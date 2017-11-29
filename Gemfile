@@ -4,6 +4,11 @@ git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
+
+# Use Pundit for permissions in classes
+gem 'pundit'
+# Use for make roles
+gem 'rolify'
 # Use rails_admin for admin side
 gem 'rails_admin', '~> 1.2'
 # Use devise as users' administrator
