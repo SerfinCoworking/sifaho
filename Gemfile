@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'bootstrap-sass'
+
 # Use Pundit for permissions in classes
 gem 'pundit'
 # Use for make roles
@@ -49,6 +51,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rails_layout'
   #Gem with better erros show de variables
   gem 'binding_of_caller'
   #Gem for view better errors
