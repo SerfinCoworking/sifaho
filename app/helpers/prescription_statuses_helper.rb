@@ -1,0 +1,2 @@
+module PrescriptionStatusesHelper
+end
