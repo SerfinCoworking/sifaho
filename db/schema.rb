@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171129031013) do
+ActiveRecord::Schema.define(version: 20171201004203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "patient_types", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "patients", force: :cascade do |t|
     t.string "first_name"
@@ -22,6 +29,21 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.string "address"
     t.string "email"
     t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "patient_types_id"
+    t.bigint "patient_type_id"
+    t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
+    t.index ["patient_types_id"], name: "index_patients_on_patient_types_id"
+  end
+
+  create_table "prescriptions", force: :cascade do |t|
+    t.string "observation"
+    t.datetime "date_received"
+    t.datetime "date_processed"
+    t.integer "id_professional"
+    t.integer "id_patient"
+    t.integer "id_prescription_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -74,4 +96,6 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "patients", "patient_types"
+  add_foreign_key "patients", "patient_types", column: "patient_types_id"
 end
