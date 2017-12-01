@@ -1,21 +1,30 @@
 main {
+
     background-color: #eee;
     padding-bottom: 80px;
-    width: 100%;
-    margin-top: 51px;
+    width: 80%;
     float: left;
-    margin-left: 15%;
-    margin-top: 10%;
+    margin-left: 10%;
+    margin-top: 5%;
+    position: fixed;
 }
 ul#sidebar {
-    width: 5%;
+    position: fixed;
+    width: 9%;
     background-color: #232173;
     top: 50px;
     max-width: 200px;
     left:0px;
     height: 100%;
 }
-
-element.style {
-
+ul#nav #navbar-nav{
+  width: 50%;
+  height: 50%;
+}
+#navbar #navbar-inverse #navbar-fixed-top{
+  background-color: #232173;
+  height: 9%;
+}
+#container #page{
+  background-color: white;
 }
