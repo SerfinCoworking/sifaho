@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  level_complexity: 1
+  prescription_requeriment: MyString
+  emergency_car: MyString
+  medication_name: MyString
+  description: MyText
+  indiction: false
+
+two:
+  level_complexity: 1
+  prescription_requeriment: MyString
+  emergency_car: MyString
+  medication_name: MyString
+  description: MyText
+  indiction: false

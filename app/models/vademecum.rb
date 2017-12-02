@@ -1,0 +1,2 @@
+class Vademecum < ApplicationRecord
+end
