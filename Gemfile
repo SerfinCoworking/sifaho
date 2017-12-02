@@ -5,7 +5,16 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'bootstrap-sass'
 
+# Use Pundit for permissions in classes
+gem 'pundit'
+# Use for make roles
+gem 'rolify'
+# Use rails_admin for admin side
+gem 'rails_admin', '~> 1.2'
+# Use devise as users' administrator
+gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use postgresql as the database for Active Record
@@ -42,6 +51,11 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rails_layout'
+  #Gem with better erros show de variables
+  gem 'binding_of_caller'
+  #Gem for view better errors
+  gem 'better_errors'
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'

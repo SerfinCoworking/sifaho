@@ -1,0 +1,29 @@
+<%# navigation styled for Bootstrap 3.0 %>
+<div class="col-sm-3 col-md-2 sidebar-nav">
+  <% if current_user.present? %>
+    <div class="span3 bs-docs-sidebar">
+      <ul id="sidebar" class="nav nav-pills nav-stacked affix col-md-3" style="top: 50px;max-width: 200px;background-color:#222222;left:0px;height: 100%;">
+      </ul>
+    </div>
+  <% end %>
+</div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to root_path, data: { turbolinks: false }, class: 'navbar-brand' do %>
+        <%= image_tag('sifaho_brand.png')%>
+      <% end %>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <%= render 'layouts/navigation_links' %>
+      </ul>
+    </div>
+  </div>
+</nav>
