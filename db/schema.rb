@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20171203225911) do
   enable_extension "plpgsql"
 
   create_table "medications", force: :cascade do |t|
-    t.integer "quantify"
+    t.integer "quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20171203225911) do
   end
 
   create_table "vademecums", force: :cascade do |t|
+    t.string "name"
     t.integer "level_complexity"
     t.boolean "indication"
     t.string "specialty_enabled"
@@ -121,7 +122,6 @@ ActiveRecord::Schema.define(version: 20171203225911) do
     t.boolean "emergency_car"
     t.string "medications"
     t.text "indications"
-    t.string "name"
   end
 
   add_foreign_key "medications", "vademecums"
