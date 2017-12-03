@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20171203225911) do
 
   create_table "medications", force: :cascade do |t|
     t.integer "quantity"
-    t.datetime "expiry_date"
+    t.datetime "expiration_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20171203225911) do
 
   create_table "vademecums", force: :cascade do |t|
     t.string "name"
-    t.integer "level_complexity"
+    t.integer "complexity_level"
     t.boolean "indication"
     t.string "specialty_enabled"
     t.string "prescription_requirements"
