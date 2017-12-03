@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171202220007) do
+ActiveRecord::Schema.define(version: 20171203225911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20171202220007) do
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "vademecum_id"
+    t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
@@ -119,7 +121,9 @@ ActiveRecord::Schema.define(version: 20171202220007) do
     t.boolean "emergency_car"
     t.string "medications"
     t.text "indications"
+    t.string "name"
   end
 
+  add_foreign_key "medications", "vademecums"
   add_foreign_key "patients", "patient_types"
 end
