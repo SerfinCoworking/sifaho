@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20171129031013) do
-
+ActiveRecord::Schema.define(version: 20171202220007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
 
   create_table "medications", force: :cascade do |t|
     t.integer "quantify"
     t.datetime "expiry_date"
     t.datetime "date_received"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "patients", force: :cascade do |t|
     t.string "first_name"
@@ -30,17 +30,9 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.string "address"
     t.string "email"
     t.string "phone"
-
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-
-  create_table "sectors", force: :cascade do |t|
-    t.string "sector_name"
-    t.text "description"
-    t.integer "level_complexity"
-    t.string "applicant"
 
   create_table "professionals", force: :cascade do |t|
     t.string "first_name"
@@ -50,20 +42,9 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.string "address"
     t.string "email"
     t.string "phone"
-
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-
-  create_table "vademecums", force: :cascade do |t|
-    t.integer "level_complexity"
-    t.boolean "indication"
-    t.string "specialty_enabled"
-    t.string "prescription_requirements"
-    t.boolean "emergency_car"
-    t.string "medications"
-    t.text "indications"
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name"
@@ -74,6 +55,15 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "sectors", force: :cascade do |t|
+    t.string "sector_name"
+    t.text "description"
+    t.integer "level_complexity"
+    t.string "applicant"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -99,7 +89,16 @@ ActiveRecord::Schema.define(version: 20171129031013) do
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"
+  end
 
+  create_table "vademecums", force: :cascade do |t|
+    t.integer "level_complexity"
+    t.boolean "indication"
+    t.string "specialty_enabled"
+    t.string "prescription_requirements"
+    t.boolean "emergency_car"
+    t.string "medications"
+    t.text "indications"
   end
 
 end
