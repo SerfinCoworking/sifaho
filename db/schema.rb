@@ -120,7 +120,6 @@ ActiveRecord::Schema.define(version: 20171203225911) do
     t.string "specialty_enabled"
     t.string "prescription_requirements"
     t.boolean "emergency_car"
-    t.string "medications"
     t.text "indications"
   end
 
