@@ -1,0 +1,47 @@
+<%= form_with(model: prescription, local: true) do |form| %>
+  <% if prescription.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(prescription.errors.count, "error") %> prohibited this prescription from being saved:</h2>
+
+      <ul>
+      <% prescription.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :observation %>
+    <%= form.text_field :observation, id: :prescription_observation %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date_received %>
+    <%= form.datetime_select :date_received, id: :prescription_date_received %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date_processed %>
+    <%= form.datetime_select :date_processed, id: :prescription_date_processed %>
+  </div>
+
+  <div class="field">
+    <%= form.label :id_professional_grantor_id %>
+    <%= form.text_field :id_professional_grantor_id, id: :prescription_id_professional_grantor_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :id_patient_id %>
+    <%= form.text_field :id_patient_id, id: :prescription_id_patient_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :id_prescription_status_id %>
+    <%= form.text_field :id_prescription_status_id, id: :prescription_id_prescription_status_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

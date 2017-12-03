@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Observation:</strong>
+  <%= @prescription.observation %>
+</p>
+
+<p>
+  <strong>Date received:</strong>
+  <%= @prescription.date_received %>
+</p>
+
+<p>
+  <strong>Date processed:</strong>
+  <%= @prescription.date_processed %>
+</p>
+
+<p>
+  <strong>Id professional grantor:</strong>
+  <%= @prescription.id_professional_grantor %>
+</p>
+
+<p>
+  <strong>Id patient:</strong>
+  <%= @prescription.id_patient %>
+</p>
+
+<p>
+  <strong>Id prescription status:</strong>
+  <%= @prescription.id_prescription_status %>
+</p>
+
+<%= link_to 'Edit', edit_prescription_path(@prescription) %> |
+<%= link_to 'Back', prescriptions_path %>
