@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20171203235345) do
   end
 
   create_table "medications", force: :cascade do |t|
-    t.integer "quantify"
+    t.integer "quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false

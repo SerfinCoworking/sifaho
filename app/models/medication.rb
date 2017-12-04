@@ -5,4 +5,5 @@ class Medication < ApplicationRecord
   validates :date_received, presence:true
 
   belongs_to :vademecum
+  has_one :medication_brand
 end
