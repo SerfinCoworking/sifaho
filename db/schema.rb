@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20171203225911) do
   create_table "sectors", force: :cascade do |t|
     t.string "sector_name"
     t.text "description"
-    t.integer "level_complexity"
+    t.integer "complexity_level"
     t.string "applicant"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -114,13 +114,14 @@ ActiveRecord::Schema.define(version: 20171203225911) do
   end
 
   create_table "vademecums", force: :cascade do |t|
-    t.string "name"
     t.integer "complexity_level"
     t.boolean "indication"
     t.string "specialty_enabled"
     t.string "prescription_requirements"
     t.boolean "emergency_car"
+    t.string "medications"
     t.text "indications"
+    t.string "name"
   end
 
   add_foreign_key "medications", "vademecums"
