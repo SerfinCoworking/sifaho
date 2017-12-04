@@ -142,7 +142,6 @@ ActiveRecord::Schema.define(version: 20171203235345) do
     t.string "name"
   end
 
-  add_foreign_key "medications", "medication_brands"
   add_foreign_key "medications", "vademecums"
   add_foreign_key "patients", "patient_types"
 end
