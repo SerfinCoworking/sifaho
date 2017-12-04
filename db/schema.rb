@@ -10,17 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171202220007) do
+ActiveRecord::Schema.define(version: 20171203225911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "medications", force: :cascade do |t|
-    t.integer "quantify"
-    t.datetime "expiry_date"
+    t.integer "quantity"
+    t.datetime "expiration_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "vademecum_id"
+    t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
@@ -112,14 +114,15 @@ ActiveRecord::Schema.define(version: 20171202220007) do
   end
 
   create_table "vademecums", force: :cascade do |t|
-    t.integer "level_complexity"
+    t.string "name"
+    t.integer "complexity_level"
     t.boolean "indication"
     t.string "specialty_enabled"
     t.string "prescription_requirements"
     t.boolean "emergency_car"
-    t.string "medications"
     t.text "indications"
   end
 
+  add_foreign_key "medications", "vademecums"
   add_foreign_key "patients", "patient_types"
 end
