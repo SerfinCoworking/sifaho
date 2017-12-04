@@ -1,8 +1,8 @@
 class CreateMedications < ActiveRecord::Migration[5.1]
   def change
     create_table :medications do |t|
-      t.integer :quantify
-      t.datetime :expiry_date
+      t.integer :quantity
+      t.datetime :expiration_date
       t.datetime :date_received
 
       t.timestamps
