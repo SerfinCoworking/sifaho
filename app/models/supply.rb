@@ -1,2 +1,3 @@
 class Supply < ApplicationRecord
+
 end
