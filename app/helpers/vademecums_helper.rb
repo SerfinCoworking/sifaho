@@ -1,0 +1,2 @@
+module VademecumsHelper
+end

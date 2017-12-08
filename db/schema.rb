@@ -10,36 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171203235345) do
+ActiveRecord::Schema.define(version: 20171203225911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "laboratories", force: :cascade do |t|
-    t.string "name"
-    t.string "address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "medication_brands", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
-    t.bigint "laboratory_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["laboratory_id"], name: "index_medication_brands_on_laboratory_id"
-  end
-
   create_table "medications", force: :cascade do |t|
-    t.integer "quantity"
+    t.integer "quantify"
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "vademecum_id"
-    t.bigint "medication_brand_id"
-    t.index ["medication_brand_id"], name: "index_medications_on_medication_brand_id"
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
   end
 
@@ -135,13 +117,11 @@ ActiveRecord::Schema.define(version: 20171203235345) do
     t.integer "level_complexity"
     t.boolean "indication"
     t.string "specialty_enabled"
-    t.string "prescription_requirements"
+    t.string "prescription_requirement"
     t.boolean "emergency_car"
+    t.string "medication_name"
     t.text "indications"
-    t.string "name"
   end
 
-  add_foreign_key "medications", "medication_brands"
-  add_foreign_key "medications", "vademecums"
   add_foreign_key "patients", "patient_types"
 end
