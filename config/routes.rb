@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :supplies
   resources :prescriptions
   resources :medications
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

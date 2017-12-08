@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171203235345) do
+ActiveRecord::Schema.define(version: 20171208144747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,11 +32,7 @@ ActiveRecord::Schema.define(version: 20171203235345) do
   end
 
   create_table "medications", force: :cascade do |t|
-<<<<<<< HEAD
-    t.integer "quantity"
-=======
     t.integer "quantify"
->>>>>>> rel-medications-vademecum
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
@@ -104,8 +100,16 @@ ActiveRecord::Schema.define(version: 20171203235345) do
   create_table "sectors", force: :cascade do |t|
     t.string "sector_name"
     t.text "description"
-    t.integer "complexity_level"
+    t.integer "level_complexity"
     t.string "applicant"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "supplies", force: :cascade do |t|
+    t.integer "quantity"
+    t.datetime "expiry_date"
+    t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -136,27 +140,17 @@ ActiveRecord::Schema.define(version: 20171203235345) do
   end
 
   create_table "vademecums", force: :cascade do |t|
-<<<<<<< HEAD
-<<<<<<< HEAD
-    t.integer "complexity_level"
-=======
     t.integer "level_complexity"
->>>>>>> med-brand-lab
-=======
-    t.integer "level_complexity"
->>>>>>> rel-medications-vademecum
     t.boolean "indication"
     t.string "specialty_enabled"
     t.string "prescription_requirement"
     t.boolean "emergency_car"
-<<<<<<< HEAD
-    t.string "medications"
-=======
     t.string "medication_name"
->>>>>>> rel-medications-vademecum
     t.text "indications"
-    t.string "name"
+    t.bigint "medication_id"
+    t.index ["medication_id"], name: "index_vademecums_on_medication_id"
   end
 
   add_foreign_key "patients", "patient_types"
+  add_foreign_key "vademecums", "medications"
 end

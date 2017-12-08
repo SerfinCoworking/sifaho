@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @supply.quantity %>
+</p>
+
+<p>
+  <strong>Expiry date:</strong>
+  <%= @supply.expiry_date %>
+</p>
+
+<p>
+  <strong>Date received:</strong>
+  <%= @supply.date_received %>
+</p>
+
+<%= link_to 'Edit', edit_supply_path(@supply) %> |
+<%= link_to 'Back', supplies_path %>
