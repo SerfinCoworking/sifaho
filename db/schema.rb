@@ -32,7 +32,11 @@ ActiveRecord::Schema.define(version: 20171203235345) do
   end
 
   create_table "medications", force: :cascade do |t|
+<<<<<<< HEAD
     t.integer "quantity"
+=======
+    t.integer "quantify"
+>>>>>>> rel-medications-vademecum
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
@@ -133,19 +137,26 @@ ActiveRecord::Schema.define(version: 20171203235345) do
 
   create_table "vademecums", force: :cascade do |t|
 <<<<<<< HEAD
+<<<<<<< HEAD
     t.integer "complexity_level"
 =======
     t.integer "level_complexity"
 >>>>>>> med-brand-lab
+=======
+    t.integer "level_complexity"
+>>>>>>> rel-medications-vademecum
     t.boolean "indication"
     t.string "specialty_enabled"
-    t.string "prescription_requirements"
+    t.string "prescription_requirement"
     t.boolean "emergency_car"
+<<<<<<< HEAD
     t.string "medications"
+=======
+    t.string "medication_name"
+>>>>>>> rel-medications-vademecum
     t.text "indications"
     t.string "name"
   end
 
-  add_foreign_key "medications", "vademecums"
   add_foreign_key "patients", "patient_types"
 end
