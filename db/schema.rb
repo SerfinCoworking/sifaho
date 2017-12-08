@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171208144747) do
+ActiveRecord::Schema.define(version: 20171208202559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20171208144747) do
   end
 
   create_table "medications", force: :cascade do |t|
-    t.integer "quantify"
+    t.integer "quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false
@@ -61,6 +61,15 @@ ActiveRecord::Schema.define(version: 20171208144747) do
     t.datetime "updated_at", null: false
     t.bigint "patient_type_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
+  end
+
+  create_table "prescription_medications", force: :cascade do |t|
+    t.integer "prescription_id"
+    t.integer "medication_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["prescription_id", "medication_id"], name: "index_prescription_medication"
   end
 
   create_table "prescriptions", force: :cascade do |t|
@@ -100,7 +109,7 @@ ActiveRecord::Schema.define(version: 20171208144747) do
   create_table "sectors", force: :cascade do |t|
     t.string "sector_name"
     t.text "description"
-    t.integer "level_complexity"
+    t.integer "complexity_level"
     t.string "applicant"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
