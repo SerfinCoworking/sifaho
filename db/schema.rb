@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171209163159) do
+ActiveRecord::Schema.define(version: 20171209180540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,15 @@ ActiveRecord::Schema.define(version: 20171209163159) do
     t.integer "quantifiable_id"
     t.integer "medication_id"
     t.string "quantifiable_type"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "quantity_supplies", force: :cascade do |t|
+    t.integer "quantificable_id"
+    t.integer "supply_id"
+    t.string "quantificable_type"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

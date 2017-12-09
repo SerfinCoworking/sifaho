@@ -11,6 +11,4 @@ class Medication < ApplicationRecord
            :through => :quantity_medications,
            :source => :quantifiable,
            :source_type => 'Prescription'
-
-
 end

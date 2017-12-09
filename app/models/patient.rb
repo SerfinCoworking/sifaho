@@ -4,4 +4,5 @@ class Patient < ApplicationRecord
   validates :dni, presence: true
 
   belongs_to :patient_type
+  has_many :prescriptions
 end
