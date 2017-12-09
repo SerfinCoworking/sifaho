@@ -5,8 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Use simple_form for do forms more easily
+gem 'simple_form'
+# Use cocoon for nested forms
+gem "cocoon"
+# Use bootstrap-sass for views
 gem 'bootstrap-sass'
-
 # Use Pundit for permissions in classes
 gem 'pundit'
 # Use for make roles
