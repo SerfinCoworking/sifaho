@@ -1,4 +1,4 @@
-class Medication < ApplicationRecord  
+class Medication < ApplicationRecord
   validates :vademecum, presence: true
   validates :expiry_date, presence: true
   validates :date_received, presence:true
@@ -6,6 +6,11 @@ class Medication < ApplicationRecord
   belongs_to :vademecum
   belongs_to :medication_brand
 
-  has_many :prescription_medications
-  has_many :prescriptions, through: :prescription_medications
+  has_many :quantity_medications
+  has_many :prescriptions,
+           :through => :quantity_medications,
+           :source => :quantifiable,
+           :source_type => 'Prescription'
+
+
 end

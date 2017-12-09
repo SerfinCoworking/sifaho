@@ -3,9 +3,7 @@
 one:
   prescription_id: 1
   medication_id: 1
-  quantity: 1
 
 two:
   prescription_id: 1
   medication_id: 1
-  quantity: 1

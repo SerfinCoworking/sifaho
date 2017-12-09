@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171208202559) do
+ActiveRecord::Schema.define(version: 20171209163159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,15 +63,6 @@ ActiveRecord::Schema.define(version: 20171208202559) do
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
-  create_table "prescription_medications", force: :cascade do |t|
-    t.integer "prescription_id"
-    t.integer "medication_id"
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["prescription_id", "medication_id"], name: "index_prescription_medication"
-  end
-
   create_table "prescriptions", force: :cascade do |t|
     t.string "observation"
     t.datetime "date_received"
@@ -91,6 +82,15 @@ ActiveRecord::Schema.define(version: 20171208202559) do
     t.string "address"
     t.string "email"
     t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "quantity_medications", force: :cascade do |t|
+    t.integer "quantifiable_id"
+    t.integer "medication_id"
+    t.string "quantifiable_type"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -45,8 +45,8 @@ medication = Medication.new(
   :quantity         => 20,
   :expiry_date      => Time.now,
   :date_received    => Time.now,
-  :vademecum        => vademecum.id,
-  :medication_brand => brand.id
+  :vademecum        => Vademecum.first,
+  :medication_brand => MedicationBrand.first
 )
 medication.save!
 
