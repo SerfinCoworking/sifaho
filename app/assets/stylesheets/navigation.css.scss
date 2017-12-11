@@ -1,30 +1,65 @@
-main {
-
-    background-color: #eee;
-    padding-bottom: 80px;
-    width: 80%;
-    float: left;
-    margin-left: 10%;
-    margin-top: 5%;
-    position: fixed;
+.navbar-header.papita {
+    background-color: #0b538d;
 }
 ul#sidebar {
     position: fixed;
-    width: 9%;
-    background-color: #232173;
+    background-color: #0b538d;
     top: 50px;
-    max-width: 200px;
-    left:0px;
+    left: 0px;
     height: 100%;
+    width: 115px;
 }
-ul#nav #navbar-nav{
-  width: 50%;
-  height: 50%;
+nav.navbar.navbar-inverse.navbar-fixed-top {
+    background-color: #0b538d;
 }
-#navbar #navbar-inverse #navbar-fixed-top{
-  background-color: #232173;
-  height: 9%;
+
+
+.btn_menu_lateral {
+    width: 112px;
+    margin-top: 8px;
+    border-radius: 10px;
+    background-color: #78a9d2;
 }
-#container #page{
-  background-color: white;
+
+.btn_menu_lateral:focus {
+    background-color: #6a8a9a;
+}
+.panel-default.panel_menu_lateral {
+    width: 115px;
+    margin-bottom: 0px;
+    border: none;
+}
+
+.panel-body.body_panel_menu_lateral {
+    padding: 0px;
+    padding-bottom: 8px;
+    background-color: #0b538d;
+}
+
+div#panel_menu__dispensar {
+    background-color: #59457c;
+    color: white;
+    border: none;
+}
+
+div#panel_menu__cargas {
+    background-color: #89726a;
+    border: none;
+    color: white;
+}
+
+div#panel_menu__insumos {
+    background-color: #10675f;
+    color: white;
+    border: none;
+}
+
+div#panel_menu__pedidos {
+    background-color: #493027;
+    color: white;
+    border: none;
+}
+
+@media (max-width: 800px) and (min-width: 300px) {
+
 }
