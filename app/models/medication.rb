@@ -15,6 +15,8 @@ class Medication < ApplicationRecord
            :source_type => 'Prescription'
 
   def name
-    self.vademecum.medication_name<<" "<<self.medication_brand.name
+    if self.vademecum
+      self.vademecum.medication_name<<" "<<self.medication_brand.name
+    end
   end
 end
