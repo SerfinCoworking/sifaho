@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Use chosen-rails for autocomplete on select
+gem 'chosen-rails'
 # Use simple_form for do forms more easily
 gem 'simple_form'
 # Use cocoon for nested forms

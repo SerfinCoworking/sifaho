@@ -5,4 +5,8 @@ class Patient < ApplicationRecord
 
   belongs_to :patient_type
   has_many :prescriptions
+
+  def full_info
+    self.first_name<<" "<<self.last_name<<" "<<self.dni.to_s
+  end
 end

@@ -21,9 +21,9 @@
         <td><%= prescription.observation %></td>
         <td><%= prescription.date_received %></td>
         <td><%= prescription.date_processed %></td>
-        <td><%= prescription.id_professional_grantor %></td>
-        <td><%= prescription.id_patient %></td>
-        <td><%= prescription.id_prescription_status %></td>
+        <td><%= prescription.professional_id %></td>
+        <td><%= prescription.patient_id %></td>
+        <td><%= prescription.prescription_status_id %></td>
         <td><%= link_to 'Show', prescription %></td>
         <td><%= link_to 'Edit', edit_prescription_path(prescription) %></td>
         <td><%= link_to 'Destroy', prescription, method: :delete, data: { confirm: 'Are you sure?' } %></td>

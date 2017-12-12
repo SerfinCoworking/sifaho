@@ -64,14 +64,15 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   end
 
   create_table "prescriptions", force: :cascade do |t|
-    t.string "observation"
+    t.text "observation"
     t.datetime "date_received"
     t.datetime "date_processed"
-    t.integer "id_professional"
-    t.integer "id_patient"
-    t.integer "id_prescription_status"
+    t.integer "patient_id"
+    t.integer "prescription_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "professional_id"
+    t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end
 
   create_table "professionals", force: :cascade do |t|
@@ -170,5 +171,6 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   end
 
   add_foreign_key "patients", "patient_types"
+  add_foreign_key "prescriptions", "professionals"
   add_foreign_key "vademecums", "medications"
 end

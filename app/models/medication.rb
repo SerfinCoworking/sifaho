@@ -1,4 +1,6 @@
 class Medication < ApplicationRecord
+  attr_accessor :name
+
   validates :vademecum, presence: true
   validates :expiry_date, presence: true
   validates :date_received, presence:true
@@ -11,4 +13,8 @@ class Medication < ApplicationRecord
            :through => :quantity_medications,
            :source => :quantifiable,
            :source_type => 'Prescription'
+
+  def name
+    self.vademecum.medication_name<<" "<<self.medication_brand.name
+  end
 end

@@ -1,3 +1,21 @@
+<script language="JavaScript" type="text/javascript">
+  $(document).on('turbolinks:load', function () {
+    // Actions to do
+    $('#prescription_patient_id_chosen').on('change', '#mychosen', function(evt, params) {
+    if (params.selected != undefined)
+    {
+        console.log('selected: ' + params.selected);
+    }
+    if (params.deselected != undefined)
+    {
+        console.log('deselected: ' + params.deselected);
+    }
+});
+  });
+</script>
+
+
+
 <%= form_with(model: prescription, local: true) do |form| %>
   <% if prescription.errors.any? %>
     <div id="error_explanation">
@@ -10,38 +28,52 @@
       </ul>
     </div>
   <% end %>
+<% end %>
 
-  <div class="field">
-    <%= form.label :observation %>
-    <%= form.text_field :observation, id: :prescription_observation %>
-  </div>
-
-  <div class="field">
-    <%= form.label :date_received %>
-    <%= form.datetime_select :date_received, id: :prescription_date_received %>
-  </div>
-
-  <div class="field">
-    <%= form.label :date_processed %>
-    <%= form.datetime_select :date_processed, id: :prescription_date_processed %>
-  </div>
-
-  <div class="field">
-    <%= form.label :id_professional_grantor_id %>
-    <%= form.text_field :id_professional_grantor_id, id: :prescription_id_professional_grantor_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :id_patient_id %>
-    <%= form.text_field :id_patient_id, id: :prescription_id_patient_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :id_prescription_status_id %>
-    <%= form.text_field :id_prescription_status_id, id: :prescription_id_prescription_status_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+<%= simple_form_for @prescription, html: {class: "form-vertical"} do |f| %>
+  <%= f.input :professional_id,
+                    label: 'Doctor',
+                    label_method: :full_name,
+                    value_method: :id,
+                    collection: @professionals,
+                    include_blank: false,
+                    input_html: { class: 'chosen-select' },
+                    prompt: 'Seleccione un doctor'
+  %>
+  <%= simple_fields_for @professional, html: {class: "form-inline"} do |fpro| %>
+    <%= fpro.input_field :first_name, placeholder: 'Nombre' %>
+    <%= fpro.input_field :last_name, placeholder: 'Apellido' %>
+    <%= fpro.input_field :dni, placeholder: 'DNI' %>
+  <% end %><br>
+  <%= f.input :patient_id,
+                    label: 'Paciente',
+                    label_method: :full_info,
+                    value_method: :id,
+                    collection: @patients,
+                    include_blank: false,
+                    input_html: { class: 'chosen-select' },
+                    prompt: 'Seleccionar un paciente o crear uno nuevo'
+  %>
+  <%= simple_fields_for @patient, html: {class: "form-inline"} do |fp| %>
+    <%= fp.input_field :first_name, placeholder: 'Nombre' %>
+    <%= fp.input_field :last_name, placeholder: 'Apellido' %>
+    <%= fp.input_field :dni, placeholder: 'DNI' %>
+  <% end %><br>
+  <label>Medicación</label>
+  <%= simple_fields_for @quantity_medication, html: {class: "form-inline"} do |fq| %>
+    <%= fq.input :medication,
+                      label: false,
+                      label_method: :name,
+                      value_method: :id,
+                      collection: @medications,
+                      include_blank: true,
+                      input_html: { class: 'chosen-select' },
+                      prompt: 'Seleccione un medicamento'
+    %>
+    <%= fq.input_field :quantity, placeholder: 'Cantidad' %>
+  <% end %><br>
+  <%= f.input :observation, label: 'Observaciones', as: :text %>
+  <%= f.input :date_received, label: 'Fecha recibida' %>
+  <%= f.input :date_processed, label: 'Fecha procesada' %>
+  <%= f.button :submit, 'Cargar prescripción'%>
 <% end %>
