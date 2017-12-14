@@ -20,6 +20,7 @@ class PrescriptionsController < ApplicationController
     @medications = Medication.all
     @patients = Patient.all
     @patient = Patient.new
+    @patient_types = PatientType.all
     @quantity_medication = QuantityMedication.new
   end
 
@@ -31,9 +32,15 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    @quan_med = QuantityMedication.new(params[:quantity_medications_attributes])
-    @quan_med.medication = Medication.find_by_id(params[:quantity_medication][:medication])
-    @quan_med.quantity = params[:quantity_medication][:quantity]
+    if(params[:prescription][:patient_id].blank?)
+      @patient = Patient.create!(patient_params)
+      @prescription.patient_id = @patient.id
+    end
+    if(params[:prescription][:professional_id].blank?)
+      @professional = Professional.create!(professional_params)
+      @prescription.professional_id = @professional.id
+    end
+    @quan_med = QuantityMedication.new(quantity_medication_params)
 
     respond_to do |format|
       if @prescription.save
@@ -82,10 +89,20 @@ class PrescriptionsController < ApplicationController
       @prescription = Prescription.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def professional_params
+      params.require(:professional).permit(:first_name, :last_name, :dni)
+    end
+
+    def patient_params
+      params.require(:patient).permit(:first_name, :last_name, :dni, :patient_type_id)
+    end
+
+    def quantity_medication_params
+      params.require(:quantity_medication).permit(:medication_id, :quantity)
+    end
+
     def prescription_params
       params.require(:prescription).permit(:observation, :date_received, :date_processed,
-                                           :professional_id, :patient_id, :prescription_status_id,
-                                           quantity_medications_attributes: [:medication, :quantity])
+                                           :professional_id, :patient_id, :prescription_status_id)
     end
 end

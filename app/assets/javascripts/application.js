@@ -12,9 +12,11 @@
 //
 //= require rails-ujs
 //= require jquery
-//= require jquery-ui
 //= require jquery_ujs
+//= require jquery-ui
 //= require chosen-jquery
 //= require turbolinks
 //= require cocoon
 //= require_tree .
+//= require moment
+//= require bootstrap-datetimepicker

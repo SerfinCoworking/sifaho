@@ -1,4 +1,11 @@
 // Place all the styles related to the welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.inline {display: inline;} 
+.chosen-container-single .chosen-single{
+  height: 34px !important;
+  line-height: 34px !important;
+  padding: 0 0 0 12px !important;
+}
+#patient_type_id_chosen{
+  width: 200px !important;
+}
