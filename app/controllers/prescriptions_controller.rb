@@ -16,12 +16,12 @@ class PrescriptionsController < ApplicationController
   def new
     @prescription = Prescription.new
     @professionals = Professional.all
-    @professional = Professional.new
     @medications = Medication.all
     @patients = Patient.all
-    @patient = Patient.new
     @patient_types = PatientType.all
-    @quantity_medication = QuantityMedication.new
+    @prescription.build_professional
+    @prescription.build_patient
+    @prescription.quantity_medications.build
   end
 
   # GET /prescriptions/1/edit
@@ -32,26 +32,11 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    if(params[:prescription][:patient_id].blank?)
-      @patient = Patient.create!(patient_params)
-      @prescription.patient_id = @patient.id
-    end
-    if(params[:prescription][:professional_id].blank?)
-      @professional = Professional.create!(professional_params)
-      @prescription.professional_id = @professional.id
-    end
-    @quan_med = QuantityMedication.new(quantity_medication_params)
 
     respond_to do |format|
       if @prescription.save
-        @quan_med.quantifiable = @prescription
-        if @quan_med.save!
-          format.html { redirect_to @prescription, notice: 'La Prescripción se ha creado correctamente.' }
-          format.json { render :show, status: :created, location: @prescription }
-        else
-          format.html { render :new }
-          format.json { render json: @prescription.errors, status: :unprocessable_entity }
-        end
+        format.html { redirect_to @prescription, notice: 'La Prescripción se ha creado correctamente.' }
+        format.json { render :show, status: :created, location: @prescription }
       else
         format.html { render :new }
         format.json { render json: @prescription.errors, status: :unprocessable_entity }
@@ -63,7 +48,7 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1.json
   def update
     respond_to do |format|
-      if @prescription.update(prescription_params)
+      if @prescription.update_attributes(prescription_params)
         format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @prescription }
       else
@@ -89,20 +74,11 @@ class PrescriptionsController < ApplicationController
       @prescription = Prescription.find(params[:id])
     end
 
-    def professional_params
-      params.require(:professional).permit(:first_name, :last_name, :dni)
-    end
-
-    def patient_params
-      params.require(:patient).permit(:first_name, :last_name, :dni, :patient_type_id)
-    end
-
-    def quantity_medication_params
-      params.require(:quantity_medication).permit(:medication_id, :quantity)
-    end
-
     def prescription_params
       params.require(:prescription).permit(:observation, :date_received, :date_processed,
-                                           :professional_id, :patient_id, :prescription_status_id)
+                                           :professional_id, :patient_id, :prescription_status_id,
+                                         quantity_medications_attributes: [:medication_id, :quantity, :_destroy],
+                                         patient_attributes: [:first_name, :last_name, :dni, :patient_type_id],
+                                         professional_attributes: [:first_name, :last_name, :dni])
     end
 end

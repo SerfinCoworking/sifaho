@@ -1,0 +1,13 @@
+<div id='form-prescription'>
+  <%= f.input :first_name, placeholder: 'Nombre', required: true, label: false %>
+  <%= f.input :last_name, placeholder: 'Apellido', required: true, label: false %>
+  <%= f.input :dni, placeholder: 'DNI', required: true, label: false %>
+  <%= f.input_field :patient_type_id,
+                    label: false,
+                    label_method: :name,
+                    value_method: :id,
+                    collection: @patient_types,
+                    class: 'chosen-select', id: 'patient_type_id',
+                    prompt: 'Tipo de paciente'
+  %>
+</div>

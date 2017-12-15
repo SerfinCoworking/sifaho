@@ -1,67 +1,4 @@
-<script language="JavaScript" type="text/javascript">
-  $(document).ready(function () {
-    $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" }) //for all select having class .chosen-select
-
-    $('#prescription_date_received').datetimepicker();
-    $('#prescription_date_processed').datetimepicker();
-    document.getElementById('patient-hint').style.display="none";
-    document.getElementById('professional-hint').style.display="none";
-    $('#patient_id').change(function () {
-        if($('#patient_id option:selected').val() == 0){
-          document.getElementById('form-prescription').style.display="block";
-          document.getElementById('patient-hint').style.display="none";
-          document.getElementById('patient_first_name').required = true;
-          document.getElementById('patient_last_name').required = true;
-          document.getElementById('patient_dni').required = true;
-          document.getElementById('patient_type_id').required = true;
-        }else{
-          document.getElementById('form-prescription').style.display="none";
-          document.getElementById('patient-hint').style.display="block";
-          document.getElementById('patient_first_name').required = false;
-          document.getElementById('patient_last_name').required = false;
-          document.getElementById('patient_dni').required = false;
-          document.getElementById('patient_type_id').required = false;
-        }
-    });
-    $('#professional_id').change(function () {
-      if($('#professional_id option:selected').val() == 0){
-        document.getElementById('form-professional').style.display="block";
-        document.getElementById('professional-hint').style.display="none";
-        document.getElementById('professional_first_name').required = true;
-        document.getElementById('professional_last_name').required = true;
-        document.getElementById('professional_dni').required = true;
-
-      }else{
-        document.getElementById('form-professional').style.display="none";
-        document.getElementById('professional-hint').style.display="block";
-        document.getElementById('professional_first_name').required = false;
-        document.getElementById('professional_last_name').required = false;
-        document.getElementById('professional_dni').required = false;
-      }
-    });
-    $('#medication').change(function () {
-      if($('#medication option:selected').val() == 0){
-        document.getElementById('quantity_medication_quantity').disabled = true;
-      }else{
-        document.getElementById('quantity_medication_quantity').disabled = false;
-      }
-    });
-  });
-</script>
-
-<%= form_with(model: prescription, local: true) do |form| %>
-  <% if prescription.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(prescription.errors.count, "error") %> prohibited this prescription from being saved:</h2>
-
-      <ul>
-      <% prescription.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-<% end %>
+<%= render 'shared/errors', object: @prescription %>
 
 <%= simple_form_for @prescription, html: {class: "form-inline"} do |f| %>
   <%= f.input :professional_id,
@@ -74,13 +11,11 @@
                     prompt: 'Seleccionar un doctor o crear uno nuevo'
   %><br><br>
   <%= f.hint 'No seleccione ningún doctor para crear uno nuevo.', id: 'professional-hint' %>
-  <%= simple_fields_for @professional, html: {class: "form-inline"} do |fpro| %>
-    <div id='form-professional'>
-      <%= fpro.input :first_name, placeholder: 'Nombre', required: true, label: false %>
-      <%= fpro.input :last_name, placeholder: 'Apellido', required: true, label: false %>
-      <%= fpro.input :dni, placeholder: 'DNI', required: true, label: false %>
-    </div>
+
+  <%= f.simple_fields_for :professional, html: {class: "form-inline"} do |form_professional| %>
+    <%= render "professional_fields", :f => form_professional %>
   <% end %><br>
+
   <%= f.input :patient_id,
                     label: 'Paciente',
                     label_method: :full_info,
@@ -90,39 +25,26 @@
                     input_html: { class: 'chosen-select', id: 'patient_id' },
                     prompt: 'Seleccionar un paciente o crear uno nuevo'
   %><br><br>
-  <%= f.hint 'No seleccione ningún paciente para crear uno nuevo.', id: 'patient-hint' %>
-  <%= simple_fields_for @patient, html: { class: 'form-inline' } do |fp| %>
-    <div id='form-prescription'>
-      <%= fp.input :first_name, placeholder: 'Nombre', required: true, label: false %>
-      <%= fp.input :last_name, placeholder: 'Apellido', required: true, label: false %>
-      <%= fp.input :dni, placeholder: 'DNI', required: true, label: false %>
-      <%= fp.input_field :patient_type_id,
-                        label: false,
-                        label_method: :name,
-                        value_method: :id,
-                        collection: @patient_types,
-                        required: true,
-                        class: 'chosen-select', id: 'patient_type_id',
-                        prompt: 'Tipo de paciente'
-      %>
-    </div>
+  <%= f.hint 'No seleccione ningún paciente para crear uno nuevo.', id: 'patientHint' %>
+
+  <%= f.simple_fields_for :patient, html: { class: 'form-inline' } do |form_patient| %>
+    <%= render "patient_fields", :f => form_patient %>
   <% end %><br>
+
   <label>Medicación</label>
-  <%= simple_fields_for @quantity_medication, html: {class: "form-inline"} do |fq| %>
-    <%= fq.input_field :medication_id,
-                      label_method: :name,
-                      value_method: :id,
-                      collection: @medications,
-                      include_blank: true,
-                      class: 'chosen-select',
-                      id: 'medication',
-                      prompt: 'Seleccione un medicamento'
-    %>
-    <%= fq.input :quantity, placeholder: 'Cantidad', required: true, disabled: true,
-                            label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
-                              :title=>"Seleccione un medicamento", "data-placement"=>"right" }%>
-    <br><br>
-  <% end %>
+  <div id="quantity-medications">
+    <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
+      <%= render "quantity_medication_fields", :f => form_quantity %>
+    <% end %>
+  </div>
+  <div class="links">
+    <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
+  </div>
+  <br><br>
+
+
   <%= f.input :observation, label: 'Observaciones', as: :text %><br><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                               as: :string,

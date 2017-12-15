@@ -1,4 +1,9 @@
 RailsAdmin.config do |config|
+  config.model Prescription do
+    field :quantity_medications do
+      inverse_of :prescription
+    end
+  end
 
   config.authorize_with do |controller|
     unless current_user.has_role? :admin
