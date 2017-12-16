@@ -3,8 +3,10 @@ source 'https://rubygems.org'
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
+
 end
 
+# Use momentjs and bootstrap3-datettimepicker for datetimepicker
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'
 # Use chosen-rails for autocomplete on select
