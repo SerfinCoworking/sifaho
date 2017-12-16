@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-#Fix para el estilo de agregar nuevos medicamentos en el chosen
+#Fix para asignar estilo al chosen de medicamentos
 jQuery ($) ->
   $('.add_fields').each ->
     $this              = $(this)
@@ -22,45 +22,33 @@ jQuery ($) ->
 
 
 $(document).on "turbolinks:load", ->
-  # enable chosen js
+  # habilitar chosen js
   $('.chosen-select').chosen
     allow_single_deselect: true
     no_results_text: 'No se encontró el resultado'
     width: '300px'
 
+  #id del form anidado para quantity_medications
   medications = $('#quantity-medications')
 
+  #Métodos para conocer la cantitdad de forms anidados
   count = medications.find('.count > span')
-
   idNum = -> medications.find('.nested-fields').size()
-
   recount = -> count.text medications.find('.nested-fields').size()
   recount()
+
   medications.on 'cocoon:before-insert', (e, el_to_add) ->
-    el_to_add.fadeIn(200)
+    el_to_add.fadeIn(200) #Efecto para el insert
 
   medications.on 'cocoon:after-insert', (e, added_el) ->
-    #Set id of nested fields
-    console.log("jquery")
+    #Se coloca el id de los campos anidados
     added_el.find('select').attr("id", "chosen-medication-"+idNum())
     added_el.find('input.form-control.numeric').attr("id", "quantity-medication-"+idNum())
     recount()
 
   medications.on 'cocoon:before-remove', (e, el_to_remove) ->
-    $(this).data('remove-timeout', 200)
+    $(this).data('remove-timeout', 200)#Efecto para remover
     el_to_remove.fadeOut(200)
 
   medications.on 'cocoon:after-remove', (e, removed_el) ->
-    recount()
-
-  addChange = ->
-    for i in [1 .. idNum()]
-      $("#chosen-medication"+idNum()).change ->
-      if $("#chosen-medication"+idNum()+" option:selected").val() == 0
-        console.log("hola1")
-        document.getElementById('#form-prescription').style.display="block";
-        document.getElementById('patientHint').style.display="none";
-      else
-        console.log("hola2")
-        document.getElementById('form-prescription').style.display="none";
-        document.getElementById('patientHint').style.display="block";
+    recount() #Se vuelve a contar la cantidad de forms
