@@ -14,7 +14,17 @@
  *= require_self
  *= require chosen
  */
- // import bootstrap-sprockets before bootstrap if using bootstrap >= 3.2
  @import 'bootstrap-sprockets';
  @import 'bootstrap';
  @import 'bootstrap-datetimepicker';
+ 
+ main.main_page {
+     background-color: #eee;
+     padding-bottom: 77px;
+     width: 90%;
+     height: 92%;
+     float: left;
+     margin-left: 121px;
+     margin-top: 36px;
+     position: fixed;
+ }
