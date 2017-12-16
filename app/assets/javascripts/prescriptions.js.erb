@@ -35,20 +35,4 @@ $(document).on('turbolinks:load', function() {
       document.getElementById('prescription_patient_attributes_dni').required = false;
     }
   });
-
-  $('#patient_id').change(function () {
-    if($('#patient_id option:selected').val() == 0){
-      document.getElementById('form-prescription').style.display="block";
-      document.getElementById('patientHint').style.display="none";
-      document.getElementById('prescription_patient_attributes_first_name').required = true;
-      document.getElementById('prescription_patient_attributes_last_name').required = true;
-      document.getElementById('prescription_patient_attributes_dni').required = true;
-    }else{
-      document.getElementById('form-prescription').style.display="none";
-      document.getElementById('patientHint').style.display="block";
-      document.getElementById('prescription_patient_attributes_first_name').required = false;
-      document.getElementById('prescription_patient_attributes_last_name').required = false;
-      document.getElementById('prescription_patient_attributes_dni').required = false;
-    }
-  });
 });
