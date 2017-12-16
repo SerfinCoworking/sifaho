@@ -2,8 +2,6 @@ $(document).on('turbolinks:load', function() {
 
   $('#prescription_date_received').datetimepicker();
   $('#prescription_date_processed').datetimepicker();
-  document.getElementById('patientHint').style.display="none";
-  document.getElementById('professional-hint').style.display="none";
 
   $('#professional_id').change(function () {
     if($('#professional_id option:selected').val() == 0){
