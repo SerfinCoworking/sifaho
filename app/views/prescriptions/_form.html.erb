@@ -43,7 +43,21 @@
       </div>
       <p class="count">Total: <span><%= @prescription.quantity_medications.count %></span></p>
   </div>
+  
+  <label>Suministro</label>
+  <div id="quantity-supplies">
+      <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
+        <%= render "quantity_supply_fields", :f => form_quantity %>
+      <% end %>
+      <div class="links">
+        <%= link_to_add_association f, :quantity_supplies, class: 'btn btn-default btn-sm' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        <% end %>
+      </div>
+      <p class="count">Total: <span><%= @prescription.quantity_supplies.count %></span></p>
+  </div>
   <br><br>
+
 
 
   <%= f.input :observation, label: 'Observaciones', as: :text %><br><br>

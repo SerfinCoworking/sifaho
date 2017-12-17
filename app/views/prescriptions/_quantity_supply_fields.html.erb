@@ -1,0 +1,50 @@
+<script  type="text/javascript">
+  //Esta porción de JS se coloca en este documento ya que el evento "onchange"
+  //se activa desde el html.
+
+  //Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
+  <% @supplies = Supply.all %>
+  var quantityToSupply = {
+  <% @supplies.each do |supply| %>
+    "<%=supply.id%>": {
+    quantity : "<%=supply.quantity%>"
+  }
+  <% end %>
+  };
+
+  //Función para establecer el máximo al campo "Cantidad" de cada medicación.
+  function setMaxQuantitySupply(idSelect){
+    console.log(idSelect);
+    var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
+    var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
+      if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
+        document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
+        document.getElementById("quantity-supply-"+idNum).disabled = false;
+        document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
+      }else{
+        document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
+        document.getElementById("quantity-supply-"+idNum).disabled = true;
+      }
+  }
+</script>
+
+<div class="nested-fields">
+  <%= f.input_field :supply_id,
+                    label_method: :name,
+                    value_method: :id,
+                    collection: @supplies,
+                    include_blank: true,
+                    class: 'chosen-select',
+                    id: 'chosen-supply-1',
+                    prompt: 'Seleccione un suministro',
+                    onchange: "setMaxQuantitySupply(this.id);"
+  %>
+  <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,
+                          label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
+                            :title=>"Seleccione un suministro", "data-placement"=>"right",
+                            min: '0', step:'any', id: 'quantity-supply-1', :style => 'width: 100px' }%>
+
+  <%= link_to_remove_association  f, class: 'remove-tag btn btn-default btn-sm' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+  <% end %>
+</div>

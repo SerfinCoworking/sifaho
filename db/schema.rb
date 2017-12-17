@@ -97,9 +97,9 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
-    t.integer "quantificable_id"
+    t.integer "quantifiable_id"
     t.integer "supply_id"
-    t.string "quantificable_type"
+    t.string "quantifiable_type"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

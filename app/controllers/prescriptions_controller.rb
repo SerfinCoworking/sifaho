@@ -22,6 +22,7 @@ class PrescriptionsController < ApplicationController
     @prescription.build_professional
     @prescription.build_patient
     @prescription.quantity_medications.build
+    @prescription.quantity_supplies.build
   end
 
   # GET /prescriptions/1/edit
@@ -78,6 +79,7 @@ class PrescriptionsController < ApplicationController
       params.require(:prescription).permit(:observation, :date_received, :date_processed,
                                            :professional_id, :patient_id, :prescription_status_id,
                                          quantity_medications_attributes: [:medication_id, :quantity, :_destroy],
+                                         quantity_supplies_attributes: [:supply_id, :quantity, :_destroy],
                                          patient_attributes: [:first_name, :last_name, :dni, :patient_type_id],
                                          professional_attributes: [:first_name, :last_name, :dni])
     end
