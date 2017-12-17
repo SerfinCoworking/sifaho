@@ -50,6 +50,14 @@ medication = Medication.new(
 )
 medication.save!
 
+supply = Supply.new(
+  :name             => "Leche",
+  :quantity         => 40,
+  :expiry_date      => Time.now,
+  :date_received    => Time.now
+)
+supply.save!
+
 patientType = PatientType.new(
   :name         => "Ambulatorio",
   :description  => "Está recibiendo servicios del departamento de emergencia."

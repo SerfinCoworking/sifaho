@@ -67,11 +67,12 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.text "observation"
     t.datetime "date_received"
     t.datetime "date_processed"
-    t.integer "patient_id"
     t.integer "prescription_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end
 
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   end
 
   create_table "supplies", force: :cascade do |t|
+    t.string "name"
     t.integer "quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
@@ -171,6 +173,7 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   end
 
   add_foreign_key "patients", "patient_types"
+  add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "vademecums", "medications"
 end
