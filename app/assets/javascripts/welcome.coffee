@@ -1,9 +1,8 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-
-#Fix para asignar estilo al chosen de medicamentos
-jQuery ($) ->
+$(document).on "turbolinks:load", ->
+  #Fix para asignar estilo al chosen de los forms anidados
   $('.add_fields').each ->
     $this              = $(this)
     insertionNode      = $this.data('association-insertion-node')
@@ -20,8 +19,6 @@ jQuery ($) ->
     insertionNode.bind 'cocoon:after-insert', (e, newContent) ->
       newContent.find('.chosen-select').chosen(width: '300px')
 
-
-$(document).on "turbolinks:load", ->
   # habilitar chosen js
   $('.chosen-select').chosen
     allow_single_deselect: true
@@ -45,6 +42,13 @@ $(document).on "turbolinks:load", ->
     added_el.find('select').attr("id", "chosen-medication-"+idNum())
     added_el.find('input.form-control.numeric').attr("id", "quantity-medication-"+idNum())
     recount()
+    for i in [1..idNum()]
+      selectedValue = $("#chosen-medication-"+i+" option:selected").val()
+      for x in [1..idNum()]
+        if x != i
+          $("#chosen-medication-"+x).find('option[value="'+selectedValue+'"]:not(:selected)').attr('disabled','disabled')
+          $("#chosen-medication-"+x).trigger("chosen:updated")
+
 
   medications.on 'cocoon:before-remove', (e, el_to_remove) ->
     $(this).data('remove-timeout', 200)#Efecto para remover
