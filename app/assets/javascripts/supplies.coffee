@@ -16,9 +16,16 @@ $(document).on "turbolinks:load", ->
 
   supplies.on 'cocoon:after-insert', (e, added_el) ->
     #Se coloca el id de los campos anidados
+    console.log("hola")
     added_el.find('select').attr("id", "chosen-supply-"+idNum())
     added_el.find('input.form-control.numeric').attr("id", "quantity-supply-"+idNum())
     recount()
+    for i in [1..idNum()]
+      selectedValue = $("#chosen-supply-"+i+" option:selected").val()
+      for x in [1..idNum()]
+        if x != i
+          $("#chosen-supply-"+x).find('option[value="'+selectedValue+'"]:not(:selected)').attr('disabled','disabled')
+          $("#chosen-supply-"+x).trigger("chosen:updated")
 
   supplies.on 'cocoon:before-remove', (e, el_to_remove) ->
     $(this).data('remove-timeout', 200)#Efecto para remover

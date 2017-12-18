@@ -2,29 +2,43 @@
   //Esta porción de JS se coloca en este documento ya que el evento "onchange"
   //se activa desde el html.
 
-  //Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
+  //Se crea un diccionario de los suministros con sus respectivas cantidades en stock.
   <% @supplies = Supply.all %>
   var quantityToSupply = {
   <% @supplies.each do |supply| %>
     "<%=supply.id%>": {
     quantity : "<%=supply.quantity%>"
-  }
+  },
   <% end %>
   };
 
-  //Función para establecer el máximo al campo "Cantidad" de cada medicación.
+  //Función para establecer el máximo al campo "Cantidad" de cada suministro.
   function setMaxQuantitySupply(idSelect){
-    console.log(idSelect);
+    var supplies = $('#quantity-supplies');
+    var supplyCant = supplies.find('.nested-fields').size();
     var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
     var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
-      if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
-        document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
-        document.getElementById("quantity-supply-"+idNum).disabled = false;
-        document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
-      }else{
-        document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
-        document.getElementById("quantity-supply-"+idNum).disabled = true;
+
+    if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
+      document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
+      document.getElementById("quantity-supply-"+idNum).disabled = false;
+      document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
+    }else{
+      document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
+      document.getElementById("quantity-supply-"+idNum).disabled = true;
+    }
+
+    //Loop para deshabilitar el suministro seleccionado en el resto y asi no repetirlo.
+    for(i = 1; i <= supplyCant; i++){
+      var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
+      for(x = 1; x <= supplyCant; x++){
+        console.log(x);
+        if(x != i){
+          $("#chosen-supply-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
+          $("#chosen-supply-"+x).trigger("chosen:updated");
+        }
       }
+    }
   }
 </script>
 

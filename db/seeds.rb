@@ -57,6 +57,13 @@ supply = Supply.new(
   :date_received    => Time.now
 )
 supply.save!
+supply2 = Supply.new(
+  :name             => "Muletas",
+  :quantity         => 5,
+  :expiry_date      => Time.now,
+  :date_received    => Time.now
+)
+supply2.save!
 
 patientType = PatientType.new(
   :name         => "Ambulatorio",
