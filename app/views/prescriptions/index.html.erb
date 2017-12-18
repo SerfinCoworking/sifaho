@@ -1,16 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Prescriptions</h1>
+<h1>Prescripciones</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Observation</th>
-      <th>Date received</th>
-      <th>Date processed</th>
-      <th>Id professional grantor</th>
-      <th>Id patient</th>
-      <th>Id prescription status</th>
+      <th>Doctor</th>
+      <th>Paciente</th>
+      <th>Estado</th>
+      <th>Medicación</th>
+      <th>Suministros</th>
+      <th>Fecha recibida</th>
+      <th>Fecha procesada</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,15 +19,50 @@
   <tbody>
     <% @prescriptions.each do |prescription| %>
       <tr>
-        <td><%= prescription.observation %></td>
+        <td><%= prescription.professional.full_name %></td>
+        <td><%= prescription.patient.full_info %></td>
+        <td><%= prescription.prescription_status_id %></td>
+        <td>
+          <% if prescription.medications.present? %>
+            <% prescription.medications.each do |med| %>
+              <span class="badge">
+                <%= prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
+              </span>
+              <%= med.name %>
+            <% end %>
+          <% else %>
+            ------
+          <% end %>
+        </td>
+        <td>
+          <% if prescription.supplies.present? %>
+            <% prescription.supplies.each do |sup| %>
+              <span class="badge">
+                <%= prescription.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+              </span>
+              <%= sup.name %>
+            <% end %>
+          <% else %>
+            ------
+          <% end %></td>
         <td><%= prescription.date_received %></td>
         <td><%= prescription.date_processed %></td>
-        <td><%= prescription.professional_id %></td>
-        <td><%= prescription.patient_id %></td>
-        <td><%= prescription.prescription_status_id %></td>
-        <td><%= link_to 'Show', prescription %></td>
-        <td><%= link_to 'Edit', edit_prescription_path(prescription) %></td>
-        <td><%= link_to 'Destroy', prescription, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to edit_prescription_path(prescription), class: 'btn btn-warning btn-xs' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to prescription_path(prescription), class: 'btn btn-danger btn-xs',
+              method: :delete, data: {confirm: 'Estas segur@?'} do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
