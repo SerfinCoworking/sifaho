@@ -39,6 +39,10 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new(prescription_params)
     @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if dispensing?
     @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if loading?
+    date_r = prescription_params[:date_received]
+    date_p = prescription_params[:date_processed]
+    @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+    @prescription.date_processed = DateTime.strptime(date_p, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @prescription.save

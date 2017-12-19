@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Prescripciones</h1>
 
 <table>
@@ -49,8 +47,8 @@
           <% else %>
             ------
           <% end %></td>
-        <td><%= prescription.date_received %></td>
-        <td><%= prescription.date_processed %></td>
+        <td><%= prescription.date_received.strftime("%d/%m/%y %H:%M") %></td>
+        <td><%= prescription.date_processed.strftime("%d/%m/%y %H:%M") %></td>
         <td>
           <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>

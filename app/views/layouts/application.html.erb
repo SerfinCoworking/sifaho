@@ -14,7 +14,7 @@
     </header>
     <main role="main">
       <div class="col-md-10 cols-sm-10">
-        <%= render 'layouts/messages' %>
+        <%= render partial: "shared/flash_messages", flash: flash %> 
         <%= yield %>
       </div>
     </main>
