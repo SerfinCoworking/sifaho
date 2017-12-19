@@ -2,7 +2,7 @@ class Prescription < ApplicationRecord
 
   belongs_to :professional
   belongs_to :patient
-  #belongs_to :prescription_status
+  belongs_to :prescription_status
 
   has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :medications, :through => :quantity_medications
