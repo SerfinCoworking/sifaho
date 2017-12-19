@@ -43,15 +43,15 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
   end
 
-  create_table "patient_types", force: :cascade do |t|
+  create_table "order_statuses", force: :cascade do |t|
     t.string "name"
-    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "order_statuses", force: :cascade do |t|
+  create_table "patient_types", force: :cascade do |t|
     t.string "name"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -69,6 +69,12 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
+  create_table "prescription_statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "prescriptions", force: :cascade do |t|
     t.text "observation"
     t.datetime "date_received"
@@ -80,12 +86,6 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.bigint "patient_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
-  end
-
-  create_table "prescription_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "professionals", force: :cascade do |t|

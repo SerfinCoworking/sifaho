@@ -33,7 +33,7 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")) if load_and_dispense?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if load_and_dispense?
 
     respond_to do |format|
       if @prescription.save
@@ -49,7 +49,7 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")) if load_and_dispense?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if load_and_dispense?
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
