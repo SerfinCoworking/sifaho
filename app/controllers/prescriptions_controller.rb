@@ -34,6 +34,7 @@ class PrescriptionsController < ApplicationController
   def create
     @prescription = Prescription.new(prescription_params)
     @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if load_and_dispense?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if load?
 
     respond_to do |format|
       if @prescription.save
@@ -89,5 +90,9 @@ class PrescriptionsController < ApplicationController
 
     def load_and_dispense?
       params[:commit] == "Cargar y dispensar"
+    end
+
+    def load?
+      params[:commit] == "Cargar prescripción"
     end
 end
