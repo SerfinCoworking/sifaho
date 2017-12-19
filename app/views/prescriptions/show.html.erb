@@ -1,34 +1,76 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Observation:</strong>
-  <%= @prescription.observation %>
+  <h5><strong>Doctor:</strong></h5>
+  <%= @prescription.professional.full_name %>
+  <strong>DNI: </strong> <%= @prescription.professional.dni %>
+  <% if @prescription.professional.enrollment.present? %>
+    <strong>Matrícula: </strong> <%= @prescription.professional.enrollment %>
+  <% end %>
 </p>
 
 <p>
-  <strong>Date received:</strong>
+  <h5><strong>Paciente:</strong></h5>
+  <%= @prescription.patient.first_name %> <%=@prescription.patient.last_name%>
+  <strong>DNI: </strong><%= @prescription.patient.dni %>
+</p>
+
+<p>
+  <h5><strong>Estado:</strong></h5>
+  <%= @prescription.prescription_status_id %>
+</p>
+
+<% if @prescription.medications.present? %>
+  <h5><strong>Medicación:</strong></h5>
+  <% @prescription.medications.each do |med| %>
+    <span class="badge">
+      <%= @prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
+    </span>
+    <%= med.name %><br>
+  <% end %>
+<% end %>
+
+<% if @prescription.supplies.present? %>
+  <p>
+    <h5><strong>Suministros:</strong></h5>
+    <% @prescription.supplies.each do |sup| %>
+      <span class="badge">
+        <%= @prescription.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+      </span>
+      <%= sup.name %><br>
+    <% end %>
+  </p>
+<% end %>
+
+<% if @prescription.observation.present? %>
+  <p>
+    <h5><strong>Observaciones:</strong></h5>
+    <%= @prescription.observation %>
+  </p>
+<% end %>
+
+<p>
+  <h5><strong>Fecha emitida:</strong></h5>
+  <%= @prescription.created_at %>
+</p>
+
+<p>
+  <h5><strong>Fecha última modificación:</strong></h5>
+  <%= @prescription.updated_at %>
+</p>
+
+<p>
+  <h5><strong>Fecha recibida:</strong></h5>
   <%= @prescription.date_received %>
 </p>
 
 <p>
-  <strong>Date processed:</strong>
+  <h5><strong>Fecha procesada:</strong></h5>
   <%= @prescription.date_processed %>
 </p>
 
-<p>
-  <strong>Id professional grantor:</strong>
-  <%= @prescription.professional_id %>
-</p>
-
-<p>
-  <strong>Id patient:</strong>
-  <%= @prescription.patient_id %>
-</p>
-
-<p>
-  <strong>Id prescription status:</strong>
-  <%= @prescription.prescription_status_id %>
-</p>
-
-<%= link_to 'Edit', edit_prescription_path(@prescription) %> |
-<%= link_to 'Back', prescriptions_path %>
+<%= link_to edit_prescription_path(@prescription), class: 'btn btn-warning' do %>
+  <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+  Editar
+<% end %> |
+<%= link_to 'Volver', prescriptions_path, class: 'btn btn-default' %>
