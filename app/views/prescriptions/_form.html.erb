@@ -43,7 +43,7 @@
       </div>
       <p class="count">Total: <span><%= @prescription.quantity_medications.count %></span></p>
   </div>
-  
+
   <label>Suministro</label>
   <div id="quantity-supplies">
       <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
@@ -77,5 +77,6 @@
                               label: "Fecha procesada: "%><br><br>
 
   <%= link_to 'Volver', prescriptions_path, class: 'btn btn-default', tabindex: "-1" %>
-  <%= f.button :submit, 'Cargar prescripción', class: 'btn btn-primary', style: "margin-left: 30%" %>
+  <%= f.button :submit, 'Cargar prescripción', class: 'btn btn-primary', style: "margin-left: 15%" %>
+  <%= f.button :submit, 'Cargar y dispensar', class: 'btn btn-success', style: "margin-left: 12%" %>
 <% end %>

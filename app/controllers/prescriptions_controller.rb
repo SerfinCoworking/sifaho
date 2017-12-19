@@ -33,6 +33,7 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")) if load_and_dispense?
 
     respond_to do |format|
       if @prescription.save
@@ -48,6 +49,8 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")) if load_and_dispense?
+
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
         format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
@@ -82,5 +85,9 @@ class PrescriptionsController < ApplicationController
                                          quantity_supplies_attributes: [:supply_id, :quantity, :_destroy],
                                          patient_attributes: [:first_name, :last_name, :dni, :patient_type_id],
                                          professional_attributes: [:first_name, :last_name, :dni])
+    end
+
+    def load_and_dispense?
+      params[:commit] == "Cargar y dispensar"
     end
 end
