@@ -21,7 +21,11 @@
       <tr>
         <td><%= prescription.professional.full_name %></td>
         <td><%= prescription.patient.full_info %></td>
-        <td><%= prescription.prescription_status_id %></td>
+        <td>
+          <span class="label label-<%= prescription.prescription_status.label %>">
+            <%= prescription.prescription_status.name %>
+          </span>
+        </td>
         <td>
           <% if prescription.medications.present? %>
             <% prescription.medications.each do |med| %>
