@@ -21,4 +21,8 @@ class Prescription < ApplicationRecord
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
           :reject_if => :all_blank
+
+  after_initialize do |prescription|
+    prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente")
+  end
 end
