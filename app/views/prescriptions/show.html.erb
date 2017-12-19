@@ -17,7 +17,9 @@
 
 <p>
   <h5><strong>Estado:</strong></h5>
-  <%= @prescription.prescription_status_id %>
+  <span class="label label-<%= @prescription.prescription_status.label %>">
+    <%= @prescription.prescription_status.name %>
+  </span>
 </p>
 
 <% if @prescription.medications.present? %>
@@ -51,22 +53,26 @@
 
 <p>
   <h5><strong>Fecha emitida:</strong></h5>
-  <%= @prescription.created_at %>
+  <%= @prescription.created_at.strftime("%d/%m/%y %H:%M") %>
 </p>
 
 <p>
   <h5><strong>Fecha última modificación:</strong></h5>
-  <%= @prescription.updated_at %>
+  <%= @prescription.updated_at.strftime("%d/%m/%y %H:%M") %>
 </p>
 
 <p>
   <h5><strong>Fecha recibida:</strong></h5>
-  <%= @prescription.date_received %>
+  <%= @prescription.date_received.strftime("%d/%m/%y %H:%M") %>
 </p>
 
 <p>
-  <h5><strong>Fecha procesada:</strong></h5>
-  <%= @prescription.date_processed %>
+  <h5><strong>Fecha dispensada:</strong></h5>
+  <% if @prescription.date_dispensed.present? %>
+    <%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+  <% else %>
+    A dispensar
+  <% end %>
 </p>
 
 <%= link_to edit_prescription_path(@prescription), class: 'btn btn-warning' do %>

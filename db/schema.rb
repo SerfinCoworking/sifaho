@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20171209180540) do
   create_table "prescriptions", force: :cascade do |t|
     t.text "observation"
     t.datetime "date_received"
-    t.datetime "date_processed"
+    t.datetime "date_dispensed"
     t.integer "prescription_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

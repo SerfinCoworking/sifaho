@@ -37,12 +37,14 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if dispensing?
+    if dispensing?
+      @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
+      @prescription.date_dispensed = DateTime.now
+    end
     @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if loading?
+
     date_r = prescription_params[:date_received]
-    date_p = prescription_params[:date_processed]
     @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
-    @prescription.date_processed = DateTime.strptime(date_p, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @prescription.save
@@ -58,7 +60,13 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if dispensing?
+    if dispensing?
+      @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
+      @prescription.date_dispensed = DateTime.now
+    end
+
+    date = prescription_params[:date_received]
+    @prescription.date_received = DateTime.strptime(date, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
@@ -88,8 +96,7 @@ class PrescriptionsController < ApplicationController
     end
 
     def prescription_params
-      params.require(:prescription).permit(:observation, :date_received, :date_processed,
-                                           :professional_id, :patient_id, :prescription_status_id,
+      params.require(:prescription).permit(:observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
                                          quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
                                          quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
                                          patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],

@@ -66,13 +66,7 @@
                               input_html: {class: "form-control"},
                               label: "Fecha recibida: ",
                               html5: false
-                              %>
-  <%= f.input :date_processed, label: 'Fecha procesada',
-                              as: :string,
-                              required: true,
-                              :placeholder => "Seleccionar fecha",
-                              input_html: {class: "form-control"},
-                              label: "Fecha procesada: "%><br><br>
+                              %><br><br>
 
   <%= link_to 'Volver', prescriptions_path, class: 'btn btn-default', tabindex: "-1" %>
   <% if @prescription.persisted? %>

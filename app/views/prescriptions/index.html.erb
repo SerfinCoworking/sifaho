@@ -9,7 +9,7 @@
       <th>Medicación</th>
       <th>Suministros</th>
       <th>Fecha recibida</th>
-      <th>Fecha procesada</th>
+      <th>Fecha dispensada</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -48,7 +48,13 @@
             ------
           <% end %></td>
         <td><%= prescription.date_received.strftime("%d/%m/%y %H:%M") %></td>
-        <td><%= prescription.date_processed.strftime("%d/%m/%y %H:%M") %></td>
+        <td>
+          <% if prescription.date_dispensed.present? %>
+            <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+          <% else %>
+            ------
+          <% end %>
+        </td>
         <td>
           <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
