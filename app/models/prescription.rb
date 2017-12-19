@@ -21,4 +21,8 @@ class Prescription < ApplicationRecord
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
           :reject_if => :all_blank
+
+  def dispensed?
+    self.prescription_status.is_dispense?
+  end
 end

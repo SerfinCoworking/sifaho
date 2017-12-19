@@ -1,6 +1,10 @@
 class PrescriptionStatus < ApplicationRecord
   has_many :prescriptions
 
+  def is_dispense?
+    self.name == "Dispensada"
+  end
+
   def label
     if self.name == "Pendiente"
       return "default"

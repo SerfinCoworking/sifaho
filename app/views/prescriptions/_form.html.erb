@@ -77,6 +77,13 @@
                               label: "Fecha procesada: "%><br><br>
 
   <%= link_to 'Volver', prescriptions_path, class: 'btn btn-default', tabindex: "-1" %>
-  <%= f.button :submit, 'Cargar prescripción', class: 'btn btn-primary', style: "margin-left: 15%" %>
-  <%= f.button :submit, 'Cargar y dispensar', class: 'btn btn-success', style: "margin-left: 12%" %>
+  <% if @prescription.persisted? %>
+    <%= f.button :submit, 'Guardar cambios', class: 'btn btn-primary', style: "margin-left: 15%" %>
+    <% unless @prescription.dispensed? %>
+      <%= f.button :submit, 'Guardar y dispensar', class: 'btn btn-success', style: "margin-left: 12%" %>
+    <% end %>
+  <% else %>
+    <%= f.button :submit, 'Cargar prescripción', class: 'btn btn-primary', style: "margin-left: 15%" %>
+    <%= f.button :submit, 'Cargar y dispensar', class: 'btn btn-success', style: "margin-left: 12%" %>
+  <% end %>
 <% end %>

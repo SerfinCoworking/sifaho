@@ -27,14 +27,18 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/1/edit
   def edit
+    @professionals = Professional.all
+    @medications = Medication.all
+    @patients = Patient.all
+    @patient_types = PatientType.all
   end
 
   # POST /prescriptions
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if load_and_dispense?
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if load?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if dispensing?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if loading?
 
     respond_to do |format|
       if @prescription.save
@@ -50,7 +54,7 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if load_and_dispense?
+    @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada") if dispensing?
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
@@ -82,17 +86,18 @@ class PrescriptionsController < ApplicationController
     def prescription_params
       params.require(:prescription).permit(:observation, :date_received, :date_processed,
                                            :professional_id, :patient_id, :prescription_status_id,
-                                         quantity_medications_attributes: [:medication_id, :quantity, :_destroy],
-                                         quantity_supplies_attributes: [:supply_id, :quantity, :_destroy],
-                                         patient_attributes: [:first_name, :last_name, :dni, :patient_type_id],
-                                         professional_attributes: [:first_name, :last_name, :dni])
+                                         quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
+                                         quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
+                                         patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
+                                         professional_attributes: [:id, :first_name, :last_name, :dni])
     end
 
-    def load_and_dispense?
-      params[:commit] == "Cargar y dispensar"
+    def dispensing?
+      submit = params[:commit]
+      return submit == "Cargar y dispensar" || submit == "Guardar y dispensar"
     end
 
-    def load?
+    def loading?
       params[:commit] == "Cargar prescripción"
     end
 end
