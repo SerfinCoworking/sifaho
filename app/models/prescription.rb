@@ -2,7 +2,7 @@ class Prescription < ApplicationRecord
 
   belongs_to :professional
   belongs_to :patient
-  #belongs_to :prescription_status
+  belongs_to :prescription_status
 
   has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :medications, :through => :quantity_medications
@@ -21,4 +21,8 @@ class Prescription < ApplicationRecord
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
           :reject_if => :all_blank
+
+  after_initialize do |prescription|
+    prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente")
+  end
 end
