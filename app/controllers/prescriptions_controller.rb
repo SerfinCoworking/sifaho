@@ -65,11 +65,11 @@ class PrescriptionsController < ApplicationController
       @prescription.date_dispensed = DateTime.now
     end
 
-    date = prescription_params[:date_received]
-    @prescription.date_received = DateTime.strptime(date, '%d/%M/%Y %H:%M %p')
+    new_date_received = DateTime.strptime(prescription_params[:date_received], '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
+        @prescription.update_attribute(:date_received, new_date_received)
         format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @prescription }
       else
