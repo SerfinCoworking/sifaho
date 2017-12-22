@@ -61,9 +61,8 @@
   <%= f.input :observation, label: 'Observaciones', as: :text %><br><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                               as: :string,
-                              required: true,
                               :placeholder => "Seleccionar fecha",
-                              input_html: {class: "form-control",
+                              input_html: {class: "form-control", required: true,
                               value: "#{@prescription.date_received.strftime("%d/%m/%y %H:%M") unless @prescription.new_record?}"},
                               label: "Fecha recibida: ",
                               html5: false
