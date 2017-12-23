@@ -14,8 +14,10 @@
     </header>
     <main role="main">
       <div class="col-md-10 cols-sm-10">
-        <%= render partial: "shared/flash_messages", flash: flash %>
-        <%= yield %>
+        <div class="container">
+          <%= render partial: "shared/flash_messages", flash: flash %>
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>

@@ -1,6 +1,6 @@
-<%= simple_form_for(@medication) do |f| %>
+<%= simple_form_for @medication, html: {class: "form-inline"} do |f| %>
   <%= f.input :vademecum_id,
-                    label: 'Droga',
+                    label: false,
                     label_method: :medication_name,
                     value_method: :id,
                     collection: @vademecums,
@@ -12,6 +12,7 @@
                           label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
                           :title=>"Seleccione una droga", "data-placement"=>"right",
                           min: '0', step:'any', id: 'quantity-medication-1', :style => 'width: 100px' }%>
+  <br><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                             as: :string,
                             :placeholder => "Seleccionar fecha",
@@ -19,7 +20,7 @@
                             value: "#{@medication.date_received.strftime("%d/%m/%y %H:%M") unless @medication.new_record?}"},
                             label: "Fecha recibida: ",
                             html5: false
-                            %><br><br>
+                            %>
   <%= f.input :expiry_date, label: 'Fecha expiración',
                             as: :string,
                             :placeholder => "Seleccionar fecha",
@@ -27,9 +28,10 @@
                             value: "#{@medication.expiry_date.strftime("%d/%m/%y %H:%M") unless @medication.new_record?}"},
                             label: "Fecha expiración: ",
                             html5: false
-                            %><br><br>
-<%  %>
+                            %>
+  <br><br>
   <div class="form-actions">
-    <%= f.button :submit %>
+    <%= link_to 'Volver', medications_path, class: 'btn btn-default', tabindex: "-1" %>
+    <%= f.button :submit, 'Cargar lote', class: 'btn btn-primary pull-right' %>
   </div>
 <% end %>
