@@ -1,4 +1,6 @@
-<%= simple_form_for @medication, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @medication, remote: true, html: {class: "form-inline"} do |f| %>
+  <div id="error_explanation" class="bg-danger text-danger">
+  </div>
   <%= f.input :vademecum_id,
                     label: false,
                     label_method: :medication_name,
@@ -11,7 +13,7 @@
   <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,
                           label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
                           :title=>"Seleccione una droga", "data-placement"=>"right",
-                          min: '0', step:'any', id: 'quantity-medication-1', :style => 'width: 100px' }%>
+                          min: '0', step:'any', id: 'quantity-medication', :style => 'width: 100px' }%>
   <br><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                             as: :string,
@@ -31,7 +33,7 @@
                             %>
   <br><br>
   <div class="form-actions">
-    <%= link_to 'Volver', medications_path, class: 'btn btn-default', tabindex: "-1" %>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>
     <%= f.button :submit, 'Cargar lote', class: 'btn btn-primary pull-right' %>
   </div>
 <% end %>
