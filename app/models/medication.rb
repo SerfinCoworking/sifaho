@@ -14,9 +14,19 @@ class Medication < ApplicationRecord
            :source => :quantifiable,
            :source_type => 'Prescription'
 
-  def name
+  def full_info
     if self.vademecum
       self.vademecum.medication_name<<" "<<self.medication_brand.name
+    end
+  end
+  def name
+    if self.vademecum
+      self.vademecum.medication_name
+    end
+  end
+  def brand
+    if self.medication_brand
+      self.medication_brand.name
     end
   end
 end

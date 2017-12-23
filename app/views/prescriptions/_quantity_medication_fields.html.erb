@@ -44,7 +44,7 @@
 
 <div class="nested-fields">
   <%= f.input_field :medication_id,
-                    label_method: :name,
+                    label_method: :full_info,
                     value_method: :id,
                     collection: @medications,
                     include_blank: true,

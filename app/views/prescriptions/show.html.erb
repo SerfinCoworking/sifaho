@@ -28,7 +28,7 @@
     <span class="badge">
       <%= @prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
     </span>
-    <%= med.name %><br>
+    <%= med.full_info %><br>
   <% end %>
 <% end %>
 

@@ -15,6 +15,7 @@ class MedicationsController < ApplicationController
   # GET /medications/new
   def new
     @medication = Medication.new
+    @vademecums = Vademecum.all
   end
 
   # GET /medications/1/edit

@@ -1,25 +1,53 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Medications</h1>
+<h1>Stock de medicamentos</h1>
 
-<table>
+<div class="container-fluid">
+  <div class="panel panel-default">
+<table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th colspan="3"></th>
+      <th>Medicamento</th>
+      <th>Marca</th>
+      <th>Cantidad</th>
+      <th>Fecha recepción</th>
+      <th>Fecha expiración</th>
+      <th colspan="3">
+      <%= link_to new_medication_path, class: 'btn btn-primary btn-xs' do %>
+        Nuevo lote
+      <% end %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @medications.each do |medication| %>
       <tr>
-        <td><%= link_to 'Show', medication %></td>
-        <td><%= link_to 'Edit', edit_medication_path(medication) %></td>
-        <td><%= link_to 'Destroy', medication, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= medication.name %></td>
+        <td><%= medication.brand %></td>
+        <td><%= medication.quantity %></td>
+        <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
+        <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
+        <td>
+          <%= link_to medication_path(medication), class: 'btn btn-default btn-xs' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to edit_medication_path(medication), class: 'btn btn-warning btn-xs' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to medication_path(medication), class: 'btn btn-danger btn-xs',
+              method: :delete, data: {confirm: 'Estas segur@?'} do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
+</div>
+</div>
 
 <br>
-
-<%= link_to 'New Medication', new_medication_path %>

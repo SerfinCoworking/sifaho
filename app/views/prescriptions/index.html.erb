@@ -30,7 +30,7 @@
               <span class="badge">
                 <%= prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
               </span>
-              <%= med.name %>
+              <%= med.full_info %>
             <% end %>
           <% else %>
             ------
