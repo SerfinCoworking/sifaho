@@ -1,19 +1,4 @@
-<script  type="text/javascript">
-function enableQuantity(){
-  if($("#vademecum_id option:selected").val() != 0){
-    $('#medication_date_received').datetimepicker();
-    $('#medication_expiry_date').datetimepicker();
-    document.getElementById("quantity-medication").setAttribute("required", true);
-    document.getElementById("quantity-medication").disabled = false;
-  }else{
-    document.getElementById("quantity-medication").value = '';
-    document.getElementById("quantity-medication").setAttribute("required", false);
-    document.getElementById("quantity-medication").disabled = true;
-  }
-}
-</script>
 <%= simple_form_for @medication, remote: true, html: {class: "form-inline"} do |f| %>
-  <div id="error_explanation" class="bg-danger text-danger" />
   <%= f.input :vademecum_id,
                     label: false,
                     label_method: :medication_name,
@@ -42,16 +27,14 @@ function enableQuantity(){
   <%= f.input :date_received, label: 'Fecha recibida',
                             as: :string,
                             :placeholder => "Seleccionar fecha",
-                            input_html: {class: "form-control", required: true,
-                            value: "#{@medication.date_received.strftime("%d/%m/%y %H:%M") unless @medication.new_record?}"},
+                            input_html: {class: "form-control", required: true},
                             label: "Fecha recibida: ",
                             html5: false
                             %>
   <%= f.input :expiry_date, label: 'Fecha expiración',
                             as: :string,
                             :placeholder => "Seleccionar fecha",
-                            input_html: {class: "form-control", required: true,
-                            value: "#{@medication.expiry_date.strftime("%d/%m/%y %H:%M") unless @medication.new_record?}"},
+                            input_html: {class: "form-control", required: true},
                             label: "Fecha expiración: ",
                             html5: false
                             %>

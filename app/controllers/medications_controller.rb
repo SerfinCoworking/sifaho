@@ -21,6 +21,8 @@ class MedicationsController < ApplicationController
 
   # GET /medications/1/edit
   def edit
+    @vademecums = Vademecum.all
+    @medication_brands = MedicationBrand.all
   end
 
   # POST /medications
@@ -48,8 +50,13 @@ class MedicationsController < ApplicationController
   # PATCH/PUT /medications/1
   # PATCH/PUT /medications/1.json
   def update
+    new_date_received = DateTime.strptime(medication_params[:date_received], '%d/%M/%Y %H:%M %p')
+    new_expiry_date = DateTime.strptime(medication_params[:expiry_date], '%d/%M/%Y %H:%M %p')
+
     respond_to do |format|
       if @medication.update(medication_params)
+        @medication.update_attribute(:date_received, new_date_received)
+        @medication.update_attribute(:expiry_date, new_expiry_date)
         format.html { redirect_to @medication, notice: 'Medication was successfully updated.' }
         format.js
         format.json { render :show, status: :ok, location: @medication }
