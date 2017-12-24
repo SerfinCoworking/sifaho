@@ -1,19 +1,43 @@
+<script  type="text/javascript">
+function enableQuantity(){
+  if($("#vademecum_id option:selected").val() != 0){
+    $('#medication_date_received').datetimepicker();
+    $('#medication_expiry_date').datetimepicker();
+    document.getElementById("quantity-medication").setAttribute("required", true);
+    document.getElementById("quantity-medication").disabled = false;
+  }else{
+    document.getElementById("quantity-medication").value = '';
+    document.getElementById("quantity-medication").setAttribute("required", false);
+    document.getElementById("quantity-medication").disabled = true;
+  }
+}
+</script>
 <%= simple_form_for @medication, remote: true, html: {class: "form-inline"} do |f| %>
-  <div id="error_explanation" class="bg-danger text-danger">
-  </div>
+  <div id="error_explanation" class="bg-danger text-danger" />
   <%= f.input :vademecum_id,
                     label: false,
                     label_method: :medication_name,
                     value_method: :id,
                     collection: @vademecums,
                     include_blank: false,
-                    input_html: { class: 'chosen-select', id: 'vademecum_id' },
+                    input_html: { class: 'chosen-select', id: 'vademecum_id',
+                                  onchange: "enableQuantity();" },
                     prompt: 'Seleccionar una droga'
   %>
   <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,
                           label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
                           :title=>"Seleccione una droga", "data-placement"=>"right",
                           min: '0', step:'any', id: 'quantity-medication', :style => 'width: 100px' }%>
+  <br><br>
+  <%= f.input :medication_brand_id,
+                    label: false,
+                    label_method: :name_and_lab,
+                    value_method: :id,
+                    collection: @medication_brands,
+                    include_blank: false,
+                    input_html: { class: 'chosen-select', id: 'medication_brand_id', onchange: "" },
+                    prompt: 'Seleccionar una marca'
+  %>
   <br><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                             as: :string,

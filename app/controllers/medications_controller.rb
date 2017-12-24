@@ -16,6 +16,7 @@ class MedicationsController < ApplicationController
   def new
     @medication = Medication.new
     @vademecums = Vademecum.all
+    @medication_brands = MedicationBrand.all
   end
 
   # GET /medications/1/edit
@@ -27,10 +28,15 @@ class MedicationsController < ApplicationController
   def create
     @medication = Medication.new(medication_params)
 
+    date_r = medication_params[:date_received]
+    date_e = medication_params[:expiry_date]
+    @medication.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+    @medication.expiry_date = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+
     respond_to do |format|
       if @medication.save
         format.html { redirect_to @medication, notice: 'Medication was successfully created.' }
-        format.js   { }
+        format.js
         format.json { render :show, status: :created, location: @medication }
       else
         format.html { render :new }
@@ -45,6 +51,7 @@ class MedicationsController < ApplicationController
     respond_to do |format|
       if @medication.update(medication_params)
         format.html { redirect_to @medication, notice: 'Medication was successfully updated.' }
+        format.js
         format.json { render :show, status: :ok, location: @medication }
       else
         format.html { render :edit }
@@ -58,6 +65,7 @@ class MedicationsController < ApplicationController
   def destroy
     @medication.destroy
     respond_to do |format|
+      format.js
       format.html { redirect_to medications_url, notice: 'Medication was successfully destroyed.' }
       format.json { head :no_content }
     end
@@ -71,6 +79,7 @@ class MedicationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def medication_params
-      params.fetch(:medication, {})
+      params.require(:medication).permit(:vademecum_id, :quantity, :date_received,
+                                         :expiry_date, :medication_brand_id)
     end
 end
