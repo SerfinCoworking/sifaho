@@ -2,6 +2,7 @@ class Medication < ApplicationRecord
   attr_accessor :name
 
   validates :vademecum, presence: true
+  validates :medication_brand, presence:true
   validates :expiry_date, presence: true
   validates :date_received, presence:true
 
@@ -13,6 +14,9 @@ class Medication < ApplicationRecord
            :through => :quantity_medications,
            :source => :quantifiable,
            :source_type => 'Prescription'
+
+  accepts_nested_attributes_for :medication_brand,
+         :reject_if => :all_blank
 
   def full_info
     if self.vademecum

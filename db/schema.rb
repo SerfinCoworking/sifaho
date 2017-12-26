@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["medication_id"], name: "index_vademecums_on_medication_id"
   end
 
+  add_foreign_key "medications", "medication_brands"
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"

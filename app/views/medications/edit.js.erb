@@ -31,5 +31,36 @@ function enableQuantity(){
   }
 }
 
+function validateForm(){
+  if($("#vademecum_id option:selected").val() == 0){
+    document.getElementsByClassName('medication_vademecum_id')[0].style.boxShadow = "0 0 5px red";
+    return false;
+  }else{
+    return true;
+  }
+}
+
+$('#medication_brand_id').change(function () {
+  if($('#medication_brand_id option:selected').val() != 0){
+    document.getElementById('form-medication-brand').style.display="none";
+    document.getElementById('medication-brand-hint').style.display="block";
+    document.getElementById('medication_medication_brand_attributes_name').required = false;
+  }else{
+    document.getElementById('form-medication-brand').style.display="block";
+    document.getElementById('medication-brand-hint').style.display="none";
+    document.getElementById('medication_medication_brand_attributes_name').required = true;
+  }
+});
+
+$('#laboratory_id').change(function () {
+  if($('#laboratory_id option:selected').val() != 0){
+    document.getElementById('form-laboratory').style.display="none";
+    document.getElementById('laboratory-hint').style.display="block";
+  }else{
+    document.getElementById('form-laboratory').style.display="block";
+    document.getElementById('laboratory-hint').style.display="none";
+  }
+});
+
 $('#medication_date_received').val("<%= @medication.date_received.strftime("%d/%m/%y %H:%M %p") %>");
 $('#medication_expiry_date').val("<%= @medication.expiry_date.strftime("%d/%m/%y %H:%M %p") %>");

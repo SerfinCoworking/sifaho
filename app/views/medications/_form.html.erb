@@ -1,4 +1,5 @@
-<%= simple_form_for @medication, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @medication, remote: true, html: {class: "form-inline", onsubmit: "return validateForm()"} do |f| %>
+<%= f.error_notification %>
   <%= f.input :vademecum_id,
                     label: false,
                     label_method: :medication_name,
@@ -13,7 +14,7 @@
                           label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
                           :title=>"Seleccione una droga", "data-placement"=>"right",
                           min: '0', step:'any', id: 'quantity-medication', :style => 'width: 100px' }%>
-  <br><br>
+
   <%= f.input :medication_brand_id,
                     label: false,
                     label_method: :name_and_lab,
@@ -21,15 +22,44 @@
                     collection: @medication_brands,
                     include_blank: false,
                     input_html: { class: 'chosen-select', id: 'medication_brand_id', onchange: "" },
-                    prompt: 'Seleccionar una marca'
+                    prompt: 'Seleccionar una marca o crear una nueva'
   %>
   <br><br>
+
+  <%= f.hint 'No seleccione ninguna marca para crear una nueva', id: 'medication-brand-hint', style: "display: none" %>
+
+  <%= f.simple_fields_for :medication_brand, html: { class: 'form-inline' } do |mb| %>
+    <div id='form-medication-brand'>
+      <label>Nueva marca</label>
+      <%= mb.input :name, placeholder: 'Marca', required: true, label: false %>
+      <%= mb.input :description, placeholder: 'Descripción', required: false, label: false %>
+      <%= mb.input :laboratory_id,
+                        label: false,
+                        label_method: :name,
+                        value_method: :id,
+                        collection: @laboratories,
+                        include_blank: true,
+                        input_html: { class: 'chosen-select', id: 'laboratory_id', onchange: "" },
+                        prompt: 'Seleccionar un laboratorio'
+      %>
+      <br><br>
+      <%= f.hint 'No seleccione ningun laboratorio para crear uno nuevo', id: 'laboratory-hint', style: "display: none" %>
+      <div id='form-laboratory'>
+        <label>Nuevo laboratorio</label>
+        <%= mb.simple_fields_for :laboratory, html: { class: 'form-inline' } do |lab| %>
+          <%= lab.input :name, placeholder: 'Nombre', label: false %>
+          <%= lab.input :address, placeholder: 'Dirección', required: false, label: false %>
+        <% end %>
+      </div>
+    </div>
+  <% end %><br>
   <%= f.input :date_received, label: 'Fecha recibida',
                             as: :string,
                             :placeholder => "Seleccionar fecha",
                             input_html: {class: "form-control", required: true},
                             label: "Fecha recibida: ",
-                            html5: false
+                            html5: false,
+                            validate: {presence: true}
                             %>
   <%= f.input :expiry_date, label: 'Fecha expiración',
                             as: :string,

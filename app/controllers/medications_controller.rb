@@ -15,21 +15,27 @@ class MedicationsController < ApplicationController
   # GET /medications/new
   def new
     @medication = Medication.new
+    @medication.build_medication_brand
+    @medication.medication_brand.build_laboratory
     @vademecums = Vademecum.all
     @medication_brands = MedicationBrand.all
+    @laboratories = Laboratory.all
   end
 
   # GET /medications/1/edit
   def edit
     @vademecums = Vademecum.all
     @medication_brands = MedicationBrand.all
+    @laboratories = Laboratory.all
   end
 
   # POST /medications
   # POST /medications.json
   def create
     @medication = Medication.new(medication_params)
-
+    if medication_params[:medication_brand_id].present?
+      @medication.update_attribute(:medication_brand_id, medication_params[:medication_brand_id])
+    end
     date_r = medication_params[:date_received]
     date_e = medication_params[:expiry_date]
     @medication.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
@@ -37,9 +43,8 @@ class MedicationsController < ApplicationController
 
     respond_to do |format|
       if @medication.save
-        format.html { redirect_to @medication, notice: 'Medication was successfully created.' }
+        flash[:success] = "La medicación se ha creado correctamente."
         format.js
-        format.json { render :show, status: :created, location: @medication }
       else
         format.html { render :new }
         format.json { render json: @medication.errors, status: :unprocessable_entity }
@@ -57,10 +62,11 @@ class MedicationsController < ApplicationController
       if @medication.update(medication_params)
         @medication.update_attribute(:date_received, new_date_received)
         @medication.update_attribute(:expiry_date, new_expiry_date)
-        format.html { redirect_to @medication, notice: 'Medication was successfully updated.' }
+        flash[:success] = "La medicación se ha modificado correctamente."
         format.js
-        format.json { render :show, status: :ok, location: @medication }
       else
+        flash[:error] = "La medicación no se ha podido modificar."
+        format.js
         format.html { render :edit }
         format.json { render json: @medication.errors, status: :unprocessable_entity }
       end
@@ -87,6 +93,8 @@ class MedicationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def medication_params
       params.require(:medication).permit(:vademecum_id, :quantity, :date_received,
-                                         :expiry_date, :medication_brand_id)
+                                         :expiry_date, :medication_brand_id,
+                                         medication_brand_attributes: [:id, :name, :description, :laboratory_id,
+                                         laboratory_attributes: [:id, :name, :address]])
     end
 end
