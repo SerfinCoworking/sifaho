@@ -4,6 +4,12 @@ $('#dialog h3').html("<i class=' glyphicon glyphicon-pencil'></i> Editar lote de
 // Render the edit form
 $('.modal-body').html('<%= j render("form") %>');
 
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<button type='submit' class='btn btn-primary pull-right' form='new_medication' value='Guardar cambios'>Guardar cambios</button>"
+);
+
 // Show the dynamic dialog
 $('#dialog').modal("show");
 

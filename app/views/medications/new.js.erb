@@ -4,6 +4,12 @@ $('#dialog h3').html("<i class='glyphicon glyphicon-plus'></i> Nuevo lote de med
 // Render the new form
 $('.modal-body').html('<%= j render("form") %>');
 
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<button type='submit' class='btn btn-primary pull-right' form='new_medication' value='Cargar lote'>Cargar lote</button>"
+);
+
 // Show the dynamic dialog
 $('#dialog').modal("show");
 

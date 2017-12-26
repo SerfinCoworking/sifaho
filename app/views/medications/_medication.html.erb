@@ -1,7 +1,7 @@
 <tr id="medication_<%= medication.id %>">
   <td><%= medication.name %></td>
   <td><%= medication.brand %></td>
-  <td><%= medication.quantity %></td>
+  <td><span class="badge"><%= medication.quantity %><span></td>
   <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
   <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
   <td>

@@ -1,5 +1,9 @@
-<h1>Stock de medicamentos</h1>
-
+<h1>Stock de medicamentos
+<%= link_to new_medication_path, remote: true, class: 'btn btn-primary btn-md' do %>
+  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+  Nuevo lote
+<% end %>
+</h1>
 <div class="panel panel-default">
   <table class="table table-hover table-striped">
     <thead>
@@ -9,10 +13,7 @@
         <th>Cantidad</th>
         <th>Fecha recepción</th>
         <th>Fecha expiración</th>
-        <th colspan="3">
-        <%= link_to new_medication_path, remote: true, class: 'btn btn-primary btn-xs' do %>
-          Nuevo lote
-        <% end %></th>
+        <th colspan="3">Acciones</th>
       </tr>
     </thead>
 

@@ -10,6 +10,9 @@ class MedicationsController < ApplicationController
   # GET /medications/1
   # GET /medications/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /medications/new
