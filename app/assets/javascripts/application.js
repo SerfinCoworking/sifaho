@@ -35,3 +35,8 @@ $(document).ajaxError(function(event,xhr,options,exc) {
     $("#error_explanation").html(er);
 
 });
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 2000);
