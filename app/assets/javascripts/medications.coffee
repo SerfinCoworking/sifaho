@@ -1,4 +1,5 @@
 $(document).on "turbolinks:load", ->
+    
   $.rails.allowAction = (link) ->
     return true unless link.attr('data-confirm')
     $.rails.showConfirmDialog(link)

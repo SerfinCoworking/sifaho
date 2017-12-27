@@ -16,7 +16,9 @@
       <div class="col-md-10 cols-sm-10">
         <div class="container-fluid">
           <%= render "layouts/flash_notices" %>
-          <%= yield %>
+          <div id="content"><%# Para will_paginate %>
+            <%= yield %>
+          </div>
         </div>
       </div>
     </main>
