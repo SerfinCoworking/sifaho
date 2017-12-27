@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require chosen-jquery
+//= require filterrific/filterrific-jquery
 //= require turbolinks
 //= require cocoon
 //= require_tree .
@@ -23,18 +24,6 @@
 //= require bootstrap-sprockets
 //= require bootstrap
 
-$(document).ajaxError(function(event,xhr,options,exc) {
-
-    var errors = JSON.parse(xhr.responseText);
-    var er ="<ul>";
-    for(var i = 0; i < errors.length; i++){
-        var list = errors[i];
-        er += "<li>"+list+"</li>"
-    }
-    er+="</ul>"
-    $("#error_explanation").html(er);
-
-});
 window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();

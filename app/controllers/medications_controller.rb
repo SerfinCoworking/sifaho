@@ -4,11 +4,26 @@ class MedicationsController < ApplicationController
   # GET /medications
   # GET /medications.json
   def index
-    @medications = Medication.paginate(per_page: 10, page: params[:page])
+    @filterrific = initialize_filterrific(
+      Medication,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Medication.options_for_sorted_by
+      },
+      persistence_id: 'shared_key',
+      default_filter_params: {},
+      available_filters: [],
+    ) or return
+    @medications = @filterrific.find.page(params[:page])
+
     respond_to do |format|
       format.html
       format.js
     end
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /medications/1
@@ -46,7 +61,7 @@ class MedicationsController < ApplicationController
     date_r = medication_params[:date_received]
     date_e = medication_params[:expiry_date]
     @medication.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
-    @medication.expiry_date = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+    @medication.expiry_date = DateTime.strptime(date_e, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @medication.save

@@ -1,1 +1,4 @@
-$("div#content").html('<%= escape_javascript(render "index") %>');
+<% js = escape_javascript(
+  render(partial: 'medications/list', locals: { medications: @medications })
+) %>
+$("#filterrific_results").html("<%= js %>");

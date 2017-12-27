@@ -5,7 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 
 end
-
+# Use filterrific to search, filter and sort lists
+gem 'filterrific'
 # Use will_paginate for limit the post per page
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'

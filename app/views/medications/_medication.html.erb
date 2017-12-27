@@ -2,7 +2,7 @@
   <td><%= medication.name %></td>
   <td><%= medication.brand %></td>
   <td><span class="badge"><%= medication.quantity %><span></td>
-  <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
+  <td><%= medication.date_received.strftime("%d/%m/%y %H:%M") %></td>
   <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
   <td>
     <%= link_to medication_path(medication), remote: true, class: 'btn btn-default btn-xs' do %>
