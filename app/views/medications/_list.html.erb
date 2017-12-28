@@ -1,21 +1,23 @@
-<div class="panel panel-default">
-  <table class="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th>Medicamento</th>
-        <th>Marca</th>
-        <th>Cantidad</th>
-        <th>Fecha recepción</th>
-        <th>Fecha expiración</th>
-        <th colspan="3">Acciones</th>
-      </tr>
-    </thead>
+<div id="filterrific_results">
+  <div class="panel panel-default">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th><%= filterrific_sorting_link(@filterrific, :droga) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :marca) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :cantidad) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :fecha_recepcion) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :fecha_expiracion) %></th>
+          <th colspan="3">Acciones</th>
+        </tr>
+      </thead>
 
-    <tbody id=medications>
-      <%= render @medications %>
-    </tbody>
-  </table>
-  <%= render 'dialog' %>
+      <tbody id=medications>
+        <%= render @medications %>
+      </tbody>
+    </table>
+    <%= render 'dialog' %>
+  </div>
 </div>
 <%= will_paginate(@medications, remote: true,
   renderer: BootstrapPagination::Rails, previous_label: 'Atras', next_label: 'Siguiente') %>

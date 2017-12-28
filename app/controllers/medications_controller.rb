@@ -10,11 +10,15 @@ class MedicationsController < ApplicationController
       select_options: {
         sorted_by: Medication.options_for_sorted_by
       },
-      persistence_id: 'shared_key',
-      default_filter_params: {},
-      available_filters: [],
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :sorted_by,
+        :search_query,
+      ],
     ) or return
     @medications = @filterrific.find.page(params[:page]).per_page(8)
+
 
     respond_to do |format|
       format.html
