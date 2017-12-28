@@ -29,3 +29,7 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 2000);
+
+$(document).on('turbolinks:load', function() {
+  $('#datetimepicker').datetimepicker();
+});

@@ -15,6 +15,7 @@ class MedicationsController < ApplicationController
       available_filters: [
         :sorted_by,
         :search_query,
+        :date_received_at,
       ],
     ) or return
     @medications = @filterrific.find.page(params[:page]).per_page(8)
