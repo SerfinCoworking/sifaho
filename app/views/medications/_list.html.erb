@@ -11,7 +11,6 @@
           <th colspan="3">Acciones</th>
         </tr>
       </thead>
-
       <tbody id=medications>
         <%= render @medications %>
       </tbody>
@@ -19,5 +18,6 @@
     <%= render 'dialog' %>
   </div>
 </div>
-<%= will_paginate(@medications, remote: true,
-  renderer: BootstrapPagination::Rails, previous_label: 'Atras', next_label: 'Siguiente') %>
+<div id="page_links">
+    <%= paginate @medications %>
+</div>
