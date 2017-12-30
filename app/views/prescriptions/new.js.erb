@@ -1,0 +1,22 @@
+// Add the dialog title
+$('#dialog h3').html("<i class='glyphicon glyphicon-plus'></i>  Nueva prescripción");
+
+// Render the new form
+$('.modal-body').html('<%= j render("form") %>');
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<button type='submit' name='commit' class='btn btn-success pull-right' form='new_prescription' value='Cargar y dispensar'>Cargar y dispensar</button>"+
+  "<button type='submit' name='commit' class='btn btn-primary pull-left' style='margin-left: 30%' form='new_prescription' value='Cargar prescripción'>Cargar prescripción</button>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Set focus to the first element
+$('#dialog').on('shown.bs.modal', function () {
+  $('.first_input').focus();
+})
+
+<%= render 'form_function' %>

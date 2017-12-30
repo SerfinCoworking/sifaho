@@ -106,7 +106,7 @@ class MedicationsController < ApplicationController
     @medication.destroy
     respond_to do |format|
       format.js
-      format.html { redirect_to medications_url, notice: 'Medication was successfully destroyed.' }
+      format.html { redirect_to medications_url, notice: 'La medicación se ha eliminado correctamente.' }
       format.json { head :no_content }
     end
   end

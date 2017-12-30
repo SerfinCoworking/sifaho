@@ -2,57 +2,20 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on "turbolinks:load", ->
-  #Fix para asignar estilo al chosen de los forms anidados
-  $('.add_fields').each ->
-    $this              = $(this)
-    insertionNode      = $this.data('association-insertion-node')
-    insertionTraversal = $this.data('association-insertion-traversal')
+  $('#dialog').on 'shown.bs.modal', (e) ->
+    # Fix para asignar estilo al chosen de los nuevos forms anidados
+    $('.add_fields').each ->
+      $this              = $(this)
+      insertionNode      = $this.data('association-insertion-node')
+      insertionTraversal = $this.data('association-insertion-traversal')
 
-    if (insertionNode)
-      if (insertionTraversal)
-        insertionNode = $this[insertionTraversal](insertionNode)
+      if (insertionNode)
+        if (insertionTraversal)
+          insertionNode = $this[insertionTraversal](insertionNode)
+        else
+          insertionNode = insertionNode == "this" ? $this : $(insertionNode)
       else
-        insertionNode = insertionNode == "this" ? $this : $(insertionNode)
-    else
-      insertionNode = $this.parent()
+        insertionNode = $this.parent()
 
-    insertionNode.bind 'cocoon:after-insert', (e, newContent) ->
-      newContent.find('.chosen-select').chosen(width: '300px')
-
-  # habilitar chosen js
-  $('.chosen-select').chosen
-    allow_single_deselect: true
-    no_results_text: 'No se encontró el resultado'
-    width: '300px'
-
-  #id del form anidado para quantity_medications
-  medications = $('#quantity-medications')
-
-  #Métodos para conocer la cantitdad de forms anidados
-  count = medications.find('.count > span')
-  idNum = -> medications.find('.nested-fields').size()
-  recount = -> count.text medications.find('.nested-fields').size()
-  recount()
-
-  medications.on 'cocoon:before-insert', (e, el_to_add) ->
-    el_to_add.fadeIn(200) #Efecto para el insert
-
-  medications.on 'cocoon:after-insert', (e, added_el) ->
-    #Se coloca el id de los campos anidados
-    added_el.find('select').attr("id", "chosen-medication-"+idNum())
-    added_el.find('input.form-control.numeric').attr("id", "quantity-medication-"+idNum())
-    recount()
-    for i in [1..idNum()]
-      selectedValue = $("#chosen-medication-"+i+" option:selected").val()
-      for x in [1..idNum()]
-        if x != i
-          $("#chosen-medication-"+x).find('option[value="'+selectedValue+'"]:not(:selected)').attr('disabled','disabled')
-          $("#chosen-medication-"+x).trigger("chosen:updated")
-
-
-  medications.on 'cocoon:before-remove', (e, el_to_remove) ->
-    $(this).data('remove-timeout', 200)#Efecto para remover
-    el_to_remove.fadeOut(200)
-
-  medications.on 'cocoon:after-remove', (e, removed_el) ->
-    recount() #Se vuelve a contar la cantidad de forms
+      insertionNode.bind 'cocoon:after-insert', (e, newContent) ->
+        newContent.find('.chosen-select').chosen(width: '270px')

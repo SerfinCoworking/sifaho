@@ -29,7 +29,6 @@ class Medication < ActiveRecord::Base
 
   # define ActiveRecord scopes for
   # :search_query, :sorted_by, :date_received_at
-
   scope :search_query, lambda { |query|
     #Se retorna nil si no hay texto en la query
     return nil  if query.blank?
@@ -81,6 +80,7 @@ class Medication < ActiveRecord::Base
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
+  
   scope :date_received_at, lambda { |reference_time|
     where('medications.date_received >= ?', reference_time)
   }

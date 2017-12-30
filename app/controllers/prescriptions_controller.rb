@@ -4,12 +4,39 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions
   # GET /prescriptions.json
   def index
-    @prescriptions = Prescription.all
+    @filterrific = initialize_filterrific(
+      Prescription,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Prescription.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :sorted_by,
+        :search_query,
+        :date_received_at,
+      ],
+    ) or return
+    @prescriptions = @filterrific.find.page(params[:page]).per_page(8)
+
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /prescriptions/1
   # GET /prescriptions/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /prescriptions/new
@@ -17,6 +44,7 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new
     @professionals = Professional.all
     @medications = Medication.all
+    @supplies = Supply.all
     @patients = Patient.all
     @patient_types = PatientType.all
     @prescription.build_professional
@@ -48,9 +76,10 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.save
-        format.html { redirect_to @prescription, notice: 'La Prescripción se ha creado correctamente.' }
-        format.json { render :show, status: :created, location: @prescription }
+        flash[:success] = "La prescripción se ha creado correctamente."
+        format.js
       else
+        flash[:error] = @prescription.errors.full_messages.first
         format.html { render :new }
         format.json { render json: @prescription.errors, status: :unprocessable_entity }
       end
@@ -71,8 +100,10 @@ class PrescriptionsController < ApplicationController
       if @prescription.update_attributes(prescription_params)
         @prescription.update_attribute(:date_received, new_date_received)
         format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
-        format.json { render :show, status: :ok, location: @prescription }
+        format.js
       else
+        flash[:error] = "La prescripción no se ha podido modificar."
+        format.js
         format.html { render :edit }
         format.json { render json: @prescription.errors, status: :unprocessable_entity }
       end
@@ -84,6 +115,7 @@ class PrescriptionsController < ApplicationController
   def destroy
     @prescription.destroy
     respond_to do |format|
+      format.js
       format.html { redirect_to prescriptions_url, notice: 'La Prescripción se ha eliminado correctamente.' }
       format.json { head :no_content }
     end

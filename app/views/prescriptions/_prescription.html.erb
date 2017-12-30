@@ -1,0 +1,56 @@
+<tr id="prescription_<%= prescription.id %>">
+  <td><%= prescription.professional.full_name %></td>
+  <td><%= prescription.patient.full_info %></td>
+  <td>
+    <span class="label label-<%= prescription.prescription_status.label %>">
+      <%= prescription.prescription_status.name %>
+    </span>
+  </td>
+  <td>
+    <% if prescription.medications.present? %>
+      <% prescription.medications.each do |med| %>
+        <span class="badge">
+          <%= prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
+        </span>
+        <%= med.full_info %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+  <td>
+    <% if prescription.supplies.present? %>
+      <% prescription.supplies.each do |sup| %>
+        <span class="badge">
+          <%= prescription.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+        </span>
+        <%= sup.name %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %></td>
+  <td><%= prescription.date_received.strftime("%d/%m/%y %H:%M") %></td>
+  <td>
+    <% if prescription.date_dispensed.present? %>
+      <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+  <td>
+    <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to edit_prescription_path(prescription), class: 'btn btn-warning btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to prescription_path(prescription), class: 'btn btn-danger btn-xs',
+        method: :delete, data: {confirm: 'Estas segur@?'} do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,25 @@
+<div id="filterrific_results">
+  <div class="panel panel-default">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th><%= filterrific_sorting_link(@filterrific, :doctor) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :medicacion) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :suministro) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :fecha_recepcion) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :fecha_dispensada) %></th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+      <tbody id=prescription>
+        <%= render @prescriptions %>
+      </tbody>
+    </table>
+    <%= render 'dialog' %>
+  </div>
+</div>
+<div id="page_links">
+    <%= paginate @prescription %>
+</div>
