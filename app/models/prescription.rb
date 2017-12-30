@@ -48,10 +48,10 @@ class Prescription < ApplicationRecord
     }
 
     # Cantidad de condiciones.
-    num_or_conds = 2
+    num_or_conds = 4
     where(
       terms.map { |term|
-        "(LOWER(professionals.first_name) LIKE ? OR LOWER(patients.first_name) LIKE ? OR (LOWER(professionals.last_name) LIKE ? OR LOWER(patients.last_name))"
+        "((LOWER(professionals.first_name) LIKE ? OR LOWER(patients.first_name) LIKE ?) OR (LOWER(professionals.last_name) LIKE ? OR LOWER(patients.last_name) LIKE ?))"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
     ).joins(:professional, :patient)
@@ -79,10 +79,10 @@ class Prescription < ApplicationRecord
     when /^suministro_/
       # Ordenamiento por cantidad en stock
       order("supplies.name #{ direction }").joins(:supply)
-    when /^fecha_recepcion_/
+    when /^recibida_/
       # Ordenamiento por la fecha de recepción
       order("prescriptions.date_received #{ direction }")
-    when /^fecha_dispensada_/
+    when /^dispensada_/
       # Ordenamiento por la fecha de expiración
       order("prescriptions.date_dispensed #{ direction }")
     else
@@ -109,8 +109,8 @@ class Prescription < ApplicationRecord
       ['Estado (a-z)', 'estado_asc'],
       ['Medicación (a-z)', 'medicacion_asc'],
       ['Suministro (a-z)', 'suministro_asc'],
-      ['Fecha recepción (la nueva primero)', 'fecha_recepcion_desc'],
-      ['Fecha dispensada (próxima a vencer primero)', 'fecha_dispensada_asc'],
+      ['Fecha recibida (la nueva primero)', 'recibida_desc'],
+      ['Fecha dispensada (próxima a vencer primero)', 'dispensada_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
   end

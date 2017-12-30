@@ -38,17 +38,13 @@
     <% end %>
   </td>
   <td>
-    <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs' do %>
+    <%= link_to prescription_path(prescription), remote:true, class: 'btn btn-default btn-xs' do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
     <% end %>
-  </td>
-  <td>
-    <%= link_to edit_prescription_path(prescription), class: 'btn btn-warning btn-xs' do %>
+    <%= link_to edit_prescription_path(prescription), remote: true, class: 'btn btn-warning btn-xs' do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
     <% end %>
-  </td>
-  <td>
-    <%= link_to prescription_path(prescription), class: 'btn btn-danger btn-xs',
+    <%= link_to prescription_path(prescription), remote: true, class: 'btn btn-danger btn-xs',
         method: :delete, data: {confirm: 'Estas segur@?'} do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
     <% end %>

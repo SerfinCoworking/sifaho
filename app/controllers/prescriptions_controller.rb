@@ -57,6 +57,7 @@ class PrescriptionsController < ApplicationController
   def edit
     @professionals = Professional.all
     @medications = Medication.all
+    @supplies = Supply.all
     @patients = Patient.all
     @patient_types = PatientType.all
   end
