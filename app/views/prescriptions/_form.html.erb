@@ -42,7 +42,6 @@
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>
-          <p class="count">Total: <span><%= @prescription.quantity_medications.count %></span></p>
       </div>
     </div>
     <div class='col-md-6'>
@@ -56,14 +55,14 @@
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>
-          <p class="count">Total: <span><%= @prescription.quantity_supplies.count %></span></p>
       </div>
       <br><br>
     </div>
   </div>
   <div class='row'>
     <div class='col-md-6'>
-      <%= f.input :observation, label: 'Observaciones', as: :text %>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 46  , :rows => 2 } %>
     </div>
     <div class='col-md-6'>
       <%= f.input :date_received, label: 'Fecha recibida',
