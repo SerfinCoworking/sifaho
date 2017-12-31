@@ -73,7 +73,7 @@ class Prescription < ApplicationRecord
     when /^estado_/
       # Ordenamiento por cantidad en stock
       order("prescription_statuses.name #{ direction }").joins(:prescription_status)
-    when /^medicacion_/
+    when /^medicamento_/
       # Ordenamiento por cantidad en stock
       order("vademecums.medication_name #{ direction }").joins(:medications, :vademecums).where(medications)
     when /^suministro_/
@@ -107,7 +107,7 @@ class Prescription < ApplicationRecord
       ['Doctor (a-z)', 'doctor_asc'],
       ['Paciente (a-z)', 'paciente_asc'],
       ['Estado (a-z)', 'estado_asc'],
-      ['Medicación (a-z)', 'medicacion_asc'],
+      ['Medicamento (a-z)', 'medicamento_asc'],
       ['Suministro (a-z)', 'suministro_asc'],
       ['Fecha recibida (la nueva primero)', 'recibida_desc'],
       ['Fecha dispensada (próxima a vencer primero)', 'dispensada_asc'],
