@@ -75,7 +75,7 @@ class Prescription < ApplicationRecord
       order("prescription_statuses.name #{ direction }").joins(:prescription_status)
     when /^medicacion_/
       # Ordenamiento por cantidad en stock
-      order("vademecums.medication_name #{ direction }").joins(:medication, :vademecum)
+      order("vademecums.medication_name #{ direction }").joins(:medications, :vademecums).where(medications)
     when /^suministro_/
       # Ordenamiento por cantidad en stock
       order("supplies.name #{ direction }").joins(:supply)

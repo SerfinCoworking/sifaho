@@ -31,5 +31,8 @@ window.setTimeout(function() {
 }, 2000);
 
 $(document).on('turbolinks:load', function() {
-  $('#datetimepicker').datetimepicker();
+  $('#datetimepicker').datetimepicker
+  $('li.active').removeClass('active');
+  console.log(location.pathname);
+  $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
 });
