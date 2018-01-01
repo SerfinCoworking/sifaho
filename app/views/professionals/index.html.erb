@@ -1,25 +1,53 @@
-<p id="notice"><%= notice %></p>
+<h3>Profesionales
+<%= link_to new_professional_path, remote: true, class: 'btn btn-primary btn-md' do %>
+  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+  Nuevo profesional
+<% end %>
+</h3>
 
-<h1>Professionals</h1>
+<%#
+  Filterrific adds the `form_for_filterrific` view helper:
+  * adds dom id 'filterrific_filter'
+  * applies javascript behaviors:
+      * AJAX form submission on change
+      * AJAX spinner while AJAX request is being processed
+  * sets form_for options like :url, :method and input name prefix
+%>
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row well well-sm">
+    <div class="col-md-3 col-sm-3">
+      <label>Buscar</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_query,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Nombre o apellido'
+      ) %>
+    </div>
+    <div class="col-md-3 col-sm-3">
+      <label>Buscar</label>
+      <%= f.text_field(
+        :search_dni,
+        class: 'filterrific-periodically-observed form-control',
+          placeholder: 'DNI'
+          ) %>
+        </div>
+    <div class="col-md-4 col-sm-3">
+      <label>Ordenar por</label>
+      <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+    </div>
+    <div class="col-md-2 col-sm-3">
+      <%= link_to reset_filterrific_url, class: 'btn btn-default btn-md pull-right' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+      <% end %>
+    </div>
+    <%# add an automated spinner to your form when the list is refreshed %>
+    <%= render_filterrific_spinner %>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% end %>
 
-  <tbody>
-    <% @professionals.each do |professional| %>
-      <tr>
-        <td><%= link_to 'Show', professional %></td>
-        <td><%= link_to 'Edit', edit_professional_path(professional) %></td>
-        <td><%= link_to 'Destroy', professional, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Professional', new_professional_path %>
+<%= render(
+  partial: 'professionals/list',
+  locals: { professionals: @professionals }
+) %>

@@ -1,13 +1,5 @@
 class Prescription < ApplicationRecord
 
-  filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
-    available_filters: [
-      :sorted_by,
-      :search_query,
-      :date_received_at,
-    ]
-  )
 
   belongs_to :professional
   belongs_to :patient
@@ -30,6 +22,15 @@ class Prescription < ApplicationRecord
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
           :reject_if => :all_blank
+
+  filterrific(
+    default_filter_params: { sorted_by: 'created_at_desc' },
+    available_filters: [
+      :sorted_by,
+      :search_query,
+      :date_received_at,
+    ]
+  )
 
   # define ActiveRecord scopes for
   # :search_query, :sorted_by, :date_received_at

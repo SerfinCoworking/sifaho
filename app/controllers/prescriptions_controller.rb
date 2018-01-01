@@ -46,11 +46,13 @@ class PrescriptionsController < ApplicationController
     @medications = Medication.all
     @supplies = Supply.all
     @patients = Patient.all
+    @sectors = Sector.all
     @patient_types = PatientType.all
     @prescription.build_professional
     @prescription.build_patient
     @prescription.quantity_medications.build
     @prescription.quantity_supplies.build
+    @prescription.professional.build_sector
   end
 
   # GET /prescriptions/1/edit
@@ -60,6 +62,7 @@ class PrescriptionsController < ApplicationController
     @supplies = Supply.all
     @patients = Patient.all
     @patient_types = PatientType.all
+    @sectors = Sector.all
   end
 
   # POST /prescriptions
@@ -132,7 +135,7 @@ class PrescriptionsController < ApplicationController
                                          quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
                                          quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
                                          patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
-                                         professional_attributes: [:id, :first_name, :last_name, :dni])
+                                         professional_attributes: [:id, :first_name, :last_name, :dni, :sector])
     end
 
     def dispensing?

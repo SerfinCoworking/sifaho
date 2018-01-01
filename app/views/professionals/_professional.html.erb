@@ -1,0 +1,18 @@
+<tr id="professional_<%= professional.id %>">
+  <td><%= professional.first_name %></td>
+  <td><%= professional.last_name %></td>
+  <td><%= professional.enrollment %></td>
+  <td><%= professional.dni %></td>
+  <td>
+    <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+    <% end %>
+    <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+    <% end %>
+    <%= link_to professional_path(professional), remote: true, class: 'btn btn-danger btn-xs',
+        method: :delete, data: {confirm: 'Estas segur@?'} do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    <% end %>
+  </td>
+</tr>

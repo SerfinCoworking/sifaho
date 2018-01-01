@@ -4,7 +4,6 @@ class CreateSectors < ActiveRecord::Migration[5.1]
       t.string :sector_name
       t.text :description
       t.integer :complexity_level
-      t.string :applicant
 
       t.timestamps
     end
