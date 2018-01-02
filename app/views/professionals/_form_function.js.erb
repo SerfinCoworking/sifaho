@@ -2,3 +2,20 @@ $('.chosen-select').chosen({
     allow_single_deselect: true,
     no_results_text: 'No se encontró el resultado',
     width: '315px'});
+
+$('#sector_id').change(function () {
+  if($('#sector_id option:selected').val() == 0){
+    document.getElementById('form-sector').style.display="block";
+    document.getElementById('sector-hint').style.display="none";
+    document.getElementById('professional_sector_attributes_sector_name').required = true;
+    document.getElementById('professional_sector_attributes_description').required = true;
+    document.getElementById('professional_sector_attributes_complexity_level').required = true;
+
+  }else{
+    document.getElementById('form-sector').style.display="none";
+    document.getElementById('sector-hint').style.display="block";
+    document.getElementById('professional_sector_attributes_sector_name').required = false;
+    document.getElementById('professional_sector_attributes_description').required = false;
+    document.getElementById('professional_sector_attributes_complexity_level').required = false;
+  }
+});

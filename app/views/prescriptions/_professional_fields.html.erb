@@ -2,6 +2,7 @@
   <%= f.input :first_name, placeholder: 'Nombre', required: true, label: false %>
   <%= f.input :last_name, placeholder: 'Apellido', required: true, label: false %>
   <%= f.input :dni, placeholder: 'DNI', required: true, label: false, input_html: { min: '10000', max:'99999999' } %>
+  <%= f.input :enrollment, placeholder: 'Matrícula', label: false, input_html: { min: '1000', max:'9999' } %>
   <%= f.input :sector_id,
                     label: false,
                     label_method: :sector_name,
@@ -17,7 +18,7 @@
   <%= f.simple_fields_for :sector, html: { class: 'form-inline' } do |fs| %>
     <div id='form-sector'>
       <label>Nuevo sector</label>
-      <%= fs.input :sector_name, placeholder: 'Nombre', required: true, label: false %>
+      <%= fs.input :sector_name, placeholder: 'Nombre sector', required: true, label: false %>
       <%= fs.input :description, as: :string, placeholder: 'Descripción', required: false, label: false %>
       <%= fs.input :complexity_level, label: false, required: true, input_html: { min: '0', max:'10' } %>
     </div>

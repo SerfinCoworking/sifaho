@@ -79,7 +79,7 @@ class PrescriptionsController < ApplicationController
     @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
-      if @prescription.save
+      if @prescription.save!
         flash.now[:success] = "La prescripción se ha creado correctamente."
         format.js
       else
@@ -127,11 +127,15 @@ class PrescriptionsController < ApplicationController
     end
 
     def prescription_params
-      params.require(:prescription).permit(:observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
-                                         quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
-                                         quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
-                                         patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
-                                         professional_attributes: [:id, :first_name, :last_name, :dni, :sector])
+      params.require(:prescription).permit(
+                                             :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
+                                             quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
+                                             quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
+                                             patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
+                                             professional_attributes: [:id, :first_name, :last_name, :dni, :sector_id, :enrollment,
+                                               sector_attributes: [:id, :sector_name, :description, :complexity_level]
+                                             ]
+                                          )
     end
 
     def dispensing?

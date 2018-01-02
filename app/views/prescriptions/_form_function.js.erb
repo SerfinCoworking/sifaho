@@ -23,6 +23,23 @@ $('#professional_id').change(function () {
   }
 });
 
+$('#sector_id').change(function () {
+  if($('#sector_id option:selected').val() == 0){
+    document.getElementById('form-sector').style.display="block";
+    document.getElementById('sector-hint').style.display="none";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
+
+  }else{
+    document.getElementById('form-sector').style.display="none";
+    document.getElementById('sector-hint').style.display="block";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
+  }
+});
+
 $('#patient_id').change(function () {
   if($('#patient_id option:selected').val() == 0){
     document.getElementById('form-prescription').style.display="block";
@@ -68,7 +85,6 @@ function setMaxQuantity(idSelect){
   for(i = 1; i <= medicationCant; i++){
     var selectedValue = $("#chosen-medication-"+i+" option:selected").val();
     for(x = 1; x <= medicationCant; x++){
-      console.log(x);
       if(x != i){
         $("#chosen-medication-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
         $("#chosen-medication-"+x).trigger("chosen:updated");
@@ -110,7 +126,6 @@ function setMaxQuantitySupply(idSelect){
   for(i = 1; i <= supplyCant; i++){
     var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
     for(x = 1; x <= supplyCant; x++){
-      console.log(x);
       if(x != i){
         $("#chosen-supply-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
         $("#chosen-supply-"+x).trigger("chosen:updated");
