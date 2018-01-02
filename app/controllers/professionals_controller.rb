@@ -58,11 +58,11 @@ class ProfessionalsController < ApplicationController
 
     respond_to do |format|
       if @professional.save
-        flash[:success] = "El profesional se ha creado correctamente."
+        flash.now[:success] = "El profesional se ha creado correctamente."
         format.js
       else
-        format.html { render :new }
-        format.json { render json: @professional.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El profesional no se ha podido crear."
+        format.js
       end
     end
   end
@@ -72,13 +72,11 @@ class ProfessionalsController < ApplicationController
   def update
     respond_to do |format|
       if @professional.update(professional_params)
-        format.html { redirect_to @professional, notice: 'Professional was successfully updated.' }
-        format.json { render :show, status: :ok, location: @professional }
-      else
-        flash[:error] = "El profesional no se ha podido modificar."
+        flash.now[:success] = "El profesional se ha modificado correctamente."
         format.js
-        format.html { render :edit }
-        format.json { render json: @professional.errors, status: :unprocessable_entity }
+      else
+        flash.now[:error] = "El profesional no se ha podido modificar."
+        format.js
       end
     end
   end
@@ -86,11 +84,11 @@ class ProfessionalsController < ApplicationController
   # DELETE /professionals/1
   # DELETE /professionals/1.json
   def destroy
+    @full_name = @professional.full_name
     @professional.destroy
     respond_to do |format|
+      flash.now[:success] = "El profesional "+@full_name+"se ha eliminado correctamente."
       format.js
-      format.html { redirect_to professionals_url, notice: 'Professional was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
@@ -103,7 +101,7 @@ class ProfessionalsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def professional_params
       params.require(:professional).permit(:first_name, :last_name, :professional_id,
-                            :patient_id, :dni, :enrollment, :sector_id,                                            
+                            :patient_id, :dni, :enrollment, :sector_id,
                             sector_attributes: [:id, :sector_name, :quantity,
                                                 :complexity_level, :description])
     end

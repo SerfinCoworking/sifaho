@@ -70,11 +70,11 @@ class MedicationsController < ApplicationController
 
     respond_to do |format|
       if @medication.save
-        flash[:success] = "La medicación se ha creado correctamente."
+        flash.now[:success] = "El lote de medicamentos se ha cargado correctamente."
         format.js
       else
-        format.html { render :new }
-        format.json { render json: @medication.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El lote de medicamentos no se ha podido cargar."
+        format.js
       end
     end
   end
@@ -89,13 +89,11 @@ class MedicationsController < ApplicationController
       if @medication.update(medication_params)
         @medication.update_attribute(:date_received, new_date_received)
         @medication.update_attribute(:expiry_date, new_expiry_date)
-        flash[:success] = "La medicación se ha modificado correctamente."
+        flash.now[:success] = "El lote de "+@medication.full_info+" se ha modificado correctamente."
         format.js
       else
-        flash[:error] = "La medicación no se ha podido modificar."
+        flash.now[:error] = "El lote de "+@medication.full_info+" no se ha podido modificar."
         format.js
-        format.html { render :edit }
-        format.json { render json: @medication.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -103,11 +101,11 @@ class MedicationsController < ApplicationController
   # DELETE /medications/1
   # DELETE /medications/1.json
   def destroy
+    @medication_info = @medication.full_info
     @medication.destroy
     respond_to do |format|
+      flash.now[:success] = "El lote de "+@medication_info+" se ha eliminado correctamente."
       format.js
-      format.html { redirect_to medications_url, notice: 'La medicación se ha eliminado correctamente.' }
-      format.json { head :no_content }
     end
   end
 

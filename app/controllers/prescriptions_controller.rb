@@ -80,12 +80,11 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.save
-        flash[:success] = "La prescripción se ha creado correctamente."
+        flash.now[:success] = "La prescripción se ha creado correctamente."
         format.js
       else
-        flash[:error] = @prescription.errors.full_messages.first
-        format.html { render :new }
-        format.json { render json: @prescription.errors, status: :unprocessable_entity }
+        flash.now[:error] = "La prescripción no se ha podido crear."
+        format.js
       end
     end
   end
@@ -102,13 +101,11 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params) && @prescription.update_attribute(:date_received, new_date_received)
-        format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
+        flash.now[:success] = "La prescripción se ha modificado correctamente."
         format.js
       else
-        flash[:error] = "La prescripción no se ha podido modificar."
+        flash.now[:error] = "La prescripción no se ha podido modificar."
         format.js
-        format.html { render :edit }
-        format.json { render json: @prescription.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -118,9 +115,8 @@ class PrescriptionsController < ApplicationController
   def destroy
     @prescription.destroy
     respond_to do |format|
+      flash.now[:success] = "La prescripción se ha eliminado correctamente."
       format.js
-      format.html { redirect_to prescriptions_url, notice: 'La Prescripción se ha eliminado correctamente.' }
-      format.json { head :no_content }
     end
   end
 

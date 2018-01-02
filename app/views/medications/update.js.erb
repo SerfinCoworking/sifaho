@@ -1,4 +1,4 @@
 <%= render 'shared/flash_message' %>
 
 $('#dialog').modal('toggle');
-$('#medications').append('<%= j render (@medication) %>')
+$('#medication_<%= @medication.id %>').replaceWith('<%= j render (@medication) %>')

@@ -1,1 +1,3 @@
-$('#medication_<%= @medication.id %>').fadeOut();
+<%= render 'shared/flash_message' %>
+
+$('#medication_<%= @medication.id %>').fadeOut(500);
