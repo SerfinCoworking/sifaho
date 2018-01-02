@@ -4,6 +4,7 @@
     <td><%= professional.last_name %></td>
     <td><%= professional.enrollment %></td>
     <td><%= professional.dni %></td>
+    <td><%= professional.sector.sector_name %></td>
     <td>
       <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>

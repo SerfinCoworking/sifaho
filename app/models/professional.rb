@@ -15,6 +15,7 @@ class Professional < ApplicationRecord
       :sorted_by,
       :search_query,
       :search_dni,
+      :with_sector_id,
     ]
   )
 
@@ -60,6 +61,9 @@ class Professional < ApplicationRecord
     when /^matricula_/
       # Ordenamiento por cantidad en stock
       order("professionals.enrollment #{ direction }")
+    when /^sector_/
+      # Ordenamiento por cantidad en stock
+      order("sectors.sector_name #{ direction }").joins(:sector)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -69,6 +73,11 @@ class Professional < ApplicationRecord
   scope :search_dni, lambda { |query|
     string = query.to_s
     where('professionals.dni::text LIKE ?', "%#{string}%")
+  }
+
+  # filters on 'sector_id' foreign key
+  scope :with_sector_id, lambda { |sector_ids|
+    where(sector_id: [*sector_ids])
   }
 
   def full_name
@@ -85,6 +94,7 @@ class Professional < ApplicationRecord
       ['Nombre (a-z)', 'nombre_asc'],
       ['Apellido (a-z)', 'apellido_asc'],
       ['Matricula', 'matricula_asc'],
+      ['Sector', 'sector_asc'],
     ]
   end
 

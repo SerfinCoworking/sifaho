@@ -8,7 +8,8 @@ class ProfessionalsController < ApplicationController
       Professional,
       params[:filterrific],
       select_options: {
-        sorted_by: Professional.options_for_sorted_by
+        sorted_by: Professional.options_for_sorted_by,
+        with_sector_id: Sector.options_for_select
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
@@ -16,6 +17,7 @@ class ProfessionalsController < ApplicationController
         :sorted_by,
         :search_query,
         :search_dni,
+        :with_sector_id,
       ],
     ) or return
     @professionals = @filterrific.find.page(params[:page]).per_page(8)

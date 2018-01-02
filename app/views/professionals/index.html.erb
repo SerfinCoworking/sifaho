@@ -32,7 +32,12 @@
           placeholder: 'DNI'
           ) %>
         </div>
-    <div class="col-md-4 col-sm-3">
+    <div class="col-md-2 col-sm-3">
+      <label>Sector</label>
+      <%= f.select( :with_sector_id, @filterrific.select_options[:with_sector_id],
+          { include_blank: 'Todos' }, {class: 'form-control'} ) %>
+    </div>
+    <div class="col-md-2 col-sm-3">
       <label>Ordenar por</label>
       <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
     </div>

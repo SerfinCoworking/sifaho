@@ -48,12 +48,17 @@ Patient.create!( first_name: "Juan", last_name: "Perez", dni: 12345678,
   address: "Elordi 343, San Martin de los Andes", email: "eljuan@gmail.com",
   phone: "02972432543", patient_type_id: 1
 )
+Sector.create!([
+  { sector_name: "Traumatología", description: "Se enfoca en el sistema oseomuscular", complexity_level: 3 },
+  { sector_name: "Oftalmología", description: "Se enfoca en el sistema ocular", complexity_level: 2 },
+  { sector_name: "Pediatría", description: "Medicina general de niños", complexity_level: 2 }
+])
 Professional.create!([
-  { first_name: "Pablo", last_name: "Santillan", dni: 12345678, enrollment: "5336",
+  { first_name: "Pablo", last_name: "Santillan", dni: 12345678, enrollment: "5336", sector_id: 1,
     address: "Sarmiento 489, San Martin de los Andes", email: "elpablito@gmail.com", phone: "0297223412" },
-  { first_name: "Marina", last_name: "Petersen", dni: 23412342, enrollment: "6754",
+  { first_name: "Marina", last_name: "Petersen", dni: 23412342, enrollment: "6754", sector_id: 2,
     address: "Elordi 213, San Martin de los Andes", email: "lamari@gmail.com", phone: "0297436893" },
-  { first_name: "Jorge", last_name: "Bo", dni: 22456789, enrollment: "9472",
+  { first_name: "Jorge", last_name: "Bo", dni: 22456789, enrollment: "9472", sector_id: 3,
     address: "Rivadavia 394, San Martin de los Andes", email: "elbojo@gmail.com", phone: "0297432157" }
 ])
 PrescriptionStatus.create!([

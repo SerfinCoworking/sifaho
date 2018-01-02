@@ -51,20 +51,17 @@
 #custom-sidebar .active a{
   background-color: rgba(124, 158, 212, 1);
 }
-
 #custom-sidebar .nav, .nav-tabs, .nav-pills{
     text-align: center;
     background-color: #0b538d!important;
     padding-left: 14px;
 }
-
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:focus {
   color: rgba(255, 255, 255, 1);
   background-color: rgba(124, 158, 212, 1);
 }
-
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a {
   font-size: 14px;
   color: rgba(255, 255, 255, 1);
