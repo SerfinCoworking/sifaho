@@ -13,7 +13,7 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
       <%= link_to professional_path(professional), remote: true, class: 'btn btn-danger btn-xs',
-          method: :delete, data: {confirm: 'Estas segur@?'} do %>
+          method: :delete, data: {confirm: "Desea eliminar a #{professional.first_name} #{professional.last_name}?"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>
