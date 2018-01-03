@@ -19,8 +19,8 @@ class Professional < ApplicationRecord
     ]
   )
 
-  # define ActiveRecord scopes for
-  # :search_query, :sorted_by, :date_received_at
+  # Se definen ActiveRecord scopes para
+  # :search_query, :sorted_by, :search_dni, :with_sector_id
   scope :search_query, lambda { |query|
     #Se retorna nil si no hay texto en la query
     return nil  if query.blank?
@@ -53,16 +53,16 @@ class Professional < ApplicationRecord
       # Ordenamiento por fecha de creación en la BD
       order("professionals.created_at #{ direction }")
     when /^nombre_/
-      # Ordenamiento por nombre de droga
+      # Ordenamiento por nombre del profesional
       order("LOWER(professionals.first_name) #{ direction }")
     when /^apellido_/
-      # Ordenamiento por marca de medicamento
+      # Ordenamiento por apellido del profesional
       order("LOWER(professionals.last_name) #{ direction }")
     when /^matricula_/
-      # Ordenamiento por cantidad en stock
+      # Ordenamiento por matricula
       order("professionals.enrollment #{ direction }")
     when /^sector_/
-      # Ordenamiento por cantidad en stock
+      # Ordenamiento por nombre del sector
       order("sectors.sector_name #{ direction }").joins(:sector)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
@@ -97,5 +97,4 @@ class Professional < ApplicationRecord
       ['Sector', 'sector_asc'],
     ]
   end
-
 end
