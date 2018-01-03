@@ -21,4 +21,6 @@ $('#dialog').on('shown.bs.modal', function () {
 <%= render 'form_function' %>
 
 $('#prescription_date_received').val("<%= @prescription.date_received.strftime("%d/%m/%y %H:%M %p") %>");
-$('#prescription_date_dispensed').val("<%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M %p") %>");
+<% if @prescription.date_dispensed.present? %>
+  $('#prescription_date_dispensed').val("<%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M %p") %>");
+<% end %>
