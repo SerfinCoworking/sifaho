@@ -25,10 +25,6 @@ class MedicationsController < ApplicationController
       format.html
       format.js
     end
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /medications/1
@@ -70,7 +66,7 @@ class MedicationsController < ApplicationController
 
     respond_to do |format|
       if @medication.save
-        flash.now[:success] = "El lote de medicamentos se ha cargado correctamente."
+        flash.now[:success] = "El lote de "+@medication.full_info+" se ha cargado correctamente."
         format.js
       else
         flash.now[:error] = "El lote de medicamentos no se ha podido cargar."

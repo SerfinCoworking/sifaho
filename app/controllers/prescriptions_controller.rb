@@ -80,7 +80,7 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.save!
-        flash.now[:success] = "La prescripción se ha creado correctamente."
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
         format.js
       else
         flash.now[:error] = "La prescripción no se ha podido crear."
@@ -101,10 +101,10 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params) && @prescription.update_attribute(:date_received, new_date_received)
-        flash.now[:success] = "La prescripción se ha modificado correctamente."
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = "La prescripción no se ha podido modificar."
+        flash.now[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
         format.js
       end
     end
@@ -113,9 +113,10 @@ class PrescriptionsController < ApplicationController
   # DELETE /prescriptions/1
   # DELETE /prescriptions/1.json
   def destroy
+    @professional_full_name = @prescription.professional.full_name
     @prescription.destroy
     respond_to do |format|
-      flash.now[:success] = "La prescripción se ha eliminado correctamente."
+      flash.now[:success] = "La prescripción de "+@professional_full_name+" se ha eliminado correctamente."
       format.js
     end
   end

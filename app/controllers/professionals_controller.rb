@@ -27,10 +27,6 @@ class ProfessionalsController < ApplicationController
       format.html
       format.js
     end
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /professionals/1
@@ -60,7 +56,7 @@ class ProfessionalsController < ApplicationController
 
     respond_to do |format|
       if @professional.save
-        flash.now[:success] = "El profesional se ha creado correctamente."
+        flash.now[:success] = @professional.full_name+" se ha creado correctamente."
         format.js
       else
         flash.now[:error] = "El profesional no se ha podido crear."
@@ -74,10 +70,10 @@ class ProfessionalsController < ApplicationController
   def update
     respond_to do |format|
       if @professional.update(professional_params)
-        flash.now[:success] = "El profesional se ha modificado correctamente."
+        flash.now[:success] = @profesional.full_name+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = "El profesional no se ha podido modificar."
+        flash.now[:error] = @profesional.full_name+" no se ha podido modificar."
         format.js
       end
     end
@@ -89,7 +85,7 @@ class ProfessionalsController < ApplicationController
     @full_name = @professional.full_name
     @professional.destroy
     respond_to do |format|
-      flash.now[:success] = "El profesional "+@full_name+"se ha eliminado correctamente."
+      flash.now[:success] = @full_name+" se ha eliminado correctamente."
       format.js
     end
   end

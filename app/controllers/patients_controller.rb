@@ -27,10 +27,6 @@ class PatientsController < ApplicationController
       format.html
       format.js
     end
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /patients/1
@@ -60,7 +56,7 @@ class PatientsController < ApplicationController
 
     respond_to do |format|
       if @patient.save
-        flash.now[:success] = "El paciente "+@patient.first_name+" se ha creado correctamente."
+        flash.now[:success] = @patient.full_info+" se ha creado correctamente."
         format.js
       else
         flash.now[:error] = "El paciente no se ha podido crear."
@@ -74,10 +70,10 @@ class PatientsController < ApplicationController
   def update
     respond_to do |format|
       if @patient.update(patient_params)
-        flash.now[:success] = "El paciente se ha modificado correctamente."
+        flash.now[:success] = @patient.full_info+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = "El paciente no se ha podido modificar."
+        flash.now[:error] = @patient.full_info+" no se ha podido modificar."
         format.js
       end
     end
