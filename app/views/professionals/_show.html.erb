@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-6">
+
+    <h5><strong>Nombre</strong></h5>
+    <%= @professional.first_name %>
+
+    <h5><strong>Apellido</strong></h5>
+      <%= @professional.last_name %>
+
+    <h5><strong>Matrícula: </strong></h5>
+    <%= @professional.enrollment %>
+
+    <h5><strong>DNI: </strong></h5>
+    <%= @professional.dni %>
+
+    <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @professional.prescriptions.count %><span></h5>
+  </div>
+
+  <div class="col-md-6">
+    <h5><strong>Sector </strong></h5>
+    <%= @professional.sector.sector_name %>
+
+    <h5><strong>Descripción </strong></h5>
+    <%= @professional.sector.description %>
+
+    <h5><strong>Nivel de complejidad </strong></h5>
+    <span class="badge"><%= @professional.sector.complexity_level %></span>
+  </div>
+</div>
