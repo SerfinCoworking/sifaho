@@ -31,8 +31,14 @@ window.setTimeout(function() {
 }, 2000);
 
 $(document).on('turbolinks:load', function() {
-  $('#datetimepicker').datetimepicker
-  $('li.active').removeClass('active');
-  console.log(location.pathname);
-  $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
+  $('#datetimepicker').datetimepicker();
+  if( $(".active").is("#pedidos-li") ) {
+    document.getElementById('custom-sidebar').style.boxShadow = "8px 0 3px 5px #59457c";
+  }else if ( $(".active").is("#stock-li") ) {
+    document.getElementById('custom-sidebar').style.boxShadow = "8px 0 3px 5px #10675f";
+  }else if ( $(".active").is("#usuarios-li") ){
+    document.getElementById('custom-sidebar').style.boxShadow = "8px 0 3px 5px #89726a";
+  }else {
+    document.getElementById('custom-sidebar').style.boxShadow = "8px 0 3px 5px #7c9ed4";
+  }
 });
