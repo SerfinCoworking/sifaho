@@ -19,7 +19,7 @@
     <div id='form-sector'>
       <label>Nuevo sector</label>
       <%= fs.input :sector_name, placeholder: 'Nombre sector', required: true, label: false %>
-      <%= fs.input :description, as: :string, placeholder: 'Descripción', required: false, label: false %>
+      <%= fs.input :description, as: :string, placeholder: 'Descripción', required: true, label: false %>
       <%= fs.input :complexity_level, label: false, required: true, input_html: { min: '0', max:'10' } %>
     </div>
   <% end %>

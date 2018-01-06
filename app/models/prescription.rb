@@ -1,5 +1,7 @@
 class Prescription < ApplicationRecord
-
+  validates_presence_of :patient
+  validates_presence_of :prescription_status
+  validates_presence_of :professional
 
   belongs_to :professional
   belongs_to :patient
@@ -21,7 +23,7 @@ class Prescription < ApplicationRecord
   accepts_nested_attributes_for :patient,
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
-          :reject_if => :all_blank
+          :reject_if => proc { |attributes| attributes.all? { |key, value| key == "_destroy" || value.blank? || (value.is_a?(Hash) && value.values.all?(&:blank?)) } }
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

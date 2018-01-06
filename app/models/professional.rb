@@ -7,7 +7,7 @@ class Professional < ApplicationRecord
   belongs_to :sector
 
   accepts_nested_attributes_for :sector,
-          :reject_if => :all_blank
+    :reject_if => :all_blank
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

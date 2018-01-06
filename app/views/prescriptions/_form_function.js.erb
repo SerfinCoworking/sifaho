@@ -13,13 +13,20 @@ $('#professional_id').change(function () {
     document.getElementById('prescription_professional_attributes_first_name').required = true;
     document.getElementById('prescription_professional_attributes_last_name').required = true;
     document.getElementById('prescription_professional_attributes_dni').required = true;
-
+    document.getElementById('form-sector').style.display="block";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
   }else{
     document.getElementById('form-professional').style.display="none";
     document.getElementById('professional-hint').style.display="block";
     document.getElementById('prescription_professional_attributes_first_name').required = false;
     document.getElementById('prescription_professional_attributes_last_name').required = false;
     document.getElementById('prescription_professional_attributes_dni').required = false;
+    document.getElementById('form-sector').style.display="none";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
   }
 });
 
@@ -27,7 +34,7 @@ $('#sector_id').change(function () {
   if($('#sector_id option:selected').val() == 0){
     document.getElementById('form-sector').style.display="block";
     document.getElementById('sector-hint').style.display="none";
-    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name ').required = true;
     document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
     document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
 

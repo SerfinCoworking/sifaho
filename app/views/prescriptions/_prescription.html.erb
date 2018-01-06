@@ -29,7 +29,13 @@
     <% else %>
       ------
     <% end %></td>
-  <td><%= prescription.date_received.strftime("%d/%m/%y %H:%M") %></td>
+  <td>
+    <% if prescription.date_received.present? %>
+      <%= prescription.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      ------
+    <% end %>
+    </td>
   <td>
     <% if prescription.date_dispensed.present? %>
       <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
