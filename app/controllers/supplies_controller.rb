@@ -4,12 +4,39 @@ class SuppliesController < ApplicationController
   # GET /supplies
   # GET /supplies.json
   def index
-    @supplies = Supply.all
+    @filterrific = initialize_filterrific(
+      Supply,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Supply.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :sorted_by,
+        :search_query,
+        :date_received_at,
+      ],
+    ) or return
+    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /supplies/1
   # GET /supplies/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /supplies/new
@@ -28,11 +55,11 @@ class SuppliesController < ApplicationController
 
     respond_to do |format|
       if @supply.save
-        format.html { redirect_to @supply, notice: 'Supply was successfully created.' }
-        format.json { render :show, status: :created, location: @supply }
+        flash.now[:success] = "El suministro "+@supply.name+" se ha creado correctamente."
+        format.js
       else
-        format.html { render :new }
-        format.json { render json: @supply.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El suministro no se ha podido crear."
+        format.js
       end
     end
   end
@@ -42,11 +69,11 @@ class SuppliesController < ApplicationController
   def update
     respond_to do |format|
       if @supply.update(supply_params)
-        format.html { redirect_to @supply, notice: 'Supply was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supply }
+        flash.now[:success] = "El suministro "+@supply.name+" se ha modificado correctamente."
+        format.js
       else
-        format.html { render :edit }
-        format.json { render json: @supply.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El suministro "+@supply.name+" no se ha podido modificar."
+        format.js
       end
     end
   end
@@ -54,10 +81,11 @@ class SuppliesController < ApplicationController
   # DELETE /supplies/1
   # DELETE /supplies/1.json
   def destroy
+    @supply_name = @supply.name
     @supply.destroy
     respond_to do |format|
-      format.html { redirect_to supplies_url, notice: 'Supply was successfully destroyed.' }
-      format.json { head :no_content }
+      flash.now[:success] = "El suministro "+@supply_name+" se ha eliminado correctamente."
+      format.js
     end
   end
 
@@ -69,6 +97,6 @@ class SuppliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_params
-      params.require(:supply).permit(:quantity, :expiry_date, :date_received)
+      params.require(:supply).permit(:name, :quantity, :expiry_date, :date_received)
     end
 end

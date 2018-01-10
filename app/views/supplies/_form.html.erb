@@ -1,32 +1,21 @@
-<%= form_with(model: supply, local: true) do |form| %>
-  <% if supply.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(supply.errors.count, "error") %> prohibited this supply from being saved:</h2>
+<%= simple_form_for @supply, remote: true, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
 
-      <ul>
-      <% supply.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :quantity %>
-    <%= form.number_field :quantity, id: :supply_quantity %>
-  </div>
-
-  <div class="field">
-    <%= form.label :expiry_date %>
-    <%= form.datetime_select :expiry_date, id: :supply_expiry_date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :date_received %>
-    <%= form.datetime_select :date_received, id: :supply_date_received %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+    <%= f.input :name, placeholder: 'Nombre', required: true, label: false %>
+    <%= f.input :quantity, placeholder: 'Cantidad', required: true, label: false, input_html: { min: '0', max:'9999' } %>
+    <br><br>
+    <%= f.input :date_received, label: 'Fecha recibida',
+                                as: :string,
+                                :placeholder => "Seleccionar fecha",
+                                input_html: {class: "form-control", required: true,
+                                value: "#{@supply.date_received.strftime("%d/%m/%y %H:%M") unless @supply.new_record?}"},
+                                html5: false
+                                %>
+    <%= f.input :expiry_date, label: 'Fecha expiración',
+                                as: :string,
+                                :placeholder => "Seleccionar fecha",
+                                input_html: {class: "form-control", required: true,
+                                value: "#{@supply.expiry_date.strftime("%d/%m/%y %H:%M") unless @supply.new_record?}"},
+                                html5: false
+                                %><br><br>
 <% end %>
