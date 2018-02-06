@@ -23,6 +23,7 @@ class Prescription < ApplicationRecord
           :reject_if => :all_blank,
           :allow_destroy => true
   accepts_nested_attributes_for :medications
+  accepts_nested_attributes_for :supplies
   accepts_nested_attributes_for :patient,
           :reject_if => :all_blank
   accepts_nested_attributes_for :professional,
@@ -77,19 +78,19 @@ class Prescription < ApplicationRecord
       # Ordenamiento por marca de medicamento
       order("LOWER(patients.first_name) #{ direction }").joins(:patient)
     when /^estado_/
-      # Ordenamiento por cantidad en stock
+      # Ordenamiento por nombre de estado
       order("prescription_statuses.name #{ direction }").joins(:prescription_status)
     when /^medicamento_/
-      # Ordenamiento por cantidad en stock
-      order("vademecums.medication_name #{ direction }").joins(:medications, :vademecums).where(medications)
+      # Ordenamiento por nombre de medicamento
+      order("vademecums.medication_name #{ direction }").joins(:medications, "LEFT OUTER JOIN vademecums ON (vademecums.medication_id = medications.id)")
     when /^suministro_/
-      # Ordenamiento por cantidad en stock
-      order("supplies.name #{ direction }").joins(:supply)
+      # Ordenamiento por nombre de suministro
+      order("supplies.name #{ direction }").joins(:supplies)
     when /^recibida_/
       # Ordenamiento por la fecha de recepción
       order("prescriptions.date_received #{ direction }")
     when /^dispensada_/
-      # Ordenamiento por la fecha de expiración
+      # Ordenamiento por la fecha de dispensación
       order("prescriptions.date_dispensed #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion

@@ -101,3 +101,20 @@
   margin-top: 20px;
   margin-bottom: 0px;
 }
+#page-header{
+  padding: 0px 0px 0px 10em;
+  margin-left: -2em;
+  margin-right: -3.1em;
+  margin-top: -0.1em;
+  background-color: #7c9ed4;
+  border-color: #7c9ed4;
+  border-radius: 0;
+  color: white;
+}
+#page-header h3{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+#flash_messages{
+  position: absolute;
+}

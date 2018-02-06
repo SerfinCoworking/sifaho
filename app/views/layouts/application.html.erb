@@ -8,6 +8,7 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
     <%= csrf_meta_tags %>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><!-- Fix dropdown navbar -->
   </head>
   <body>
     <header>
@@ -15,8 +16,9 @@
     </header>
     <main role="main">
       <div class="col-md-10 cols-sm-10">
+        <%= render "layouts/flash_notices" %>
+        <div class="well well-sm" id="page-header"><%= yield :page_header %></div>
         <div class="container-fluid">
-          <%= render "layouts/flash_notices" %>
           <%= yield %>
         </div>
       </div>

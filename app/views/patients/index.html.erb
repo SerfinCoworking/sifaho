@@ -1,9 +1,11 @@
-<h3>Pacientes
-<%= link_to new_patient_path, remote: true, class: 'btn btn-primary btn-md' do %>
-  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-  Nuevo paciente
+<% content_for :page_header do %>
+  <h3>Pacientes
+  <%= link_to new_patient_path, remote: true, class: 'btn btn-primary btn-md' do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    Nuevo paciente
+  <% end %>
+  </h3>
 <% end %>
-</h3>
 
 <%#
   Filterrific adds the `form_for_filterrific` view helper:

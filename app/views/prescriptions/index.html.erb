@@ -1,10 +1,11 @@
-<h3>Prescripciones
-<%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-md' do %>
-  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-  Nueva prescripción
+<% content_for :page_header do %>
+  <h3>Prescripciones
+  <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-md' do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    Nueva prescripción
+  <% end %>
+  </h3>
 <% end %>
-</h3>
-
 <%#
   Filterrific adds the `form_for_filterrific` view helper:
   * adds dom id 'filterrific_filter'

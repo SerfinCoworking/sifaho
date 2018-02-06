@@ -1,9 +1,11 @@
-<h3>Stock de medicamentos
-<%= link_to new_medication_path, remote: true, class: 'btn btn-primary btn-md' do %>
-  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-  Nuevo lote
+<% content_for :page_header do %>
+  <h3>Stock de medicamentos
+  <%= link_to new_medication_path, remote: true, class: 'btn btn-primary btn-md' do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    Nuevo lote
+  <% end %>
+  </h3>
 <% end %>
-</h3>
 
 <%#
   Filterrific adds the `form_for_filterrific` view helper:
