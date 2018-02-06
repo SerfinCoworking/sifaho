@@ -4,3 +4,10 @@
 #patient_type_id_chosen{
   width: 200px !important;
 }
+
+.med-sup-col{
+  max-width:20px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
