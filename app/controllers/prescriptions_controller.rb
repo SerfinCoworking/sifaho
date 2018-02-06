@@ -1,5 +1,5 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense]
 
   # GET /prescriptions
   # GET /prescriptions.json
@@ -69,17 +69,15 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
-    if dispensing?
-      @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
-      @prescription.date_dispensed = DateTime.now
-    end
-    @prescription.prescription_status = PrescriptionStatus.find_by_name("Pendiente") if loading?
 
     date_r = prescription_params[:date_received]
     @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
 
+    @prescription.set_pending
+
     respond_to do |format|
       if @prescription.save!
+        dispense if dispensing?
         flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
         format.js
       else
@@ -93,8 +91,7 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1.json
   def update
     if dispensing?
-      @prescription.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
-      @prescription.date_dispensed = DateTime.now
+      @prescription.dispense
     end
 
     new_date_received = DateTime.strptime(prescription_params[:date_received], '%d/%M/%Y %H:%M %p')
@@ -121,6 +118,21 @@ class PrescriptionsController < ApplicationController
     end
   end
 
+  # GET /prescriptions/1/dispense
+  def dispense
+    @prescription.dispense
+
+    respond_to do |format|
+      if @prescription.save!
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha dispensado correctamente."
+        format.js
+      else
+        flash.now[:error] = "La prescripción no se ha podido dispensar."
+        format.js
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_prescription
@@ -142,9 +154,5 @@ class PrescriptionsController < ApplicationController
     def dispensing?
       submit = params[:commit]
       return submit == "Cargar y dispensar" || submit == "Guardar y dispensar"
-    end
-
-    def loading?
-      params[:commit] == "Cargar prescripción"
     end
 end

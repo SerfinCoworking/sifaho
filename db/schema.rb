@@ -69,15 +69,6 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
-  create_table "pg_search_documents", force: :cascade do |t|
-    t.text "content"
-    t.string "searchable_type"
-    t.bigint "searchable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
-  end
-
   create_table "prescription_statuses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -112,21 +103,23 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   end
 
   create_table "quantity_medications", force: :cascade do |t|
-    t.integer "quantifiable_id"
     t.integer "medication_id"
     t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_med_poly"
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
-    t.integer "quantifiable_id"
     t.integer "supply_id"
     t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_poly"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -144,7 +137,6 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.string "sector_name"
     t.text "description"
     t.integer "complexity_level"
-    t.string "applicant"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

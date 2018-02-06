@@ -80,4 +80,9 @@ class Supply < ApplicationRecord
        ['Cantidad', 'cantidad_asc']
      ]
    end
+
+   #Métodos públicos
+   def decrement(a_quantity)
+     self.quantity -= a_quantity
+   end
 end

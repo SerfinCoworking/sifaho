@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :supplies
   resources :prescriptions
+  get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
   resources :patients
   resources :medications
   resources :quantity_medications

@@ -6,7 +6,7 @@
       <%= prescription.prescription_status.name %>
     </span>
   </td>
-  <td>
+  <td class="med-sup-col">
     <% if prescription.medications.present? %>
       <% prescription.medications.each do |med| %>
         <span class="badge">
@@ -18,7 +18,7 @@
       ------
     <% end %>
   </td>
-  <td>
+  <td class="med-sup-col">
     <% if prescription.supplies.present? %>
       <% prescription.supplies.each do |sup| %>
         <span class="badge">
@@ -36,11 +36,13 @@
       ------
     <% end %>
     </td>
-  <td>
+  <td class="text-center">
     <% if prescription.date_dispensed.present? %>
       <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
     <% else %>
-      ------
+      <%= link_to dispense_prescription_path(prescription), remote: true, class: 'btn btn-success btn-xs' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+      <% end %>
     <% end %>
   </td>
   <td>

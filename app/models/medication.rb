@@ -80,7 +80,7 @@ class Medication < ActiveRecord::Base
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
-  
+
   scope :date_received_at, lambda { |reference_time|
     where('medications.date_received >= ?', reference_time)
   }
@@ -111,5 +111,10 @@ class Medication < ActiveRecord::Base
       ['Fecha de expiración (próxima a vencer primero)', 'fecha_expiracion_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
+  end
+
+  #Métodos públicos
+  def decrement(a_quantity)
+    self.quantity -= a_quantity
   end
 end

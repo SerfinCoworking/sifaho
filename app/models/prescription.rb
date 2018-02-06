@@ -2,6 +2,10 @@ class Prescription < ApplicationRecord
   validates_presence_of :patient
   validates_presence_of :prescription_status
   validates_presence_of :professional
+  validates_associated :quantity_medications
+  validates_associated :medications
+  validates_associated :quantity_supplies
+  validates_associated :supplies
 
   belongs_to :professional
   belongs_to :patient
@@ -11,7 +15,6 @@ class Prescription < ApplicationRecord
   has_many :medications, :through => :quantity_medications
   has_many :quantity_supplies, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, :through => :quantity_supplies
-
 
   accepts_nested_attributes_for :quantity_medications,
           :reject_if => :all_blank,
@@ -98,9 +101,6 @@ class Prescription < ApplicationRecord
     where('prescriptions.date_received >= ?', reference_time)
   }
 
-  def dispensed?
-    self.prescription_status.is_dispense?
-  end
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
@@ -116,5 +116,31 @@ class Prescription < ApplicationRecord
       ['Fecha dispensada (próxima a vencer primero)', 'dispensada_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
+  end
+
+  #Métodos públicos
+  def set_pending
+    self.prescription_status = PrescriptionStatus.find_by_name("Pendiente")
+  end
+
+  def dispensed?
+    self.prescription_status.is_dispense?
+  end
+
+  def dispense
+    unless dispensed?
+      self.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
+      self.date_dispensed = DateTime.now
+      if self.quantity_medications.present?
+        self.quantity_medications.each do |q_m|
+          q_m.decrement
+        end
+      end #End 1st if
+      if self.quantity_supplies.present?
+        self.quantity_supplies.each do |q_s|
+          q_s.decrement
+        end
+      end #End 2nd if
+    end #End dispensed?
   end
 end
