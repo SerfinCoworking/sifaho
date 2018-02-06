@@ -1,4 +1,4 @@
 <%= render 'shared/flash_message' %>
 
 $('#dialog').modal('toggle');
-$('#prescriptions').append('<%= j render (@prescription) %>')
+$('#prescriptions').prepend('<%= j render (@prescription) %>')
