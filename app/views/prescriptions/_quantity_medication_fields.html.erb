@@ -1,36 +1,6 @@
-<script  type="text/javascript">
-  //Esta porción de JS se coloca en este documento ya que el evento "onchange"
-  //se activa desde el html.
-
-  //Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
-  <% @medications = Medication.all %>
-  var quantityToMedication = {
-  <% @medications.each do |medication| %>
-    "<%=medication.id%>": {
-    quantity : "<%=medication.quantity%>"
-  }
-  <% end %>
-  };
-
-  //Función para establecer el máximo al campo "Cantidad" de cada medicación.
-  function setMaxQuantity(idSelect){
-    console.log(idSelect);
-    var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
-    var medication_id =  $("#chosen-medication-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
-      if($("#chosen-medication-"+idNum+" option:selected").val() != 0){
-        document.getElementById("quantity-medication-"+idNum).setAttribute("required", true);
-        document.getElementById("quantity-medication-"+idNum).disabled = false;
-        document.getElementById("quantity-medication-"+idNum).setAttribute("max", quantityToMedication[medication_id].quantity);
-      }else{
-        document.getElementById("quantity-medication-"+idNum).setAttribute("required", false);
-        document.getElementById("quantity-medication-"+idNum).disabled = true;
-      }
-  }
-</script>
-
 <div class="nested-fields">
   <%= f.input_field :medication_id,
-                    label_method: :name,
+                    label_method: :full_info,
                     value_method: :id,
                     collection: @medications,
                     include_blank: true,

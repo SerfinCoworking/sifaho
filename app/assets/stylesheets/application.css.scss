@@ -17,14 +17,5 @@
  @import 'bootstrap-sprockets';
  @import 'bootstrap';
  @import 'bootstrap-datetimepicker';
- 
- main.main_page {
-     background-color: #eee;
-     padding-bottom: 77px;
-     width: 90%;
-     height: 92%;
-     float: left;
-     margin-left: 121px;
-     margin-top: 36px;
-     position: fixed;
- }
+ @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+ @import url('https://fonts.googleapis.com/css?family=Lato');

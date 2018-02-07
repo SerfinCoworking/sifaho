@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-md-6">
+    <p>
+      <h5><strong>Doctor:</strong></h5>
+      <%= @prescription.professional.full_name %>
+      <strong>DNI: </strong> <%= @prescription.professional.dni %>
+      <% if @prescription.professional.enrollment.present? %>
+        <strong>Matrícula: </strong> <%= @prescription.professional.enrollment %>
+      <% end %>
+    </p>
+
+    <p>
+      <h5><strong>Paciente:</strong></h5>
+      <%= @prescription.patient.first_name %> <%=@prescription.patient.last_name%>
+      <strong>DNI: </strong><%= @prescription.patient.dni %>
+    </p>
+
+    <p>
+      <h5><strong>Estado:</strong>
+        <span class="label label-<%= @prescription.prescription_status.label %>">
+          <%= @prescription.prescription_status.name %>
+        </span>
+      </h5>
+    </p>
+
+    <% if @prescription.medications.present? %>
+      <h5><strong>Medicación:</strong></h5>
+      <% @prescription.medications.each do |med| %>
+        <span class="badge">
+          <%= @prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
+        </span>
+        <%= med.full_info %><br>
+      <% end %>
+    <% end %>
+
+    <% if @prescription.supplies.present? %>
+      <p>
+        <h5><strong>Suministros:</strong></h5>
+        <% @prescription.supplies.each do |sup| %>
+          <span class="badge">
+            <%= @prescription.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+          </span>
+          <%= sup.name %><br>
+        <% end %>
+      </p>
+    <% end %>
+
+    <% if @prescription.observation.present? %>
+      <p>
+        <h5><strong>Observaciones:</strong></h5>
+        <%= @prescription.observation %>
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <p>
+      <h5><strong>Fecha emitida:</strong></h5>
+      <%= @prescription.created_at.strftime("%d/%m/%y %H:%M") %>
+    </p>
+
+    <p>
+      <h5><strong>Fecha última modificación:</strong></h5>
+      <%= @prescription.updated_at.strftime("%d/%m/%y %H:%M") %>
+    </p>
+
+    <p>
+      <h5><strong>Fecha recibida:</strong></h5>
+      <%= @prescription.date_received.strftime("%d/%m/%y %H:%M") %>
+    </p>
+
+    <p>
+      <h5><strong>Fecha dispensada:</strong></h5>
+      <% if @prescription.date_dispensed.present? %>
+        <%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+      <% else %>
+        A dispensar
+      <% end %>
+    </p>
+  </div>
+</div>

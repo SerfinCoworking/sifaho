@@ -1,0 +1,21 @@
+  <tr id="patient_<%= patient.id %>">
+    <div class="js-fade fade-in is-paused">
+    <td><%= patient.first_name %></td>
+    <td><%= patient.last_name %></td>
+    <td><%= patient.dni %></td>
+    <td><%= patient.patient_type.name %></td>
+    <td><%= patient.created_at %></td>
+    <td>
+      <%= link_to patient_path(patient), remote:true, class: 'btn btn-default btn-xs' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+      <%= link_to edit_patient_path(patient), remote: true, class: 'btn btn-warning btn-xs' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% end %>
+      <%= link_to patient_path(patient), remote: true, class: 'btn btn-danger btn-xs',
+          method: :delete, data: {confirm: "Desea eliminar a #{patient.first_name} #{patient.last_name}?"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
+    </td>
+  </div>
+  </tr>

@@ -1,3 +1,13 @@
 // Place all the styles related to the Prescriptions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#patient_type_id_chosen{
+  width: 200px !important;
+}
+
+.med-sup-col{
+  max-width:20px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

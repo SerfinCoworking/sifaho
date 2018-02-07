@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171209180540) do
+ActiveRecord::Schema.define(version: 20171231233445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,12 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
   end
 
+  create_table "order_statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "patient_types", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -63,15 +69,22 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
+  create_table "prescription_statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "prescriptions", force: :cascade do |t|
     t.text "observation"
     t.datetime "date_received"
-    t.datetime "date_processed"
-    t.integer "patient_id"
+    t.datetime "date_dispensed"
     t.integer "prescription_status_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end
 
@@ -85,24 +98,28 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "sector_id"
+    t.index ["sector_id"], name: "index_professionals_on_sector_id"
   end
 
   create_table "quantity_medications", force: :cascade do |t|
-    t.integer "quantifiable_id"
     t.integer "medication_id"
     t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_med_poly"
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
-    t.integer "quantificable_id"
     t.integer "supply_id"
-    t.string "quantificable_type"
+    t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_poly"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -120,12 +137,12 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.string "sector_name"
     t.text "description"
     t.integer "complexity_level"
-    t.string "applicant"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "supplies", force: :cascade do |t|
+    t.string "name"
     t.integer "quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
@@ -170,7 +187,10 @@ ActiveRecord::Schema.define(version: 20171209180540) do
     t.index ["medication_id"], name: "index_vademecums_on_medication_id"
   end
 
+  add_foreign_key "medications", "medication_brands"
   add_foreign_key "patients", "patient_types"
+  add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
+  add_foreign_key "professionals", "sectors"
   add_foreign_key "vademecums", "medications"
 end

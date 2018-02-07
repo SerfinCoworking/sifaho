@@ -1,6 +1,5 @@
-<%= render 'shared/errors', object: @prescription %>
-
-<%= simple_form_for @prescription, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @prescription, remote: true, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
   <%= f.input :professional_id,
                     label: 'Doctor',
                     label_method: :full_name,
@@ -8,7 +7,7 @@
                     collection: @professionals,
                     include_blank: false,
                     input_html: { class: 'chosen-select', id: 'professional_id' },
-                    prompt: 'Seleccionar un doctor o crear uno nuevo'
+                    prompt: 'Seleccione un doctor o cree uno'
   %><br><br>
   <%= f.hint 'No seleccione ningún doctor para crear uno nuevo.', id: 'professional-hint', style: "display: none" %>
 
@@ -23,7 +22,7 @@
                     collection: @patients,
                     include_blank: false,
                     input_html: { class: 'chosen-select', id: 'patient_id' },
-                    prompt: 'Seleccionar un paciente o crear uno nuevo'
+                    prompt: 'Seleccione un paciente o cree uno'
   %><br><br>
   <%= f.hint 'No seleccione ningún paciente para crear uno nuevo.', id: 'patientHint', style: "display: none" %>
 
@@ -31,37 +30,48 @@
     <%= render "patient_fields", :f => form_patient %>
   <% end %><br>
 
-  <label>Medicación</label>
-  <div id="quantity-medications">
-      <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
-        <%= render "quantity_medication_fields", :f => form_quantity %>
-      <% end %>
-      <div class="links">
-        <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        <% end %>
+  <div class='row'>
+    <div class='col-md-6'>
+      <label>Medicación</label>
+      <div id="quantity-medications">
+          <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
+            <%= render "quantity_medication_fields", :f => form_quantity %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
       </div>
-      <p class="count">Total: <span><%= @prescription.quantity_medications.count %></span></p>
+    </div>
+    <div class='col-md-6'>
+      <label>Suministro</label>
+      <div id="quantity-supplies">
+          <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
+            <%= render "quantity_supply_fields", :f => form_quantity %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association f, :quantity_supplies, class: 'btn btn-default btn-sm' do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+      </div>
+      <br>
+    </div>
   </div>
-  <br><br>
-
-
-  <%= f.input :observation, label: 'Observaciones', as: :text %><br><br>
-  <%= f.input :date_received, label: 'Fecha recibida',
-                              as: :string,
-                              required: true,
-                              :placeholder => "Seleccionar fecha",
-                              input_html: {class: "form-control"},
-                              label: "Fecha recibida: ",
-                              html5: false
-                              %>
-  <%= f.input :date_processed, label: 'Fecha procesada',
-                              as: :string,
-                              required: true,
-                              :placeholder => "Seleccionar fecha",
-                              input_html: {class: "form-control"},
-                              label: "Fecha procesada: "%><br><br>
-
-  <%= link_to 'Volver', prescriptions_path, class: 'btn btn-default', tabindex: "-1" %>
-  <%= f.button :submit, 'Cargar prescripción', class: 'btn btn-primary', style: "margin-left: 30%" %>
+  <div class='row'>
+    <div class='col-md-6'>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 46  , :rows => 2 } %>
+    </div>
+    <div class='col-md-6'>
+      <%= f.input :date_received, label: 'Fecha recibida',
+                                  as: :string,
+                                  :placeholder => "Seleccionar fecha",
+                                  input_html: {class: "form-control", required: true,
+                                  value: "#{@prescription.date_received.strftime("%d/%m/%y %H:%M") unless @prescription.new_record?}"},
+                                  html5: false
+                                  %><br><br>
+    </div>
+  </div>
 <% end %>

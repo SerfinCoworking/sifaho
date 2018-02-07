@@ -1,15 +1,42 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense]
 
   # GET /prescriptions
   # GET /prescriptions.json
   def index
-    @prescriptions = Prescription.all
+    @filterrific = initialize_filterrific(
+      Prescription,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Prescription.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :sorted_by,
+        :search_query,
+        :date_received_at,
+      ],
+    ) or return
+    @prescriptions = @filterrific.find.page(params[:page]).per_page(8)
+
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /prescriptions/1
   # GET /prescriptions/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /prescriptions/new
@@ -17,15 +44,25 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new
     @professionals = Professional.all
     @medications = Medication.all
+    @supplies = Supply.all
     @patients = Patient.all
+    @sectors = Sector.all
     @patient_types = PatientType.all
     @prescription.build_professional
+    @prescription.professional.build_sector
     @prescription.build_patient
     @prescription.quantity_medications.build
+    @prescription.quantity_supplies.build
   end
 
   # GET /prescriptions/1/edit
   def edit
+    @professionals = Professional.all
+    @medications = Medication.all
+    @supplies = Supply.all
+    @patients = Patient.all
+    @patient_types = PatientType.all
+    @sectors = Sector.all
   end
 
   # POST /prescriptions
@@ -33,13 +70,19 @@ class PrescriptionsController < ApplicationController
   def create
     @prescription = Prescription.new(prescription_params)
 
+    date_r = prescription_params[:date_received]
+    @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+
+    @prescription.set_pending
+
     respond_to do |format|
-      if @prescription.save
-        format.html { redirect_to @prescription, notice: 'La Prescripción se ha creado correctamente.' }
-        format.json { render :show, status: :created, location: @prescription }
+      if @prescription.save!
+        dispense if dispensing?
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+        format.js
       else
-        format.html { render :new }
-        format.json { render json: @prescription.errors, status: :unprocessable_entity }
+        flash.now[:error] = "La prescripción no se ha podido crear."
+        format.js
       end
     end
   end
@@ -47,13 +90,19 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
+    if dispensing?
+      @prescription.dispense
+    end
+
+    new_date_received = DateTime.strptime(prescription_params[:date_received], '%d/%M/%Y %H:%M %p')
+
     respond_to do |format|
-      if @prescription.update_attributes(prescription_params)
-        format.html { redirect_to @prescription, notice: 'La Prescripción se ha modificado correctamente.' }
-        format.json { render :show, status: :ok, location: @prescription }
+      if @prescription.update_attributes(prescription_params) && @prescription.update_attribute(:date_received, new_date_received)
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
+        format.js
       else
-        format.html { render :edit }
-        format.json { render json: @prescription.errors, status: :unprocessable_entity }
+        flash.now[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
+        format.js
       end
     end
   end
@@ -61,10 +110,26 @@ class PrescriptionsController < ApplicationController
   # DELETE /prescriptions/1
   # DELETE /prescriptions/1.json
   def destroy
+    @professional_full_name = @prescription.professional.full_name
     @prescription.destroy
     respond_to do |format|
-      format.html { redirect_to prescriptions_url, notice: 'La Prescripción se ha eliminado correctamente.' }
-      format.json { head :no_content }
+      flash.now[:success] = "La prescripción de "+@professional_full_name+" se ha eliminado correctamente."
+      format.js
+    end
+  end
+
+  # GET /prescriptions/1/dispense
+  def dispense
+    @prescription.dispense
+
+    respond_to do |format|
+      if @prescription.save!
+        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha dispensado correctamente."
+        format.js
+      else
+        flash.now[:error] = "La prescripción no se ha podido dispensar."
+        format.js
+      end
     end
   end
 
@@ -75,10 +140,19 @@ class PrescriptionsController < ApplicationController
     end
 
     def prescription_params
-      params.require(:prescription).permit(:observation, :date_received, :date_processed,
-                                           :professional_id, :patient_id, :prescription_status_id,
-                                         quantity_medications_attributes: [:medication_id, :quantity, :_destroy],
-                                         patient_attributes: [:first_name, :last_name, :dni, :patient_type_id],
-                                         professional_attributes: [:first_name, :last_name, :dni])
+      params.require(:prescription).permit(
+                                             :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
+                                             quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
+                                             quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
+                                             patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
+                                             professional_attributes: [:id, :first_name, :last_name, :dni, :enrollment, :sector_id,
+                                               sector_attributes: [:id, :sector_name, :description, :complexity_level]
+                                             ]
+                                          )
+    end
+
+    def dispensing?
+      submit = params[:commit]
+      return submit == "Cargar y dispensar" || submit == "Guardar y dispensar"
     end
 end

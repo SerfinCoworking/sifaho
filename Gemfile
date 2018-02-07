@@ -5,7 +5,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 
 end
-
+# Use filterrific to search, filter and sort lists
+gem 'filterrific'
+# Use will_paginate for limit the post per page
+gem 'will_paginate', '~> 3.1.0'
+gem 'will_paginate-bootstrap'
 # Use momentjs and bootstrap3-datettimepicker for datetimepicker
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'

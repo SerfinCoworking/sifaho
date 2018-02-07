@@ -1,0 +1,36 @@
+<li <%=  "class=active" if controller_name == "welcome" %>>
+  <%= link_to root_path do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-home') %>
+    Inicio
+  <% end %>
+</li>
+<li><div id="pedidos-label" class="well well-sm"><strong>Pedidos</strong></div></li>
+<li id="pedidos-li"<%=  "class=active" if controller_name == "prescriptions" %>>
+  <%= link_to prescriptions_url do %>
+    Prescripciones
+  <% end %>
+</li>
+<li id="pedidos-li" <%=  "class=active" if controller_name == "orders" %>><a href="#">Internos</a></li>
+<li><div id="stock-label" class="well well-sm"><strong>Stock</strong></div></li>
+<li id="stock-li" <%= "class=active" if controller_name == "medications" %>>
+  <%= link_to medications_url do %>
+    Medicamentos
+  <% end %>
+</li>
+<li id="stock-li" <%=  "class=active" if controller_name == "supplies" %>>
+  <%= link_to supplies_url do %>
+    Suministros
+  <% end %>
+</li>
+<li id="stock-li"><a href="#">Abastecimiento</a></li>
+<li><div id="usuarios-label" class="well well-sm"><strong>Usuarios</strong></div></li>
+<li id="usuarios-li" <%=  "class=active" if controller_name == "professionals" %>>
+  <%= link_to professionals_url do %>
+    Profesionales
+  <% end %>
+</li>
+<li id="usuarios-li" <%=  "class=active" if controller_name == "patients" %>>
+  <%= link_to patients_url do %>
+    Pacientes
+  <% end %>
+</li>

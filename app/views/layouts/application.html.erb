@@ -4,18 +4,25 @@ ato<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "Sifaho" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Sifaho" %>">
+    <%= favicon_link_tag 'sifaho-favicon.png' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
     <%= csrf_meta_tags %>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><!-- Fix dropdown navbar -->
   </head>
   <body>
     <header>
       <%= render 'layouts/navigation' %>
     </header>
-    <main role="main" class="main_page">
-      <div class="col-md-10 cols-sm-10 conteiner_all">
-        <%= render 'layouts/messages' %>
-        <%= yield %>
+    <main role="main">
+      <div class="col-md-10 cols-sm-10">
+        <%= render "layouts/flash_notices" %>
+        <% if user_signed_in? %>
+          <div class="well well-sm" id="page-header"><%= yield :page_header %></div>
+        <% end %>
+        <div class="container-fluid">
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>

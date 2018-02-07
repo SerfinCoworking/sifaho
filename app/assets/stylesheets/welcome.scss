@@ -6,6 +6,119 @@
   line-height: 34px !important;
   padding: 0 0 0 12px !important;
 }
-#patient_type_id_chosen{
-  width: 200px !important;
+
+.datepicker{z-index:1151 !important;}
+
+#custom-bootstrap-menu.navbar-default .navbar-brand {
+    color: rgba(255, 255, 255, 1);
+}
+#custom-bootstrap-menu.navbar-default {
+    font-size: 14px;
+    background-color: rgba(11, 83, 141, 1);
+    border-width: 0px;
+    border-radius: 0px;
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(11, 83, 141, 1);
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(124, 158, 212, 1);
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(124, 158, 212, 1);
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle {
+    border-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus {
+    background-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle .icon-bar {
+    background-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: #0b538d;
+}
+
+#custom-sidebar .active a{
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills{
+    text-align: center;
+    background-color: #0b538d!important;
+    padding-left: 14px;
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills>li>a:hover,
+#custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:hover,
+#custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills>li>a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills>li>div{
+  margin-left: -15px;
+  width: 20.1rem!important;
+}
+
+#pedidos-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #59457c;
+  border-top-color: #7c9ed4;
+  background-color: #59457c;
+  float: inherit;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+#stock-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #10675f;
+  border-top-color: #7c9ed4;
+  background-color: #10675f;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+#usuarios-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #89726a;
+  border-top-color: #7c9ed4;
+  background-color: #89726a;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+li .well strong{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 15px;
+}
+#page-header{
+  padding: 0px 0px 0px 10em;
+  margin-left: -2em;
+  margin-right: -3.1em;
+  margin-top: -0.1em;
+  background-color: #7c9ed4;
+  border-color: #7c9ed4;
+  border-radius: 0;
+  color: white;
+}
+#page-header h3{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+#flash_messages{
+  position: absolute;
 }
