@@ -17,7 +17,9 @@
     <main role="main">
       <div class="col-md-10 cols-sm-10">
         <%= render "layouts/flash_notices" %>
-        <div class="well well-sm" id="page-header"><%= yield :page_header %></div>
+        <% if user_signed_in? %>
+          <div class="well well-sm" id="page-header"><%= yield :page_header %></div>
+        <% end %>
         <div class="container-fluid">
           <%= yield %>
         </div>

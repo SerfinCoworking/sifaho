@@ -19,8 +19,8 @@ $ ->
                    <h4><i class="glyphicon glyphicon-trash"></i>  #{message}</h4>
                  </div>
                  <div class="modal-footer">
-                   <a data-dismiss="modal" class="btn">Cancel</a>
-                   <a data-dismiss="modal" class="btn btn-danger confirm">Ok</a>
+                   <a data-dismiss="modal" class="btn btn-default pull-left">Cancelar</a>
+                   <a data-dismiss="modal" class="btn btn-danger confirm">Aceptar</a>
                  </div>
                </div>
              </div>
