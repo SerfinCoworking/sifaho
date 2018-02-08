@@ -120,6 +120,10 @@ class Prescription < ApplicationRecord
   end
 
   #Métodos públicos
+  def count_prescriptions_today
+    Prescription.where("date_received >= :today", { today: Date.today.beginning_of_day })
+  end
+
   def set_pending
     self.prescription_status = PrescriptionStatus.find_by_name("Pendiente")
   end

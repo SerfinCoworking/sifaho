@@ -71,7 +71,7 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new(prescription_params)
 
     date_r = prescription_params[:date_received]
-    @prescription.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
+    @prescription.date_received = DateTime.strptime(date_r, '%d/%m/%Y %H:%M %p')
 
     @prescription.set_pending
 
