@@ -69,7 +69,7 @@
                                   as: :string,
                                   :placeholder => "Seleccionar fecha",
                                   input_html: {class: "form-control", required: true,
-                                  value: "#{@prescription.date_received.strftime("%d/%m/%y %H:%M") unless @prescription.new_record?}"},
+                                  value: "#{@prescription.date_received unless @prescription.new_record?}"},
                                   html5: false
                                   %><br><br>
     </div>

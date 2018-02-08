@@ -70,9 +70,6 @@ class PrescriptionsController < ApplicationController
   def create
     @prescription = Prescription.new(prescription_params)
 
-    date_r = prescription_params[:date_received]
-    @prescription.date_received = DateTime.strptime(date_r, '%d/%m/%Y %H:%M %p')
-
     @prescription.set_pending
 
     respond_to do |format|
@@ -94,10 +91,8 @@ class PrescriptionsController < ApplicationController
       @prescription.dispense
     end
 
-    new_date_received = DateTime.strptime(prescription_params[:date_received], '%d/%M/%Y %H:%M %p')
-
     respond_to do |format|
-      if @prescription.update_attributes(prescription_params) && @prescription.update_attribute(:date_received, new_date_received)
+      if @prescription.update_attributes(prescription_params)
         flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
         format.js
       else
