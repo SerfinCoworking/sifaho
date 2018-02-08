@@ -54,9 +54,12 @@ class Supply < ApplicationRecord
     when /^nombre_/
       # Ordenamiento por nombre de suministro
       order("LOWER(supplies.name) #{ direction }")
-    when /^recibida_/
+    when /^fecha_recepcion_/
       # Ordenamiento por la fecha de recepción
       order("supplies.date_received #{ direction }")
+    when /^fecha_expiracion_/
+      # Ordenamiento por la fecha de expiración
+      order("supplies.expiry_date #{ direction }")
     when /^cantidad_/
       # Ordenamiento por la cantidad
       order("supplies.quantity #{ direction }")
@@ -76,7 +79,8 @@ class Supply < ApplicationRecord
      [
        ['Creación', 'created_at_asc'],
        ['Nombre (a-z)', 'nombre_asc'],
-       ['Fecha recibida (la nueva primero)', 'recibida_desc'],
+       ['Fecha recepción (la nueva primero)', 'fecha_recepcion_desc'],
+       ['Fecha expiración (prox a vencer primero)', 'fecha_expiracion_asc'],
        ['Cantidad', 'cantidad_asc']
      ]
    end

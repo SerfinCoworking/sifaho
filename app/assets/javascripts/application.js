@@ -32,7 +32,7 @@ window.setTimeout(function() {
 }, 2000);
 
 $(document).on('turbolinks:load', function() {
-  $('#datetimepicker').datetimepicker();
+  $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
 
   var sidebar = document.getElementById('custom-sidebar');
   var page_header = document.getElementById('page-header');

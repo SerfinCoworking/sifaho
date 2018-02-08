@@ -59,10 +59,6 @@ class MedicationsController < ApplicationController
     if medication_params[:medication_brand_id].present?
       @medication.update_attribute(:medication_brand_id, medication_params[:medication_brand_id])
     end
-    date_r = medication_params[:date_received]
-    date_e = medication_params[:expiry_date]
-    @medication.date_received = DateTime.strptime(date_r, '%d/%M/%Y %H:%M %p')
-    @medication.expiry_date = DateTime.strptime(date_e, '%d/%M/%Y %H:%M %p')
 
     respond_to do |format|
       if @medication.save
@@ -78,13 +74,8 @@ class MedicationsController < ApplicationController
   # PATCH/PUT /medications/1
   # PATCH/PUT /medications/1.json
   def update
-    new_date_received = DateTime.strptime(medication_params[:date_received], '%d/%M/%Y %H:%M %p')
-    new_expiry_date = DateTime.strptime(medication_params[:expiry_date], '%d/%M/%Y %H:%M %p')
-
     respond_to do |format|
       if @medication.update(medication_params)
-        @medication.update_attribute(:date_received, new_date_received)
-        @medication.update_attribute(:expiry_date, new_expiry_date)
         flash.now[:success] = "El lote de "+@medication.full_info+" se ha modificado correctamente."
         format.js
       else
