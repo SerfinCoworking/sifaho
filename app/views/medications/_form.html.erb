@@ -59,16 +59,14 @@
                             input_html: {class: "form-control", required: true},
                             label: "Fecha recibida: ",
                             html5: false,
-                            validate: {presence: true},
-                            date_format: 'DD/MM/YYYY hh:mm A/PM'
+                            validate: {presence: true}
                             %>
   <%= f.input :expiry_date, label: 'Fecha expiración',
                             as: :string,
                             :placeholder => "Seleccione una fecha",
                             input_html: {class: "form-control", required: true},
                             label: "Fecha expiración: ",
-                            html5: false,
-                            date_format: 'DD/MM/YYYY hh:mm A/PM'
+                            html5: false                            
                             %>
   <br><br>
 <% end %>

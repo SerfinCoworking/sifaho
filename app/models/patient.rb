@@ -74,9 +74,6 @@ class Patient < ApplicationRecord
     where(patient_type_id: [*type_ids])
   }
 
-  def full_info
-    self.first_name<<" "<<self.last_name<<" "<<self.dni.to_s
-  end
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
@@ -87,5 +84,14 @@ class Patient < ApplicationRecord
       ['Apellido (a-z)', 'apellido_asc'],
       ['Tipo de paciente', 'tipo_de_paciente_asc'],
     ]
+  end
+
+  #Métodos públicos
+  def full_info
+    self.first_name<<" "<<self.last_name<<" "<<self.dni.to_s
+  end
+
+  def full_name
+    self.first_name<<" "<<self.last_name
   end
 end
