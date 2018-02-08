@@ -8,14 +8,14 @@
                                 as: :string,
                                 :placeholder => "Seleccionar fecha",
                                 input_html: {class: "form-control", required: true,
-                                value: "#{@supply.date_received.strftime("%d/%m/%y %H:%M") unless @supply.new_record?}"},
+                                value: "#{@supply.date_received unless @supply.new_record?}"},
                                 html5: false
                                 %>
     <%= f.input :expiry_date, label: 'Fecha expiración',
                                 as: :string,
                                 :placeholder => "Seleccionar fecha",
                                 input_html: {class: "form-control", required: true,
-                                value: "#{@supply.expiry_date.strftime("%d/%m/%y %H:%M") unless @supply.new_record?}"},
+                                value: "#{@supply.expiry_date unless @supply.new_record?}"},
                                 html5: false
                                 %><br><br>
 <% end %>
