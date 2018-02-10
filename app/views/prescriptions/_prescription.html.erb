@@ -40,20 +40,24 @@
     <% if prescription.date_dispensed.present? %>
       <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
     <% else %>
-      <%= link_to dispense_prescription_path(prescription), remote: true, class: 'btn btn-success btn-xs' do %>
+      <%= link_to dispense_prescription_path(prescription), remote: true,
+            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
       <% end %>
     <% end %>
   </td>
   <td>
-    <%= link_to prescription_path(prescription), remote:true, class: 'btn btn-default btn-xs' do %>
+    <%= link_to prescription_path(prescription), remote:true,
+          class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
     <% end %>
-    <%= link_to edit_prescription_path(prescription), remote: true, class: 'btn btn-warning btn-xs' do %>
+    <%= link_to edit_prescription_path(prescription), remote: true,
+          class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
     <% end %>
     <%= link_to prescription_path(prescription), remote: true, class: 'btn btn-danger btn-xs',
-        method: :delete, data: {confirm: "Desea eliminar la prescripción del paciente #{prescription.patient.full_info}?"} do %>
+          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top',
+          confirm: "Desea eliminar la prescripción del paciente #{prescription.patient.full_info}?"} do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
     <% end %>
   </td>

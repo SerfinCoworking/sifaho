@@ -148,4 +148,18 @@ class Prescription < ApplicationRecord
       end #End 2nd if
     end #End dispensed?
   end
+
+  #Métodos de clase
+  def self.current_day
+    where("date_received >= :today", { today: DateTime.now.beginning_of_day.strftime('%d/%m/%Y %H:%M') })
+  end
+  def self.current_month
+    where("date_received >= :month", { month: DateTime.now.beginning_of_month.strftime('%d/%m/%Y %H:%M') })
+  end
+  def self.dispensed
+    where("prescription_status_id = 2")
+  end
+  def self.pending
+    where("prescription_status_id = 1")
+  end
 end

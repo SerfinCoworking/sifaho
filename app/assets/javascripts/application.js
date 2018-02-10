@@ -16,6 +16,8 @@
 //= require jquery-ui
 //= require chosen-jquery
 //= require filterrific/filterrific-jquery
+//= require highcharts
+//= require chartkick
 //= require turbolinks
 //= require cocoon
 //= require_tree .
@@ -32,6 +34,8 @@ window.setTimeout(function() {
 }, 2000);
 
 $(document).on('turbolinks:load', function() {
+  $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
+
   $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
 
   var sidebar = document.getElementById('custom-sidebar');

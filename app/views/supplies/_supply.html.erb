@@ -1,18 +1,21 @@
   <tr id="supply_<%= supply.id %>">
     <div class="js-fade fade-in is-paused">
+    <td><%= supply.id %></td>
     <td><%= supply.name %></td>
     <td><%= supply.quantity %></td>
     <td><%= supply.date_received.strftime("%d/%m/%y %H:%M") %></td>
     <td><%= supply.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
     <td>
-      <%= link_to supply_path(supply), remote:true, class: 'btn btn-default btn-xs' do %>
+      <%= link_to supply_path(supply), remote:true, class: 'btn btn-default btn-xs',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
-      <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs' do %>
+      <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs',
+            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
       <%= link_to supply_path(supply), remote: true, class: 'btn btn-danger btn-xs',
-          method: :delete, data: {confirm: "Desea eliminar #{supply.quantity} #{supply.name}s?"} do %>
+          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar #{supply.quantity} #{supply.name}s?"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>

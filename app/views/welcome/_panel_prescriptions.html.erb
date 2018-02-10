@@ -1,0 +1,80 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Prescripciones <small>Hoy <%= Time.now.strftime("%d/%m/%Y") %></small>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        <%= @count_prescriptions_today %> prescripciones recibidas en el día
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width: <%= @percent_dispensed_prescriptions %>">
+        <%= @percent_dispensed_prescriptions %> dispensadas
+      </div>
+      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_pendient_prescriptions %>">
+        <%= @percent_pendient_prescriptions %> pendientes
+      </div>
+    </div>
+    Total: <span class="label label-primary"><%= @count_prescriptions_today %></span>
+    Dispensadas: <span class="label label-success"><%= @count_disp_pres %></span>
+    Pendientes: <span class="label label-warning"><%= @count_pend_pres %></span>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Prescripciones <small>Mes actual</small>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        <%= @count_prescriptions_month %> prescripciones recibidas en el mes
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width: <%= @percent_disp_pres_month %>">
+        <%= @percent_disp_pres_month %> dispensadas
+      </div>
+      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_pend_pres_month %>">
+        <%= @percent_pend_pres_month %> pendientes
+      </div>
+    </div>
+    Total: <span class="label label-primary"><%= @count_prescriptions_month %></span>
+    Dispensadas: <span class="label label-success"><%= @count_disp_pres_month %></span>
+    Pendientes: <span class="label label-warning"><%= @count_pend_pres_month %></span>
+  </div>
+  <% if @last_prescriptions.present? %>
+  <div class="panel-footer"><h3 class="panel-title">Últimas recibidas</h3>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Paciente</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @last_prescriptions.each do |pre|%>
+          <tr>
+            <td><%= pre.professional.full_name %></td>
+            <td><%= pre.patient.full_name %></td>
+            <td>
+              <span class="label label-<%= pre.prescription_status.label %>">
+                <%= pre.prescription_status.name %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="text-center">
+    <%= link_to prescriptions_url, class: 'btn btn-default btn-xs' do %>
+      Ver más
+    <% end %>
+  </div>
+  </div>
+  <% end %>
+</div>

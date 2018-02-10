@@ -6,14 +6,16 @@
     <td><%= professional.dni %></td>
     <td><%= professional.sector.sector_name %></td>
     <td>
-      <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs' do %>
+      <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
-      <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs' do %>
+      <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs',
+            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
       <%= link_to professional_path(professional), remote: true, class: 'btn btn-danger btn-xs',
-          method: :delete, data: {confirm: "Desea eliminar a #{professional.first_name} #{professional.last_name}?"} do %>
+          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar a #{professional.first_name} #{professional.last_name}?"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>

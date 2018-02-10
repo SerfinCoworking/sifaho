@@ -65,6 +65,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    chartkick (2.2.5)
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     chosen-rails (1.8.3)
@@ -100,6 +101,8 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
+    highcharts-rails (6.0.3)
+      railties (>= 3.1)
     i18n (0.9.3)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -269,11 +272,13 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails (~> 4.17.47)
   byebug
   capybara (~> 2.13)
+  chartkick
   chosen-rails
   cocoon
   coffee-rails (~> 4.2)
   devise
   filterrific
+  highcharts-rails
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   momentjs-rails (>= 2.9.0)
