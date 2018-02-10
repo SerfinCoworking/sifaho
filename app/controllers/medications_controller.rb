@@ -30,6 +30,8 @@ class MedicationsController < ApplicationController
   # GET /medications/1
   # GET /medications/1.json
   def show
+    _percent = @medication.quantity.to_f / @medication.initial_quantity  * 100 unless @medication.initial_quantity == 0
+    @percent_quantity_medication = _percent
     respond_to do |format|
       format.js
     end

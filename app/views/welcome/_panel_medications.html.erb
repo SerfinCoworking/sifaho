@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Lotes de medicamentos <small>Todos</small></h3>
+    <h3 class="panel-title">Lotes de medicamentos <small>Expiración</small></h3>
   </div>
   <div class="panel-body">
     <div class="progress">
@@ -23,5 +23,33 @@
     Buen estado: <span class="label label-success"><%= @count_good_medications %></span>
     Próximos a vencer: <span class="label label-warning"><%= @count_near_expiry_medications %></span>
     Vencidos: <span class="label label-danger"><%= @count_expired_medications %></span>
+  </div>
+  <div class="panel-heading">
+    <h3 class="panel-title">Cantidades<small>Expiración</small></h3>
+  </div>
+</div>
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <h3 class="panel-title">Lotes vencidos</h3>
+  </div>
+  <div class="panel-body">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>N°Lote</th>
+          <th>Droga</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @expired_medications.each do |em|%>
+          <tr>
+            <td><%= em.id %></td>
+            <td><%= em.name %></td>
+            <td><span class="label label-<%= em.quantity_label %>"><%= em.quantity %></span></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -16,8 +16,15 @@
       <%= @medication.medication_brand.laboratory.name %>
     </span>
     <br><br>
-
-    <div class="well well-sm"><h3>Cantidad en stock: <%= @medication.quantity %></h3></div>
+    <div class="well well-sm">
+      <h4>Cantidad en stock: <span class="label label-<%= @medication.quantity_label %>"><%= @medication.quantity %></span></h4>
+        <div class="progress">
+          <div class="progress-bar progress-bar-<%= @medication.quantity_label %> progress-bar-striped active" style="width: <%= @percent_quantity_medication %>%">
+            <%= @percent_quantity_medication %>%
+          </div>
+        </div>
+      Cantidad inicial: <span class="label label-primary"><%= @medication.initial_quantity %></span>
+    </div>
   </div>
 
   <div class="col-md-6">

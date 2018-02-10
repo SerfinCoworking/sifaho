@@ -1,6 +1,8 @@
 class Medication < ActiveRecord::Base
   attr_accessor :name
 
+  after_create :assign_initial_quantity
+
   validates :vademecum, presence: true
   validates :medication_brand, presence:true
   validates :expiry_date, presence: true
@@ -116,5 +118,25 @@ class Medication < ActiveRecord::Base
   #Métodos públicos
   def decrement(a_quantity)
     self.quantity -= a_quantity
+  end
+
+  def quantity_label
+    if self.percent_stock == 0
+      return 'danger'
+    elsif self.percent_stock <= 30
+      return 'warning'
+    else
+      return 'success'
+    end
+  end
+
+  def percent_stock
+    self.quantity.to_f / self.initial_quantity  * 100 unless self.initial_quantity == 0
+  end
+
+  private
+  def assign_initial_quantity
+    self.initial_quantity = self.quantity
+    save!
   end
 end
