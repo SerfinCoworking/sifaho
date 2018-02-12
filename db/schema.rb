@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   create_table "supplies", force: :cascade do |t|
     t.string "name"
     t.integer "quantity"
+    t.integer "initial_quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
     t.datetime "created_at", null: false

@@ -34,6 +34,9 @@ class SuppliesController < ApplicationController
   # GET /supplies/1
   # GET /supplies/1.json
   def show
+    _percent = @supply.quantity.to_f / @supply.initial_quantity  * 100 unless @supply.initial_quantity == 0
+    @percent_quantity_supply = _percent
+
     respond_to do |format|
       format.js
     end

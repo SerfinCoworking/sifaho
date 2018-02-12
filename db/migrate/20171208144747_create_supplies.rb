@@ -3,6 +3,7 @@ class CreateSupplies < ActiveRecord::Migration[5.1]
     create_table :supplies do |t|
       t.string :name
       t.integer :quantity
+      t.integer :initial_quantity
       t.datetime :expiry_date
       t.datetime :date_received
 

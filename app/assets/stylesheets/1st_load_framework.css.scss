@@ -3,7 +3,7 @@
 @import "bootstrap";
 
 html {
-  background-color: #eee;
+  // background-color: #eee;
 }
 // make all images responsive by default
 img {
@@ -38,7 +38,7 @@ img {
 // to make views framework-neutral
 main {
   @extend .container;
-  background-color: #eee;
+  // background-color: #eee;
   //display: inline-block;
   width: 100%;
   margin-top: 51px; // accommodate the navbar

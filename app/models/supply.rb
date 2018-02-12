@@ -1,4 +1,6 @@
 class Supply < ApplicationRecord
+  after_create :assign_initial_quantity
+
   validates_presence_of :name, presence: true
   validates_presence_of :quantity, presence: true
   validates_presence_of :date_received, presence: true
@@ -88,5 +90,25 @@ class Supply < ApplicationRecord
    #Métodos públicos
    def decrement(a_quantity)
      self.quantity -= a_quantity
+   end
+
+   def percent_stock
+     self.quantity.to_f / self.initial_quantity  * 100 unless self.initial_quantity == 0
+   end
+
+   def quantity_label
+     if self.percent_stock == 0
+       return 'danger'
+     elsif self.percent_stock <= 30
+       return 'warning'
+     else
+       return 'success'
+     end
+   end
+   
+   private
+   def assign_initial_quantity
+     self.initial_quantity = self.quantity
+     save!
    end
 end

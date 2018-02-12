@@ -87,21 +87,6 @@ class Medication < ActiveRecord::Base
     where('medications.date_received >= ?', reference_time)
   }
 
-  def full_info
-    if self.vademecum
-      self.vademecum.medication_name<<" "<<self.medication_brand.name
-    end
-  end
-  def name
-    if self.vademecum
-      self.vademecum.medication_name
-    end
-  end
-  def brand
-    if self.medication_brand
-      self.medication_brand.name
-    end
-  end
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
@@ -116,8 +101,30 @@ class Medication < ActiveRecord::Base
   end
 
   #Métodos públicos
+  def full_info
+    if self.vademecum
+      self.vademecum.medication_name<<" "<<self.medication_brand.name
+    end
+  end
+
+  def name
+    if self.vademecum
+      self.vademecum.medication_name
+    end
+  end
+
+  def brand
+    if self.medication_brand
+      self.medication_brand.name
+    end
+  end
+
   def decrement(a_quantity)
     self.quantity -= a_quantity
+  end
+
+  def percent_stock
+    self.quantity.to_f / self.initial_quantity  * 100 unless self.initial_quantity == 0
   end
 
   def quantity_label
@@ -130,8 +137,15 @@ class Medication < ActiveRecord::Base
     end
   end
 
-  def percent_stock
-    self.quantity.to_f / self.initial_quantity  * 100 unless self.initial_quantity == 0
+  # Métodos de clase
+  def self.expired
+    where("expiry_date <= :date", { date: DateTime.now })
+  end
+  def self.near_expiry
+    where("expiry_date < :date AND expiry_date > :today", { date: DateTime.now + 3.month, today: DateTime.now })
+  end
+  def self.in_good_state
+    where("expiry_date >= :date", { date: DateTime.now })
   end
 
   private

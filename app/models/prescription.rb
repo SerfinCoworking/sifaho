@@ -149,7 +149,7 @@ class Prescription < ApplicationRecord
     end #End dispensed?
   end
 
-  #Métodos de clase
+  # Métodos de clase
   def self.current_day
     where("date_received >= :today", { today: DateTime.now.beginning_of_day.strftime('%d/%m/%Y %H:%M') })
   end

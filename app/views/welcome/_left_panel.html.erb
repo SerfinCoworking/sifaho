@@ -1,3 +1,4 @@
+<!--  Panel Prescripciones del día -->
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Prescripciones <small>Hoy <%= Time.now.strftime("%d/%m/%Y") %></small>
@@ -23,6 +24,7 @@
   </div>
 </div>
 
+<!--  Panel Prescripciones Mes actual -->
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Prescripciones <small>Mes actual</small>
@@ -46,35 +48,28 @@
     Dispensadas: <span class="label label-success"><%= @count_disp_pres_month %></span>
     Pendientes: <span class="label label-warning"><%= @count_pend_pres_month %></span>
   </div>
-  <% if @last_prescriptions.present? %>
-  <div class="panel-footer"><h3 class="panel-title">Últimas recibidas</h3>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Doctor</th>
-          <th>Paciente</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @last_prescriptions.each do |pre|%>
-          <tr>
-            <td><%= pre.professional.full_name %></td>
-            <td><%= pre.patient.full_name %></td>
-            <td>
-              <span class="label label-<%= pre.prescription_status.label %>">
-                <%= pre.prescription_status.name %>
-              </span>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <div class="text-center">
-    <%= link_to prescriptions_url, class: 'btn btn-default btn-xs' do %>
-      Ver más
-    <% end %>
+</div>
+
+<!--  Panel Lote de medicamentos -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Lotes de medicamentos <small>Expiración</small></h3>
   </div>
+  <div class="panel-body">
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width: <%= @percent_good_medications %>">
+        <%= @percent_good_medications %> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      </div>
+      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_near_expiry_medications %>">
+        <%= @percent_near_expiry_medications %> <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+      </div>
+      <div class="progress-bar progress-bar-danger" style="width: <%= @percent_expired_medications %>">
+        <%= @percent_expired_medications %> <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+      </div>
+    </div>
+    Total: <span class="label label-primary"><%= @count_total_medications %></span>
+    Buen estado: <span class="label label-success"><%= @count_good_medications %></span>
+    Próximos a vencer: <span class="label label-warning"><%= @count_near_expiry_medications %></span>
+    Vencidos: <span class="label label-danger"><%= @count_expired_medications %></span>
   </div>
-  <% end %>
 </div>

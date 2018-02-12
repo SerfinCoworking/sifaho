@@ -2,7 +2,7 @@
     <div class="js-fade fade-in is-paused">
     <td><%= supply.id %></td>
     <td><%= supply.name %></td>
-    <td><%= supply.quantity %></td>
+    <td><span class="label label-<%= supply.quantity_label %>"><%= supply.quantity %></span></td>
     <td><%= supply.date_received.strftime("%d/%m/%y %H:%M") %></td>
     <td><%= supply.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
     <td>
@@ -15,7 +15,7 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
       <%= link_to supply_path(supply), remote: true, class: 'btn btn-danger btn-xs',
-          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar #{supply.quantity} #{supply.name}s?"} do %>
+          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar el lote de #{supply.name} con cantidad: #{supply.quantity}?"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>

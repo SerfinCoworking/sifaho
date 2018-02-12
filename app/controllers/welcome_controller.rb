@@ -17,16 +17,17 @@ class WelcomeController < ApplicationController
       @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
       @last_prescriptions = Prescription.limit(5).order(date_received: :desc)
 
+      @expired_medications = Medication.expired.limit(3)
+      @near_expiry_medications = Medication.near_expiry.limit(3)
 
-      @count_type_medications = Medication.count
-      @count_good_medications = Medication.where("expiry_date >= :date", { date: DateTime.now + 3.month }).count
-      @count_near_expiry_medications = Medication.where("expiry_date <= :date", { date: DateTime.now + 3.month }).count
-      @count_expired_medications = Medication.where("expiry_date <= :date", { date: DateTime.now }).count
-      @count_near_expiry_medications -= @count_expired_medications
+      @count_total_medications = Medication.count
+      @count_near_expiry_medications = Medication.near_expiry.count
+      @count_expired_medications = Medication.expired.count
+      @count_good_medications = Medication.in_good_state.count - @count_near_expiry_medications
 
-      @percent_good_medications = _helper.number_to_percentage((@count_good_medications.to_f / @count_type_medications  * 100), precision: 0) unless @count_type_medications == 0
-      @percent_near_expiry_medications = _helper.number_to_percentage((@count_near_expiry_medications.to_f / @count_type_medications  * 100), precision: 0) unless @count_type_medications == 0
-      @percent_expired_medications = _helper.number_to_percentage((@count_expired_medications.to_f / @count_type_medications  * 100), precision: 0) unless @count_type_medications == 0
+      @percent_good_medications = _helper.number_to_percentage((@count_good_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
+      @percent_near_expiry_medications = _helper.number_to_percentage((@count_near_expiry_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
+      @percent_expired_medications = _helper.number_to_percentage((@count_expired_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
 
   end
 end
