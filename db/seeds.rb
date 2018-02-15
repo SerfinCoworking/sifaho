@@ -30,14 +30,14 @@ Vademecum.create!([
     indications: "Anafilaxia. Crisis Asmática severa. Paro Cardio Respiratorio, asistolia, FV/TV, DEM." }
 ])
 Medication.create!([
-  { quantity: 20, expiry_date: Time.now, date_received: Time.now, vademecum_id: 1,
+  { quantity: 20, expiry_date: DateTime.now + 2.year, date_received: Time.now, vademecum_id: 1,
     medication_brand: MedicationBrand.first },
-  { quantity: 15, expiry_date: Time.now, date_received: Time.now, vademecum_id: 2,
+  { quantity: 15, expiry_date: DateTime.now + 1.year, date_received: Time.now, vademecum_id: 2,
     medication_brand: MedicationBrand.find(2) },
 ])
 Supply.create!([
-  { name: "Leche", quantity: 40, expiry_date: Time.now, date_received: Time.now },
-  { name: "Muletas", quantity: 5, expiry_date: Time.now, date_received: Time.now }
+  { name: "Leche", quantity: 40, expiry_date: DateTime.now + 4.month, date_received: Time.now },
+  { name: "Muletas", quantity: 5, expiry_date: DateTime.now + 10.year, date_received: Time.now }
 ])
 PatientType.create!([
   { name: "Ambulatorio", description: "Está recibiendo servicios del departamento de emergencia."},

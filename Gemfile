@@ -6,6 +6,9 @@ git_source(:github) do |repo_name|
 
 end
 
+# To group by date
+gem 'groupdate'
+gem 'active_median'
 # Use chartkick and highcharts-rails to perform charts
 gem 'chartkick'
 gem 'highcharts-rails'

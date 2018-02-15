@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
       _helper = ActiveSupport::NumberHelper
       _prescriptions_today = Prescription.current_day
       _prescriptions_month = Prescription.current_month
+      @prescriptions = Prescription.all
       @count_prescriptions_today = _prescriptions_today.count
       @count_prescriptions_month = _prescriptions_month.count
       @count_pend_pres = _prescriptions_today.pending.count
@@ -17,6 +18,7 @@ class WelcomeController < ApplicationController
       @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
       @last_prescriptions = Prescription.limit(5).order(date_received: :desc)
 
+      @medications = Medication.all
       @expired_medications = Medication.expired.limit(3)
       @near_expiry_medications = Medication.near_expiry.limit(3)
 
@@ -28,6 +30,5 @@ class WelcomeController < ApplicationController
       @percent_good_medications = _helper.number_to_percentage((@count_good_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
       @percent_near_expiry_medications = _helper.number_to_percentage((@count_near_expiry_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
       @percent_expired_medications = _helper.number_to_percentage((@count_expired_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
-
   end
 end
