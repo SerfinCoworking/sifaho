@@ -5,6 +5,7 @@ class CreateMedications < ActiveRecord::Migration[5.1]
       t.integer :initial_quantity
       t.datetime :expiry_date
       t.datetime :date_received
+      t.column :status, :integer, default: 0
 
       t.timestamps
     end

@@ -1,7 +1,10 @@
 class Medication < ActiveRecord::Base
   attr_accessor :name
 
-  after_create :assign_initial_quantity
+  enum status: { good: 0, near_expiry: 1, expired: 2}
+
+  after_create :update_status, :assign_initial_quantity
+  after_update :update_status
 
   validates :vademecum, presence: true
   validates :medication_brand, presence:true
@@ -119,6 +122,16 @@ class Medication < ActiveRecord::Base
     end
   end
 
+  def status
+    if self.good?
+      return 'Bien'
+    elsif self.near_expiry?
+      return 'Por expirar'
+    elsif self.expired?
+      return 'Expirado'
+    end
+  end
+
   def decrement(a_quantity)
     self.quantity -= a_quantity
   end
@@ -137,20 +150,43 @@ class Medication < ActiveRecord::Base
     end
   end
 
+  def status_label
+    if self.good?
+      return 'success'
+    elsif self.near_expiry?
+      return 'warning'
+    elsif self.expired?
+      return 'danger'
+    end
+  end
+
   # Métodos de clase
   def self.expired
-    where("expiry_date <= :date", { date: DateTime.now })
+    where(status: [:expired])
   end
   def self.near_expiry
-    where("expiry_date < :date AND expiry_date > :today", { date: DateTime.now + 3.month, today: DateTime.now })
+    where(status: [:near_expiry])
   end
   def self.in_good_state
-    where("expiry_date >= :date", { date: DateTime.now })
+    where(status: [:good])
   end
 
   private
   def assign_initial_quantity
     self.initial_quantity = self.quantity
     save!
+  end
+
+  def update_status
+    # If good
+    if expiry_date >= DateTime.now
+      self.good!
+    # If near_expiry
+    elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+      self.near_expiry!
+    # If expired
+    elsif self.expiry_date <= DateTime.now
+      self.expired!
+    end
   end
 end

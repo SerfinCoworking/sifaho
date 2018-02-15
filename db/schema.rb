@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.integer "initial_quantity"
     t.datetime "expiry_date"
     t.datetime "date_received"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "vademecum_id"

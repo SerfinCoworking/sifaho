@@ -2,7 +2,14 @@
   <td><%= medication.id %></td>
   <td><%= medication.name %></td>
   <td><%= medication.brand %></td>
-  <td><span class="label label-<%= medication.quantity_label %>"><%= medication.quantity %></span></td>
+  <td><span class="label label-<%= medication.status_label %>"><%= medication.status %></span></td>
+  <td>
+    <% if medication.expired? %>
+      <span class="badge"><%= medication.quantity %></span>
+    <% else %>
+      <span class="label label-<%= medication.quantity_label %>"><%= medication.quantity %></span>
+    <% end %>
+  </td>
   <td><%= medication.date_received.strftime("%d/%m/%y %H:%M") %></td>
   <td><%= medication.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
   <td>
