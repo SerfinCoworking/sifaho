@@ -25,7 +25,7 @@ class WelcomeController < ApplicationController
       @count_total_medications = Medication.count
       @count_near_expiry_medications = Medication.near_expiry.count
       @count_expired_medications = Medication.expired.count
-      @count_good_medications = Medication.in_good_state.count - @count_near_expiry_medications
+      @count_good_medications = Medication.in_good_state.count
 
       @percent_good_medications = _helper.number_to_percentage((@count_good_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0
       @percent_near_expiry_medications = _helper.number_to_percentage((@count_near_expiry_medications.to_f / @count_total_medications  * 100), precision: 0) unless @count_total_medications == 0

@@ -4,17 +4,14 @@
     <h3 class="panel-title">Lotes de medicamentos <small>Expiración</small></h3>
   </div>
   <div class="panel-body">
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" style="width: <%= @percent_good_medications %>">
-        <%= @percent_good_medications %> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-      </div>
-      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_near_expiry_medications %>">
-        <%= @percent_near_expiry_medications %> <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-      </div>
-      <div class="progress-bar progress-bar-danger" style="width: <%= @percent_expired_medications %>">
-        <%= @percent_expired_medications %> <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
-      </div>
-    </div>
+    <% data = @medications.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+      status_colors = {"Bien" => "#40c95e", "Por Expirar" => "#f1ae45", "Expirado" => "#d36262"}
+      colors = []
+      data.each do |status, _|
+        colors << status_colors[status]
+      end
+      %>
+    <%= pie_chart data, colors: colors %>
     Total: <span class="label label-primary"><%= @count_total_medications %></span>
     Buen estado: <span class="label label-success"><%= @count_good_medications %></span>
     Próximos a expirar: <span class="label label-warning"><%= @count_near_expiry_medications %></span>

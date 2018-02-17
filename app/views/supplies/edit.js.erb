@@ -20,5 +20,5 @@ $('#dialog').on('shown.bs.modal', function () {
 
 <%= render 'form_function' %>
 
-$('#supply_date_received').val("<%= @supply.date_received.strftime("%d/%m/%y %H:%M %p") %>");
-$('#supply_expiry_date').val("<%= @supply.expiry_date.strftime("%d/%m/%y %H:%M %p") %>");
+$('#supply_date_received').val("<%= @supply.date_received.strftime("%d/%m/%Y %H:%M %p") %>");
+$('#supply_expiry_date').val("<%= @supply.expiry_date.strftime("%d/%m/%Y %H:%M %p") %>");

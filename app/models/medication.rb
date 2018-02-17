@@ -1,15 +1,26 @@
 class Medication < ActiveRecord::Base
   attr_accessor :name
 
-  enum status: { good: 0, near_expiry: 1, expired: 2}
+  enum status: { bien: 0, por_expirar: 1, expirado: 2}
 
   after_create :update_status, :assign_initial_quantity
-  after_update :update_status
+  before_update :update_status, if: :will_save_change_to_expiry_date?
 
   validates :vademecum, presence: true
   validates :medication_brand, presence:true
   validates :expiry_date, presence: true
   validates :date_received, presence:true
+
+  belongs_to :vademecum
+  belongs_to :medication_brand
+  has_many :quantity_medications
+  has_many :prescriptions,
+        :through => :quantity_medications,
+        :source => :quantifiable,
+        :source_type => 'Prescription'
+
+  accepts_nested_attributes_for :medication_brand,
+  :reject_if => :all_blank
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -19,18 +30,6 @@ class Medication < ActiveRecord::Base
       :date_received_at,
     ]
   )
-
-  belongs_to :vademecum
-  belongs_to :medication_brand
-
-  has_many :quantity_medications
-  has_many :prescriptions,
-           :through => :quantity_medications,
-           :source => :quantifiable,
-           :source_type => 'Prescription'
-
-  accepts_nested_attributes_for :medication_brand,
-         :reject_if => :all_blank
 
   # define ActiveRecord scopes for
   # :search_query, :sorted_by, :date_received_at
@@ -122,24 +121,17 @@ class Medication < ActiveRecord::Base
     end
   end
 
-  def status
-    if self.good?
-      return 'Bien'
-    elsif self.near_expiry?
-      return 'Por expirar'
-    elsif self.expired?
-      return 'Expirado'
-    end
-  end
-
+  # Disminuye la cantidad
   def decrement(a_quantity)
     self.quantity -= a_quantity
   end
 
+  # Retorna el porcentaje actual de stock
   def percent_stock
     self.quantity.to_f / self.initial_quantity  * 100 unless self.initial_quantity == 0
   end
 
+  # Label de porcentaje de stock para vista.
   def quantity_label
     if self.percent_stock == 0
       return 'danger'
@@ -150,43 +142,46 @@ class Medication < ActiveRecord::Base
     end
   end
 
+  # Label del estado para vista.
   def status_label
-    if self.good?
+    if self.bien?
       return 'success'
-    elsif self.near_expiry?
+    elsif self.por_expirar?
       return 'warning'
-    elsif self.expired?
+    elsif self.expirado?
       return 'danger'
     end
   end
 
   # Métodos de clase
-  def self.expired
-    where(status: [:expired])
+  def self.expired # Retorna los medicamentos expirados
+    where(status: [:expirado])
   end
-  def self.near_expiry
-    where(status: [:near_expiry])
+  def self.near_expiry # Retorna los medicamentos pronto a expirar
+    where(status: [:por_expirar])
   end
-  def self.in_good_state
-    where(status: [:good])
+  def self.in_good_state # Retorna los medicamentos en buen estado
+    where(status: [:bien])
   end
 
   private
+  # Se actualiza el estado de expiración
+  def update_status
+    # If expired
+    if self.expiry_date <= DateTime.now
+      self.status = "expirado"
+      # If near_expiry
+    elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+      self.status = "por_expirar"
+      # If good
+    elsif expiry_date > DateTime.now
+      self.status = "bien"
+    end
+  end
+
+  # Se asigna la cantidad inicial
   def assign_initial_quantity
     self.initial_quantity = self.quantity
     save!
-  end
-
-  def update_status
-    # If good
-    if expiry_date >= DateTime.now
-      self.good!
-    # If near_expiry
-    elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-      self.near_expiry!
-    # If expired
-    elsif self.expiry_date <= DateTime.now
-      self.expired!
-    end
   end
 end

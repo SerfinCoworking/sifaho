@@ -25,5 +25,5 @@ $('.chosen-select').chosen({
 
 <%= render 'form_function' %>
 
-$('#medication_date_received').val("<%= @medication.date_received.strftime("%d/%m/%y %H:%M %p") %>");
-$('#medication_expiry_date').val("<%= @medication.expiry_date.strftime("%d/%m/%y %H:%M %p") %>");
+$('#medication_date_received').val("<%= @medication.date_received.strftime("%d/%m/%Y %H:%M") %>");
+$('#medication_expiry_date').val("<%= @medication.expiry_date.strftime("%d/%m/%Y %H:%M") %>");
