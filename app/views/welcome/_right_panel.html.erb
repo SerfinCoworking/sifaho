@@ -5,7 +5,7 @@
   </div>
   <div class="panel-body">
     <% data = @medications.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
-      status_colors = {"Bien" => "#40c95e", "Por Expirar" => "#f1ae45", "Expirado" => "#d36262"}
+      status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262"}
       colors = []
       data.each do |status, _|
         colors << status_colors[status]
@@ -13,9 +13,9 @@
       %>
     <%= pie_chart data, colors: colors %>
     Total: <span class="label label-primary"><%= @count_total_medications %></span>
-    Buen estado: <span class="label label-success"><%= @count_good_medications %></span>
-    Próximos a expirar: <span class="label label-warning"><%= @count_near_expiry_medications %></span>
-    Expirados: <span class="label label-danger"><%= @count_expired_medications %></span>
+    Vigentes: <span class="label label-success"><%= @count_good_medications %></span>
+    Por vencer: <span class="label label-warning"><%= @count_near_expiry_medications %></span>
+    Vencidos: <span class="label label-danger"><%= @count_expired_medications %></span>
   </div>
 </div>
 <!-- Panel Lotes expirados -->

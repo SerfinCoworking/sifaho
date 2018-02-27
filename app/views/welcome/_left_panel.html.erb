@@ -42,7 +42,6 @@
     </div>
     <div class="panel-body">
       <%= line_chart @prescriptions.group_by_day(:date_received, format: "%d/%m/%Y").count, discrete: true %>
-      <%= pie_chart @prescriptions.joins(:prescription_status).group(:name).count, colors: ["#4d6","#777"] %>
     </div>
   <% end %>
   <!--  Panel Últimas prescripciones -->

@@ -1,7 +1,7 @@
 class Medication < ActiveRecord::Base
   attr_accessor :name
 
-  enum status: { bien: 0, por_expirar: 1, expirado: 2}
+  enum status: { vigente: 0, por_vencer: 1, vencido: 2}
 
   after_create :update_status, :assign_initial_quantity
   before_update :update_status, if: :will_save_change_to_expiry_date?
@@ -28,6 +28,7 @@ class Medication < ActiveRecord::Base
       :sorted_by,
       :search_query,
       :date_received_at,
+      :status,
     ]
   )
 
@@ -89,6 +90,10 @@ class Medication < ActiveRecord::Base
     where('medications.date_received >= ?', reference_time)
   }
 
+  scope :status, ->(options) {
+    where(status: options) unless options.nil?
+  }
+
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
@@ -144,24 +149,24 @@ class Medication < ActiveRecord::Base
 
   # Label del estado para vista.
   def status_label
-    if self.bien?
+    if self.vigente?
       return 'success'
-    elsif self.por_expirar?
+    elsif self.por_vencer?
       return 'warning'
-    elsif self.expirado?
+    elsif self.vencido?
       return 'danger'
     end
   end
 
   # Métodos de clase
   def self.expired # Retorna los medicamentos expirados
-    where(status: [:expirado])
+    where(status: [:vencido])
   end
   def self.near_expiry # Retorna los medicamentos pronto a expirar
-    where(status: [:por_expirar])
+    where(status: [:por_vencer])
   end
   def self.in_good_state # Retorna los medicamentos en buen estado
-    where(status: [:bien])
+    where(status: [:vigente])
   end
 
   private
@@ -169,13 +174,13 @@ class Medication < ActiveRecord::Base
   def update_status
     # If expired
     if self.expiry_date <= DateTime.now
-      self.status = "expirado"
+      self.status = "vencido"
       # If near_expiry
     elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-      self.status = "por_expirar"
+      self.status = "por_vencer"
       # If good
     elsif expiry_date > DateTime.now
-      self.status = "bien"
+      self.status = "vigente"
     end
   end
 
