@@ -124,6 +124,9 @@ li .well strong{
 }
 #flash_messages{
   position: absolute;
+  top: 10px;
+  right: 0px;
+  z-index: 1;
 }
 .body-table{
   padding-top: 0px;
