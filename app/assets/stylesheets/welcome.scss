@@ -48,6 +48,9 @@
     background-color: #0b538d;
 }
 
+#custom-sidebar{
+  z-index: 1;
+}
 #custom-sidebar .active a{
   background-color: rgba(124, 158, 212, 1);
 }
@@ -111,7 +114,7 @@ li .well strong{
 #page-header{
   padding: 0px 0px 0px 16em;
   position: relative;
-  z-index: -1;
+  z-index: 0;
   margin: -0.1em -3.85% 1.7% -10%;
   background-color: #7c9ed4;
   border-color: #7c9ed4;
