@@ -109,10 +109,10 @@ li .well strong{
   font-size: 15px;
 }
 #page-header{
-  padding: 0px 0px 0px 10em;
-  margin-left: -2em;
-  margin-right: -3.1em;
-  margin-top: -0.1em;
+  padding: 0px 0px 0px 16em;
+  position: relative;
+  z-index: -1;
+  margin: -0.1em -3.85% 1.7% -10%;
   background-color: #7c9ed4;
   border-color: #7c9ed4;
   border-radius: 0;
