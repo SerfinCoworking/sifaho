@@ -21,3 +21,13 @@ production:
   database: sifaho_production
   username: sifaho
   password: <%= ENV['SIFAHO_DATABASE_PASSWORD'] %>
+
+db2:
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  host: 10.10.8.21
+  database:
+  username:
+  password: 1
+  port: 5432
