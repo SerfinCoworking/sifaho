@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   end
 
   create_table "vademecums", force: :cascade do |t|
+    t.integer "code_number"
     t.integer "level_complexity"
     t.boolean "indication"
     t.string "specialty_enabled"

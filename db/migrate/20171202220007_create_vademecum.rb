@@ -1,6 +1,7 @@
 class CreateVademecum < ActiveRecord::Migration[5.1]
   def change
     create_table :vademecums do |t|
+      t.integer :code_number, :limit => 4
       t.integer :level_complexity
       t.boolean :indication
       t.string :specialty_enabled
