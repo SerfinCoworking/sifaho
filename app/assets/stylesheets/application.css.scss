@@ -17,5 +17,19 @@
  @import 'bootstrap-sprockets';
  @import 'bootstrap';
  @import 'bootstrap-datetimepicker';
- @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
- @import url('https://fonts.googleapis.com/css?family=Lato');
+
+
+ @font-face {
+   font-family: "Jenna Sue";
+   src: url('/assets/JennaSue.ttf');
+ }
+
+ @font-face {
+   font-family: "Lato";
+   src: url('/assets/Lato-Regular.ttf');
+ }
+
+ @font-face {
+   font-family: "Fira Sans";
+   src: url('/assets/FiraSans-Regular.ttf');
+ }
