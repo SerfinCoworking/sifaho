@@ -58,4 +58,26 @@ $(document).on('turbolinks:load', function() {
     page_header.style.background = "#7c9ed4";
     page_header.style.borderColor = "#7c9ed4";
   }
+
+  $("#pedidos").on("hide.bs.collapse", function(){
+    $("#pedidos-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Pedidos</strong>');
+  });
+  $("#pedidos").on("show.bs.collapse", function(){
+    $("#pedidos-label").html('<span class="glyphicon glyphicon-list-alt"></span> <strong>Pedidos</strong>');
+  });
+
+  $("#stock").on("hide.bs.collapse", function(){
+    $("#stock-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Stock</strong>');
+  });
+  $("#stock").on("show.bs.collapse", function(){
+    $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Stock</strong>');
+  });
+
+  $("#usuarios").on("hide.bs.collapse", function(){
+    $("#usuarios-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Usuarios</strong>');
+  });
+  $("#usuarios").on("show.bs.collapse", function(){
+    $("#usuarios-label").html('<span class="glyphicon glyphicon-user"></span> <strong>Usuarios</strong>');
+  });
+
 });

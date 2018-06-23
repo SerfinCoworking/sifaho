@@ -51,17 +51,35 @@
 #custom-sidebar{
   z-index: 1;
 }
-#custom-sidebar .active a{
+#custom-sidebar .active a,
+#custom-sidebar ul>.active a{
   background-color: rgba(124, 158, 212, 1);
 }
+#custom-sidebar .nav, .nav-tabs, .nav-pills
 #custom-sidebar .nav, .nav-tabs, .nav-pills{
     text-align: center;
     background-color: #0b538d!important;
     padding-left: 14px;
 }
+#custom-sidebar .active a, #custom-sidebar ul > .active a{
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills>ul>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+
+.nav > li > a{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+}
+.nav > li > a:hover{
   color: rgba(255, 255, 255, 1);
   background-color: rgba(124, 158, 212, 1);
 }
@@ -72,6 +90,7 @@
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>div{
   margin-left: -15px;
   width: 20.1rem!important;
+  padding-right: 15px;
 }
 
 #pedidos-label{
