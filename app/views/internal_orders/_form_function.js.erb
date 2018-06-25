@@ -1,0 +1,142 @@
+$('#prescription_date_received').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+$('#prescription_date_processed').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+
+$('.chosen-select').chosen({
+    allow_single_deselect: true,
+    no_results_text: 'No se encontró el resultado',
+    width: '270px'});
+
+$('#professional_id').change(function () {
+  if($('#professional_id option:selected').val() == 0){
+    document.getElementById('form-professional').style.display="block";
+    document.getElementById('professional-hint').style.display="none";
+    document.getElementById('prescription_professional_attributes_first_name').required = true;
+    document.getElementById('prescription_professional_attributes_last_name').required = true;
+    document.getElementById('prescription_professional_attributes_dni').required = true;
+    document.getElementById('form-sector').style.display="block";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
+  }else{
+    document.getElementById('form-professional').style.display="none";
+    document.getElementById('professional-hint').style.display="block";
+    document.getElementById('prescription_professional_attributes_first_name').required = false;
+    document.getElementById('prescription_professional_attributes_last_name').required = false;
+    document.getElementById('prescription_professional_attributes_dni').required = false;
+    document.getElementById('form-sector').style.display="none";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
+  }
+});
+
+$('#sector_id').change(function () {
+  if($('#sector_id option:selected').val() == 0){
+    document.getElementById('form-sector').style.display="block";
+    document.getElementById('sector-hint').style.display="none";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name ').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
+
+  }else{
+    document.getElementById('form-sector').style.display="none";
+    document.getElementById('sector-hint').style.display="block";
+    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
+    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
+  }
+});
+
+$('#patient_id').change(function () {
+  if($('#patient_id option:selected').val() == 0){
+    document.getElementById('form-prescription').style.display="block";
+    document.getElementById('patientHint').style.display="none";
+    document.getElementById('prescription_patient_attributes_first_name').required = true;
+    document.getElementById('prescription_patient_attributes_last_name').required = true;
+    document.getElementById('prescription_patient_attributes_dni').required = true;
+  }else{
+    document.getElementById('form-prescription').style.display="none";
+    document.getElementById('patientHint').style.display="block";
+    document.getElementById('prescription_patient_attributes_first_name').required = false;
+    document.getElementById('prescription_patient_attributes_last_name').required = false;
+    document.getElementById('prescription_patient_attributes_dni').required = false;
+  }
+});
+
+//Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
+<% @medications = Medication.all %>
+var quantityToMedication = {
+<% @medications.each do |medication| %>
+  "<%=medication.id%>": {
+  quantity : "<%=medication.quantity%>"
+},
+<% end %>
+};
+//Función para establecer el máximo al campo "Cantidad" de cada medicación.
+function setMaxQuantity(idSelect){
+  var medications = $('#quantity-medications');
+  var medicationCant = medications.find('.nested-fields').size();
+  var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
+  var medication_id =  $("#chosen-medication-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
+
+  if($("#chosen-medication-"+idNum+" option:selected").val() != 0){
+    document.getElementById("quantity-medication-"+idNum).setAttribute("required", true);
+    document.getElementById("quantity-medication-"+idNum).disabled = false;
+    document.getElementById("quantity-medication-"+idNum).setAttribute("max", quantityToMedication[medication_id].quantity);
+  }else{
+    document.getElementById("quantity-medication-"+idNum).setAttribute("required", false);
+    document.getElementById("quantity-medication-"+idNum).disabled = true;
+  }
+
+  //Loop para deshabilitar el suministro seleccionado en el resto y asi no repetirlo.
+  for(i = 1; i <= medicationCant; i++){
+    var selectedValue = $("#chosen-medication-"+i+" option:selected").val();
+    for(x = 1; x <= medicationCant; x++){
+      if(x != i){
+        $("#chosen-medication-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
+        $("#chosen-medication-"+x).trigger("chosen:updated");
+      }
+    }
+  }
+}
+//Esta porción de JS se coloca en este documento ya que el evento "onchange"
+//se activa desde el html.
+
+//Se crea un diccionario de los suministros con sus respectivas cantidades en stock.
+<% @supplies = Supply.all %>
+var quantityToSupply = {
+<% @supplies.each do |supply| %>
+  "<%=supply.id%>": {
+  quantity : "<%=supply.quantity%>"
+},
+<% end %>
+};
+
+
+//Función para establecer el máximo al campo "Cantidad" de cada suministro.
+function setMaxQuantitySupply(idSelect){
+  var supplies = $('#quantity-supplies');
+  var supplyCant = supplies.find('.nested-fields').size();
+  var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
+  var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
+
+  if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
+    document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
+    document.getElementById("quantity-supply-"+idNum).disabled = false;
+    document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
+  }else{
+    document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
+    document.getElementById("quantity-supply-"+idNum).disabled = true;
+  }
+
+  //Loop para deshabilitar el suministro seleccionado en el resto y asi no repetirlo.
+  for(i = 1; i <= supplyCant; i++){
+    var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
+    for(x = 1; x <= supplyCant; x++){
+      if(x != i){
+        $("#chosen-supply-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
+        $("#chosen-supply-"+x).trigger("chosen:updated");
+      }
+    }
+  }
+}

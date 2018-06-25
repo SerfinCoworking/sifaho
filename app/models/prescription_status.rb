@@ -1,4 +1,5 @@
 class PrescriptionStatus < ApplicationRecord
+  # Relaciones
   has_many :prescriptions
 
   def is_dispense?

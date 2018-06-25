@@ -5,7 +5,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :rememberable,
          :trackable, :validatable
 
+  # Relaciones
   belongs_to :sector
+  has_many :internal_orders, foreign_key: "responsable_id"
 
-  validates :sector, presence: true
+  # Validaciones
+  validates_presence_of :sector
 end

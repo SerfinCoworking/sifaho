@@ -1,10 +1,12 @@
 class Professional < ApplicationRecord
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :dni, presence: true
-
+  # Relaciones
   has_many :prescriptions
   belongs_to :sector
+
+  # Validaciones
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates_presence_of :dni
 
   accepts_nested_attributes_for :sector,
     :reject_if => :all_blank

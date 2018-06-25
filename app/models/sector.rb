@@ -1,9 +1,11 @@
 class Sector < ApplicationRecord
-  validates :sector_name, presence: true
-  validates :complexity_level, presence: true
-
+  # Relaciones
   has_many :professionals
   has_many :users
+
+  # Validaciones
+  validates_presence_of :sector_name
+  validates_presence_of :complexity_level
 
   def self.options_for_select
     order('LOWER(sector_name)').map { |e| [e.sector_name, e.id] }

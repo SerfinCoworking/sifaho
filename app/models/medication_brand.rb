@@ -1,8 +1,10 @@
 class MedicationBrand < ApplicationRecord
-  validates :name, presence: true
-
+  # Relaciones
   belongs_to :laboratory
   has_many :medication
+
+  # Validaciones
+  validates_presence_of :name
 
   accepts_nested_attributes_for :laboratory
 

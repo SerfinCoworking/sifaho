@@ -1,10 +1,12 @@
 class Patient < ApplicationRecord
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :dni, presence: true
-
+  # Relaciones
   belongs_to :patient_type
   has_many :prescriptions
+
+  # Validaciones
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates_presence_of :dni
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

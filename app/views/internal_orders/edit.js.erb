@@ -1,0 +1,29 @@
+// Add the dialog title
+$('#dialog h3').html("<i class=' glyphicon glyphicon-pencil'></i>  Editando prescripción");
+
+// Render the edit form
+$('.modal-body').html('<%= j render("form") %>');
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<% unless @prescription.dispensed? %>"+
+    "<button type='submit' name='commit' class='btn btn-success' style='margin-right: 15%' form='edit_prescription_<%=@prescription.id%>' value='Guardar y dispensar'>Guardar y dispensar</button>"+
+  "<% end %>"+
+  "<button type='submit' name='commit' class='btn btn-primary pull-right' form='edit_prescription_<%=@prescription.id%>' value='Guardar cambios'>Guardar cambios</button>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Set focus to the first element
+$('#dialog').on('shown.bs.modal', function () {
+  $('.first_input').focus()
+})
+
+<%= render 'form_function' %>
+
+$('#prescription_date_received').val("<%= @prescription.date_received.strftime("%d/%m/%Y %H:%M %p") %>");
+<% if @prescription.date_dispensed.present? %>
+  $('#prescription_date_dispensed').val("<%= @prescription.date_dispensed.strftime("%d/%m/%Y %H:%M %p") %>");
+<% end %>
