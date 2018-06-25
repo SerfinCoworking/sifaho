@@ -6,17 +6,21 @@ Sector.create!([
   { sector_name: "Oftalmología", description: "Se enfoca en el sistema ocular", complexity_level: 2 },
   { sector_name: "Pediatría", description: "Medicina general de niños", complexity_level: 2 }
 ])
-joeUser = User.new(
-  :email                 => "eugesma@sifaho.com",
+eugeUser = User.new(
+  :username              => "eugesma",
+  :first_name            => "Eugenio",
+  :last_name             => "Gómez",
+  :email                 => "eugesma@gmail.com",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => 1
+  :sector_id             => 1,
+  :gender                => 0
 )
-joeUser.add_role :admin
-joeUser.save!
-User.create!( email: "veronica@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 2)
-User.create!( email: "claudia@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 3)
-User.create!( email: "damian@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 1)
+eugeUser.add_role :admin
+eugeUser.save!
+User.create!( username: "veronica", first_name: "Verónica", password: "12345678", password_confirmation: "12345678", sector_id: 2, gender: 1)
+User.create!( username: "claudia", first_name: "Claudia", password: "12345678", password_confirmation: "12345678", sector_id: 3, gender: 1)
+User.create!( username: "damian", first_name: "Damián", last_name: "Diez", email: "damianediez@gmail.com", password: "12345678", password_confirmation: "12345678", sector_id: 1, gender: 0)
 Laboratory.create!([
   { name: "Bayer", address: "Munro, Provincia de Buenos Aires"},
   { name: "Droguería INTI S.A.", address: "Lucas Jaimes No. 1959, Buenos Aires"}
