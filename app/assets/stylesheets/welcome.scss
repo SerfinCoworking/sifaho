@@ -165,8 +165,16 @@ li .well strong{
   color: white;
 }
 #sector-name{
-    font-size: 35px;
+    font-size: 30px;
     color: white;
     padding-top: 20px;
     font-family: 'KG Neatly Printed', sans-serif;
+}
+
+.navbar, .nav-pills {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
