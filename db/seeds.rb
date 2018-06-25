@@ -1,18 +1,22 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Sector.create!([
+  { sector_name: "Informática", description: "Soporte en informatica", complexity_level: 3 },
+  { sector_name: "Depósito", description: "Dispensación de insumos y drogas a todo el hospital", complexity_level: 3 },
+  { sector_name: "Farmacia", description: "Dispensación de insumos y drogas a los pacientes del hospital", complexity_level: 3 },
+  { sector_name: "Traumatología", description: "Se enfoca en el sistema oseomuscular", complexity_level: 3 },
+  { sector_name: "Oftalmología", description: "Se enfoca en el sistema ocular", complexity_level: 2 },
+  { sector_name: "Pediatría", description: "Medicina general de niños", complexity_level: 2 }
+])
 joeUser = User.new(
-  :email                 => "joe@example.com",
+  :email                 => "eugesma@sifaho.com",
   :password              => "12345678",
-  :password_confirmation => "12345678"
+  :password_confirmation => "12345678",
+  :sector_id             => 1
 )
 joeUser.add_role :admin
 joeUser.save!
-User.create!( email: "jane@example.com", password: "12345678", password_confirmation: "12345678")
+User.create!( email: "veronica@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 2)
+User.create!( email: "claudia@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 3)
+User.create!( email: "damian@sifaho.com", password: "12345678", password_confirmation: "12345678", sector_id: 1)
 Laboratory.create!([
   { name: "Bayer", address: "Munro, Provincia de Buenos Aires"},
   { name: "Droguería INTI S.A.", address: "Lucas Jaimes No. 1959, Buenos Aires"}
@@ -48,11 +52,6 @@ Patient.create!( first_name: "Juan", last_name: "Perez", dni: 12345678,
   address: "Elordi 343, San Martin de los Andes", email: "eljuan@gmail.com",
   phone: "02972432543", patient_type_id: 1
 )
-Sector.create!([
-  { sector_name: "Traumatología", description: "Se enfoca en el sistema oseomuscular", complexity_level: 3 },
-  { sector_name: "Oftalmología", description: "Se enfoca en el sistema ocular", complexity_level: 2 },
-  { sector_name: "Pediatría", description: "Medicina general de niños", complexity_level: 2 }
-])
 Professional.create!([
   { first_name: "Pablo", last_name: "Santillan", dni: 12345678, enrollment: "5336", sector_id: 1,
     address: "Sarmiento 489, San Martin de los Andes", email: "elpablito@gmail.com", phone: "0297223412" },

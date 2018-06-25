@@ -62,7 +62,7 @@
     padding-left: 14px;
 }
 #custom-sidebar .active a, #custom-sidebar ul > .active a{
-  color: rgba(255, 255, 255, 1);
+  color: white;
   background-color: rgba(124, 158, 212, 1);
   border-radius: 5px;
 }
@@ -70,22 +70,21 @@
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:focus {
-  color: rgba(255, 255, 255, 1);
+  color: white;
   background-color: rgba(124, 158, 212, 1);
   border-radius: 5px;
 }
-
 .nav > li > a{
   font-size: 14px;
-  color: rgba(255, 255, 255, 1);
+  color: white;
 }
 .nav > li > a:hover{
-  color: rgba(255, 255, 255, 1);
+  color: white;
   background-color: rgba(124, 158, 212, 1);
 }
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a {
   font-size: 14px;
-  color: rgba(255, 255, 255, 1);
+  color: white;
 }
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>div{
   margin-left: -15px;
@@ -154,4 +153,20 @@ li .well strong{
   padding-top: 0px;
   padding-bottom: 0px;
   margin-bottom: -10px;
+}
+.navbar-nav > li > .dropdown-menu{
+  background-color: #0b538d;
+}
+.dropdown-menu > li > a{
+  color: white;
+}
+.dropdown-menu > li > a:hover{
+  background-color: rgba(124, 158, 212, 1);
+  color: white;
+}
+#sector-name{
+    font-size: 35px;
+    color: white;
+    padding-top: 20px;
+    font-family: 'KG Neatly Printed', sans-serif;
 }

@@ -4,6 +4,14 @@
       <span class="glyphicon glyphicon-user"></span> <%= current_user.email %>
     </a>
     <ul class="inverse-dropdown dropdown-menu">
+      <% if current_user.has_role? :admin %>
+        <li>
+          <%= link_to rails_admin_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-sunglasses') %>
+            Administración
+          <% end %>
+        </li>
+      <% end %>
       <li>
         <%= link_to destroy_user_session_path, :method => :delete do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-off') %>
