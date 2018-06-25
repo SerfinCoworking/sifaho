@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Internal Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Responsable</th>
+      <th>Date sent</th>
+      <th>Date received</th>
+      <th>Observation</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @internal_orders.each do |internal_order| %>
+      <tr>
+        <td><%= internal_order.responsable %></td>
+        <td><%= internal_order.date_sent %></td>
+        <td><%= internal_order.date_received %></td>
+        <td><%= internal_order.observation %></td>
+        <td><%= link_to 'Show', internal_order %></td>
+        <td><%= link_to 'Edit', edit_internal_order_path(internal_order) %></td>
+        <td><%= link_to 'Destroy', internal_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Internal Order', new_internal_order_path %>

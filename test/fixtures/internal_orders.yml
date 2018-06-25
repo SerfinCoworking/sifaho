@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  responsable: one
+  date_sent: 2018-06-25 15:50:29
+  date_received: 2018-06-25 15:50:29
+  observation: MyText
+
+two:
+  responsable: two
+  date_sent: 2018-06-25 15:50:29
+  date_received: 2018-06-25 15:50:29
+  observation: MyText

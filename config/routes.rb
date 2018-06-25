@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :internal_orders
   resources :supplies
   resources :prescriptions
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"

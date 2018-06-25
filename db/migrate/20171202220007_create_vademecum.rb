@@ -10,5 +10,6 @@ class CreateVademecum < ActiveRecord::Migration[5.1]
       t.string :medication_name
       t.text :indications
     end
+    add_reference :vademecums, :medication, foreign_key: true
   end
 end

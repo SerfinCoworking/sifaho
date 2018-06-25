@@ -1,0 +1,14 @@
+<%= simple_form_for(@internal_order) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :responsable %>
+    <%= f.input :date_sent %>
+    <%= f.input :date_received %>
+    <%= f.input :observation %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

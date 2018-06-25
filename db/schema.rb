@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180624222847) do
+ActiveRecord::Schema.define(version: 20180625185028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "internal_orders", force: :cascade do |t|
+    t.datetime "date_sent"
+    t.datetime "date_received"
+    t.text "observation"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "responsable_id"
+    t.index ["responsable_id"], name: "index_internal_orders_on_responsable_id"
+  end
 
   create_table "laboratories", force: :cascade do |t|
     t.string "name"
@@ -39,16 +50,10 @@ ActiveRecord::Schema.define(version: 20180624222847) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "vademecum_id"
     t.bigint "medication_brand_id"
+    t.bigint "vademecum_id"
     t.index ["medication_brand_id"], name: "index_medications_on_medication_brand_id"
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
-  end
-
-  create_table "order_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "patient_types", force: :cascade do |t|

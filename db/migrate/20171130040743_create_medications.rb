@@ -9,5 +9,6 @@ class CreateMedications < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_reference :medications, :medication_brand, foreign_key: true
   end
 end
