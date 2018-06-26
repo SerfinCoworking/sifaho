@@ -1,4 +1,10 @@
 $(document).on('turbolinks:load', function() {
+  window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+      });
+  }, 2000);
+
   $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
 
   $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});

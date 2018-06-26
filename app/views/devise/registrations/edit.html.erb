@@ -29,6 +29,20 @@
         <%= f.password_field :current_password, class: 'form-control' %>
       </div>
     </fieldset>
+    <%= f.fields_for :profile do |ff| %>
+     <div class="form­group">
+      <%= ff.label :first_name %>
+      <%= ff.text_field :first_name, class: 'form­control' %>
+     </div>
+     <div class="form­group">
+      <%= ff.label :last_name %>
+      <%= ff.text_field :last_name, class: 'form­control' %>
+     </div>
+     <div class="form­group">
+      <%= ff.label :date_of_birth %>
+      <%= ff.date_field :date_of_birth, class: 'form­control' %>
+     </div>
+    <% end %>
     <%= f.submit 'Guardar cambios', :class => 'button right' %>
   <% end %>
 </div>

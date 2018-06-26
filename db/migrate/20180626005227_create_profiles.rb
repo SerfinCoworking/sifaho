@@ -8,7 +8,7 @@ class CreateProfiles < ActiveRecord::Migration[5.1]
       t.string :enrollment
       t.string :address
       t.string :email
-      t.column :gender, :integer
+      t.column :sex, :integer, default: 0
       t.references :user, index: true
 
       t.timestamps

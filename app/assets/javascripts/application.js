@@ -32,3 +32,7 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 2000);
+
+$('#dialog').on('hide.bs.modal', function () {
+  console.log("asd");
+};
