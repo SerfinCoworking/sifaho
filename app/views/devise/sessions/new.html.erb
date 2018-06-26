@@ -21,7 +21,6 @@ body {
       <%= f.label 'Contraseña' %>
       <%= f.password_field :password, class: 'form-control' %>
     </div>
-      <%= f.submit 'Iniciar sesión', :class => 'button right' %>
       <% if devise_mapping.rememberable? -%>
         <div class="checkbox" style="width:150px">
           <label>
@@ -29,5 +28,6 @@ body {
           </label>
         </div>
       <% end -%>
+      <%= f.submit 'Iniciar sesión', class: 'btn btn-success btn-md', id: 'login-btn' %>
   <% end %>
 </div>

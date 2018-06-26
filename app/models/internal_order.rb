@@ -37,13 +37,13 @@ class InternalOrder < ApplicationRecord
     }
 
     # Cantidad de condiciones.
-    num_or_conds = 4
+    num_or_conds = 2
     where(
       terms.map { |term|
-        "((LOWER(professionals.first_name) LIKE ? OR LOWER(patients.first_name) LIKE ?) OR (LOWER(professionals.last_name) LIKE ? OR LOWER(patients.last_name) LIKE ?))"
+        "((LOWER(user.first_name) LIKE ? OR LOWER(user.last_name) LIKE ?))"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
-    ).joins(:professional, :patient)
+    ).joins(:user)
   }
 
   scope :sorted_by, lambda { |sort_option|
@@ -53,12 +53,9 @@ class InternalOrder < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("internal_orders.created_at #{ direction }")
-    when /^doctor_/
+    when /^responsable_/
       # Ordenamiento por nombre de responsable
       order("LOWER(users.full_name) #{ direction }").joins(:user)
-    when /^paciente_/
-      # Ordenamiento por marca de medicamento
-      order("LOWER(patients.first_name) #{ direction }").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("prescription_statuses.name #{ direction }").joins(:prescription_status)
@@ -68,10 +65,10 @@ class InternalOrder < ApplicationRecord
     when /^suministro_/
       # Ordenamiento por nombre de suministro
       order("supplies.name #{ direction }").joins(:supplies)
-    when /^recibida_/
+    when /^recibido_/
       # Ordenamiento por la fecha de recepción
       order("internal_orders.date_received #{ direction }")
-    when /^dispensada_/
+    when /^dispensado_/
       # Ordenamiento por la fecha de dispensación
       order("internal_orders.date_dispensed #{ direction }")
     else
@@ -83,4 +80,19 @@ class InternalOrder < ApplicationRecord
   scope :date_received_at, lambda { |reference_time|
     where('internal_orders.date_received >= ?', reference_time)
   }
+
+  # Método para establecer las opciones del select input del filtro
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
+  def self.options_for_sorted_by
+    [
+      ['Creación', 'created_at_asc'],
+      ['Responsable (a-z)', 'responsable_asc'],
+      ['Estado (a-z)', 'estado_asc'],
+      ['Medicamento (a-z)', 'medicamento_asc'],
+      ['Suministro (a-z)', 'suministro_asc'],
+      ['Fecha recibido (el mas nuevo primero)', 'recibido_desc'],
+      ['Fecha dispensado (el primero dispensado)', 'despensado_asc'],
+      ['Cantidad', 'cantidad_asc']
+    ]
+  end
 end
