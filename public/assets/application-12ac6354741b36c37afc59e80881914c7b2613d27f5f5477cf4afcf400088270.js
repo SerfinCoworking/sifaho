@@ -182,13 +182,11 @@ Released under the MIT license
           }
           return typeof options.complete === "function" ? options.complete(xhr, xhr.statusText) : void 0;
         });
-        if (typeof options.beforeSend === "function") {
-          options.beforeSend(xhr, options);
+        if (!(typeof options.beforeSend === "function" ? options.beforeSend(xhr, options) : void 0)) {
+          return false;
         }
         if (xhr.readyState === XMLHttpRequest.OPENED) {
           return xhr.send(options.data);
-        } else {
-          return fire(document, 'ajaxStop');
         }
       };
 
@@ -291,7 +289,7 @@ Released under the MIT license
         }
         params = [];
         inputs.forEach(function(input) {
-          if (!input.name) {
+          if (!input.name || input.disabled) {
             return;
           }
           if (matches(input, 'select')) {
@@ -553,7 +551,7 @@ Released under the MIT license
               return fire(element, 'ajax:send', [xhr]);
             } else {
               fire(element, 'ajax:stopped');
-              return xhr.abort();
+              return false;
             }
           },
           success: function() {
@@ -65157,23 +65155,16 @@ jQuery(document).on('ready page:load', function() {
  * Chartkick.js
  * Create beautiful charts with one line of JavaScript
  * https://github.com/ankane/chartkick.js
- * v2.2.4
+ * v2.3.6
  * MIT License
  */
 
-/*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
-
-(function (window) {
-  'use strict';
-
-  var config = window.Chartkick || {};
-  var Chartkick, ISO8601_PATTERN, DECIMAL_SEPARATOR, adapters = [];
-  var DATE_PATTERN = /^(\d\d\d\d)(\-)?(\d\d)(\-)?(\d\d)$/i;
-  var GoogleChartsAdapter, HighchartsAdapter, ChartjsAdapter;
-  var pendingRequests = [], runningRequests = 0, maxRequests = 4;
-
-  // helpers
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global.Chartkick = factory());
+}(this, (function () { 'use strict';
 
   function isArray(variable) {
     return Object.prototype.toString.call(variable) === "[object Array]";
@@ -65212,9 +65203,11 @@ jQuery(document).on('ready page:load', function() {
     return target;
   }
 
+  var DATE_PATTERN = /^(\d\d\d\d)(-)?(\d\d)(-)?(\d\d)$/i;
+
   // https://github.com/Do/iso8601.js
-  ISO8601_PATTERN = /(\d\d\d\d)(\-)?(\d\d)(\-)?(\d\d)(T)?(\d\d)(:)?(\d\d)?(:)?(\d\d)?([\.,]\d+)?($|Z|([\+\-])(\d\d)(:)?(\d\d)?)/i;
-  DECIMAL_SEPARATOR = String(1.5).charAt(1);
+  var ISO8601_PATTERN = /(\d\d\d\d)(-)?(\d\d)(-)?(\d\d)(T)?(\d\d)(:)?(\d\d)?(:)?(\d\d)?([.,]\d+)?($|Z|([+-])(\d\d)(:)?(\d\d)?)/i;
+  var DECIMAL_SEPARATOR = String(1.5).charAt(1);
 
   function parseISO8601(input) {
     var day, hour, matches, milliseconds, minutes, month, offset, result, seconds, type, year;
@@ -65259,6 +65252,50 @@ jQuery(document).on('ready page:load', function() {
       }
     }
     return false;
+  }
+
+  function toStr(n) {
+    return "" + n;
+  }
+
+  function toFloat(n) {
+    return parseFloat(n);
+  }
+
+  function toDate(n) {
+    var matches, year, month, day;
+    if (typeof n !== "object") {
+      if (typeof n === "number") {
+        n = new Date(n * 1000); // ms
+      } else {
+        n = toStr(n);
+        if ((matches = n.match(DATE_PATTERN))) {
+        year = parseInt(matches[1], 10);
+        month = parseInt(matches[3], 10) - 1;
+        day = parseInt(matches[5], 10);
+        return new Date(year, month, day);
+        } else { // str
+          // try our best to get the str into iso8601
+          // TODO be smarter about this
+          var str = n.replace(/ /, "T").replace(" ", "").replace("UTC", "Z");
+          n = parseISO8601(str) || new Date(n);
+        }
+      }
+    }
+    return n;
+  }
+
+  function toArr(n) {
+    if (!isArray(n)) {
+      var arr = [], i;
+      for (i in n) {
+        if (n.hasOwnProperty(i)) {
+          arr.push([i, n[i]]);
+        }
+      }
+      n = arr;
+    }
+    return n;
   }
 
   function jsOptionsFunc(defaultOptions, hideLegend, setTitle, setMin, setMax, setStacked, setXtitle, setYtitle) {
@@ -65310,27 +65347,1298 @@ jQuery(document).on('ready page:load', function() {
     };
   }
 
-  function setText(element, text) {
-    if (document.body.innerText) {
-      element.innerText = text;
-    } else {
-      element.textContent = text;
+  function sortByTime(a, b) {
+    return a[0].getTime() - b[0].getTime();
+  }
+
+  function sortByNumberSeries(a, b) {
+    return a[0] - b[0];
+  }
+
+  function sortByNumber(a, b) {
+    return a - b;
+  }
+
+  function isMinute(d) {
+    return d.getMilliseconds() === 0 && d.getSeconds() === 0;
+  }
+
+  function isHour(d) {
+    return isMinute(d) && d.getMinutes() === 0;
+  }
+
+  function isDay(d) {
+    return isHour(d) && d.getHours() === 0;
+  }
+
+  function isWeek(d, dayOfWeek) {
+    return isDay(d) && d.getDay() === dayOfWeek;
+  }
+
+  function isMonth(d) {
+    return isDay(d) && d.getDate() === 1;
+  }
+
+  function isYear(d) {
+    return isMonth(d) && d.getMonth() === 0;
+  }
+
+  function isDate(obj) {
+    return !isNaN(toDate(obj)) && toStr(obj).length >= 6;
+  }
+
+  function formatValue(pre, value, options) {
+    pre = pre || "";
+    if (options.prefix) {
+      if (value < 0) {
+        value = value * -1;
+        pre += "-";
+      }
+      pre += options.prefix;
     }
+
+    if (options.thousands || options.decimal) {
+      value = toStr(value);
+      var parts = value.split(".");
+      value = parts[0];
+      if (options.thousands) {
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, options.thousands);
+      }
+      if (parts.length > 1) {
+        value += (options.decimal || ".") + parts[1];
+      }
+    }
+
+    return pre + value + (options.suffix || "");
   }
 
-  function chartError(element, message) {
-    setText(element, "Error Loading Chart: " + message);
-    element.style.color = "#ff0000";
+  function allZeros(data) {
+    var i, j, d;
+    for (i = 0; i < data.length; i++) {
+      d = data[i].data;
+      for (j = 0; j < d.length; j++) {
+        if (d[j][1] != 0) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
-  function pushRequest(element, url, success) {
-    pendingRequests.push([element, url, success]);
+  var baseOptions = {
+    maintainAspectRatio: false,
+    animation: false,
+    tooltips: {
+      displayColors: false,
+      callbacks: {}
+    },
+    legend: {},
+    title: {fontSize: 20, fontColor: "#333"}
+  };
+
+  var defaultOptions = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            maxTicksLimit: 4
+          },
+          scaleLabel: {
+            fontSize: 16,
+            // fontStyle: "bold",
+            fontColor: "#333"
+          }
+        }
+      ],
+      xAxes: [
+        {
+          gridLines: {
+            drawOnChartArea: false
+          },
+          scaleLabel: {
+            fontSize: 16,
+            // fontStyle: "bold",
+            fontColor: "#333"
+          },
+          time: {},
+          ticks: {}
+        }
+      ]
+    }
+  };
+
+  // http://there4.io/2012/05/02/google-chart-color-list/
+  var defaultColors = [
+    "#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#3B3EAC", "#0099C6",
+    "#DD4477", "#66AA00", "#B82E2E", "#316395", "#994499", "#22AA99", "#AAAA11",
+    "#6633CC", "#E67300", "#8B0707", "#329262", "#5574A6", "#651067"
+  ];
+
+  var hideLegend = function (options, legend, hideLegend) {
+    if (legend !== undefined) {
+      options.legend.display = !!legend;
+      if (legend && legend !== true) {
+        options.legend.position = legend;
+      }
+    } else if (hideLegend) {
+      options.legend.display = false;
+    }
+  };
+
+  var setTitle = function (options, title) {
+    options.title.display = true;
+    options.title.text = title;
+  };
+
+  var setMin = function (options, min) {
+    if (min !== null) {
+      options.scales.yAxes[0].ticks.min = toFloat(min);
+    }
+  };
+
+  var setMax = function (options, max) {
+    options.scales.yAxes[0].ticks.max = toFloat(max);
+  };
+
+  var setBarMin = function (options, min) {
+    if (min !== null) {
+      options.scales.xAxes[0].ticks.min = toFloat(min);
+    }
+  };
+
+  var setBarMax = function (options, max) {
+    options.scales.xAxes[0].ticks.max = toFloat(max);
+  };
+
+  var setStacked = function (options, stacked) {
+    options.scales.xAxes[0].stacked = !!stacked;
+    options.scales.yAxes[0].stacked = !!stacked;
+  };
+
+  var setXtitle = function (options, title) {
+    options.scales.xAxes[0].scaleLabel.display = true;
+    options.scales.xAxes[0].scaleLabel.labelString = title;
+  };
+
+  var setYtitle = function (options, title) {
+    options.scales.yAxes[0].scaleLabel.display = true;
+    options.scales.yAxes[0].scaleLabel.labelString = title;
+  };
+
+  // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+  var addOpacity = function(hex, opacity) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? "rgba(" + parseInt(result[1], 16) + ", " + parseInt(result[2], 16) + ", " + parseInt(result[3], 16) + ", " + opacity + ")" : hex;
+  };
+
+  var setLabelSize = function (chart, data, options) {
+    var maxLabelSize = Math.ceil(chart.element.offsetWidth / 4.0 / data.labels.length);
+    if (maxLabelSize > 25) {
+      maxLabelSize = 25;
+    }
+    options.scales.xAxes[0].ticks.callback = function (value) {
+      value = toStr(value);
+      if (value.length > maxLabelSize) {
+        return value.substring(0, maxLabelSize - 2) + "...";
+      } else {
+        return value;
+      }
+    };
+  };
+
+  var setFormatOptions = function(chart, options, chartType) {
+    var formatOptions = {
+      prefix: chart.options.prefix,
+      suffix: chart.options.suffix,
+      thousands: chart.options.thousands,
+      decimal: chart.options.decimal
+    };
+
+    if (formatOptions.prefix || formatOptions.suffix || formatOptions.thousands || formatOptions.decimal) {
+      if (chartType !== "pie") {
+        var myAxes = options.scales.yAxes;
+        if (chartType === "bar") {
+          myAxes = options.scales.xAxes;
+        }
+
+        if (!myAxes[0].ticks.callback) {
+          myAxes[0].ticks.callback = function (value) {
+            return formatValue("", value, formatOptions);
+          };
+        }
+      }
+
+      if (!options.tooltips.callbacks.label) {
+        if (chartType !== "pie") {
+          var valueLabel = chartType === "bar" ? "xLabel" : "yLabel";
+          options.tooltips.callbacks.label = function (tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+            if (label) {
+              label += ': ';
+            }
+            return formatValue(label, tooltipItem[valueLabel], formatOptions);
+          };
+        } else {
+          // need to use separate label for pie charts
+          options.tooltips.callbacks.label = function (tooltipItem, data) {
+            var dataLabel = data.labels[tooltipItem.index];
+            var value = ': ';
+
+            if (isArray(dataLabel)) {
+              // show value on first line of multiline label
+              // need to clone because we are changing the value
+              dataLabel = dataLabel.slice();
+              dataLabel[0] += value;
+            } else {
+              dataLabel += value;
+            }
+
+            return formatValue(dataLabel, data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index], formatOptions);
+          };
+        }
+      }
+    }
+  };
+
+  var jsOptions = jsOptionsFunc(merge(baseOptions, defaultOptions), hideLegend, setTitle, setMin, setMax, setStacked, setXtitle, setYtitle);
+
+  var createDataTable = function (chart, options, chartType) {
+    var datasets = [];
+    var labels = [];
+
+    var colors = chart.options.colors || defaultColors;
+
+    var day = true;
+    var week = true;
+    var dayOfWeek;
+    var month = true;
+    var year = true;
+    var hour = true;
+    var minute = true;
+    var detectType = (chartType === "line" || chartType === "area") && !chart.discrete;
+
+    var series = chart.data;
+
+    var sortedLabels = [];
+
+    var i, j, s, d, key, rows = [];
+    for (i = 0; i < series.length; i++) {
+      s = series[i];
+
+      for (j = 0; j < s.data.length; j++) {
+        d = s.data[j];
+        key = detectType ? d[0].getTime() : d[0];
+        if (!rows[key]) {
+          rows[key] = new Array(series.length);
+        }
+        rows[key][i] = toFloat(d[1]);
+        if (sortedLabels.indexOf(key) === -1) {
+          sortedLabels.push(key);
+        }
+      }
+    }
+
+    if (detectType || chart.options.xtype === "number") {
+      sortedLabels.sort(sortByNumber);
+    }
+
+    var rows2 = [];
+    for (j = 0; j < series.length; j++) {
+      rows2.push([]);
+    }
+
+    var value;
+    var k;
+    for (k = 0; k < sortedLabels.length; k++) {
+      i = sortedLabels[k];
+      if (detectType) {
+        value = new Date(toFloat(i));
+        // TODO make this efficient
+        day = day && isDay(value);
+        if (!dayOfWeek) {
+          dayOfWeek = value.getDay();
+        }
+        week = week && isWeek(value, dayOfWeek);
+        month = month && isMonth(value);
+        year = year && isYear(value);
+        hour = hour && isHour(value);
+        minute = minute && isMinute(value);
+      } else {
+        value = i;
+      }
+      labels.push(value);
+      for (j = 0; j < series.length; j++) {
+        // Chart.js doesn't like undefined
+        rows2[j].push(rows[i][j] === undefined ? null : rows[i][j]);
+      }
+    }
+
+    for (i = 0; i < series.length; i++) {
+      s = series[i];
+
+      var color = s.color || colors[i];
+      var backgroundColor = chartType !== "line" ? addOpacity(color, 0.5) : color;
+
+      var dataset = {
+        label: s.name,
+        data: rows2[i],
+        fill: chartType === "area",
+        borderColor: color,
+        backgroundColor: backgroundColor,
+        pointBackgroundColor: color,
+        pointHoverBackgroundColor: color,
+        borderWidth: 2
+      };
+
+      if (s.stack) {
+        dataset.stack = s.stack;
+      }
+
+      if (chart.options.curve === false) {
+        dataset.lineTension = 0;
+      }
+
+      if (chart.options.points === false) {
+        dataset.pointRadius = 0;
+        dataset.pointHitRadius = 5;
+      }
+
+      dataset = merge(dataset, chart.options.dataset || {});
+      dataset = merge(dataset, s.library || {});
+      dataset = merge(dataset, s.dataset || {});
+
+      datasets.push(dataset);
+    }
+
+    if (detectType && labels.length > 0) {
+      var minTime = labels[0].getTime();
+      var maxTime = labels[0].getTime();
+      for (i = 1; i < labels.length; i++) {
+        value = labels[i].getTime();
+        if (value < minTime) {
+          minTime = value;
+        }
+        if (value > maxTime) {
+          maxTime = value;
+        }
+      }
+
+      var timeDiff = (maxTime - minTime) / (86400 * 1000.0);
+
+      if (!options.scales.xAxes[0].time.unit) {
+        var step;
+        if (year || timeDiff > 365 * 10) {
+          options.scales.xAxes[0].time.unit = "year";
+          step = 365;
+        } else if (month || timeDiff > 30 * 10) {
+          options.scales.xAxes[0].time.unit = "month";
+          step = 30;
+        } else if (day || timeDiff > 10) {
+          options.scales.xAxes[0].time.unit = "day";
+          step = 1;
+        } else if (hour || timeDiff > 0.5) {
+          options.scales.xAxes[0].time.displayFormats = {hour: "MMM D, h a"};
+          options.scales.xAxes[0].time.unit = "hour";
+          step = 1 / 24.0;
+        } else if (minute) {
+          options.scales.xAxes[0].time.displayFormats = {minute: "h:mm a"};
+          options.scales.xAxes[0].time.unit = "minute";
+          step = 1 / 24.0 / 60.0;
+        }
+
+        if (step && timeDiff > 0) {
+          var unitStepSize = Math.ceil(timeDiff / step / (chart.element.offsetWidth / 100.0));
+          if (week && step === 1) {
+            unitStepSize = Math.ceil(unitStepSize / 7.0) * 7;
+          }
+          options.scales.xAxes[0].time.unitStepSize = unitStepSize;
+        }
+      }
+
+      if (!options.scales.xAxes[0].time.tooltipFormat) {
+        if (day) {
+          options.scales.xAxes[0].time.tooltipFormat = "ll";
+        } else if (hour) {
+          options.scales.xAxes[0].time.tooltipFormat = "MMM D, h a";
+        } else if (minute) {
+          options.scales.xAxes[0].time.tooltipFormat = "h:mm a";
+        }
+      }
+    }
+
+    var data = {
+      labels: labels,
+      datasets: datasets
+    };
+
+    return data;
+  };
+
+  var defaultExport = function defaultExport(library) {
+    this.name = "chartjs";
+    this.library = library;
+  };
+
+  defaultExport.prototype.renderLineChart = function renderLineChart (chart, chartType) {
+    if (chart.options.xtype === "number") {
+      return this.renderScatterChart(chart, chartType, true);
+    }
+
+    var chartOptions = {};
+    // fix for https://github.com/chartjs/Chart.js/issues/2441
+    if (!chart.options.max && allZeros(chart.data)) {
+      chartOptions.max = 1;
+    }
+
+    var options = jsOptions(chart, merge(chartOptions, chart.options));
+    setFormatOptions(chart, options, chartType);
+
+    var data = createDataTable(chart, options, chartType || "line");
+
+    options.scales.xAxes[0].type = chart.discrete ? "category" : "time";
+
+    this.drawChart(chart, "line", data, options);
+  };
+
+  defaultExport.prototype.renderPieChart = function renderPieChart (chart) {
+    var options = merge({}, baseOptions);
+    if (chart.options.donut) {
+      options.cutoutPercentage = 50;
+    }
+
+    if ("legend" in chart.options) {
+      hideLegend(options, chart.options.legend);
+    }
+
+    if (chart.options.title) {
+      setTitle(options, chart.options.title);
+    }
+
+    options = merge(options, chart.options.library || {});
+    setFormatOptions(chart, options, "pie");
+
+    var labels = [];
+    var values = [];
+    for (var i = 0; i < chart.data.length; i++) {
+      var point = chart.data[i];
+      labels.push(point[0]);
+      values.push(point[1]);
+    }
+
+    var dataset = {
+      data: values,
+      backgroundColor: chart.options.colors || defaultColors
+    };
+    dataset = merge(dataset, chart.options.dataset || {});
+
+    var data = {
+      labels: labels,
+      datasets: [dataset]
+    };
+
+    this.drawChart(chart, "pie", data, options);
+  };
+
+  defaultExport.prototype.renderColumnChart = function renderColumnChart (chart, chartType) {
+    var options;
+    if (chartType === "bar") {
+      options = jsOptionsFunc(merge(baseOptions, defaultOptions), hideLegend, setTitle, setBarMin, setBarMax, setStacked, setXtitle, setYtitle)(chart, chart.options);
+    } else {
+      options = jsOptions(chart, chart.options);
+    }
+    setFormatOptions(chart, options, chartType);
+    var data = createDataTable(chart, options, "column");
+    if (chartType !== "bar") {
+      setLabelSize(chart, data, options);
+    }
+    this.drawChart(chart, (chartType === "bar" ? "horizontalBar" : "bar"), data, options);
+  };
+
+  defaultExport.prototype.renderAreaChart = function renderAreaChart (chart) {
+    this.renderLineChart(chart, "area");
+  };
+
+  defaultExport.prototype.renderBarChart = function renderBarChart (chart) {
+    this.renderColumnChart(chart, "bar");
+  };
+
+  defaultExport.prototype.renderScatterChart = function renderScatterChart (chart, chartType, lineChart) {
+    chartType = chartType || "line";
+
+    var options = jsOptions(chart, chart.options);
+    if (!lineChart) {
+      setFormatOptions(chart, options, chartType);
+    }
+
+    var colors = chart.options.colors || defaultColors;
+
+    var datasets = [];
+    var series = chart.data;
+    for (var i = 0; i < series.length; i++) {
+      var s = series[i];
+      var d = [];
+      for (var j = 0; j < s.data.length; j++) {
+        var point = {
+          x: toFloat(s.data[j][0]),
+          y: toFloat(s.data[j][1])
+        };
+        if (chartType === "bubble") {
+          point.r = toFloat(s.data[j][2]);
+        }
+        d.push(point);
+      }
+
+      var color = s.color || colors[i];
+      var backgroundColor = chartType === "area" ? addOpacity(color, 0.5) : color;
+
+      datasets.push({
+        label: s.name,
+        showLine: lineChart || false,
+        data: d,
+        borderColor: color,
+        backgroundColor: backgroundColor,
+        pointBackgroundColor: color,
+        fill: chartType === "area"
+      });
+    }
+
+    if (chartType === "area") {
+      chartType = "line";
+    }
+
+    var data = {datasets: datasets};
+
+    options.scales.xAxes[0].type = "linear";
+    options.scales.xAxes[0].position = "bottom";
+
+    this.drawChart(chart, chartType, data, options);
+  };
+
+  defaultExport.prototype.renderBubbleChart = function renderBubbleChart (chart) {
+    this.renderScatterChart(chart, "bubble");
+  };
+
+  defaultExport.prototype.destroy = function destroy (chart) {
+    if (chart.chart) {
+      chart.chart.destroy();
+    }
+  };
+
+  defaultExport.prototype.drawChart = function drawChart (chart, type, data, options) {
+    this.destroy(chart);
+
+    chart.element.innerHTML = "<canvas></canvas>";
+    var ctx = chart.element.getElementsByTagName("CANVAS")[0];
+    chart.chart = new this.library(ctx, {
+      type: type,
+      data: data,
+      options: options
+    });
+  };
+
+  var defaultOptions$1 = {
+    chart: {},
+    xAxis: {
+      title: {
+        text: null
+      },
+      labels: {
+        style: {
+          fontSize: "12px"
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: null
+      },
+      labels: {
+        style: {
+          fontSize: "12px"
+        }
+      }
+    },
+    title: {
+      text: null
+    },
+    credits: {
+      enabled: false
+    },
+    legend: {
+      borderWidth: 0
+    },
+    tooltip: {
+      style: {
+        fontSize: "12px"
+      }
+    },
+    plotOptions: {
+      areaspline: {},
+      series: {
+        marker: {}
+      }
+    }
+  };
+
+  var hideLegend$1 = function (options, legend, hideLegend) {
+    if (legend !== undefined) {
+      options.legend.enabled = !!legend;
+      if (legend && legend !== true) {
+        if (legend === "top" || legend === "bottom") {
+          options.legend.verticalAlign = legend;
+        } else {
+          options.legend.layout = "vertical";
+          options.legend.verticalAlign = "middle";
+          options.legend.align = legend;
+        }
+      }
+    } else if (hideLegend) {
+      options.legend.enabled = false;
+    }
+  };
+
+  var setTitle$1 = function (options, title) {
+    options.title.text = title;
+  };
+
+  var setMin$1 = function (options, min) {
+    options.yAxis.min = min;
+  };
+
+  var setMax$1 = function (options, max) {
+    options.yAxis.max = max;
+  };
+
+  var setStacked$1 = function (options, stacked) {
+    options.plotOptions.series.stacking = stacked ? (stacked === true ? "normal" : stacked) : null;
+  };
+
+  var setXtitle$1 = function (options, title) {
+    options.xAxis.title.text = title;
+  };
+
+  var setYtitle$1 = function (options, title) {
+    options.yAxis.title.text = title;
+  };
+
+  var jsOptions$1 = jsOptionsFunc(defaultOptions$1, hideLegend$1, setTitle$1, setMin$1, setMax$1, setStacked$1, setXtitle$1, setYtitle$1);
+
+  var setFormatOptions$1 = function(chart, options, chartType) {
+    var formatOptions = {
+      prefix: chart.options.prefix,
+      suffix: chart.options.suffix,
+      thousands: chart.options.thousands,
+      decimal: chart.options.decimal
+    };
+
+    if (formatOptions.prefix || formatOptions.suffix || formatOptions.thousands || formatOptions.decimal) {
+      if (chartType !== "pie" && !options.yAxis.labels.formatter) {
+        options.yAxis.labels.formatter = function () {
+          return formatValue("", this.value, formatOptions);
+        };
+      }
+
+      if (!options.tooltip.pointFormatter) {
+        options.tooltip.pointFormatter = function () {
+          return '<span style="color:' + this.color + '>\u25CF</span> ' + formatValue(this.series.name + ': <b>', this.y, formatOptions) + '</b><br/>';
+        };
+      }
+    }
+  };
+
+  var defaultExport$1 = function defaultExport(library) {
+    this.name = "highcharts";
+    this.library = library;
+  };
+
+  defaultExport$1.prototype.renderLineChart = function renderLineChart (chart, chartType) {
+    chartType = chartType || "spline";
+    var chartOptions = {};
+    if (chartType === "areaspline") {
+      chartOptions = {
+        plotOptions: {
+          areaspline: {
+            stacking: "normal"
+          },
+          area: {
+            stacking: "normal"
+          },
+          series: {
+            marker: {
+              enabled: false
+            }
+          }
+        }
+      };
+    }
+
+    if (chart.options.curve === false) {
+      if (chartType === "areaspline") {
+        chartType = "area";
+      } else if (chartType === "spline") {
+        chartType = "line";
+      }
+    }
+
+    var options = jsOptions$1(chart, chart.options, chartOptions), data, i, j;
+    options.xAxis.type = chart.discrete ? "category" : "datetime";
+    if (!options.chart.type) {
+      options.chart.type = chartType;
+    }
+    setFormatOptions$1(chart, options, chartType);
+
+    var series = chart.data;
+    for (i = 0; i < series.length; i++) {
+      data = series[i].data;
+      if (!chart.discrete) {
+        for (j = 0; j < data.length; j++) {
+          data[j][0] = data[j][0].getTime();
+        }
+      }
+      series[i].marker = {symbol: "circle"};
+      if (chart.options.points === false) {
+        series[i].marker.enabled = false;
+      }
+    }
+
+    this.drawChart(chart, series, options);
+  };
+
+  defaultExport$1.prototype.renderScatterChart = function renderScatterChart (chart) {
+    var options = jsOptions$1(chart, chart.options, {});
+    options.chart.type = "scatter";
+    this.drawChart(chart, chart.data, options);
+  };
+
+  defaultExport$1.prototype.renderPieChart = function renderPieChart (chart) {
+    var chartOptions = merge(defaultOptions$1, {});
+
+    if (chart.options.colors) {
+      chartOptions.colors = chart.options.colors;
+    }
+    if (chart.options.donut) {
+      chartOptions.plotOptions = {pie: {innerSize: "50%"}};
+    }
+
+    if ("legend" in chart.options) {
+      hideLegend$1(chartOptions, chart.options.legend);
+    }
+
+    if (chart.options.title) {
+      setTitle$1(chartOptions, chart.options.title);
+    }
+
+    var options = merge(chartOptions, chart.options.library || {});
+    setFormatOptions$1(chart, options, "pie");
+    var series = [{
+      type: "pie",
+      name: chart.options.label || "Value",
+      data: chart.data
+    }];
+
+    this.drawChart(chart, series, options);
+  };
+
+  defaultExport$1.prototype.renderColumnChart = function renderColumnChart (chart, chartType) {
+    chartType = chartType || "column";
+    var series = chart.data;
+    var options = jsOptions$1(chart, chart.options), i, j, s, d, rows = [], categories = [];
+    options.chart.type = chartType;
+    setFormatOptions$1(chart, options, chartType);
+
+    for (i = 0; i < series.length; i++) {
+      s = series[i];
+
+      for (j = 0; j < s.data.length; j++) {
+        d = s.data[j];
+        if (!rows[d[0]]) {
+          rows[d[0]] = new Array(series.length);
+          categories.push(d[0]);
+        }
+        rows[d[0]][i] = d[1];
+      }
+    }
+
+    if (chart.options.xtype === "number") {
+      categories.sort(sortByNumber);
+    }
+
+    options.xAxis.categories = categories;
+
+    var newSeries = [], d2;
+    for (i = 0; i < series.length; i++) {
+      d = [];
+      for (j = 0; j < categories.length; j++) {
+        d.push(rows[categories[j]][i] || 0);
+      }
+
+      d2 = {
+        name: series[i].name,
+        data: d
+      };
+      if (series[i].stack) {
+        d2.stack = series[i].stack;
+      }
+
+      newSeries.push(d2);
+    }
+
+    this.drawChart(chart, newSeries, options);
+  };
+
+  defaultExport$1.prototype.renderBarChart = function renderBarChart (chart) {
+    this.renderColumnChart(chart, "bar");
+  };
+
+  defaultExport$1.prototype.renderAreaChart = function renderAreaChart (chart) {
+    this.renderLineChart(chart, "areaspline");
+  };
+
+  defaultExport$1.prototype.destroy = function destroy (chart) {
+    if (chart.chart) {
+      chart.chart.destroy();
+    }
+  };
+
+  defaultExport$1.prototype.drawChart = function drawChart (chart, data, options) {
+    this.destroy(chart);
+
+    options.chart.renderTo = chart.element.id;
+    options.series = data;
+    chart.chart = new this.library.Chart(options);
+  };
+
+  var loaded = {};
+  var callbacks = [];
+
+  // Set chart options
+  var defaultOptions$2 = {
+    chartArea: {},
+    fontName: "'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif",
+    pointSize: 6,
+    legend: {
+      textStyle: {
+        fontSize: 12,
+        color: "#444"
+      },
+      alignment: "center",
+      position: "right"
+    },
+    curveType: "function",
+    hAxis: {
+      textStyle: {
+        color: "#666",
+        fontSize: 12
+      },
+      titleTextStyle: {},
+      gridlines: {
+        color: "transparent"
+      },
+      baselineColor: "#ccc",
+      viewWindow: {}
+    },
+    vAxis: {
+      textStyle: {
+        color: "#666",
+        fontSize: 12
+      },
+      titleTextStyle: {},
+      baselineColor: "#ccc",
+      viewWindow: {}
+    },
+    tooltip: {
+      textStyle: {
+        color: "#666",
+        fontSize: 12
+      }
+    }
+  };
+
+  var hideLegend$2 = function (options, legend, hideLegend) {
+    if (legend !== undefined) {
+      var position;
+      if (!legend) {
+        position = "none";
+      } else if (legend === true) {
+        position = "right";
+      } else {
+        position = legend;
+      }
+      options.legend.position = position;
+    } else if (hideLegend) {
+      options.legend.position = "none";
+    }
+  };
+
+  var setTitle$2 = function (options, title) {
+    options.title = title;
+    options.titleTextStyle = {color: "#333", fontSize: "20px"};
+  };
+
+  var setMin$2 = function (options, min) {
+    options.vAxis.viewWindow.min = min;
+  };
+
+  var setMax$2 = function (options, max) {
+    options.vAxis.viewWindow.max = max;
+  };
+
+  var setBarMin$1 = function (options, min) {
+    options.hAxis.viewWindow.min = min;
+  };
+
+  var setBarMax$1 = function (options, max) {
+    options.hAxis.viewWindow.max = max;
+  };
+
+  var setStacked$2 = function (options, stacked) {
+    options.isStacked = stacked ? stacked : false;
+  };
+
+  var setXtitle$2 = function (options, title) {
+    options.hAxis.title = title;
+    options.hAxis.titleTextStyle.italic = false;
+  };
+
+  var setYtitle$2 = function (options, title) {
+    options.vAxis.title = title;
+    options.vAxis.titleTextStyle.italic = false;
+  };
+
+  var jsOptions$2 = jsOptionsFunc(defaultOptions$2, hideLegend$2, setTitle$2, setMin$2, setMax$2, setStacked$2, setXtitle$2, setYtitle$2);
+
+  var resize = function (callback) {
+    if (window.attachEvent) {
+      window.attachEvent("onresize", callback);
+    } else if (window.addEventListener) {
+      window.addEventListener("resize", callback, true);
+    }
+    callback();
+  };
+
+  var defaultExport$2 = function defaultExport(library) {
+    this.name = "google";
+    this.library = library;
+  };
+
+  defaultExport$2.prototype.renderLineChart = function renderLineChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {};
+
+      if (chart.options.curve === false) {
+        chartOptions.curveType = "none";
+      }
+
+      if (chart.options.points === false) {
+        chartOptions.pointSize = 0;
+      }
+
+      var options = jsOptions$2(chart, chart.options, chartOptions);
+      var columnType = chart.discrete ? "string" : "datetime";
+      if (chart.options.xtype === "number") {
+        columnType = "number";
+      }
+      var data = this$1.createDataTable(chart.data, columnType);
+
+      this$1.drawChart(chart, this$1.library.visualization.LineChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderPieChart = function renderPieChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {
+        chartArea: {
+          top: "10%",
+          height: "80%"
+        },
+        legend: {}
+      };
+      if (chart.options.colors) {
+        chartOptions.colors = chart.options.colors;
+      }
+      if (chart.options.donut) {
+        chartOptions.pieHole = 0.5;
+      }
+      if ("legend" in chart.options) {
+        hideLegend$2(chartOptions, chart.options.legend);
+      }
+      if (chart.options.title) {
+        setTitle$2(chartOptions, chart.options.title);
+      }
+      var options = merge(merge(defaultOptions$2, chartOptions), chart.options.library || {});
+
+      var data = new this$1.library.visualization.DataTable();
+      data.addColumn("string", "");
+      data.addColumn("number", "Value");
+      data.addRows(chart.data);
+
+      this$1.drawChart(chart, this$1.library.visualization.PieChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderColumnChart = function renderColumnChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var options = jsOptions$2(chart, chart.options);
+      var data = this$1.createDataTable(chart.data, "string", chart.options.xtype);
+
+      this$1.drawChart(chart, this$1.library.visualization.ColumnChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderBarChart = function renderBarChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {
+        hAxis: {
+          gridlines: {
+            color: "#ccc"
+          }
+        }
+      };
+      var options = jsOptionsFunc(defaultOptions$2, hideLegend$2, setTitle$2, setBarMin$1, setBarMax$1, setStacked$2, setXtitle$2, setYtitle$2)(chart, chart.options, chartOptions);
+      var data = this$1.createDataTable(chart.data, "string", chart.options.xtype);
+
+      this$1.drawChart(chart, this$1.library.visualization.BarChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderAreaChart = function renderAreaChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {
+        isStacked: true,
+        pointSize: 0,
+        areaOpacity: 0.5
+      };
+
+      var options = jsOptions$2(chart, chart.options, chartOptions);
+      var columnType = chart.discrete ? "string" : "datetime";
+      if (chart.options.xtype === "number") {
+        columnType = "number";
+      }
+      var data = this$1.createDataTable(chart.data, columnType);
+
+      this$1.drawChart(chart, this$1.library.visualization.AreaChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderGeoChart = function renderGeoChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {
+        legend: "none",
+        colorAxis: {
+          colors: chart.options.colors || ["#f6c7b6", "#ce502d"]
+        }
+      };
+      var options = merge(merge(defaultOptions$2, chartOptions), chart.options.library || {});
+
+      var data = new this$1.library.visualization.DataTable();
+      data.addColumn("string", "");
+      data.addColumn("number", chart.options.label || "Value");
+      data.addRows(chart.data);
+
+      this$1.drawChart(chart, this$1.library.visualization.GeoChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderScatterChart = function renderScatterChart (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {};
+      var options = jsOptions$2(chart, chart.options, chartOptions);
+
+      var series = chart.data, rows2 = [], i, j, data, d;
+      for (i = 0; i < series.length; i++) {
+        d = series[i].data;
+        for (j = 0; j < d.length; j++) {
+          var row = new Array(series.length + 1);
+          row[0] = d[j][0];
+          row[i + 1] = d[j][1];
+          rows2.push(row);
+        }
+      }
+
+      data = new this$1.library.visualization.DataTable();
+      data.addColumn("number", "");
+      for (i = 0; i < series.length; i++) {
+        data.addColumn("number", series[i].name);
+      }
+      data.addRows(rows2);
+
+      this$1.drawChart(chart, this$1.library.visualization.ScatterChart, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.renderTimeline = function renderTimeline (chart) {
+      var this$1 = this;
+
+    this.waitForLoaded(chart, "timeline", function () {
+      var chartOptions = {
+        legend: "none"
+      };
+
+      if (chart.options.colors) {
+        chartOptions.colors = chart.options.colors;
+      }
+      var options = merge(merge(defaultOptions$2, chartOptions), chart.options.library || {});
+
+      var data = new this$1.library.visualization.DataTable();
+      data.addColumn({type: "string", id: "Name"});
+      data.addColumn({type: "date", id: "Start"});
+      data.addColumn({type: "date", id: "End"});
+      data.addRows(chart.data);
+
+      chart.element.style.lineHeight = "normal";
+
+      this$1.drawChart(chart, this$1.library.visualization.Timeline, data, options);
+    });
+  };
+
+  defaultExport$2.prototype.destroy = function destroy (chart) {
+    if (chart.chart) {
+      chart.chart.clearChart();
+    }
+  };
+
+  defaultExport$2.prototype.drawChart = function drawChart (chart, type, data, options) {
+    this.destroy(chart);
+
+    chart.chart = new type(chart.element);
+    resize(function () {
+      chart.chart.draw(data, options);
+    });
+  };
+
+  defaultExport$2.prototype.waitForLoaded = function waitForLoaded (chart, pack, callback) {
+      var this$1 = this;
+
+    if (!callback) {
+      callback = pack;
+      pack = "corechart";
+    }
+
+    callbacks.push({pack: pack, callback: callback});
+
+    if (loaded[pack]) {
+      this.runCallbacks();
+    } else {
+      loaded[pack] = true;
+
+      // https://groups.google.com/forum/#!topic/google-visualization-api/fMKJcyA2yyI
+      var loadOptions = {
+        packages: [pack],
+        callback: function () { this$1.runCallbacks(); }
+      };
+      var config = chart.__config();
+      if (config.language) {
+        loadOptions.language = config.language;
+      }
+      if (pack === "corechart" && config.mapsApiKey) {
+        loadOptions.mapsApiKey = config.mapsApiKey;
+      }
+
+      if (this.library.setOnLoadCallback) {
+        this.library.load("visualization", "1", loadOptions);
+      } else {
+        this.library.charts.load("current", loadOptions);
+      }
+    }
+  };
+
+  defaultExport$2.prototype.runCallbacks = function runCallbacks () {
+      var this$1 = this;
+
+    var cb, call;
+    for (var i = 0; i < callbacks.length; i++) {
+      cb = callbacks[i];
+      call = this$1.library.visualization && ((cb.pack === "corechart" && this$1.library.visualization.LineChart) || (cb.pack === "timeline" && this$1.library.visualization.Timeline));
+      if (call) {
+        cb.callback();
+        callbacks.splice(i, 1);
+        i--;
+      }
+    }
+  };
+
+  // cant use object as key
+  defaultExport$2.prototype.createDataTable = function createDataTable (series, columnType, xtype) {
+    var i, j, s, d, key, rows = [], sortedLabels = [];
+    for (i = 0; i < series.length; i++) {
+      s = series[i];
+
+      for (j = 0; j < s.data.length; j++) {
+        d = s.data[j];
+        key = (columnType === "datetime") ? d[0].getTime() : d[0];
+        if (!rows[key]) {
+          rows[key] = new Array(series.length);
+          sortedLabels.push(key);
+        }
+        rows[key][i] = toFloat(d[1]);
+      }
+    }
+
+    var rows2 = [];
+    var day = true;
+    var value;
+    for (j = 0; j < sortedLabels.length; j++) {
+      i = sortedLabels[j];
+      if (columnType === "datetime") {
+        value = new Date(toFloat(i));
+        day = day && isDay(value);
+      } else if (columnType === "number") {
+        value = toFloat(i);
+      } else {
+        value = i;
+      }
+      rows2.push([value].concat(rows[i]));
+    }
+    if (columnType === "datetime") {
+      rows2.sort(sortByTime);
+    } else if (columnType === "number") {
+      rows2.sort(sortByNumberSeries);
+    }
+
+    if (xtype === "number") {
+      rows2.sort(sortByNumberSeries);
+
+      for (i = 0; i < rows2.length; i++) {
+        rows2[i][0] = toStr(rows2[i][0]);
+      }
+    }
+
+    // create datatable
+    var data = new this.library.visualization.DataTable();
+    columnType = columnType === "datetime" && day ? "date" : columnType;
+    data.addColumn(columnType, "");
+    for (i = 0; i < series.length; i++) {
+      data.addColumn("number", series[i].name);
+    }
+    data.addRows(rows2);
+
+    return data;
+  };
+
+  var pendingRequests = [], runningRequests = 0, maxRequests = 4;
+
+  function pushRequest(url, success, error) {
+    pendingRequests.push([url, success, error]);
     runNext();
   }
 
   function runNext() {
     if (runningRequests < maxRequests) {
-      var request = pendingRequests.shift()
+      var request = pendingRequests.shift();
       if (request) {
         runningRequests++;
         getJSON(request[0], request[1], request[2]);
@@ -65344,10 +66652,10 @@ jQuery(document).on('ready page:load', function() {
     runNext();
   }
 
-  function getJSON(element, url, success) {
+  function getJSON(url, success, error) {
     ajaxCall(url, success, function (jqXHR, textStatus, errorThrown) {
       var message = (typeof errorThrown === "string") ? errorThrown : errorThrown.message;
-      chartError(element, message);
+      error(message);
     });
   }
 
@@ -65378,24 +66686,44 @@ jQuery(document).on('ready page:load', function() {
     }
   }
 
-  function errorCatcher(chart, callback) {
+  var config = (typeof window !== "undefined" && window.Chartkick) || {};
+  var adapters = [];
+
+  // helpers
+
+  function setText(element, text) {
+    if (document.body.innerText) {
+      element.innerText = text;
+    } else {
+      element.textContent = text;
+    }
+  }
+
+  function chartError(element, message) {
+    setText(element, "Error Loading Chart: " + message);
+    element.style.color = "#ff0000";
+  }
+
+  function errorCatcher(chart) {
     try {
-      callback(chart);
+      chart.__render();
     } catch (err) {
       chartError(chart.element, err.message);
       throw err;
     }
   }
 
-  function fetchDataSource(chart, callback, dataSource) {
+  function fetchDataSource(chart, dataSource) {
     if (typeof dataSource === "string") {
-      pushRequest(chart.element, dataSource, function (data, textStatus, jqXHR) {
+      pushRequest(dataSource, function (data) {
         chart.rawData = data;
-        errorCatcher(chart, callback);
+        errorCatcher(chart);
+      }, function (message) {
+        chartError(chart.element, message);
       });
     } else {
       chart.rawData = dataSource;
-      errorCatcher(chart, callback);
+      errorCatcher(chart);
     }
   }
 
@@ -65418,20 +66746,20 @@ jQuery(document).on('ready page:load', function() {
     link.appendChild(image);
     element.style.position = "relative";
 
-    chart.downloadAttached = true;
+    chart.__downloadAttached = true;
 
     // mouseenter
-    addEvent(element, "mouseover", function(e) {
+    chart.__enterEvent = addEvent(element, "mouseover", function(e) {
       var related = e.relatedTarget;
       // check download option again to ensure it wasn't changed
-      if (!related || (related !== this && !childOf(this, related)) && chart.options.download) {
+      if ((!related || (related !== this && !childOf(this, related))) && chart.options.download) {
         link.href = chart.toImage();
         element.appendChild(link);
       }
     });
 
     // mouseleave
-    addEvent(element, "mouseout", function(e) {
+    chart.__leaveEvent = addEvent(element, "mouseout", function(e) {
       var related = e.relatedTarget;
       if (!related || (related !== this && !childOf(this, related))) {
         if (link.parentNode) {
@@ -65445,1184 +66773,89 @@ jQuery(document).on('ready page:load', function() {
   function addEvent(elem, event, fn) {
     if (elem.addEventListener) {
       elem.addEventListener(event, fn, false);
+      return fn;
     } else {
-      elem.attachEvent("on" + event, function() {
+      var fn2 = function() {
         // set the this pointer same as addEventListener when fn is called
         return(fn.call(elem, window.event));
-      });
+      };
+      elem.attachEvent("on" + event, fn2);
+      return fn2;
+    }
+  }
+
+  function removeEvent(elem, event, fn) {
+    if (elem.removeEventListener) {
+      elem.removeEventListener(event, fn, false);
+    } else {
+      elem.detachEvent("on" + event, fn);
     }
   }
 
   // https://gist.github.com/shawnbot/4166283
   function childOf(p, c) {
-    if (p === c) return false;
-    while (c && c !== p) c = c.parentNode;
+    if (p === c) { return false; }
+    while (c && c !== p) { c = c.parentNode; }
     return c === p;
   }
 
-  // type conversions
-
-  function toStr(n) {
-    return "" + n;
-  }
-
-  function toFloat(n) {
-    return parseFloat(n);
-  }
-
-  function toDate(n) {
-    var matches, year, month, day;
-    if (typeof n !== "object") {
-      if (typeof n === "number") {
-        n = new Date(n * 1000); // ms
-      } else if ((matches = n.match(DATE_PATTERN))) {
-        year = parseInt(matches[1], 10);
-        month = parseInt(matches[3], 10) - 1;
-        day = parseInt(matches[5], 10);
-        return new Date(year, month, day);
-      } else { // str
-        // try our best to get the str into iso8601
-        // TODO be smarter about this
-        var str = n.replace(/ /, "T").replace(" ", "").replace("UTC", "Z");
-        n = parseISO8601(str) || new Date(n);
+  function getAdapterType(library) {
+    if (library) {
+      if (library.product === "Highcharts") {
+        return defaultExport$1;
+      } else if (library.setOnLoadCallback || library.charts) {
+        return defaultExport$2;
+      } else if (isFunction(library)) {
+        return defaultExport;
       }
     }
-    return n;
+    throw new Error("Unknown adapter");
   }
 
-  function toArr(n) {
-    if (!isArray(n)) {
-      var arr = [], i;
-      for (i in n) {
-        if (n.hasOwnProperty(i)) {
-          arr.push([i, n[i]]);
-        }
-      }
-      n = arr;
+  function addAdapter(library) {
+    var adapterType = getAdapterType(library);
+    var adapter = new adapterType(library);
+
+    if (adapters.indexOf(adapter) === -1) {
+      adapters.push(adapter);
     }
-    return n;
-  }
-
-  function sortByTime(a, b) {
-    return a[0].getTime() - b[0].getTime();
-  }
-
-  function sortByNumberSeries(a, b) {
-    return a[0] - b[0];
-  }
-
-  function sortByNumber(a, b) {
-    return a - b;
   }
 
   function loadAdapters() {
-    if (!HighchartsAdapter && "Highcharts" in window) {
-      HighchartsAdapter = new function () {
-        var Highcharts = window.Highcharts;
-
-        this.name = "highcharts";
-
-        var defaultOptions = {
-          chart: {},
-          xAxis: {
-            title: {
-              text: null
-            },
-            labels: {
-              style: {
-                fontSize: "12px"
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: null
-            },
-            labels: {
-              style: {
-                fontSize: "12px"
-              }
-            }
-          },
-          title: {
-            text: null
-          },
-          credits: {
-            enabled: false
-          },
-          legend: {
-            borderWidth: 0
-          },
-          tooltip: {
-            style: {
-              fontSize: "12px"
-            }
-          },
-          plotOptions: {
-            areaspline: {},
-            series: {
-              marker: {}
-            }
-          }
-        };
-
-        var hideLegend = function (options, legend, hideLegend) {
-          if (legend !== undefined) {
-            options.legend.enabled = !!legend;
-            if (legend && legend !== true) {
-              if (legend === "top" || legend === "bottom") {
-                options.legend.verticalAlign = legend;
-              } else {
-                options.legend.layout = "vertical";
-                options.legend.verticalAlign = "middle";
-                options.legend.align = legend;
-              }
-            }
-          } else if (hideLegend) {
-            options.legend.enabled = false;
-          }
-        };
-
-        var setTitle = function (options, title) {
-          options.title.text = title;
-        };
-
-        var setMin = function (options, min) {
-          options.yAxis.min = min;
-        };
-
-        var setMax = function (options, max) {
-          options.yAxis.max = max;
-        };
-
-        var setStacked = function (options, stacked) {
-          options.plotOptions.series.stacking = stacked ? "normal" : null;
-        };
-
-        var setXtitle = function (options, title) {
-          options.xAxis.title.text = title;
-        };
-
-        var setYtitle = function (options, title) {
-          options.yAxis.title.text = title;
-        };
-
-        var jsOptions = jsOptionsFunc(defaultOptions, hideLegend, setTitle, setMin, setMax, setStacked, setXtitle, setYtitle);
-
-        this.renderLineChart = function (chart, chartType) {
-          chartType = chartType || "spline";
-          var chartOptions = {};
-          if (chartType === "areaspline") {
-            chartOptions = {
-              plotOptions: {
-                areaspline: {
-                  stacking: "normal"
-                },
-                area: {
-                  stacking: "normal"
-                },
-                series: {
-                  marker: {
-                    enabled: false
-                  }
-                }
-              }
-            };
-          }
-
-          if (chart.options.curve === false) {
-            if (chartType === "areaspline") {
-              chartType = "area";
-            } else if (chartType === "spline") {
-              chartType = "line";
-            }
-          }
-
-          var options = jsOptions(chart, chart.options, chartOptions), data, i, j;
-          options.xAxis.type = chart.discrete ? "category" : "datetime";
-          if (!options.chart.type) {
-            options.chart.type = chartType;
-          }
-          options.chart.renderTo = chart.element.id;
-
-          var series = chart.data;
-          for (i = 0; i < series.length; i++) {
-            data = series[i].data;
-            if (!chart.discrete) {
-              for (j = 0; j < data.length; j++) {
-                data[j][0] = data[j][0].getTime();
-              }
-            }
-            series[i].marker = {symbol: "circle"};
-            if (chart.options.points === false) {
-              series[i].marker.enabled = false;
-            }
-          }
-          options.series = series;
-          chart.chart = new Highcharts.Chart(options);
-        };
-
-        this.renderScatterChart = function (chart) {
-          var chartOptions = {};
-          var options = jsOptions(chart, chart.options, chartOptions);
-          options.chart.type = "scatter";
-          options.chart.renderTo = chart.element.id;
-          options.series = chart.data;
-          chart.chart = new Highcharts.Chart(options);
-        };
-
-        this.renderPieChart = function (chart) {
-          var chartOptions = merge(defaultOptions, {});
-
-          if (chart.options.colors) {
-            chartOptions.colors = chart.options.colors;
-          }
-          if (chart.options.donut) {
-            chartOptions.plotOptions = {pie: {innerSize: "50%"}};
-          }
-
-          if ("legend" in chart.options) {
-            hideLegend(chartOptions, chart.options.legend);
-          }
-
-          if (chart.options.title) {
-            setTitle(chartOptions, chart.options.title);
-          }
-
-          var options = merge(chartOptions, chart.options.library || {});
-          options.chart.renderTo = chart.element.id;
-          options.series = [{
-            type: "pie",
-            name: chart.options.label || "Value",
-            data: chart.data
-          }];
-          chart.chart = new Highcharts.Chart(options);
-        };
-
-        this.renderColumnChart = function (chart, chartType) {
-          chartType = chartType || "column";
-          var series = chart.data;
-          var options = jsOptions(chart, chart.options), i, j, s, d, rows = [], categories = [];
-          options.chart.type = chartType;
-          options.chart.renderTo = chart.element.id;
-
-          for (i = 0; i < series.length; i++) {
-            s = series[i];
-
-            for (j = 0; j < s.data.length; j++) {
-              d = s.data[j];
-              if (!rows[d[0]]) {
-                rows[d[0]] = new Array(series.length);
-                categories.push(d[0]);
-              }
-              rows[d[0]][i] = d[1];
-            }
-          }
-
-          if (chart.options.xtype === "number") {
-            categories.sort(sortByNumber);
-          }
-
-          options.xAxis.categories = categories;
-
-          var newSeries = [], d2;
-          for (i = 0; i < series.length; i++) {
-            d = [];
-            for (j = 0; j < categories.length; j++) {
-              d.push(rows[categories[j]][i] || 0);
-            }
-
-            d2 = {
-              name: series[i].name,
-              data: d
-            }
-            if (series[i].stack) {
-              d2.stack = series[i].stack;
-            }
-
-            newSeries.push(d2);
-          }
-          options.series = newSeries;
-
-          chart.chart = new Highcharts.Chart(options);
-        };
-
-        var self = this;
-
-        this.renderBarChart = function (chart) {
-          self.renderColumnChart(chart, "bar");
-        };
-
-        this.renderAreaChart = function (chart) {
-          self.renderLineChart(chart, "areaspline");
-        };
-      };
-      adapters.push(HighchartsAdapter);
+    if ("Chart" in window) {
+      addAdapter(window.Chart);
     }
-    if (!GoogleChartsAdapter && window.google && (window.google.setOnLoadCallback || window.google.charts)) {
-      GoogleChartsAdapter = new function () {
-        var google = window.google;
 
-        this.name = "google";
-
-        var loaded = {};
-        var callbacks = [];
-
-        var runCallbacks = function () {
-          var cb, call;
-          for (var i = 0; i < callbacks.length; i++) {
-            cb = callbacks[i];
-            call = google.visualization && ((cb.pack === "corechart" && google.visualization.LineChart) || (cb.pack === "timeline" && google.visualization.Timeline));
-            if (call) {
-              cb.callback();
-              callbacks.splice(i, 1);
-              i--;
-            }
-          }
-        };
-
-        var waitForLoaded = function (pack, callback) {
-          if (!callback) {
-            callback = pack;
-            pack = "corechart";
-          }
-
-          callbacks.push({pack: pack, callback: callback});
-
-          if (loaded[pack]) {
-            runCallbacks();
-          } else {
-            loaded[pack] = true;
-
-            // https://groups.google.com/forum/#!topic/google-visualization-api/fMKJcyA2yyI
-            var loadOptions = {
-              packages: [pack],
-              callback: runCallbacks
-            };
-            if (config.language) {
-              loadOptions.language = config.language;
-            }
-            if (pack === "corechart" && config.mapsApiKey) {
-              loadOptions.mapsApiKey = config.mapsApiKey;
-            }
-
-            if (window.google.setOnLoadCallback) {
-              google.load("visualization", "1", loadOptions);
-            } else {
-              google.charts.load("current", loadOptions);
-            }
-          }
-        };
-
-        // Set chart options
-        var defaultOptions = {
-          chartArea: {},
-          fontName: "'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif",
-          pointSize: 6,
-          legend: {
-            textStyle: {
-              fontSize: 12,
-              color: "#444"
-            },
-            alignment: "center",
-            position: "right"
-          },
-          curveType: "function",
-          hAxis: {
-            textStyle: {
-              color: "#666",
-              fontSize: 12
-            },
-            titleTextStyle: {},
-            gridlines: {
-              color: "transparent"
-            },
-            baselineColor: "#ccc",
-            viewWindow: {}
-          },
-          vAxis: {
-            textStyle: {
-              color: "#666",
-              fontSize: 12
-            },
-            titleTextStyle: {},
-            baselineColor: "#ccc",
-            viewWindow: {}
-          },
-          tooltip: {
-            textStyle: {
-              color: "#666",
-              fontSize: 12
-            }
-          }
-        };
-
-        var hideLegend = function (options, legend, hideLegend) {
-          if (legend !== undefined) {
-            var position;
-            if (!legend) {
-              position = "none";
-            } else if (legend === true) {
-              position = "right";
-            } else {
-              position = legend;
-            }
-            options.legend.position = position;
-          } else if (hideLegend) {
-            options.legend.position = "none";
-          }
-        };
-
-        var setTitle = function (options, title) {
-          options.title = title;
-          options.titleTextStyle = {color: "#333", fontSize: "20px"};
-        };
-
-        var setMin = function (options, min) {
-          options.vAxis.viewWindow.min = min;
-        };
-
-        var setMax = function (options, max) {
-          options.vAxis.viewWindow.max = max;
-        };
-
-        var setBarMin = function (options, min) {
-          options.hAxis.viewWindow.min = min;
-        };
-
-        var setBarMax = function (options, max) {
-          options.hAxis.viewWindow.max = max;
-        };
-
-        var setStacked = function (options, stacked) {
-          options.isStacked = !!stacked;
-        };
-
-        var setXtitle = function (options, title) {
-          options.hAxis.title = title;
-          options.hAxis.titleTextStyle.italic = false;
-        };
-
-        var setYtitle = function (options, title) {
-          options.vAxis.title = title;
-          options.vAxis.titleTextStyle.italic = false;
-        };
-
-        var jsOptions = jsOptionsFunc(defaultOptions, hideLegend, setTitle, setMin, setMax, setStacked, setXtitle, setYtitle);
-
-        // cant use object as key
-        var createDataTable = function (series, columnType, xtype) {
-          var i, j, s, d, key, rows = [], sortedLabels = [];
-          for (i = 0; i < series.length; i++) {
-            s = series[i];
-
-            for (j = 0; j < s.data.length; j++) {
-              d = s.data[j];
-              key = (columnType === "datetime") ? d[0].getTime() : d[0];
-              if (!rows[key]) {
-                rows[key] = new Array(series.length);
-                sortedLabels.push(key);
-              }
-              rows[key][i] = toFloat(d[1]);
-            }
-          }
-
-          var rows2 = [];
-          var day = true;
-          var value;
-          for (var j = 0; j < sortedLabels.length; j++) {
-            var i = sortedLabels[j];
-            if (columnType === "datetime") {
-              value = new Date(toFloat(i));
-              day = day && isDay(value);
-            } else if (columnType === "number") {
-              value = toFloat(i);
-            } else {
-              value = i;
-            }
-            rows2.push([value].concat(rows[i]));
-          }
-          if (columnType === "datetime") {
-            rows2.sort(sortByTime);
-          } else if (columnType === "number") {
-            rows2.sort(sortByNumberSeries);
-          }
-
-          if (xtype === "number") {
-            rows2.sort(sortByNumberSeries);
-
-            for (var i = 0; i < rows2.length; i++) {
-              rows2[i][0] = toStr(rows2[i][0]);
-            }
-          }
-
-          // create datatable
-          var data = new google.visualization.DataTable();
-          columnType = columnType === "datetime" && day ? "date" : columnType;
-          data.addColumn(columnType, "");
-          for (i = 0; i < series.length; i++) {
-            data.addColumn("number", series[i].name);
-          }
-          data.addRows(rows2);
-
-          return data;
-        };
-
-        var resize = function (callback) {
-          if (window.attachEvent) {
-            window.attachEvent("onresize", callback);
-          } else if (window.addEventListener) {
-            window.addEventListener("resize", callback, true);
-          }
-          callback();
-        };
-
-        this.renderLineChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {};
-
-            if (chart.options.curve === false) {
-              chartOptions.curveType = "none";
-            }
-
-            if (chart.options.points === false) {
-              chartOptions.pointSize = 0;
-            }
-
-            var options = jsOptions(chart, chart.options, chartOptions);
-            var columnType = chart.discrete ? "string" : "datetime";
-            if (chart.options.xtype === "number") {
-              columnType = "number";
-            }
-            var data = createDataTable(chart.data, columnType);
-            chart.chart = new google.visualization.LineChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderPieChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {
-              chartArea: {
-                top: "10%",
-                height: "80%"
-              },
-              legend: {}
-            };
-            if (chart.options.colors) {
-              chartOptions.colors = chart.options.colors;
-            }
-            if (chart.options.donut) {
-              chartOptions.pieHole = 0.5;
-            }
-            if ("legend" in chart.options) {
-              hideLegend(chartOptions, chart.options.legend);
-            }
-            if (chart.options.title) {
-              setTitle(chartOptions, chart.options.title);
-            }
-            var options = merge(merge(defaultOptions, chartOptions), chart.options.library || {});
-
-            var data = new google.visualization.DataTable();
-            data.addColumn("string", "");
-            data.addColumn("number", "Value");
-            data.addRows(chart.data);
-
-            chart.chart = new google.visualization.PieChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderColumnChart = function (chart) {
-          waitForLoaded(function () {
-            var options = jsOptions(chart, chart.options);
-            var data = createDataTable(chart.data, "string", chart.options.xtype);
-            chart.chart = new google.visualization.ColumnChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderBarChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {
-              hAxis: {
-                gridlines: {
-                  color: "#ccc"
-                }
-              }
-            };
-            var options = jsOptionsFunc(defaultOptions, hideLegend, setTitle, setBarMin, setBarMax, setStacked, setXtitle, setYtitle)(chart, chart.options, chartOptions);
-            var data = createDataTable(chart.data, "string", chart.options.xtype);
-            chart.chart = new google.visualization.BarChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderAreaChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {
-              isStacked: true,
-              pointSize: 0,
-              areaOpacity: 0.5
-            };
-
-            var options = jsOptions(chart, chart.options, chartOptions);
-            var columnType = chart.discrete ? "string" : "datetime";
-            if (chart.options.xtype === "number") {
-              columnType = "number";
-            }
-            var data = createDataTable(chart.data, columnType);
-            chart.chart = new google.visualization.AreaChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderGeoChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {
-              legend: "none",
-              colorAxis: {
-                colors: chart.options.colors || ["#f6c7b6", "#ce502d"]
-              }
-            };
-            var options = merge(merge(defaultOptions, chartOptions), chart.options.library || {});
-
-            var data = new google.visualization.DataTable();
-            data.addColumn("string", "");
-            data.addColumn("number", chart.options.label || "Value");
-            data.addRows(chart.data);
-
-            chart.chart = new google.visualization.GeoChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderScatterChart = function (chart) {
-          waitForLoaded(function () {
-            var chartOptions = {};
-            var options = jsOptions(chart, chart.options, chartOptions);
-
-            var series = chart.data, rows2 = [], i, j, data, d;
-            for (i = 0; i < series.length; i++) {
-              d = series[i].data;
-              for (j = 0; j < d.length; j++) {
-                var row = new Array(series.length + 1);
-                row[0] = d[j][0];
-                row[i + 1] = d[j][1];
-                rows2.push(row);
-              }
-            }
-
-            var data = new google.visualization.DataTable();
-            data.addColumn("number", "");
-            for (i = 0; i < series.length; i++) {
-              data.addColumn("number", series[i].name);
-            }
-            data.addRows(rows2);
-
-            chart.chart = new google.visualization.ScatterChart(chart.element);
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-
-        this.renderTimeline = function (chart) {
-          waitForLoaded("timeline", function () {
-            var chartOptions = {
-              legend: "none"
-            };
-
-            if (chart.options.colors) {
-              chartOptions.colors = chart.options.colors;
-            }
-            var options = merge(merge(defaultOptions, chartOptions), chart.options.library || {});
-
-            var data = new google.visualization.DataTable();
-            data.addColumn({type: "string", id: "Name"});
-            data.addColumn({type: "date", id: "Start"});
-            data.addColumn({type: "date", id: "End"});
-            data.addRows(chart.data);
-
-            chart.element.style.lineHeight = "normal";
-            chart.chart = new google.visualization.Timeline(chart.element);
-
-            resize(function () {
-              chart.chart.draw(data, options);
-            });
-          });
-        };
-      };
-
-      adapters.push(GoogleChartsAdapter);
+    if ("Highcharts" in window) {
+      addAdapter(window.Highcharts);
     }
-    if (!ChartjsAdapter && "Chart" in window) {
-      ChartjsAdapter = new function () {
-        var Chart = window.Chart;
 
-        this.name = "chartjs";
-
-        var baseOptions = {
-          maintainAspectRatio: false,
-          animation: false,
-          tooltips: {
-            displayColors: false
-          },
-          legend: {},
-          title: {fontSize: 20, fontColor: "#333"}
-        };
-
-        var defaultOptions = {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  maxTicksLimit: 4
-                },
-                scaleLabel: {
-                  fontSize: 16,
-                  // fontStyle: "bold",
-                  fontColor: "#333"
-                }
-              }
-            ],
-            xAxes: [
-              {
-                gridLines: {
-                  drawOnChartArea: false
-                },
-                scaleLabel: {
-                  fontSize: 16,
-                  // fontStyle: "bold",
-                  fontColor: "#333"
-                },
-                time: {},
-                ticks: {}
-              }
-            ]
-          }
-        };
-
-        // http://there4.io/2012/05/02/google-chart-color-list/
-        var defaultColors = [
-          "#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#3B3EAC", "#0099C6",
-          "#DD4477", "#66AA00", "#B82E2E", "#316395", "#994499", "#22AA99", "#AAAA11",
-          "#6633CC", "#E67300", "#8B0707", "#329262", "#5574A6", "#651067"
-        ];
-
-        var hideLegend = function (options, legend, hideLegend) {
-          if (legend !== undefined) {
-            options.legend.display = !!legend;
-            if (legend && legend !== true) {
-              options.legend.position = legend;
-            }
-          } else if (hideLegend) {
-            options.legend.display = false;
-          }
-        };
-
-        var setTitle = function (options, title) {
-          options.title.display = true;
-          options.title.text = title;
-        };
-
-        var setMin = function (options, min) {
-          if (min !== null) {
-            options.scales.yAxes[0].ticks.min = toFloat(min);
-          }
-        };
-
-        var setMax = function (options, max) {
-          options.scales.yAxes[0].ticks.max = toFloat(max);
-        };
-
-        var setBarMin = function (options, min) {
-          if (min !== null) {
-            options.scales.xAxes[0].ticks.min = toFloat(min);
-          }
-        };
-
-        var setBarMax = function (options, max) {
-          options.scales.xAxes[0].ticks.max = toFloat(max);
-        };
-
-        var setStacked = function (options, stacked) {
-          options.scales.xAxes[0].stacked = !!stacked;
-          options.scales.yAxes[0].stacked = !!stacked;
-        };
-
-        var setXtitle = function (options, title) {
-          options.scales.xAxes[0].scaleLabel.display = true;
-          options.scales.xAxes[0].scaleLabel.labelString = title;
-        };
-
-        var setYtitle = function (options, title) {
-          options.scales.yAxes[0].scaleLabel.display = true;
-          options.scales.yAxes[0].scaleLabel.labelString = title;
-        };
-
-        var drawChart = function(chart, type, data, options) {
-          if (chart.chart) {
-            chart.chart.destroy();
-          } else {
-            chart.element.innerHTML = "<canvas></canvas>";
-          }
-
-          var ctx = chart.element.getElementsByTagName("CANVAS")[0];
-          chart.chart = new Chart(ctx, {
-            type: type,
-            data: data,
-            options: options
-          });
-        };
-
-        // http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-        var addOpacity = function(hex, opacity) {
-          var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-          return result ? "rgba(" + parseInt(result[1], 16) + ", " + parseInt(result[2], 16) + ", " + parseInt(result[3], 16) + ", " + opacity + ")" : hex;
-        };
-
-        var setLabelSize = function (chart, data, options) {
-          var maxLabelSize = Math.ceil(chart.element.offsetWidth / 4.0 / data.labels.length);
-          if (maxLabelSize > 25) {
-            maxLabelSize = 25;
-          }
-          options.scales.xAxes[0].ticks.callback = function (value) {
-            value = toStr(value);
-            if (value.length > maxLabelSize) {
-              return value.substring(0, maxLabelSize - 2) + "...";
-            } else {
-              return value;
-            }
-          };
-        };
-
-        var jsOptions = jsOptionsFunc(merge(baseOptions, defaultOptions), hideLegend, setTitle, setMin, setMax, setStacked, setXtitle, setYtitle);
-
-        var createDataTable = function (chart, options, chartType) {
-          var datasets = [];
-          var labels = [];
-
-          var colors = chart.options.colors || defaultColors;
-
-          var day = true;
-          var week = true;
-          var dayOfWeek;
-          var month = true;
-          var year = true;
-          var hour = true;
-          var minute = true;
-          var detectType = (chartType === "line" || chartType === "area") && !chart.discrete;
-
-          var series = chart.data;
-
-          var sortedLabels = [];
-
-          var i, j, s, d, key, rows = [];
-          for (i = 0; i < series.length; i++) {
-            s = series[i];
-
-            for (j = 0; j < s.data.length; j++) {
-              d = s.data[j];
-              key = detectType ? d[0].getTime() : d[0];
-              if (!rows[key]) {
-                rows[key] = new Array(series.length);
-              }
-              rows[key][i] = toFloat(d[1]);
-              if (sortedLabels.indexOf(key) === -1) {
-                sortedLabels.push(key);
-              }
-            }
-          }
-
-          if (detectType || chart.options.xtype === "number") {
-            sortedLabels.sort(sortByNumber);
-          }
-
-          var rows2 = [];
-          for (j = 0; j < series.length; j++) {
-            rows2.push([]);
-          }
-
-          var value;
-          var k;
-          for (k = 0; k < sortedLabels.length; k++) {
-            i = sortedLabels[k];
-            if (detectType) {
-              value = new Date(toFloat(i));
-              // TODO make this efficient
-              day = day && isDay(value);
-              if (!dayOfWeek) {
-                dayOfWeek = value.getDay();
-              }
-              week = week && isWeek(value, dayOfWeek);
-              month = month && isMonth(value);
-              year = year && isYear(value);
-              hour = hour && isHour(value);
-              minute = minute && isMinute(value);
-            } else {
-              value = i;
-            }
-            labels.push(value);
-            for (j = 0; j < series.length; j++) {
-              // Chart.js doesn't like undefined
-              rows2[j].push(rows[i][j] === undefined ? null : rows[i][j]);
-            }
-          }
-
-          for (i = 0; i < series.length; i++) {
-            s = series[i];
-
-            var color = s.color || colors[i];
-            var backgroundColor = chartType !== "line" ? addOpacity(color, 0.5) : color;
-
-            var dataset = {
-              label: s.name,
-              data: rows2[i],
-              fill: chartType === "area",
-              borderColor: color,
-              backgroundColor: backgroundColor,
-              pointBackgroundColor: color,
-              borderWidth: 2
-            };
-
-            if (s.stack) {
-              dataset.stack = s.stack;
-            }
-
-            if (chart.options.curve === false) {
-              dataset.lineTension = 0;
-            }
-
-            if (chart.options.points === false) {
-              dataset.pointRadius = 0;
-              dataset.pointHitRadius = 5;
-            }
-
-            datasets.push(merge(dataset, s.library || {}));
-          }
-
-          if (detectType && labels.length > 0) {
-            var minTime = labels[0].getTime();
-            var maxTime = labels[0].getTime();
-            for (i = 1; i < labels.length; i++) {
-              value = labels[i].getTime();
-              if (value < minTime) {
-                minTime = value;
-              }
-              if (value > maxTime) {
-                maxTime = value;
-              }
-            }
-
-            var timeDiff = (maxTime - minTime) / (86400 * 1000.0);
-
-            if (!options.scales.xAxes[0].time.unit) {
-              var step;
-              if (year || timeDiff > 365 * 10) {
-                options.scales.xAxes[0].time.unit = "year";
-                step = 365;
-              } else if (month || timeDiff > 30 * 10) {
-                options.scales.xAxes[0].time.unit = "month";
-                step = 30;
-              } else if (day || timeDiff > 10) {
-                options.scales.xAxes[0].time.unit = "day";
-                step = 1;
-              } else if (hour || timeDiff > 0.5) {
-                options.scales.xAxes[0].time.displayFormats = {hour: "MMM D, h a"};
-                options.scales.xAxes[0].time.unit = "hour";
-                step = 1 / 24.0;
-              } else if (minute) {
-                options.scales.xAxes[0].time.displayFormats = {minute: "h:mm a"};
-                options.scales.xAxes[0].time.unit = "minute";
-                step = 1 / 24.0 / 60.0;
-              }
-
-              if (step && timeDiff > 0) {
-                var unitStepSize = Math.ceil(timeDiff / step / (chart.element.offsetWidth / 100.0));
-                if (week && step === 1) {
-                  unitStepSize = Math.ceil(unitStepSize / 7.0) * 7;
-                }
-                options.scales.xAxes[0].time.unitStepSize = unitStepSize;
-              }
-            }
-
-            if (!options.scales.xAxes[0].time.tooltipFormat) {
-              if (day) {
-                options.scales.xAxes[0].time.tooltipFormat = "ll";
-              } else if (hour) {
-                options.scales.xAxes[0].time.tooltipFormat = "MMM D, h a";
-              } else if (minute) {
-                options.scales.xAxes[0].time.tooltipFormat = "h:mm a";
-              }
-            }
-          }
-
-          var data = {
-            labels: labels,
-            datasets: datasets
-          };
-
-          return data;
-        };
-
-        this.renderLineChart = function (chart, chartType) {
-          if (chart.options.xtype === "number") {
-            return self.renderScatterChart(chart, chartType, true);
-          }
-
-          var chartOptions = {};
-          if (chartType === "area") {
-            // TODO fix area stacked
-            // chartOptions.stacked = true;
-          }
-          // fix for https://github.com/chartjs/Chart.js/issues/2441
-          if (!chart.options.max && allZeros(chart.data)) {
-            chartOptions.max = 1;
-          }
-
-          var options = jsOptions(chart, merge(chartOptions, chart.options));
-
-          var data = createDataTable(chart, options, chartType || "line");
-
-          options.scales.xAxes[0].type = chart.discrete ? "category" : "time";
-
-          drawChart(chart, "line", data, options);
-        };
-
-        this.renderPieChart = function (chart) {
-          var options = merge({}, baseOptions);
-          if (chart.options.donut) {
-            options.cutoutPercentage = 50;
-          }
-
-          if ("legend" in chart.options) {
-            hideLegend(options, chart.options.legend);
-          }
-
-          if (chart.options.title) {
-            setTitle(options, chart.options.title);
-          }
-
-          options = merge(options, chart.options.library || {});
-
-          var labels = [];
-          var values = [];
-          for (var i = 0; i < chart.data.length; i++) {
-            var point = chart.data[i];
-            labels.push(point[0]);
-            values.push(point[1]);
-          }
-
-          var data = {
-            labels: labels,
-            datasets: [
-              {
-                data: values,
-                backgroundColor: chart.options.colors || defaultColors
-              }
-            ]
-          };
-
-          drawChart(chart, "pie", data, options);
-        };
-
-        this.renderColumnChart = function (chart, chartType) {
-          var options;
-          if (chartType === "bar") {
-            options = jsOptionsFunc(merge(baseOptions, defaultOptions), hideLegend, setTitle, setBarMin, setBarMax, setStacked, setXtitle, setYtitle)(chart, chart.options);
-          } else {
-            options = jsOptions(chart, chart.options);
-          }
-          var data = createDataTable(chart, options, "column");
-          setLabelSize(chart, data, options);
-          drawChart(chart, (chartType === "bar" ? "horizontalBar" : "bar"), data, options);
-        };
-
-        var self = this;
-
-        this.renderAreaChart = function (chart) {
-          self.renderLineChart(chart, "area");
-        };
-
-        this.renderBarChart = function (chart) {
-          self.renderColumnChart(chart, "bar");
-        };
-
-        this.renderScatterChart = function (chart, chartType, lineChart) {
-          chartType = chartType || "line";
-
-          var options = jsOptions(chart, chart.options);
-
-          var colors = chart.options.colors || defaultColors;
-
-          var datasets = [];
-          var series = chart.data;
-          for (var i = 0; i < series.length; i++) {
-            var s = series[i];
-            var d = [];
-            for (var j = 0; j < s.data.length; j++) {
-              var point = {
-                x: toFloat(s.data[j][0]),
-                y: toFloat(s.data[j][1])
-              };
-              if (chartType === "bubble") {
-                point.r = toFloat(s.data[j][2]);
-              }
-              d.push(point);
-            }
-
-            var color = s.color || colors[i];
-            var backgroundColor = chartType === "area" ? addOpacity(color, 0.5) : color;
-
-            datasets.push({
-              label: s.name,
-              showLine: lineChart || false,
-              data: d,
-              borderColor: color,
-              backgroundColor: backgroundColor,
-              pointBackgroundColor: color,
-              fill: chartType === "area"
-            })
-          }
-
-          if (chartType === "area") {
-            chartType = "line";
-          }
-
-          var data = {datasets: datasets};
-
-          options.scales.xAxes[0].type = "linear";
-          options.scales.xAxes[0].position = "bottom";
-
-          drawChart(chart, chartType, data, options);
-        };
-
-        this.renderBubbleChart = function (chart) {
-          this.renderScatterChart(chart, "bubble");
-        };
-      };
-
-      adapters.unshift(ChartjsAdapter);
+    if (window.google && (window.google.setOnLoadCallback || window.google.charts)) {
+      addAdapter(window.google);
+    }
+  }
+
+  function dataEmpty(data, chartType) {
+    if (chartType === "PieChart" || chartType === "GeoChart" || chartType === "Timeline") {
+      return data.length === 0;
+    } else {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].data.length > 0) {
+          return false;
+        }
+      }
+      return true;
     }
   }
 
   function renderChart(chartType, chart) {
-    callAdapter(chartType, chart);
-    if (chart.options.download && !chart.downloadAttached && chart.adapter === "chartjs") {
-      addDownloadButton(chart);
+    if (chart.options.messages && chart.options.messages.empty && dataEmpty(chart.data, chartType)) {
+      setText(chart.element, chart.options.messages.empty);
+    } else {
+      callAdapter(chartType, chart);
+      if (chart.options.download && !chart.__downloadAttached && chart.adapter === "chartjs") {
+        addDownloadButton(chart);
+      }
     }
   }
 
@@ -66639,10 +66872,16 @@ jQuery(document).on('ready page:load', function() {
       adapter = adapters[i];
       if ((!adapterName || adapterName === adapter.name) && isFunction(adapter[fnName])) {
         chart.adapter = adapter.name;
+        chart.__adapterObject = adapter;
         return adapter[fnName](chart);
       }
     }
-    throw new Error("No adapter found");
+
+    if (adapters.length > 0) {
+      throw new Error("No charting library found for " + chartType);
+    } else {
+      throw new Error("No charting libraries found - be sure to include one before your charts");
+    }
   }
 
   // process data
@@ -66676,47 +66915,6 @@ jQuery(document).on('ready page:load', function() {
     return r;
   };
 
-  function isMinute(d) {
-    return d.getMilliseconds() === 0 && d.getSeconds() === 0;
-  }
-
-  function isHour(d) {
-    return isMinute(d) && d.getMinutes() === 0;
-  }
-
-  function isDay(d) {
-    return isHour(d) && d.getHours() === 0;
-  }
-
-  function isWeek(d, dayOfWeek) {
-    return isDay(d) && d.getDay() === dayOfWeek;
-  }
-
-  function isMonth(d) {
-    return isDay(d) && d.getDate() === 1;
-  }
-
-  function isYear(d) {
-    return isMonth(d) && d.getMonth() === 0;
-  }
-
-  function isDate(obj) {
-    return !isNaN(toDate(obj)) && toStr(obj).length >= 6;
-  }
-
-  function allZeros(data) {
-    var i, j, d;
-    for (i = 0; i < data.length; i++) {
-      d = data[i].data;
-      for (j = 0; j < d.length; j++) {
-        if (d[j][1] != 0) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   function detectDiscrete(series) {
     var i, j, data;
     for (i = 0; i < series.length; i++) {
@@ -66735,13 +66933,13 @@ jQuery(document).on('ready page:load', function() {
   function copySeries(series) {
     var newSeries = [], i, j;
     for (i = 0; i < series.length; i++) {
-      var copy = {}
+      var copy = {};
       for (j in series[i]) {
         if (series[i].hasOwnProperty(j)) {
           copy[j] = series[i][j];
         }
       }
-      newSeries.push(copy)
+      newSeries.push(copy);
     }
     return newSeries;
   }
@@ -66788,41 +66986,9 @@ jQuery(document).on('ready page:load', function() {
     return perfectData;
   }
 
-  function processTime(chart)
-  {
-    var i, data = chart.rawData;
-    for (i = 0; i < data.length; i++) {
-      data[i][1] = toDate(data[i][1]);
-      data[i][2] = toDate(data[i][2]);
-    }
-    return data;
-  }
+  // define classes
 
-  function processLineData(chart) {
-    return processSeries(chart, "datetime");
-  }
-
-  function processColumnData(chart) {
-    return processSeries(chart, "string");
-  }
-
-  function processBarData(chart) {
-    return processSeries(chart, "string");
-  }
-
-  function processAreaData(chart) {
-    return processSeries(chart, "datetime");
-  }
-
-  function processScatterData(chart) {
-    return processSeries(chart, "number");
-  }
-
-  function processBubbleData(chart) {
-    return processSeries(chart, "bubble");
-  }
-
-  function createChart(chartType, chart, element, dataSource, opts, processData) {
+  var Chart = function Chart(element, dataSource, options) {
     var elementId;
     if (typeof element === "string") {
       elementId = element;
@@ -66831,120 +66997,327 @@ jQuery(document).on('ready page:load', function() {
         throw new Error("No element with id " + elementId);
       }
     }
+    this.element = element;
+    this.options = merge(Chartkick.options, options || {});
+    this.dataSource = dataSource;
 
-    chart.element = element;
-    opts = merge(Chartkick.options, opts || {});
-    chart.options = opts;
-    chart.dataSource = dataSource;
+    Chartkick.charts[element.id] = this;
 
-    if (!processData) {
-      processData = function (chart) {
-        return chart.rawData;
-      }
+    fetchDataSource(this, dataSource);
+
+    if (this.options.refresh) {
+      this.startRefresh();
     }
+  };
 
-    // getters
-    chart.getElement = function () {
-      return element;
-    };
-    chart.getDataSource = function () {
-      return chart.dataSource;
-    };
-    chart.getData = function () {
-      return chart.data;
-    };
-    chart.getOptions = function () {
-      return chart.options;
-    };
-    chart.getChartObject = function () {
-      return chart.chart;
-    };
-    chart.getAdapter = function () {
-      return chart.adapter;
-    };
+  Chart.prototype.getElement = function getElement () {
+    return this.element;
+  };
 
-    var callback = function () {
-      chart.data = processData(chart);
-      renderChart(chartType, chart);
-    };
+  Chart.prototype.getDataSource = function getDataSource () {
+    return this.dataSource;
+  };
 
-    // functions
-    chart.updateData = function (dataSource, options) {
-      chart.dataSource = dataSource;
-      if (options) {
-        chart.options = merge(Chartkick.options, options);
-      }
-      fetchDataSource(chart, callback, dataSource);
-    };
-    chart.setOptions = function (options) {
-      chart.options = merge(Chartkick.options, options);
-      chart.redraw();
-    };
-    chart.redraw = function() {
-      fetchDataSource(chart, callback, chart.rawData);
-    };
-    chart.refreshData = function () {
-      if (typeof chart.dataSource === "string") {
-        // prevent browser from caching
-        var sep = chart.dataSource.indexOf("?") === -1 ? "?" : "&";
-        var url = chart.dataSource + sep + "_=" + (new Date()).getTime();
-        fetchDataSource(chart, callback, url);
-      }
-    };
-    chart.stopRefresh = function () {
-      if (chart.intervalId) {
-        clearInterval(chart.intervalId);
-      }
-    };
-    chart.toImage = function () {
-      if (chart.adapter === "chartjs") {
-        return chart.chart.toBase64Image();
+  Chart.prototype.getData = function getData () {
+    return this.data;
+  };
+
+  Chart.prototype.getOptions = function getOptions () {
+    return this.options;
+  };
+
+  Chart.prototype.getChartObject = function getChartObject () {
+    return this.chart;
+  };
+
+  Chart.prototype.getAdapter = function getAdapter () {
+    return this.adapter;
+  };
+
+  Chart.prototype.updateData = function updateData (dataSource, options) {
+    this.dataSource = dataSource;
+    if (options) {
+      this.__updateOptions(options);
+    }
+    fetchDataSource(this, dataSource);
+  };
+
+  Chart.prototype.setOptions = function setOptions (options) {
+    this.__updateOptions(options);
+    this.redraw();
+  };
+
+  Chart.prototype.redraw = function redraw () {
+    fetchDataSource(this, this.rawData);
+  };
+
+  Chart.prototype.refreshData = function refreshData () {
+    if (typeof this.dataSource === "string") {
+      // prevent browser from caching
+      var sep = this.dataSource.indexOf("?") === -1 ? "?" : "&";
+      var url = this.dataSource + sep + "_=" + (new Date()).getTime();
+      fetchDataSource(this, url);
+    }
+  };
+
+  Chart.prototype.startRefresh = function startRefresh () {
+      var this$1 = this;
+
+    var refresh = this.options.refresh;
+
+    if (!this.intervalId) {
+      if (refresh) {
+        this.intervalId = setInterval( function () {
+          this$1.refreshData();
+        }, refresh * 1000);
       } else {
-        return null;
+        throw new Error("No refresh interval");
       }
     }
+  };
 
-    Chartkick.charts[element.id] = chart;
-
-    fetchDataSource(chart, callback, dataSource);
-
-    if (opts.refresh) {
-      chart.intervalId = setInterval( function () {
-        chart.refreshData();
-      }, opts.refresh * 1000);
+  Chart.prototype.stopRefresh = function stopRefresh () {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     }
-  }
+  };
 
-  // define classes
+  Chart.prototype.toImage = function toImage () {
+    if (this.adapter === "chartjs") {
+      return this.chart.toBase64Image();
+    } else {
+      return null;
+    }
+  };
 
-  Chartkick = {
-    LineChart: function (element, dataSource, options) {
-      createChart("LineChart", this, element, dataSource, options, processLineData);
-    },
-    PieChart: function (element, dataSource, options) {
-      createChart("PieChart", this, element, dataSource, options, processSimple);
-    },
-    ColumnChart: function (element, dataSource, options) {
-      createChart("ColumnChart", this, element, dataSource, options, processColumnData);
-    },
-    BarChart: function (element, dataSource, options) {
-      createChart("BarChart", this, element, dataSource, options, processBarData);
-    },
-    AreaChart: function (element, dataSource, options) {
-      createChart("AreaChart", this, element, dataSource, options, processAreaData);
-    },
-    GeoChart: function (element, dataSource, options) {
-      createChart("GeoChart", this, element, dataSource, options, processSimple);
-    },
-    ScatterChart: function (element, dataSource, options) {
-      createChart("ScatterChart", this, element, dataSource, options, processScatterData);
-    },
-    BubbleChart: function (element, dataSource, options) {
-      createChart("BubbleChart", this, element, dataSource, options, processBubbleData);
-    },
-    Timeline: function (element, dataSource, options) {
-      createChart("Timeline", this, element, dataSource, options, processTime);
-    },
+  Chart.prototype.destroy = function destroy () {
+    if (this.__adapterObject) {
+      this.__adapterObject.destroy(this);
+    }
+
+    if (this.__enterEvent) {
+      removeEvent(this.element, "mouseover", this.__enterEvent);
+    }
+
+    if (this.__leaveEvent) {
+      removeEvent(this.element, "mouseout", this.__leaveEvent);
+    }
+  };
+
+  Chart.prototype.__updateOptions = function __updateOptions (options) {
+    var updateRefresh = options.refresh && options.refresh !== this.options.refresh;
+    this.options = merge(Chartkick.options, options);
+    if (updateRefresh) {
+      this.stopRefresh();
+      this.startRefresh();
+    }
+  };
+
+  Chart.prototype.__render = function __render () {
+    this.data = this.__processData();
+    renderChart(this.__chartName(), this);
+  };
+
+  Chart.prototype.__config = function __config () {
+    return config;
+  };
+
+  var LineChart = (function (Chart) {
+    function LineChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) LineChart.__proto__ = Chart;
+    LineChart.prototype = Object.create( Chart && Chart.prototype );
+    LineChart.prototype.constructor = LineChart;
+
+    LineChart.prototype.__processData = function __processData () {
+      return processSeries(this, "datetime");
+    };
+
+    LineChart.prototype.__chartName = function __chartName () {
+      return "LineChart";
+    };
+
+    return LineChart;
+  }(Chart));
+
+  var PieChart = (function (Chart) {
+    function PieChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) PieChart.__proto__ = Chart;
+    PieChart.prototype = Object.create( Chart && Chart.prototype );
+    PieChart.prototype.constructor = PieChart;
+
+    PieChart.prototype.__processData = function __processData () {
+      return processSimple(this);
+    };
+
+    PieChart.prototype.__chartName = function __chartName () {
+      return "PieChart";
+    };
+
+    return PieChart;
+  }(Chart));
+
+  var ColumnChart = (function (Chart) {
+    function ColumnChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) ColumnChart.__proto__ = Chart;
+    ColumnChart.prototype = Object.create( Chart && Chart.prototype );
+    ColumnChart.prototype.constructor = ColumnChart;
+
+    ColumnChart.prototype.__processData = function __processData () {
+      return processSeries(this, "string");
+    };
+
+    ColumnChart.prototype.__chartName = function __chartName () {
+      return "ColumnChart";
+    };
+
+    return ColumnChart;
+  }(Chart));
+
+  var BarChart = (function (Chart) {
+    function BarChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) BarChart.__proto__ = Chart;
+    BarChart.prototype = Object.create( Chart && Chart.prototype );
+    BarChart.prototype.constructor = BarChart;
+
+    BarChart.prototype.__processData = function __processData () {
+      return processSeries(this, "string");
+    };
+
+    BarChart.prototype.__chartName = function __chartName () {
+      return "BarChart";
+    };
+
+    return BarChart;
+  }(Chart));
+
+  var AreaChart = (function (Chart) {
+    function AreaChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) AreaChart.__proto__ = Chart;
+    AreaChart.prototype = Object.create( Chart && Chart.prototype );
+    AreaChart.prototype.constructor = AreaChart;
+
+    AreaChart.prototype.__processData = function __processData () {
+      return processSeries(this, "datetime");
+    };
+
+    AreaChart.prototype.__chartName = function __chartName () {
+      return "AreaChart";
+    };
+
+    return AreaChart;
+  }(Chart));
+
+  var GeoChart = (function (Chart) {
+    function GeoChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) GeoChart.__proto__ = Chart;
+    GeoChart.prototype = Object.create( Chart && Chart.prototype );
+    GeoChart.prototype.constructor = GeoChart;
+
+    GeoChart.prototype.__processData = function __processData () {
+      return processSimple(this);
+    };
+
+    GeoChart.prototype.__chartName = function __chartName () {
+      return "GeoChart";
+    };
+
+    return GeoChart;
+  }(Chart));
+
+  var ScatterChart = (function (Chart) {
+    function ScatterChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) ScatterChart.__proto__ = Chart;
+    ScatterChart.prototype = Object.create( Chart && Chart.prototype );
+    ScatterChart.prototype.constructor = ScatterChart;
+
+    ScatterChart.prototype.__processData = function __processData () {
+      return processSeries(this, "number");
+    };
+
+    ScatterChart.prototype.__chartName = function __chartName () {
+      return "ScatterChart";
+    };
+
+    return ScatterChart;
+  }(Chart));
+
+  var BubbleChart = (function (Chart) {
+    function BubbleChart () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) BubbleChart.__proto__ = Chart;
+    BubbleChart.prototype = Object.create( Chart && Chart.prototype );
+    BubbleChart.prototype.constructor = BubbleChart;
+
+    BubbleChart.prototype.__processData = function __processData () {
+      return processSeries(this, "bubble");
+    };
+
+    BubbleChart.prototype.__chartName = function __chartName () {
+      return "BubbleChart";
+    };
+
+    return BubbleChart;
+  }(Chart));
+
+  var Timeline = (function (Chart) {
+    function Timeline () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) Timeline.__proto__ = Chart;
+    Timeline.prototype = Object.create( Chart && Chart.prototype );
+    Timeline.prototype.constructor = Timeline;
+
+    Timeline.prototype.__processData = function __processData () {
+      var i, data = this.rawData;
+      for (i = 0; i < data.length; i++) {
+        data[i][1] = toDate(data[i][1]);
+        data[i][2] = toDate(data[i][2]);
+      }
+      return data;
+    };
+
+    Timeline.prototype.__chartName = function __chartName () {
+      return "Timeline";
+    };
+
+    return Timeline;
+  }(Chart));
+
+  var Chartkick = {
+    LineChart: LineChart,
+    PieChart: PieChart,
+    ColumnChart: ColumnChart,
+    BarChart: BarChart,
+    AreaChart: AreaChart,
+    GeoChart: GeoChart,
+    ScatterChart: ScatterChart,
+    BubbleChart: BubbleChart,
+    Timeline: Timeline,
     charts: {},
     configure: function (options) {
       for (var key in options) {
@@ -66960,17 +67333,15 @@ jQuery(document).on('ready page:load', function() {
         }
       }
     },
+    config: config,
     options: {},
     adapters: adapters,
-    createChart: createChart
+    addAdapter: addAdapter
   };
 
-  if (typeof module === "object" && typeof module.exports === "object") {
-    module.exports = Chartkick;
-  } else {
-    window.Chartkick = Chartkick;
-  }
-}(window));
+  return Chartkick;
+
+})));
 /*
 Turbolinks 5.1.0
 Copyright © 2018 Basecamp, LLC
@@ -67117,6 +67488,102 @@ return this.lastRenderedLocation=this.location,this.notifyApplicationAfterPageLo
 })(jQuery);
 
 
+$(document).on('turbolinks:load', function() {
+  window.setTimeout(function() {
+      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+          $(this).remove();
+      });
+  }, 2000);
+
+  $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
+
+  $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+
+  var sidebar = document.getElementById('custom-sidebar');
+  var page_header = document.getElementById('page-header');
+  // Se cambia el color de la sombra del menú lateral
+  if( $(".active").is("#pedidos-li") ) {
+    sidebar.style.boxShadow = "8px 0 3px 5px #59457c";
+    page_header.style.background = "#59457c";
+    page_header.style.borderColor = "#59457c";
+  }else if ( $(".active").is("#stock-li") ) {
+    sidebar.style.boxShadow = "8px 0 3px 5px #10675f";
+    page_header.style.background = "#10675f";
+    page_header.style.borderColor = "#10675f";
+  }else if ( $(".active").is("#usuarios-li") ){
+    sidebar.style.boxShadow = "8px 0 3px 5px #89726a";
+    page_header.style.background = "#89726a";
+    page_header.style.borderColor = "#89726a";
+  }else {
+    sidebar.style.boxShadow = "8px 0 3px 5px #7c9ed4";
+    page_header.style.background = "#7c9ed4";
+    page_header.style.borderColor = "#7c9ed4";
+  }
+
+  $("#pedidos").on("hide.bs.collapse", function(){
+    $("#pedidos-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Pedidos</strong>');
+  });
+  $("#pedidos").on("show.bs.collapse", function(){
+    $("#pedidos-label").html('<span class="glyphicon glyphicon-list-alt"></span> <strong>Pedidos</strong>');
+  });
+
+  $("#stock").on("hide.bs.collapse", function(){
+    $("#stock-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Stock</strong>');
+  });
+  $("#stock").on("show.bs.collapse", function(){
+    $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Stock</strong>');
+  });
+
+  $("#usuarios").on("hide.bs.collapse", function(){
+    $("#usuarios-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Usuarios</strong>');
+  });
+  $("#usuarios").on("show.bs.collapse", function(){
+    $("#usuarios-label").html('<span class="glyphicon glyphicon-user"></span> <strong>Usuarios</strong>');
+  });
+
+  $('#dialog').on('shown.bs.modal', function(e) {
+  var idNum, medications;
+  // Id del form anidado para quantity_medications
+  medications = $('#quantity-medications');
+  // Métodos para conocer la cantitdad de forms anidados
+  idNum = function() {
+    return medications.find('.nested-fields').size();
+  };
+  medications.on('cocoon:before-insert', function(e, el_to_add) {
+    return el_to_add.fadeIn(200); // Efecto para el insert
+  });
+  medications.on('cocoon:after-insert', function(e, added_el) {
+    var i, j, ref, results, selectedValue, x;
+    // Se coloca el id de los campos anidados
+    added_el.find('select').attr("id", "chosen-medication-" + idNum());
+    added_el.find('input.form-control.numeric').attr("id", "quantity-medication-" + idNum());
+    results = [];
+    for (i = j = 1, ref = idNum(); (1 <= ref ? j <= ref : j >= ref); i = 1 <= ref ? ++j : --j) {
+      selectedValue = $("#chosen-medication-" + i + " option:selected").val();
+      results.push((function() {
+        var k, ref1, results1;
+        results1 = [];
+        for (x = k = 1, ref1 = idNum(); (1 <= ref1 ? k <= ref1 : k >= ref1); x = 1 <= ref1 ? ++k : --k) {
+          if (x !== i) {
+            $("#chosen-medication-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
+            results1.push($("#chosen-medication-" + x).trigger("chosen:updated"));
+          } else {
+            results1.push(void 0);
+          }
+        }
+        return results1;
+      })());
+    }
+    return results;
+  });
+  medications.on('cocoon:before-remove', function(e, el_to_remove) {
+    $(this).data('remove-timeout', 200); // Efecto para remover
+    return el_to_remove.fadeOut(200);
+  });
+  return medications.on('cocoon:after-remove', function(e, removed_el) {});
+});
+
+});
 (function() {
   var context = this;
 
@@ -67732,6 +68199,10 @@ return this.lastRenderedLocation=this.location,this.notifyApplicationAfterPageLo
 
 }).call(this);
 (function() {
+
+
+}).call(this);
+(function() {
   $(function() {
     $.rails.allowAction = function(link) {
       if (!link.attr('data-confirm')) {
@@ -67753,49 +68224,6 @@ return this.lastRenderedLocation=this.location,this.notifyApplicationAfterPageLo
         return $.rails.confirmed(link);
       });
     };
-  });
-
-}).call(this);
-(function() {
-  $(document).on("turbolinks:load", function() {
-    return $('#dialog').on('shown.bs.modal', function(e) {
-      var idNum, medications;
-      medications = $('#quantity-medications');
-      idNum = function() {
-        return medications.find('.nested-fields').size();
-      };
-      medications.on('cocoon:before-insert', function(e, el_to_add) {
-        return el_to_add.fadeIn(200);
-      });
-      medications.on('cocoon:after-insert', function(e, added_el) {
-        var i, j, ref, results, selectedValue, x;
-        added_el.find('select').attr("id", "chosen-medication-" + idNum());
-        added_el.find('input.form-control.numeric').attr("id", "quantity-medication-" + idNum());
-        results = [];
-        for (i = j = 1, ref = idNum(); 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-          selectedValue = $("#chosen-medication-" + i + " option:selected").val();
-          results.push((function() {
-            var k, ref1, results1;
-            results1 = [];
-            for (x = k = 1, ref1 = idNum(); 1 <= ref1 ? k <= ref1 : k >= ref1; x = 1 <= ref1 ? ++k : --k) {
-              if (x !== i) {
-                $("#chosen-medication-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
-                results1.push($("#chosen-medication-" + x).trigger("chosen:updated"));
-              } else {
-                results1.push(void 0);
-              }
-            }
-            return results1;
-          })());
-        }
-        return results;
-      });
-      medications.on('cocoon:before-remove', function(e, el_to_remove) {
-        $(this).data('remove-timeout', 200);
-        return el_to_remove.fadeOut(200);
-      });
-      return medications.on('cocoon:after-remove', function(e, removed_el) {});
-    });
   });
 
 }).call(this);
@@ -67888,7 +68316,7 @@ return this.lastRenderedLocation=this.location,this.notifyApplicationAfterPageLo
 
 }).call(this);
 //! moment.js
-//! version : 2.17.1
+//! version : 2.20.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -67922,12 +68350,21 @@ function isObject(input) {
 }
 
 function isObjectEmpty(obj) {
-    var k;
-    for (k in obj) {
-        // even if its not own property I'd still call it non-empty
-        return false;
+    if (Object.getOwnPropertyNames) {
+        return (Object.getOwnPropertyNames(obj).length === 0);
+    } else {
+        var k;
+        for (k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
+}
+
+function isUndefined(input) {
+    return input === void 0;
 }
 
 function isNumber(input) {
@@ -67986,7 +68423,9 @@ function defaultParsingFlags() {
         userInvalidated : false,
         iso             : false,
         parsedDateParts : [],
-        meridiem        : null
+        meridiem        : null,
+        rfc2822         : false,
+        weekdayMismatch : false
     };
 }
 
@@ -68015,12 +68454,10 @@ if (Array.prototype.some) {
     };
 }
 
-var some$1 = some;
-
 function isValid(m) {
     if (m._isValid == null) {
         var flags = getParsingFlags(m);
-        var parsedParts = some$1.call(flags.parsedDateParts, function (i) {
+        var parsedParts = some.call(flags.parsedDateParts, function (i) {
             return i != null;
         });
         var isNowValid = !isNaN(m._d.getTime()) &&
@@ -68028,6 +68465,7 @@ function isValid(m) {
             !flags.empty &&
             !flags.invalidMonth &&
             !flags.invalidWeekday &&
+            !flags.weekdayMismatch &&
             !flags.nullInput &&
             !flags.invalidFormat &&
             !flags.userInvalidated &&
@@ -68060,10 +68498,6 @@ function createInvalid (flags) {
     }
 
     return m;
-}
-
-function isUndefined(input) {
-    return input === void 0;
 }
 
 // Plugins that add properties should also add the key here (null value),
@@ -68105,7 +68539,7 @@ function copyConfig(to, from) {
     }
 
     if (momentProperties.length > 0) {
-        for (i in momentProperties) {
+        for (i = 0; i < momentProperties.length; i++) {
             prop = momentProperties[i];
             val = from[prop];
             if (!isUndefined(val)) {
@@ -68242,8 +68676,11 @@ function set (config) {
     }
     this._config = config;
     // Lenient ordinal parsing accepts just a number in addition to
-    // number + (possibly) stuff coming from _ordinalParseLenient.
-    this._ordinalParseLenient = new RegExp(this._ordinalParse.source + '|' + (/\d{1,2}/).source);
+    // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
+    // TODO: Remove "ordinalParse" fallback in next major release.
+    this._dayOfMonthOrdinalParseLenient = new RegExp(
+        (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
+            '|' + (/\d{1,2}/).source);
 }
 
 function mergeConfigs(parentConfig, childConfig) {
@@ -68294,8 +68731,6 @@ if (Object.keys) {
     };
 }
 
-var keys$1 = keys;
-
 var defaultCalendar = {
     sameDay : '[Today at] LT',
     nextDay : '[Tomorrow at] LT',
@@ -68341,7 +68776,7 @@ function invalidDate () {
 }
 
 var defaultOrdinal = '%d';
-var defaultOrdinalParse = /\d{1,2}/;
+var defaultDayOfMonthOrdinalParse = /\d{1,2}/;
 
 function ordinal (number) {
     return this._ordinal.replace('%d', number);
@@ -68351,6 +68786,7 @@ var defaultRelativeTime = {
     future : 'in %s',
     past   : '%s ago',
     s  : 'a few seconds',
+    ss : '%d seconds',
     m  : 'a minute',
     mm : '%d minutes',
     h  : 'an hour',
@@ -68420,56 +68856,6 @@ function getPrioritizedUnits(unitsObj) {
     return units;
 }
 
-function makeGetSet (unit, keepTime) {
-    return function (value) {
-        if (value != null) {
-            set$1(this, unit, value);
-            hooks.updateOffset(this, keepTime);
-            return this;
-        } else {
-            return get(this, unit);
-        }
-    };
-}
-
-function get (mom, unit) {
-    return mom.isValid() ?
-        mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
-}
-
-function set$1 (mom, unit, value) {
-    if (mom.isValid()) {
-        mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
-    }
-}
-
-// MOMENTS
-
-function stringGet (units) {
-    units = normalizeUnits(units);
-    if (isFunction(this[units])) {
-        return this[units]();
-    }
-    return this;
-}
-
-
-function stringSet (units, value) {
-    if (typeof units === 'object') {
-        units = normalizeObjectUnits(units);
-        var prioritized = getPrioritizedUnits(units);
-        for (var i = 0; i < prioritized.length; i++) {
-            this[prioritized[i].unit](units[prioritized[i].unit]);
-        }
-    } else {
-        units = normalizeUnits(units);
-        if (isFunction(this[units])) {
-            return this[units](value);
-        }
-    }
-    return this;
-}
-
 function zeroFill(number, targetLength, forceSign) {
     var absNumber = '' + Math.abs(number),
         zerosToFill = targetLength - absNumber.length,
@@ -68533,7 +68919,7 @@ function makeFormatFunction(format) {
     return function (mom) {
         var output = '', i;
         for (i = 0; i < length; i++) {
-            output += array[i] instanceof Function ? array[i].call(mom, format) : array[i];
+            output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
         }
         return output;
     };
@@ -68590,7 +68976,7 @@ var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 
 // any word (or two) characters or numbers including two/three word month in arabic.
 // includes scottish gaelic two word and hyphenated months
-var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
 
 
 var regexes = {};
@@ -68660,6 +69046,131 @@ var MILLISECOND = 6;
 var WEEK = 7;
 var WEEKDAY = 8;
 
+// FORMATTING
+
+addFormatToken('Y', 0, 0, function () {
+    var y = this.year();
+    return y <= 9999 ? '' + y : '+' + y;
+});
+
+addFormatToken(0, ['YY', 2], 0, function () {
+    return this.year() % 100;
+});
+
+addFormatToken(0, ['YYYY',   4],       0, 'year');
+addFormatToken(0, ['YYYYY',  5],       0, 'year');
+addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
+
+// ALIASES
+
+addUnitAlias('year', 'y');
+
+// PRIORITIES
+
+addUnitPriority('year', 1);
+
+// PARSING
+
+addRegexToken('Y',      matchSigned);
+addRegexToken('YY',     match1to2, match2);
+addRegexToken('YYYY',   match1to4, match4);
+addRegexToken('YYYYY',  match1to6, match6);
+addRegexToken('YYYYYY', match1to6, match6);
+
+addParseToken(['YYYYY', 'YYYYYY'], YEAR);
+addParseToken('YYYY', function (input, array) {
+    array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
+});
+addParseToken('YY', function (input, array) {
+    array[YEAR] = hooks.parseTwoDigitYear(input);
+});
+addParseToken('Y', function (input, array) {
+    array[YEAR] = parseInt(input, 10);
+});
+
+// HELPERS
+
+function daysInYear(year) {
+    return isLeapYear(year) ? 366 : 365;
+}
+
+function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+// HOOKS
+
+hooks.parseTwoDigitYear = function (input) {
+    return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
+};
+
+// MOMENTS
+
+var getSetYear = makeGetSet('FullYear', true);
+
+function getIsLeapYear () {
+    return isLeapYear(this.year());
+}
+
+function makeGetSet (unit, keepTime) {
+    return function (value) {
+        if (value != null) {
+            set$1(this, unit, value);
+            hooks.updateOffset(this, keepTime);
+            return this;
+        } else {
+            return get(this, unit);
+        }
+    };
+}
+
+function get (mom, unit) {
+    return mom.isValid() ?
+        mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
+}
+
+function set$1 (mom, unit, value) {
+    if (mom.isValid() && !isNaN(value)) {
+        if (unit === 'FullYear' && isLeapYear(mom.year()) && mom.month() === 1 && mom.date() === 29) {
+            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value, mom.month(), daysInMonth(value, mom.month()));
+        }
+        else {
+            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        }
+    }
+}
+
+// MOMENTS
+
+function stringGet (units) {
+    units = normalizeUnits(units);
+    if (isFunction(this[units])) {
+        return this[units]();
+    }
+    return this;
+}
+
+
+function stringSet (units, value) {
+    if (typeof units === 'object') {
+        units = normalizeObjectUnits(units);
+        var prioritized = getPrioritizedUnits(units);
+        for (var i = 0; i < prioritized.length; i++) {
+            this[prioritized[i].unit](units[prioritized[i].unit]);
+        }
+    } else {
+        units = normalizeUnits(units);
+        if (isFunction(this[units])) {
+            return this[units](value);
+        }
+    }
+    return this;
+}
+
+function mod(n, x) {
+    return ((n % x) + x) % x;
+}
+
 var indexOf;
 
 if (Array.prototype.indexOf) {
@@ -68677,10 +69188,13 @@ if (Array.prototype.indexOf) {
     };
 }
 
-var indexOf$1 = indexOf;
-
 function daysInMonth(year, month) {
-    return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+    if (isNaN(year) || isNaN(month)) {
+        return NaN;
+    }
+    var modMonth = mod(month, 12);
+    year += (month - modMonth) / 12;
+    return modMonth === 1 ? (isLeapYear(year) ? 29 : 28) : (31 - modMonth % 7 % 2);
 }
 
 // FORMATTING
@@ -68736,7 +69250,8 @@ var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
 var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
 function localeMonths (m, format) {
     if (!m) {
-        return this._months;
+        return isArray(this._months) ? this._months :
+            this._months['standalone'];
     }
     return isArray(this._months) ? this._months[m.month()] :
         this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
@@ -68745,7 +69260,8 @@ function localeMonths (m, format) {
 var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
 function localeMonthsShort (m, format) {
     if (!m) {
-        return this._monthsShort;
+        return isArray(this._monthsShort) ? this._monthsShort :
+            this._monthsShort['standalone'];
     }
     return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
         this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
@@ -68767,26 +69283,26 @@ function handleStrictParse(monthName, format, strict) {
 
     if (strict) {
         if (format === 'MMM') {
-            ii = indexOf$1.call(this._shortMonthsParse, llc);
+            ii = indexOf.call(this._shortMonthsParse, llc);
             return ii !== -1 ? ii : null;
         } else {
-            ii = indexOf$1.call(this._longMonthsParse, llc);
+            ii = indexOf.call(this._longMonthsParse, llc);
             return ii !== -1 ? ii : null;
         }
     } else {
         if (format === 'MMM') {
-            ii = indexOf$1.call(this._shortMonthsParse, llc);
+            ii = indexOf.call(this._shortMonthsParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._longMonthsParse, llc);
+            ii = indexOf.call(this._longMonthsParse, llc);
             return ii !== -1 ? ii : null;
         } else {
-            ii = indexOf$1.call(this._longMonthsParse, llc);
+            ii = indexOf.call(this._longMonthsParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._shortMonthsParse, llc);
+            ii = indexOf.call(this._shortMonthsParse, llc);
             return ii !== -1 ? ii : null;
         }
     }
@@ -68945,78 +69461,12 @@ function computeMonthsParse () {
     this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
 }
 
-// FORMATTING
-
-addFormatToken('Y', 0, 0, function () {
-    var y = this.year();
-    return y <= 9999 ? '' + y : '+' + y;
-});
-
-addFormatToken(0, ['YY', 2], 0, function () {
-    return this.year() % 100;
-});
-
-addFormatToken(0, ['YYYY',   4],       0, 'year');
-addFormatToken(0, ['YYYYY',  5],       0, 'year');
-addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
-
-// ALIASES
-
-addUnitAlias('year', 'y');
-
-// PRIORITIES
-
-addUnitPriority('year', 1);
-
-// PARSING
-
-addRegexToken('Y',      matchSigned);
-addRegexToken('YY',     match1to2, match2);
-addRegexToken('YYYY',   match1to4, match4);
-addRegexToken('YYYYY',  match1to6, match6);
-addRegexToken('YYYYYY', match1to6, match6);
-
-addParseToken(['YYYYY', 'YYYYYY'], YEAR);
-addParseToken('YYYY', function (input, array) {
-    array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
-});
-addParseToken('YY', function (input, array) {
-    array[YEAR] = hooks.parseTwoDigitYear(input);
-});
-addParseToken('Y', function (input, array) {
-    array[YEAR] = parseInt(input, 10);
-});
-
-// HELPERS
-
-function daysInYear(year) {
-    return isLeapYear(year) ? 366 : 365;
-}
-
-function isLeapYear(year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
-
-// HOOKS
-
-hooks.parseTwoDigitYear = function (input) {
-    return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
-};
-
-// MOMENTS
-
-var getSetYear = makeGetSet('FullYear', true);
-
-function getIsLeapYear () {
-    return isLeapYear(this.year());
-}
-
 function createDate (y, m, d, h, M, s, ms) {
-    //can't just apply() to create a date:
-    //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
+    // can't just apply() to create a date:
+    // https://stackoverflow.com/q/181348
     var date = new Date(y, m, d, h, M, s, ms);
 
-    //the date constructor remaps years 0-99 to 1900-1999
+    // the date constructor remaps years 0-99 to 1900-1999
     if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
         date.setFullYear(y);
     }
@@ -69026,7 +69476,7 @@ function createDate (y, m, d, h, M, s, ms) {
 function createUTCDate (y) {
     var date = new Date(Date.UTC.apply(null, arguments));
 
-    //the Date.UTC function remaps years 0-99 to 1900-1999
+    // the Date.UTC function remaps years 0-99 to 1900-1999
     if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
         date.setUTCFullYear(y);
     }
@@ -69043,7 +69493,7 @@ function firstWeekOffset(year, dow, doy) {
     return -fwdlw + fwd - 1;
 }
 
-//http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
+// https://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
 function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
     var localWeekday = (7 + weekday - dow) % 7,
         weekOffset = firstWeekOffset(year, dow, doy),
@@ -69244,7 +69694,8 @@ function parseIsoWeekday(input, locale) {
 var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
 function localeWeekdays (m, format) {
     if (!m) {
-        return this._weekdays;
+        return isArray(this._weekdays) ? this._weekdays :
+            this._weekdays['standalone'];
     }
     return isArray(this._weekdays) ? this._weekdays[m.day()] :
         this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
@@ -69277,48 +69728,48 @@ function handleStrictParse$1(weekdayName, format, strict) {
 
     if (strict) {
         if (format === 'dddd') {
-            ii = indexOf$1.call(this._weekdaysParse, llc);
+            ii = indexOf.call(this._weekdaysParse, llc);
             return ii !== -1 ? ii : null;
         } else if (format === 'ddd') {
-            ii = indexOf$1.call(this._shortWeekdaysParse, llc);
+            ii = indexOf.call(this._shortWeekdaysParse, llc);
             return ii !== -1 ? ii : null;
         } else {
-            ii = indexOf$1.call(this._minWeekdaysParse, llc);
+            ii = indexOf.call(this._minWeekdaysParse, llc);
             return ii !== -1 ? ii : null;
         }
     } else {
         if (format === 'dddd') {
-            ii = indexOf$1.call(this._weekdaysParse, llc);
+            ii = indexOf.call(this._weekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._shortWeekdaysParse, llc);
+            ii = indexOf.call(this._shortWeekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._minWeekdaysParse, llc);
+            ii = indexOf.call(this._minWeekdaysParse, llc);
             return ii !== -1 ? ii : null;
         } else if (format === 'ddd') {
-            ii = indexOf$1.call(this._shortWeekdaysParse, llc);
+            ii = indexOf.call(this._shortWeekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._weekdaysParse, llc);
+            ii = indexOf.call(this._weekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._minWeekdaysParse, llc);
+            ii = indexOf.call(this._minWeekdaysParse, llc);
             return ii !== -1 ? ii : null;
         } else {
-            ii = indexOf$1.call(this._minWeekdaysParse, llc);
+            ii = indexOf.call(this._minWeekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._weekdaysParse, llc);
+            ii = indexOf.call(this._weekdaysParse, llc);
             if (ii !== -1) {
                 return ii;
             }
-            ii = indexOf$1.call(this._shortWeekdaysParse, llc);
+            ii = indexOf.call(this._shortWeekdaysParse, llc);
             return ii !== -1 ? ii : null;
         }
     }
@@ -69564,8 +70015,10 @@ addRegexToken('a',  matchMeridiem);
 addRegexToken('A',  matchMeridiem);
 addRegexToken('H',  match1to2);
 addRegexToken('h',  match1to2);
+addRegexToken('k',  match1to2);
 addRegexToken('HH', match1to2, match2);
 addRegexToken('hh', match1to2, match2);
+addRegexToken('kk', match1to2, match2);
 
 addRegexToken('hmm', match3to4);
 addRegexToken('hmmss', match5to6);
@@ -69573,6 +70026,10 @@ addRegexToken('Hmm', match3to4);
 addRegexToken('Hmmss', match5to6);
 
 addParseToken(['H', 'HH'], HOUR);
+addParseToken(['k', 'kk'], function (input, array, config) {
+    var kInput = toInt(input);
+    array[HOUR] = kInput === 24 ? 0 : kInput;
+});
 addParseToken(['a', 'A'], function (input, array, config) {
     config._isPm = config._locale.isPM(input);
     config._meridiem = input;
@@ -69643,7 +70100,7 @@ var baseConfig = {
     longDateFormat: defaultLongDateFormat,
     invalidDate: defaultInvalidDate,
     ordinal: defaultOrdinal,
-    ordinalParse: defaultOrdinalParse,
+    dayOfMonthOrdinalParse: defaultDayOfMonthOrdinalParse,
     relativeTime: defaultRelativeTime,
 
     months: defaultLocaleMonths,
@@ -69701,11 +70158,10 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            require('./locale/' + name);
-            // because defineLocale currently also sets the global locale, we
-            // want to undo that for lazy loaded locales
+            var aliasedRequire = require;
+            aliasedRequire('./locale/' + name);
             getSetGlobalLocale(oldLocale);
-        } catch (e) { }
+        } catch (e) {}
     }
     return locales[name];
 }
@@ -69781,10 +70237,11 @@ function defineLocale (name, config) {
 
 function updateLocale(name, config) {
     if (config != null) {
-        var locale, parentConfig = baseConfig;
+        var locale, tmpLocale, parentConfig = baseConfig;
         // MERGE
-        if (locales[name] != null) {
-            parentConfig = locales[name]._config;
+        tmpLocale = loadLocale(name);
+        if (tmpLocale != null) {
+            parentConfig = tmpLocale._config;
         }
         config = mergeConfigs(parentConfig, config);
         locale = new Locale(config);
@@ -69831,7 +70288,7 @@ function getLocale (key) {
 }
 
 function listLocales() {
-    return keys$1(locales);
+    return keys(locales);
 }
 
 function checkOverflow (m) {
@@ -69862,6 +70319,156 @@ function checkOverflow (m) {
     }
 
     return m;
+}
+
+// Pick the first defined of two or three arguments.
+function defaults(a, b, c) {
+    if (a != null) {
+        return a;
+    }
+    if (b != null) {
+        return b;
+    }
+    return c;
+}
+
+function currentDateArray(config) {
+    // hooks is actually the exported moment object
+    var nowValue = new Date(hooks.now());
+    if (config._useUTC) {
+        return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
+    }
+    return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
+}
+
+// convert an array to a date.
+// the array should mirror the parameters below
+// note: all values past the year are optional and will default to the lowest possible value.
+// [year, month, day , hour, minute, second, millisecond]
+function configFromArray (config) {
+    var i, date, input = [], currentDate, expectedWeekday, yearToUse;
+
+    if (config._d) {
+        return;
+    }
+
+    currentDate = currentDateArray(config);
+
+    //compute day of the year from weeks and weekdays
+    if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
+        dayOfYearFromWeekInfo(config);
+    }
+
+    //if the day of the year is set, figure out what it is
+    if (config._dayOfYear != null) {
+        yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
+
+        if (config._dayOfYear > daysInYear(yearToUse) || config._dayOfYear === 0) {
+            getParsingFlags(config)._overflowDayOfYear = true;
+        }
+
+        date = createUTCDate(yearToUse, 0, config._dayOfYear);
+        config._a[MONTH] = date.getUTCMonth();
+        config._a[DATE] = date.getUTCDate();
+    }
+
+    // Default to current date.
+    // * if no year, month, day of month are given, default to today
+    // * if day of month is given, default month and year
+    // * if month is given, default only year
+    // * if year is given, don't default anything
+    for (i = 0; i < 3 && config._a[i] == null; ++i) {
+        config._a[i] = input[i] = currentDate[i];
+    }
+
+    // Zero out whatever was not defaulted, including time
+    for (; i < 7; i++) {
+        config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
+    }
+
+    // Check for 24:00:00.000
+    if (config._a[HOUR] === 24 &&
+            config._a[MINUTE] === 0 &&
+            config._a[SECOND] === 0 &&
+            config._a[MILLISECOND] === 0) {
+        config._nextDay = true;
+        config._a[HOUR] = 0;
+    }
+
+    config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
+    expectedWeekday = config._useUTC ? config._d.getUTCDay() : config._d.getDay();
+
+    // Apply timezone offset from input. The actual utcOffset can be changed
+    // with parseZone.
+    if (config._tzm != null) {
+        config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
+    }
+
+    if (config._nextDay) {
+        config._a[HOUR] = 24;
+    }
+
+    // check for mismatching day of week
+    if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== expectedWeekday) {
+        getParsingFlags(config).weekdayMismatch = true;
+    }
+}
+
+function dayOfYearFromWeekInfo(config) {
+    var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
+
+    w = config._w;
+    if (w.GG != null || w.W != null || w.E != null) {
+        dow = 1;
+        doy = 4;
+
+        // TODO: We need to take the current isoWeekYear, but that depends on
+        // how we interpret now (local, utc, fixed offset). So create
+        // a now version of current config (take local/utc/offset flags, and
+        // create now).
+        weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
+        week = defaults(w.W, 1);
+        weekday = defaults(w.E, 1);
+        if (weekday < 1 || weekday > 7) {
+            weekdayOverflow = true;
+        }
+    } else {
+        dow = config._locale._week.dow;
+        doy = config._locale._week.doy;
+
+        var curWeek = weekOfYear(createLocal(), dow, doy);
+
+        weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
+
+        // Default to current week.
+        week = defaults(w.w, curWeek.week);
+
+        if (w.d != null) {
+            // weekday -- low day numbers are considered next week
+            weekday = w.d;
+            if (weekday < 0 || weekday > 6) {
+                weekdayOverflow = true;
+            }
+        } else if (w.e != null) {
+            // local weekday -- counting starts from begining of week
+            weekday = w.e + dow;
+            if (w.e < 0 || w.e > 6) {
+                weekdayOverflow = true;
+            }
+        } else {
+            // default to begining of week
+            weekday = dow;
+        }
+    }
+    if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
+        getParsingFlags(config)._overflowWeeks = true;
+    } else if (weekdayOverflow != null) {
+        getParsingFlags(config)._overflowWeekday = true;
+    } else {
+        temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
+        config._a[YEAR] = temp.year;
+        config._dayOfYear = temp.dayOfYear;
+    }
 }
 
 // iso 8601 regex
@@ -69954,6 +70561,101 @@ function configFromISO(config) {
     }
 }
 
+// RFC 2822 regex: For details see https://tools.ietf.org/html/rfc2822#section-3.3
+var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/;
+
+function extractFromRFC2822Strings(yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr) {
+    var result = [
+        untruncateYear(yearStr),
+        defaultLocaleMonthsShort.indexOf(monthStr),
+        parseInt(dayStr, 10),
+        parseInt(hourStr, 10),
+        parseInt(minuteStr, 10)
+    ];
+
+    if (secondStr) {
+        result.push(parseInt(secondStr, 10));
+    }
+
+    return result;
+}
+
+function untruncateYear(yearStr) {
+    var year = parseInt(yearStr, 10);
+    if (year <= 49) {
+        return 2000 + year;
+    } else if (year <= 999) {
+        return 1900 + year;
+    }
+    return year;
+}
+
+function preprocessRFC2822(s) {
+    // Remove comments and folding whitespace and replace multiple-spaces with a single space
+    return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').trim();
+}
+
+function checkWeekday(weekdayStr, parsedInput, config) {
+    if (weekdayStr) {
+        // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
+        var weekdayProvided = defaultLocaleWeekdaysShort.indexOf(weekdayStr),
+            weekdayActual = new Date(parsedInput[0], parsedInput[1], parsedInput[2]).getDay();
+        if (weekdayProvided !== weekdayActual) {
+            getParsingFlags(config).weekdayMismatch = true;
+            config._isValid = false;
+            return false;
+        }
+    }
+    return true;
+}
+
+var obsOffsets = {
+    UT: 0,
+    GMT: 0,
+    EDT: -4 * 60,
+    EST: -5 * 60,
+    CDT: -5 * 60,
+    CST: -6 * 60,
+    MDT: -6 * 60,
+    MST: -7 * 60,
+    PDT: -7 * 60,
+    PST: -8 * 60
+};
+
+function calculateOffset(obsOffset, militaryOffset, numOffset) {
+    if (obsOffset) {
+        return obsOffsets[obsOffset];
+    } else if (militaryOffset) {
+        // the only allowed military tz is Z
+        return 0;
+    } else {
+        var hm = parseInt(numOffset, 10);
+        var m = hm % 100, h = (hm - m) / 100;
+        return h * 60 + m;
+    }
+}
+
+// date and time from ref 2822 format
+function configFromRFC2822(config) {
+    var match = rfc2822.exec(preprocessRFC2822(config._i));
+    if (match) {
+        var parsedArray = extractFromRFC2822Strings(match[4], match[3], match[2], match[5], match[6], match[7]);
+        if (!checkWeekday(match[1], parsedArray, config)) {
+            return;
+        }
+
+        config._a = parsedArray;
+        config._tzm = calculateOffset(match[8], match[9], match[10]);
+
+        config._d = createUTCDate.apply(null, config._a);
+        config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
+
+        getParsingFlags(config).rfc2822 = true;
+    } else {
+        config._isValid = false;
+    }
+}
+
 // date from iso format or fallback
 function configFromString(config) {
     var matched = aspNetJsonRegex.exec(config._i);
@@ -69966,13 +70668,24 @@ function configFromString(config) {
     configFromISO(config);
     if (config._isValid === false) {
         delete config._isValid;
-        hooks.createFromInputFallback(config);
+    } else {
+        return;
     }
+
+    configFromRFC2822(config);
+    if (config._isValid === false) {
+        delete config._isValid;
+    } else {
+        return;
+    }
+
+    // Final attempt, use Input Fallback
+    hooks.createFromInputFallback(config);
 }
 
 hooks.createFromInputFallback = deprecate(
-    'value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' +
-    'which is not reliable across all browsers and versions. Non ISO date formats are ' +
+    'value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' +
+    'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' +
     'discouraged and will be removed in an upcoming major release. Please refer to ' +
     'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
     function (config) {
@@ -69980,151 +70693,11 @@ hooks.createFromInputFallback = deprecate(
     }
 );
 
-// Pick the first defined of two or three arguments.
-function defaults(a, b, c) {
-    if (a != null) {
-        return a;
-    }
-    if (b != null) {
-        return b;
-    }
-    return c;
-}
-
-function currentDateArray(config) {
-    // hooks is actually the exported moment object
-    var nowValue = new Date(hooks.now());
-    if (config._useUTC) {
-        return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
-    }
-    return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
-}
-
-// convert an array to a date.
-// the array should mirror the parameters below
-// note: all values past the year are optional and will default to the lowest possible value.
-// [year, month, day , hour, minute, second, millisecond]
-function configFromArray (config) {
-    var i, date, input = [], currentDate, yearToUse;
-
-    if (config._d) {
-        return;
-    }
-
-    currentDate = currentDateArray(config);
-
-    //compute day of the year from weeks and weekdays
-    if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
-        dayOfYearFromWeekInfo(config);
-    }
-
-    //if the day of the year is set, figure out what it is
-    if (config._dayOfYear) {
-        yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
-
-        if (config._dayOfYear > daysInYear(yearToUse)) {
-            getParsingFlags(config)._overflowDayOfYear = true;
-        }
-
-        date = createUTCDate(yearToUse, 0, config._dayOfYear);
-        config._a[MONTH] = date.getUTCMonth();
-        config._a[DATE] = date.getUTCDate();
-    }
-
-    // Default to current date.
-    // * if no year, month, day of month are given, default to today
-    // * if day of month is given, default month and year
-    // * if month is given, default only year
-    // * if year is given, don't default anything
-    for (i = 0; i < 3 && config._a[i] == null; ++i) {
-        config._a[i] = input[i] = currentDate[i];
-    }
-
-    // Zero out whatever was not defaulted, including time
-    for (; i < 7; i++) {
-        config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
-    }
-
-    // Check for 24:00:00.000
-    if (config._a[HOUR] === 24 &&
-            config._a[MINUTE] === 0 &&
-            config._a[SECOND] === 0 &&
-            config._a[MILLISECOND] === 0) {
-        config._nextDay = true;
-        config._a[HOUR] = 0;
-    }
-
-    config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
-    // Apply timezone offset from input. The actual utcOffset can be changed
-    // with parseZone.
-    if (config._tzm != null) {
-        config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
-    }
-
-    if (config._nextDay) {
-        config._a[HOUR] = 24;
-    }
-}
-
-function dayOfYearFromWeekInfo(config) {
-    var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
-
-    w = config._w;
-    if (w.GG != null || w.W != null || w.E != null) {
-        dow = 1;
-        doy = 4;
-
-        // TODO: We need to take the current isoWeekYear, but that depends on
-        // how we interpret now (local, utc, fixed offset). So create
-        // a now version of current config (take local/utc/offset flags, and
-        // create now).
-        weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
-        week = defaults(w.W, 1);
-        weekday = defaults(w.E, 1);
-        if (weekday < 1 || weekday > 7) {
-            weekdayOverflow = true;
-        }
-    } else {
-        dow = config._locale._week.dow;
-        doy = config._locale._week.doy;
-
-        var curWeek = weekOfYear(createLocal(), dow, doy);
-
-        weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
-
-        // Default to current week.
-        week = defaults(w.w, curWeek.week);
-
-        if (w.d != null) {
-            // weekday -- low day numbers are considered next week
-            weekday = w.d;
-            if (weekday < 0 || weekday > 6) {
-                weekdayOverflow = true;
-            }
-        } else if (w.e != null) {
-            // local weekday -- counting starts from begining of week
-            weekday = w.e + dow;
-            if (w.e < 0 || w.e > 6) {
-                weekdayOverflow = true;
-            }
-        } else {
-            // default to begining of week
-            weekday = dow;
-        }
-    }
-    if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
-        getParsingFlags(config)._overflowWeeks = true;
-    } else if (weekdayOverflow != null) {
-        getParsingFlags(config)._overflowWeekday = true;
-    } else {
-        temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
-        config._a[YEAR] = temp.year;
-        config._dayOfYear = temp.dayOfYear;
-    }
-}
-
 // constant that refers to the ISO standard
 hooks.ISO_8601 = function () {};
+
+// constant that refers to the RFC 2822 form
+hooks.RFC_2822 = function () {};
 
 // date from string and format string
 function configFromStringAndFormat(config) {
@@ -70133,7 +70706,10 @@ function configFromStringAndFormat(config) {
         configFromISO(config);
         return;
     }
-
+    if (config._f === hooks.RFC_2822) {
+        configFromRFC2822(config);
+        return;
+    }
     config._a = [];
     getParsingFlags(config).empty = true;
 
@@ -70325,7 +70901,7 @@ function prepareConfig (config) {
 
 function configFromInput(config) {
     var input = config._i;
-    if (input === undefined) {
+    if (isUndefined(input)) {
         config._d = new Date(hooks.now());
     } else if (isDate(input)) {
         config._d = new Date(input.valueOf());
@@ -70336,7 +70912,7 @@ function configFromInput(config) {
             return parseInt(obj, 10);
         });
         configFromArray(config);
-    } else if (typeof(input) === 'object') {
+    } else if (isObject(input)) {
         configFromObject(config);
     } else if (isNumber(input)) {
         // from milliseconds
@@ -70437,6 +71013,38 @@ var now = function () {
     return Date.now ? Date.now() : +(new Date());
 };
 
+var ordering = ['year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
+
+function isDurationValid(m) {
+    for (var key in m) {
+        if (!(indexOf.call(ordering, key) !== -1 && (m[key] == null || !isNaN(m[key])))) {
+            return false;
+        }
+    }
+
+    var unitHasDecimal = false;
+    for (var i = 0; i < ordering.length; ++i) {
+        if (m[ordering[i]]) {
+            if (unitHasDecimal) {
+                return false; // only allow non-integers for smallest unit
+            }
+            if (parseFloat(m[ordering[i]]) !== toInt(m[ordering[i]])) {
+                unitHasDecimal = true;
+            }
+        }
+    }
+
+    return true;
+}
+
+function isValid$1() {
+    return this._isValid;
+}
+
+function createInvalid$1() {
+    return createDuration(NaN);
+}
+
 function Duration (duration) {
     var normalizedInput = normalizeObjectUnits(duration),
         years = normalizedInput.year || 0,
@@ -70449,6 +71057,8 @@ function Duration (duration) {
         seconds = normalizedInput.second || 0,
         milliseconds = normalizedInput.millisecond || 0;
 
+    this._isValid = isDurationValid(normalizedInput);
+
     // representation for dateAddRemove
     this._milliseconds = +milliseconds +
         seconds * 1e3 + // 1000
@@ -70458,7 +71068,7 @@ function Duration (duration) {
     // day when working around DST, we need to store them separately
     this._days = +days +
         weeks * 7;
-    // It is impossible translate months into days without knowing
+    // It is impossible to translate months into days without knowing
     // which months you are are talking about, so we have to store
     // it separately.
     this._months = +months +
@@ -70572,7 +71182,7 @@ hooks.updateOffset = function () {};
 // a second time. In case it wants us to change the offset again
 // _changeInProgress == true case, then we have to adjust, because
 // there is no such time in the given timezone.
-function getSetOffset (input, keepLocalTime) {
+function getSetOffset (input, keepLocalTime, keepMinutes) {
     var offset = this._offset || 0,
         localAdjust;
     if (!this.isValid()) {
@@ -70584,7 +71194,7 @@ function getSetOffset (input, keepLocalTime) {
             if (input === null) {
                 return this;
             }
-        } else if (Math.abs(input) < 16) {
+        } else if (Math.abs(input) < 16 && !keepMinutes) {
             input = input * 60;
         }
         if (!this._isUTC && keepLocalTime) {
@@ -70642,7 +71252,7 @@ function setOffsetToLocal (keepLocalTime) {
 
 function setOffsetToParsedOffset () {
     if (this._tzm != null) {
-        this.utcOffset(this._tzm);
+        this.utcOffset(this._tzm, false, true);
     } else if (typeof this._i === 'string') {
         var tZone = offsetFromString(matchOffset, this._i);
         if (tZone != null) {
@@ -70705,12 +71315,12 @@ function isUtc () {
 }
 
 // ASP.NET json date format regex
-var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
+var aspNetRegex = /^(\-|\+)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
 
 // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
 // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
 // and further modified to allow for strings containing both week and day
-var isoRegex = /^(-)?P(?:(-?[0-9,.]*)Y)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)W)?(?:(-?[0-9,.]*)D)?(?:T(?:(-?[0-9,.]*)H)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)S)?)?$/;
+var isoRegex = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
 
 function createDuration (input, key) {
     var duration = input,
@@ -70744,7 +71354,7 @@ function createDuration (input, key) {
             ms : toInt(absRound(match[MILLISECOND] * 1000)) * sign // the millisecond decimal point is included in the match
         };
     } else if (!!(match = isoRegex.exec(input))) {
-        sign = (match[1] === '-') ? -1 : 1;
+        sign = (match[1] === '-') ? -1 : (match[1] === '+') ? 1 : 1;
         duration = {
             y : parseIso(match[2], sign),
             M : parseIso(match[3], sign),
@@ -70774,6 +71384,7 @@ function createDuration (input, key) {
 }
 
 createDuration.fn = Duration.prototype;
+createDuration.invalid = createInvalid$1;
 
 function parseIso (inp, sign) {
     // We'd normally use ~~inp for this, but unfortunately it also
@@ -70846,14 +71457,14 @@ function addSubtract (mom, duration, isAdding, updateOffset) {
 
     updateOffset = updateOffset == null ? true : updateOffset;
 
-    if (milliseconds) {
-        mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
+    if (months) {
+        setMonth(mom, get(mom, 'Month') + months * isAdding);
     }
     if (days) {
         set$1(mom, 'Date', get(mom, 'Date') + days * isAdding);
     }
-    if (months) {
-        setMonth(mom, get(mom, 'Month') + months * isAdding);
+    if (milliseconds) {
+        mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
     }
     if (updateOffset) {
         hooks.updateOffset(mom, days || months);
@@ -70963,22 +71574,18 @@ function diff (input, units, asFloat) {
 
     units = normalizeUnits(units);
 
-    if (units === 'year' || units === 'month' || units === 'quarter') {
-        output = monthDiff(this, that);
-        if (units === 'quarter') {
-            output = output / 3;
-        } else if (units === 'year') {
-            output = output / 12;
-        }
-    } else {
-        delta = this - that;
-        output = units === 'second' ? delta / 1e3 : // 1000
-            units === 'minute' ? delta / 6e4 : // 1000 * 60
-            units === 'hour' ? delta / 36e5 : // 1000 * 60 * 60
-            units === 'day' ? (delta - zoneDelta) / 864e5 : // 1000 * 60 * 60 * 24, negate dst
-            units === 'week' ? (delta - zoneDelta) / 6048e5 : // 1000 * 60 * 60 * 24 * 7, negate dst
-            delta;
+    switch (units) {
+        case 'year': output = monthDiff(this, that) / 12; break;
+        case 'month': output = monthDiff(this, that); break;
+        case 'quarter': output = monthDiff(this, that) / 3; break;
+        case 'second': output = (this - that) / 1e3; break; // 1000
+        case 'minute': output = (this - that) / 6e4; break; // 1000 * 60
+        case 'hour': output = (this - that) / 36e5; break; // 1000 * 60 * 60
+        case 'day': output = (this - that - zoneDelta) / 864e5; break; // 1000 * 60 * 60 * 24, negate dst
+        case 'week': output = (this - that - zoneDelta) / 6048e5; break; // 1000 * 60 * 60 * 24 * 7, negate dst
+        default: output = this - that;
     }
+
     return asFloat ? output : absFloor(output);
 }
 
@@ -71010,18 +71617,24 @@ function toString () {
     return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
 }
 
-function toISOString () {
-    var m = this.clone().utc();
-    if (0 < m.year() && m.year() <= 9999) {
-        if (isFunction(Date.prototype.toISOString)) {
-            // native implementation is ~50x faster, use it when we can
+function toISOString(keepOffset) {
+    if (!this.isValid()) {
+        return null;
+    }
+    var utc = keepOffset !== true;
+    var m = utc ? this.clone().utc() : this;
+    if (m.year() < 0 || m.year() > 9999) {
+        return formatMoment(m, utc ? 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYYYY-MM-DD[T]HH:mm:ss.SSSZ');
+    }
+    if (isFunction(Date.prototype.toISOString)) {
+        // native implementation is ~50x faster, use it when we can
+        if (utc) {
             return this.toDate().toISOString();
         } else {
-            return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+            return new Date(this._d.valueOf()).toISOString().replace('Z', formatMoment(m, 'Z'));
         }
-    } else {
-        return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
     }
+    return formatMoment(m, utc ? 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYY-MM-DD[T]HH:mm:ss.SSSZ');
 }
 
 /**
@@ -71041,7 +71654,7 @@ function inspect () {
         zone = 'Z';
     }
     var prefix = '[' + func + '("]';
-    var year = (0 < this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
+    var year = (0 <= this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
     var datetime = '-MM-DD[T]HH:mm:ss.SSS';
     var suffix = zone + '[")]';
 
@@ -71209,7 +71822,7 @@ function toJSON () {
     return this.isValid() ? this.toISOString() : null;
 }
 
-function isValid$1 () {
+function isValid$2 () {
     return isValid(this);
 }
 
@@ -71369,12 +71982,15 @@ addUnitPriority('date', 9);
 addRegexToken('D',  match1to2);
 addRegexToken('DD', match1to2, match2);
 addRegexToken('Do', function (isStrict, locale) {
-    return isStrict ? locale._ordinalParse : locale._ordinalParseLenient;
+    // TODO: Remove "ordinalParse" fallback in next major release.
+    return isStrict ?
+      (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
+      locale._dayOfMonthOrdinalParseLenient;
 });
 
 addParseToken(['D', 'DD'], DATE);
 addParseToken('Do', function (input, array) {
-    array[DATE] = toInt(input.match(match1to2)[0], 10);
+    array[DATE] = toInt(input.match(match1to2)[0]);
 });
 
 // MOMENTS
@@ -71549,7 +72165,7 @@ proto.isBetween         = isBetween;
 proto.isSame            = isSame;
 proto.isSameOrAfter     = isSameOrAfter;
 proto.isSameOrBefore    = isSameOrBefore;
-proto.isValid           = isValid$1;
+proto.isValid           = isValid$2;
 proto.lang              = lang;
 proto.locale            = locale;
 proto.localeData        = localeData;
@@ -71774,7 +72390,7 @@ function listWeekdaysMin (localeSorted, format, index) {
 }
 
 getSetGlobalLocale('en', {
-    ordinalParse: /\d{1,2}(th|st|nd|rd)/,
+    dayOfMonthOrdinalParse: /\d{1,2}(th|st|nd|rd)/,
     ordinal : function (number) {
         var b = number % 10,
             output = (toInt(number % 100 / 10) === 1) ? 'th' :
@@ -71895,6 +72511,9 @@ function monthsToDays (months) {
 }
 
 function as (units) {
+    if (!this.isValid()) {
+        return NaN;
+    }
     var days;
     var months;
     var milliseconds = this._milliseconds;
@@ -71923,6 +72542,9 @@ function as (units) {
 
 // TODO: Use this.as('ms')?
 function valueOf$1 () {
+    if (!this.isValid()) {
+        return NaN;
+    }
     return (
         this._milliseconds +
         this._days * 864e5 +
@@ -71946,14 +72568,18 @@ var asWeeks        = makeAs('w');
 var asMonths       = makeAs('M');
 var asYears        = makeAs('y');
 
+function clone$1 () {
+    return createDuration(this);
+}
+
 function get$2 (units) {
     units = normalizeUnits(units);
-    return this[units + 's']();
+    return this.isValid() ? this[units + 's']() : NaN;
 }
 
 function makeGetter(name) {
     return function () {
-        return this._data[name];
+        return this.isValid() ? this._data[name] : NaN;
     };
 }
 
@@ -71971,11 +72597,12 @@ function weeks () {
 
 var round = Math.round;
 var thresholds = {
-    s: 45,  // seconds to minute
-    m: 45,  // minutes to hour
-    h: 22,  // hours to day
-    d: 26,  // days to month
-    M: 11   // months to year
+    ss: 44,         // a few seconds to seconds
+    s : 45,         // seconds to minute
+    m : 45,         // minutes to hour
+    h : 22,         // hours to day
+    d : 26,         // days to month
+    M : 11          // months to year
 };
 
 // helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
@@ -71992,16 +72619,17 @@ function relativeTime$1 (posNegDuration, withoutSuffix, locale) {
     var months   = round(duration.as('M'));
     var years    = round(duration.as('y'));
 
-    var a = seconds < thresholds.s && ['s', seconds]  ||
-            minutes <= 1           && ['m']           ||
-            minutes < thresholds.m && ['mm', minutes] ||
-            hours   <= 1           && ['h']           ||
-            hours   < thresholds.h && ['hh', hours]   ||
-            days    <= 1           && ['d']           ||
-            days    < thresholds.d && ['dd', days]    ||
-            months  <= 1           && ['M']           ||
-            months  < thresholds.M && ['MM', months]  ||
-            years   <= 1           && ['y']           || ['yy', years];
+    var a = seconds <= thresholds.ss && ['s', seconds]  ||
+            seconds < thresholds.s   && ['ss', seconds] ||
+            minutes <= 1             && ['m']           ||
+            minutes < thresholds.m   && ['mm', minutes] ||
+            hours   <= 1             && ['h']           ||
+            hours   < thresholds.h   && ['hh', hours]   ||
+            days    <= 1             && ['d']           ||
+            days    < thresholds.d   && ['dd', days]    ||
+            months  <= 1             && ['M']           ||
+            months  < thresholds.M   && ['MM', months]  ||
+            years   <= 1             && ['y']           || ['yy', years];
 
     a[2] = withoutSuffix;
     a[3] = +posNegDuration > 0;
@@ -72030,10 +72658,17 @@ function getSetRelativeTimeThreshold (threshold, limit) {
         return thresholds[threshold];
     }
     thresholds[threshold] = limit;
+    if (threshold === 's') {
+        thresholds.ss = limit - 1;
+    }
     return true;
 }
 
 function humanize (withSuffix) {
+    if (!this.isValid()) {
+        return this.localeData().invalidDate();
+    }
+
     var locale = this.localeData();
     var output = relativeTime$1(this, !withSuffix, locale);
 
@@ -72046,6 +72681,10 @@ function humanize (withSuffix) {
 
 var abs$1 = Math.abs;
 
+function sign(x) {
+    return ((x > 0) - (x < 0)) || +x;
+}
+
 function toISOString$1() {
     // for ISO strings we do not use the normal bubbling rules:
     //  * milliseconds bubble up until they become hours
@@ -72054,6 +72693,10 @@ function toISOString$1() {
     // This is because there is no context-free conversion between hours and days
     // (think of clock changes)
     // and also not between days and months (28-31 days per month)
+    if (!this.isValid()) {
+        return this.localeData().invalidDate();
+    }
+
     var seconds = abs$1(this._milliseconds) / 1000;
     var days         = abs$1(this._days);
     var months       = abs$1(this._months);
@@ -72076,7 +72719,7 @@ function toISOString$1() {
     var D = days;
     var h = hours;
     var m = minutes;
-    var s = seconds;
+    var s = seconds ? seconds.toFixed(3).replace(/\.?0+$/, '') : '';
     var total = this.asSeconds();
 
     if (!total) {
@@ -72085,19 +72728,24 @@ function toISOString$1() {
         return 'P0D';
     }
 
-    return (total < 0 ? '-' : '') +
-        'P' +
-        (Y ? Y + 'Y' : '') +
-        (M ? M + 'M' : '') +
-        (D ? D + 'D' : '') +
+    var totalSign = total < 0 ? '-' : '';
+    var ymSign = sign(this._months) !== sign(total) ? '-' : '';
+    var daysSign = sign(this._days) !== sign(total) ? '-' : '';
+    var hmsSign = sign(this._milliseconds) !== sign(total) ? '-' : '';
+
+    return totalSign + 'P' +
+        (Y ? ymSign + Y + 'Y' : '') +
+        (M ? ymSign + M + 'M' : '') +
+        (D ? daysSign + D + 'D' : '') +
         ((h || m || s) ? 'T' : '') +
-        (h ? h + 'H' : '') +
-        (m ? m + 'M' : '') +
-        (s ? s + 'S' : '');
+        (h ? hmsSign + h + 'H' : '') +
+        (m ? hmsSign + m + 'M' : '') +
+        (s ? hmsSign + s + 'S' : '');
 }
 
 var proto$2 = Duration.prototype;
 
+proto$2.isValid        = isValid$1;
 proto$2.abs            = abs;
 proto$2.add            = add$1;
 proto$2.subtract       = subtract$1;
@@ -72112,6 +72760,7 @@ proto$2.asMonths       = asMonths;
 proto$2.asYears        = asYears;
 proto$2.valueOf        = valueOf$1;
 proto$2._bubble        = bubble;
+proto$2.clone          = clone$1;
 proto$2.get            = get$2;
 proto$2.milliseconds   = milliseconds;
 proto$2.seconds        = seconds;
@@ -72153,7 +72802,7 @@ addParseToken('x', function (input, array, config) {
 // Side effect imports
 
 
-hooks.version = '2.17.1';
+hooks.version = '2.20.1';
 
 setHookCallback(createLocal);
 
@@ -72180,10 +72829,23 @@ hooks.updateLocale          = updateLocale;
 hooks.locales               = listLocales;
 hooks.weekdaysShort         = listWeekdaysShort;
 hooks.normalizeUnits        = normalizeUnits;
-hooks.relativeTimeRounding = getSetRelativeTimeRounding;
+hooks.relativeTimeRounding  = getSetRelativeTimeRounding;
 hooks.relativeTimeThreshold = getSetRelativeTimeThreshold;
 hooks.calendarFormat        = getCalendarFormat;
 hooks.prototype             = proto;
+
+// currently HTML5 input type only supports 24-hour formats
+hooks.HTML5_FMT = {
+    DATETIME_LOCAL: 'YYYY-MM-DDTHH:mm',             // <input type="datetime-local" />
+    DATETIME_LOCAL_SECONDS: 'YYYY-MM-DDTHH:mm:ss',  // <input type="datetime-local" step="1" />
+    DATETIME_LOCAL_MS: 'YYYY-MM-DDTHH:mm:ss.SSS',   // <input type="datetime-local" step="0.001" />
+    DATE: 'YYYY-MM-DD',                             // <input type="date" />
+    TIME: 'HH:mm',                                  // <input type="time" />
+    TIME_SECONDS: 'HH:mm:ss',                       // <input type="time" step="1" />
+    TIME_MS: 'HH:mm:ss.SSS',                        // <input type="time" step="0.001" />
+    WEEK: 'YYYY-[W]WW',                             // <input type="week" />
+    MONTH: 'YYYY-MM'                                // <input type="month" />
+};
 
 return hooks;
 
@@ -79609,52 +80271,3 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 2000);
-
-$(document).on('turbolinks:load', function() {
-  $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
-
-  $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
-
-  var sidebar = document.getElementById('custom-sidebar');
-  var page_header = document.getElementById('page-header');
-  // Se cambia el color de la sombra del menú lateral
-  if( $(".active").is("#pedidos-li") ) {
-    sidebar.style.boxShadow = "8px 0 3px 5px #59457c";
-    page_header.style.background = "#59457c";
-    page_header.style.borderColor = "#59457c";
-  }else if ( $(".active").is("#stock-li") ) {
-    sidebar.style.boxShadow = "8px 0 3px 5px #10675f";
-    page_header.style.background = "#10675f";
-    page_header.style.borderColor = "#10675f";
-  }else if ( $(".active").is("#usuarios-li") ){
-    sidebar.style.boxShadow = "8px 0 3px 5px #89726a";
-    page_header.style.background = "#89726a";
-    page_header.style.borderColor = "#89726a";
-  }else {
-    sidebar.style.boxShadow = "8px 0 3px 5px #7c9ed4";
-    page_header.style.background = "#7c9ed4";
-    page_header.style.borderColor = "#7c9ed4";
-  }
-
-  $("#pedidos").on("hide.bs.collapse", function(){
-    $("#pedidos-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Pedidos</strong>');
-  });
-  $("#pedidos").on("show.bs.collapse", function(){
-    $("#pedidos-label").html('<span class="glyphicon glyphicon-list-alt"></span> <strong>Pedidos</strong>');
-  });
-
-  $("#stock").on("hide.bs.collapse", function(){
-    $("#stock-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Stock</strong>');
-  });
-  $("#stock").on("show.bs.collapse", function(){
-    $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Stock</strong>');
-  });
-
-  $("#usuarios").on("hide.bs.collapse", function(){
-    $("#usuarios-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Usuarios</strong>');
-  });
-  $("#usuarios").on("show.bs.collapse", function(){
-    $("#usuarios-label").html('<span class="glyphicon glyphicon-user"></span> <strong>Usuarios</strong>');
-  });
-
-});
