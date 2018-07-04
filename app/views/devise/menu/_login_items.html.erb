@@ -2,11 +2,7 @@
   <li class="inverse-dropdown">
     <a class="inverse-dropdown dropdown-toggle" data-toggle="dropdown" href="#">
       <span class="glyphicon glyphicon-user"></span>
-      <% if current_user.profile.first_name.present? %>
-        <%= current_user.profile.full_name %>
-      <% else %>
-        <%= current_user.username %>
-      <% end %>
+      <%= current_user.full_name %>
     </a>
     <ul class="inverse-dropdown dropdown-menu">
       <% if current_user.has_role? :admin %>

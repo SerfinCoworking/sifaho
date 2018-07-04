@@ -41,17 +41,17 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_orders/new
   def new
-    @internal_orders = InternalOrder.new
+    @internal_order = InternalOrder.new
     @responsables = User.all
     @medications = Medication.all
     @supplies = Supply.all
-    @internal_orders.quantity_medications.build
-    @internal_orders.quantity_supplies.build
+    @internal_order.quantity_medications.build
+    @internal_order.quantity_supplies.build
   end
 
   # GET /internal_orders/1/edit
   def edit
-    @professionals = User.all
+    @responsables = User.all
     @medications = Medication.all
     @supplies = Supply.all
   end
@@ -59,12 +59,17 @@ class InternalOrdersController < ApplicationController
   # POST /internal_orders
   # POST /internal_orders.json
   def create
-    @internal_orders = Prescription.new(internal_orders_params)
+    @internal_order = InternalOrder.new(internal_order_params)
 
     respond_to do |format|
-      if @internal_orders.save!
-        dispense if dispensing?
-        flash.now[:success] = "El pedido interno de "+@internal_orders.responsable.sector.sector_name+" se ha creado correctamente."
+      if @internal_order.save!
+        # Si no se entrega, se limpia la fecha de entrega
+        if delivering?
+          @internal_order.entregado!
+          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
+        else
+          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
+        end
         format.js
       else
         flash.now[:error] = "El pedido interno no se ha podido crear."
@@ -76,14 +81,14 @@ class InternalOrdersController < ApplicationController
   # PATCH/PUT /internal_orders/1
   # PATCH/PUT /internal_orders/1.json
   def update
-    @internal_order.dispensado! if dispensing?
+    @internal_order.entregado! if delivering?
 
     respond_to do |format|
       if @internal_order.update_attributes(internal_order_params)
-        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector.sector_name+" se ha modificado correctamente."
+        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.sector.sector_name+" no se ha podido modificar."
+        flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" no se ha podido modificar."
         format.js
       end
     end
@@ -101,13 +106,13 @@ class InternalOrdersController < ApplicationController
   end
 
   # GET /internal_orders/1/dispense
-  def dispense
+  def deliver
     respond_to do |format|
-      if @internal_order.dispensado!
-        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha dispensado correctamente."
+      if @internal_order.entregado!
+        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha entregado correctamente."
         format.js
       else
-        flash.now[:error] = "El pedido interno no se ha podido dispensar."
+        flash.now[:error] = "El pedido interno no se ha podido entregar."
         format.js
       end
     end
@@ -121,12 +126,14 @@ class InternalOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_params
-      params.require(:internal_order).permit(:responsable_id, :date_sent, :date_received, :observation)
+      params.require(:internal_order).permit(:responsable_id, :date_delivered, :date_received, :observation,
+        quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
+        quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy])
     end
 
     # Se verifica si el value del submit del form es para dispensar
-    def dispensing?
+    def delivering?
       submit = params[:commit]
-      return submit == "Cargar y dispensar" || submit == "Guardar y dispensar"
+      return submit == "Cargar y entregar" || submit == "Guardar y entregar"
     end
 end

@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20180626005227) do
   enable_extension "plpgsql"
 
   create_table "internal_orders", force: :cascade do |t|
-    t.datetime "date_sent"
+    t.datetime "date_delivered"
     t.datetime "date_received"
     t.text "observation"
     t.integer "status", default: 0
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 20180626005227) do
     t.string "enrollment"
     t.string "address"
     t.string "email"
-    t.integer "sex"
+    t.integer "sex", default: 0
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

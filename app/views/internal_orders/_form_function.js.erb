@@ -1,67 +1,25 @@
-$('#prescription_date_received').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
-$('#prescription_date_processed').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+$(function () {
+    $('#internal_order_date_received').datetimepicker({
+      format: 'DD/MM/YYYY',
+    })
+    $('#internal_order_date_delivered').datetimepicker({
+      format: 'DD/MM/YYYY',
+      useCurrent: false, //Important! See issue #1075
+    });
+    $("#internal_order_date_received").on("dp.change", function (e) {
+        $('#internal_order_date_delivered').data("DateTimePicker").minDate(e.date);
+    });
+    $("#internal_order_date_delivered").on("dp.change", function (e) {
+        $('#internal_order_date_received').data("DateTimePicker").maxDate(e.date);
+    });
+});
+
 
 $('.chosen-select').chosen({
     allow_single_deselect: true,
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
-$('#professional_id').change(function () {
-  if($('#professional_id option:selected').val() == 0){
-    document.getElementById('form-professional').style.display="block";
-    document.getElementById('professional-hint').style.display="none";
-    document.getElementById('prescription_professional_attributes_first_name').required = true;
-    document.getElementById('prescription_professional_attributes_last_name').required = true;
-    document.getElementById('prescription_professional_attributes_dni').required = true;
-    document.getElementById('form-sector').style.display="block";
-    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = true;
-    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
-    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
-  }else{
-    document.getElementById('form-professional').style.display="none";
-    document.getElementById('professional-hint').style.display="block";
-    document.getElementById('prescription_professional_attributes_first_name').required = false;
-    document.getElementById('prescription_professional_attributes_last_name').required = false;
-    document.getElementById('prescription_professional_attributes_dni').required = false;
-    document.getElementById('form-sector').style.display="none";
-    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
-    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
-    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
-  }
-});
-
-$('#sector_id').change(function () {
-  if($('#sector_id option:selected').val() == 0){
-    document.getElementById('form-sector').style.display="block";
-    document.getElementById('sector-hint').style.display="none";
-    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name ').required = true;
-    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = true;
-    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = true;
-
-  }else{
-    document.getElementById('form-sector').style.display="none";
-    document.getElementById('sector-hint').style.display="block";
-    document.getElementById('prescription_professional_attributes_sector_attributes_sector_name').required = false;
-    document.getElementById('prescription_professional_attributes_sector_attributes_description').required = false;
-    document.getElementById('prescription_professional_attributes_sector_attributes_complexity_level').required = false;
-  }
-});
-
-$('#patient_id').change(function () {
-  if($('#patient_id option:selected').val() == 0){
-    document.getElementById('form-prescription').style.display="block";
-    document.getElementById('patientHint').style.display="none";
-    document.getElementById('prescription_patient_attributes_first_name').required = true;
-    document.getElementById('prescription_patient_attributes_last_name').required = true;
-    document.getElementById('prescription_patient_attributes_dni').required = true;
-  }else{
-    document.getElementById('form-prescription').style.display="none";
-    document.getElementById('patientHint').style.display="block";
-    document.getElementById('prescription_patient_attributes_first_name').required = false;
-    document.getElementById('prescription_patient_attributes_last_name').required = false;
-    document.getElementById('prescription_patient_attributes_dni').required = false;
-  }
-});
 
 //Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
 <% @medications = Medication.all %>

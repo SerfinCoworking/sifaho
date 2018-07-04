@@ -4,9 +4,13 @@ class Supply < ApplicationRecord
   # Relaciones
   has_many :quantity_supplies
   has_many :prescriptions,
-  :through => :quantity_supplies,
-  :source => :quantifiable,
-  :source_type => 'Prescription'
+    :through => :quantity_supplies,
+    :source => :quantifiable,
+    :source_type => 'Prescription'
+  has_many :internal_orders,
+    :through => :quantity_supplies,
+    :source => :quantifiable,
+    :source_type => 'InternalOrder'
 
   # Validaciones
   validates_presence_of :name

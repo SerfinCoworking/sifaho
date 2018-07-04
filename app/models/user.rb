@@ -2,7 +2,7 @@ class User < ApplicationRecord
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :rememberable, :trackable 
+  devise :rememberable, :trackable
   devise :database_authenticatable, :authentication_keys => [:username]
 
   # Relaciones
@@ -15,5 +15,17 @@ class User < ApplicationRecord
 
   def create_profile
     Profile.create(user: self)
+  end
+
+  def full_name
+    if self.profile.first_name
+      self.profile.full_name
+    else
+      self.username
+    end
+  end
+
+  def name_and_sector
+    self.full_name << " | " << self.sector.sector_name
   end
 end

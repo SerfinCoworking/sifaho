@@ -11,9 +11,13 @@ class Medication < ActiveRecord::Base
   belongs_to :medication_brand
   has_many :quantity_medications
   has_many :prescriptions,
-  :through => :quantity_medications,
-  :source => :quantifiable,
-  :source_type => 'Prescription'
+    :through => :quantity_medications,
+    :source => :quantifiable,
+    :source_type => 'Prescription'
+  has_many :internal_orders,
+    :through => :quantity_medications,
+    :source => :quantifiable,
+    :source_type => 'InternalOrder'
 
   # Validaciones
   validates_presence_of :vademecum

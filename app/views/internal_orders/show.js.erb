@@ -1,5 +1,5 @@
 // Add the dialog title
-$('#dialog h3').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo prescripción");
+$('#dialog h3').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo pedido interno");
 
 // Render the edit form
 $('.modal-body').html('<%= j render("show") %>');
@@ -7,9 +7,9 @@ $('.modal-body').html('<%= j render("show") %>');
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
-  '<%= link_to edit_prescription_path(@prescription), remote: true, class: "btn btn-warning btn-md" do %>'+
+  '<%= link_to edit_internal_order_path(@internal_order), remote: true, class: "btn btn-warning btn-md" do %>'+
     '<%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>'+
-    ' Editar prescripción'+
+    ' Editar pedido interno'+
   '<% end %>'
 );
 

@@ -3,22 +3,22 @@
     <table class="table table-hover table-striped">
       <thead>
         <tr>
-          <th><%= filterrific_sorting_link(@filterrific, :doctor) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :responsable) %></th>
+          <th>Sector</th>
           <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :medicamento) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :suministro) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :recibida) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :dispensada) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :recibido) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :entregado) %></th>
           <th colspan="3">Acciones</th>
         </tr>
       </thead>
-      <tbody id=prescriptions>
-        <%= render @prescriptions %>
+      <tbody id=internal_orders>
+        <%= render @internal_orders %>
       </tbody>
     </table>
   </div>
 </div>
 <div id="page_links">
-    <%= paginate @prescription %>
+    <%= paginate @internal_order %>
 </div>

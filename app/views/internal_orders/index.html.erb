@@ -1,8 +1,8 @@
 <% content_for :page_header do %>
-  <h3>Prescripciones
-  <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-md' do %>
+  <h3>Pedidos internos
+  <%= link_to new_internal_order_path, remote: true, class: 'btn btn-primary btn-md' do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    Nueva prescripción
+    Nuevo pedido interno
   <% end %>
   </h3>
 <% end %>
@@ -22,7 +22,7 @@
       <%= f.text_field(
         :search_query,
         class: 'filterrific-periodically-observed form-control',
-        placeholder: 'Doctor o paciente'
+        placeholder: 'Responsable'
       ) %>
     </div>
     <div class="col-md-4 col-sm-3">
@@ -47,6 +47,6 @@
 <% end %>
 
 <%= render(
-  partial: 'prescriptions/list',
-  locals: { prescriptions: @prescriptions }
+  partial: 'internal_orders/list',
+  locals: { internal_orders: @internal_orders }
 ) %>

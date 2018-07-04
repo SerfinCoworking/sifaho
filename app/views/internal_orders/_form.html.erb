@@ -2,7 +2,7 @@
   <%= f.error_notification %>
   <%= f.input :responsable_id,
                     label: 'Responsable',
-                    label_method: :full_name,
+                    label_method: :name_and_sector,
                     value_method: :id,
                     collection: @responsables,
                     include_blank: false,
@@ -48,7 +48,7 @@
       <%= f.input :date_received, label: 'Fecha recibida',
                                   as: :string,
                                   :placeholder => "Seleccionar fecha",
-                                  input_html: {class: "form-control", required: true,
+                                  input_html: {class: "form-control", required: true, autocomplete: 'off',
                                   value: "#{@internal_order.date_received unless @internal_order.new_record?}"},
                                   html5: false
                                   %><br><br>
