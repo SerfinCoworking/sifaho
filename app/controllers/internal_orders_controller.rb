@@ -66,6 +66,7 @@ class InternalOrdersController < ApplicationController
         # Si no se entrega, se limpia la fecha de entrega
         if delivering?
           @internal_order.entregado!
+          
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
         else
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
