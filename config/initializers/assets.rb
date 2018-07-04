@@ -13,3 +13,6 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 Rails.application.config.assets.precompile += %w( filterrific/filterrific-spinner.gif )
+Rails.application.config.assets.paths << Rails.root.join('app', 'vendor', 'assets', 'fonts')
+Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
+Rails.application.config.assets.precompile += %w( Lato-Regular.ttf,  bg-sifaho.jpg)
