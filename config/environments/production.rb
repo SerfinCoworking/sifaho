@@ -95,4 +95,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )
+
+  config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif] 
 end
