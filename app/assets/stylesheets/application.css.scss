@@ -21,20 +21,28 @@
 
  @font-face {
    font-family: "Jenna Sue";
-   src: asset-url("JennaSue.ttf");
+   src: font-url( asset-path("JennaSue.ttf") );
+   font-weight: normal;
+   font-style: normal;
  }
 
  @font-face {
    font-family: "Lato";
-   src: asset-url("Lato-Regular.ttf");
+   src: font-url( asset-path("Lato-Regular.ttf") );
+   font-weight: normal;
+   font-style: normal;
  }
 
  @font-face {
    font-family: "Fira Sans";
-   src: asset-url("FiraSans-Regular.ttf");
+   src: font-url( asset-path("FiraSans-Regular.ttf") );
+   font-weight: normal;
+   font-style: normal;
  }
 
  @font-face {
    font-family: "KG Neatly Printed";
-   src: asset-url("KGNeatlyPrinted.ttf");
+   src: font-url( asset-path("KGNeatlyPrinted.ttf") );
+   font-weight: normal;
+   font-style: normal;
  }
