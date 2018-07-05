@@ -1,15 +1,21 @@
 class Supply < ApplicationRecord
   after_create :assign_initial_quantity
 
-  validates_presence_of :name, presence: true
-  validates_presence_of :quantity, presence: true
-  validates_presence_of :date_received, presence: true
-
+  # Relaciones
   has_many :quantity_supplies
   has_many :prescriptions,
-           :through => :quantity_supplies,
-           :source => :quantifiable,
-           :source_type => 'Prescription'
+    :through => :quantity_supplies,
+    :source => :quantifiable,
+    :source_type => 'Prescription'
+  has_many :internal_orders,
+    :through => :quantity_supplies,
+    :source => :quantifiable,
+    :source_type => 'InternalOrder'
+
+  # Validaciones
+  validates_presence_of :name
+  validates_presence_of :quantity
+  validates_presence_of :date_received
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -105,7 +111,7 @@ class Supply < ApplicationRecord
        return 'success'
      end
    end
-   
+
    private
    def assign_initial_quantity
      self.initial_quantity = self.quantity

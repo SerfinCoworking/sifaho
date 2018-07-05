@@ -51,27 +51,45 @@
 #custom-sidebar{
   z-index: 1;
 }
-#custom-sidebar .active a{
+#custom-sidebar .active a,
+#custom-sidebar ul>.active a{
   background-color: rgba(124, 158, 212, 1);
 }
+#custom-sidebar .nav, .nav-tabs, .nav-pills
 #custom-sidebar .nav, .nav-tabs, .nav-pills{
     text-align: center;
     background-color: #0b538d!important;
     padding-left: 14px;
 }
+#custom-sidebar .active a, #custom-sidebar ul > .active a{
+  color: white;
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+#custom-sidebar .nav, .nav-tabs, .nav-pills>ul>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:hover,
 #custom-sidebar .nav, .nav-tabs, .nav-pills>.active>a:focus {
-  color: rgba(255, 255, 255, 1);
+  color: white;
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+.nav > li > a{
+  font-size: 14px;
+  color: white;
+}
+.nav > li > a:hover{
+  color: white;
   background-color: rgba(124, 158, 212, 1);
 }
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>a {
   font-size: 14px;
-  color: rgba(255, 255, 255, 1);
+  color: white;
 }
 #custom-sidebar .nav, .nav-tabs, .nav-pills>li>div{
   margin-left: -15px;
   width: 20.1rem!important;
+  padding-right: 15px;
 }
 
 #pedidos-label{
@@ -135,4 +153,39 @@ li .well strong{
   padding-top: 0px;
   padding-bottom: 0px;
   margin-bottom: -10px;
+}
+.navbar-nav > li > .dropdown-menu{
+  background-color: #0b538d;
+}
+.dropdown-menu > li > a{
+  color: white;
+}
+.dropdown-menu > li > a:hover{
+  background-color: rgba(124, 158, 212, 1);
+  color: white;
+}
+#sector-name{
+    font-size: 30px;
+    color: white;
+    padding-top: 20px;
+    font-family: 'KG Neatly Printed', sans-serif;
+}
+
+.navbar, .nav-pills {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+#login-btn{
+  width: 100%;
+}
+.modal-dialog{
+  position: relative;
+  display: table; /* This is important */
+  overflow-y: auto;
+  overflow-x: auto;
+  width: auto;
+  min-width: 300px;
 }

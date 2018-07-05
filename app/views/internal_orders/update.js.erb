@@ -1,0 +1,4 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+$('#internal_order_<%= @internal_order.id %>').replaceWith('<%= j render (@internal_order) %>')

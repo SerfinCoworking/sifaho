@@ -6,18 +6,25 @@ class Medication < ActiveRecord::Base
   after_create :update_status, :assign_initial_quantity
   before_update :update_status, if: :will_save_change_to_expiry_date?
 
-  validates :vademecum, presence: true
-  validates :medication_brand, presence:true
-  validates :expiry_date, presence: true
-  validates :date_received, presence:true
-
+  # Relaciones
   belongs_to :vademecum
   belongs_to :medication_brand
   has_many :quantity_medications
   has_many :prescriptions,
-        :through => :quantity_medications,
-        :source => :quantifiable,
-        :source_type => 'Prescription'
+    :through => :quantity_medications,
+    :source => :quantifiable,
+    :source_type => 'Prescription'
+  has_many :internal_orders,
+    :through => :quantity_medications,
+    :source => :quantifiable,
+    :source_type => 'InternalOrder'
+
+  # Validaciones
+  validates_presence_of :vademecum
+  validates_presence_of :medication_brand
+  validates_presence_of :expiry_date
+  validates_presence_of :date_received
+
 
   accepts_nested_attributes_for :medication_brand,
   :reject_if => :all_blank

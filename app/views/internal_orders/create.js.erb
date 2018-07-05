@@ -1,0 +1,4 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+$('#internal_orders').prepend('<%= j render (@internal_order) %>')

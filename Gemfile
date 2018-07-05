@@ -37,7 +37,7 @@ gem 'pundit'
 # Use for make roles
 gem 'rolify'
 # Use rails_admin for admin side
-gem 'rails_admin', '~> 1.2'
+gem 'rails_admin', '~> 1.3'
 # Use devise as users' administrator
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

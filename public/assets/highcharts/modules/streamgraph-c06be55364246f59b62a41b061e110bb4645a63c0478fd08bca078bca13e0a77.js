@@ -1,0 +1,1 @@
+"use strict";!function(t){"object"==typeof module&&module.exports?module.exports=t:t(Highcharts)}(function(t){(0,t.seriesType)("streamgraph","areaspline",{fillOpacity:1,lineWidth:0,marker:{enabled:!1},stacking:"stream"},{negStacks:!1,streamStacker:function(t,e,a){t[0]-=e.total/2,t[1]-=e.total/2,this.stackedYData[a]=0===this.index?t[1]:t[0]}})});

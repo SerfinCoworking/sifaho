@@ -1,10 +1,12 @@
 class QuantityMedication < ApplicationRecord
-  validates :quantity, presence: true
-  validates :medication, presence: true
-  validates_associated :medication
-
+  # Relaciones
   belongs_to :medication
   belongs_to :quantifiable, :polymorphic => true
+
+  # Validaciones
+  validates_presence_of :quantity
+  validates_presence_of :medication
+  validates_associated :medication
 
   accepts_nested_attributes_for :medication
 

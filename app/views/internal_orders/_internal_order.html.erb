@@ -1,0 +1,63 @@
+<tr id="internal_order_<%= internal_order.id %>">
+  <td><%= internal_order.responsable.full_name %></td>
+  <td><%= internal_order.responsable.sector.sector_name %></td>
+  <td><span class="label label-<%= internal_order.status_label %>"><%= internal_order.status.split('_').map(&:capitalize).join(' ') %></span></td>
+  <td class="med-sup-col">
+    <% if internal_order.medications.present? %>
+      <% internal_order.medications.each do |med| %>
+        <span class="badge">
+          <%= internal_order.quantity_medications.find_by_medication_id(med.id).quantity %>
+        </span>
+        <%= med.full_info %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+  <td class="med-sup-col">
+    <% if internal_order.supplies.present? %>
+      <% internal_order.supplies.each do |sup| %>
+        <span class="badge">
+          <%= internal_order.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+        </span>
+        <%= sup.name %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %></td>
+  <td>
+    <% if internal_order.date_received.present? %>
+      <%= internal_order.date_received.strftime("%d/%m/%Y") %>
+    <% else %>
+      ------
+    <% end %>
+    </td>
+    <% if internal_order.date_delivered %>
+      <td>
+      <%= internal_order.date_delivered.strftime("%d/%m/%Y") %>
+    <% else %>
+      <td class="text-center">
+      <%= link_to deliver_internal_order_path(internal_order), remote: true,
+            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+      <% end %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to internal_order_path(internal_order), remote:true,
+          class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+    <% end %>
+    <% unless internal_order.entregado? %>
+      <%= link_to edit_internal_order_path(internal_order), remote: true,
+            class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% end %>
+    <% end %>
+    <%= link_to internal_order_path(internal_order), remote: true, class: 'btn btn-danger btn-xs',
+          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top',
+          confirm: "Desea eliminar el pedido interno de #{internal_order.responsable.profile.full_name}?"} do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    <% end %>
+  </td>
+</tr>

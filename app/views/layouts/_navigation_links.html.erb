@@ -1,1 +1,6 @@
-<%# add navigation links to this file %>
+<% if user_signed_in? %>
+  <li id="sector-name">
+    <%= current_user.sector.sector_name %>
+      <%= Time.now.strftime("%d/%m/%Y") %>
+  </li>
+<% end %>

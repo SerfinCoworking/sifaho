@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171231233445) do
+ActiveRecord::Schema.define(version: 20180626005227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "internal_orders", force: :cascade do |t|
+    t.datetime "date_delivered"
+    t.datetime "date_received"
+    t.text "observation"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "responsable_id"
+    t.index ["responsable_id"], name: "index_internal_orders_on_responsable_id"
+  end
 
   create_table "laboratories", force: :cascade do |t|
     t.string "name"
@@ -39,16 +50,10 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "vademecum_id"
     t.bigint "medication_brand_id"
+    t.bigint "vademecum_id"
     t.index ["medication_brand_id"], name: "index_medications_on_medication_brand_id"
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
-  end
-
-  create_table "order_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "patient_types", force: :cascade do |t|
@@ -104,6 +109,21 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.index ["sector_id"], name: "index_professionals_on_sector_id"
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.date "date_of_birth"
+    t.integer "dni"
+    t.string "enrollment"
+    t.string "address"
+    t.string "email"
+    t.integer "sex", default: 0
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
   create_table "quantity_medications", force: :cascade do |t|
     t.integer "medication_id"
     t.string "quantifiable_type"
@@ -141,6 +161,8 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.integer "complexity_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_sectors_on_user_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -154,7 +176,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "username", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -166,8 +188,10 @@ ActiveRecord::Schema.define(version: 20171231233445) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.bigint "sector_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["sector_id"], name: "index_users_on_sector_id"
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -179,6 +203,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   end
 
   create_table "vademecums", force: :cascade do |t|
+    t.integer "code_number"
     t.integer "level_complexity"
     t.boolean "indication"
     t.string "specialty_enabled"
@@ -195,5 +220,7 @@ ActiveRecord::Schema.define(version: 20171231233445) do
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "sectors"
+  add_foreign_key "sectors", "users"
+  add_foreign_key "users", "sectors"
   add_foreign_key "vademecums", "medications"
 end

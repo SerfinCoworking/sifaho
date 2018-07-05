@@ -1,4 +1,14 @@
 class Prescription < ApplicationRecord
+  # Relaciones
+  belongs_to :professional
+  belongs_to :patient
+  belongs_to :prescription_status
+  has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :medications, :through => :quantity_medications
+  has_many :quantity_supplies, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supplies, :through => :quantity_supplies
+
+  # Validaciones
   validates_presence_of :patient
   validates_presence_of :prescription_status
   validates_presence_of :professional
@@ -6,15 +16,6 @@ class Prescription < ApplicationRecord
   validates_associated :medications
   validates_associated :quantity_supplies
   validates_associated :supplies
-
-  belongs_to :professional
-  belongs_to :patient
-  belongs_to :prescription_status
-
-  has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :medications, :through => :quantity_medications
-  has_many :quantity_supplies, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, :through => :quantity_supplies
 
   accepts_nested_attributes_for :quantity_medications,
           :reject_if => :all_blank,

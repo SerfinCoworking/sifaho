@@ -68,7 +68,7 @@
       <%= f.input :date_received, label: 'Fecha recibida',
                                   as: :string,
                                   :placeholder => "Seleccionar fecha",
-                                  input_html: {class: "form-control", required: true,
+                                  input_html: {class: "form-control", required: true, autocomplete: 'off',
                                   value: "#{@prescription.date_received unless @prescription.new_record?}"},
                                   html5: false
                                   %><br><br>

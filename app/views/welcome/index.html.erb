@@ -1,5 +1,5 @@
 <% content_for :page_header do %>
-  <h3>Bienvenido a SIFAHO</h3>
+  <h3><%= current_user.profile.hombre? ? 'Bienvenido' : 'Bienvenida'  %> a SIFAHO</h3>
 <% end %>
 <div cass="row">
   <div class="col-md-6">

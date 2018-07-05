@@ -1,0 +1,57 @@
+<%= simple_form_for @internal_order, remote: true, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :responsable_id,
+                    label: 'Responsable',
+                    label_method: :name_and_sector,
+                    value_method: :id,
+                    collection: @responsables,
+                    include_blank: false,
+                    input_html: { class: 'chosen-select', id: 'responsable_id' },
+                    prompt: 'Seleccione un responsable'
+  %><br><br>
+
+  <div class='row'>
+    <div class='col-md-6'>
+      <label>Medicación</label>
+      <div id="quantity-medications">
+          <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
+            <%= render "quantity_medication_fields", :f => form_quantity %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+      </div>
+    </div>
+    <div class='col-md-6'>
+      <label>Suministro</label>
+      <div id="quantity-supplies">
+          <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
+            <%= render "quantity_supply_fields", :f => form_quantity %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association f, :quantity_supplies, class: 'btn btn-default btn-sm' do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+      </div>
+      <br>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-md-6'>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 46  , :rows => 2 } %>
+    </div>
+    <div class='col-md-6'>
+      <%= f.input :date_received, label: 'Fecha recibida',
+                                  as: :string,
+                                  :placeholder => "Seleccionar fecha",
+                                  input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                  value: "#{@internal_order.date_received unless @internal_order.new_record?}"},
+                                  html5: false
+                                  %><br><br>
+    </div>
+  </div>
+<% end %>
