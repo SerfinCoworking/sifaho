@@ -17,3 +17,4 @@ Rails.application.config.assets.paths << Rails.root.join('app', 'vendor', 'asset
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
 Rails.application.config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb )
+Rails.application.config.assets.precompile += %w( bg-sifaho.jpg )
