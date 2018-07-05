@@ -1,6 +1,10 @@
 body {
   &.sessions-body {
      background-image: url("<%= asset_path('bg-sifaho.jpg') %>");
+     background-image: asset-url("bg-sifaho.jpg", image);
+     background-image: asset-url($asset, $asset-type);
+     background-image: image-url("bg-sifaho.jpg");
+     background-image: asset-data-url("bg-sifaho.jpg");
   }
   background-repeat: no-repeat;
   background-attachment: fixed;
