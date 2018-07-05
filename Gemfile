@@ -6,6 +6,10 @@ git_source(:github) do |repo_name|
 
 end
 
+gem 'unicorn'
+gem 'thin'
+gem 'passenger'
+
 # To group by date
 gem 'groupdate'
 gem 'active_median'
