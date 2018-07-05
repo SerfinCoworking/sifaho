@@ -1,6 +1,6 @@
 body {
   &.sessions-body {
-     background-image: image-url("bg-sifaho.jpg");
+     background-image: asset-data-url("bg-sifaho.jpg");
   }
   background-repeat: no-repeat;
   background-attachment: fixed;
