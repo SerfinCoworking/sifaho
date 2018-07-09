@@ -1,0 +1,22 @@
+current directory: /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/src/helper-scripts/download_binaries
+/home/sifaho/.rvm/rubies/ruby-2.4.2/bin/ruby -r ./siteconf20180705-26448-peds43.rb extconf.rb
+Attempting to download https://oss-binaries.phusionpassenger.com/binaries/passenger/by_release/5.3.3/rubyext-ruby-2.4.2-x86_64-linux.tar.gz into /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/download_cache
+*** Could not download https://oss-binaries.phusionpassenger.com/binaries/passenger/by_release/5.3.3/rubyext-ruby-2.4.2-x86_64-linux.tar.gz: The requested URL returned error: 404 Not Found
+Attempting to download https://s3.amazonaws.com/phusion-passenger/binaries/passenger/by_release/5.3.3/rubyext-ruby-2.4.2-x86_64-linux.tar.gz into /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/download_cache
+*** Could not download https://s3.amazonaws.com/phusion-passenger/binaries/passenger/by_release/5.3.3/rubyext-ruby-2.4.2-x86_64-linux.tar.gz: The requested URL returned error: 403 Forbidden
+Attempting to download https://oss-binaries.phusionpassenger.com/binaries/passenger/by_release/5.3.3/nginx-1.14.0-x86_64-linux.tar.gz into /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/download_cache
+*** Could not download https://oss-binaries.phusionpassenger.com/binaries/passenger/by_release/5.3.3/nginx-1.14.0-x86_64-linux.tar.gz: Resolving timed out after 4513 milliseconds
+Attempting to download https://s3.amazonaws.com/phusion-passenger/binaries/passenger/by_release/5.3.3/nginx-1.14.0-x86_64-linux.tar.gz into /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/download_cache
+Attempting to download https://oss-binaries.phusionpassenger.com/binaries/passenger/by_release/5.3.3/agent-x86_64-linux.tar.gz into /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/download_cache
+
+current directory: /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/src/helper-scripts/download_binaries
+make "DESTDIR=" clean
+true
+
+current directory: /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/src/helper-scripts/download_binaries
+make "DESTDIR="
+true
+
+current directory: /var/www/SIFAHO/code/vendor/bundle/ruby/2.4.0/gems/passenger-5.3.3/src/helper-scripts/download_binaries
+make "DESTDIR=" install
+true
