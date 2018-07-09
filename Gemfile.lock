@@ -43,12 +43,9 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
-    autoprefixer-rails (8.6.3)
+    autoprefixer-rails (8.6.4)
       execjs
     bcrypt (3.1.12)
-    bcrypt (3.1.12-java)
-    bcrypt (3.1.12-x64-mingw32)
-    bcrypt (3.1.12-x86-mingw32)
     better_errors (2.4.0)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -87,8 +84,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
-    concurrent-ruby (1.0.5-java)
     crass (1.0.4)
+    daemons (1.2.6)
     debug_inspector (0.0.3)
     devise (4.4.3)
       bcrypt (~> 3.0)
@@ -97,11 +94,9 @@ GEM
       responders
       warden (~> 1.2.3)
     erubi (1.7.1)
+    eventmachine (1.2.7)
     execjs (2.7.0)
     ffi (1.9.25)
-    ffi (1.9.25-java)
-    ffi (1.9.25-x64-mingw32)
-    ffi (1.9.25-x86-mingw32)
     filterrific (5.0.1)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
@@ -137,6 +132,7 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
+    kgio (2.11.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -155,21 +151,15 @@ GEM
     multi_json (1.13.1)
     nested_form (0.3.2)
     nio4r (2.3.1)
-    nio4r (2.3.1-java)
-    nokogiri (1.8.3)
-      mini_portile2 (~> 2.3.0)
-    nokogiri (1.8.3-java)
-    nokogiri (1.8.3-x64-mingw32)
-      mini_portile2 (~> 2.3.0)
-    nokogiri (1.8.3-x86-mingw32)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
+    passenger (5.3.3)
+      rack
+      rake (>= 0.8.1)
     pg (0.21.0)
-    pg (0.21.0-x64-mingw32)
-    pg (0.21.0-x86-mingw32)
     public_suffix (3.0.2)
     puma (3.11.4)
-    puma (3.11.4-java)
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (2.0.5)
@@ -215,6 +205,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    raindrops (0.19.0)
     rake (12.3.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
@@ -237,7 +228,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    selenium-webdriver (3.12.0)
+    selenium-webdriver (3.13.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
     simple_form (4.0.1)
@@ -256,19 +247,23 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     temple (0.8.0)
+    thin (1.7.2)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
     thor (0.20.0)
     thread_safe (0.3.6)
-    thread_safe (0.3.6-java)
     tilt (2.0.8)
     turbolinks (5.1.1)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2018.5)
-      tzinfo (>= 1.0.0)
-    uglifier (4.1.12)
+    uglifier (4.1.14)
       execjs (>= 0.3.0, < 3)
+    unicorn (5.4.0)
+      kgio (~> 2.6)
+      raindrops (~> 0.7)
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.6.2)
@@ -278,8 +273,6 @@ GEM
       railties (>= 5.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-driver (0.6.5-java)
-      websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
     will_paginate (3.1.6)
     will_paginate-bootstrap (1.0.1)
@@ -288,11 +281,7 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
-  java
   ruby
-  x64-mingw32
-  x86-mingw32
-  x86-mswin32
 
 DEPENDENCIES
   active_median
@@ -313,6 +302,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   momentjs-rails (>= 2.9.0)
+  passenger
   pg (~> 0.18)
   puma (~> 3.7)
   pundit
@@ -325,9 +315,11 @@ DEPENDENCIES
   simple_form
   spring
   spring-watcher-listen (~> 2.0.0)
+  thin
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
+  unicorn
   web-console (>= 3.3.0)
   will_paginate (~> 3.1.0)
   will_paginate-bootstrap
@@ -336,4 +328,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.2
+   1.16.1
