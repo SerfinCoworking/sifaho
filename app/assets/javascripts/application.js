@@ -16,6 +16,7 @@
 //= require jquery_ujs
 //= require chosen-jquery
 //= require filterrific/filterrific-jquery
+//= require awesomplete
 //= require highcharts
 //= require chartkick
 //= require turbolinks

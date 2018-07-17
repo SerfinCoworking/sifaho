@@ -1,5 +1,4 @@
-$('#prescription_date_received').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
-$('#prescription_date_processed').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+$('#prescription_date_received').datetimepicker({ format: 'DD/MM/YYYY HH:mm' });
 
 $('.chosen-select').chosen({
     allow_single_deselect: true,
@@ -140,3 +139,31 @@ function setMaxQuantitySupply(idSelect){
     }
   }
 }
+
+jQuery(function() {
+  var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+  return $('#professional').autocomplete({
+    source: $('#professional').data('autocomplete-source'),
+    minLength: 3,
+    open: function (e, ui) {
+      var acData = $(this).data('ui-autocomplete');
+      acData
+      .menu
+      .element
+      .find('li')
+      .each(function () {
+          var me = $(this);
+          var keywords = acData.term.split(' ').join('|');
+          me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+      });
+    },
+    select:
+    function (event, ui) {
+      $("#professional_id").val(ui.item.id);
+      console.log(ui.item.dni);
+    }
+  }).each(function() {
+      $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+  })
+});

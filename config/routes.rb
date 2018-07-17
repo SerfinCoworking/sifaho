@@ -7,7 +7,12 @@ Rails.application.routes.draw do
   resources :patients
   resources :medications
   resources :quantity_medications
-  resources :professionals
+  resources :professionals do
+    collection do
+
+      get "doctors"
+    end
+  end
   resources :patients
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   devise_for :users, :controllers => { registrations: 'registrations' }
@@ -15,4 +20,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get '/profile/edit', to:'profiles#edit', as:'edit_profile'
   patch '/profile', to: 'profiles#update'
+  # Rescue errors
+  match "/404", :to => "errors#not_found", :via => :all
+  match "/500", :to => "errors#internal_server_error", :via => :all
 end

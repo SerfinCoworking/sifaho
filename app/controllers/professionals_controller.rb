@@ -90,6 +90,13 @@ class ProfessionalsController < ApplicationController
     end
   end
 
+  def doctors
+    @doctors = Professional.order(:first_name).search_query(params[:term])
+    render json: @doctors.map{ |doc| { id: doc.id, dni: doc.dni, label: doc.full_name } }
+
+    # @doctors.map{ |doc| { id: doc.id, dni: doc.dni, full_name: doc.full_name } }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_professional

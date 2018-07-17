@@ -1,6 +1,11 @@
 <%= simple_form_for @prescription, remote: true, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
-  <%= f.input :professional_id,
+  <%= f.label :professional_id, "Doctor" %>
+  <%= f.text_field :professional_id, id: "professional", class: "form-control",
+                    placeholder: 'Nombre o Apellido',
+                    data: { autocomplete_source: doctors_professionals_path } %>
+  <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
+  <!-- <%= f.input :professional_id,
                     label: 'Doctor',
                     label_method: :full_name,
                     value_method: :id,
@@ -13,7 +18,7 @@
 
   <%= f.simple_fields_for :professional, html: {class: "form-inline"} do |form_professional| %>
     <%= render "professional_fields", :f => form_professional %>
-  <% end %><br>
+  <% end %><br> -->
 
   <%= f.input :patient_id,
                     label: 'Paciente',
