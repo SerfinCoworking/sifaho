@@ -1,7 +1,5 @@
 {
   "name": "sifaho",
   "private": true,
-  "dependencies": {
-    "awesomplete": "^1.1.2"
-  }
+  "dependencies": {}
 }
