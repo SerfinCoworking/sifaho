@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180626005227) do
+ActiveRecord::Schema.define(version: 20180718175416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,12 +64,16 @@ ActiveRecord::Schema.define(version: 20180626005227) do
   end
 
   create_table "patients", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
+    t.string "first_name", limit: 100
+    t.string "last_name", limit: 100
     t.integer "dni"
-    t.string "address"
-    t.string "email"
-    t.string "phone"
+    t.integer "sex", default: 1
+    t.datetime "birthdate"
+    t.boolean "is_chronic"
+    t.boolean "is_urban"
+    t.string "phone", limit: 20
+    t.string "cell_phone", limit: 20
+    t.string "email", limit: 50
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "patient_type_id"
@@ -95,18 +99,29 @@ ActiveRecord::Schema.define(version: 20180626005227) do
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end
 
+  create_table "professional_types", force: :cascade do |t|
+    t.string "name", limit: 50
+  end
+
   create_table "professionals", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
+    t.string "first_name", limit: 50
+    t.string "last_name", limit: 50
+    t.string "full_name", limit: 102
     t.integer "dni"
-    t.string "enrollment"
-    t.string "address"
+    t.string "enrollment", limit: 20
     t.string "email"
     t.string "phone"
+    t.integer "sex", default: 1
+    t.boolean "is_active"
+    t.string "docket", limit: 10
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "professional_type_id"
     t.bigint "sector_id"
+    t.index ["professional_type_id"], name: "index_professionals_on_professional_type_id"
     t.index ["sector_id"], name: "index_professionals_on_sector_id"
+    t.index ["user_id"], name: "index_professionals_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -122,6 +137,17 @@ ActiveRecord::Schema.define(version: 20180626005227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.string "cuit"
+    t.string "domicile"
+    t.string "phone"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "quantity_medications", force: :cascade do |t|
@@ -167,12 +193,44 @@ ActiveRecord::Schema.define(version: 20180626005227) do
 
   create_table "supplies", force: :cascade do |t|
     t.string "name"
-    t.integer "quantity"
-    t.integer "initial_quantity"
-    t.datetime "expiry_date"
-    t.datetime "date_received"
+    t.string "description"
+    t.string "observation"
+    t.string "unity", limit: 100
+    t.boolean "needs_expiration"
+    t.boolean "active_alarm"
+    t.integer "period_alarm"
+    t.integer "expiration_alarm"
+    t.integer "quantity_alarm"
+    t.integer "period_control"
+    t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "supply_area_id"
+    t.index ["supply_area_id"], name: "index_supplies_on_supply_area_id"
+  end
+
+  create_table "supply_areas", force: :cascade do |t|
+    t.string "name", limit: 50
+  end
+
+  create_table "supply_lots", force: :cascade do |t|
+    t.string "code"
+    t.string "supply_name"
+    t.datetime "expiry_date"
+    t.datetime "date_received"
+    t.integer "quantity"
+    t.integer "initial_quantity"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "supply_id"
+    t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
+  end
+
+  create_table "unities", force: :cascade do |t|
+    t.string "name", limit: 100
+    t.integer "simela_group"
+    t.decimal "simela_relation", precision: 10, scale: 4
   end
 
   create_table "users", force: :cascade do |t|
@@ -219,8 +277,11 @@ ActiveRecord::Schema.define(version: 20180626005227) do
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
+  add_foreign_key "professionals", "professional_types"
   add_foreign_key "professionals", "sectors"
   add_foreign_key "sectors", "users"
+  add_foreign_key "supplies", "supply_areas"
+  add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"
   add_foreign_key "vademecums", "medications"
 end

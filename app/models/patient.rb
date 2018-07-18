@@ -90,10 +90,10 @@ class Patient < ApplicationRecord
 
   #Métodos públicos
   def full_info
-    self.first_name<<" "<<self.last_name<<" "<<self.dni.to_s
+    self.first_name+" "+self.last_name+" "+self.dni.to_s
   end
 
   def full_name
-    self.first_name<<" "<<self.last_name
+    self.first_name+" "+self.last_name
   end
 end

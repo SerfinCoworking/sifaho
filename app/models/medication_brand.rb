@@ -9,6 +9,6 @@ class MedicationBrand < ApplicationRecord
   accepts_nested_attributes_for :laboratory
 
   def name_and_lab
-    self.name<<" - "<<self.laboratory.name
+    self.name+" - "+self.laboratory.name
   end
 end

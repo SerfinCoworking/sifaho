@@ -1,9 +1,14 @@
 class Professional < ApplicationRecord
+  enum sex: { indeterminado: 1, mujer: 2, hombre: 3 }
+
+  after_create :assign_full_name
+
   # Relaciones
   has_many :prescriptions
   belongs_to :sector
+  belongs_to :professional_type
+  has_one :user
 
-  # Validaciones
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :dni
@@ -82,10 +87,9 @@ class Professional < ApplicationRecord
     where(sector_id: [*sector_ids])
   }
 
-  def full_name
-    if self.first_name and self.last_name
-      self.first_name << " " << self.last_name
-    end
+  def assign_full_name
+    self.full_name = self.last_name+" "+self.first_name
+    save!
   end
 
   # Método para establecer las opciones del select input del filtro

@@ -1,0 +1,21 @@
+<%= simple_form_for @supply, remote: true, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
+
+    <%= f.input :name, placeholder: 'Nombre', required: true, label: false %>
+    <%= f.input :quantity, placeholder: 'Cantidad', required: true, label: false, input_html: { min: '0', max:'9999' } %>
+    <br><br>
+    <%= f.input :date_received, label: 'Fecha recibida',
+                                as: :string,
+                                :placeholder => "Seleccionar fecha",
+                                input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                value: "#{@supply.date_received unless @supply.new_record?}"},
+                                html5: false
+                                %>
+    <%= f.input :expiry_date, label: 'Fecha expiración',
+                                as: :string,
+                                :placeholder => "Seleccionar fecha",
+                                input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                value: "#{@supply.expiry_date unless @supply.new_record?}"},
+                                html5: false
+                                %><br><br>
+<% end %>

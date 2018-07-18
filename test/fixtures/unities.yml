@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  simela_group: 1
+  simela_relation: 9.99
+
+two:
+  name: MyString
+  simela_group: 1
+  simela_relation: 9.99

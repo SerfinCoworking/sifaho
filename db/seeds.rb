@@ -6,16 +6,32 @@ Sector.create!([
   { sector_name: "Oftalmología", description: "Se enfoca en el sistema ocular", complexity_level: 2 },
   { sector_name: "Pediatría", description: "Medicina general de niños", complexity_level: 2 }
 ])
+ProfessionalType.create!([
+  { name: "Informática" },
+  { name: "Depósito" },
+  { name: "Farmacia" },
+  { name: "Traumatología" },
+  { name: "Oftalmología" },
+  { name: "Pediatría" }
+])
+Professional.create!([
+  { first_name: "Eugenio", last_name: "Gómez", dni: 12345678, professional_type_id: 1,
+    sector_id: 1, email: "eugesma@gmail.com", phone: "422862"},
+  { first_name: "Pablo", last_name: "Santillan", dni: 12345678, enrollment: "5336", professional_type_id: 4,
+    sector_id: 4, email: "elpablito@gmail.com", phone: "0297223412" },
+  { first_name: "Marina", last_name: "Petersen", dni: 23412342, enrollment: "6754", professional_type_id: 5,
+    sector_id: 5, email: "lamari@gmail.com", phone: "0297436893" },
+  { first_name: "Jorge", last_name: "Bo", dni: 22456789, enrollment: "9472", professional_type_id: 6,
+    sector_id: 6, email: "elbojo@gmail.com", phone: "0297432157" }
+])
 eugeUser = User.new(
   :username              => "eugesma",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => 1,
+  :sector_id             => 1
 )
 eugeUser.add_role :admin
 eugeUser.save!
-User.create!( username: "veronica", password: "12345678", password_confirmation: "12345678", sector_id: 2)
-User.create!( username: "claudia", password: "12345678", password_confirmation: "12345678", sector_id: 3)
 User.create!( username: "damian", password: "12345678", password_confirmation: "12345678", sector_id: 1)
 Laboratory.create!([
   { name: "Bayer", address: "Munro, Provincia de Buenos Aires"},
@@ -39,26 +55,10 @@ Medication.create!([
   { quantity: 15, expiry_date: DateTime.current + 1.year, date_received: DateTime.current, vademecum_id: 2,
     medication_brand: MedicationBrand.find(2) },
 ])
-Supply.create!([
-  { name: "Leche", quantity: 40, expiry_date: DateTime.current + 4.month, date_received: DateTime.current },
-  { name: "Muletas", quantity: 5, expiry_date: DateTime.current + 10.year, date_received: DateTime.current }
-])
 PatientType.create!([
   { name: "Ambulatorio", description: "Está recibiendo servicios del departamento de emergencia."},
   { name: "Cuidados intensivos", description: "Está recibiendo servicios del departamento de emergencia."},
   { name: "Esteril", description: "Incapaz de procrear."}
-])
-Patient.create!( first_name: "Juan", last_name: "Perez", dni: 12345678,
-  address: "Elordi 343, San Martin de los Andes", email: "eljuan@gmail.com",
-  phone: "02972432543", patient_type_id: 1
-)
-Professional.create!([
-  { first_name: "Pablo", last_name: "Santillan", dni: 12345678, enrollment: "5336", sector_id: 1,
-    address: "Sarmiento 489, San Martin de los Andes", email: "elpablito@gmail.com", phone: "0297223412" },
-  { first_name: "Marina", last_name: "Petersen", dni: 23412342, enrollment: "6754", sector_id: 2,
-    address: "Elordi 213, San Martin de los Andes", email: "lamari@gmail.com", phone: "0297436893" },
-  { first_name: "Jorge", last_name: "Bo", dni: 22456789, enrollment: "9472", sector_id: 3,
-    address: "Rivadavia 394, San Martin de los Andes", email: "elbojo@gmail.com", phone: "0297432157" }
 ])
 PrescriptionStatus.create!([
   { name: "Pendiente" },

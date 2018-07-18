@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :supply_lots
   resources :internal_orders
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
   resources :supplies
