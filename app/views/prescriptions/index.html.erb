@@ -35,8 +35,7 @@
           id: "datetimepicker", placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY hh:mm A/PM'}) %>
     </div>
     <div class="col-md-2 col-sm-3">
-      <%= link_to reset_filterrific_url, class: 'btn btn-default btn-md pull-right',
-            title: 'Reiniciar filtro', data: { toggle: 'tooltip', placement: 'bottom' } do %>
+      <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
       <% end %>
     </div>

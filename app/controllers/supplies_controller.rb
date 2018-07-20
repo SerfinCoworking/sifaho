@@ -11,15 +11,16 @@ class SuppliesController < ApplicationController
         sorted_by: Supply.options_for_sorted_by
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
+      default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
         :search_query,
-        :date_received_at,
+        :with_code,
+        :with_area_id,
       ],
     ) or return
     @supplies = @filterrific.find.page(params[:page]).per_page(8)
-
+    @supply_areas = SupplyArea.all
 
     respond_to do |format|
       format.html

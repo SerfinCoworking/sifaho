@@ -20,7 +20,7 @@
     <%= render "professional_fields", :f => form_professional %>
   <% end %><br> -->
 
-  <%= f.input :patient_id,
+  <!-- <%= f.input :patient_id,
                     label: 'Paciente',
                     label_method: :full_info,
                     value_method: :id,
@@ -33,10 +33,10 @@
 
   <%= f.simple_fields_for :patient, html: { class: 'form-inline' } do |form_patient| %>
     <%= render "patient_fields", :f => form_patient %>
-  <% end %><br>
+  <% end %><br> -->
 
-  <div class='row'>
-    <div class='col-md-6'>
+   <div class='row'>
+    <!--<div class='col-md-6'>
       <label>Medicación</label>
       <div id="quantity-medications">
           <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
@@ -48,9 +48,9 @@
             <% end %>
           </div>
       </div>
-    </div>
-    <div class='col-md-6'>
-      <label>Suministro</label>
+    </div> -->
+    <div class='col-md-12'>
+      <label>Insumos</label>
       <div id="quantity-supplies">
           <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
             <%= render "quantity_supply_fields", :f => form_quantity %>

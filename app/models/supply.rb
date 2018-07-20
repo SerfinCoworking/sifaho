@@ -12,9 +12,10 @@ class Supply < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },
     available_filters: [
+      :with_code,
       :sorted_by,
       :search_query,
-      :date_received_at,
+      :with_area_id,
     ]
   )
 
@@ -63,11 +64,21 @@ class Supply < ApplicationRecord
     end
   }
 
+  scope :with_code, lambda { |query|
+    string = query.to_s
+    where('supplies.id::text LIKE ?', "#{string}%")
+  }
+
+  scope :with_area_id, lambda { |an_id|
+    where('supplies.supply_area_id >= ?', an_id)
+  }
+
+
    # Método para establecer las opciones del select input del filtro
    # Es llamado por el controlador como parte de `initialize_filterrific`.
    def self.options_for_sorted_by
      [
-       ['Código', 'codigo_asc'],
+       ['Código (asc)', 'codigo_asc'],
        ['Nombre (a-z)', 'nombre_asc'],
        ['Unidad (a-z)', 'unidad_asc']
      ]

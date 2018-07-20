@@ -102,9 +102,9 @@ function setMaxQuantity(idSelect){
 //se activa desde el html.
 
 //Se crea un diccionario de los suministros con sus respectivas cantidades en stock.
-<% @supplies = Supply.all %>
+<% @supplt_lots = SupplyLot.all %>
 var quantityToSupply = {
-<% @supplies.each do |supply| %>
+<% @supplt_lots.each do |supply| %>
   "<%=supply.id%>": {
   quantity : "<%=supply.quantity%>"
 },

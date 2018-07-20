@@ -2,7 +2,7 @@
   <h3>Pedidos internos
   <%= link_to new_internal_order_path, remote: true, class: 'btn btn-primary btn-md' do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    Nuevo pedido interno
+    Nuevo
   <% end %>
   </h3>
 <% end %>
@@ -35,9 +35,8 @@
           id: "datetimepicker", placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY hh:mm A/PM'}) %>
     </div>
     <div class="col-md-2 col-sm-3">
-      <%= link_to reset_filterrific_url, class: 'btn btn-default btn-md pull-right',
-            title: 'Reiniciar filtro', data: { toggle: 'tooltip', placement: 'bottom' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+      <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
       <% end %>
     </div>
     <%# add an automated spinner to your form when the list is refreshed %>

@@ -51,6 +51,12 @@ class Patient < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("patients.created_at #{ direction }")
+    when /^fecha_nacimiento_/
+      # Ordenamiento por fecha de creación en la BD
+      order("patients.birthdate #{ direction }")
+    when /^dni_/
+      # Ordenamiento por fecha de creación en la BD
+      order("patients.dni #{ direction }")
     when /^nombre_/
       # Ordenamiento por nombre de paciente
       order("LOWER(patients.first_name) #{ direction }")
@@ -81,7 +87,7 @@ class Patient < ApplicationRecord
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
-      ['Creación', 'created_at_asc'],
+      ['Creación (desc)', 'created_at_desc'],
       ['Nombre (a-z)', 'nombre_asc'],
       ['Apellido (a-z)', 'apellido_asc'],
       ['Tipo de paciente', 'tipo_de_paciente_asc'],

@@ -3,8 +3,8 @@
     <td><%= patient.first_name %></td>
     <td><%= patient.last_name %></td>
     <td><%= patient.dni %></td>
-    <td><%= patient.patient_type.name %></td>
-    <td><%= patient.created_at %></td>
+    <td><%= patient.birthdate.strftime("%d/%m/%Y") %></td>
+    <td><%= patient.is_chronic? ? "Si" : "No" %></td>
     <td>
       <%= link_to patient_path(patient), remote:true, class: 'btn btn-default btn-xs',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

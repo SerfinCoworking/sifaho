@@ -82,6 +82,10 @@ class Professional < ApplicationRecord
     where('professionals.dni::text LIKE ?', "%#{string}%")
   }
 
+  def full_name
+    self.fullname
+  end
+
   # filters on 'sector_id' foreign key
   scope :with_sector_id, lambda { |sector_ids|
     where(sector_id: [*sector_ids])

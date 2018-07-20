@@ -2,9 +2,9 @@
     <div class="js-fade fade-in is-paused">
     <td><%= professional.first_name %></td>
     <td><%= professional.last_name %></td>
-    <td><%= professional.enrollment %></td>
+    <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
     <td><%= professional.dni %></td>
-    <td><%= professional.sector.sector_name %></td>
+    <td><%= professional.professional_type.name %></td>
     <td>
       <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

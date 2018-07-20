@@ -42,10 +42,6 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
-    @professionals = Professional.all
-    @medications = Medication.all
-    @supplies = Supply.all
-    @patients = Patient.all
     @sectors = Sector.all
     @patient_types = PatientType.all
     @prescription.build_professional

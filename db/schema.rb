@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20180718175416) do
   create_table "professionals", force: :cascade do |t|
     t.string "first_name", limit: 50
     t.string "last_name", limit: 50
-    t.string "full_name", limit: 102
+    t.string "fullname", limit: 102
     t.integer "dni"
     t.string "enrollment", limit: 20
     t.string "email"

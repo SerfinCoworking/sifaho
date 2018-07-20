@@ -5,9 +5,9 @@
         <tr>
           <th><%= filterrific_sorting_link(@filterrific, :nombre) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :apellido) %></th>
-          <th>DNI</th>
-          <th><%= filterrific_sorting_link(@filterrific, :tipo_de_paciente) %></th>
-          <th>Cargado</th>
+          <th><%= filterrific_sorting_link(@filterrific, :dni) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :fecha_nacimiento) %></th>
+          <th>Crónico</th>
           <th colspan="3">Acciones</th>
         </tr>
       </thead>
@@ -16,7 +16,7 @@
       </tbody>
     </table>
   </div>
-</div>
-<div id="page_links">
+  <div id="page_links">
     <%= paginate @patient %>
+  </div>
 </div>
