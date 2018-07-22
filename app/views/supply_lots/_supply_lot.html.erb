@@ -1,0 +1,30 @@
+  <tr id="supply_lot_<%= supply_lot.id %>">
+    <div class="js-fade fade-in is-paused">
+      <td><%= supply_lot.id %></td>
+      <td><%= supply_lot.code %></td>
+      <td><%= supply_lot.supply_name %></td>
+      <td>
+        <span class="label label-<%= supply_lot.status_label %>">
+          <%= supply_lot.status.split('_').map(&:capitalize).join(' ') %>
+        </span>
+      </td>
+      <td><span class="label label-default"><%= supply_lot.initial_quantity %></span></td>
+      <td><span class="label label-<%= supply_lot.quantity_label %>"><%= supply_lot.quantity %></span></td>
+      <td><%= supply_lot.date_received.strftime("%d/%m/%Y") %></td>
+      <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "---" %></td>
+      <td>
+        <%= link_to supply_lot_path(supply_lot), remote:true, class: 'btn btn-default btn-xs',
+              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <% end %>
+        <%= link_to edit_supply_lot_path(supply_lot), remote: true, class: 'btn btn-warning btn-xs',
+              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+        <%= link_to supply_lot_path(supply_lot), remote: true, class: 'btn btn-danger btn-xs',
+            title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar el lote de #{supply_lot.supply_name} con cantidad: #{supply_lot.quantity}?"} do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <% end %>
+      </td>
+    </div>
+  </tr>

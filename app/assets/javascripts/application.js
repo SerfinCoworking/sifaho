@@ -20,15 +20,15 @@
 //= require chartkick
 //= require turbolinks
 //= require cocoon
-//= require_tree .
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-sprockets
 //= require bootstrap
+//= require_tree .
 
 // Se oculta el flash message
 window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
-}, 2000);
+}, 2500);

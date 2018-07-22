@@ -39,10 +39,10 @@
       <label>Ordenar por</label>
       <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
     </div>
-    <div class="col-md-2 col-sm-2">
+    <!-- <div class="col-md-2 col-sm-2">
       <label>Area</label>
       <%= f.select(:with_area_id, @supply_areas, { class: 'chosen-select' }) %>
-    </div>
+    </div> -->
     <div class="col-md-2 col-sm-3">
       <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>

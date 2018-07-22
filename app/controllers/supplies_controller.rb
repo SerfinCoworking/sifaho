@@ -56,6 +56,7 @@ class SuppliesController < ApplicationController
   # POST /supplies.json
   def create
     @supply = Supply.new(supply_params)
+    @new_supply_lot = Supply.new
 
     respond_to do |format|
       if @supply.save
@@ -91,6 +92,16 @@ class SuppliesController < ApplicationController
       flash.now[:success] = "El suministro "+@supply_name+" se ha eliminado correctamente."
       format.js
     end
+  end
+
+  def search_by_name
+    @supplies = Supply.order(:name).search_query(params[:term]).limit(15)
+    render json: @supplies.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration } }
+  end
+
+  def search_by_id
+    @supplies = Supply.order(:id).with_code(params[:term])
+    render json: @supplies.map{ |sup| { label: sup.id, name: sup.name , expiry: sup.needs_expiration } }
   end
 
   private

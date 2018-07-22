@@ -18,17 +18,18 @@ class SupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply
-  validates_presence_of :expiry_date
+  validates_presence_of :quantity
   validates_presence_of :date_received
 
 
   filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
+    default_filter_params: { sorted_by: 'creacion_desc' },
     available_filters: [
+      :with_code,
       :sorted_by,
       :search_query,
-      :date_received_at,
-      :status,
+      :with_area_id,
+      :date_received_at
     ]
   )
 
@@ -49,83 +50,73 @@ class SupplyLot < ApplicationRecord
     }
 
     # Cantidad de condiciones.
-    num_or_conds = 2
+    num_or_conds = 1
     where(
       terms.map { |term|
-        "(LOWER(vademecums.medication_name) LIKE ? OR LOWER(medication_brands.name) LIKE ?)"
+        "(LOWER(supply_lots.name) LIKE ?)"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
-    ).joins(:vademecum, :medication_brand)
+    )
   }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
-    when /^created_at_/s
-      # Ordenamiento por fecha de creación en la BD
-      order("medications.created_at #{ direction }")
-    when /^droga_/
-      # Ordenamiento por nombre de droga
-      order("LOWER(vademecums.medication_name) #{ direction }").joins(:vademecum)
-    when /^marca_/
-      # Ordenamiento por marca de medicamento
-      order("LOWER(medication_brands.name) #{ direction }").joins(:medication_brand)
-    when /^fecha_recepcion_/
-      # Ordenamiento por la fecha de recepción
-      order("medications.date_received #{ direction }")
-    when /^fecha_expiracion_/
-      # Ordenamiento por la fecha de expiración
-      order("medications.date_received #{ direction }")
+    when /^creacion_/
+      # Ordenamiento por fecha de recepción
+      order("supply_lots.created_at #{ direction }")
+    when /^codigo_/
+      # Ordenamiento por código de lote
+      order("LOWER(supply_lots.code) #{ direction }")
+    when /^insumo_/
+      # Ordenamiento por nombre del insumo
+      order("LOWER(supply_lots.supply_name) #{ direction }")
+    when /^estado_/
+      # Ordenamiento por estado del lote
+      order("supply_lots.status #{ direction }")
+    when /^cantidad_inicial_/
+      # Ordenamiento por cantidad inicial del lote
+      order("supply_lots.initial_quantity #{ direction }")
     when /^cantidad_/
-      # Ordenamiento por cantidad en stock
-      order("medications.quantity #{ direction }")
+      # Ordenamiento por cantidad actual del lote
+      order("supply_lots.quantity #{ direction }")
+    when /^fecha_recepcion_/
+      # Ordenamiento por fecha de recepción
+      order("supply_lots.date_received #{ direction }")
+    when /^fecha_expiracion_/
+      # Ordenamiento por fecha de expiración
+      order("supply_lots.expiry_date #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
 
+  scope :with_code, lambda { |query|
+    string = query.to_s
+    where('supply_lots.id::text LIKE ?', "#{string}%")
+  }
+
   scope :date_received_at, lambda { |reference_time|
-    where('medications.date_received >= ?', reference_time)
+    where('supply_lots.date_received >= ?', reference_time)
   }
 
-  scope :status, ->(options) {
-    where(status: options) unless options.nil?
-  }
-
-  # Método para establecer las opciones del select input del filtro
-  # Es llamado por el controlador como parte de `initialize_filterrific`.
-  def self.options_for_sorted_by
-    [
-      ['Creación', 'created_at_asc'],
-      ['Droga (a-z)', 'droga_asc'],
-      ['Marca (a-z)', 'marca_asc'],
-      ['Fecha recepción (la nueva primero)', 'fecha_recepcion_desc'],
-      ['Fecha de expiración (próxima a vencer primero)', 'fecha_expiracion_asc'],
-      ['Cantidad', 'cantidad_asc']
-    ]
-  end
+   # Método para establecer las opciones del select input del filtro
+   # Es llamado por el controlador como parte de `initialize_filterrific`.
+   def self.options_for_sorted_by
+     [
+       ['Creación (desc)', 'creacion_desc'],
+       ['Código (asc)', 'codigo_asc'],
+       ['Insumo (a-z)', 'insumo_asc'],
+       ['Cantidad (asc)', 'cantidad_asc'],
+       ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
+       ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
+       ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
+     ]
+   end
 
   #Métodos públicos
-  def full_info
-    if self.vademecum
-      self.vademecum.medication_name<<" "<<self.medication_brand.name
-    end
-  end
-
-  def name
-    if self.vademecum
-      self.vademecum.medication_name
-    end
-  end
-
-  def brand
-    if self.medication_brand
-      self.medication_brand.name
-    end
-  end
-
   # Disminuye la cantidad
   def decrement(a_quantity)
     self.quantity -= a_quantity
@@ -172,15 +163,17 @@ class SupplyLot < ApplicationRecord
   private
   # Se actualiza el estado de expiración
   def update_status
-    # If expired
-    if self.expiry_date <= DateTime.now
-      self.status = "vencido"
-      # If near_expiry
-    elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-      self.status = "por_vencer"
-      # If good
-    elsif expiry_date > DateTime.now
-      self.status = "vigente"
+    if expiry_date?
+      # If expired
+      if self.expiry_date <= DateTime.now
+        self.status = "vencido"
+        # If near_expiry
+      elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+        self.status = "por_vencer"
+        # If good
+      elsif expiry_date > DateTime.now
+        self.status = "vigente"
+      end
     end
   end
 
@@ -188,7 +181,7 @@ class SupplyLot < ApplicationRecord
   def assign_constants
     self.initial_quantity = self.quantity
     self.code = self.supply_id.to_s
-    self.name = self.supply.name
+    self.supply_name = self.supply.name
     save!
   end
 end

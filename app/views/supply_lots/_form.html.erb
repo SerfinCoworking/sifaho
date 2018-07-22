@@ -1,21 +1,59 @@
-<%= simple_form_for @supply, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @new_supply_lot, remote: true, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
-
-    <%= f.input :name, placeholder: 'Nombre', required: true, label: false %>
-    <%= f.input :quantity, placeholder: 'Cantidad', required: true, label: false, input_html: { min: '0', max:'9999' } %>
-    <br><br>
-    <%= f.input :date_received, label: 'Fecha recibida',
-                                as: :string,
-                                :placeholder => "Seleccionar fecha",
-                                input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                value: "#{@supply.date_received unless @supply.new_record?}"},
-                                html5: false
-                                %>
-    <%= f.input :expiry_date, label: 'Fecha expiración',
-                                as: :string,
-                                :placeholder => "Seleccionar fecha",
-                                input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                value: "#{@supply.expiry_date unless @supply.new_record?}"},
-                                html5: false
-                                %><br><br>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Insumo</th>
+        <th>Cantidad</th>
+        <th>Fecha recepción</th>
+        <th>Fecha expiración</th>
+        <th colspan="1"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <div class="js-fade fade-in is-paused">
+          <td>
+            <%= f.input :supply_id, class: "form-control",
+                            placeholder: 'Código', label: false,
+                            data: { autocomplete_source: search_by_id_supplies_path },
+                            input_html: { min: '0', max:'9999' },
+                            required: true %>
+          </td>
+          <td>
+            <%= f.text_field :supply_id, id: "nom_ins", class: "form-control",
+                              placeholder: 'Nombre',
+                              data: { autocomplete_source: search_by_name_supplies_path },
+                              required: true %>
+            <%= f.hidden_field :supply_id, id: "supply_id" %>
+          </td>
+          <td>
+            <%= f.input :quantity, placeholder: 'Cantidad', required: true,
+                                        label: false,
+                                        input_html: { min: '0', max:'9999' } %>
+          </td>
+          <td>
+            <%= f.input :date_received, label: false,
+                                        as: :string,
+                                        :placeholder => "Seleccionar fecha",
+                                        input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                        value: "#{@new_supply_lot.new_record? ? @new_supply_lot.date_received : Date.today}"},
+                                        html5: false %>
+          </td>
+          <td>
+            <%= f.input :expiry_date, label: false,
+                                        as: :string,
+                                        :placeholder => "Seleccionar fecha",
+                                        input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                        value: "#{@new_supply_lot.expiry_date unless @new_supply_lot.new_record?}"},
+                                        html5: false %>
+          </td>
+          <td>
+            <button type='submit' name='commit' class='btn btn-primary pull-right' form='new_supply_lot'>Cargar lote</button>
+          </td>
+        </div>
+      </tr>
+    </tbody>
+  </table>
 <% end %>

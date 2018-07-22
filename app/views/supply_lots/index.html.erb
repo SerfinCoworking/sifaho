@@ -1,37 +1,68 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Supply Lots</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Expiry date</th>
-      <th>Date received</th>
-      <th>Quantity</th>
-      <th>Initial quantity</th>
-      <th>Status</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @supply_lots.each do |supply_lot| %>
-      <tr>
-        <td><%= supply_lot.code %></td>
-        <td><%= supply_lot.expiry_date %></td>
-        <td><%= supply_lot.date_received %></td>
-        <td><%= supply_lot.quantity %></td>
-        <td><%= supply_lot.initial_quantity %></td>
-        <td><%= supply_lot.status %></td>
-        <td><%= link_to 'Show', supply_lot %></td>
-        <td><%= link_to 'Edit', edit_supply_lot_path(supply_lot) %></td>
-        <td><%= link_to 'Destroy', supply_lot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<% content_for :page_header do %>
+  <h3>Lotes de insumos
+    <!-- <%= link_to new_supply_lot_path, remote: true, class: 'btn btn-primary btn-md' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Nuevo
+    <% end %> -->
+    <%= button_tag(class: "btn btn-primary btn-md", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Nuevo
     <% end %>
-  </tbody>
-</table>
+    <%= button_tag(class: "btn btn-info btn-md", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+      Filtrar
+    <% end %>
+  </h3>
+<% end %>
+<div class="panel panel-primary" id="filter-panel">
+  <div class="panel-collapse collapse" id="new">
+      <%= render "form" %>
+  </div>
+</div>
+<div class="panel panel-info" id="filter-panel">
+  <div class="panel-collapse collapse" id="filter">
+    <div class="panel-body">
+      <%= form_for_filterrific @filterrific do |f| %>
+        <div class="col-md-2 col-sm-2">
+          <label>Buscar</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :with_code,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Código'
+          ) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <label>Buscar</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_query,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Nombre de insumo'
+          ) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <label>Ordenar por</label>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+        </div>
+        <div class="col-md-3 col-sm-3">
+           <label>Recibido desde</label>
+           <%= f.text_field(:date_received_at, class: 'form-control filterrific-periodically-observed',
+              id: "datetimepicker", placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+        </div>
+        <div class="col-md-2 col-sm-3">
+          <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+          <% end %>
+        </div>
+        <%# add an automated spinner to your form when the list is refreshed %>
+        <%= render_filterrific_spinner %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<br>
-
-<%= link_to 'New Supply Lot', new_supply_lot_path %>
+<%= render(
+  partial: 'supply_lots/list',
+  locals: { supply_lots: @supply_lots }
+) %>

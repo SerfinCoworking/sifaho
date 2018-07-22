@@ -4,12 +4,45 @@ class SupplyLotsController < ApplicationController
   # GET /supply_lots
   # GET /supply_lots.json
   def index
-    @supply_lots = SupplyLot.all
+    @filterrific = initialize_filterrific(
+      SupplyLot,
+      params[:filterrific],
+      select_options: {
+        sorted_by: SupplyLot.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'creacion_desc'},
+      available_filters: [
+        :sorted_by,
+        :search_query,
+        :with_code,
+        :with_area_id,
+        :date_received_at
+      ],
+    ) or return
+    @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+
+    @new_supply_lot = SupplyLot.new
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /supply_lots/1
   # GET /supply_lots/1.json
   def show
+    _percent = @supply_lot.quantity.to_f / @supply_lot.initial_quantity  * 100 unless @supply_lot.initial_quantity == 0
+    @percent_quantity_supply_lot = _percent
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /supply_lots/new
@@ -28,11 +61,11 @@ class SupplyLotsController < ApplicationController
 
     respond_to do |format|
       if @supply_lot.save
-        format.html { redirect_to @supply_lot, notice: 'Supply lot was successfully created.' }
-        format.json { render :show, status: :created, location: @supply_lot }
+        flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha creado correctamente."
+        format.js
       else
-        format.html { render :new }
-        format.json { render json: @supply_lot.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El lote no se ha podido crear."
+        format.js
       end
     end
   end
@@ -42,11 +75,11 @@ class SupplyLotsController < ApplicationController
   def update
     respond_to do |format|
       if @supply_lot.update(supply_lot_params)
-        format.html { redirect_to @supply_lot, notice: 'Supply lot was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supply_lot }
+        flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha modificado correctamente."
+        format.js
       else
-        format.html { render :edit }
-        format.json { render json: @supply_lot.errors, status: :unprocessable_entity }
+        flash.now[:error] = "El lote de "+@supply_lot.supply_name+" no se ha podido modificar."
+        format.js
       end
     end
   end
@@ -54,10 +87,11 @@ class SupplyLotsController < ApplicationController
   # DELETE /supply_lots/1
   # DELETE /supply_lots/1.json
   def destroy
+    @supply_name = @supply_lot.supply_name
     @supply_lot.destroy
     respond_to do |format|
-      format.html { redirect_to supply_lots_url, notice: 'Supply lot was successfully destroyed.' }
-      format.json { head :no_content }
+      flash.now[:success] = "El lote de "+@supply_name+" se ha eliminado correctamente."
+      format.js
     end
   end
 
@@ -69,6 +103,6 @@ class SupplyLotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_lot_params
-      params.require(:supply_lot).permit(:code, :expiry_date, :date_received, :quantity, :initial_quantity, :status)
+      params.require(:supply_lot).permit(:supply_id, :quantity, :expiry_date, :date_received)
     end
 end
