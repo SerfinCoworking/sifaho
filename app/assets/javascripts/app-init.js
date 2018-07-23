@@ -52,31 +52,31 @@ $(document).on('turbolinks:load', function() {
   });
 
   $('#dialog').on('shown.bs.modal', function(e) {
-  var idNum, medications;
-  // Id del form anidado para quantity_medications
-  medications = $('#quantity-medications');
+  var idNum, supply_lots;
+  // Id del form anidado para quantity_supply_lots
+  supply_lots = $('#quantity-supply_lots');
   // Métodos para conocer la cantitdad de forms anidados
   idNum = function() {
-    return medications.find('.nested-fields').size();
+    return supply_lots.find('.nested-fields').size();
   };
-  medications.on('cocoon:before-insert', function(e, el_to_add) {
+  supply_lots.on('cocoon:before-insert', function(e, el_to_add) {
     return el_to_add.fadeIn(200); // Efecto para el insert
   });
-  medications.on('cocoon:after-insert', function(e, added_el) {
+  supply_lots.on('cocoon:after-insert', function(e, added_el) {
     var i, j, ref, results, selectedValue, x;
     // Se coloca el id de los campos anidados
-    added_el.find('select').attr("id", "chosen-medication-" + idNum());
-    added_el.find('input.form-control.numeric').attr("id", "quantity-medication-" + idNum());
+    added_el.find('select').attr("id", "chosen-supply-lot-" + idNum());
+    added_el.find('input.form-control.numeric').attr("id", "quantity-supply-lot-" + idNum());
     results = [];
     for (i = j = 1, ref = idNum(); (1 <= ref ? j <= ref : j >= ref); i = 1 <= ref ? ++j : --j) {
-      selectedValue = $("#chosen-medication-" + i + " option:selected").val();
+      selectedValue = $("#chosen-supply-lot-" + i + " option:selected").val();
       results.push((function() {
         var k, ref1, results1;
         results1 = [];
         for (x = k = 1, ref1 = idNum(); (1 <= ref1 ? k <= ref1 : k >= ref1); x = 1 <= ref1 ? ++k : --k) {
           if (x !== i) {
-            $("#chosen-medication-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
-            results1.push($("#chosen-medication-" + x).trigger("chosen:updated"));
+            $("#chosen-supply-lot-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
+            results1.push($("#chosen-supply-lot-" + x).trigger("chosen:updated"));
           } else {
             results1.push(void 0);
           }
@@ -86,11 +86,11 @@ $(document).on('turbolinks:load', function() {
     }
     return results;
   });
-  medications.on('cocoon:before-remove', function(e, el_to_remove) {
+  supply_lots.on('cocoon:before-remove', function(e, el_to_remove) {
     $(this).data('remove-timeout', 200); // Efecto para remover
     return el_to_remove.fadeOut(200);
   });
-  return medications.on('cocoon:after-remove', function(e, removed_el) {});
+  return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
 });
 
 });
