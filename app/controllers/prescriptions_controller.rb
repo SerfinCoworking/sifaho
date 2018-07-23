@@ -42,13 +42,9 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
-    @sectors = Sector.all
-    @patient_types = PatientType.all
-    @prescription.build_professional
-    @prescription.professional.build_sector
-    @prescription.build_patient
+    @supply_lots = SupplyLot.all
     @prescription.quantity_medications.build
-    @prescription.quantity_supplies.build
+    @prescription.quantity_supply_lots.build
   end
 
   # GET /prescriptions/1/edit
@@ -141,11 +137,8 @@ class PrescriptionsController < ApplicationController
       params.require(:prescription).permit(
                                              :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
                                              quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
-                                             quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy],
-                                             patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id],
-                                             professional_attributes: [:id, :first_name, :last_name, :dni, :enrollment, :sector_id,
-                                               sector_attributes: [:id, :sector_name, :description, :complexity_level]
-                                             ]
+                                             quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy],
+                                             patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id]
                                           )
     end
 

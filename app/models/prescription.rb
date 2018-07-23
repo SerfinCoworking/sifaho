@@ -5,8 +5,8 @@ class Prescription < ApplicationRecord
   belongs_to :prescription_status
   has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :medications, :through => :quantity_medications
-  has_many :quantity_supplies, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, :through => :quantity_supplies
+  has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supply_lots, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :patient
@@ -14,21 +14,17 @@ class Prescription < ApplicationRecord
   validates_presence_of :professional
   validates_associated :quantity_medications
   validates_associated :medications
-  validates_associated :quantity_supplies
-  validates_associated :supplies
+  validates_associated :quantity_supply_lots
+  validates_associated :supply_lots
 
-  accepts_nested_attributes_for :quantity_medications,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :quantity_supplies,
+  # accepts_nested_attributes_for :quantity_medications,
+  #         :reject_if => :all_blank,
+  #         :allow_destroy => true
+  accepts_nested_attributes_for :quantity_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
   accepts_nested_attributes_for :medications
-  accepts_nested_attributes_for :supplies
-  accepts_nested_attributes_for :patient,
-          :reject_if => :all_blank
-  accepts_nested_attributes_for :professional,
-          :reject_if => proc { |attributes| attributes.all? { |key, value| key == "_destroy" || value.blank? || (value.is_a?(Hash) && value.values.all?(&:blank?)) } }
+  accepts_nested_attributes_for :supply_lots
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -142,9 +138,9 @@ class Prescription < ApplicationRecord
           q_m.decrement
         end
       end #End 1st if
-      if self.quantity_supplies.present?
-        self.quantity_supplies.each do |q_s|
-          q_s.decrement
+      if self.quantity_supply_lots.present?
+        self.quantity_supply_lots.each do |q_s_ls|
+          q_s_ls.decrement
         end
       end #End 2nd if
     end #End dispensed?

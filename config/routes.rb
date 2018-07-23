@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # Rescue errors
   match "/404", :to => "errors#not_found", :via => :all
   match "/500", :to => "errors#internal_server_error", :via => :all
-  
+
   resources :supply_lots do
     member do
       get "delete"
@@ -42,6 +42,9 @@ Rails.application.routes.draw do
   resources :patients do
     member do
       get "delete"
+    end
+    collection do
+      get "search"
     end
   end
 

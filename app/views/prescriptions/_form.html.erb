@@ -4,37 +4,15 @@
   <%= f.text_field :professional_id, id: "professional", class: "form-control",
                     placeholder: 'Nombre o Apellido',
                     data: { autocomplete_source: doctors_professionals_path },
-                    size: 35 %>
+                    size: 30 %>
   <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
-  <!-- <%= f.input :professional_id,
-                    label: 'Doctor',
-                    label_method: :full_name,
-                    value_method: :id,
-                    collection: @professionals,
-                    include_blank: false,
-                    input_html: { class: 'chosen-select', id: 'professional_id' },
-                    prompt: 'Seleccione un doctor o cree uno'
-  %><br><br>
-  <%= f.hint 'No seleccione ningún doctor para crear uno nuevo.', id: 'professional-hint', style: "display: none" %>
 
-  <%= f.simple_fields_for :professional, html: {class: "form-inline"} do |form_professional| %>
-    <%= render "professional_fields", :f => form_professional %>
-  <% end %><br> -->
-
-  <%= f.input :patient_id,
-                    label: 'Paciente',
-                    label_method: :full_info,
-                    value_method: :id,
-                    collection: @patients,
-                    include_blank: false,
-                    input_html: { class: 'chosen-select', id: 'patient_id' },
-                    prompt: 'Seleccione un paciente o cree uno'
-  %><br><br>
-  <%= f.hint 'No seleccione ningún paciente para crear uno nuevo.', id: 'patientHint', style: "display: none" %>
-
-  <%= f.simple_fields_for :patient, html: { class: 'form-inline' } do |form_patient| %>
-    <%= render "patient_fields", :f => form_patient %>
-  <% end %><br>
+  <%= f.label :patient_id, "Paciente" %>
+  <%= f.text_field :professional_id, id: "patient", class: "form-control",
+                    placeholder: 'Nombre o Apellido',
+                    data: { autocomplete_source: search_patients_path },
+                    size: 30 %>
+  <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
 
    <div class='row'>
     <!--<div class='col-md-6'>
@@ -52,12 +30,12 @@
     </div> -->
     <div class='col-md-12'>
       <label>Insumos</label>
-      <div id="quantity-supplies">
-          <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
-            <%= render "quantity_supply_fields", :f => form_quantity %>
+      <div id="quantity-supply_lots">
+          <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
+            <%= render "quantity_supply_lot_fields", :f => form_quantity %>
           <% end %>
           <div class="links">
-            <%= link_to_add_association f, :quantity_supplies, class: 'btn btn-default btn-sm' do %>
+            <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>
@@ -68,7 +46,7 @@
   <div class='row'>
     <div class='col-md-6'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-          :input_html => { :cols => 46  , :rows => 2 } %>
+          :input_html => { :cols => 30  , :rows => 3 } %>
     </div>
     <div class='col-md-6'>
       <%= f.input :date_received, label: 'Fecha recibida',

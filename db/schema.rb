@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180718175416) do
+ActiveRecord::Schema.define(version: 20180723151319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,8 +74,8 @@ ActiveRecord::Schema.define(version: 20180718175416) do
     t.string "phone", limit: 20
     t.string "cell_phone", limit: 20
     t.string "email", limit: 50
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.bigint "patient_type_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
@@ -146,8 +146,8 @@ ActiveRecord::Schema.define(version: 20180718175416) do
     t.string "domicile"
     t.string "phone"
     t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "quantity_medications", force: :cascade do |t|
@@ -168,6 +168,16 @@ ActiveRecord::Schema.define(version: 20180718175416) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_poly"
+  end
+
+  create_table "quantity_supply_lots", force: :cascade do |t|
+    t.integer "supply_lot_id"
+    t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_lot_poly"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -197,15 +207,15 @@ ActiveRecord::Schema.define(version: 20180718175416) do
     t.string "observation"
     t.string "unity", limit: 100
     t.boolean "needs_expiration"
-    t.boolean "active_alarm"
     t.integer "period_alarm"
     t.integer "expiration_alarm"
     t.integer "quantity_alarm"
     t.integer "period_control"
     t.boolean "is_active"
-    t.datetime "created_at", null: false
+    t.datetime "created_at"
     t.datetime "updated_at", null: false
     t.bigint "supply_area_id"
+    t.boolean "active_alarm"
     t.index ["supply_area_id"], name: "index_supplies_on_supply_area_id"
   end
 

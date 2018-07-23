@@ -99,7 +99,7 @@ class Patient < ApplicationRecord
     self.first_name+" "+self.last_name+" "+self.dni.to_s
   end
 
-  def full_name
+  def fullname
     self.first_name+" "+self.last_name
   end
 end
