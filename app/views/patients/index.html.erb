@@ -4,55 +4,54 @@
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
     Nuevo
   <% end %>
+  <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+    Filtrar
+  <% end %>
   </h3>
 <% end %>
 
-<%#
-  Filterrific adds the `form_for_filterrific` view helper:
-  * adds dom id 'filterrific_filter'
-  * applies javascript behaviors:
-      * AJAX form submission on change
-      * AJAX spinner while AJAX request is being processed
-  * sets form_for options like :url, :method and input name prefix
-%>
-<%= form_for_filterrific @filterrific do |f| %>
-  <div class="row well well-sm">
-    <div class="col-md-3 col-sm-3">
-      <label>Buscar</label>
-      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-      <%= f.text_field(
-        :search_query,
-        class: 'filterrific-periodically-observed form-control',
-        placeholder: 'Nombre o apellido'
-      ) %>
-    </div>
-    <div class="col-md-3 col-sm-3">
-      <label>Buscar</label>
-      <%= f.text_field(
-        :search_dni,
-        class: 'filterrific-periodically-observed form-control',
-          placeholder: 'DNI'
-          ) %>
-        </div>
-    <div class="col-md-2 col-sm-3">
-      <label>Tipo de paciente</label>
-      <%= f.select( :with_patient_type_id, @filterrific.select_options[:with_patient_type_id],
-          { include_blank: 'Todos' }, {class: 'form-control'} ) %>
-    </div>
-    <div class="col-md-2 col-sm-3">
-      <label>Ordenar por</label>
-      <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
-    </div>
-    <div class="col-md-2 col-sm-3">
-      <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+<div class="panel panel-info" id="filter-panel">
+  <div class="panel-collapse collapse" id="filter">
+    <div class="panel-body">
+      <%= form_for_filterrific @filterrific do |f| %>
+          <div class="col-md-3 col-sm-3">
+            <label>Buscar</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_query,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre o apellido'
+            ) %>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>Buscar</label>
+            <%= f.text_field(
+              :search_dni,
+              class: 'filterrific-periodically-observed form-control',
+                placeholder: 'DNI'
+                ) %>
+              </div>
+          <div class="col-md-2 col-sm-3">
+            <label>Tipo de paciente</label>
+            <%= f.select( :with_patient_type_id, @filterrific.select_options[:with_patient_type_id],
+                { include_blank: 'Todos' }, {class: 'form-control'} ) %>
+          </div>
+          <div class="col-md-2 col-sm-3">
+            <label>Ordenar por</label>
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+          </div>
+          <div class="col-md-2 col-sm-3">
+            <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+            <% end %>
+          </div>
+          <!-- Spinner para la carga -->
+          <%= render_filterrific_spinner %>
       <% end %>
     </div>
-    <%# add an automated spinner to your form when the list is refreshed %>
-    <%= render_filterrific_spinner %>
   </div>
-
-<% end %>
+</div>
 
 <%= render(
   partial: 'patients/list',
