@@ -3,7 +3,8 @@
   <%= f.label :professional_id, "Doctor" %>
   <%= f.text_field :professional_id, id: "professional", class: "form-control",
                     placeholder: 'Nombre o Apellido',
-                    data: { autocomplete_source: doctors_professionals_path } %>
+                    data: { autocomplete_source: doctors_professionals_path },
+                    size: 35 %>
   <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
   <!-- <%= f.input :professional_id,
                     label: 'Doctor',
@@ -20,7 +21,7 @@
     <%= render "professional_fields", :f => form_professional %>
   <% end %><br> -->
 
-  <!-- <%= f.input :patient_id,
+  <%= f.input :patient_id,
                     label: 'Paciente',
                     label_method: :full_info,
                     value_method: :id,
@@ -33,7 +34,7 @@
 
   <%= f.simple_fields_for :patient, html: { class: 'form-inline' } do |form_patient| %>
     <%= render "patient_fields", :f => form_patient %>
-  <% end %><br> -->
+  <% end %><br>
 
    <div class='row'>
     <!--<div class='col-md-6'>

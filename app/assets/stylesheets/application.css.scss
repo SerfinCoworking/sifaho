@@ -18,14 +18,6 @@
  @import 'bootstrap';
  @import 'bootstrap-datetimepicker';
 
-
- @font-face {
-   font-family: "Jenna Sue";
-   src: font-url( asset-path("JennaSue.ttf") );
-   font-weight: normal;
-   font-style: normal;
- }
-
  @font-face {
    font-family: "Lato";
    src: font-url( asset-path("Lato-Regular.ttf") );
@@ -33,16 +25,9 @@
    font-style: normal;
  }
 
- @font-face {
-   font-family: "Fira Sans";
-   src: font-url( asset-path("FiraSans-Regular.ttf") );
-   font-weight: normal;
-   font-style: normal;
- }
-
- @font-face {
-   font-family: "KG Neatly Printed";
-   src: font-url( asset-path("KGNeatlyPrinted.ttf") );
-   font-weight: normal;
-   font-style: normal;
- }
+@font-face {
+  font-family: "Comfortaa-regular";
+  src: font-url( asset-path("Comfortaa-Regular.ttf") );
+  font-weight: normal;
+  font-style: normal;
+}

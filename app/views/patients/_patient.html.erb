@@ -14,8 +14,8 @@
             title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
-      <%= link_to patient_path(patient), remote: true, class: 'btn btn-danger btn-xs',
-            title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar a #{patient.first_name} #{patient.last_name}?"} do %>
+      <%= link_to delete_patient_path(patient), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>

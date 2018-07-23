@@ -54,9 +54,8 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>
-    <%= link_to internal_order_path(internal_order), remote: true, class: 'btn btn-danger btn-xs',
-          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top',
-          confirm: "Desea eliminar el pedido interno de #{internal_order.responsable.profile.full_name}?"} do %>
+    <%= link_to delete_internal_order_path(internal_order), remote: true,
+          class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
     <% end %>
   </td>

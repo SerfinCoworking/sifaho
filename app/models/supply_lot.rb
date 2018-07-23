@@ -53,7 +53,7 @@ class SupplyLot < ApplicationRecord
     num_or_conds = 1
     where(
       terms.map { |term|
-        "(LOWER(supply_lots.name) LIKE ?)"
+        "(LOWER(supply_lots.supply_name) LIKE ?)"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
     )

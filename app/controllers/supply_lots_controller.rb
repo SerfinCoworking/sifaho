@@ -1,5 +1,5 @@
 class SupplyLotsController < ApplicationController
-  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy]
+  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /supply_lots
   # GET /supply_lots.json
@@ -52,6 +52,7 @@ class SupplyLotsController < ApplicationController
 
   # GET /supply_lots/1/edit
   def edit
+    @new_supply_lot = @supply_lot
   end
 
   # POST /supply_lots
@@ -91,6 +92,13 @@ class SupplyLotsController < ApplicationController
     @supply_lot.destroy
     respond_to do |format|
       flash.now[:success] = "El lote de "+@supply_name+" se ha eliminado correctamente."
+      format.js
+    end
+  end
+
+  # GET /supply_lot/1/delete
+  def delete
+    respond_to do |format|
       format.js
     end
   end

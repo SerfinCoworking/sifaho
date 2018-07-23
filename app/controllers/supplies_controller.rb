@@ -1,5 +1,5 @@
 class SuppliesController < ApplicationController
-  before_action :set_supply, only: [:show, :edit, :update, :destroy]
+  before_action :set_supply, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /supplies
   # GET /supplies.json
@@ -94,14 +94,21 @@ class SuppliesController < ApplicationController
     end
   end
 
+  # GET /supply/1/delete
+  def delete
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def search_by_name
     @supplies = Supply.order(:name).search_query(params[:term]).limit(15)
     render json: @supplies.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration } }
   end
 
   def search_by_id
-    @supplies = Supply.order(:id).with_code(params[:term])
-    render json: @supplies.map{ |sup| { label: sup.id, name: sup.name , expiry: sup.needs_expiration } }
+    @supplies = Supply.order(:id).with_code(params[:term]).limit(8)
+    render json: @supplies.map{ |sup| { label: sup.id.to_s+" "+sup.name, value: sup.id, name: sup.name , expiry: sup.needs_expiration } }
   end
 
   private

@@ -8,49 +8,59 @@
         <th>Cantidad</th>
         <th>Fecha recepción</th>
         <th>Fecha expiración</th>
-        <th colspan="1"></th>
+        <th colspan="2"></th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <div class="js-fade fade-in is-paused">
           <td>
-            <%= f.input :supply_id, class: "form-control",
-                            placeholder: 'Código', label: false,
-                            data: { autocomplete_source: search_by_id_supplies_path },
-                            input_html: { min: '0', max:'9999' },
-                            required: true %>
+            <%= f.text_field :supply_id, class: "form-control",
+                              placeholder: 'Código', label: false,
+                              data: { autocomplete_source: search_by_id_supplies_path },
+                              size: 5,
+                              required: true %>
           </td>
           <td>
             <%= f.text_field :supply_id, id: "nom_ins", class: "form-control",
                               placeholder: 'Nombre',
                               data: { autocomplete_source: search_by_name_supplies_path },
+                              size: 40,
                               required: true %>
             <%= f.hidden_field :supply_id, id: "supply_id" %>
           </td>
           <td>
-            <%= f.input :quantity, placeholder: 'Cantidad', required: true,
-                                        label: false,
-                                        input_html: { min: '0', max:'9999' } %>
+            <%= f.input :quantity, placeholder: 'Cant', required: true,
+                        label: false, input_html: { min: '0', max:'9999' } %>
           </td>
           <td>
-            <%= f.input :date_received, label: false,
-                                        as: :string,
-                                        :placeholder => "Seleccionar fecha",
-                                        input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                        value: "#{@new_supply_lot.new_record? ? @new_supply_lot.date_received : Date.today}"},
-                                        html5: false %>
+            <%= f.input :date_received, as: :string, label: false, :placeholder => "Una fecha",
+                        input_html: {
+                          :style => 'width: 110px',
+                          class: "form-control",
+                          required: true,
+                          autocomplete: 'off',
+                          value: "#{@new_supply_lot.new_record? ? Date.today.strftime('%d/%m/%Y') : @new_supply_lot.date_received.strftime('%d/%m/%Y') }"
+                        },
+                        html5: false %>
           </td>
           <td>
-            <%= f.input :expiry_date, label: false,
-                                        as: :string,
-                                        :placeholder => "Seleccionar fecha",
-                                        input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                        value: "#{@new_supply_lot.expiry_date unless @new_supply_lot.new_record?}"},
-                                        html5: false %>
+            <%= f.input :expiry_date, as: :string, label: false, :placeholder => "Una fecha",
+                        input_html: {
+                          :style => 'width: 110px',
+                          class: "form-control",
+                          required: true,
+                          autocomplete: 'off'
+                        },
+                        html5: false %>
           </td>
-          <td>
-            <button type='submit' name='commit' class='btn btn-primary pull-right' form='new_supply_lot'>Cargar lote</button>
+          <td class="td-btn">
+            <button type='reset' class='btn btn-default btn-md pull-left' tabindex="-1">
+              <span class='glyphicon glyphicon-erase'></span>
+            </button>
+            <button type='submit' name='commit' class='btn btn-primary pull-right' form='new_supply_lot'>
+              Cargar lote
+            </button>
           </td>
         </div>
       </tr>

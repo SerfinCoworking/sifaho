@@ -4,6 +4,7 @@ $(document).on('turbolinks:load', function() {
 
   $("#new_supply_lot").bind("ajax:complete", function(event,xhr,status){
     document.getElementById("new_supply_lot").reset();
+    $('#supply_lot_supply_id').focus()
   });
 
   jQuery(function() {
@@ -11,6 +12,7 @@ $(document).on('turbolinks:load', function() {
 
     return $('#supply_lot_supply_id').autocomplete({
       source: $('#supply_lot_supply_id').data('autocomplete-source'),
+      autoFocus: true,
       minLength: 1,
       open: function (e, ui) {
         var acData = $(this).data('ui-autocomplete');
@@ -27,7 +29,12 @@ $(document).on('turbolinks:load', function() {
       select:
       function (event, ui) {
         $("#nom_ins").val(ui.item.name);
-        $("#supply_id").val(ui.item.id);
+        $("#supply_id").val(ui.item.value);
+        if(ui.item.expiry){
+          document.getElementById("supply_lot_expiry_date").disabled = false;
+        }else{
+          document.getElementById("supply_lot_expiry_date").disabled = true;
+        }
       }
     }).each(function() {
         $(this).autocomplete("widget").insertAfter($("#dialog").parent());
@@ -39,6 +46,7 @@ $(document).on('turbolinks:load', function() {
 
     return $('#nom_ins').autocomplete({
       source: $('#nom_ins').data('autocomplete-source'),
+      autoFocus: true,
       minLength: 3,
       open: function (e, ui) {
         var acData = $(this).data('ui-autocomplete');
@@ -61,7 +69,6 @@ $(document).on('turbolinks:load', function() {
         }else{
           document.getElementById("supply_lot_expiry_date").disabled = true;
         }
-        console.log(ui.item.expiry);
       }
     }).each(function() {
         $(this).autocomplete("widget").insertAfter($("#dialog").parent());

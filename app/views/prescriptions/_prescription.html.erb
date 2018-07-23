@@ -58,9 +58,8 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>
-    <%= link_to prescription_path(prescription), remote: true, class: 'btn btn-danger btn-xs',
-          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top',
-          confirm: "Desea eliminar la prescripción del paciente #{prescription.patient.full_info}?"} do %>
+    <%= link_to delete_prescription_path(prescription), remote: true,
+          class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
     <% end %>
   </td>

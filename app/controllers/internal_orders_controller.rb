@@ -1,5 +1,5 @@
 class InternalOrdersController < ApplicationController
-  before_action :set_internal_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /internal_orders
   # GET /internal_orders.json
@@ -66,7 +66,7 @@ class InternalOrdersController < ApplicationController
         # Si no se entrega, se limpia la fecha de entrega
         if delivering?
           @internal_order.entregado!
-          
+
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
         else
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
@@ -102,6 +102,13 @@ class InternalOrdersController < ApplicationController
     @internal_order.destroy
     respond_to do |format|
       flash.now[:success] = "El pedido interno de "+@sector_name+" se ha eliminado correctamente."
+      format.js
+    end
+  end
+
+  # GET /internal_order/1/delete
+  def delete
+    respond_to do |format|
       format.js
     end
   end

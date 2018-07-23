@@ -14,8 +14,8 @@
             title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
-      <%= link_to professional_path(professional), remote: true, class: 'btn btn-danger btn-xs',
-          title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar a #{professional.first_name} #{professional.last_name}?"} do %>
+      <%= link_to delete_professional_path(professional), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
       <% end %>
     </td>

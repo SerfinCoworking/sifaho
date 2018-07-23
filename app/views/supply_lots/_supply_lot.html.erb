@@ -21,8 +21,8 @@
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
         <% end %>
-        <%= link_to supply_lot_path(supply_lot), remote: true, class: 'btn btn-danger btn-xs',
-            title: 'Borrar', method: :delete, data: { toggle: 'tooltip', placement: 'top', confirm: "Desea eliminar el lote de #{supply_lot.supply_name} con cantidad: #{supply_lot.quantity}?"} do %>
+        <%= link_to delete_supply_lot_path(supply_lot), remote: true,
+              class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
         <% end %>
       </td>

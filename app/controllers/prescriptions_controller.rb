@@ -1,5 +1,5 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete]
 
   # GET /prescriptions
   # GET /prescriptions.json
@@ -121,6 +121,13 @@ class PrescriptionsController < ApplicationController
         flash.now[:error] = "La prescripción no se ha podido dispensar."
         format.js
       end
+    end
+  end
+
+  # GET /prescription/1/delete
+  def delete
+    respond_to do |format|
+      format.js
     end
   end
 

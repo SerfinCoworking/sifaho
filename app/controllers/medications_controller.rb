@@ -1,5 +1,5 @@
 class MedicationsController < ApplicationController
-  before_action :set_medication, only: [:show, :edit, :update, :destroy]
+  before_action :set_medication, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /medications
   # GET /medications.json

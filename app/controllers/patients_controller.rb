@@ -1,5 +1,5 @@
 class PatientsController < ApplicationController
-  before_action :set_patient, only: [:show, :edit, :update, :destroy]
+  before_action :set_patient, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /patients
   # GET /patients.json
@@ -86,6 +86,13 @@ class PatientsController < ApplicationController
     @patient.destroy
     respond_to do |format|
       flash.now[:success] = "El paciente "+@full_info+" se ha eliminado correctamente."
+      format.js
+    end
+  end
+
+  # GET /patient/1/delete
+  def delete
+    respond_to do |format|
       format.js
     end
   end
