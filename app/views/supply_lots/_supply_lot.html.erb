@@ -2,7 +2,7 @@
     <div class="js-fade fade-in is-paused">
       <td><%= supply_lot.id %></td>
       <td><%= supply_lot.code %></td>
-      <td><%= supply_lot.supply_name %></td>
+      <td class="col-sup-name"><%= supply_lot.supply_name %></td>
       <td>
         <span class="label label-<%= supply_lot.status_label %>">
           <%= supply_lot.status.split('_').map(&:capitalize).join(' ') %>

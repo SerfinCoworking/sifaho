@@ -13,6 +13,11 @@ Rails.application.routes.draw do
     member do
       get "delete"
     end
+    collection do
+      get "search_by_id"
+      get "search_by_code"
+      get "search_by_name"
+    end
   end
 
   resources :internal_orders do

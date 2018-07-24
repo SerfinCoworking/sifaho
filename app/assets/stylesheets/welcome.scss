@@ -192,3 +192,9 @@ li .well strong{
 #filter-panel{
   margin-bottom: 0px!important;
 }
+.ins-col-alert{
+  max-width: 220px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

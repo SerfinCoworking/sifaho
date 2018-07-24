@@ -5,44 +5,6 @@ $('.chosen-select').chosen({
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
-// //Se crea un diccionario de las medicaciones con sus respectivas cantidades en stock.
-// <% @medications = Medication.all %>
-// var quantityToMedication = {
-// <% @medications.each do |medication| %>
-//   "<%=medication.id%>": {
-//   quantity : "<%=medication.quantity%>"
-// },
-// <% end %>
-// };
-//Función para establecer el máximo al campo "Cantidad" de cada medicación.
-// function setMaxQuantity(idSelect){
-//   var medications = $('#quantity-medications');
-//   var medicationCant = medications.find('.nested-fields').size();
-//   var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
-//   var medication_id =  $("#chosen-medication-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
-//
-//   if($("#chosen-medication-"+idNum+" option:selected").val() != 0){
-//     document.getElementById("quantity-medication-"+idNum).setAttribute("required", true);
-//     document.getElementById("quantity-medication-"+idNum).disabled = false;
-//     document.getElementById("quantity-medication-"+idNum).setAttribute("max", quantityToMedication[medication_id].quantity);
-//   }else{
-//     document.getElementById("quantity-medication-"+idNum).setAttribute("required", false);
-//     document.getElementById("quantity-medication-"+idNum).disabled = true;
-//   }
-//
-//   //Loop para deshabilitar el suministro seleccionado en el resto y asi no repetirlo.
-//   for(i = 1; i <= medicationCant; i++){
-//     var selectedValue = $("#chosen-medication-"+i+" option:selected").val();
-//     for(x = 1; x <= medicationCant; x++){
-//       if(x != i){
-//         $("#chosen-medication-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
-//         $("#chosen-medication-"+x).trigger("chosen:updated");
-//       }
-//     }
-//   }
-// }
-//Esta porción de JS se coloca en este documento ya que el evento "onchange"
-//se activa desde el html.
 
  //Se crea un diccionario de los suministros con sus respectivas cantidades en stock.
 <% @supplt_lots = SupplyLot.all %>
@@ -54,6 +16,30 @@ var quantityToSupply = {
 <% end %>
 };
 
+$(document).on("change", "#prescription_quantity_supply_lots_attributes_0_supply_lot_id", function(){
+  var country = $(this).val();
+
+  console.log("Cambio el cod");
+  $.ajax({
+    url: "/users/new",
+    method: "GET",
+    dataType: "json",
+    data: {country: country},
+    error: function (xhr, status, error) {
+      console.error('AJAX Error: ' + status + error);
+    },
+    success: function (response) {
+      console.log(response);
+      var cities = response["cities"];
+      $("#city select").empty();
+
+      $("#city select").append('<option>Select city</option>');
+      for(var i=0; i< cities.length; i++){
+        $("#city select").append('<option value="' + cities[i]["id"] + '">' + cities[i]["name"] + '</option>');
+      }
+    }
+  });
+});
 
 //Función para establecer el máximo al campo "Cantidad" de cada suministro.
 function setMaxQuantitySupplyLot(idSelect){
@@ -131,7 +117,6 @@ jQuery(function() {
     select:
     function (event, ui) {
       $("#patient_id").val(ui.item.id);
-      console.log(ui.item.dni);
     }
   }).each(function() {
       $(this).autocomplete("widget").insertAfter($("#dialog").parent());

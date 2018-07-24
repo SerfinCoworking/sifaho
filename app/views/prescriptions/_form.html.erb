@@ -8,38 +8,44 @@
   <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
 
   <%= f.label :patient_id, "Paciente" %>
-  <%= f.text_field :professional_id, id: "patient", class: "form-control",
+  <%= f.text_field :patient_id, id: "patient", class: "form-control",
                     placeholder: 'Nombre o Apellido',
                     data: { autocomplete_source: search_patients_path },
                     size: 30 %>
   <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
 
    <div class='row'>
-    <!--<div class='col-md-6'>
-      <label>Medicación</label>
-      <div id="quantity-medications">
-          <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
-            <%= render "quantity_medication_fields", :f => form_quantity %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-      </div>
-    </div> -->
     <div class='col-md-12'>
-      <label>Insumos</label>
-      <div id="quantity-supply_lots">
-          <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
-            <%= render "quantity_supply_lot_fields", :f => form_quantity %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-      </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Insumo</th>
+            <th>Cantidad</th>
+            <th>Lote N°</th>
+            <th>Expiración</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <div class="js-fade fade-in is-paused">
+              <div id="quantity-supply_lots">
+                <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
+                  <%= render "quantity_supply_lot_fields", :f => form_quantity %>
+                <% end %>
+              </div>
+              <td>
+                <div class="links">
+                  <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
+                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                  <% end %>
+                </div>
+              </td>
+            </div>
+          </tr>
+        </tbody>
+      </table>
       <br>
     </div>
   </div>

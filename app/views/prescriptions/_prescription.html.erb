@@ -1,30 +1,18 @@
 <tr id="prescription_<%= prescription.id %>">
-  <td><%= prescription.professional.full_name %></td>
-  <td><%= prescription.patient.full_info %></td>
+  <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
+  <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
     <span class="label label-<%= prescription.prescription_status.label %>">
       <%= prescription.prescription_status.name %>
     </span>
   </td>
-  <td class="med-sup-col">
-    <% if prescription.medications.present? %>
-      <% prescription.medications.each do |med| %>
+  <td class="pres-col-sup">
+    <% if prescription.supply_lots.present? %>
+      <% prescription.supply_lots.each do |sup_lot| %>
         <span class="badge">
-          <%= prescription.quantity_medications.find_by_medication_id(med.id).quantity %>
+          <%= prescription.quantity_supply_lots.find_by_supply_lot_id(sup_lot.id).quantity %>
         </span>
-        <%= med.full_info %>
-      <% end %>
-    <% else %>
-      ------
-    <% end %>
-  </td>
-  <td class="med-sup-col">
-    <% if prescription.supplies.present? %>
-      <% prescription.supplies.each do |sup| %>
-        <span class="badge">
-          <%= prescription.quantity_supplies.find_by_supply_id(sup.id).quantity %>
-        </span>
-        <%= sup.name %>
+        <%= sup_lot.supply_name %>
       <% end %>
     <% else %>
       ------

@@ -1,10 +1,10 @@
 <!--  Panel Lote de medicamentos -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Lotes de medicamentos <small>Expiración</small></h3>
+    <h3 class="panel-title">Lotes de insumos <small>Expiración</small></h3>
   </div>
   <div class="panel-body">
-    <% data = @medications.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+    <% data = @supply_lots.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
       status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262"}
       colors = []
       data.each do |status, _|
@@ -12,19 +12,21 @@
       end
       %>
     <%= pie_chart data, colors: colors %>
-    Total: <span class="label label-primary"><%= @count_total_medications %></span>
-    Vigentes: <span class="label label-success"><%= @count_good_medications %></span>
-    Por vencer: <span class="label label-warning"><%= @count_near_expiry_medications %></span>
-    Vencidos: <span class="label label-danger"><%= @count_expired_medications %></span>
+    Total: <span class="label label-primary"><%= @count_total_supply_lots %></span>
+    Vigentes: <span class="label label-success"><%= @count_good_supply_lots %></span>
+    Por vencer: <span class="label label-warning"><%= @count_near_expiry_supply_lots %></span>
+    Vencidos: <span class="label label-danger"><%= @count_expired_supply_lots %></span>
   </div>
 </div>
 <!-- Panel Lotes expirados -->
-<% if @expired_medications.present? %>
+<% if @expired_supply_lots.present? %>
   <div class="panel panel-danger">
     <div class="panel-heading">
-      <h3 class="panel-title">Lotes expirados
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-warning-sign') %>
+        Lotes expirados
         <div class="pull-right">
-          <%= link_to medications_url(filterrific: {:status => 2}), class: 'btn btn-default btn-xs' do %>
+          <%= link_to supply_lots_url(filterrific: {:status => 2}), class: 'btn btn-default btn-xs' do %>
                   Ver más
           <% end %>
         </div>
@@ -35,18 +37,18 @@
         <thead>
           <tr>
             <th>N°Lote</th>
-            <th>Droga</th>
+            <th>Insumo</th>
             <th>Cantidad</th>
             <th>Expiración</th>
           </tr>
         </thead>
         <tbody>
-          <% @expired_medications.each do |em|%>
+          <% @expired_supply_lots.each do |esl|%>
             <tr>
-              <td><%= em.id %></td>
-              <td><%= em.name %></td>
-              <td><span class="label label-<%= em.quantity_label %>"><%= em.quantity %></span></td>
-              <td><%= em.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
+              <td><%= esl.id %></td>
+              <td class="ins-col-alert"><%= esl.supply_name %></td>
+              <td><span class="label label-default"><%= esl.quantity %></span></td>
+              <td><%= esl.expiry_date.strftime("%d/%m/%Y") %></td>
             </tr>
           <% end %>
         </tbody>
@@ -56,12 +58,14 @@
 <% end %>
 
 <!-- Panel Lotes próximos a expirar  -->
-<% if @near_expiry_medications.present? %>
+<% if @near_expiry_supply_lots.present? %>
   <div class="panel panel-warning">
     <div class="panel-heading">
-      <h3 class="panel-title">Lotes próximos a expirar
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-time') %>
+        Lotes próximos a expirar
         <div class="pull-right">
-          <%= link_to medications_url(filterrific: {:status => 1}), class: 'btn btn-default btn-xs' do %>
+          <%= link_to supply_lots_url(filterrific: {:status => 1}), class: 'btn btn-default btn-xs' do %>
                   Ver más
           <% end %>
         </div>
@@ -72,18 +76,18 @@
         <thead>
           <tr>
             <th>N°Lote</th>
-            <th>Droga</th>
+            <th>Insumo</th>
             <th>Cantidad</th>
             <th>Expiración</th>
           </tr>
         </thead>
         <tbody>
-          <% @near_expiry_medications.each do |nem|%>
+          <% @near_expiry_supply_lots.each do |nesl|%>
             <tr>
-              <td><%= nem.id %></td>
-              <td><%= nem.name %></td>
-              <td><span class="label label-<%= nem.quantity_label %>"><%= nem.quantity %></span></td>
-              <td><%= nem.expiry_date.strftime("%d/%m/%y %H:%M") %></td>
+              <td><%= nesl.id %></td>
+              <td><%= nesl.supply_name %></td>
+              <td><span class="label label-default"><%= nesl.quantity %></span></td>
+              <td><%= nesl.expiry_date? ? nesl.expiry_date.strftime("%d/%m/%Y") : "---" %></td>
             </tr>
           <% end %>
         </tbody>

@@ -42,15 +42,13 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
-    @supply_lots = SupplyLot.all
-    @prescription.quantity_medications.build
     @prescription.quantity_supply_lots.build
+    @filtered_lots = []
   end
 
   # GET /prescriptions/1/edit
   def edit
     @professionals = Professional.all
-    @medications = Medication.all
     @supplies = Supply.all
     @patients = Patient.all
     @patient_types = PatientType.all
@@ -136,7 +134,6 @@ class PrescriptionsController < ApplicationController
     def prescription_params
       params.require(:prescription).permit(
                                              :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
-                                             quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
                                              quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy],
                                              patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id]
                                           )

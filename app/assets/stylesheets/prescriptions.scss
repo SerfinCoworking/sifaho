@@ -5,8 +5,20 @@
   width: 200px !important;
 }
 
-.med-sup-col{
-  max-width:20px; /* Customise it accordingly */
+.pres-col-pro{
+  max-width: 130px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pres-col-pat{
+  max-width: 130px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pres-col-sup{
+  max-width: 250px; /* Customise it accordingly */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

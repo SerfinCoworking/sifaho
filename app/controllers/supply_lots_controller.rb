@@ -103,6 +103,16 @@ class SupplyLotsController < ApplicationController
     end
   end
 
+  def search_by_code
+    @supply_lots = SupplyLot.order(:code).with_code(params[:term]).limit(10)
+    render json: @supply_lots.map{ |sup_lot| { label: sup_lot.code, code: sup_lot.id, expiry: sup_lot.needs_expiration } }
+  end
+
+  def search_by_name
+    @supplies = SupplyLot.order(:supply_name).search_query(params[:term]).limit(10)
+    render json: @supplies.map{ |sup_lot| { label: sup_lot.supply_name, code: sup_lot.code, cant: sup_lot.quantity, expiry: sup_lot.needs_expiration } }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_supply_lot
