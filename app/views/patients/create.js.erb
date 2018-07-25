@@ -1,4 +1,8 @@
 <%= render 'shared/flash_message' %>
 
 $('#dialog').modal('toggle');
-$('#patients').append('<%= j render (@patient) %>')
+
+$('#patients').prepend('<%= j render (@patient) %>')
+
+// Efecto de ingreso
+$('#patient_<%= @patient.id %>').hide().fadeIn(500);

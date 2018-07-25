@@ -16,36 +16,18 @@
 
    <div class='row'>
     <div class='col-md-12'>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Insumo</th>
-            <th>Cantidad</th>
-            <th>Lote N°</th>
-            <th>Expiración</th>
-            <th colspan="2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <div class="js-fade fade-in is-paused">
-              <div id="quantity-supply_lots">
-                <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
-                  <%= render "quantity_supply_lot_fields", :f => form_quantity %>
-                <% end %>
-              </div>
-              <td>
-                <div class="links">
-                  <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                  <% end %>
-                </div>
-              </td>
-            </div>
-          </tr>
-        </tbody>
-      </table>
+      <div id="quantity-supply-lots">
+        <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
+          <%= render "quantity_supply_lot_fields", :f => form_quantity %>
+        <% end %>
+      </div>
+      <td>
+        <div class="links">
+          <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          <% end %>
+        </div>
+      </td>
       <br>
     </div>
   </div>

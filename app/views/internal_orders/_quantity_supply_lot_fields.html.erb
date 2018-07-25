@@ -1,12 +1,12 @@
 <div class="nested-fields">
-  <%= f.input_field :supply_id,
-                    label_method: :name,
+  <%= f.input_field :supply_lot_id,
+                    label_method: :supply_name,
                     value_method: :id,
                     collection: @supplies,
                     include_blank: true,
                     class: 'chosen-select',
                     id: 'chosen-supply-1',
-                    prompt: 'Seleccione un suministro',
+                    prompt: 'Seleccione un insumo',
                     onchange: "setMaxQuantitySupply(this.id);"
   %>
   <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,

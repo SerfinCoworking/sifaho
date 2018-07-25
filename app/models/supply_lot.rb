@@ -158,7 +158,7 @@ class SupplyLot < ApplicationRecord
   end
   def self.in_good_state # Retorna los medicamentos en buen estado
     where(status: [:vigente])
-  end  
+  end
 
   private
   # Se actualiza el estado de expiración

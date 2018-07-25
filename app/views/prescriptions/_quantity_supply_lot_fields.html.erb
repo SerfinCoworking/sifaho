@@ -1,45 +1,22 @@
 <div class="nested-fields">
-  <td>
-    <%= f.text_field :supply_lot_id, class: "form-control",
-                      placeholder: 'Código', label: false,
-                      data: { autocomplete_source: search_by_code_supply_lots_path },
-                      size: 5,
-                      required: false %>
-  </td>
-  <td>
-    <!-- <%= f.input_field :supply_lot_id,
-                      label_method: :supply_name,
-                      value_method: :id,
-                      collection: @supply_lots,
-                      include_blank: true,
-                      class: 'chosen-select',
-                      id: 'chosen-supply-1',
-                      prompt: 'Seleccione un insumo',
-                      onchange: "setMaxQuantitySupplyLot(this.id);" %> -->
-    <%= f.text_field :supply_lot_id, id: "nom_ins", class: "form-control",
-                      placeholder: 'Nombre de insumo',
-                      data: { autocomplete_source: search_by_name_supply_lots_path },
-                      size: 40,
-                      required: true %>
-  </td>
-  <td>
-    <%= f.input :quantity, placeholder: 'Cant', required: false, disabled: true,
-                label: false,
-                input_html: { "data-tooltip"=>true, :class=>"has-tip",
-                              :title=>"Seleccione un insumo", "data-placement"=>"right",
-                              min: '0', step:'any', id: 'quantity-supply-1',
-                              :style => 'width: 70px'
-                            }%>
-  </td>
-  <td>
-    <%= select_tag "lot", options_for_select(@filtered_lots.collect{|lot| [lot.id, lot.expiry_date, lot.quantity]}, selected: params[supply_lot_id]),
-          prompt: "Lote", class: "form-control" %>
-    <%= f.collection_select :supply_lot_id, SupplyLot.all, :id, :id, {:prompt => "Lote"}, {:class=>"form-control", disabled: false} %>
-  </td>
-  <td><label id="lot-expiry"></label></td>
-  <td>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-default btn-sm' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-    <% end %>
-  </td>
+  <%= f.text_field :supply_lot_id, class: "form-control supply-cod",
+                    placeholder: 'Código', label: false,
+                    data: { autocomplete_source: search_by_code_supply_lots_path },
+                    size: 5,
+                    required: false %>
+  <%= f.text_field :supply_lot_id, id: "nom_ins", class: "form-control supply-name",
+                    placeholder: 'Nombre de insumo',
+                    data: { autocomplete_source: search_by_name_supply_lots_path },
+                    size: 40,
+                    required: true %>
+  <%= f.input :quantity, placeholder: 'Cant', required: false, disabled: true,
+              label: false,
+              input_html: { "data-tooltip"=>true, :class=>"has-tip",
+                            :title=>"Seleccione un insumo", "data-placement"=>"right",
+                            min: '0', step:'any', id: 'quantity-supply-1',
+                            :style => 'width: 70px'
+                          }%>
+  <%= link_to_remove_association  f, class: 'remove-tag btn btn-default btn-sm' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+  <% end %>
 </div>

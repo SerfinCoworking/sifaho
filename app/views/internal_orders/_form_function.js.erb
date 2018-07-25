@@ -24,21 +24,21 @@ $('.chosen-select').chosen({
 //Esta porción de JS se coloca en este documento ya que el evento "onchange"
 //se activa desde el html.
 
-//Se crea un diccionario de los suministros con sus respectivas cantidades en stock.
-<% @supplies = Supply.all %>
+//Se crea un diccionario de los insumos con sus respectivas cantidades en stock.
+<% @supply_lots = SupplyLot.all %>
 var quantityToSupply = {
-<% @supplies.each do |supply| %>
-  "<%=supply.id%>": {
-  quantity : "<%=supply.quantity%>"
+<% @supply_lots.each do |lot| %>
+  "<%=lot.id%>": {
+  quantity : "<%=lot.quantity%>"
 },
 <% end %>
 };
 
 
-//Función para establecer el máximo al campo "Cantidad" de cada suministro.
+//Función para establecer el máximo al campo "Cantidad" de cada insumo.
 function setMaxQuantitySupply(idSelect){
-  var supplies = $('#quantity-supplies');
-  var supplyCant = supplies.find('.nested-fields').size();
+  var supply_lots = $('#quantity-supply-lots');
+  var supplyCant = supply_lots.find('.nested-fields').size();
   var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
   var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
 
@@ -51,7 +51,7 @@ function setMaxQuantitySupply(idSelect){
     document.getElementById("quantity-supply-"+idNum).disabled = true;
   }
 
-  //Loop para deshabilitar el suministro seleccionado en el resto y asi no repetirlo.
+  //Loop para deshabilitar el insumo seleccionado en el resto y asi no repetirlo.
   for(i = 1; i <= supplyCant; i++){
     var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
     for(x = 1; x <= supplyCant; x++){
@@ -62,3 +62,46 @@ function setMaxQuantitySupply(idSelect){
     }
   }
 }
+
+
+$('#dialog').on('shown.bs.modal', function(e) {
+var idNum, supply_lots;
+// Id del form anidado para quantity_supply_lots
+supply_lots = $('#quantity-supply-lots');
+// Métodos para conocer la cantitdad de forms anidados
+idNum = function() {
+  return supply_lots.find('.nested-fields').size();
+};
+supply_lots.on('cocoon:before-insert', function(e, el_to_add) {
+  return el_to_add.fadeIn(200); // Efecto para el insert
+});
+supply_lots.on('cocoon:after-insert', function(e, added_el) {
+  var i, j, ref, results, selectedValue, x;
+  // Se coloca el id de los campos anidados
+  added_el.find('select').attr("id", "chosen-supply-" + idNum());
+  added_el.find('input.form-control.numeric').attr("id", "quantity-supply-" + idNum());
+  results = [];
+  for (i = j = 1, ref = idNum(); (1 <= ref ? j <= ref : j >= ref); i = 1 <= ref ? ++j : --j) {
+    selectedValue = $("#chosen-supply-" + i + " option:selected").val();
+    results.push((function() {
+      var k, ref1, results1;
+      results1 = [];
+      for (x = k = 1, ref1 = idNum(); (1 <= ref1 ? k <= ref1 : k >= ref1); x = 1 <= ref1 ? ++k : --k) {
+        if (x !== i) {
+          $("#chosen-supply-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
+          results1.push($("#chosen-supply-" + x).trigger("chosen:updated"));
+        } else {
+          results1.push(void 0);
+        }
+      }
+      return results1;
+    })());
+  }
+  return results;
+});
+supply_lots.on('cocoon:before-remove', function(e, el_to_remove) {
+  $(this).data('remove-timeout', 200); // Efecto para remover
+  return el_to_remove.fadeOut(200);
+});
+return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
+});
