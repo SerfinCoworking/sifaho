@@ -12,26 +12,15 @@
 
   <div class='row'>
     <div class='col-md-6'>
-      <label>Medicación</label>
-      <div id="quantity-medications">
-          <%= f.simple_fields_for :quantity_medications, html: {class: "form-inline"} do |form_quantity| %>
-            <%= render "quantity_medication_fields", :f => form_quantity %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association f, :quantity_medications, class: 'btn btn-default btn-sm' do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-      </div>
     </div>
     <div class='col-md-6'>
-      <label>Suministro</label>
-      <div id="quantity-supplies">
+      <label>Insumo</label>
+      <div id="quantity-supply-lots">
           <%= f.simple_fields_for :quantity_supplies, html: {class: "form-inline"} do |form_quantity| %>
-            <%= render "quantity_supply_fields", :f => form_quantity %>
+            <%= render "quantity_supply_lot_fields", :f => form_quantity %>
           <% end %>
           <div class="links">
-            <%= link_to_add_association f, :quantity_supplies, class: 'btn btn-default btn-sm' do %>
+            <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>

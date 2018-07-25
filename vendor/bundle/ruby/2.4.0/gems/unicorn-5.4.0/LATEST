@@ -1,0 +1,13 @@
+=== unicorn 5.3.1 / 2017-10-03 19:03 UTC
+
+  This release fixes an occasional GC problem introduced in v5.3.0
+  to reduce global variable overhead (commit 979ebcf91705709b)
+
+  Thanks to Xuanzhong Wei for the patch which lead to this release:
+
+  https://bogomips.org/unicorn-public/20171003182054.76392-1-azrlew@gmail.com/T/#u
+  https://bogomips.org/unicorn-public/20171003145718.30404-1-azrlew@gmail.com/T/#u
+
+  Xuanzhong Wei (1):
+        fix GC issue on rb_global_variable array
+

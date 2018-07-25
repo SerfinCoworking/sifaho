@@ -1,6 +1,6 @@
 RailsAdmin.config do |config|
   config.model Prescription do
-    field :quantity_medications do
+    field :quantity_supply_lots do
       inverse_of :prescription
     end
   end

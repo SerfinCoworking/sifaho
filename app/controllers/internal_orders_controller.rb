@@ -43,16 +43,13 @@ class InternalOrdersController < ApplicationController
   def new
     @internal_order = InternalOrder.new
     @responsables = User.all
-    @medications = Medication.all
     @supplies = Supply.all
-    @internal_order.quantity_medications.build
     @internal_order.quantity_supplies.build
   end
 
   # GET /internal_orders/1/edit
   def edit
     @responsables = User.all
-    @medications = Medication.all
     @supplies = Supply.all
   end
 
@@ -135,7 +132,6 @@ class InternalOrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_params
       params.require(:internal_order).permit(:responsable_id, :date_delivered, :date_received, :observation,
-        quantity_medications_attributes: [:id, :medication_id, :quantity, :_destroy],
         quantity_supplies_attributes: [:id, :supply_id, :quantity, :_destroy])
     end
 

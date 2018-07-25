@@ -3,23 +3,16 @@ class InternalOrder < ApplicationRecord
 
   # Relaciones
   belongs_to :responsable, class_name: 'User'
-  has_many :quantity_medications, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :medications, :through => :quantity_medications
-  has_many :quantity_supplies, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, :through => :quantity_supplies
+  has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supply_lots, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :responsable
   validates_presence_of :date_received
-  validates_associated :quantity_medications
-  validates_associated :medications
-  validates_associated :quantity_supplies
-  validates_associated :supplies
+  validates_associated :quantity_supply_lots
+  validates_associated :supply_lots
 
-  accepts_nested_attributes_for :quantity_medications,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :quantity_supplies,
+  accepts_nested_attributes_for :quantity_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
 
@@ -71,9 +64,6 @@ class InternalOrder < ApplicationRecord
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("internal_orders.status #{ direction }")
-    when /^medicamento_/
-      # Ordenamiento por nombre de medicamento
-      order("vademecums.medication_name #{ direction }").joins(:medications, "LEFT OUTER JOIN vademecums ON (vademecums.medication_id = medications.id)")
     when /^suministro_/
       # Ordenamiento por nombre de suministro
       order("supplies.name #{ direction }").joins(:supplies)

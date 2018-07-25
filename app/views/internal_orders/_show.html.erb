@@ -21,22 +21,12 @@
       </h5>
     </p>
 
-    <% if @internal_order.medications.present? %>
-      <h5><strong>Medicación:</strong></h5>
-      <% @internal_order.medications.each do |med| %>
-        <span class="badge">
-          <%= @internal_order.quantity_medications.find_by_medication_id(med.id).quantity %>
-        </span>
-        <%= med.full_info %><br>
-      <% end %>
-    <% end %>
-
-    <% if @internal_order.supplies.present? %>
+    <% if @internal_order.supply_lots.present? %>
       <p>
-        <h5><strong>Suministros:</strong></h5>
-        <% @internal_order.supplies.each do |sup| %>
+        <h5><strong>Insumos:</strong></h5>
+        <% @internal_order.supply_lots.each do |sup| %>
           <span class="badge">
-            <%= @internal_order.quantity_supplies.find_by_supply_id(sup.id).quantity %>
+            <%= @internal_order.quantity_supply_lots.find_by_supply_id(sup.id).quantity %>
           </span>
           <%= sup.name %><br>
         <% end %>
