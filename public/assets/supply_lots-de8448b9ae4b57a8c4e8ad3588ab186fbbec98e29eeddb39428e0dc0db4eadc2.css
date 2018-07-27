@@ -1,6 +1,0 @@
-.col-sup-name{
-  max-width: 300px; /* Customise it accordingly */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
