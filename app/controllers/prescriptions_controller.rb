@@ -42,6 +42,7 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
+    @supplies = SupplyLot.all
     @prescription.quantity_supply_lots.build
     @filtered_lots = []
   end
@@ -49,7 +50,7 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/1/edit
   def edit
     @professionals = Professional.all
-    @supplies = Supply.all
+    @supplies = SupplyLot.all
     @patients = Patient.all
     @patient_types = PatientType.all
     @sectors = Sector.all

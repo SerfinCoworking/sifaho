@@ -5,31 +5,6 @@ $('.chosen-select').chosen({
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
-$(document).on("change", "#prescription_quantity_supply_lots_attributes_0_supply_lot_id", function(){
-  var country = $(this).val();
-
-  console.log("Cambio el cod");
-  $.ajax({
-    url: "/users/new",
-    method: "GET",
-    dataType: "json",
-    data: {country: country},
-    error: function (xhr, status, error) {
-      console.error('AJAX Error: ' + status + error);
-    },
-    success: function (response) {
-      console.log(response);
-      var cities = response["cities"];
-      $("#city select").empty();
-
-      $("#city select").append('<option>Select city</option>');
-      for(var i=0; i< cities.length; i++){
-        $("#city select").append('<option value="' + cities[i]["id"] + '">' + cities[i]["name"] + '</option>');
-      }
-    }
-  });
-});
-
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -82,4 +57,88 @@ jQuery(function() {
   }).each(function() {
       $(this).autocomplete("widget").insertAfter($("#dialog").parent());
   })
+});
+
+//Esta porción de JS se coloca en este documento ya que el evento "onchange"
+//se activa desde el html.
+
+//Se crea un diccionario de los insumos con sus respectivas cantidades en stock.
+<% @supply_lots = SupplyLot.all %>
+var quantityToSupply = {
+<% @supply_lots.each do |lot| %>
+  "<%=lot.id%>": {
+  quantity : "<%=lot.quantity%>"
+},
+<% end %>
+};
+
+
+//Función para establecer el máximo al campo "Cantidad" de cada insumo.
+function setMaxQuantitySupply(idSelect){
+  var supply_lots = $('#quantity-supply-lots');
+  var supplyCant = supply_lots.find('.nested-fields').size();
+  var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
+  var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
+
+  if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
+    document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
+    document.getElementById("quantity-supply-"+idNum).disabled = false;
+    document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
+  }else{
+    document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
+    document.getElementById("quantity-supply-"+idNum).disabled = true;
+  }
+
+  //Loop para deshabilitar el insumo seleccionado en el resto y asi no repetirlo.
+  for(i = 1; i <= supplyCant; i++){
+    var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
+    for(x = 1; x <= supplyCant; x++){
+      if(x != i){
+        $("#chosen-supply-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
+        $("#chosen-supply-"+x).trigger("chosen:updated");
+      }
+    }
+  }
+}
+
+$('#dialog').on('shown.bs.modal', function(e) {
+var idNum, supply_lots;
+// Id del form anidado para quantity_supply_lots
+supply_lots = $('#quantity-supply-lots');
+// Métodos para conocer la cantitdad de forms anidados
+idNum = function() {
+  return supply_lots.find('.nested-fields').size();
+};
+supply_lots.on('cocoon:before-insert', function(e, el_to_add) {
+  return el_to_add.fadeIn(200); // Efecto para el insert
+});
+supply_lots.on('cocoon:after-insert', function(e, added_el) {
+  var i, j, ref, results, selectedValue, x;
+  // Se coloca el id de los campos anidados
+  added_el.find('select').attr("id", "chosen-supply-" + idNum());
+  added_el.find('input.form-control.numeric').attr("id", "quantity-supply-" + idNum());
+  results = [];
+  for (i = j = 1, ref = idNum(); (1 <= ref ? j <= ref : j >= ref); i = 1 <= ref ? ++j : --j) {
+    selectedValue = $("#chosen-supply-" + i + " option:selected").val();
+    results.push((function() {
+      var k, ref1, results1;
+      results1 = [];
+      for (x = k = 1, ref1 = idNum(); (1 <= ref1 ? k <= ref1 : k >= ref1); x = 1 <= ref1 ? ++k : --k) {
+        if (x !== i) {
+          $("#chosen-supply-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
+          results1.push($("#chosen-supply-" + x).trigger("chosen:updated"));
+        } else {
+          results1.push(void 0);
+        }
+      }
+      return results1;
+    })());
+  }
+  return results;
+});
+supply_lots.on('cocoon:before-remove', function(e, el_to_remove) {
+  $(this).data('remove-timeout', 200); // Efecto para remover
+  return el_to_remove.fadeOut(200);
+});
+return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
 });

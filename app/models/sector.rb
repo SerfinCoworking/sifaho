@@ -1,7 +1,8 @@
 class Sector < ApplicationRecord
   # Relaciones
-  has_many :professionals
   has_many :users
+  has_many :internal_orders
+  has_many :prescriptions
 
   # Validaciones
   validates_presence_of :sector_name

@@ -7,12 +7,13 @@
     </span>
   </td>
   <td class="pres-col-sup">
-    <% if prescription.supply_lots.present? %>
-      <% prescription.supply_lots.each do |sup_lot| %>
+    <% if prescription.quantity_supply_lots.present? %>
+      (<%= prescription.quantity_supply_lots.count %>)
+      <% prescription.quantity_supply_lots.each do |qsl| %>
         <span class="badge">
-          <%= prescription.quantity_supply_lots.find_by_supply_lot_id(sup_lot.id).quantity %>
+          <%= qsl.quantity %>
         </span>
-        <%= sup_lot.supply_name %>
+        <%= qsl.supply_name %>
       <% end %>
     <% else %>
       ------

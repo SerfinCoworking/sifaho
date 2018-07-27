@@ -20,6 +20,8 @@ class InternalOrdersController < ApplicationController
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
 
+    @internal_orders.with_sector(current_user.sector)
+
 
     respond_to do |format|
       format.html
@@ -60,13 +62,14 @@ class InternalOrdersController < ApplicationController
 
     respond_to do |format|
       if @internal_order.save!
-        
-        # Si no se entrega, se limpia la fecha de entrega
+        # Si se carga y entrega el pedido
         if delivering?
-          @internal_order.date_delivered = DateTime.now
-          @internal_order.entregado!
-
-          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
+          begin
+            @internal_order.deliver
+            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
+          rescue ArgumentError => e
+            flash.now[:error] = "No se ha podido entregar: "+e.message
+          end
         else
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
         end
@@ -115,13 +118,20 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1/dispense
   def deliver
     respond_to do |format|
-      @internal_order.date_delivered = DateTime.now
-      if @internal_order.entregado!
-        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha entregado correctamente."
+      begin
+        @internal_order.deliver
+
+      rescue ArgumentError => e
+        flash.now[:error] = e.message
         format.js
       else
-        flash.now[:error] = "El pedido interno no se ha podido entregar."
-        format.js
+        if @internal_order.save!
+          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.full_name+" se ha entregado correctamente."
+          format.js
+        else
+          flash.now[:error] = "El pedido interno no se ha podido entregar."
+          format.js
+        end
       end
     end
   end

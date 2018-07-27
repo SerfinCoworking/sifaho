@@ -27,3 +27,27 @@ $('#internal_order_date_received').val("<%= @internal_order.date_received.strfti
 <% if @internal_order.date_delivered.present? %>
   $('#internal_order_date_delivered').val("<%= @internal_order.date_delivered.strftime('%d/%m/%Y') %>");
 <% end %>
+
+
+$('.add_fields').each(function() {
+    var $this, insertionNode, insertionTraversal, _ref;
+    $this = $(this);
+    insertionNode = $this.data('association-insertion-node');
+    insertionTraversal = $this.data('association-insertion-traversal');
+    if (insertionNode) {
+      if (insertionTraversal) {
+        insertionNode = $this[insertionTraversal](insertionNode);
+      } else {
+        insertionNode = (_ref = insertionNode === "this") != null ? _ref : {
+          $this: $(insertionNode)
+        };
+      }
+    } else {
+      insertionNode = $this.parent();
+    }
+    return insertionNode.bind('cocoon:after-insert', function(e, newContent) {
+      return newContent.find('.chosen-select').chosen({
+        width: '270px'
+      });
+    });
+  });

@@ -21,8 +21,8 @@ class User < ApplicationRecord
   end
 
   def full_name
-    if self.professional
-      self.professional.full_name
+    if self.profile.last_name?
+      self.profile.full_name
     else
       self.username
     end

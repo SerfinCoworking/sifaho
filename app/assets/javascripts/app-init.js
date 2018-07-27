@@ -3,7 +3,7 @@ $(document).on('turbolinks:load', function() {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove();
       });
-  }, 2000);
+  }, 3500);
 
   $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
 

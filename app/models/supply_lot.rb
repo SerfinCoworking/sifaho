@@ -119,7 +119,11 @@ class SupplyLot < ApplicationRecord
   #Métodos públicos
   # Disminuye la cantidad
   def decrement(a_quantity)
-    self.quantity -= a_quantity
+    if quantity < a_quantity
+      raise ArgumentError, "Cantidad en stock insuficiente de lote N°"+self.id.to_s+" insumo "+self.supply_name
+    else
+      self.quantity -= a_quantity
+    end
   end
 
   # Retorna el porcentaje actual de stock

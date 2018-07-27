@@ -97,7 +97,7 @@ class ProfessionalsController < ApplicationController
   end
 
   def doctors
-    @doctors = Professional.order(:first_name).search_query(params[:term])
+    @doctors = Professional.order(:first_name).search_query(params[:term]).limit(10)
     render json: @doctors.map{ |doc| { id: doc.id, dni: doc.dni, label: doc.fullname } }
   end
 

@@ -98,7 +98,7 @@ class PatientsController < ApplicationController
   end
 
   def search
-    @patients = Patient.order(:first_name).search_query(params[:term])
+    @patients = Patient.order(:first_name).search_query(params[:term]).limit(10)
     render json: @patients.map{ |pat| { id: pat.id, dni: pat.dni, label: pat.fullname } }
   end
 

@@ -11,6 +11,10 @@ class QuantitySupplyLot < ApplicationRecord
 
   #Métodos públicos
   def decrement
-    self.supply_lot.decrement(self.quantity)
+      self.supply_lot.decrement(self.quantity)
+  end
+
+  def supply_name
+    self.supply_lot.supply_name
   end
 end

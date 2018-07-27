@@ -1,13 +1,18 @@
 class InternalOrder < ApplicationRecord
   enum status: { pendiente: 0, entregado: 1, anulado: 2}
 
+  # Callbacks
+  before_validation :assign_sector
+
   # Relaciones
   belongs_to :responsable, class_name: 'User'
+  belongs_to :sector
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :responsable
+  validates_presence_of :sector
   validates_presence_of :date_received
   validates_associated :quantity_supply_lots
   validates_associated :supply_lots
@@ -83,6 +88,10 @@ class InternalOrder < ApplicationRecord
     where('internal_orders.date_received >= ?', reference_time)
   }
 
+  scope :with_sector, lambda { |a_sector|
+    where('internal_orders.sector == ?', a_sector)
+  }
+
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
@@ -98,6 +107,22 @@ class InternalOrder < ApplicationRecord
     ]
   end
 
+  def deliver
+    if entregado?
+      raise ArgumentError, "Ya se ha entregado este pedido"
+    else
+      if self.quantity_supply_lots.present?
+        self.quantity_supply_lots.each do |qsls|
+          qsls.decrement
+        end
+      else
+        raise ArgumentError, 'No hay lotes en el pedido'
+      end
+      self.date_delivered = DateTime.now
+      self.entregado!
+    end #End entregado?
+  end
+
   # Label del estado para vista.
   def status_label
     if self.entregado?
@@ -107,5 +132,11 @@ class InternalOrder < ApplicationRecord
     elsif self.anulado?
       return 'danger'
     end
+  end
+
+  private
+
+  def assign_sector
+    self.sector = self.responsable.sector
   end
 end
