@@ -1,8 +1,0 @@
-/* line 1, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/supply_lots.scss */
-.col-sup-name {
-  max-width: 300px;
-  /* Customise it accordingly */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
