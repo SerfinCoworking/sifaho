@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "search"
+      get "search_by_dni"
     end
   end
 

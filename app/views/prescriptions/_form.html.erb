@@ -8,6 +8,10 @@
   <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
 
   <%= f.label :patient_id, "Paciente" %>
+  <%= f.text_field :patient_id, id: "patient_dni", class: "form-control",
+                    placeholder: 'DNI',
+                    data: { autocomplete_source: search_by_dni_patients_path },
+                    size: 10 %>
   <%= f.text_field :patient_id, id: "patient", class: "form-control",
                     placeholder: 'Nombre o Apellido',
                     data: { autocomplete_source: search_patients_path },

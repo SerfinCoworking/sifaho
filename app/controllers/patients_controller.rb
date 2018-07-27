@@ -102,6 +102,11 @@ class PatientsController < ApplicationController
     render json: @patients.map{ |pat| { id: pat.id, dni: pat.dni, label: pat.fullname } }
   end
 
+  def search_by_dni
+    @patients = Patient.order(:first_name).search_dni(params[:term]).limit(10)
+    render json: @patients.map{ |pat| { id: pat.id, fullname: pat.fullname, label: pat.dni } }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_patient
