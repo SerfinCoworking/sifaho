@@ -16,6 +16,5 @@ class CreateProfessionals < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_reference :professionals, :professional_type, foreign_key: true
-    add_reference :professionals, :sector, foreign_key: true
   end
 end

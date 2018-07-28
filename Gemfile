@@ -6,6 +6,9 @@ git_source(:github) do |repo_name|
 
 end
 
+# For bootstrap toggle buttons
+gem "bootstrap-switch-rails"
+# For a lot of jquery functions
 gem 'jquery-ui-rails'
 # To group by date
 gem 'groupdate'

@@ -70,7 +70,7 @@ class Supply < ApplicationRecord
   }
 
   scope :with_area_id, lambda { |an_id|
-    where('supplies.supply_area_id >= ?', an_id)
+    where('supplies.supply_area_id = ?', an_id)
   }
 
 

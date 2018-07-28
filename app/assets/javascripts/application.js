@@ -21,6 +21,7 @@
 //= require turbolinks
 //= require cocoon
 //= require moment
+//= require bootstrap-switch
 //= require bootstrap-datetimepicker
 //= require bootstrap-sprockets
 //= require bootstrap

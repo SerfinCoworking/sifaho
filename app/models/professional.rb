@@ -5,16 +5,13 @@ class Professional < ApplicationRecord
 
   # Relaciones
   has_many :prescriptions
-  belongs_to :sector
   belongs_to :professional_type
   has_one :user
 
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :dni
-
-  accepts_nested_attributes_for :sector,
-    :reject_if => :all_blank
+  validates_presence_of :professional_type
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -22,7 +19,7 @@ class Professional < ApplicationRecord
       :sorted_by,
       :search_query,
       :search_dni,
-      :with_sector_id,
+      :with_professional_type_id,
     ]
   )
 
@@ -68,9 +65,9 @@ class Professional < ApplicationRecord
     when /^matricula_/
       # Ordenamiento por matricula
       order("professionals.enrollment #{ direction }")
-    when /^sector_/
+    when /^professional_type_/
       # Ordenamiento por nombre del sector
-      order("sectors.sector_name #{ direction }").joins(:sector)
+      order("LOWER(professional_types.name) #{ direction }").joins(:professional_type)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -87,12 +84,12 @@ class Professional < ApplicationRecord
   end
 
   # filters on 'sector_id' foreign key
-  scope :with_sector_id, lambda { |sector_ids|
-    where(sector_id: [*sector_ids])
+  scope :with_professional_type_id, lambda { |type_id|
+    where(professional_type_id: [*type_id])
   }
 
   def assign_full_name
-    self.full_name = self.last_name+" "+self.first_name
+    self.fullname = self.last_name+" "+self.first_name
     save!
   end
 

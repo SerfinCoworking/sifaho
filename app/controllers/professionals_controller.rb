@@ -9,7 +9,7 @@ class ProfessionalsController < ApplicationController
       params[:filterrific],
       select_options: {
         sorted_by: Professional.options_for_sorted_by,
-        with_sector_id: Sector.options_for_select
+        professional_type_id: ProfessionalType.options_for_select
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
@@ -17,7 +17,7 @@ class ProfessionalsController < ApplicationController
         :sorted_by,
         :search_query,
         :search_dni,
-        :with_sector_id,
+        :with_professional_type_id,
       ],
     ) or return
     @professionals = @filterrific.find.page(params[:page]).per_page(8)
@@ -39,13 +39,12 @@ class ProfessionalsController < ApplicationController
   # GET /professionals/new
   def new
     @professional = Professional.new
-    @professional.build_sector
-    @sectors = Sector.all
+    @professional_types = ProfessionalType.all
   end
 
   # GET /professionals/1/edit
   def edit
-    @sectors = Sector.all
+    @professional_types = ProfessionalType.all
   end
 
   # POST /professionals
@@ -54,8 +53,8 @@ class ProfessionalsController < ApplicationController
     @professional = Professional.new(professional_params)
 
     respond_to do |format|
-      if @professional.save
-        flash.now[:success] = @professional.full_name+" se ha creado correctamente."
+      if @professional.save!
+        flash.now[:success] = @professional.fullname+" se ha creado correctamente."
         format.js
       else
         flash.now[:error] = "El profesional no se ha podido crear."
@@ -69,10 +68,10 @@ class ProfessionalsController < ApplicationController
   def update
     respond_to do |format|
       if @professional.update(professional_params)
-        flash.now[:success] = @profesional.full_name+" se ha modificado correctamente."
+        flash.now[:success] = @profesional.fullname+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = @profesional.full_name+" no se ha podido modificar."
+        flash.now[:error] = @profesional.fullname+" no se ha podido modificar."
         format.js
       end
     end
@@ -81,10 +80,10 @@ class ProfessionalsController < ApplicationController
   # DELETE /professionals/1
   # DELETE /professionals/1.json
   def destroy
-    @full_name = @professional.full_name
+    @fullname = @professional.fullname
     @professional.destroy
     respond_to do |format|
-      flash.now[:success] = @full_name+" se ha eliminado correctamente."
+      flash.now[:success] = @fullname+" se ha eliminado correctamente."
       format.js
     end
   end
@@ -109,9 +108,7 @@ class ProfessionalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def professional_params
-      params.require(:professional).permit(:first_name, :last_name, :professional_id,
-                            :patient_id, :dni, :enrollment, :sector_id,
-                            sector_attributes: [:id, :sector_name, :quantity,
-                                                :complexity_level, :description])
+      params.require(:professional).permit( :id, :first_name, :last_name, :dni,
+                                            :enrollment, :professional_type_id, :is_active)
     end
 end

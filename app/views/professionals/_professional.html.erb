@@ -3,6 +3,11 @@
     <td><%= professional.first_name %></td>
     <td><%= professional.last_name %></td>
     <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
+    <td>
+      <span class="label label-<%= professional.is_active? ? "success" : "danger" %>">
+        <%= professional.is_active? ? "Activo" : "Inactivo" %>
+      </span>
+    </td>
     <td><%= professional.dni %></td>
     <td><%= professional.professional_type.name %></td>
     <td>
