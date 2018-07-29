@@ -35,9 +35,6 @@ class SuppliesController < ApplicationController
   # GET /supplies/1
   # GET /supplies/1.json
   def show
-    _percent = @supply.quantity.to_f / @supply.initial_quantity  * 100 unless @supply.initial_quantity == 0
-    @percent_quantity_supply = _percent
-
     respond_to do |format|
       format.js
     end
@@ -46,10 +43,14 @@ class SuppliesController < ApplicationController
   # GET /supplies/new
   def new
     @supply = Supply.new
+    @unities = Unity.all
+    @supply_areas = SupplyArea.all
   end
 
   # GET /supplies/1/edit
   def edit
+    @unities = Unity.all
+    @supply_areas = SupplyArea.all
   end
 
   # POST /supplies
@@ -119,6 +120,8 @@ class SuppliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_params
-      params.require(:supply).permit(:name, :quantity, :expiry_date, :date_received)
+      params.require(:supply).permit(:name, :period_alarm, :period_control, :expiration_alarm,
+                                     :is_active, :needs_expiration, :unity, :supply_area_id,
+                                     :description, :observation, :active_alarm, :quantity_alarm)
     end
 end

@@ -1,21 +1,60 @@
 <%= simple_form_for @supply, remote: true, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
+  <div class="row">
+    <div class="col-md-8">
+      <%= f.hidden_field :is_active, id: "is_active", value: @supply.new_record? ? true : @supply.is_active %>
+      <input type="checkbox" name="is-active-check">
+      &emsp;&emsp;&emsp;
+      <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+      <%= f.hidden_field :needs_expiration, id: "needs_expiration", value: @supply.new_record? ? true : @supply.needs_expiration %>
+      <input type="checkbox" name="expiration-check">
+      <br><br>
+      <%= f.label 'Nombre de insumo' %>
+      <%= f.text_field :name, placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg', class: 'form-control',
+          required: true, size: 50, autocomplete: 'off' %>
+      <br><br>
+      <%= f.label 'Unidad' %>
+      <%= f.input_field :unity,
+                        label_method: :name,
+                        value_method: :name,
+                        collection: @unities,
+                        include_blank: true,
+                        input_html: { id: 'unities'},
+                        prompt: 'Seleccione unidad' %>
+      &emsp;
+      <%= f.input_field :supply_area_id,
+                        label: 'Area',
+                        label_method: :name,
+                        value_method: :id,
+                        collection: @supply_areas,
+                        include_blank: true,
+                        input_html: { id: 'supply_areas'},
+                        prompt: 'Seleccione un área'
+      %>
+      <br><br>
+      <%= f.input :description, label: 'Descripción', as: :text,
+          :input_html => { :cols => 50, :rows => 2 } %>
+      <br><br>
+      <%= f.input :observation, label: 'Observación', as: :text,
+          :input_html => { :cols => 50, :rows => 2 } %>
+    </div>
 
-    <%= f.input :name, placeholder: 'Nombre', required: true, label: false %>
-    <%= f.input :quantity, placeholder: 'Cantidad', required: true, label: false, input_html: { min: '0', max:'9999' } %>
-    <br><br>
-    <%= f.input :date_received, label: 'Fecha recibida',
-                                as: :string,
-                                :placeholder => "Seleccionar fecha",
-                                input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                value: "#{@supply.date_received unless @supply.new_record?}"},
-                                html5: false
-                                %>
-    <%= f.input :expiry_date, label: 'Fecha expiración',
-                                as: :string,
-                                :placeholder => "Seleccionar fecha",
-                                input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                value: "#{@supply.expiry_date unless @supply.new_record?}"},
-                                html5: false
-                                %><br><br>
+    <div class="col-md-4">
+      <%= f.hidden_field :active_alarm, id: "active_alarm", value: @supply.new_record? ? true : @supply.active_alarm %>
+      <input type="checkbox" name="alarm-check">
+      <br><br>
+      <%= f.input :quantity_alarm, placeholder: 'Cantidad', required: true,
+                  label: 'Alarma de cantidad', input_html: { min: '0', max:'9999', value: 1 } %>
+      <br><br>
+      <%= f.input :period_alarm, placeholder: 'Días', required: true,
+                  label: 'Período de alarma', input_html: { min: '0', max:'9999', value: 52 } %>
+      <br><br>
+      <%= f.input :period_control, placeholder: 'Días', required: true,
+                  label: 'Período de control', input_html: { min: '0', max:'9999', value: 52 } %>
+      <br><br>
+      <%= f.input :expiration_alarm, placeholder: 'Días', required: true,
+                  label: 'Alarma de expiración', input_html: { min: '0', max:'9999', value: 30 } %>
+      <br><br>
+    </div>
+  </div>
 <% end %>

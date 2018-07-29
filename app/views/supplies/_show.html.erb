@@ -1,29 +1,49 @@
-<p id="notice"><%= notice %></p>
-
-<h5><strong>Suministro: </strong><%= @supply.name %></h5>
-
-<div class="well well-sm">
-  <h4>Cantidad en stock: <span class="label label-<%= @supply.quantity_label %>"><%= @supply.quantity %></span></h4></h4>
-    <div class="progress">
-      <div class="progress-bar progress-bar-<%= @supply.quantity_label %> progress-bar-striped active" style="width: <%= @percent_quantity_supply %>%">
-        <%= @percent_quantity_supply %>%
-      </div>
-    </div>
-  Cantidad inicial: <span class="label label-primary"><%= @supply.initial_quantity %></span>
-</div>
 <div class="row">
   <div class="col-md-6">
-    <h5><strong>Recibida:</strong></h5>
-    <%= @supply.date_received.strftime("%d/%m/%y %H:%M") %>
+    <h5><strong>Insumo: </strong><%= @supply.name %></h5>
 
-    <h5><strong>Expiración:</strong></h5>
-    <%= @supply.expiry_date.strftime("%d/%m/%y %H:%M") %>
+    <h5><strong>Estado: </strong>
+      <span class='label label-<%= @supply.is_active? ? "success" : "danger" %>'>
+        <%= @supply.is_active? ? "Activo" : "Inactivo" %>
+      </span>
+    </h5>
+
+    <h5><strong>Unidad: </strong><%= @supply.unity %></h5>
+
+    <h5><strong>Área: </strong><%= @supply.supply_area.name %></h5>
+
+    <h5><strong>Descripción: </strong>
+      <%= @supply.description.present? ? @supply.description : "----" %>
+    </h5>
+
+    <h5><strong>Observación: </strong>
+      <%= @supply.observation.present? ? @supply.observation : "----" %>
+    </h5>
   </div>
   <div class="col-md-6">
-    <h5><strong>Cargada:</strong></h5>
-    <%= @supply.created_at.strftime("%d/%m/%y %H:%M") %>
+    <h5><strong>Expira?: </strong>
+      <%= @supply.needs_expiration? ? "Si" : "No" %>
+    </h5>
 
-    <h5><strong>Última modificación:</strong></h5>
-    <%= @supply.updated_at.strftime("%d/%m/%y %H:%M") %>
+    <h5><strong>Alarma: </strong>
+      <span class='label label-<%= @supply.is_active? ? "success" : "default" %>'>
+      <%= @supply.active_alarm? ? "Activa" : "Inactiva" %>
+    </h5>
+
+    <h5><strong>Alarma de cantidad: </strong>
+      <span class="label label-default"><%= @supply.quantity_alarm %></span>
+    </h5>
+
+    <h5><strong>Período de alarma: </strong>
+      <span class="label label-default"><%= @supply.period_alarm %> días</span>
+    </h5>
+
+    <h5><strong>Período de control: </strong>
+      <span class="label label-default"><%= @supply.period_control %> días</span>
+    </h5>
+
+    <h5><strong>Alarma de expiración: </strong>
+      <span class="label label-default"><%= @supply.expiration_alarm %> días</span>
+    </h5>
   </div>
 </div>
