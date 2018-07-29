@@ -4,7 +4,6 @@ $('.chosen-select').chosen({
   width: '200px'
 });
 $('input[name="my-checkbox"]').on('init.bootstrapSwitch', function(event, state) {
-  console.log(state); // true | false
   document.getElementById("is_active").value = state;
 });
 $("[name='my-checkbox']").bootstrapSwitch({
@@ -12,6 +11,5 @@ $("[name='my-checkbox']").bootstrapSwitch({
   offText: "Inactivo",
 });
 $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-  console.log(state); // true | false
   document.getElementById("is_active").value = state;
 });

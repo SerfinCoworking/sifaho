@@ -7,6 +7,7 @@ class Patient < ApplicationRecord
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :dni
+  validates_presence_of :birthdate
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

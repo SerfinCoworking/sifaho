@@ -19,3 +19,5 @@ $('#dialog').on('shown.bs.modal', function () {
 })
 
 <%= render 'form_function' %>
+
+$('#patient_birthdate').val("<%= @patient.birthdate.strftime('%d/%m/%Y') %>");

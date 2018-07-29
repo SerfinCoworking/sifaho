@@ -40,7 +40,6 @@ class PatientsController < ApplicationController
   # GET /patients/new
   def new
     @patient = Patient.new
-    @patient.build_patient_type
     @patient_types = PatientType.all
   end
 
@@ -116,8 +115,7 @@ class PatientsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def patient_params
       params.require(:patient).permit(:first_name, :last_name, :dni,
-                            :address, :email, :phone,
-                            patient_type_attributes: [:id, :sector_name, :quantity,
-                                                :complexity_level, :description])
+                            :email, :birthdate, :phone, :sex, :patient_type_id,
+                            :is_chronic, :is_urban, :cell_phone)
     end
 end

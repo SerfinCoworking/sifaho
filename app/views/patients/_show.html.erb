@@ -10,14 +10,14 @@
     <h5><strong>DNI:</strong></h5>
     <%= @patient.dni %>
 
-    <h5><strong>Email</strong></h5>
-    <%= @patient.email.present? ? @patient.email : "----" %>
-
     <h5><strong>Teléfono</strong></h5>
     <%= @patient.phone.present? ? @patient.phone : "----" %>
 
-    <h5><strong>Dirección</strong></h5>
-    <%= @patient.address.present? ? @patient.address : "----" %>
+    <h5><strong>Celular</strong></h5>
+    <%= @patient.cell_phone.present? ? @patient.cell_phone : "----" %>
+
+    <h5><strong>Email</strong></h5>
+    <%= @patient.email.present? ? @patient.email : "----" %>
 
 
   </div>
@@ -25,10 +25,19 @@
     <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @patient.prescriptions.count %><span></h5>
 
     <h5><strong>Tipo de paciente </strong></h5>
-    <%= @patient.patient_type.name %>
+    <%= @patient.patient_type.present? ? @patient.patient_type.name : "----" %>
 
-    <h5><strong>Se cargó el </strong></h5>
-    <%= @patient.created_at %>
+    <% if @patient.created_at.present? %>
+      <h5><strong>Se cargó el </strong></h5>
+      <%= @patient.created_at %>
+    <% end %>
+
+    <h5><strong>Crónico?</strong></h5>
+    <%= @patient.is_chronic? ? "Si" : "No" %>
+
+    <h5><strong>Urbano?</strong></h5>
+    <%= @patient.is_urban? ? "Si" : "No" %>
+
 
   </div>
 </div>
