@@ -1,0 +1,17 @@
+<% content_for :page_header do %>
+  <h3 class="panel-tittle">
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    Lotes de insumos <small>papelera</small>
+    <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+      Filtrar
+    <% end %>
+  </h3>
+<% end %>
+
+<%= render "filter" %>
+
+<%= render(
+  partial: 'supply_lots/list',
+  locals: { supply_lots: @supply_lots }
+) %>

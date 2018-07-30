@@ -140,6 +140,9 @@ li .well strong{
   margin-top: 0px;
   margin-bottom: 0px;
 }
+#page-header small{
+  color: white;
+}
 #flash_messages{
   position: absolute;
   top: 10px;

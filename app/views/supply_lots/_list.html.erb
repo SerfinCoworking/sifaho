@@ -21,5 +21,16 @@
   </div>
   <div id="page_links">
     <%= paginate @supply_lot %>
+    <% unless current_page?(controller: 'supply_lots', action: 'trash_index') %>
+      <%= link_to trash_index_supply_lots_path, class: "btn btn-default btn-md pull-right" do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        Papelera
+      <% end %>
+    <% else %>
+      <%= link_to supply_lots_path, class: "btn btn-default btn-md pull-right" do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-arrow-left') %>
+        Volver
+      <% end %>
+    <% end %>
   </div>
 </div>

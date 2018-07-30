@@ -12,6 +12,6 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user && (user.has_role? :internal_order)
+    
   end
 end

@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
 
 end
 
+# To avoid delete records
+gem "paranoia", "~> 2.2"
 # For bootstrap toggle buttons
 gem "bootstrap-switch-rails"
 # For a lot of jquery functions

@@ -12,8 +12,10 @@ Rails.application.routes.draw do
   resources :supply_lots do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
     collection do
+      get "trash_index"
       get "search_by_id"
       get "search_by_code"
       get "search_by_name"

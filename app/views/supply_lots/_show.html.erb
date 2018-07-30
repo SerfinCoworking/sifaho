@@ -13,7 +13,7 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    <h5><strong>Recibida:</strong></h5>
+    <h5><strong>Recibido:</strong></h5>
     <%= @supply_lot.date_received.strftime("%d/%m/%Y") %>
 
     <% if @supply_lot.supply.needs_expiration? %>
@@ -22,10 +22,15 @@
     <% end %>
   </div>
   <div class="col-md-6">
-    <h5><strong>Cargada:</strong></h5>
+    <h5><strong>Cargado:</strong></h5>
     <%= @supply_lot.created_at.strftime("%d/%m/%y %H:%M") %>
 
     <h5><strong>Última modificación:</strong></h5>
     <%= @supply_lot.updated_at.strftime("%d/%m/%y %H:%M") %>
+
+    <% if @supply_lot.deleted? %>
+    <h5><strong>Eliminado:</strong></h5>
+    <%= @supply_lot.deleted_at.strftime("%d/%m/%y %H:%M") %>
+    <% end %>
   </div>
 </div>

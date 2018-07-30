@@ -6,6 +6,7 @@ class InternalOrder < ApplicationRecord
 
   # Relaciones
   belongs_to :responsable, class_name: 'User'
+  has_one :profile, :through => :responsable
   belongs_to :sector
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, :through => :quantity_supply_lots
@@ -50,10 +51,10 @@ class InternalOrder < ApplicationRecord
     num_or_conds = 2
     where(
       terms.map { |term|
-        "((LOWER(responsables.first_name) LIKE ? OR LOWER(responsables.last_name) LIKE ?))"
+        "((LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ?))"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
-    ).joins("INNER JOIN users AS responsables ON responsables.id = entry_notes.responsable_id")
+    ).joins(:profile) # Perfil del responsable del pedido
   }
 
   scope :sorted_by, lambda { |sort_option|

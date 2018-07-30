@@ -1,4 +1,6 @@
 class SupplyLot < ApplicationRecord
+  acts_as_paranoid
+
   enum status: { vigente: 0, por_vencer: 1, vencido: 2}
 
   after_create :update_status, :assign_constants

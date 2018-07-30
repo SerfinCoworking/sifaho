@@ -1,5 +1,5 @@
 class SupplyLotsController < ApplicationController
-  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy, :delete, :restore, :restore_confirm]
 
   # GET /supply_lots
   # GET /supply_lots.json
@@ -24,15 +24,33 @@ class SupplyLotsController < ApplicationController
 
     @new_supply_lot = SupplyLot.new
 
-    respond_to do |format|
-      format.html
-      format.js
-    end
     rescue ActiveRecord::RecordNotFound => e
       # There is an issue with the persisted param_set. Reset it.
       puts "Had to reset filterrific params: #{ e.message }"
       redirect_to(reset_filterrific_url(format: :html)) and return
   end
+
+  def trash_index
+    @filterrific = initialize_filterrific(
+      SupplyLot.only_deleted,
+      params[:filterrific],
+      select_options: {
+        sorted_by: SupplyLot.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'creacion_desc'},
+      available_filters: [
+        :sorted_by, :search_query, :with_code, :with_area_id, :date_received_at
+      ],
+    ) or return
+    @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+
+    rescue ActiveRecord::RecordNotFound => e
+      # There is an issue with the persisted param_set. Reset it.
+      puts "Had to reset filterrific params: #{ e.message }"
+      redirect_to(reset_filterrific_url(format: :html)) and return
+  end
+
 
   # GET /supply_lots/1
   # GET /supply_lots/1.json
@@ -103,6 +121,23 @@ class SupplyLotsController < ApplicationController
     end
   end
 
+  # GET /supply_lot/1/restore_confirm
+  def restore_confirm
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /supply_lot/1/restore
+  def restore
+    SupplyLot.restore(@supply_lot.id, :recursive => true)
+
+    respond_to do |format|
+      flash.now[:success] = "El lote N°"+@supply_lot.id.to_s+" se ha restaurado correctamente."
+      format.js
+    end
+  end
+
   def search_by_code
     @supply_lots = SupplyLot.order(:code).with_code(params[:term]).limit(10)
     render json: @supply_lots.map{ |sup_lot| { label: sup_lot.code, code: sup_lot.id, expiry: sup_lot.needs_expiration } }
@@ -116,7 +151,7 @@ class SupplyLotsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_supply_lot
-      @supply_lot = SupplyLot.find(params[:id])
+      @supply_lot = SupplyLot.with_deleted.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

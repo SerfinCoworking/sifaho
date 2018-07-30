@@ -28,7 +28,7 @@
 <li class="nav-header" data-toggle="collapse" data-target="#stock"><div id="stock-label" class="well well-sm">
   <span class="glyphicon glyphicon-barcode"><strong> Stock</strong></div></li>
 <ul class="nav nav-list" id="stock">
-  <li id="stock-li" class="<%= active_class(supply_lots_path) %>">
+  <li id="stock-li" class="<%= active_class(supply_lots_path) %><%= active_class(trash_index_supply_lots_path) %>">
     <%= link_to supply_lots_url do %>
       Lotes
     <% end %>
