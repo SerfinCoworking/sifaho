@@ -20,7 +20,7 @@ class InternalOrdersController < ApplicationController
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
 
-    @internal_orders.with_sector(current_user.sector)
+    @internal_orders = @internal_orders.with_sector_id(current_user.sector_id)
 
 
     respond_to do |format|

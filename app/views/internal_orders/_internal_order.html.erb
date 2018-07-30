@@ -33,19 +33,25 @@
     <% end %>
   </td>
   <td>
-    <%= link_to internal_order_path(internal_order), remote:true,
-          class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-    <% end %>
-    <% unless internal_order.entregado? %>
-      <%= link_to edit_internal_order_path(internal_order), remote: true,
-            class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+    <% if policy(internal_order).show? %>
+      <%= link_to internal_order_path(internal_order), remote:true,
+            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
-    <%= link_to delete_internal_order_path(internal_order), remote: true,
-          class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    <% unless internal_order.entregado? %>
+      <% if policy(internal_order).edit? %>
+        <%= link_to edit_internal_order_path(internal_order), remote: true,
+              class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).destroy? %>
+      <%= link_to delete_internal_order_path(internal_order), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
     <% end %>
   </td>
 </tr>

@@ -88,8 +88,8 @@ class InternalOrder < ApplicationRecord
     where('internal_orders.date_received >= ?', reference_time)
   }
 
-  scope :with_sector, lambda { |a_sector|
-    where('internal_orders.sector == ?', a_sector)
+  scope :with_sector_id, lambda { |an_id|
+    where(sector_id: [*an_id])
   }
 
   # Método para establecer las opciones del select input del filtro
