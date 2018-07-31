@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
 
 end
 
+# For full text search
+gem 'pg_search'
 # To avoid delete records
 gem "paranoia", "~> 2.2"
 # For bootstrap toggle buttons

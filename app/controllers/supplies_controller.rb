@@ -14,7 +14,7 @@ class SuppliesController < ApplicationController
       default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
-        :search_query,
+        :search_text,
         :with_code,
         :with_area_id,
       ],
@@ -103,7 +103,7 @@ class SuppliesController < ApplicationController
   end
 
   def search_by_name
-    @supplies = Supply.order(:name).search_query(params[:term]).limit(15)
+    @supplies = Supply.order(:name).search_text(params[:term]).limit(15)
     render json: @supplies.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration } }
   end
 

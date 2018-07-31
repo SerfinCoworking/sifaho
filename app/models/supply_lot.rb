@@ -13,6 +13,7 @@ class SupplyLot < ApplicationRecord
     :through => :quantity_supplies,
     :source => :quantifiable,
     :source_type => 'Prescription'
+
   has_many :internal_orders,
     :through => :quantity_supplies,
     :source => :quantifiable,
@@ -22,7 +23,6 @@ class SupplyLot < ApplicationRecord
   validates_presence_of :supply
   validates_presence_of :quantity
   validates_presence_of :date_received
-
 
   filterrific(
     default_filter_params: { sorted_by: 'creacion_desc' },
