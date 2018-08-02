@@ -61,12 +61,19 @@ class PrescriptionsController < ApplicationController
   def create
     @prescription = Prescription.new(prescription_params)
 
-    @prescription.set_pending
-
     respond_to do |format|
       if @prescription.save!
-        dispense if dispensing?
-        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+        # Si se entrega la prescripción
+        if dispensing?
+          begin
+            @prescription.dispense
+            flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y entregado correctamente."
+          rescue ArgumentError => e
+            flash.now[:error] = "Se ha creado pero no se ha podido entregar: "+e.message
+          end
+        else
+          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+        end
         format.js
       else
         flash.now[:error] = "La prescripción no se ha podido crear."
@@ -78,13 +85,18 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
-    if dispensing?
-      @prescription.dispense
-    end
-
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
-        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
+        if dispensing?
+          begin
+            @prescription.dispense
+            flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado y entregado correctamente."
+          rescue ArgumentError => e
+            flash.now[:error] = "La prescripción se ha modificado pero no se entregó: "+e.message
+          end
+        else
+          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
+        end
         format.js
       else
         flash.now[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
@@ -106,15 +118,21 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/1/dispense
   def dispense
-    @prescription.dispense
-
     respond_to do |format|
-      if @prescription.save!
-        flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha dispensado correctamente."
+      begin
+        @prescription.dispense
+
+      rescue ArgumentError => e
+        flash.now[:error] = e.message
         format.js
       else
-        flash.now[:error] = "La prescripción no se ha podido dispensar."
-        format.js
+        if @prescription.save!
+          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha dispensado correctamente."
+          format.js
+        else
+          flash.now[:error] = "La prescripción no se ha podido dispensar."
+          format.js
+        end
       end
     end
   end

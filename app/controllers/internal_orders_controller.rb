@@ -68,7 +68,7 @@ class InternalOrdersController < ApplicationController
             @internal_order.deliver
             flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
           rescue ArgumentError => e
-            flash.now[:error] = "No se ha podido entregar: "+e.message
+            flash.now[:info] = "Se ha creado pero no se ha podido entregar: "+e.message
           end
         else
           flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
@@ -84,11 +84,19 @@ class InternalOrdersController < ApplicationController
   # PATCH/PUT /internal_orders/1
   # PATCH/PUT /internal_orders/1.json
   def update
-    @internal_order.entregado! if delivering?
-
     respond_to do |format|
       if @internal_order.update_attributes(internal_order_params)
-        flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado correctamente."
+        # Si se carga y entrega el pedido
+        if delivering?
+          begin
+            @internal_order.deliver
+            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado y entregado correctamente."
+          rescue ArgumentError => e
+            flash.now[:info] = "Se ha modificado pero no se ha podido entregar: "+e.message
+          end
+        else
+          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado correctamente."
+        end
         format.js
       else
         flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" no se ha podido modificar."

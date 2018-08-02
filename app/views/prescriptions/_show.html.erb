@@ -17,8 +17,8 @@
 
     <p>
       <h5><strong>Estado:</strong>
-        <span class="label label-<%= @prescription.prescription_status.label %>">
-          <%= @prescription.prescription_status.name %>
+        <span class="label label-<%= @prescription.status_label %>">
+          <%= @prescription.status.split('_').map(&:capitalize).join(' ') %>
         </span>
       </h5>
     </p>
@@ -60,7 +60,7 @@
 
     <p>
       <h5><strong>Fecha dispensada:</strong></h5>
-      <% if @prescription.dispensed? %>
+      <% if @prescription.dispensada? %>
         <%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
       <% else %>
         A dispensar

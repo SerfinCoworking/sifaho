@@ -123,6 +123,8 @@ class SupplyLot < ApplicationRecord
   def decrement(a_quantity)
     if quantity < a_quantity
       raise ArgumentError, "Cantidad en stock insuficiente de lote N°"+self.id.to_s+" insumo "+self.supply_name
+    elsif self.deleted?
+      raise ArgumentError, "El lote N°"+self.id.to_s+" de "+self.supply_name+" se encuentra en la papelera"
     else
       self.quantity -= a_quantity
     end
@@ -153,17 +155,6 @@ class SupplyLot < ApplicationRecord
     elsif self.vencido?
       return 'danger'
     end
-  end
-
-  # Métodos de clase
-  def self.expired # Retorna los medicamentos expirados
-    where(status: [:vencido])
-  end
-  def self.near_expiry # Retorna los medicamentos pronto a expirar
-    where(status: [:por_vencer])
-  end
-  def self.in_good_state # Retorna los medicamentos en buen estado
-    where(status: [:vigente])
   end
 
   private

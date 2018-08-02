@@ -1,14 +1,14 @@
 class Prescription < ApplicationRecord
+  enum status: { pendiente: 0, dispensada: 1 }
+
   # Relaciones
   belongs_to :professional
   belongs_to :patient
-  belongs_to :prescription_status
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :patient
-  validates_presence_of :prescription_status
   validates_presence_of :professional
   validates_associated :quantity_supply_lots
   validates_associated :supply_lots
@@ -105,28 +105,25 @@ class Prescription < ApplicationRecord
   end
 
   #Métodos públicos
-  def count_prescriptions_today
-    Prescription.where("date_received >= :today", { today: Date.today.beginning_of_day })
-  end
-
-  def set_pending
-    self.prescription_status = PrescriptionStatus.find_by_name("Pendiente")
-  end
-
-  def dispensed?
-    self.prescription_status.is_dispense?
-  end
-
   def dispense
-    unless dispensed?
-      self.prescription_status = PrescriptionStatus.find_by_name("Dispensada")
-      self.date_dispensed = DateTime.now
+    if dispensada?
+      raise ArgumentError, "Ya se ha entregado esta prescripción"
+    else
       if self.quantity_supply_lots.present?
-        self.quantity_supply_lots.each do |q_s_ls|
-          q_s_ls.decrement
+        self.quantity_supply_lots.each do |qsls|
+          qsls.decrement
         end
+      else
+        raise ArgumentError, 'No hay insumos en la prescripción'
       end
-    end #End dispensed?
+      self.date_dispensed = DateTime.now
+      self.dispensada!
+    end #End dispensada?
+  end
+
+  # Label del estado para vista.
+  def status_label
+    if self.dispensada?; return 'success'; elsif self.pendiente?; return 'default'; end
   end
 
   # Métodos de clase
@@ -135,11 +132,5 @@ class Prescription < ApplicationRecord
   end
   def self.current_month
     where("date_received >= :month", { month: DateTime.now.beginning_of_month })
-  end
-  def self.dispensed
-    where("prescription_status_id = 2")
-  end
-  def self.pending
-    where("prescription_status_id = 1")
   end
 end

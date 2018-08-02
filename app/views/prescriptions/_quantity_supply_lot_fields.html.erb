@@ -12,7 +12,7 @@
   <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,
                           label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
                             :title=>"Seleccione un suministro", "data-placement"=>"right",
-                            min: '0', step:'any', id: 'quantity-supply-1', :style => 'width: 100px' }%>
+                            min: '1', step:'any', id: 'quantity-supply-1', :style => 'width: 100px' }%>
 
   <%= link_to_remove_association  f, class: 'remove-tag btn btn-default btn-sm' do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>

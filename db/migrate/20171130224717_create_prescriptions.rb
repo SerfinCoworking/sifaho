@@ -4,7 +4,6 @@ class CreatePrescriptions < ActiveRecord::Migration[5.1]
       t.text :observation
       t.datetime :date_received
       t.datetime :date_dispensed
-      t.integer :prescription_status_id
 
       t.timestamps
     end

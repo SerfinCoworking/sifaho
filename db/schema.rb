@@ -10,10 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180730160738) do
+ActiveRecord::Schema.define(version: 20180802172811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_trgm"
+  enable_extension "unaccent"
 
   create_table "internal_orders", force: :cascade do |t|
     t.datetime "date_delivered"
@@ -97,6 +99,7 @@ ActiveRecord::Schema.define(version: 20180730160738) do
     t.datetime "updated_at", null: false
     t.bigint "professional_id"
     t.bigint "patient_id"
+    t.integer "status", default: 0
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end
