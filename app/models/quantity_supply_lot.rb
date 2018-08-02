@@ -1,6 +1,6 @@
 class QuantitySupplyLot < ApplicationRecord
   # Relaciones
-  belongs_to :supply_lot
+  belongs_to :supply_lot, -> { with_deleted }
   belongs_to :quantifiable, :polymorphic => true
 
   # Validaciones
