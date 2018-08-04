@@ -4,15 +4,23 @@ class Prescription < ApplicationRecord
   # Relaciones
   belongs_to :professional
   belongs_to :patient
+  has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supplies, :through => :quantity_supply_requests
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :patient
   validates_presence_of :professional
+  validates_associated :quantity_supply_requests
+  validates_associated :supplies
   validates_associated :quantity_supply_lots
   validates_associated :supply_lots
 
+  accepts_nested_attributes_for :quantity_supply_requests,
+          :reject_if => :all_blank,
+          :allow_destroy => true
+  accepts_nested_attributes_for :supplies
   accepts_nested_attributes_for :quantity_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true

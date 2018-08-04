@@ -1,32 +1,101 @@
 <%= simple_form_for @prescription, remote: true, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
-  <%= f.label :professional_id, "Doctor" %>
-  <%= f.text_field :professional_id, id: "professional", class: "form-control",
-                    placeholder: 'Nombre o Apellido',
-                    data: { autocomplete_source: doctors_professionals_path },
-                    size: 30 %>
-  <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
+  <div class='row'>
+    <div class='col-md-7'>
+      <%= f.label :professional_id, "Doctor" %>
+      <%= f.text_field :professional_id, id: "professional", class: "form-control",
+                        placeholder: 'Nombre o Apellido',
+                        data: { autocomplete_source: doctors_professionals_path },
+                        size: 30,
+                        value: "#{@prescription.professional.fullname unless @prescription.new_record?}" %>
+      <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
+      <%= f.label :patient_id, "Paciente" %>
+      <%= f.input :patient_id, as: :string, id: "patient_dni", class: "form-control",
+                        label: "DNI",
+                        placeholder: '12345678',
+                        :input_html => {
+                          data: { autocomplete_source: search_by_dni_patients_path },
+                          value: "#{@prescription.patient.dni unless @prescription.new_record?}"
+                        },
+                        size: 10 %>
+      <%= f.input :patient_id, as: :string, id: "patient",
+                        label: "Nombre y apellido",
+                        placeholder: 'Juan Perez',
+                        :input_html => {
+                          data: { autocomplete_source: search_patients_path },
+                          value: "#{@prescription.patient.fullname unless @prescription.new_record?}"
+                        },
+                        size: 30 %>
+      <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
+    </div>
+    <div class='col-md-5'>
+      <br><br><br>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 30  , :rows => 3 } %>
+    </div>
+  </div>
 
-  <%= f.label :patient_id, "Paciente" %>
-  <%= f.text_field :patient_id, id: "patient_dni", class: "form-control",
-                    placeholder: 'DNI',
-                    data: { autocomplete_source: search_by_dni_patients_path },
-                    size: 10 %>
-  <%= f.text_field :patient_id, id: "patient", class: "form-control",
-                    placeholder: 'Nombre o Apellido',
-                    data: { autocomplete_source: search_patients_path },
-                    size: 30 %>
-  <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
+  <!-- Insumos solicitados -->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Insumos solicitados</th>
+        <th>Cantidad</th>
+        <th>Dosis diaria</th>
+        <th>Duración tratamiento</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_supply_requests">
+      <%= f.simple_fields_for :quantity_supply_requests do |form_quantity| %>
+        <%= render "quantity_supply_request_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-sm',
+    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "prepend"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
+  </div>
+  <br>
 
-   <div class='row'>
+  <!-- Insumos a dispensar -->
+  <!-- <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cód</th>
+        <th>Insumos a dispensar</th>
+        <th>Lote N°</th>
+        <th>Cantidad</th>
+        <th>Expiración</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_supply_lots">
+      <%= f.simple_fields_for :quantity_supply_lots do |form_quantity| %>
+        <%= render "quantity_supply_lot_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm',
+    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "prepend"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
+  </div> -->
+
+
+
+  <div class='row'>
     <div class='col-md-12'>
-      <label>Insumo</label>
+      <label>Insumos a dispensar</label>
       <div id="quantity-supply-lots">
         <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
           <%= render "quantity_supply_lot_fields", :f => form_quantity %>
         <% end %>
         <div class="links">
-          <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
+          <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm' do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           <% end %>
         </div>
@@ -36,17 +105,22 @@
   </div>
   <div class='row'>
     <div class='col-md-6'>
-      <%= f.input :observation, label: 'Observaciones', as: :text,
-          :input_html => { :cols => 30  , :rows => 3 } %>
-    </div>
-    <div class='col-md-6'>
-      <%= f.input :date_received, label: 'Fecha recibida',
+      <%= f.input :date_received, label: 'Fecha recetada',
                                   as: :string,
                                   :placeholder => "Seleccionar fecha",
                                   input_html: {class: "form-control", required: true, autocomplete: 'off',
                                   value: "#{@prescription.date_received unless @prescription.new_record?}"},
                                   html5: false
-                                  %><br><br>
+                                  %>
+    </div>
+    <div class='col-md-6'>
+      <%= f.input :date_received, label: 'Fecha expiración',
+                                  as: :string,
+                                  :placeholder => "Seleccionar fecha",
+                                  input_html: {class: "form-control", required: true, autocomplete: 'off',
+                                  value: "#{@prescription.date_received unless @prescription.new_record?}"},
+                                  html5: false
+                                  %>
     </div>
   </div>
 <% end %>

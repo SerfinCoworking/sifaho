@@ -1,10 +1,10 @@
 <%= simple_form_for @professional, remote: true, html: {class: "form-inline"} do |f| %>
 <%= f.error_notification %>
-  <%= f.input :first_name, placeholder: 'Nombre', required: true, label: false %>
-  <%= f.input :last_name, placeholder: 'Apellido', required: true, label: false %>
-  <%= f.input :dni, placeholder: 'DNI', required: true, label: false, input_html: { min: '10000', max:'99999999' } %>
+  <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
+  <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
+  <%= f.input :dni, placeholder: '12345678', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
   <br><br>
-  <%= f.input :enrollment, placeholder: 'Matrícula', label: false, input_html: { min: '1000', max:'9999' } %>
+  <%= f.input :enrollment, placeholder: '1234', label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
   <%= f.input :professional_type_id,
                     label: false,
                     label_method: :name,
@@ -15,6 +15,7 @@
                     prompt: 'Seleccione una especialidad'
   %>
   <br><br>
-  <%= f.hidden_field :is_active, id: "is_active" %>
+  <%= f.label :is_active, 'Estado' %>
+  <%= f.hidden_field :is_active, id: "is_active", label: 'Estado', value: "#{@professional.is_active unless @professional.new_record?}" %>
   <input type="checkbox" name="my-checkbox">
 <% end %>

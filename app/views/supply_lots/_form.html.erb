@@ -26,7 +26,8 @@
                               placeholder: 'Nombre',
                               data: { autocomplete_source: search_by_name_supplies_path },
                               size: 40,
-                              required: true %>
+                              required: true,
+                              value: "#{@new_supply_lot.supply_name unless @new_supply_lot.new_record?}" %>
             <%= f.hidden_field :supply_id, id: "supply_id" %>
           </td>
           <td>

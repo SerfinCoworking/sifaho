@@ -7,9 +7,15 @@ $('input[name="my-checkbox"]').on('init.bootstrapSwitch', function(event, state)
   document.getElementById("is_active").value = state;
 });
 $("[name='my-checkbox']").bootstrapSwitch({
-  onText: "Activo",
-  offText: "Inactivo",
+  onColor: "danger",
+  offColor: "success",
+  onText: "Inactivo",
+  offText: "Activo",
 });
 $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-  document.getElementById("is_active").value = state;
+  if(state){
+    document.getElementById("is_active").value = false;
+  }else{
+    document.getElementById("is_active").value = true;
+  }
 });

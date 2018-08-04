@@ -20,7 +20,6 @@ class PrescriptionsController < ApplicationController
     ) or return
     @prescriptions = @filterrific.find.page(params[:page]).per_page(8)
 
-
     respond_to do |format|
       format.html
       format.js
@@ -42,18 +41,14 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
-    @supplies = SupplyLot.all
+    @supply_lots = SupplyLot.all
+    @prescription.quantity_supply_requests.build
     @prescription.quantity_supply_lots.build
-    @filtered_lots = []
   end
 
   # GET /prescriptions/1/edit
   def edit
-    @professionals = Professional.all
-    @supplies = SupplyLot.all
-    @patients = Patient.all
-    @patient_types = PatientType.all
-    @sectors = Sector.all
+    @supply_lots = SupplyLot.all
   end
 
   # POST /prescriptions
@@ -153,6 +148,8 @@ class PrescriptionsController < ApplicationController
     def prescription_params
       params.require(:prescription).permit(
                                              :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
+                                             quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
+                                                                                   :treatment_duration, :_destroy],
                                              quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy],
                                              patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id]
                                           )

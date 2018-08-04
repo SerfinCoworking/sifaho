@@ -1,0 +1,38 @@
+<tr class="nested-fields">
+  <td>
+    <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+                    label: false,
+                    placeholder: 'Nombre',
+                    required: true,
+                    :input_html => {
+                      class: "supply-name",
+                      data: { autocomplete_source: search_by_name_supplies_path },
+                      :style => 'width: 300px'
+                    } %>
+    <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
+  </td>
+  <td>
+    <%= f.input :quantity, label: false, placeholder: 'Cant', required: true, disabled: true,
+                        input_html: { "data-tooltip"=>true, :class=>"has-tip",
+                        :title=>"Seleccione un insumo", "data-placement"=>"right",
+                        min: '1', step:'any', :style => 'width: 69px' }%>
+  </td>
+  <td>
+    <%= f.input :daily_dose, label: false, placeholder: 'Días', required: false, disabled: true,
+                         input_html: { "data-tooltip"=>true, :class=>"has-tip daily-dose",
+                         :title=>"Seleccione un insumo", "data-placement"=>"right",
+                          min: '1', step:'any', :style => 'width: 67px' }%>
+  </td>
+  <td>
+    <%= f.input :treatment_duration, label: false, placeholder: 'Días',
+                            required: false, disabled: true,
+                            input_html: { "data-tooltip"=>true, :class=>"has-tip",
+                            :title=>"Seleccione un insumo", "data-placement"=>"right",
+                            min: '1', step:'any', :style => 'width: 67px' }%>
+  </td>
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+    <% end %>
+  </td>
+</tr>

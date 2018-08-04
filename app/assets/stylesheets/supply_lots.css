@@ -4,3 +4,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+#links-quant-form{
+  margin-top: -15px;
+}

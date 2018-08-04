@@ -1,0 +1,1 @@
+$(document).on("turbolinks:load",function(){$("#filterrific_with_professional_type_id").chosen({allow_single_deselect:!0,no_results_text:"No se encontr\xf3 el resultado",width:"150px"})});

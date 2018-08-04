@@ -5,6 +5,7 @@ $('.chosen-select').chosen({
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
+// Función para autocompletar nombre y apellido del doctor
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -32,6 +33,7 @@ jQuery(function() {
   })
 });
 
+// Función para autocompletar DNI de paciente
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -60,6 +62,7 @@ jQuery(function() {
   })
 });
 
+// Función para autocompletar Nombre de paciente
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -88,9 +91,6 @@ jQuery(function() {
   })
 });
 
-//Esta porción de JS se coloca en este documento ya que el evento "onchange"
-//se activa desde el html.
-
 //Se crea un diccionario de los insumos con sus respectivas cantidades en stock.
 <% @supply_lots = SupplyLot.all %>
 var quantityToSupply = {
@@ -100,7 +100,6 @@ var quantityToSupply = {
 },
 <% end %>
 };
-
 
 //Función para establecer el máximo al campo "Cantidad" de cada insumo.
 function setMaxQuantitySupply(idSelect){
@@ -170,4 +169,40 @@ supply_lots.on('cocoon:before-remove', function(e, el_to_remove) {
   return el_to_remove.fadeOut(200);
 });
 return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
+});
+
+supplies = $('#quantity_supply_requests'); // Formulario anidado
+
+$(document).on("focus",".supply-name", function() {
+
+  var _this = $(this);
+
+  jQuery(function() {
+    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+    return _this.autocomplete({
+      source: _this.data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 3,
+      open: function (e, ui) {
+        var acData = $(this).data('ui-autocomplete');
+        acData
+        .menu
+        .element
+        .find('li')
+        .each(function () {
+            var me = $(this);
+            var keywords = acData.term.split(' ').join('|');
+            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+        });
+      },
+      select:
+      function (event, ui) {
+        $(".supply-id").val(ui.item.id);
+        $(".numeric").prop('disabled', false);
+      }
+    }).each(function() {
+        $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+    })
+  });
 });

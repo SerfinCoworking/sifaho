@@ -68,10 +68,10 @@ class ProfessionalsController < ApplicationController
   def update
     respond_to do |format|
       if @professional.update(professional_params)
-        flash.now[:success] = @profesional.fullname+" se ha modificado correctamente."
+        flash.now[:success] = @professional.fullname+" se ha modificado correctamente."
         format.js
       else
-        flash.now[:error] = @profesional.fullname+" no se ha podido modificar."
+        flash.now[:error] = @professional.fullname+" no se ha podido modificar."
         format.js
       end
     end

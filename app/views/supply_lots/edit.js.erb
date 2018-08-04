@@ -7,7 +7,7 @@ $('.modal-body').html('<%= j render("form") %>');
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
-  "<button type='submit' class='btn btn-primary pull-right' form='edit_supply_lot_<%=@supply_lot.id%>' value='Guardar cambios'>Guardar cambios</button>"
+  "<button type='submit' class='btn btn-primary pull-right' form='edit_supply_lot_<%=@new_supply_lot.id%>' value='Guardar cambios'>Guardar cambios</button>"
 );
 
 
@@ -19,9 +19,7 @@ $('#dialog').modal("show");
 
 // Set focus to the first element
 $('#dialog').on('shown.bs.modal', function () {
-  $('.first_input').focus()
-})
+  $('#supply_lot_supply_id').focus();
+});
 
 <%= render 'form_function' %>
-
-document.getElementById("nom_ins").value = "<%= @supply_lot.supply_name %>";
