@@ -7,20 +7,20 @@
     </span>
   </td>
   <td class="pres-col-sup">
-    <% if prescription.quantity_supply_lots.present? %>
-      (<%= prescription.quantity_supply_lots.count %>)
-      <% prescription.quantity_supply_lots.each do |qsl| %>
+    <% if prescription.quantity_supply_requests.present? %>
+      (<%= prescription.quantity_supply_requests.count %>)
+      <% prescription.quantity_supply_requests.each do |qsr| %>
         <span class="badge">
-          <%= qsl.quantity %>
+          <%= qsr.quantity %>
         </span>
-        <%= qsl.supply_name %>
+        <%= qsr.supply_name %>
       <% end %>
     <% else %>
       ------
     <% end %></td>
   <td>
-    <% if prescription.date_received.present? %>
-      <%= prescription.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% if prescription.prescribed_date.present? %>
+      <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
     <% else %>
       ------
     <% end %>

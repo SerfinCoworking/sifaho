@@ -1,4 +1,32 @@
-$('#prescription_date_received').datetimepicker({ format: 'DD/MM/YYYY HH:mm' });
+$(function () {
+  var today = new moment();
+  var expiryDate = new moment().add(30, 'days');
+  $('#prescription_prescribed_date').datetimepicker({
+    format: 'DD/MM/YYYY',
+    date: today
+  });
+  $('#prescription_expiry_date').datetimepicker({
+    format: 'DD/MM/YYYY',
+    date: expiryDate,
+    useCurrent: false, //Important! See issue #1075
+  });
+  $("#prescription_prescribed_date").on("dp.change", function (e) {
+    $('#prescription_expiry_date').data("DateTimePicker").minDate(e.date);
+    $('#prescription_expiry_date').data("DateTimePicker").date(e.date.add(30,'days'));
+  });
+  $("#prescription_expiry_date").on("dp.change", function (e) {
+      $('#prescription_prescribed_date').data("DateTimePicker").maxDate(e.date);
+  });
+});
+
+$(".supply-name").on("click", function () {
+   $(this).select();
+});
+$(".supply-lot-name").on("click", function () {
+   $(this).select();
+});
+
+
 
 $('.chosen-select').chosen({
     allow_single_deselect: true,
@@ -27,13 +55,19 @@ jQuery(function() {
     select:
     function (event, ui) {
       $("#professional_id").val(ui.item.id);
+    },
+    response: function(event, ui) {
+      if (!ui.content.length) {
+          var noResult = { value:"",label:"No se encontró al doctor" };
+          ui.content.push(noResult);
+      }
     }
   }).each(function() {
       $(this).autocomplete("widget").insertAfter($("#dialog").parent());
   })
 });
 
-// Función para autocompletar DNI de paciente
+// Función para autocompletar DNI del paciente
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -56,6 +90,12 @@ jQuery(function() {
     function (event, ui) {
       $("#patient_id").val(ui.item.id);
       $("#patient").val(ui.item.fullname);
+    },
+    response: function(event, ui) {
+      if (!ui.content.length) {
+          var noResult = { value:"",label:"No se encontró el dni" };
+          ui.content.push(noResult);
+      }
     }
   }).each(function() {
       $(this).autocomplete("widget").insertAfter($("#dialog").parent());
@@ -85,6 +125,12 @@ jQuery(function() {
     function (event, ui) {
       $("#patient_id").val(ui.item.id);
       $("#patient_dni").val(ui.item.dni);
+    },
+    response: function(event, ui) {
+      if (!ui.content.length) {
+          var noResult = { value:"",label:"No se encontró al paciente" };
+          ui.content.push(noResult);
+      }
     }
   }).each(function() {
       $(this).autocomplete("widget").insertAfter($("#dialog").parent());
@@ -173,6 +219,7 @@ return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
 
 supplies = $('#quantity_supply_requests'); // Formulario anidado
 
+// Función para autocompletar y buscar el insumo
 $(document).on("focus",".supply-name", function() {
 
   var _this = $(this);
@@ -200,6 +247,107 @@ $(document).on("focus",".supply-name", function() {
       function (event, ui) {
         $(".supply-id").val(ui.item.id);
         $(".numeric").prop('disabled', false);
+      },
+      response: function(event, ui) {
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el insumo" };
+            ui.content.push(noResult);
+        }
+      }
+    }).each(function() {
+        $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+    })
+  });
+});
+
+// Función para autocompletar y buscar el lote de insumo por código
+$(document).on("focus",".supply-lot-code", function() {
+  var _this = $(this);
+  jQuery(function() {
+    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+    return _this.autocomplete({
+      source: _this.data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 1,
+      open: function (e, ui) {
+        var acData = $(this).data('ui-autocomplete');
+        acData
+        .menu
+        .element
+        .find('li')
+        .each(function () {
+            var me = $(this);
+            var keywords = acData.term.split(' ').join('|');
+            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+        });
+      },
+      select:
+      function (event, ui) {
+        $(".supply-lot-id").val(ui.item.id);
+        $(".supply-lot-num").val(ui.item.id);
+        $(".supply-lot-name").val(ui.item.name);
+        $('.supply-lot-expiry').datetimepicker({format: 'DD/MM/YYYY'});
+        $('.supply-lot-quantity').attr({ "max" : ui.item.quant });
+        if(ui.item.expiry_date){
+          var date = new Date(ui.item.expiry_date);
+          $(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+        }else{
+          $(".supply-lot-expiry").val("No expira");
+        }
+      },
+      response: function(event, ui) {
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el código en stock" };
+            ui.content.push(noResult);
+        }
+      }
+    }).each(function() {
+        $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+    })
+  });
+});
+
+// Función para autocompletar y buscar el lote de insumo por nombre
+$(document).on("focus",".supply-lot-name", function() {
+  var _this = $(this);
+  jQuery(function() {
+    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+    return _this.autocomplete({
+      source: _this.data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 3,
+      open: function (e, ui) {
+        var acData = $(this).data('ui-autocomplete');
+        acData
+        .menu
+        .element
+        .find('li')
+        .each(function () {
+            var me = $(this);
+            var keywords = acData.term.split(' ').join('|');
+            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+        });
+      },
+      select:
+      function (event, ui) {
+        $(".supply-lot-id").val(ui.item.id);
+        $(".supply-lot-num").val(ui.item.id);
+        $(".supply-lot-code").val(ui.item.code);
+        $('.supply-lot-quantity').attr({ "max" : ui.item.quant });
+        if(ui.item.expiry_date){
+          var date = new Date(ui.item.expiry_date);
+          $(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+        }else{
+          $(".supply-lot-expiry").val("No expira");
+        }
+      },
+      response: function(event, ui) {
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el insumo en stock" };
+            ui.content.push(noResult);
+        }
       }
     }).each(function() {
         $(this).autocomplete("widget").insertAfter($("#dialog").parent());

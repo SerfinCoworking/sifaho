@@ -13,9 +13,12 @@ class PrescriptionsController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_professional_and_patient,
+        :search_supply_code,
+        :search_supply_name,
         :sorted_by,
-        :search_query,
-        :date_received_at,
+        :date_prescribed_since,
+        :date_dispensed_since
       ],
     ) or return
     @prescriptions = @filterrific.find.page(params[:page]).per_page(8)
@@ -64,7 +67,7 @@ class PrescriptionsController < ApplicationController
             @prescription.dispense
             flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y entregado correctamente."
           rescue ArgumentError => e
-            flash.now[:error] = "Se ha creado pero no se ha podido entregar: "+e.message
+            flash.now[:notice] = "Se ha creado pero no se ha podido entregar: "+e.message
           end
         else
           flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
@@ -87,7 +90,7 @@ class PrescriptionsController < ApplicationController
             @prescription.dispense
             flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado y entregado correctamente."
           rescue ArgumentError => e
-            flash.now[:error] = "La prescripción se ha modificado pero no se entregó: "+e.message
+            flash.now[:notice] = "La prescripción se ha modificado pero no se entregó: "+e.message
           end
         else
           flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
@@ -148,10 +151,10 @@ class PrescriptionsController < ApplicationController
     def prescription_params
       params.require(:prescription).permit(
                                              :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
+                                             :prescribed_date, :expiry_date,
                                              quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
                                                                                    :treatment_duration, :_destroy],
-                                             quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy],
-                                             patient_attributes: [:id, :first_name, :last_name, :dni, :patient_type_id]
+                                             quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy]
                                           )
     end
 

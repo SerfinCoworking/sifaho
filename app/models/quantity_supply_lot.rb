@@ -17,4 +17,19 @@ class QuantitySupplyLot < ApplicationRecord
   def supply_name
     self.supply_lot.supply_name
   end
+
+  # Retorna el código del insumo del lote
+  def supply_code
+    self.supply_lot.code
+  end
+
+  # Retorna fecha de expiración del lote
+  def expiry_date
+    self.supply_lot.expiry_date
+  end
+
+  # Retorna el tipo de unidad
+  def unity
+    self.supply_lot.unity
+  end
 end

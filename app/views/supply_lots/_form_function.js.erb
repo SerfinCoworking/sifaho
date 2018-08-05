@@ -11,7 +11,6 @@ jQuery(function() {
 
   return $('#supply_lot_supply_id').autocomplete({
     source: $('#supply_lot_supply_id').data('autocomplete-source'),
-    autoFocus: true,
     minLength: 1,
     open: function (e, ui) {
       var acData = $(this).data('ui-autocomplete');

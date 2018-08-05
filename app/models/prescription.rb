@@ -1,4 +1,7 @@
 class Prescription < ApplicationRecord
+  include PgSearch
+
+  # Estados
   enum status: { pendiente: 0, dispensada: 1 }
 
   # Relaciones
@@ -12,11 +15,14 @@ class Prescription < ApplicationRecord
   # Validaciones
   validates_presence_of :patient
   validates_presence_of :professional
+  validates_presence_of :prescribed_date
+  validates_presence_of :expiry_date
   validates_associated :quantity_supply_requests
   validates_associated :supplies
   validates_associated :quantity_supply_lots
   validates_associated :supply_lots
 
+  # Atributos anidados
   accepts_nested_attributes_for :quantity_supply_requests,
           :reject_if => :all_blank,
           :allow_destroy => true
@@ -29,37 +35,29 @@ class Prescription < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
+      :search_professional_and_patient,
+      :search_supply_code,
+      :search_supply_name,
       :sorted_by,
-      :search_query,
-      :date_received_at,
+      :date_prescribed_since,
+      :date_dispensed_since,
     ]
   )
 
-  # define ActiveRecord scopes for
-  # :search_query, :sorted_by, :date_received_at
-  scope :search_query, lambda { |query|
-    #Se retorna nil si no hay texto en la query
-    return nil  if query.blank?
+  pg_search_scope :search_professional_and_patient,
+  :associated_against => { :professional => :fullname, patient: [:last_name, :first_name] },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
-    # Se pasa a minusculas para busqueda en postgresql
-    # Luego se dividen las palabras en claves individuales
-    terms = query.downcase.split(/\s+/)
+  pg_search_scope :search_supply_code,
+  :associated_against => { :supplies => :id, :supply_lots => :code },
+  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
-    # Remplaza "*" con "%" para busquedas abiertas con LIKE
-    # Agrega '%', remueve los '%' duplicados
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-
-    # Cantidad de condiciones.
-    num_or_conds = 4
-    where(
-      terms.map { |term|
-        "((LOWER(professionals.first_name) LIKE ? OR LOWER(patients.first_name) LIKE ?) OR (LOWER(professionals.last_name) LIKE ? OR LOWER(patients.last_name) LIKE ?))"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conds }.flatten
-    ).joins(:professional, :patient)
-  }
+  pg_search_scope :search_supply_name,
+  :associated_against => { :supplies => :name, :supply_lots => :supply_name },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -77,9 +75,12 @@ class Prescription < ApplicationRecord
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("prescription_statuses.name #{ direction }").joins(:prescription_status)
-    when /^insumo_/
+    when /^insumos_solicitados_/
       # Ordenamiento por nombre de insumo
-      order("supply_lots.supply_name #{ direction }").joins(:supply_lots)
+      order("supplies.name #{ direction }").joins(:supplies)
+    when /^recetada_/
+      # Ordenamiento por la fecha de recepción
+      order("prescriptions.prescribed_date #{ direction }")
     when /^recibida_/
       # Ordenamiento por la fecha de recepción
       order("prescriptions.date_received #{ direction }")
@@ -92,10 +93,15 @@ class Prescription < ApplicationRecord
     end
   }
 
-  scope :date_received_at, lambda { |reference_time|
-    where('prescriptions.date_received >= ?', reference_time)
+  # Prescripciones prescritas desde una fecha
+  scope :date_prescribed_since, lambda { |reference_time|
+    where('prescriptions.prescribed_date >= ?', reference_time)
   }
 
+  # Prescripciones dispensadas desde una fecha
+  scope :date_dispensed_since, lambda { |reference_time|
+    where('prescriptions.date_dispensed >= ?', reference_time)
+  }
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
@@ -105,14 +111,17 @@ class Prescription < ApplicationRecord
       ['Doctor (a-z)', 'doctor_asc'],
       ['Paciente (a-z)', 'paciente_asc'],
       ['Estado (a-z)', 'estado_asc'],
-      ['Insumo (a-z)', 'insumo_asc'],
-      ['Fecha recibida (la nueva primero)', 'recibida_desc'],
-      ['Fecha dispensada (próxima a vencer primero)', 'dispensada_asc'],
+      ['Insumos solicitados (a-z)', 'insumo_asc'],
+      ['Fecha recetada (desc)', 'recetada_desc'],
+      ['Fecha recibida (desc)', 'recibida_desc'],
+      ['Fecha dispensada (asc)', 'dispensada_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
   end
 
   #Métodos públicos
+
+  # Cambia estado a dispensado y descuenta la cantidad a los insumos
   def dispense
     if dispensada?
       raise ArgumentError, "Ya se ha entregado esta prescripción"
@@ -135,9 +144,11 @@ class Prescription < ApplicationRecord
   end
 
   # Métodos de clase
+
   def self.current_day
     where("date_received >= :today", { today: DateTime.now.beginning_of_day })
   end
+
   def self.current_month
     where("date_received >= :month", { month: DateTime.now.beginning_of_month })
   end

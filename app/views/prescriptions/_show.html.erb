@@ -2,8 +2,8 @@
   <div class="col-md-6">
     <p>
       <h5><strong>Doctor:</strong></h5>
-      <%= @prescription.professional.full_name %>
-      <strong>DNI: </strong> <%= @prescription.professional.dni %>
+      <%= @prescription.professional.full_name %><br>
+      <strong>DNI: </strong> <%= @prescription.professional.dni %><br>
       <% if @prescription.professional.enrollment.present? %>
         <strong>Matrícula: </strong> <%= @prescription.professional.enrollment %>
       <% end %>
@@ -11,7 +11,7 @@
 
     <p>
       <h5><strong>Paciente:</strong></h5>
-      <%= @prescription.patient.first_name %> <%=@prescription.patient.last_name%>
+      <%= @prescription.patient.first_name %> <%=@prescription.patient.last_name%><br>
       <strong>DNI: </strong><%= @prescription.patient.dni %>
     </p>
 
@@ -23,18 +23,6 @@
       </h5>
     </p>
 
-    <% if @prescription.supply_lots.present? %>
-      <p>
-        <h5><strong>Insumos:</strong></h5>
-        <% @prescription.supply_lots.each do |sup_lot| %>
-          <span class="badge">
-            <%= @prescription.quantity_supply_lots.find_by_supply_lot_id(sup_lot.id).quantity %>
-          </span>
-          <%= sup_lot.supply_name %><br>
-        <% end %>
-      </p>
-    <% end %>
-
     <% if @prescription.observation.present? %>
       <p>
         <h5><strong>Observaciones:</strong></h5>
@@ -44,27 +32,103 @@
   </div>
   <div class="col-md-6">
     <p>
-      <h5><strong>Fecha emitida:</strong></h5>
-      <%= @prescription.created_at.strftime("%d/%m/%y %H:%M") %>
+      <h5><strong>Fecha cargada:</strong></h5>
+      <%= @prescription.created_at.strftime("%d/%m/%Y %H:%M") %>
     </p>
 
     <p>
       <h5><strong>Fecha última modificación:</strong></h5>
-      <%= @prescription.updated_at.strftime("%d/%m/%y %H:%M") %>
+      <%= @prescription.updated_at.strftime("%d/%m/%Y %H:%M") %>
     </p>
 
     <p>
-      <h5><strong>Fecha recibida:</strong></h5>
-      <%= @prescription.date_received.strftime("%d/%m/%y %H:%M") %>
+      <h5><strong>Fecha recetada:</strong></h5>
+      <% if @prescription.prescribed_date.present? %>
+        <%= @prescription.prescribed_date.strftime("%d/%m/%Y") %>
+      <% else %>
+        ----
+      <% end %>
     </p>
 
     <p>
       <h5><strong>Fecha dispensada:</strong></h5>
       <% if @prescription.dispensada? %>
-        <%= @prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+        <%= @prescription.date_dispensed.strftime("%d/%m/%Y %H:%M") %>
       <% else %>
-        A dispensar
+        Pendiente
       <% end %>
     </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Insumos solicitados</th>
+          <th>Cantidad</th>
+          <th>Dosis diaria</th>
+          <th>Duración tratamiento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @prescription.quantity_supply_requests.each do |qsr| %>
+          <tr>
+            <td>
+              <%= qsr.supply_name %>
+            </td>
+            <td>
+              <%= qsr.quantity %> <%= qsr.unity.pluralize(qsr.quantity) %>
+            </td>
+            <td>
+              <%= qsr.daily_dose %> <%= qsr.unity.pluralize(qsr.daily_dose) %>
+            </td>
+            <td>
+              <%= qsr.treatment_duration %> <%="día".pluralize(qsr.treatment_duration)%>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Cód</th>
+          <th><%= @prescription.dispensada? ? "Insumos dispensados" : "Insumos a dispensar" %></th>
+          <th>Cantidad</th>
+          <th>Lote N°</th>
+          <th>Expiración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @prescription.quantity_supply_lots.present? %>
+          <% @prescription.quantity_supply_lots.each do |qsl| %>
+            <tr>
+              <td>
+                <%= qsl.supply_code %>
+              </td>
+              <td>
+                <%= qsl.supply_name %>
+              </td>
+              <td>
+                <%= qsl.quantity %> <%= qsl.unity.pluralize(qsl.quantity) %>
+              </td>
+              <td>
+                <%= qsl.supply_lot_id %>
+              </td>
+              <td>
+                <%= qsl.expiry_date.present? ? qsl.expiry_date.strftime("%d/%m/%Y") : "No tiene" %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td></td><td>No hay insumos a dispensar</td></tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

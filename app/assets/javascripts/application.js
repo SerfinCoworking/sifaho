@@ -12,8 +12,8 @@
 //
 //= require rails-ujs
 //= require jquery
-//= require jquery-ui
 //= require jquery_ujs
+//= require jquery-ui
 //= require chosen-jquery
 //= require filterrific/filterrific-jquery
 //= require highcharts
@@ -32,4 +32,4 @@ window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
-}, 4000);
+}, 5000);

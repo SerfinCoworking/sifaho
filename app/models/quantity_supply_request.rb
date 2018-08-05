@@ -11,7 +11,13 @@ class QuantitySupplyRequest < ApplicationRecord
 
   #Métodos públicos
 
+  # Retorna el nombre del insumo
   def supply_name
-    self.supply.supply_name
+    self.supply.name
+  end
+
+  # Retorna el tipo de unidad
+  def unity
+    self.supply.unity
   end
 end

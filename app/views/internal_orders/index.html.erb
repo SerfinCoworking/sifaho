@@ -21,7 +21,8 @@
           <%= f.text_field(
             :search_query,
             class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Responsable'
+            placeholder: 'Responsable',
+            autocomplete: 'off'
           ) %>
         </div>
         <div class="col-md-4 col-sm-3">
@@ -31,13 +32,11 @@
         <div class="col-md-3 col-sm-3">
            <label>Recibido desde</label>
            <%= f.text_field(:date_received_at, class: 'form-control filterrific-periodically-observed',
-              id: "datetimepicker", placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY hh:mm A/PM'}) %>
+              id: "datetimepicker", placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
         </div>
-        <div class="col-md-2 col-sm-3">
-          <%= button_tag(type: 'reset', class: "btn btn-default btn-md pull-right") do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
-        </div>
+        <%= link_to reset_filterrific_url, class: "btn btn-default btn-md pull-right" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
         <!-- Spinner para la carga -->
         <%= render_filterrific_spinner %>
       <% end %>

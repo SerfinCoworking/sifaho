@@ -74,7 +74,12 @@
   }
 }
 .ui-menu-item .ui-state-focus {
-background: #faa;
+  background: #faa;
 }
 
 .ui-helper-hidden-accessible { display:none; } //Hide that pesky bottom message
+
+.ui-menu .ui-menu-item:hover, .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-state-active {
+  background-color: rgba(124, 158, 212, 1);
+  color: white;
+}

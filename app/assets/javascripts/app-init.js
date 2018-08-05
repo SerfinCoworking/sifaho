@@ -6,11 +6,11 @@ $(document).on('turbolinks:load', function() {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
           $(this).remove();
       });
-  }, 4000);
+  }, 5000);
 
   $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
 
-  $('#datetimepicker').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
+  $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY'});
 
   var sidebar = document.getElementById('custom-sidebar');
   var page_header = document.getElementById('page-header');

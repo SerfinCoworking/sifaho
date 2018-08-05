@@ -1,5 +1,6 @@
 class SupplyLot < ApplicationRecord
   acts_as_paranoid
+  include PgSearch
 
   enum status: { vigente: 0, por_vencer: 1, vencido: 2}
 
@@ -34,6 +35,15 @@ class SupplyLot < ApplicationRecord
       :date_received_at
     ]
   )
+
+  pg_search_scope :search_text,
+  against: :code,
+  against: :supply_name,
+  :using => {
+    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
+  },
+  :ignoring => :accents # Ignorar tildes.
+
 
   # define ActiveRecord scopes for
   # :search_query, :sorted_by, :date_received_at
@@ -100,6 +110,11 @@ class SupplyLot < ApplicationRecord
     where('supply_lots.id::text LIKE ?', "#{string}%")
   }
 
+  scope :with_code, lambda { |query|
+    string = query.to_s
+    where('supply_lots.code::text LIKE ?', "#{string}%")
+  }
+
   scope :date_received_at, lambda { |reference_time|
     where('supply_lots.date_received >= ?', reference_time)
   }
@@ -155,6 +170,11 @@ class SupplyLot < ApplicationRecord
     elsif self.vencido?
       return 'danger'
     end
+  end
+
+  # Retorna el tipo de unidad
+  def unity
+    self.supply.unity
   end
 
   private
