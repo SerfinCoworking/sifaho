@@ -1,4 +1,6 @@
 class InternalOrder < ApplicationRecord
+  include PgSearch
+
   enum status: { pendiente: 0, entregado: 1, anulado: 2}
 
   # Callbacks
@@ -8,6 +10,8 @@ class InternalOrder < ApplicationRecord
   belongs_to :responsable, class_name: 'User'
   has_one :profile, :through => :responsable
   belongs_to :sector
+  has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supplies, :through => :quantity_supply_requests
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, :through => :quantity_supply_lots
 
@@ -15,47 +19,48 @@ class InternalOrder < ApplicationRecord
   validates_presence_of :responsable
   validates_presence_of :sector
   validates_presence_of :date_received
+  # validates_presence_of :quantity_supply_requests
+  validates_associated :quantity_supply_requests
+  validates_associated :supplies
   validates_associated :quantity_supply_lots
   validates_associated :supply_lots
 
+  # Atributos anidados
+  accepts_nested_attributes_for :quantity_supply_requests,
+          :reject_if => :all_blank,
+          :allow_destroy => true
+  accepts_nested_attributes_for :supplies
   accepts_nested_attributes_for :quantity_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
+  accepts_nested_attributes_for :supply_lots
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
+      :search_responsable,
+      :search_supply_code,
+      :search_supply_name,
       :sorted_by,
-      :search_query,
       :date_received_at,
     ]
   )
 
-  # define ActiveRecord scopes for
-  # :search_query, :sorted_by, :date_received_at
-  scope :search_query, lambda { |query|
-    #Se retorna nil si no hay texto en la query
-    return nil  if query.blank?
+  pg_search_scope :search_supply_code,
+  :associated_against => { :supplies => :id, :supply_lots => :code },
+  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
-    # Se pasa a minusculas para busqueda en postgresql
-    # Luego se dividen las palabras en claves individuales
-    terms = query.downcase.split(/\s+/)
+  pg_search_scope :search_supply_name,
+  :associated_against => { :supplies => :name, :supply_lots => :supply_name },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
-    # Remplaza "*" con "%" para busquedas abiertas con LIKE
-    # Agrega '%', remueve los '%' duplicados
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
+  pg_search_scope :search_responsable,
+  :associated_against => { :profile => :first_name, :profile => :last_name, :responsable => :username },
+  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
-    # Cantidad de condiciones.
-    num_or_conds = 2
-    where(
-      terms.map { |term|
-        "((LOWER(profiles.first_name) LIKE ? OR LOWER(profiles.last_name) LIKE ?))"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conds }.flatten
-    ).joins(:profile) # Perfil del responsable del pedido
-  }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -66,12 +71,15 @@ class InternalOrder < ApplicationRecord
       order("internal_orders.created_at #{ direction }")
     when /^responsable_/
       # Ordenamiento por nombre de responsable
-      order("LOWER(users.full_name) #{ direction }").joins(:user)
+      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = internal_orders.responsable_id")
+    when /^sector_/
+      # Ordenamiento por nombre de sector
+      order("sectors.sector_name #{ direction }").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("internal_orders.status #{ direction }")
-    when /^suministro_/
-      # Ordenamiento por nombre de suministro
+    when /^insumos_solicitados_/
+      # Ordenamiento por nombre de insumo solicitado
       order("supplies.name #{ direction }").joins(:supplies)
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
@@ -98,10 +106,10 @@ class InternalOrder < ApplicationRecord
   def self.options_for_sorted_by
     [
       ['Creación (desc)', 'created_at_desc'],
+      ['Sector (a-z)', 'sector_asc'],
       ['Responsable (a-z)', 'responsable_asc'],
       ['Estado (a-z)', 'estado_asc'],
-      ['Medicamento (a-z)', 'medicamento_asc'],
-      ['Suministro (a-z)', 'suministro_asc'],
+      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
       ['Fecha recibido (asc)', 'recibido_desc'],
       ['Fecha entregado (asc)', 'entregado_asc'],
       ['Cantidad (asc)', 'cantidad_asc']

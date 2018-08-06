@@ -13,15 +13,14 @@ class InternalOrdersController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_responsable,
+        :search_supply_code,
+        :search_supply_name,
         :sorted_by,
-        :search_query,
         :date_received_at,
       ],
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
-
-    @internal_orders = @internal_orders.with_sector_id(current_user.sector_id)
-
 
     respond_to do |format|
       format.html

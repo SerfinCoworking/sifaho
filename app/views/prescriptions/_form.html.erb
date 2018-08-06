@@ -56,7 +56,7 @@
   </table>
   <div class="links" id="links-quant-form">
     <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-sm',
-    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "prepend"} do %>
+    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
     <% end %>
   </div>
@@ -81,7 +81,7 @@
   </table>
   <div class="links" id="links-quant-form">
     <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm',
-    data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "prepend"} do %>
+    data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
     <% end %>
   </div>

@@ -30,7 +30,8 @@ class SupplyLot < ApplicationRecord
     available_filters: [
       :with_code,
       :sorted_by,
-      :search_query,
+      :with_status,
+      :search_text,
       :with_area_id,
       :date_received_at
     ]
@@ -43,33 +44,6 @@ class SupplyLot < ApplicationRecord
     :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
   },
   :ignoring => :accents # Ignorar tildes.
-
-
-  # define ActiveRecord scopes for
-  # :search_query, :sorted_by, :date_received_at
-  scope :search_query, lambda { |query|
-    #Se retorna nil si no hay texto en la query
-    return nil  if query.blank?
-
-    # Se pasa a minusculas para busqueda en postgresql
-    # Luego se dividen las palabras en claves individuales
-    terms = query.downcase.split(/\s+/)
-
-    # Remplaza "*" con "%" para busquedas abiertas con LIKE
-    # Agrega '%', remueve los '%' duplicados
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-
-    # Cantidad de condiciones.
-    num_or_conds = 1
-    where(
-      terms.map { |term|
-        "(LOWER(supply_lots.supply_name) LIKE ?)"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conds }.flatten
-    )
-  }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -119,6 +93,10 @@ class SupplyLot < ApplicationRecord
     where('supply_lots.date_received >= ?', reference_time)
   }
 
+  scope :with_status, lambda { |a_status|
+    where('supply_lots.status = ?', a_status)
+  }
+
    # Método para establecer las opciones del select input del filtro
    # Es llamado por el controlador como parte de `initialize_filterrific`.
    def self.options_for_sorted_by
@@ -130,6 +108,15 @@ class SupplyLot < ApplicationRecord
        ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
        ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
        ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
+     ]
+   end
+
+   def self.options_for_status
+     [
+       ['Todos', ''],
+       ['Vigentes', 0],
+       ['Por vencer', 1],
+       ['Vencidos', 2],
      ]
    end
 

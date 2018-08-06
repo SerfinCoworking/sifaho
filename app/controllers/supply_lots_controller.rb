@@ -8,13 +8,15 @@ class SupplyLotsController < ApplicationController
       SupplyLot,
       params[:filterrific],
       select_options: {
-        sorted_by: SupplyLot.options_for_sorted_by
+        sorted_by: SupplyLot.options_for_sorted_by,
+        with_status: SupplyLot.options_for_status
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'creacion_desc'},
       available_filters: [
         :sorted_by,
-        :search_query,
+        :with_status,
+        :search_text,
         :with_code,
         :with_area_id,
         :date_received_at
@@ -35,12 +37,14 @@ class SupplyLotsController < ApplicationController
       SupplyLot.only_deleted,
       params[:filterrific],
       select_options: {
-        sorted_by: SupplyLot.options_for_sorted_by
+        sorted_by: SupplyLot.options_for_sorted_by,
+        with_status: SupplyLot.options_for_status
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'creacion_desc'},
       available_filters: [
-        :sorted_by, :search_query, :with_code, :with_area_id, :date_received_at
+        :sorted_by, :with_status, :search_text, :with_code, :with_area_id,
+        :date_received_at
       ],
     ) or return
     @supply_lots = @filterrific.find.page(params[:page]).per_page(8)

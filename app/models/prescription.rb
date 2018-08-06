@@ -17,6 +17,7 @@ class Prescription < ApplicationRecord
   validates_presence_of :professional
   validates_presence_of :prescribed_date
   validates_presence_of :expiry_date
+  validates_presence_of :quantity_supply_requests
   validates_associated :quantity_supply_requests
   validates_associated :supplies
   validates_associated :quantity_supply_lots
@@ -74,7 +75,7 @@ class Prescription < ApplicationRecord
       order("LOWER(patients.first_name) #{ direction }").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("prescription_statuses.name #{ direction }").joins(:prescription_status)
+      order("prescriptions.status #{ direction }")
     when /^insumos_solicitados_/
       # Ordenamiento por nombre de insumo
       order("supplies.name #{ direction }").joins(:supplies)
@@ -111,7 +112,7 @@ class Prescription < ApplicationRecord
       ['Doctor (a-z)', 'doctor_asc'],
       ['Paciente (a-z)', 'paciente_asc'],
       ['Estado (a-z)', 'estado_asc'],
-      ['Insumos solicitados (a-z)', 'insumo_asc'],
+      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
       ['Fecha recetada (desc)', 'recetada_desc'],
       ['Fecha recibida (desc)', 'recibida_desc'],
       ['Fecha dispensada (asc)', 'dispensada_asc'],

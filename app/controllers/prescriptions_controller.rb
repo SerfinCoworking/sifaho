@@ -44,14 +44,14 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/new
   def new
     @prescription = Prescription.new
-    @supply_lots = SupplyLot.all
     @prescription.quantity_supply_requests.build
     @prescription.quantity_supply_lots.build
   end
 
   # GET /prescriptions/1/edit
   def edit
-    @supply_lots = SupplyLot.all
+    @prescription.quantity_supply_requests || @prescription.quantity_supply_requests.build
+    @prescription.quantity_supply_lots || @prescription.quantity_supply_lots.build
   end
 
   # POST /prescriptions

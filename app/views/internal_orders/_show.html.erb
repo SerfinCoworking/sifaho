@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-6">
     <p>
       <h5><strong>Responsable:</strong>
       <%= @internal_order.responsable.full_name %>
@@ -22,7 +22,14 @@
         </span>
       </h5>
     </p>
-    <br>
+    <% if @internal_order.observation.present? %>
+    <p>
+      <h5><strong>Observaciones:</strong></h5>
+      <%= @internal_order.observation %>
+    </p>
+    <% end %>
+  </div>
+  <div class="col-md-6">
     <p>
       <h5><strong>Emitida:</strong>
       <%= @internal_order.created_at.strftime("%d/%m/%y %H:%M") %>
@@ -51,33 +58,28 @@
       </h5>
     </p>
   </div>
-  <div class="col-md-7">
-        <table class="table table-hover table-striped">
-          <thead>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Insumo solicitado</th>
+          <th>Cant</th>
+          <th>Lote N°</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @internal_order.supply_lots.present? %>
+          <% @internal_order.quantity_supply_lots.each do |qsl| %>
             <tr>
-              <th>Insumo</th>
-              <th>Cant</th>
-              <th>Lote N°</th>
+              <td class="io-show-sup"><%= qsl.supply_name %></td>
+              <td><span class="label label-default"><%= qsl.quantity %></span></td>
+              <td><%= qsl.supply_lot_id %></td>
             </tr>
-          </thead>
-          <tbody>
-            <% if @internal_order.supply_lots.present? %>
-              <% @internal_order.quantity_supply_lots.each do |qsl| %>
-                <tr>
-                  <td class="io-show-sup"><%= qsl.supply_name %></td>
-                  <td><span class="label label-default"><%= qsl.quantity %></span></td>
-                  <td><%= qsl.supply_lot_id %></td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      <% if @internal_order.observation.present? %>
-      <p>
-        <h5><strong>Observaciones:</strong></h5>
-        <%= @internal_order.observation %>
-      </p>
-      <% end %>
-    </div>
-
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
