@@ -3,6 +3,7 @@ class Sector < ApplicationRecord
   has_many :users
   has_many :internal_orders
   has_many :prescriptions
+  has_many :supply_lots
 
   # Validaciones
   validates_presence_of :sector_name

@@ -5,7 +5,7 @@ class SupplyLotsController < ApplicationController
   # GET /supply_lots.json
   def index
     @filterrific = initialize_filterrific(
-      SupplyLot,
+      SupplyLot.lots_for_sector(current_user.sector),
       params[:filterrific],
       select_options: {
         sorted_by: SupplyLot.options_for_sorted_by,
@@ -34,7 +34,7 @@ class SupplyLotsController < ApplicationController
 
   def trash_index
     @filterrific = initialize_filterrific(
-      SupplyLot.only_deleted,
+      SupplyLot.only_deleted.lots_for_sector(current_user.sector),
       params[:filterrific],
       select_options: {
         sorted_by: SupplyLot.options_for_sorted_by,
@@ -82,8 +82,10 @@ class SupplyLotsController < ApplicationController
   def create
     @supply_lot = SupplyLot.new(supply_lot_params)
 
+    @supply_lot.sector = current_user.sector
+
     respond_to do |format|
-      if @supply_lot.save
+      if @supply_lot.save!
         flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha creado correctamente."
         format.js
       else
@@ -163,6 +165,6 @@ class SupplyLotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_lot_params
-      params.require(:supply_lot).permit(:supply_id, :quantity, :expiry_date, :date_received)
+      params.require(:supply_lot).permit(:lot_code, :supply_id, :quantity, :expiry_date, :date_received)
     end
 end

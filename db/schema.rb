@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180804142559) do
+ActiveRecord::Schema.define(version: 20180806145039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,7 +254,11 @@ ActiveRecord::Schema.define(version: 20180804142559) do
     t.datetime "updated_at", null: false
     t.bigint "supply_id"
     t.datetime "deleted_at"
+    t.bigint "sector_id"
+    t.string "lot_code", limit: 20
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
+    t.index ["lot_code"], name: "index_supply_lots_on_lot_code", unique: true
+    t.index ["sector_id"], name: "index_supply_lots_on_sector_id"
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 
@@ -313,6 +317,7 @@ ActiveRecord::Schema.define(version: 20180804142559) do
   add_foreign_key "professionals", "sectors"
   add_foreign_key "sectors", "users"
   add_foreign_key "supplies", "supply_areas"
+  add_foreign_key "supply_lots", "sectors"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"
   add_foreign_key "vademecums", "medications"

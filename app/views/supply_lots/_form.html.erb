@@ -3,7 +3,8 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Código</th>
+        <th>Cód Lote</th>
+        <th>Cód Insumo</th>
         <th>Insumo</th>
         <th>Cantidad</th>
         <th>Fecha recepción</th>
@@ -15,8 +16,12 @@
       <tr>
         <div class="js-fade fade-in is-paused">
           <td>
+            <%= f.text_field :lot_code, class: "form-control", size: 5, required: true,
+                              placeholder: 'Cód Lot', label: false %>
+          </td>
+          <td>
             <%= f.text_field :supply_id, class: "form-control",
-                              placeholder: 'Código', label: false,
+                              placeholder: 'Cód Ins', label: false,
                               data: { autocomplete_source: search_by_id_supplies_path },
                               size: 5,
                               required: true %>

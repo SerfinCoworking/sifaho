@@ -9,6 +9,17 @@ class Supply < ApplicationRecord
   validates_presence_of :quantity_alarm
   validates_presence_of :period_control
 
+  has_many :quantity_supply_lots
+  has_many :prescriptions,
+    :through => :quantity_supply_lots,
+    :source => :quantifiable,
+    :source_type => 'Prescription'
+
+  has_many :internal_orders,
+    :through => :quantity_supply_lots,
+    :source => :quantifiable,
+    :source_type => 'InternalOrder'
+
 
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },

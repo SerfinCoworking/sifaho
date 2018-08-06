@@ -4,26 +4,34 @@ class SupplyLot < ApplicationRecord
 
   enum status: { vigente: 0, por_vencer: 1, vencido: 2}
 
-  after_create :update_status, :assign_constants
+  before_validation :assign_constants
+  after_validation :update_status
   before_update :update_status, if: :will_save_change_to_expiry_date?
 
   # Relaciones
+  belongs_to :sector
   belongs_to :supply
-  has_many :quantity_supplies
+  has_many :quantity_supply_lots
   has_many :prescriptions,
-    :through => :quantity_supplies,
+    :through => :quantity_supply_lots,
     :source => :quantifiable,
     :source_type => 'Prescription'
 
   has_many :internal_orders,
-    :through => :quantity_supplies,
+    :through => :quantity_supply_lots,
     :source => :quantifiable,
     :source_type => 'InternalOrder'
 
   # Validaciones
+  validates_presence_of :sector
   validates_presence_of :supply
   validates_presence_of :quantity
+  validates_presence_of :initial_quantity
+  validates_presence_of :code
+  validates_presence_of :supply_name
   validates_presence_of :date_received
+  validates_presence_of :lot_code
+  validates_uniqueness_of :lot_code
 
   filterrific(
     default_filter_params: { sorted_by: 'creacion_desc' },
@@ -52,7 +60,10 @@ class SupplyLot < ApplicationRecord
     when /^creacion_/
       # Ordenamiento por fecha de recepción
       order("supply_lots.created_at #{ direction }")
-    when /^codigo_/
+    when /^cod_lote_/
+      # Ordenamiento por código de lote
+      order("LOWER(supply_lots.lot_code) #{ direction }")
+    when /^cod_ins_/
       # Ordenamiento por código de lote
       order("LOWER(supply_lots.code) #{ direction }")
     when /^insumo_/
@@ -97,28 +108,33 @@ class SupplyLot < ApplicationRecord
     where('supply_lots.status = ?', a_status)
   }
 
-   # Método para establecer las opciones del select input del filtro
-   # Es llamado por el controlador como parte de `initialize_filterrific`.
-   def self.options_for_sorted_by
-     [
-       ['Creación (desc)', 'creacion_desc'],
-       ['Código (asc)', 'codigo_asc'],
-       ['Insumo (a-z)', 'insumo_asc'],
-       ['Cantidad (asc)', 'cantidad_asc'],
-       ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
-       ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
-       ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
-     ]
-   end
+  def self.lots_for_sector(a_sector)
+    where(sector: a_sector)
+  end
 
-   def self.options_for_status
-     [
-       ['Todos', ''],
-       ['Vigentes', 0],
-       ['Por vencer', 1],
-       ['Vencidos', 2],
-     ]
-   end
+  # Método para establecer las opciones del select input del filtro
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
+  def self.options_for_sorted_by
+   [
+     ['Creación (desc)', 'creacion_desc'],
+     ['Código de lote (asc)', 'cod_lote_asc'],
+     ['Código de insumo (asc)', 'cod_ins_asc'],
+     ['Insumo (a-z)', 'insumo_asc'],
+     ['Cantidad (asc)', 'cantidad_asc'],
+     ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
+     ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
+     ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
+   ]
+  end
+
+  def self.options_for_status
+   [
+     ['Todos', ''],
+     ['Vigentes', 0],
+     ['Por vencer', 1],
+     ['Vencidos', 2],
+   ]
+  end
 
   #Métodos públicos
   # Disminuye la cantidad
@@ -186,6 +202,5 @@ class SupplyLot < ApplicationRecord
     self.initial_quantity = self.quantity
     self.code = self.supply_id.to_s
     self.supply_name = self.supply.name
-    save!
   end
 end
