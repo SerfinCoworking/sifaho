@@ -4,6 +4,7 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions
   # GET /prescriptions.json
   def index
+    authorize Prescription
     @filterrific = initialize_filterrific(
       Prescription,
       params[:filterrific],
@@ -36,6 +37,7 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/1
   # GET /prescriptions/1.json
   def show
+    authorize @prescription
     respond_to do |format|
       format.js
     end
@@ -43,6 +45,7 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/new
   def new
+    authorize Prescription
     @prescription = Prescription.new
     @prescription.quantity_supply_requests.build
     @prescription.quantity_supply_lots.build
@@ -50,6 +53,7 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/1/edit
   def edit
+    authorize @prescription
     @prescription.quantity_supply_requests || @prescription.quantity_supply_requests.build
     @prescription.quantity_supply_lots || @prescription.quantity_supply_lots.build
   end
@@ -58,6 +62,7 @@ class PrescriptionsController < ApplicationController
   # POST /prescriptions.json
   def create
     @prescription = Prescription.new(prescription_params)
+    authorize @prescription
 
     respond_to do |format|
       if @prescription.save!
@@ -83,6 +88,8 @@ class PrescriptionsController < ApplicationController
   # PATCH/PUT /prescriptions/1
   # PATCH/PUT /prescriptions/1.json
   def update
+    authorize @prescription
+
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
         if dispensing?
@@ -106,6 +113,7 @@ class PrescriptionsController < ApplicationController
   # DELETE /prescriptions/1
   # DELETE /prescriptions/1.json
   def destroy
+    authorize @prescription
     @professional_full_name = @prescription.professional.full_name
     @prescription.destroy
     respond_to do |format|
@@ -116,6 +124,7 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/1/dispense
   def dispense
+    authorize @prescription
     respond_to do |format|
       begin
         @prescription.dispense
@@ -137,6 +146,7 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescription/1/delete
   def delete
+    authorize @prescription
     respond_to do |format|
       format.js
     end

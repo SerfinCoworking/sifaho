@@ -29,27 +29,38 @@
       <td>
       <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
     <% else %>
-      <td class="text-center">
-      <%= link_to dispense_prescription_path(prescription), remote: true,
-            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-      <% end %>
+      <% if policy(prescription).dispense? %>
+        <td class="text-center">
+        <%= link_to dispense_prescription_path(prescription), remote: true,
+              class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        <% end %>
+      <% else %>
+        <td>
+        Sin dispensar
+      <% end  %>
     <% end %>
   </td>
-  <td>
-    <%= link_to prescription_path(prescription), remote:true,
-          class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-    <% end %>
-    <% unless prescription.dispensada? %>
-      <%= link_to edit_prescription_path(prescription), remote: true,
-            class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+  <td class="text-center">
+    <% if policy(prescription).show? %>
+      <%= link_to prescription_path(prescription), remote:true,
+            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
-    <%= link_to delete_prescription_path(prescription), remote: true,
-          class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+    <% if policy(prescription).edit? %>
+      <% unless prescription.dispensada? %>
+        <%= link_to edit_prescription_path(prescription), remote: true,
+              class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if policy(prescription).delete? %>
+      <%= link_to delete_prescription_path(prescription), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
     <% end %>
   </td>
 </tr>

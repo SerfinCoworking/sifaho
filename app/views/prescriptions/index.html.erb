@@ -1,8 +1,10 @@
 <% content_for :page_header do %>
   <h3>Prescripciones
-  <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-sm' do %>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    Nueva
+  <% if policy(Prescription).new? %>
+    <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-sm' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Nueva
+    <% end %>
   <% end %>
   <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>

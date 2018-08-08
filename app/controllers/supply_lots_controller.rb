@@ -4,6 +4,7 @@ class SupplyLotsController < ApplicationController
   # GET /supply_lots
   # GET /supply_lots.json
   def index
+    authorize SupplyLot
     @filterrific = initialize_filterrific(
       SupplyLot.lots_for_sector(current_user.sector),
       params[:filterrific],
@@ -33,6 +34,7 @@ class SupplyLotsController < ApplicationController
   end
 
   def trash_index
+    authorize SupplyLot
     @filterrific = initialize_filterrific(
       SupplyLot.only_deleted.lots_for_sector(current_user.sector),
       params[:filterrific],
@@ -59,6 +61,7 @@ class SupplyLotsController < ApplicationController
   # GET /supply_lots/1
   # GET /supply_lots/1.json
   def show
+    authorize @supply_lot
     _percent = @supply_lot.quantity.to_f / @supply_lot.initial_quantity  * 100 unless @supply_lot.initial_quantity == 0
     @percent_quantity_supply_lot = _percent
 
@@ -69,11 +72,13 @@ class SupplyLotsController < ApplicationController
 
   # GET /supply_lots/new
   def new
+    authorize SupplyLot
     @supply_lot = SupplyLot.new
   end
 
   # GET /supply_lots/1/edit
   def edit
+    authorize @supply_lot
     @new_supply_lot = @supply_lot
   end
 
@@ -81,8 +86,8 @@ class SupplyLotsController < ApplicationController
   # POST /supply_lots.json
   def create
     @supply_lot = SupplyLot.new(supply_lot_params)
-
     @supply_lot.sector = current_user.sector
+    authorize @supply_lot
 
     respond_to do |format|
       if @supply_lot.save!
@@ -98,6 +103,8 @@ class SupplyLotsController < ApplicationController
   # PATCH/PUT /supply_lots/1
   # PATCH/PUT /supply_lots/1.json
   def update
+    authorize @supply_lot
+
     respond_to do |format|
       if @supply_lot.update(supply_lot_params)
         flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha modificado correctamente."
@@ -112,16 +119,18 @@ class SupplyLotsController < ApplicationController
   # DELETE /supply_lots/1
   # DELETE /supply_lots/1.json
   def destroy
+    authorize @supply_lot
     @supply_name = @supply_lot.supply_name
     @supply_lot.destroy
     respond_to do |format|
-      flash.now[:success] = "El lote de "+@supply_name+" se ha eliminado correctamente."
+      flash.now[:success] = "El lote de "+@supply_name+" se ha enviado a la papelera."
       format.js
     end
   end
 
   # GET /supply_lot/1/delete
   def delete
+    authorize @supply_lot
     respond_to do |format|
       format.js
     end
@@ -136,10 +145,11 @@ class SupplyLotsController < ApplicationController
 
   # GET /supply_lot/1/restore
   def restore
+    authorize @supply_lot
     SupplyLot.restore(@supply_lot.id, :recursive => true)
 
     respond_to do |format|
-      flash.now[:success] = "El lote N°"+@supply_lot.id.to_s+" se ha restaurado correctamente."
+      flash.now[:success] = "El lote con código "+@supply_lot.code+" se ha restaurado correctamente."
       format.js
     end
   end

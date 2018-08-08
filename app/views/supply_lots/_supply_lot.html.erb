@@ -12,24 +12,32 @@
       <td><span class="label label-<%= supply_lot.quantity_label %>"><%= supply_lot.quantity %></span></td>
       <td><%= supply_lot.date_received.strftime("%d/%m/%Y") %></td>
       <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "---" %></td>
-      <td>
-        <%= link_to supply_lot_path(supply_lot), remote:true, class: 'btn btn-default btn-xs',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <td class="text-center">
+        <% if policy(supply_lot).show? %>
+          <%= link_to supply_lot_path(supply_lot), remote:true, class: 'btn btn-default btn-xs',
+                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <% end %>
         <% end %>
         <% if current_page?(controller: 'supply_lots', action: 'trash_index') %>
-          <%= link_to restore_confirm_supply_lot_path(supply_lot), remote: true,
-                class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+          <% if policy(supply_lot).restore? %>
+            <%= link_to restore_confirm_supply_lot_path(supply_lot), remote: true,
+                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+            <% end %>
           <% end %>
         <% else %>
-          <%= link_to edit_supply_lot_path(supply_lot), remote: true, class: 'btn btn-warning btn-xs',
-                title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          <% if policy(supply_lot).edit? %>
+            <%= link_to edit_supply_lot_path(supply_lot), remote: true, class: 'btn btn-warning btn-xs',
+                  title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+            <% end %>
           <% end %>
-          <%= link_to delete_supply_lot_path(supply_lot), remote: true,
-                class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+          <% if policy(supply_lot).delete? %>
+            <%= link_to delete_supply_lot_path(supply_lot), remote: true,
+                  class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            <% end %>
           <% end %>
         <% end %>
       </td>

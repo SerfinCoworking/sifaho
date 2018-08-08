@@ -147,10 +147,10 @@ class Prescription < ApplicationRecord
   # Métodos de clase
 
   def self.current_day
-    where("date_received >= :today", { today: DateTime.now.beginning_of_day })
+    where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })
   end
 
   def self.current_month
-    where("date_received >= :month", { month: DateTime.now.beginning_of_month })
+    where("prescribed_date >= :month", { month: DateTime.now.beginning_of_month })
   end
 end

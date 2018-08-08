@@ -25,14 +25,19 @@
       <td>
       <%= internal_order.date_delivered.strftime("%d/%m/%Y") %>
     <% else %>
-      <td class="text-center">
-      <%= link_to deliver_internal_order_path(internal_order), remote: true,
-            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+      <% if policy(internal_order).deliver? %>
+        <td class="text-center">
+        <%= link_to deliver_internal_order_path(internal_order), remote: true,
+              class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        <% end %>
+      <% else %>
+        <td>
+        Sin entregar
       <% end %>
     <% end %>
   </td>
-  <td>
+  <td class="text-center">
     <% if policy(internal_order).show? %>
       <%= link_to internal_order_path(internal_order), remote:true,
             class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

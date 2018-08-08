@@ -4,6 +4,7 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders
   # GET /internal_orders.json
   def index
+    authorize InternalOrder
     @filterrific = initialize_filterrific(
       InternalOrder,
       params[:filterrific],
@@ -35,6 +36,7 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1
   # GET /internal_orders/1.json
   def show
+    authorize @internal_order
     respond_to do |format|
       format.js
     end
@@ -42,6 +44,7 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_orders/new
   def new
+    authorize InternalOrder
     @internal_order = InternalOrder.new
     @responsables = User.all
     @supplies = SupplyLot.all
@@ -50,6 +53,7 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_orders/1/edit
   def edit
+    authorize @internal_order
     @responsables = User.all
     @supplies = SupplyLot.all
   end
@@ -58,6 +62,7 @@ class InternalOrdersController < ApplicationController
   # POST /internal_orders.json
   def create
     @internal_order = InternalOrder.new(internal_order_params)
+    authorize @internal_order
 
     respond_to do |format|
       if @internal_order.save!
@@ -83,6 +88,8 @@ class InternalOrdersController < ApplicationController
   # PATCH/PUT /internal_orders/1
   # PATCH/PUT /internal_orders/1.json
   def update
+    authorize @internal_order
+
     respond_to do |format|
       if @internal_order.update_attributes(internal_order_params)
         # Si se carga y entrega el pedido
@@ -107,6 +114,7 @@ class InternalOrdersController < ApplicationController
   # DELETE /internal_orders/1
   # DELETE /internal_orders/1.json
   def destroy
+    authorize @internal_order
     @sector_name = @internal_order.responsable.sector.sector_name
     @internal_order.destroy
     respond_to do |format|
@@ -117,6 +125,7 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_order/1/delete
   def delete
+    authorize @internal_order
     respond_to do |format|
       format.js
     end
@@ -124,6 +133,7 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_orders/1/dispense
   def deliver
+    authorize @internal_order
     respond_to do |format|
       begin
         @internal_order.deliver

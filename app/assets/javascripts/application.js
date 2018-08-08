@@ -18,6 +18,7 @@
 //= require filterrific/filterrific-jquery
 //= require highcharts
 //= require chartkick
+//= require Chart.bundle
 //= require turbolinks
 //= require cocoon
 //= require moment

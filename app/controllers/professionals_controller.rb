@@ -4,6 +4,7 @@ class ProfessionalsController < ApplicationController
   # GET /professionals
   # GET /professionals.json
   def index
+    authorize Professional
     @filterrific = initialize_filterrific(
       Professional,
       params[:filterrific],
@@ -31,6 +32,7 @@ class ProfessionalsController < ApplicationController
   # GET /professionals/1
   # GET /professionals/1.json
   def show
+    authorize @professional
     respond_to do |format|
       format.js
     end
@@ -38,12 +40,14 @@ class ProfessionalsController < ApplicationController
 
   # GET /professionals/new
   def new
+    authorize Professional
     @professional = Professional.new
     @professional_types = ProfessionalType.all
   end
 
   # GET /professionals/1/edit
   def edit
+    authorize @professional
     @professional_types = ProfessionalType.all
   end
 
@@ -51,6 +55,7 @@ class ProfessionalsController < ApplicationController
   # POST /professionals.json
   def create
     @professional = Professional.new(professional_params)
+    authorize @professional
 
     respond_to do |format|
       if @professional.save!
@@ -66,6 +71,7 @@ class ProfessionalsController < ApplicationController
   # PATCH/PUT /professionals/1
   # PATCH/PUT /professionals/1.json
   def update
+    authorize @professional
     respond_to do |format|
       if @professional.update(professional_params)
         flash.now[:success] = @professional.fullname+" se ha modificado correctamente."
@@ -80,6 +86,7 @@ class ProfessionalsController < ApplicationController
   # DELETE /professionals/1
   # DELETE /professionals/1.json
   def destroy
+    authorize @professional
     @fullname = @professional.fullname
     @professional.destroy
     respond_to do |format|
@@ -90,6 +97,7 @@ class ProfessionalsController < ApplicationController
 
   # GET /professional/1/delete
   def delete
+    authorize @professional
     respond_to do |format|
       format.js
     end

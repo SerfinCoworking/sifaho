@@ -11,17 +11,23 @@
     <td><%= professional.dni %></td>
     <td><%= professional.professional_type.name %></td>
     <td>
-      <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs',
-            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% if policy(professional).show? %>
+        <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs',
+              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <% end %>
       <% end %>
-      <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs',
-            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% if policy(professional).edit? %>
+        <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs',
+              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
       <% end %>
-      <%= link_to delete_professional_path(professional), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% if policy(professional).delete? %>
+        <%= link_to delete_professional_path(professional), remote: true,
+              class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <% end %>
       <% end %>
     </td>
   </div>

@@ -11,13 +11,17 @@
   <span class="glyphicon glyphicon-list-alt"><strong> Pedidos</strong></div></li>
 <ul class="nav nav-list" id="pedidos">
   <li id="pedidos-li" class="<%= active_class(prescriptions_path) %>">
-    <%= link_to prescriptions_url do %>
-      Prescripciones
+    <% if policy(Prescription).index? %>
+      <%= link_to prescriptions_url do %>
+        Prescripciones
+      <% end %>
     <% end %>
   </li>
   <li id="pedidos-li" class="<%= active_class(internal_orders_path) %>">
-    <%= link_to internal_orders_path do %>
-      Internos
+    <% if policy(InternalOrder).index? %>
+      <%= link_to internal_orders_path do %>
+        Internos
+      <% end %>
     <% end %>
   </li>
 </ul>
@@ -29,16 +33,19 @@
   <span class="glyphicon glyphicon-barcode"><strong> Stock</strong></div></li>
 <ul class="nav nav-list" id="stock">
   <li id="stock-li" class="<%= active_class(supply_lots_path) %><%= active_class(trash_index_supply_lots_path) %>">
-    <%= link_to supply_lots_url do %>
-      Lotes
+    <% if policy(SupplyLot).index? %>
+      <%= link_to supply_lots_url do %>
+        Lotes
+      <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class(supplies_path) %>">
-    <%= link_to supplies_url do %>
-      Insumos
+  <li id="stock-li" class="<%= active_class(supplies_path) %><%= active_class(trash_index_supplies_path) %>">
+    <% if policy(Supply).index? %>
+      <%= link_to supplies_url do %>
+        Insumos
+      <% end %>
     <% end %>
   </li>
-  <li id="stock-li"><a href="#">Abastecimiento</a></li>
 </ul>
 
 
@@ -48,13 +55,17 @@
     <span class="glyphicon glyphicon-user"><strong> Usuarios</strong></div></li>
   <ul class="nav nav-list" id="usuarios">
   <li id="usuarios-li" class="<%= active_class(professionals_path) %>">
-    <%= link_to professionals_url do %>
-      Profesionales
+    <% if policy(Professional).index? %>
+      <%= link_to professionals_url do %>
+        Profesionales
+      <% end %>
     <% end %>
   </li>
   <li id="usuarios-li" class="<%= active_class(patients_path) %>">
-    <%= link_to patients_url do %>
-      Pacientes
+    <% if policy(Patient).index? %>
+      <%= link_to patients_url do %>
+        Pacientes
+      <% end %>
     <% end %>
   </li>
 </ul>

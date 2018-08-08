@@ -1,8 +1,10 @@
 <% content_for :page_header do %>
   <h3>Lotes de insumos
-    <%= button_tag(class: "btn btn-primary btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
+    <% if policy(SupplyLot).new? %>
+      <%= button_tag(class: "btn btn-primary btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Nuevo
+      <% end %>
     <% end %>
     <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
@@ -10,11 +12,13 @@
     <% end %>
   </h3>
 <% end %>
-<div class="panel panel-primary" id="filter-panel">
-  <div class="panel-collapse collapse" id="new">
-      <%= render "form" %>
+<% if policy(@supply_lots).new? %>
+  <div class="panel panel-primary" id="filter-panel">
+    <div class="panel-collapse collapse" id="new">
+        <%= render "form" %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <%= render "filter" %>
 

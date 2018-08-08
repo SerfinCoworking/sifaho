@@ -10,7 +10,7 @@ class SupplyLot < ApplicationRecord
 
   # Relaciones
   belongs_to :sector
-  belongs_to :supply
+  belongs_to :supply, -> { with_deleted }
   has_many :quantity_supply_lots
   has_many :prescriptions,
     :through => :quantity_supply_lots,

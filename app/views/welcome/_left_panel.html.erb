@@ -1,6 +1,6 @@
 <!--  Panel Prescripciones del día -->
 <div class="panel panel-default">
-  <div class="panel-heading">
+  <!-- <div class="panel-heading">
     <h3 class="panel-title">Prescripciones <small>Hoy <%= Time.now.strftime("%d/%m/%Y") %></small>
     </h3>
   </div>
@@ -16,9 +16,9 @@
     Total: <span class="label label-primary"><%= @count_prescriptions_today %></span>
     Dispensadas: <span class="label label-success"><%= @count_disp_pres %></span>
     Pendientes: <span class="label label-warning"><%= @count_pend_pres %></span>
-  </div>
+  </div> -->
   <!--  Panel Prescripciones Mes actual -->
-  <div class="panel-heading">
+  <!-- <div class="panel-heading">
     <h3 class="panel-title">Prescripciones <small>Mes actual</small>
     </h3>
   </div>
@@ -34,16 +34,27 @@
     Total: <span class="label label-primary"><%= @count_prescriptions_month %></span>
     Dispensadas: <span class="label label-success"><%= @count_disp_pres_month %></span>
     Pendientes: <span class="label label-warning"><%= @count_pend_pres_month %></span>
-  </div>
+  </div> -->
   <!--  Panel prescripciones recibidas por día -->
   <% if @prescriptions.count >= 4 %>
     <div class="panel-heading">
-      <h3 class="panel-title">Cantidad por día</h3>
+      <h3 class="panel-title">Pescripciones <small>Esta semana </small</h3>
     </div>
     <div class="panel-body">
-      <%= line_chart @prescriptions.group_by_day(:date_received, format: "%d/%m/%Y").count, discrete: true %>
+      <%= line_chart @prescriptions.group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%d/%m/%Y").count, discrete: true, adapter: "highcharts" %>
     </div>
   <% end %>
+  <div class="panel-heading">
+    <h3 class="panel-title">Prescripciones por mes</h3>
+  </div>
+  <div class="panel-body">
+    <%= column_chart charts_by_month_prescriptions_path,
+      download: "Prescripciones recetadas por mes SIFAHO",
+      label: "Cantidad",
+      colors: ["rgb(130,165,239, 0.6)"],
+      messages: {empty: "No hay prescripciones en este mes"},
+      adapter: "highcharts" %>
+    </div>
 </div>
 
 <!--  Panel Últimas prescripciones -->

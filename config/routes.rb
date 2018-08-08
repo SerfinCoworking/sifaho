@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :internal_orders do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
   end
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
@@ -32,8 +33,10 @@ Rails.application.routes.draw do
   resources :supplies do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
     collection do
+      get "trash_index"
       get "search_by_id"
       get "search_by_name"
     end
@@ -42,6 +45,7 @@ Rails.application.routes.draw do
   resources :prescriptions do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
@@ -49,6 +53,7 @@ Rails.application.routes.draw do
   resources :patients do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
     collection do
       get "search"
@@ -59,6 +64,7 @@ Rails.application.routes.draw do
   resources :professionals do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
     collection do
       get "doctors"
@@ -68,6 +74,11 @@ Rails.application.routes.draw do
   resources :patients do
     member do
       get "delete"
+      get "restore"; get "restore_confirm"
     end
+  end
+
+  namespace :charts do
+    get "by-month-prescriptions"
   end
 end

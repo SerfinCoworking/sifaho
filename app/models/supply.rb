@@ -1,4 +1,5 @@
 class Supply < ApplicationRecord
+  acts_as_paranoid
   include PgSearch
   # Relaciones
   belongs_to :supply_area

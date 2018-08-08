@@ -1,9 +1,10 @@
 class SuppliesController < ApplicationController
-  before_action :set_supply, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_supply, only: [:show, :edit, :update, :destroy, :delete, :restore, :restore_confirm]
 
   # GET /supplies
   # GET /supplies.json
   def index
+    authorize Supply
     @filterrific = initialize_filterrific(
       Supply,
       params[:filterrific],
@@ -21,20 +22,35 @@ class SuppliesController < ApplicationController
     ) or return
     @supplies = @filterrific.find.page(params[:page]).per_page(8)
     @supply_areas = SupplyArea.all
+  end
 
-    respond_to do |format|
-      format.html
-      format.js
-    end
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
+  # GET /supplies
+  # GET /supplies.json
+  def trash_index
+    authorize Supply
+    @filterrific = initialize_filterrific(
+      Supply.only_deleted,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Supply.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'codigo_asc'},
+      available_filters: [
+        :sorted_by,
+        :search_text,
+        :with_code,
+        :with_area_id,
+      ],
+    ) or return
+    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @supply_areas = SupplyArea.all
   end
 
   # GET /supplies/1
   # GET /supplies/1.json
   def show
+    authorize @supply
     respond_to do |format|
       format.js
     end
@@ -42,6 +58,7 @@ class SuppliesController < ApplicationController
 
   # GET /supplies/new
   def new
+    authorize Supply
     @supply = Supply.new
     @unities = Unity.all
     @supply_areas = SupplyArea.all
@@ -49,6 +66,7 @@ class SuppliesController < ApplicationController
 
   # GET /supplies/1/edit
   def edit
+    authorize @supply
     @unities = Unity.all
     @supply_areas = SupplyArea.all
   end
@@ -58,6 +76,7 @@ class SuppliesController < ApplicationController
   def create
     @supply = Supply.new(supply_params)
     @new_supply_lot = Supply.new
+    authorize @supply
 
     respond_to do |format|
       if @supply.save
@@ -73,6 +92,7 @@ class SuppliesController < ApplicationController
   # PATCH/PUT /supplies/1
   # PATCH/PUT /supplies/1.json
   def update
+    authorize @supply
     respond_to do |format|
       if @supply.update(supply_params)
         flash.now[:success] = "El suministro "+@supply.name+" se ha modificado correctamente."
@@ -87,6 +107,7 @@ class SuppliesController < ApplicationController
   # DELETE /supplies/1
   # DELETE /supplies/1.json
   def destroy
+    authorize @supply
     @supply_name = @supply.name
     @supply.destroy
     respond_to do |format|
@@ -97,7 +118,26 @@ class SuppliesController < ApplicationController
 
   # GET /supply/1/delete
   def delete
+    authorize @supply
     respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /supply/1/restore_confirm
+  def restore_confirm
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /supply/1/restore
+  def restore
+    authorize @supply
+    Supply.restore(@supply.id, :recursive => true)
+
+    respond_to do |format|
+      flash.now[:success] = "El insumo código "+@supply.id.to_s+" se ha restaurado correctamente."
       format.js
     end
   end
@@ -115,7 +155,7 @@ class SuppliesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_supply
-      @supply = Supply.find(params[:id])
+      @supply = Supply.with_deleted.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
