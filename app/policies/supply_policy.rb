@@ -13,7 +13,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_role? :central_pharmacist
+    create_sup.any? { |role| user.has_role?(role) }
   end
 
   def new?
@@ -21,7 +21,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_role? :central_pharmacist
+    update_sup.any? { |role| user.has_role?(role) }
   end
 
   def edit?
@@ -29,7 +29,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_role? :central_pharmacist
+    destroy_sup.any? { |role| user.has_role?(role) }
   end
 
   def delete?
@@ -52,5 +52,17 @@ class SupplyPolicy < ApplicationPolicy
 
   def see_supplies
     [ :admin, :pharmacist, :pharmacist_assistant, :responsable, :medic, :central_pharmacist ]
+  end
+
+  def destroy_sup
+    [ :admin, :central_pharmacist ]
+  end
+
+  def update_sup
+    [ :admin, :central_pharmacist ]
+  end
+
+  def create_sup
+    [ :admin, :central_pharmacist ]
   end
 end

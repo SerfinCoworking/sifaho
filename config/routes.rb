@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "doctors"
+      get "doctors_by_enrollment"
     end
   end
 

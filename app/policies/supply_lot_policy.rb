@@ -32,7 +32,7 @@ class SupplyLotPolicy < ApplicationPolicy
   end
 
   def delete?
-    destroy?    
+    destroy?
   end
 
   def restore?
@@ -46,7 +46,7 @@ class SupplyLotPolicy < ApplicationPolicy
   end
 
   def new_sl
-    [ :pharmacist, :pharmacist_assistant ]
+    [ :admin, :pharmacist, :pharmacist_assistant ]
   end
 
   def destroy_sl

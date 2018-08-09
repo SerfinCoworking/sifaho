@@ -34,11 +34,11 @@ class InternalOrderPolicy < ApplicationPolicy
   private
 
   def deliver_io
-    [ :pharmacist, :pharmacist_assistant ]
+    [ :admin, :pharmacist, :pharmacist_assistant ]
   end
 
   def update_io
-    [ :pharmacist, :pharmacist_assistant ]
+    [ :admin, :pharmacist, :pharmacist_assistant ]
   end
 
   def index_io
@@ -46,10 +46,10 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def create_io
-    [ :pharmacist, :pharmacist_assistant, :responsable]
+    [ :admin, :pharmacist, :pharmacist_assistant, :responsable]
   end
 
   def destroy_io
-    [ :pharmacist ]
+    [ :admin, :pharmacist ]
   end
 end

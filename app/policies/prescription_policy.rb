@@ -39,7 +39,7 @@ class PrescriptionPolicy < ApplicationPolicy
   private
 
   def update_pres
-    [ :pharmacist, :pharmacist_assistant ]
+    [ :admin, :pharmacist, :pharmacist_assistant ]
   end
 
   def see_pres
@@ -47,14 +47,14 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def new_pres
-    [ :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
   end
 
   def destroy_pres
-    [ :pharmacist ]
+    [ :admin, :pharmacist ]
   end
 
   def dispense_pres
-    [ :pharmacist, :pharmacist_assistant ]
+    [ :admin, :pharmacist, :pharmacist_assistant ]
   end
 end
