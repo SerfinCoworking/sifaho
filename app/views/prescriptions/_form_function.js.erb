@@ -33,6 +33,41 @@ $('.chosen-select').chosen({
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
+    // Función para autocompletar matrícula del doctor
+    jQuery(function() {
+      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+      return $('#prof_enrollment').autocomplete({
+        source: $('#prof_enrollment').data('autocomplete-source'),
+        minLength: 2,
+        open: function (e, ui) {
+          var acData = $(this).data('ui-autocomplete');
+          acData
+          .menu
+          .element
+          .find('li')
+          .each(function () {
+              var me = $(this);
+              var keywords = acData.term.split(' ').join('|');
+              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+          });
+        },
+        select:
+        function (event, ui) {
+          $("#professional_id").val(ui.item.id);
+          $("#professional").val(ui.item.fullname);
+        },
+        response: function(event, ui) {
+          if (!ui.content.length) {
+              var noResult = { value:"",label:"No se encontró al doctor" };
+              ui.content.push(noResult);
+          }
+        }
+      }).each(function() {
+          $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+      })
+    });
+
 // Función para autocompletar nombre y apellido del doctor
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";

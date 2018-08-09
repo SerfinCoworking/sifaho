@@ -3,37 +3,50 @@
   <div class='row'>
     <div class='col-md-7'>
       <%= f.label :professional_id, "Doctor" %>
-      <%= f.text_field :professional_id, id: "professional", class: "form-control",
-                        placeholder: 'Nombre o Apellido',
-                        data: { autocomplete_source: doctors_professionals_path },
-                        size: 30,
-                        value: "#{@prescription.professional.fullname unless @prescription.new_record?}" %>
+      <%= f.input :professional_id, as: :string,
+                        label: 'Matrícula',
+                        placeholder: '1234',
+                        :input_html => {
+                          id: "prof_enrollment",
+                          data: { autocomplete_source: doctors_by_enrollment_professionals_path },
+                          value: "#{@prescription.professional.enrollment unless @prescription.new_record?}",
+                          size: 7
+                        } %>
+      <%= f.input :professional_id, as: :string,
+                        label: 'Apellido y nombre',
+                        placeholder: 'Perez Juan',
+                        :input_html => {
+                          id: "professional",
+                          data: { autocomplete_source: doctors_professionals_path },
+                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
+                          size: 33
+                        } %>
       <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
       <%= f.label :patient_id, "Paciente" %>
-      <%= f.input :patient_id, as: :string, class: "form-control",
+      <%= f.input :patient_id, as: :string, class: 'form-control',
                         label: "DNI",
                         placeholder: '12345678',
                         :input_html => {
                           id: 'patient_dni',
                           data: { autocomplete_source: search_by_dni_patients_path },
-                          value: "#{@prescription.patient.dni unless @prescription.new_record?}"
-                        },
-                        size: 10 %>
-      <%= f.input :patient_id, as: :string, id: "patient",
+                          value: "#{@prescription.patient.dni unless @prescription.new_record?}",
+                          size: 10
+                        } %>
+      <%= f.input :patient_id, as: :string,
                         label: "Nombre y apellido",
                         placeholder: 'Juan Perez',
                         :input_html => {
                           id: 'patient',
                           data: { autocomplete_source: search_patients_path },
-                          value: "#{@prescription.patient.fullname unless @prescription.new_record?}"
-                        },
-                        size: 30 %>
+                          value: "#{@prescription.patient.fullname unless @prescription.new_record?}",
+                          size: 30
+                        } %>
       <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
     </div>
     <div class='col-md-5'>
-      <br><br><br>
+      <br><br>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-          :input_html => { :cols => 30  , :rows => 3 } %>
+          :input_html => { :cols => 30  , :rows => 5 } %>
     </div>
   </div>
 

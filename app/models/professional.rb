@@ -1,4 +1,6 @@
 class Professional < ApplicationRecord
+  include PgSearch
+
   enum sex: { indeterminado: 1, mujer: 2, hombre: 3 }
 
   after_create :assign_full_name
@@ -22,6 +24,12 @@ class Professional < ApplicationRecord
       :with_professional_type_id,
     ]
   )
+
+  pg_search_scope :search_professional_enrollment,
+  against: :enrollment,
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
+
 
   # Se definen ActiveRecord scopes para
   # :search_query, :sorted_by, :search_dni, :with_sector_id
