@@ -19,7 +19,7 @@ class InternalOrder < ApplicationRecord
   validates_presence_of :responsable
   validates_presence_of :sector
   validates_presence_of :date_received
-  # validates_presence_of :quantity_supply_requests
+  validates_presence_of :quantity_supply_requests
   validates_associated :quantity_supply_requests
   validates_associated :supplies
   validates_associated :quantity_supply_lots

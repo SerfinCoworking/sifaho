@@ -48,6 +48,7 @@ class InternalOrdersController < ApplicationController
     @internal_order = InternalOrder.new
     @responsables = User.all
     @supplies = SupplyLot.all
+    @internal_order.quantity_supply_requests.build
     @internal_order.quantity_supply_lots.build
   end
 

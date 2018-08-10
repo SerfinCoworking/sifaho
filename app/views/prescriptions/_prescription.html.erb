@@ -41,7 +41,7 @@
       <% end  %>
     <% end %>
   </td>
-  <td class="text-center">
+  <td>
     <% if policy(prescription).show? %>
       <%= link_to prescription_path(prescription), remote:true,
             class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

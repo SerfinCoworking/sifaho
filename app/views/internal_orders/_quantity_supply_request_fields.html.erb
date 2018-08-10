@@ -1,0 +1,41 @@
+<tr class="nested-fields">
+  <td>
+    <%= f.input :supply_id, as: :string,
+                      placeholder: 'Cód',
+                      label: false,
+                      required: true,
+                      :input_html => {
+                        class: "supply-code",
+                        data: { autocomplete_source: search_by_id_supplies_path },
+                        size: 4,
+                        autocomplete: 'off'
+                      } %>
+  </td>
+  <td>
+    <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+                    label: false,
+                    placeholder: 'Nombre',
+                    required: true,
+                    :input_html => {
+                      class: "supply-name",
+                      data: { autocomplete_source: search_by_name_supplies_path },
+                      size: 50
+                    } %>
+    <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
+  </td>
+  <td>
+    <%= f.input :quantity, label: false, placeholder: 'Cantidad', required: true, disabled: true,
+                        input_html: {
+                          "data-tooltip"=>true,
+                          :class=>"has-tip supply-quantity",
+                          :title=>"Seleccione un insumo",
+                          "data-placement"=>"right",
+                          min: '1', max: '9999', step:'any', :style => 'width: 100px'
+                        } %>
+  </td>
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+    <% end %>
+  </td>
+</tr>

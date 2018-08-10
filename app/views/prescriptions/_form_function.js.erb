@@ -33,40 +33,41 @@ $('.chosen-select').chosen({
     no_results_text: 'No se encontró el resultado',
     width: '270px'});
 
-    // Función para autocompletar matrícula del doctor
-    jQuery(function() {
-      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+// Función para autocompletar matrícula del doctor
+jQuery(function() {
+  var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
-      return $('#prof_enrollment').autocomplete({
-        source: $('#prof_enrollment').data('autocomplete-source'),
-        minLength: 2,
-        open: function (e, ui) {
-          var acData = $(this).data('ui-autocomplete');
-          acData
-          .menu
-          .element
-          .find('li')
-          .each(function () {
-              var me = $(this);
-              var keywords = acData.term.split(' ').join('|');
-              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-          });
-        },
-        select:
-        function (event, ui) {
-          $("#professional_id").val(ui.item.id);
-          $("#professional").val(ui.item.fullname);
-        },
-        response: function(event, ui) {
-          if (!ui.content.length) {
-              var noResult = { value:"",label:"No se encontró al doctor" };
-              ui.content.push(noResult);
-          }
-        }
-      }).each(function() {
-          $(this).autocomplete("widget").insertAfter($("#dialog").parent());
-      })
-    });
+  return $('#prof_enrollment').autocomplete({
+    source: $('#prof_enrollment').data('autocomplete-source'),
+    minLength: 2,
+    open: function (e, ui) {
+      var acData = $(this).data('ui-autocomplete');
+      acData
+      .menu
+      .element
+      .find('li')
+      .each(function () {
+          var me = $(this);
+          var keywords = acData.term.split(' ').join('|');
+          me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+      });
+    },
+    select:
+    function (event, ui) {
+      $("#professional_id").val(ui.item.id);
+      $("#professional").val(ui.item.fullname);
+      $('#patient_dni').focus();
+    },
+    response: function(event, ui) {
+      if (!ui.content.length) {
+          var noResult = { value:"",label:"No se encontró al doctor" };
+          ui.content.push(noResult);
+      }
+    }
+  }).each(function() {
+      $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+  })
+});
 
 // Función para autocompletar nombre y apellido del doctor
 jQuery(function() {
@@ -90,6 +91,8 @@ jQuery(function() {
     select:
     function (event, ui) {
       $("#professional_id").val(ui.item.id);
+      $("#prof_enrollment").val(ui.item.enrollment);
+      $('#patient_dni').focus();
     },
     response: function(event, ui) {
       if (!ui.content.length) {
@@ -125,6 +128,7 @@ jQuery(function() {
     function (event, ui) {
       $("#patient_id").val(ui.item.id);
       $("#patient").val(ui.item.fullname);
+      $('.supply-code').focus();
     },
     response: function(event, ui) {
       if (!ui.content.length) {
@@ -160,6 +164,7 @@ jQuery(function() {
     function (event, ui) {
       $("#patient_id").val(ui.item.id);
       $("#patient_dni").val(ui.item.dni);
+      $('.supply-code').focus();
     },
     response: function(event, ui) {
       if (!ui.content.length) {
@@ -202,6 +207,7 @@ $(document).on("focus",".supply-code", function() {
         nested_form.find(".supply-id").val(ui.item.value);
         nested_form.find(".supply-name").val(ui.item.name);
         nested_form.find(".supply-quantity").prop('disabled', false);
+        nested_form.find('.supply-quantity').focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {
@@ -245,6 +251,7 @@ $(document).on("focus",".supply-name", function() {
         nested_form.find(".supply-id").val(ui.item.id);
         nested_form.find(".supply-code").val(ui.item.id);
         nested_form.find(".supply-quantity").prop('disabled', false);
+        nested_form.find('.supply-quantity').focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {
@@ -332,6 +339,7 @@ $(document).on("focus",".supply-lot-sup-code", function() {
         }else{
           nested_form.find(".supply-lot-expiry").val("No expira");
         }
+        nested_form.find('.supply-lot-quantity').focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {
@@ -373,13 +381,14 @@ $(document).on("focus",".supply-lot-name", function() {
         nested_form.find(".supply-lot-id").val(ui.item.id);
         nested_form.find(".supply-lot-sup-code").val(ui.item.code);
         nested_form.find(".supply-lot-code").val(ui.item.lot_code);
-        $('.supply-lot-quantity').attr({ "max" : ui.item.quant });
+        nested_form.find('.supply-lot-quantity').attr({ "max" : ui.item.quant });
         if(ui.item.expiry_date){
           var date = new Date(ui.item.expiry_date);
           nested_form.find(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
         }else{
           nested_form.find(".supply-lot-expiry").val("No expira");
         }
+        nested_form.find('.supply-lot-quantity').focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {

@@ -20,4 +20,8 @@ class QuantitySupplyRequest < ApplicationRecord
   def unity
     self.supply.unity
   end
+
+  def supply_code
+    self.supply.id
+  end
 end

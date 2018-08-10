@@ -61,23 +61,67 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <table class="table table-hover table-striped">
+    <table class="table table-hover">
       <thead>
         <tr>
-          <th>Insumo solicitado</th>
-          <th>Cant</th>
-          <th>Lote N°</th>
+          <th>Cód Insumo</th>
+          <th>Insumos solicitados</th>
+          <th>Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <% if @internal_order.supply_lots.present? %>
+        <% @internal_order.quantity_supply_requests.each do |qsr| %>
+          <tr>
+            <td>
+              <%= qsr.supply_id %>
+            </td>
+            <td>
+              <%= qsr.supply_name %>
+            </td>
+            <td>
+              <%= qsr.quantity %> <%= qsr.unity.pluralize(qsr.quantity) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Cód Insumo</th>
+          <th><%= @internal_order.entregado? ? "Insumos entregados" : "Insumos a entregar" %></th>
+          <th>Cantidad</th>
+          <th>Lote</th>
+          <th>Expiración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @internal_order.quantity_supply_lots.present? %>
           <% @internal_order.quantity_supply_lots.each do |qsl| %>
             <tr>
-              <td class="io-show-sup"><%= qsl.supply_name %></td>
-              <td><span class="label label-default"><%= qsl.quantity %></span></td>
-              <td><%= qsl.supply_lot_id %></td>
+              <td>
+                <%= qsl.supply_code %>
+              </td>
+              <td>
+                <%= qsl.supply_name %>
+              </td>
+              <td>
+                <%= qsl.quantity %> <%= qsl.unity.pluralize(qsl.quantity) %>
+              </td>
+              <td>
+                <%= qsl.supply_lot_id %>
+              </td>
+              <td>
+                <%= qsl.expiry_date.present? ? qsl.expiry_date.strftime("%d/%m/%Y") : "No tiene" %>
+              </td>
             </tr>
           <% end %>
+        <% else %>
+          <tr><td></td><td>No hay insumos a dispensar</td></tr>
         <% end %>
       </tbody>
     </table>

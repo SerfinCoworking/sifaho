@@ -10,22 +10,54 @@
                     prompt: 'Seleccione un responsable'
   %><br><br>
 
-  <div class='row'>
-    <div class='col-md-12'>
-      <label>Insumo</label>
-      <div id="quantity-supply-lots">
-        <%= f.simple_fields_for :quantity_supply_lots, html: {class: "form-inline"} do |form_quantity| %>
-          <%= render "quantity_supply_lot_fields", :f => form_quantity %>
-        <% end %>
-        <div class="links">
-          <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-default btn-sm' do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          <% end %>
-        </div>
-      </div>
-      <br>
-    </div>
+  <!-- Insumos solicitados -->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cód insumo</th>
+        <th>Insumos solicitados</th>
+        <th>Cantidad</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_supply_requests">
+      <%= f.simple_fields_for :quantity_supply_requests do |form_quantity| %>
+        <%= render "quantity_supply_request_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-sm',
+    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
   </div>
+
+  <!-- Insumos a dispensar -->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cód insumo</th>
+        <th>Insumos a entregar</th>
+        <th>Cantidad</th>
+        <th>Lote</th>
+        <th>Expiración</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_supply_lots">
+      <%= f.simple_fields_for :quantity_supply_lots do |form_quantity| %>
+        <%= render "quantity_supply_lot_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm',
+    data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
+  </div>
+
   <div class='row'>
     <div class='col-md-6'>
       <%= f.input :observation, label: 'Observaciones', as: :text,

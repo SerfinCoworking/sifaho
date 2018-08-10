@@ -37,7 +37,7 @@
       <% end %>
     <% end %>
   </td>
-  <td class="text-center">
+  <td>
     <% if policy(internal_order).show? %>
       <%= link_to internal_order_path(internal_order), remote:true,
             class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

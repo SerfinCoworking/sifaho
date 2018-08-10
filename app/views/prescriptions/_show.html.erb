@@ -65,6 +65,7 @@
     <table class="table table-hover">
       <thead>
         <tr>
+          <th>Cód Insumo</th>
           <th>Insumos solicitados</th>
           <th>Cantidad</th>
           <th>Dosis diaria</th>
@@ -74,6 +75,9 @@
       <tbody>
         <% @prescription.quantity_supply_requests.each do |qsr| %>
           <tr>
+            <td>
+              <%= qsr.supply_id %>
+            </td>
             <td>
               <%= qsr.supply_name %>
             </td>
@@ -97,10 +101,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Cód</th>
+          <th>Cód Insumo</th>
           <th><%= @prescription.dispensada? ? "Insumos dispensados" : "Insumos a dispensar" %></th>
           <th>Cantidad</th>
-          <th>Lote N°</th>
+          <th>Lote</th>
           <th>Expiración</th>
         </tr>
       </thead>

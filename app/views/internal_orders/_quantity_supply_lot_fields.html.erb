@@ -1,20 +1,56 @@
-<div class="nested-fields">
-  <%= f.input_field :supply_lot_id,
-                    label_method: :supply_name,
-                    value_method: :id,
-                    collection: @supplies,
-                    include_blank: true,
-                    class: 'chosen-select',
-                    id: 'chosen-supply-1',
-                    prompt: 'Seleccione un insumo',
-                    onchange: "setMaxQuantitySupply(this.id);"
-  %>
-  <%= f.input :quantity, placeholder: 'Cantidad', required: false, disabled: true,
-                          label: false, input_html: { "data-tooltip"=>true, :class=>"has-tip",
-                            :title=>"Seleccione un suministro", "data-placement"=>"right",
-                            min: '0', step:'any', id: 'quantity-supply-1', :style => 'width: 100px' }%>
-
-  <%= link_to_remove_association  f, class: 'remove-tag btn btn-default btn-sm' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-  <% end %>
-</div>
+<tr class="nested-fields">
+  <td>
+    <%= f.input :supply_lot_id, as: :string,
+                      placeholder: 'Cód',
+                      label: false,
+                      required: true,
+                      :input_html => {
+                        class: "supply-lot-sup-code",
+                        data: { autocomplete_source: search_by_code_supply_lots_path },
+                        size: 4,
+                        autocomplete: 'off'
+                      } %>
+  </td>
+  <td>
+    <%= f.input :supply_lot_id, as: :string,
+                      placeholder: 'Nombre insumo',
+                      label: false,
+                      required: true,
+                      :input_html => {
+                        class: "supply-lot-name",
+                        data: { autocomplete_source: search_by_name_supply_lots_path },
+                        size: 38
+                      } %>
+    <%= f.hidden_field :supply_lot_id, class: "supply-lot-id" %>
+  </td>
+  <td>
+    <%= f.input :quantity, placeholder: 'Cant', required: true,
+                label: false, input_html: { min: '1', max: '9999', class: 'supply-lot-quantity' } %>
+  </td>
+  <td>
+    <%= f.input :supply_lot_id, as: :string,
+                      label: false,
+                      placeholder: 'Código',
+                      disabled: true,
+                      :input_html => {
+                        class: "supply-lot-code",
+                        :style => 'width: 96px'
+                      } %>
+  </td>
+  <td>
+    <%= f.input :supply_lot_id, as: :string,
+                label: false,
+                placeholder: "Una fecha",
+                disabled: true,
+                input_html: {
+                  :style => 'width: 96px',
+                  class: "supply-lot-expiry"
+                },
+                html5: false %>
+  </td>
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+    <% end %>
+  </td>
+</tr>
