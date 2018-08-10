@@ -172,87 +172,48 @@ jQuery(function() {
   })
 });
 
-//Se crea un diccionario de los insumos con sus respectivas cantidades en stock.
-<% @supply_lots = SupplyLot.all %>
-var quantityToSupply = {
-<% @supply_lots.each do |lot| %>
-  "<%=lot.id%>": {
-  quantity : "<%=lot.quantity%>"
-},
-<% end %>
-};
+// Función para autocompletar y buscar el insumo por código
+$(document).on("focus",".supply-code", function() {
 
-//Función para establecer el máximo al campo "Cantidad" de cada insumo.
-function setMaxQuantitySupply(idSelect){
-  var supply_lots = $('#quantity-supply-lots');
-  var supplyCant = supply_lots.find('.nested-fields').size();
-  var idNum = idSelect.substr(idSelect.length - 1); //Se toma el último caracter del id, que es lo unico que varía.
-  var supply_id =  $("#chosen-supply-"+idNum+" option:selected").val(); //Se aloja el id de la opcion seleccionada para acceder al diccionario.
+  var _this = $(this);
 
-  if($("#chosen-supply-"+idNum+" option:selected").val() != 0){
-    document.getElementById("quantity-supply-"+idNum).setAttribute("required", true);
-    document.getElementById("quantity-supply-"+idNum).disabled = false;
-    document.getElementById("quantity-supply-"+idNum).setAttribute("max", quantityToSupply[supply_id].quantity);
-  }else{
-    document.getElementById("quantity-supply-"+idNum).setAttribute("required", false);
-    document.getElementById("quantity-supply-"+idNum).disabled = true;
-  }
+  jQuery(function() {
+    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
-  //Loop para deshabilitar el insumo seleccionado en el resto y asi no repetirlo.
-  for(i = 1; i <= supplyCant; i++){
-    var selectedValue = $("#chosen-supply-"+i+" option:selected").val();
-    for(x = 1; x <= supplyCant; x++){
-      if(x != i){
-        $("#chosen-supply-"+x).find('option[value="'+ selectedValue +'"]:not(:selected)').attr('disabled','disabled');
-        $("#chosen-supply-"+x).trigger("chosen:updated");
-      }
-    }
-  }
-}
-
-$('#dialog').on('shown.bs.modal', function(e) {
-var idNum, supply_lots;
-// Id del form anidado para quantity_supply_lots
-supply_lots = $('#quantity-supply-lots');
-// Métodos para conocer la cantitdad de forms anidados
-idNum = function() {
-  return supply_lots.find('.nested-fields').size();
-};
-supply_lots.on('cocoon:before-insert', function(e, el_to_add) {
-  return el_to_add.fadeIn(200); // Efecto para el insert
-});
-supply_lots.on('cocoon:after-insert', function(e, added_el) {
-  var i, j, ref, results, selectedValue, x;
-  // Se coloca el id de los campos anidados
-  added_el.find('select').attr("id", "chosen-supply-" + idNum());
-  added_el.find('input.form-control.numeric').attr("id", "quantity-supply-" + idNum());
-  results = [];
-  for (i = j = 1, ref = idNum(); (1 <= ref ? j <= ref : j >= ref); i = 1 <= ref ? ++j : --j) {
-    selectedValue = $("#chosen-supply-" + i + " option:selected").val();
-    results.push((function() {
-      var k, ref1, results1;
-      results1 = [];
-      for (x = k = 1, ref1 = idNum(); (1 <= ref1 ? k <= ref1 : k >= ref1); x = 1 <= ref1 ? ++k : --k) {
-        if (x !== i) {
-          $("#chosen-supply-" + x).find('option[value="' + selectedValue + '"]:not(:selected)').attr('disabled', 'disabled');
-          results1.push($("#chosen-supply-" + x).trigger("chosen:updated"));
-        } else {
-          results1.push(void 0);
+    return _this.autocomplete({
+      source: _this.data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 1,
+      open: function (e, ui) {
+        var acData = $(this).data('ui-autocomplete');
+        acData
+        .menu
+        .element
+        .find('li')
+        .each(function () {
+            var me = $(this);
+            var keywords = acData.term.split(' ').join('|');
+            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+        });
+      },
+      select:
+      function (event, ui) {
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-id").val(ui.item.value);
+        nested_form.find(".supply-name").val(ui.item.name);
+        nested_form.find(".supply-quantity").prop('disabled', false);
+      },
+      response: function(event, ui) {
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el insumo" };
+            ui.content.push(noResult);
         }
       }
-      return results1;
-    })());
-  }
-  return results;
+    }).each(function() {
+        $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+    })
+  });
 });
-supply_lots.on('cocoon:before-remove', function(e, el_to_remove) {
-  $(this).data('remove-timeout', 200); // Efecto para remover
-  return el_to_remove.fadeOut(200);
-});
-return supply_lots.on('cocoon:after-remove', function(e, removed_el) {});
-});
-
-supplies = $('#quantity_supply_requests'); // Formulario anidado
 
 // Función para autocompletar y buscar el insumo
 $(document).on("focus",".supply-name", function() {
@@ -280,8 +241,10 @@ $(document).on("focus",".supply-name", function() {
       },
       select:
       function (event, ui) {
-        $(".supply-id").val(ui.item.id);
-        $(".numeric").prop('disabled', false);
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-id").val(ui.item.id);
+        nested_form.find(".supply-code").val(ui.item.id);
+        nested_form.find(".supply-quantity").prop('disabled', false);
       },
       response: function(event, ui) {
         if (!ui.content.length) {
@@ -295,8 +258,46 @@ $(document).on("focus",".supply-name", function() {
   });
 });
 
+
+$(document).on("keyup change",".supply-quantity", function() {
+  var _this = $(this);
+  jQuery(function() {
+    var nested_form = _this.parents(".nested-fields");
+    nested_form.find(".numeric").prop('disabled', false);
+    var daily_dose = nested_form.find(".daily-dose");
+    var treat_durat = nested_form.find(".treat-durat");
+    if (daily_dose.val()){
+      treat_durat.val(_this.val() / daily_dose.val());
+    }else{
+      daily_dose.val(1);
+      treat_durat.val(_this.val() / daily_dose.val());
+    }
+  });
+});
+
+$(document).on("keyup change",".daily-dose", function() {
+  var _this = $(this);
+  jQuery(function() {
+    var nested_form = _this.parents(".nested-fields");
+    var supply_quantity = nested_form.find(".supply-quantity");
+    var treat_durat = nested_form.find(".treat-durat");
+    treat_durat.val( supply_quantity.val() / _this.val());
+  });
+});
+
+$(document).on("keyup change",".treat-durat", function() {
+  var _this = $(this);
+  jQuery(function() {
+    console.log(_this.val());
+    var nested_form = _this.parents(".nested-fields");
+    var supply_quantity = nested_form.find(".supply-quantity");
+    var daily_dose = nested_form.find(".daily-dose");
+    supply_quantity.val( _this.val() * daily_dose.val());
+  });
+});
+
 // Función para autocompletar y buscar el lote de insumo por código
-$(document).on("focus",".supply-lot-code", function() {
+$(document).on("focus",".supply-lot-sup-code", function() {
   var _this = $(this);
   jQuery(function() {
     var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
@@ -319,16 +320,17 @@ $(document).on("focus",".supply-lot-code", function() {
       },
       select:
       function (event, ui) {
-        $(".supply-lot-id").val(ui.item.id);
-        $(".supply-lot-num").val(ui.item.id);
-        $(".supply-lot-name").val(ui.item.name);
-        $('.supply-lot-expiry').datetimepicker({format: 'DD/MM/YYYY'});
-        $('.supply-lot-quantity').attr({ "max" : ui.item.quant });
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-lot-id").val(ui.item.id);
+        nested_form.find(".supply-lot-sup-code").val(ui.item.code);
+        nested_form.find(".supply-lot-name").val(ui.item.name);
+        nested_form.find(".supply-lot-code").val(ui.item.lot_code);
+        nested_form.find('.supply-lot-quantity').attr({ "max" : ui.item.quant });
         if(ui.item.expiry_date){
           var date = new Date(ui.item.expiry_date);
-          $(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+          nested_form.find(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
         }else{
-          $(".supply-lot-expiry").val("No expira");
+          nested_form.find(".supply-lot-expiry").val("No expira");
         }
       },
       response: function(event, ui) {
@@ -367,15 +369,16 @@ $(document).on("focus",".supply-lot-name", function() {
       },
       select:
       function (event, ui) {
-        $(".supply-lot-id").val(ui.item.id);
-        $(".supply-lot-num").val(ui.item.id);
-        $(".supply-lot-code").val(ui.item.code);
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-lot-id").val(ui.item.id);
+        nested_form.find(".supply-lot-sup-code").val(ui.item.code);
+        nested_form.find(".supply-lot-code").val(ui.item.lot_code);
         $('.supply-lot-quantity').attr({ "max" : ui.item.quant });
         if(ui.item.expiry_date){
           var date = new Date(ui.item.expiry_date);
-          $(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
+          nested_form.find(".supply-lot-expiry").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear());
         }else{
-          $(".supply-lot-expiry").val("No expira");
+          nested_form.find(".supply-lot-expiry").val("No expira");
         }
       },
       response: function(event, ui) {

@@ -5,9 +5,10 @@
                       label: false,
                       required: true,
                       :input_html => {
-                        class: "supply-lot-code",
+                        class: "supply-lot-sup-code",
                         data: { autocomplete_source: search_by_code_supply_lots_path },
-                        :style => 'width: 80px'
+                        size: 4,
+                        autocomplete: 'off'
                       } %>
   </td>
   <td>
@@ -18,7 +19,7 @@
                       :input_html => {
                         class: "supply-lot-name",
                         data: { autocomplete_source: search_by_name_supply_lots_path },
-                        :style => 'width: 300px'
+                        size: 38
                       } %>
     <%= f.hidden_field :supply_lot_id, class: "supply-lot-id" %>
   </td>
@@ -29,10 +30,10 @@
   <td>
     <%= f.input :supply_lot_id, as: :string,
                       label: false,
-                      placeholder: 'Un N°',
+                      placeholder: 'Cód',
                       disabled: true,
                       :input_html => {
-                        class: "supply-lot-num",
+                        class: "supply-lot-code",
                         :style => 'width: 50px'
                       } %>
   </td>

@@ -1,5 +1,17 @@
 <tr class="nested-fields">
   <td>
+    <%= f.input :supply_id, as: :string,
+                      placeholder: 'Código',
+                      label: false,
+                      required: true,
+                      :input_html => {
+                        class: "supply-code",
+                        data: { autocomplete_source: search_by_id_supplies_path },
+                        size: 4,
+                        autocomplete: 'off'
+                      } %>
+  </td>
+  <td>
     <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
                     label: false,
                     placeholder: 'Nombre',
@@ -7,15 +19,19 @@
                     :input_html => {
                       class: "supply-name",
                       data: { autocomplete_source: search_by_name_supplies_path },
-                      :style => 'width: 300px'
+                      size: 38
                     } %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
   <td>
     <%= f.input :quantity, label: false, placeholder: 'Cant', required: true, disabled: true,
-                        input_html: { "data-tooltip"=>true, :class=>"has-tip",
-                        :title=>"Seleccione un insumo", "data-placement"=>"right",
-                        min: '1', step:'any', :style => 'width: 69px' }%>
+                        input_html: {
+                          "data-tooltip"=>true,
+                          :class=>"has-tip supply-quantity",
+                          :title=>"Seleccione un insumo",
+                          "data-placement"=>"right",
+                          min: '1', max: '9999', step:'any', :style => 'width: 67px'
+                        } %>
   </td>
   <td>
     <%= f.input :daily_dose, label: false, placeholder: 'Días', required: false, disabled: true,
@@ -26,7 +42,7 @@
   <td>
     <%= f.input :treatment_duration, label: false, placeholder: 'Días',
                             required: false, disabled: true,
-                            input_html: { "data-tooltip"=>true, :class=>"has-tip",
+                            input_html: { "data-tooltip"=>true, :class=>"has-tip treat-durat",
                             :title=>"Seleccione un insumo", "data-placement"=>"right",
                             min: '1', step:'any', :style => 'width: 67px' }%>
   </td>
