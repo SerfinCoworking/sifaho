@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808183640) do
+ActiveRecord::Schema.define(version: 20180810230705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,6 +210,12 @@ ActiveRecord::Schema.define(version: 20180808183640) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
+  create_table "sector_supply_lots", force: :cascade do |t|
+    t.integer "sector_id"
+    t.integer "supply_lot_id"
+    t.index ["sector_id", "supply_lot_id"], name: "sector_supply_lot"
+  end
+
   create_table "sectors", force: :cascade do |t|
     t.string "sector_name"
     t.text "description"
@@ -256,11 +262,9 @@ ActiveRecord::Schema.define(version: 20180808183640) do
     t.datetime "updated_at", null: false
     t.bigint "supply_id"
     t.datetime "deleted_at"
-    t.bigint "sector_id"
     t.string "lot_code", limit: 20
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
     t.index ["lot_code"], name: "index_supply_lots_on_lot_code", unique: true
-    t.index ["sector_id"], name: "index_supply_lots_on_sector_id"
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 
@@ -319,7 +323,6 @@ ActiveRecord::Schema.define(version: 20180808183640) do
   add_foreign_key "professionals", "sectors"
   add_foreign_key "sectors", "users"
   add_foreign_key "supplies", "supply_areas"
-  add_foreign_key "supply_lots", "sectors"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"
   add_foreign_key "vademecums", "medications"

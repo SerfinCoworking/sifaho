@@ -20,7 +20,7 @@ class SupplyLotPolicy < ApplicationPolicy
   end
 
   def update?
-    record.sector_id == user.sector_id && new_sl.any? { |role| user.has_role?(role) }
+    new_sl.any? { |role| user.has_role?(role) }
   end
 
   def edit?
@@ -28,7 +28,7 @@ class SupplyLotPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.sector_id == user.sector_id && destroy_sl.any? { |role| user.has_role?(role) }
+    destroy_sl.any? { |role| user.has_role?(role) }
   end
 
   def delete?

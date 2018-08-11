@@ -6,7 +6,7 @@ class SupplyLotsController < ApplicationController
   def index
     authorize SupplyLot
     @filterrific = initialize_filterrific(
-      SupplyLot.lots_for_sector(current_user.sector),
+      SupplyLot,
       params[:filterrific],
       select_options: {
         sorted_by: SupplyLot.options_for_sorted_by,
@@ -36,7 +36,7 @@ class SupplyLotsController < ApplicationController
   def trash_index
     authorize SupplyLot
     @filterrific = initialize_filterrific(
-      SupplyLot.only_deleted.lots_for_sector(current_user.sector),
+      SupplyLot.only_deleted,
       params[:filterrific],
       select_options: {
         sorted_by: SupplyLot.options_for_sorted_by,
