@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ordering Supplies</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sector</th>
+      <th>Observation</th>
+      <th>Date received</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ordering_supplies.each do |ordering_supply| %>
+      <tr>
+        <td><%= ordering_supply.sector %></td>
+        <td><%= ordering_supply.observation %></td>
+        <td><%= ordering_supply.date_received %></td>
+        <td><%= ordering_supply.status %></td>
+        <td><%= link_to 'Show', ordering_supply %></td>
+        <td><%= link_to 'Edit', edit_ordering_supply_path(ordering_supply) %></td>
+        <td><%= link_to 'Destroy', ordering_supply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ordering Supply', new_ordering_supply_path %>

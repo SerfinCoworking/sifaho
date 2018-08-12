@@ -35,14 +35,14 @@
   <li id="stock-li" class="<%= active_class(sector_supply_lots_path) %><%= active_class(trash_index_sector_supply_lots_path) %>">
     <% if policy(SectorSupplyLot).index? %>
       <%= link_to sector_supply_lots_url do %>
-        Lotes
+        <%= current_user.sector.sector_name %>
       <% end %>
     <% end %>
   </li>
   <li id="stock-li" class="<%= active_class(supply_lots_path) %><%= active_class(trash_index_supply_lots_path) %>">
     <% if policy(SupplyLot).index? %>
       <%= link_to supply_lots_url do %>
-        Lotes provincia
+        Lotes Provincia
       <% end %>
     <% end %>
   </li>

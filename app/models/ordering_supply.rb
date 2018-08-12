@@ -1,36 +1,25 @@
-class InternalOrder < ApplicationRecord
+class OrderingSupply < ApplicationRecord
   include PgSearch
 
-  enum status: { pendiente: 0, entregado: 1, anulado: 2 }
-
-  # Callbacks
-  before_validation :assign_sector
+  enum status: { preparando: 0, pendiente: 1, recibido: 2, anulado: 3 }
 
   # Relaciones
   belongs_to :responsable, class_name: 'User'
   has_one :profile, :through => :responsable
   belongs_to :sector
-  has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests
-  has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots
+  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
 
   # Validaciones
   validates_presence_of :responsable
   validates_presence_of :sector
-  validates_presence_of :date_received
-  validates_presence_of :quantity_supply_requests
-  validates_associated :quantity_supply_requests
-  validates_associated :supplies
-  validates_associated :quantity_supply_lots
-  validates_associated :sector_supply_lots
+  validates_presence_of :quantity_ord_supply_requests
+  validates_presence_of :supply_lots
+  validates_associated :quantity_ord_supply_requests
+  validates_associated :supply_lots
 
-  # Atributos anidados
-  accepts_nested_attributes_for :quantity_supply_requests,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :supplies
-  accepts_nested_attributes_for :quantity_supply_lots,
+  accepts_nested_attributes_for :supply_lots
+  accepts_nested_attributes_for :quantity_ord_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
 
@@ -38,20 +27,20 @@ class InternalOrder < ApplicationRecord
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :search_responsable,
-      :search_supply_code,
-      :search_supply_name,
+      :search_lot_code,
+      :search_supply,
       :sorted_by,
       :date_received_at,
     ]
   )
 
-  pg_search_scope :search_supply_code,
-  :associated_against => { :supplies => :id, :supply_lots => :code },
+  pg_search_scope :search_lot_code,
+  :associated_against => { :supply_lots => :lot_code },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_supply_name,
-  :associated_against => { :supplies => :name, :supply_lots => :supply_name },
+  pg_search_scope :search_supply,
+  :associated_against => { :supply_lots => :supply_name, :supply_lots => :code },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
@@ -60,32 +49,28 @@ class InternalOrder < ApplicationRecord
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
-      order("internal_orders.created_at #{ direction }")
+      order("ordering_supplies.created_at #{ direction }")
     when /^responsable_/
       # Ordenamiento por nombre de responsable
-      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = internal_orders.responsable_id")
+      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = ordering_supplies.responsable_id")
     when /^sector_/
       # Ordenamiento por nombre de sector
       order("sectors.sector_name #{ direction }").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("internal_orders.status #{ direction }")
+      order("ordering_supplies.status #{ direction }")
     when /^insumos_solicitados_/
       # Ordenamiento por nombre de insumo solicitado
-      order("supplies.name #{ direction }").joins(:supplies)
+      order("supply_lots.supply_name #{ direction }").joins(:supply_lots)
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
-      order("internal_orders.date_received #{ direction }")
-    when /^entregado_/
-      # Ordenamiento por la fecha de dispensación
-      order("internal_orders.date_delivered #{ direction }")
+      order("ordering_supplies.date_received #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -93,7 +78,7 @@ class InternalOrder < ApplicationRecord
   }
 
   scope :date_received_at, lambda { |reference_time|
-    where('internal_orders.date_received >= ?', reference_time)
+    where('ordering_supplies.date_received >= ?', reference_time)
   }
 
   scope :with_sector_id, lambda { |an_id|
@@ -110,8 +95,6 @@ class InternalOrder < ApplicationRecord
       ['Estado (a-z)', 'estado_asc'],
       ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
       ['Fecha recibido (asc)', 'recibido_desc'],
-      ['Fecha entregado (asc)', 'entregado_asc'],
-      ['Cantidad (asc)', 'cantidad_asc']
     ]
   end
 
@@ -133,10 +116,12 @@ class InternalOrder < ApplicationRecord
 
   # Label del estado para vista.
   def status_label
-    if self.entregado?
-      return 'success'
-    elsif self.pendiente?
+    if self.armando?
       return 'default'
+    elsif self.pendiente?
+      return 'info'
+    elsif self.recibido?
+      return 'success'
     elsif self.anulado?
       return 'danger'
     end
@@ -147,4 +132,5 @@ class InternalOrder < ApplicationRecord
   def assign_sector
     self.sector = self.responsable.sector
   end
+
 end

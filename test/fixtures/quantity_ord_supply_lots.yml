@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  supply_lot: 1
+  requested_quantity: 1
+  delivered_quantity: 1
+
+two:
+  supply_lot: 1
+  requested_quantity: 1
+  delivered_quantity: 1

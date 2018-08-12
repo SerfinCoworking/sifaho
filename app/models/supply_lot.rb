@@ -9,10 +9,15 @@ class SupplyLot < ApplicationRecord
   before_update :update_status, if: :will_save_change_to_expiry_date?
 
   # Relaciones
+  belongs_to :supply, -> { with_deleted }
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :sectors, through: :sector_supply_lots
 
-  belongs_to :supply, -> { with_deleted }
+  has_many :quantity_ord_supply_lots
+  has_many :ordering_supplies, -> { with_deleted },
+    :through => :quantity_ord_supply_lots,
+    :source => :quantifiable,
+    :source_type => 'OrderingSupply'
 
   # Validaciones
   validates_presence_of :sector

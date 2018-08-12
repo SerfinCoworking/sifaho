@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180811153716) do
+ActiveRecord::Schema.define(version: 20180812184939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,18 @@ ActiveRecord::Schema.define(version: 20180811153716) do
     t.bigint "vademecum_id"
     t.index ["medication_brand_id"], name: "index_medications_on_medication_brand_id"
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
+  end
+
+  create_table "ordering_supplies", force: :cascade do |t|
+    t.bigint "sector_id"
+    t.text "observation"
+    t.datetime "date_received"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "responsable_id"
+    t.index ["responsable_id"], name: "index_ordering_supplies_on_responsable_id"
+    t.index ["sector_id"], name: "index_ordering_supplies_on_sector_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
@@ -159,6 +171,17 @@ ActiveRecord::Schema.define(version: 20180811153716) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_med_poly"
+  end
+
+  create_table "quantity_ord_supply_lots", force: :cascade do |t|
+    t.integer "supply_lot"
+    t.string "quantifiable_type"
+    t.bigint "quantifiable_id"
+    t.integer "requested_quantity"
+    t.integer "delivered_quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
@@ -317,6 +340,7 @@ ActiveRecord::Schema.define(version: 20180811153716) do
 
   add_foreign_key "internal_orders", "sectors"
   add_foreign_key "medications", "medication_brands"
+  add_foreign_key "ordering_supplies", "sectors"
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"

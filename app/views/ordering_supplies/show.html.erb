@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sector:</strong>
+  <%= @ordering_supply.sector %>
+</p>
+
+<p>
+  <strong>Observation:</strong>
+  <%= @ordering_supply.observation %>
+</p>
+
+<p>
+  <strong>Date received:</strong>
+  <%= @ordering_supply.date_received %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @ordering_supply.status %>
+</p>
+
+<%= link_to 'Edit', edit_ordering_supply_path(@ordering_supply) %> |
+<%= link_to 'Back', ordering_supplies_path %>
