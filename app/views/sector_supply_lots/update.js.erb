@@ -1,0 +1,4 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+$('#sector_supply_lot_<%= @sector_supply_lot.id %>').replaceWith('<%= j render (@sector_supply_lot) %>')

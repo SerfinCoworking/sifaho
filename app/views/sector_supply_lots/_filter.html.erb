@@ -3,10 +3,10 @@
     <div class="panel-body">
       <%= form_for_filterrific @filterrific do |f| %>
         <div class="col-md-1 col-sm-1">
-          <label>Lote</label>
+          <label>Insumo</label>
           <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
           <%= f.text_field(
-            :search_lot_code,
+            :with_code,
             class: 'filterrific-periodically-observed form-control',
             placeholder: 'Código',
             autocomplete: 'off'
@@ -18,7 +18,7 @@
           <%= f.text_field(
             :search_text,
             class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Código o Nombre',
+            placeholder: 'Nombre de insumo',
             autocomplete: 'off'
           ) %>
         </div>

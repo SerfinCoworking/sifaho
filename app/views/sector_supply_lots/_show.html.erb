@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h5><strong>Insumo: </strong><%= @sector_supply_lot.supply_name %></h5>
+
+<div class="well well-sm">
+  <h4>Cantidad en stock: <span class="label label-<%= @sector_supply_lot.quantity_label %>"><%= @sector_supply_lot.quantity %></span></h4></h4>
+    <div class="progress">
+      <div class="progress-bar progress-bar-<%= @sector_supply_lot.quantity_label %> progress-bar-striped active" style="width: <%= @percent_quantity_sector_supply_lot %>%">
+        <%= @percent_quantity_sector_supply_lot %>%
+      </div>
+    </div>
+  Cantidad inicial: <span class="label label-primary"><%= @sector_supply_lot.initial_quantity %></span>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h5><strong>Recibido:</strong></h5>
+    <%= @sector_supply_lot.created_at.strftime("%d/%m/%Y") %>
+
+    <% if @sector_supply_lot.needs_expiration? %>
+      <h5><strong>Expiración:</strong></h5>
+      <%= @sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") %>
+    <% end %>
+
+    <h5><strong>Última modificación:</strong></h5>
+    <%= @sector_supply_lot.updated_at.strftime("%d/%m/%y %H:%M") %>
+
+    <% if @sector_supply_lot.deleted? %>
+    <h5><strong>Eliminado:</strong></h5>
+    <%= @sector_supply_lot.deleted_at.strftime("%d/%m/%y %H:%M") %>
+    <% end %>
+  </div>
+</div>

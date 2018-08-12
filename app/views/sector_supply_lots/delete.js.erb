@@ -4,15 +4,15 @@ $('#dialog h4').html("<h4><i class=' glyphicon glyphicon-trash'></i>  Borrando l
 // Render the edit form
 $('.modal-body').html(
   'Esta seguro que desea eliminar el siguiente lote?<br>'+
-  "<strong>N°: </strong><%= @supply_lot.id %><br>"+
-  "<strong>Código: </strong><%= @supply_lot.code %><br>"+
-  "<strong>Insumo: </strong><%= @supply_lot.supply_name %>"
+  "<strong>Lote: </strong><%= @sector_supply_lot.lot_code %><br>"+
+  "<strong>Código insumo: </strong><%= @sector_supply_lot.code %><br>"+
+  "<strong>Insumo: </strong><%= @sector_supply_lot.supply_name %>"
 );
 
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
-  "<a data-remote='true' data-method='delete' href='/supply_lots/<%= @supply_lot.id %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='/sector_supply_lots/<%= @sector_supply_lot.id %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180810230705) do
+ActiveRecord::Schema.define(version: 20180811153716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,12 +82,6 @@ ActiveRecord::Schema.define(version: 20180810230705) do
     t.datetime "updated_at"
     t.bigint "patient_type_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
-  end
-
-  create_table "prescription_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "prescriptions", force: :cascade do |t|
@@ -178,12 +172,12 @@ ActiveRecord::Schema.define(version: 20180810230705) do
   end
 
   create_table "quantity_supply_lots", force: :cascade do |t|
-    t.integer "supply_lot_id"
     t.string "quantifiable_type"
     t.bigint "quantifiable_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sector_supply_lot_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_lot_poly"
   end
 
@@ -213,6 +207,13 @@ ActiveRecord::Schema.define(version: 20180810230705) do
   create_table "sector_supply_lots", force: :cascade do |t|
     t.integer "sector_id"
     t.integer "supply_lot_id"
+    t.integer "status", default: 0
+    t.integer "quantity"
+    t.integer "initial_quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_sector_supply_lots_on_deleted_at"
     t.index ["sector_id", "supply_lot_id"], name: "sector_supply_lot"
   end
 

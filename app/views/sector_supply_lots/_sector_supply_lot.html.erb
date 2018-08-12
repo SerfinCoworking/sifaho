@@ -1,0 +1,39 @@
+  <tr id="sector_supply_lot_<%= sector_supply_lot.id %>">
+    <div class="js-fade fade-in is-paused">
+      <td><%= sector_supply_lot.lot_code %></td>
+      <td><%= sector_supply_lot.code %></td>
+      <td class="col-sup-name"><%= sector_supply_lot.supply_name %></td>
+      <td>
+        <span class="label label-<%= sector_supply_lot.status_label %>">
+          <%= sector_supply_lot.status.split('_').map(&:capitalize).join(' ') %>
+        </span>
+      </td>
+      <td><span class="label label-default"><%= sector_supply_lot.initial_quantity %></span></td>
+      <td><span class="label label-<%= sector_supply_lot.quantity_label %>"><%= sector_supply_lot.quantity %></span></td>
+      <td><%= sector_supply_lot.created_at.strftime("%d/%m/%Y") %></td>
+      <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "---" %></td>
+      <td class="text-center">
+        <% if policy(sector_supply_lot).show? %>
+          <%= link_to sector_supply_lot_path(sector_supply_lot), remote:true, class: 'btn btn-default btn-xs',
+                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <% end %>
+        <% end %>
+        <% if current_page?(controller: 'sector_supply_lots', action: 'trash_index') %>
+          <% if policy(sector_supply_lot).restore? %>
+            <%= link_to restore_confirm_sector_supply_lot_path(sector_supply_lot), remote: true,
+                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <% if policy(sector_supply_lot).delete? %>
+            <%= link_to delete_sector_supply_lot_path(sector_supply_lot), remote: true,
+                  class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </td>
+    </div>
+  </tr>

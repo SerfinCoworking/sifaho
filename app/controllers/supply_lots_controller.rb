@@ -18,8 +18,7 @@ class SupplyLotsController < ApplicationController
         :sorted_by,
         :with_status,
         :search_text,
-        :with_code,
-        :with_area_id,
+        :search_lot_code,
         :date_received_at
       ],
     ) or return

@@ -113,7 +113,7 @@
                 <%= qsl.quantity %> <%= qsl.unity.pluralize(qsl.quantity) %>
               </td>
               <td>
-                <%= qsl.supply_lot_id %>
+                <%= qsl.lot_code %>
               </td>
               <td>
                 <%= qsl.expiry_date.present? ? qsl.expiry_date.strftime("%d/%m/%Y") : "No tiene" %>

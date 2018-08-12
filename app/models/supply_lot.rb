@@ -9,21 +9,10 @@ class SupplyLot < ApplicationRecord
   before_update :update_status, if: :will_save_change_to_expiry_date?
 
   # Relaciones
-  # belongs_to :sector
-  has_many :sector_supply_lots
+  has_many :sector_supply_lots, -> { with_deleted }
   has_many :sectors, through: :sector_supply_lots
 
   belongs_to :supply, -> { with_deleted }
-  has_many :quantity_supply_lots
-  has_many :prescriptions,
-    :through => :quantity_supply_lots,
-    :source => :quantifiable,
-    :source_type => 'Prescription'
-
-  has_many :internal_orders,
-    :through => :quantity_supply_lots,
-    :source => :quantifiable,
-    :source_type => 'InternalOrder'
 
   # Validaciones
   validates_presence_of :sector
@@ -39,18 +28,23 @@ class SupplyLot < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'creacion_desc' },
     available_filters: [
-      :with_code,
+      :search_lot_code,
       :sorted_by,
       :with_status,
       :search_text,
-      :with_area_id,
       :date_received_at
     ]
   )
 
+  pg_search_scope :search_lot_code,
+  against: :lot_code,
+  :using => {
+    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
+  },
+  :ignoring => :accents # Ignorar tildes.
+
   pg_search_scope :search_text,
-  against: :code,
-  against: :supply_name,
+  against: [:code, :supply_name],
   :using => {
     :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
   },
@@ -63,7 +57,7 @@ class SupplyLot < ApplicationRecord
     when /^creacion_/
       # Ordenamiento por fecha de recepción
       order("supply_lots.created_at #{ direction }")
-    when /^cod_lote_/
+    when /^lote_/
       # Ordenamiento por código de lote
       order("LOWER(supply_lots.lot_code) #{ direction }")
     when /^cod_ins_/
@@ -93,16 +87,6 @@ class SupplyLot < ApplicationRecord
     end
   }
 
-  scope :with_code, lambda { |query|
-    string = query.to_s
-    where('supply_lots.id::text LIKE ?', "#{string}%")
-  }
-
-  scope :with_code, lambda { |query|
-    string = query.to_s
-    where('supply_lots.code::text LIKE ?', "#{string}%")
-  }
-
   scope :date_received_at, lambda { |reference_time|
     where('supply_lots.date_received >= ?', reference_time)
   }
@@ -120,7 +104,7 @@ class SupplyLot < ApplicationRecord
   def self.options_for_sorted_by
    [
      ['Creación (desc)', 'creacion_desc'],
-     ['Código de lote (asc)', 'cod_lote_asc'],
+     ['Código de lote (asc)', 'lote_asc'],
      ['Código de insumo (asc)', 'cod_ins_asc'],
      ['Insumo (a-z)', 'insumo_asc'],
      ['Cantidad (asc)', 'cantidad_asc'],
@@ -158,7 +142,7 @@ class SupplyLot < ApplicationRecord
 
   # Label de porcentaje de stock para vista.
   def quantity_label
-    if self.percent_stock == 0
+    if self.percent_stock == 0 || self.percent_stock.nil?
       return 'danger'
     elsif self.percent_stock <= 30
       return 'warning'
@@ -181,6 +165,10 @@ class SupplyLot < ApplicationRecord
   # Retorna el tipo de unidad
   def unity
     self.supply.unity
+  end
+
+  def needs_expiration?
+    self.supply.needs_expiration?
   end
 
   private

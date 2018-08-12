@@ -164,7 +164,7 @@ class PrescriptionsController < ApplicationController
                                              :prescribed_date, :expiry_date,
                                              quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
                                                                                    :treatment_duration, :_destroy],
-                                             quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy]
+                                             quantity_supply_lots_attributes: [:id, :sector_supply_lot_id, :quantity, :_destroy]
                                           )
     end
 

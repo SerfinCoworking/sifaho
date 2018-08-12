@@ -1,7 +1,7 @@
 class Patient < ApplicationRecord
   # Relaciones
   belongs_to :patient_type
-  has_many :prescriptions
+  has_many :prescriptions, -> { with_deleted }
 
   # Validaciones
   validates_presence_of :first_name

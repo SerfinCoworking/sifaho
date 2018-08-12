@@ -8,9 +8,9 @@ class Prescription < ApplicationRecord
   belongs_to :professional
   belongs_to :patient
   has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, :through => :quantity_supply_requests
+  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supply_lots, :through => :quantity_supply_lots
+  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots
 
   # Validaciones
   validates_presence_of :patient
@@ -21,7 +21,7 @@ class Prescription < ApplicationRecord
   validates_associated :quantity_supply_requests
   validates_associated :supplies
   validates_associated :quantity_supply_lots
-  validates_associated :supply_lots
+  validates_associated :sector_supply_lots
 
   # Atributos anidados
   accepts_nested_attributes_for :quantity_supply_requests,
@@ -31,7 +31,7 @@ class Prescription < ApplicationRecord
   accepts_nested_attributes_for :quantity_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
-  accepts_nested_attributes_for :supply_lots
+  accepts_nested_attributes_for :sector_supply_lots
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -51,12 +51,12 @@ class Prescription < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_code,
-  :associated_against => { :supplies => :id, :supply_lots => :code },
+  :associated_against => { :supplies => :id, :sector_supply_lots => :code },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_name,
-  :associated_against => { :supplies => :name, :supply_lots => :supply_name },
+  :associated_against => { :supplies => :name, :sector_supply_lots => :supply_name },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 

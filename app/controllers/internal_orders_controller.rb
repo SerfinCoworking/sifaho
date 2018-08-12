@@ -47,7 +47,6 @@ class InternalOrdersController < ApplicationController
     authorize InternalOrder
     @internal_order = InternalOrder.new
     @responsables = User.all
-    @supplies = SupplyLot.all
     @internal_order.quantity_supply_requests.build
     @internal_order.quantity_supply_lots.build
   end
@@ -163,7 +162,9 @@ class InternalOrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_params
       params.require(:internal_order).permit(:responsable_id, :date_delivered, :date_received, :observation,
-        quantity_supply_lots_attributes: [:id, :supply_lot_id, :quantity, :_destroy])
+        quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
+                                              :treatment_duration, :_destroy],
+        quantity_supply_lots_attributes: [:id, :sector_supply_lot_id, :quantity, :_destroy])
     end
 
     # Se verifica si el value del submit del form es para dispensar

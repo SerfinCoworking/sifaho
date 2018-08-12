@@ -16,7 +16,18 @@ Rails.application.routes.draw do
     end
     collection do
       get "trash_index"
-      get "search_by_id"
+      get "search_by_code"
+      get "search_by_name"
+    end
+  end
+
+  resources :sector_supply_lots, only: [:index, :show, :destroy ] do
+    member do
+      get "delete"
+      get "restore"; get "restore_confirm"
+    end
+    collection do
+      get "trash_index"
       get "search_by_code"
       get "search_by_name"
     end
