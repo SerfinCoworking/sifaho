@@ -41,12 +41,12 @@ class OrderingSupply < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply,
-  :associated_against => { :supply_lots => :supply_name, :supply_lots => :code },
+  :associated_against => { supply_lots: [:supply_name, :code] },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_responsable,
-  :associated_against => { :profile => :first_name, :profile => :last_name, :responsable => :username },
+  :associated_against => { profile: [:last_name, :first_name], :responsable => :username },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 

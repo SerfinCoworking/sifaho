@@ -18,7 +18,7 @@ Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
 Rails.application.config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb *.css.scss )
 Rails.application.config.assets.precompile += %w( bg-sifaho.jpg )
-Rails.application.config.assets.precompile += %w( scaffolds.css.erb )
 Rails.application.config.assets.precompile += %w( welcome.css )
 Rails.application.config.assets.precompile += %w( 1st_load_framework.css.scss )
 Rails.application.config.assets.precompile += %w( prescriptions.scss )
+Rails.application.config.assets.precompile += %w( scaffolds.css.erb )

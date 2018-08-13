@@ -1,0 +1,16 @@
+current directory: /home/bashud/Documentos/SIFAHO/vendor/bundle/ruby/2.4.0/gems/binding_of_caller-0.8.0/ext/binding_of_caller
+/home/bashud/.rvm/rubies/ruby-2.4.2/bin/ruby -r ./siteconf20180813-10989-1griezg.rb extconf.rb
+
+current directory: /home/bashud/Documentos/SIFAHO/vendor/bundle/ruby/2.4.0/gems/binding_of_caller-0.8.0/ext/binding_of_caller
+make "DESTDIR=" clean
+make: *** No hay ninguna regla para construir el objetivo «clean».  Alto.
+
+current directory: /home/bashud/Documentos/SIFAHO/vendor/bundle/ruby/2.4.0/gems/binding_of_caller-0.8.0/ext/binding_of_caller
+make "DESTDIR="
+echo "Nada."
+Nada.
+
+current directory: /home/bashud/Documentos/SIFAHO/vendor/bundle/ruby/2.4.0/gems/binding_of_caller-0.8.0/ext/binding_of_caller
+make "DESTDIR=" install
+echo "Nada."
+Nada.
