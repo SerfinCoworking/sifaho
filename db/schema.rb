@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180812184939) do
+ActiveRecord::Schema.define(version: 20180813182720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,9 +24,13 @@ ActiveRecord::Schema.define(version: 20180812184939) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "responsable_id"
+    t.bigint "provider_id"
+    t.bigint "applicant_id"
+    t.datetime "deleted_at"
     t.bigint "sector_id"
-    t.index ["responsable_id"], name: "index_internal_orders_on_responsable_id"
+    t.index ["applicant_id"], name: "index_internal_orders_on_applicant_id"
+    t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
+    t.index ["provider_id"], name: "index_internal_orders_on_provider_id"
     t.index ["sector_id"], name: "index_internal_orders_on_sector_id"
   end
 
@@ -68,6 +72,8 @@ ActiveRecord::Schema.define(version: 20180812184939) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "responsable_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_ordering_supplies_on_deleted_at"
     t.index ["responsable_id"], name: "index_ordering_supplies_on_responsable_id"
     t.index ["sector_id"], name: "index_ordering_supplies_on_sector_id"
   end
@@ -108,6 +114,8 @@ ActiveRecord::Schema.define(version: 20180812184939) do
     t.integer "status", default: 0
     t.datetime "prescribed_date"
     t.datetime "expiry_date"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
   end

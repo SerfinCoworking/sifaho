@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   end
 
   resources :internal_orders do
+    get "new_deliver", on: :collection
     member do
       get "delete"
       get "restore"; get "restore_confirm"

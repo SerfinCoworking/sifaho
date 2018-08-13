@@ -19,7 +19,8 @@
                     :input_html => {
                       class: "supply-name",
                       data: { autocomplete_source: search_by_name_supplies_path },
-                      size: 38
+                      size: 38,
+                      value: "#{f.object.supply_name unless f.object.new_record?}"
                     } %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>

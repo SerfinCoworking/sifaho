@@ -1,4 +1,5 @@
 class InternalOrder < ApplicationRecord
+  acts_as_paranoid
   include PgSearch
 
   enum status: { pendiente: 0, entregado: 1, anulado: 2 }
@@ -7,8 +8,10 @@ class InternalOrder < ApplicationRecord
   before_validation :assign_sector
 
   # Relaciones
-  belongs_to :responsable, class_name: 'User'
-  has_one :profile, :through => :responsable
+  belongs_to :applicant, class_name: 'User'
+  belongs_to :provider, class_name: 'User'
+  has_one :profile, :through => :applicant
+  has_one :profile, :through => :provider
   belongs_to :sector
   has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests
@@ -16,7 +19,8 @@ class InternalOrder < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots
 
   # Validaciones
-  validates_presence_of :responsable
+  validates_presence_of :applicant
+  validates_presence_of :provider
   validates_presence_of :sector
   validates_presence_of :date_received
   validates_presence_of :quantity_supply_requests
@@ -122,6 +126,7 @@ class InternalOrder < ApplicationRecord
       if self.quantity_supply_lots.present?
         self.quantity_supply_lots.each do |qsls|
           qsls.decrement
+          qsls.increment_lot_to(self.applicant.sector)
         end
       else
         raise ArgumentError, 'No hay lotes en el pedido'
@@ -145,6 +150,6 @@ class InternalOrder < ApplicationRecord
   private
 
   def assign_sector
-    self.sector = self.responsable.sector
+    self.sector = self.provider.sector
   end
 end

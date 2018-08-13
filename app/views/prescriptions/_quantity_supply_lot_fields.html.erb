@@ -8,7 +8,8 @@
                         class: "supply-lot-sup-code",
                         data: { autocomplete_source: search_by_code_sector_supply_lots_path },
                         size: 4,
-                        autocomplete: 'off'
+                        autocomplete: 'off',
+                        value: "#{f.object.supply_code unless f.object.new_record?}"
                       } %>
   </td>
   <td>
@@ -19,7 +20,8 @@
                       :input_html => {
                         class: "supply-lot-name",
                         data: { autocomplete_source: search_by_name_sector_supply_lots_path },
-                        size: 38
+                        size: 38,
+                        value: "#{f.object.supply_name unless f.object.new_record?}"
                       } %>
     <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
   </td>
@@ -34,7 +36,8 @@
                       disabled: true,
                       :input_html => {
                         class: "supply-lot-code",
-                        :style => 'width: 96px'
+                        :style => 'width: 96px',
+                        value: "#{f.object.lot_code unless f.object.new_record?}"
                       } %>
   </td>
   <td>
@@ -43,8 +46,9 @@
                 placeholder: "Una fecha",
                 disabled: true,
                 input_html: {
-                  :style => 'width: 96px',
-                  class: "supply-lot-expiry"
+                  :style => 'width: 100px',
+                  class: "supply-lot-expiry",
+                  value: "#{f.object.expiry_date.strftime("%d/%m/%Y") unless f.object.new_record?}"
                 },
                 html5: false %>
   </td>

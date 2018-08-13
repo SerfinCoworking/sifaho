@@ -1,4 +1,5 @@
 class OrderingSupply < ApplicationRecord
+  acts_as_paranoid
   include PgSearch
 
   enum status: { preparando: 0, pendiente: 1, recibido: 2, anulado: 3 }

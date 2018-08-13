@@ -7,7 +7,6 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
       t.column :status, :integer, default: 0
 
       t.timestamps
-    end
-    add_reference :internal_orders, :responsable, index: true
+    ends
   end
 end

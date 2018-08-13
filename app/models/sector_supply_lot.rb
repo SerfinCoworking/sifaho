@@ -6,6 +6,7 @@ class SectorSupplyLot < ApplicationRecord
 
   # Callbacks
   after_validation :update_status
+  before_validation :assign_constants
 
   # Relaciones
   belongs_to :sector
@@ -99,6 +100,10 @@ class SectorSupplyLot < ApplicationRecord
   }
 
   # Métodos públicos #---------------------------------------------------------
+  def increment(a_quantity)
+    self.quantity = 0 unless self.quantity.present?
+    self.quantity += a_quantity
+  end
 
   # Disminuye la cantidad
   def decrement(a_quantity)
@@ -194,8 +199,6 @@ class SectorSupplyLot < ApplicationRecord
       self.initial_quantity = self.quantity # Se vuelve a asignar la cantidad inicial
     end
     self.initial_quantity = self.quantity unless initial_quantity.present?
-    self.code = self.supply_id.to_s
-    self.supply_name = self.supply.name
   end
 
   # Métodos de clase #----------------------------------------------------------

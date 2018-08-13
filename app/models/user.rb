@@ -7,7 +7,8 @@ class User < ApplicationRecord
 
   # Relaciones
   belongs_to :sector
-  has_many :internal_orders, -> { with_deleted }, foreign_key: "responsable_id"
+  has_many :internal_orders, -> { with_deleted }, foreign_key: "applicant_id"
+  has_many :internal_orders, -> { with_deleted }, foreign_key: "provider_id"
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy
 

@@ -16,7 +16,7 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def update?
-    record.responsable_id == user.id || update_io.any? { |role| user.has_role?(role) }
+    record.applicant_id == user.id || update_io.any? { |role| user.has_role?(role) }
   end
 
   def edit?
@@ -27,8 +27,16 @@ class InternalOrderPolicy < ApplicationPolicy
     destroy_io.any? { |role| user.has_role?(role) }
   end
 
+  def delete?
+    destroy?
+  end
+
   def deliver?
     deliver_io.any? { |role| user.has_role?(role) }
+  end
+
+  def new_deliver?
+    deliver?
   end
 
   private

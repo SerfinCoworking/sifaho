@@ -1,4 +1,5 @@
 class Prescription < ApplicationRecord
+  acts_as_paranoid
   include PgSearch
 
   # Estados

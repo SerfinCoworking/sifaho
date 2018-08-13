@@ -46,7 +46,16 @@ class InternalOrdersController < ApplicationController
   def new
     authorize InternalOrder
     @internal_order = InternalOrder.new
-    @responsables = User.all
+    @providers = User.where.not(sector: current_user.sector_id )
+    @internal_order.quantity_supply_requests.build
+    @internal_order.quantity_supply_lots.build
+  end
+
+  # GET /internal_orders/new_deliver
+  def new_deliver
+    authorize InternalOrder
+    @internal_order = InternalOrder.new
+    @applicants = User.where.not(sector: current_user.sector_id )
     @internal_order.quantity_supply_requests.build
     @internal_order.quantity_supply_lots.build
   end
@@ -75,7 +84,7 @@ class InternalOrdersController < ApplicationController
             flash.now[:notice] = "Se ha creado pero no se ha podido entregar: "+e.message
           end
         else
-          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado correctamente."
+          flash.now[:success] = "El pedido interno de "+@internal_order.applicant.sector.sector_name+" se ha creado correctamente."
         end
         format.js
       else
@@ -115,10 +124,10 @@ class InternalOrdersController < ApplicationController
   # DELETE /internal_orders/1.json
   def destroy
     authorize @internal_order
-    @sector_name = @internal_order.responsable.sector.sector_name
+    # @sector_name = @internal_order.responsable.sector.sector_name
     @internal_order.destroy
     respond_to do |format|
-      flash.now[:success] = "El pedido interno de "+@sector_name+" se ha eliminado correctamente."
+      flash.now[:success] = "El pedido interno de se ha eliminado correctamente."
       format.js
     end
   end
@@ -143,7 +152,7 @@ class InternalOrdersController < ApplicationController
         format.js
       else
         if @internal_order.save!
-          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.full_name+" se ha entregado correctamente."
+          flash.now[:success] = "El pedido interno de "+@internal_order.applicant.full_name+" se ha entregado correctamente."
           format.js
         else
           flash.now[:error] = "El pedido interno no se ha podido entregar."
@@ -161,7 +170,7 @@ class InternalOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_params
-      params.require(:internal_order).permit(:responsable_id, :date_delivered, :date_received, :observation,
+      params.require(:internal_order).permit(:applicant_id, :provider_id, :date_delivered, :date_received, :observation,
         quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
                                               :treatment_duration, :_destroy],
         quantity_supply_lots_attributes: [:id, :sector_supply_lot_id, :quantity, :_destroy])
@@ -170,6 +179,6 @@ class InternalOrdersController < ApplicationController
     # Se verifica si el value del submit del form es para dispensar
     def delivering?
       submit = params[:commit]
-      return submit == "Cargar y entregar" || submit == "Guardar y entregar"
+      return submit == "Entregar" || submit == "Guardar y entregar"
     end
 end
