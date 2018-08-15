@@ -82,7 +82,7 @@ class SectorSupplyLot < ApplicationRecord
     when /^cantidad_/
       # Ordenamiento por cantidad actual del lote
       order("sector_supply_lots.quantity #{ direction }")
-    when /^fecha_expiracion_/
+    when /^expiracion_/
       # Ordenamiento por fecha de expiración
       order("supply_lots.expiry_date #{ direction }").joins(:supply_lots)
     else
@@ -211,15 +211,14 @@ class SectorSupplyLot < ApplicationRecord
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
    [
-     ['Recepción (desc)', 'recepcion_desc'],
+     ['Fecha recepción (desc)', 'recepcion_desc'],
+     ['Fecha expiración (asc)', 'expiracion_asc'],
      ['Código de lote (asc)', 'lote_asc'],
      ['Código de insumo (asc)', 'cod_ins_asc'],
      ['Insumo (a-z)', 'insumo_asc'],
      ['Estado', 'estado_asc'],
      ['Cantidad (asc)', 'cantidad_asc'],
      ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
-     ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
-     ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
    ]
   end
 

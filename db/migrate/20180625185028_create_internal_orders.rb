@@ -7,6 +7,11 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
       t.column :status, :integer, default: 0
 
       t.timestamps
-    ends
+    end
+    add_reference :internal_orders, :sector, foreign_key: true
+    add_reference :internal_orders, :provider, index: true
+    add_reference :internal_orders, :applicant, index: true
+    add_column :internal_orders, :deleted_at, :datetime
+    add_index :internal_orders, :deleted_at
   end
 end

@@ -9,5 +9,7 @@ class CreateOrderingSupplies < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_reference :ordering_supplies, :responsable, index: true
+    add_column :ordering_supplies, :deleted_at, :datetime
+    add_index :ordering_supplies, :deleted_at
   end
 end

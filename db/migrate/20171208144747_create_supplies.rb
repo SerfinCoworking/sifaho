@@ -16,5 +16,7 @@ class CreateSupplies < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_reference :supplies, :supply_area, foreign_key: true
+    add_column :supplies, :deleted_at, :datetime
+    add_index :supplies, :deleted_at
   end
 end
