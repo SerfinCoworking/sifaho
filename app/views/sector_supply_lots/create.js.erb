@@ -1,0 +1,11 @@
+<%= render 'shared/flash_message' %>
+
+<% if @sector_supply_lot.present? %>
+  // Se oculta el original
+  $('#sector_supply_lot_<%= @sector_supply_lot.id %>').hide()
+
+  $('#sector_supply_lots').prepend('<%= j render (@sector_supply_lot) %>')
+
+  // Efecto de ingreso
+  $('#sector_supply_lot_<%= @sector_supply_lot.id %>').hide().fadeIn(500);
+<% end %>

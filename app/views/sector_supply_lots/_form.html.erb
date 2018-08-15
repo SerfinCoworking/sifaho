@@ -1,0 +1,98 @@
+<%= simple_form_for @new_sector_supply_lot, remote: true, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Lote</th>
+        <th>Cód Ins</th>
+        <th>Insumo</th>
+        <th>Cantidad</th>
+        <th>Fecha recepción</th>
+        <th>Fecha expiración</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <div class="js-fade fade-in is-paused">
+          <td>
+            <%= f.input :supply_lot_id, as: :string,
+                              placeholder: 'Código',
+                              label: false,
+                              required: true,
+                              :input_html => {
+                                id: "supply-lot-code",
+                                data: { autocomplete_source: search_by_lot_code_supply_lots_path },
+                                size: 5,
+                                autocomplete: 'off',
+                                value: "#{f.object.lot_code unless f.object.new_record?}"
+                              } %>
+          </td>
+          <td>
+            <%= f.input :supply_lot_id, as: :string,
+                              placeholder: 'Código',
+                              label: false,
+                              required: true,
+                              :input_html => {
+                                id: 'supply-code',
+                                data: { autocomplete_source: search_by_id_supplies_path },
+                                autocomplete: 'off',
+                                size: 4,
+                                value: "#{f.object.code unless f.object.new_record?}"
+                              } %>
+          </td>
+          <td>
+            <%= f.input :supply_lot_id, as: :string,
+                              placeholder: 'Nombre insumo',
+                              label: false,
+                              required: true,
+                              :input_html => {
+                                id: "supply-name",
+                                data: { autocomplete_source: search_by_name_supplies_path },
+                                size: 40,
+                                value: "#{f.object.supply_name unless f.object.new_record?}"
+                              } %>
+            <%= f.hidden_field :supply_lot_id, id: 'supply-lot-id' %>
+            <%= hidden_field_tag "sector_supply_lot[supply_id]" %>
+            <%= hidden_field_tag "sector_supply_lot[lot_code]"  %>
+          </td>
+          <td>
+            <%= f.input :quantity, placeholder: 'Cant', required: true,
+                        label: false, input_html: { id: 'supply-quantity', min: '0', max:'9999' } %>
+          </td>
+          <td>
+            <%= f.input :created_at, as: :string, label: false, :placeholder => "Una fecha",
+                        input_html: {
+                          :style => 'width: 109px',
+                          id: "date-received",
+                          required: true,
+                          autocomplete: 'off',
+                          value: "#{f.object.new_record? ? Date.today.strftime('%d/%m/%Y') : f.object.created_at.strftime('%d/%m/%Y') }"
+                        },
+                        html5: false %>
+          </td>
+          <td>
+            <%= f.input :supply_lot_id, as: :string, label: false, :placeholder => "Una fecha",
+                        input_html: {
+                          :style => 'width: 109px',
+                          id: "expiry-date",
+                          required: true,
+                          autocomplete: 'off',
+                          value: "#{f.object.expiry_date.strftime('%d/%m/%Y') unless f.object.new_record?}"
+                        },
+                        html5: false %>
+            <%= hidden_field_tag "sector_supply_lot[expiry_date]"  %>
+          </td>
+          <td class="td-btn">
+            <button type='reset' class='btn btn-default btn-md pull-left' tabindex="-1">
+              <span class='glyphicon glyphicon-erase'></span>
+            </button>
+            <button type='submit' name='commit' class='btn btn-primary pull-right' form='new_sector_supply_lot'>
+              Cargar lote
+            </button>
+          </td>
+        </div>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

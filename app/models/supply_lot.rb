@@ -20,7 +20,6 @@ class SupplyLot < ApplicationRecord
     :source_type => 'OrderingSupply'
 
   # Validaciones
-  validates_presence_of :sector
   validates_presence_of :supply
   validates_presence_of :quantity
   validates_presence_of :initial_quantity
@@ -28,7 +27,7 @@ class SupplyLot < ApplicationRecord
   validates_presence_of :supply_name
   validates_presence_of :date_received
   validates_presence_of :lot_code
-  validates_uniqueness_of :lot_code
+  validates :lot_code, uniqueness: {conditions: ->{with_deleted}}
 
   filterrific(
     default_filter_params: { sorted_by: 'creacion_desc' },
@@ -198,8 +197,10 @@ class SupplyLot < ApplicationRecord
     if self.initial_quantity.present? && self.initial_quantity < self.quantity # Si se edita y coloca una cantidad mayor a la inicial
       self.initial_quantity = self.quantity # Se vuelve a asignar la cantidad inicial
     end
+    self. quantity = 0 unless self.quantity.present?
     self.initial_quantity = self.quantity unless initial_quantity.present?
     self.code = self.supply_id.to_s
     self.supply_name = self.supply.name
+    self.date_received = DateTime.now unless date_received.present?
   end
 end

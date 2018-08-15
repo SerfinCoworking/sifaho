@@ -13,7 +13,7 @@
         <td><span class="label label-<%= supply_lot.quantity_label %>"><%= supply_lot.quantity %></span></td>
       <% end %>
       <td><%= supply_lot.date_received.strftime("%d/%m/%Y") %></td>
-      <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "---" %></td>
+      <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
       <td class="text-center">
         <% if policy(supply_lot).show? %>
           <%= link_to supply_lot_path(supply_lot), remote:true, class: 'btn btn-default btn-xs',
