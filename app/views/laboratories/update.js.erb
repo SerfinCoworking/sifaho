@@ -1,0 +1,4 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+$('#laboratory_<%= @laboratory.id %>').replaceWith('<%= j render (@laboratory) %>')

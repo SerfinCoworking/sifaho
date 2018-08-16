@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180813182720) do
+ActiveRecord::Schema.define(version: 20180815220430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,10 +35,13 @@ ActiveRecord::Schema.define(version: 20180813182720) do
   end
 
   create_table "laboratories", force: :cascade do |t|
+    t.integer "cuit"
+    t.integer "gln"
     t.string "name"
-    t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
+    t.index ["gln"], name: "index_laboratories_on_gln", unique: true
   end
 
   create_table "medication_brands", force: :cascade do |t|
@@ -295,8 +298,9 @@ ActiveRecord::Schema.define(version: 20180813182720) do
     t.bigint "supply_id"
     t.datetime "deleted_at"
     t.string "lot_code", limit: 20
+    t.bigint "laboratory_id"
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
-    t.index ["lot_code"], name: "index_supply_lots_on_lot_code", unique: true
+    t.index ["laboratory_id"], name: "index_supply_lots_on_laboratory_id"
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 
@@ -356,6 +360,7 @@ ActiveRecord::Schema.define(version: 20180813182720) do
   add_foreign_key "professionals", "sectors"
   add_foreign_key "sectors", "users"
   add_foreign_key "supplies", "supply_areas"
+  add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"
   add_foreign_key "vademecums", "medications"

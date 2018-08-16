@@ -1,0 +1,27 @@
+  <tr id="laboratory_<%= laboratory.id %>">
+    <div class="js-fade fade-in is-paused">
+    <td><%= laboratory.name %></td>
+    <td><%= laboratory.cuit %></td>
+    <td><%= laboratory.gln %></td>
+    <td>
+      <% if policy(laboratory).show? %>
+        <%= link_to laboratory_path(laboratory), remote:true, class: 'btn btn-default btn-xs',
+              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <% end %>
+      <% end %>
+      <% if policy(laboratory).edit? %>
+        <%= link_to edit_laboratory_path(laboratory), remote: true, class: 'btn btn-warning btn-xs',
+              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+      <% end %>
+      <% if policy(laboratory).delete? %>
+        <%= link_to delete_laboratory_path(laboratory), remote: true,
+              class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <% end %>
+      <% end %>
+    </td>
+  </div>
+  </tr>

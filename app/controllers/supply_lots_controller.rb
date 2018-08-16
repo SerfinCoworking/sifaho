@@ -25,11 +25,6 @@ class SupplyLotsController < ApplicationController
     @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
 
     @new_supply_lot = SupplyLot.new
-
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   def trash_index
@@ -49,11 +44,6 @@ class SupplyLotsController < ApplicationController
       ],
     ) or return
     @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
-
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
 
@@ -85,7 +75,6 @@ class SupplyLotsController < ApplicationController
   # POST /supply_lots.json
   def create
     @supply_lot = SupplyLot.new(supply_lot_params)
-    @supply_lot.sector = current_user.sector
     authorize @supply_lot
 
     respond_to do |format|
@@ -105,7 +94,7 @@ class SupplyLotsController < ApplicationController
     authorize @supply_lot
 
     respond_to do |format|
-      if @supply_lot.update(supply_lot_params)
+      if @supply_lot.update!(supply_lot_params)
         flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha modificado correctamente."
         format.js
       else

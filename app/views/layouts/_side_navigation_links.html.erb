@@ -58,20 +58,27 @@
 
 
 <!-- Menu USUARIOS -->
-  <li class="nav-header" data-toggle="collapse" data-target="#usuarios"><div id="usuarios-label" class="well well-sm">
-    <span class="glyphicon glyphicon-user"><strong> Usuarios</strong></div></li>
-  <ul class="nav nav-list" id="usuarios">
-  <li id="usuarios-li" class="<%= active_class(professionals_path) %>">
+  <li class="nav-header" data-toggle="collapse" data-target="#efectores"><div id="efectores-label" class="well well-sm">
+    <span class="glyphicon glyphicon-user"><strong> Efectores</strong></div></li>
+  <ul class="nav nav-list" id="efectores">
+  <li id="efectores-li" class="<%= active_class(professionals_path) %>">
     <% if policy(Professional).index? %>
       <%= link_to professionals_url do %>
         Profesionales
       <% end %>
     <% end %>
   </li>
-  <li id="usuarios-li" class="<%= active_class(patients_path) %>">
+  <li id="efectores-li" class="<%= active_class(patients_path) %>">
     <% if policy(Patient).index? %>
       <%= link_to patients_url do %>
         Pacientes
+      <% end %>
+    <% end %>
+  </li>
+  <li id="efectores-li" class="<%= active_class(laboratories_path) %>">
+    <% if policy(Laboratory).index? %>
+      <%= link_to laboratories_url do %>
+        Laboratorios
       <% end %>
     <% end %>
   </li>

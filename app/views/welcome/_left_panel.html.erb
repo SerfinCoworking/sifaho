@@ -38,14 +38,14 @@
   <!--  Panel prescripciones recibidas por día -->
   <% if @prescriptions.count >= 4 %>
     <div class="panel-heading">
-      <h3 class="panel-title">Pescripciones <small>Esta semana </small</h3>
+      <h3 class="panel-title">Pescripciones <small>Esta semana </small></h3>
     </div>
     <div class="panel-body">
       <%= line_chart @prescriptions.group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%d/%m/%Y").count, discrete: true, adapter: "highcharts" %>
     </div>
   <% end %>
   <div class="panel-heading">
-    <h3 class="panel-title">Prescripciones por mes</h3>
+    <h3 class="panel-title">Prescripciones <small>Este año</small></h3>
   </div>
   <div class="panel-body">
     <%= column_chart charts_by_month_prescriptions_path,

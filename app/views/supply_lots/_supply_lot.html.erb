@@ -9,10 +9,13 @@
         </span>
       </td>
       <% if policy(SupplyLot).new? %>
-        <td><span class="label label-default"><%= supply_lot.initial_quantity %></span></td>
-        <td><span class="label label-<%= supply_lot.quantity_label %>"><%= supply_lot.quantity %></span></td>
+        <td>
+          <div class="progress-bar progress-bar-<%= supply_lot.quantity_label %> progress-bar-striped" id="quantity-bar" style="width: <%= supply_lot.percent_stock %>%">
+            <%= supply_lot.quantity %>/<%= supply_lot.initial_quantity %>
+          </div>
+        </td>
       <% end %>
-      <td><%= supply_lot.date_received.strftime("%d/%m/%Y") %></td>
+      <td><%= supply_lot.created_at.strftime("%d/%m/%Y") %></td>
       <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
       <td class="text-center">
         <% if policy(supply_lot).show? %>

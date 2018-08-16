@@ -23,7 +23,7 @@ $(document).on('turbolinks:load', function() {
     sidebar.style.boxShadow = "8px 0 3px 5px #10675f";
     page_header.style.background = "#10675f";
     page_header.style.borderColor = "#10675f";
-  }else if ( $(".active").is("#usuarios-li") ){
+  }else if ( $(".active").is("#efectores-li") ){
     sidebar.style.boxShadow = "8px 0 3px 5px #89726a";
     page_header.style.background = "#89726a";
     page_header.style.borderColor = "#89726a";
@@ -47,10 +47,10 @@ $(document).on('turbolinks:load', function() {
     $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Stock</strong>');
   });
 
-  $("#usuarios").on("hide.bs.collapse", function(){
-    $("#usuarios-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Usuarios</strong>');
+  $("#efectores").on("hide.bs.collapse", function(){
+    $("#efectores-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Efectores</strong>');
   });
-  $("#usuarios").on("show.bs.collapse", function(){
-    $("#usuarios-label").html('<span class="glyphicon glyphicon-user"></span> <strong>Usuarios</strong>');
+  $("#efectores").on("show.bs.collapse", function(){
+    $("#efectores-label").html('<span class="glyphicon glyphicon-user"></span> <strong>Efectores</strong>');
   });
 });

@@ -25,11 +25,6 @@ class SectorSupplyLotsController < ApplicationController
     @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
 
     @new_sector_supply_lot = SectorSupplyLot.new
-
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   def trash_index
@@ -48,11 +43,6 @@ class SectorSupplyLotsController < ApplicationController
       ],
     ) or return
     @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
-
-    rescue ActiveRecord::RecordNotFound => e
-      # There is an issue with the persisted param_set. Reset it.
-      puts "Had to reset filterrific params: #{ e.message }"
-      redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # GET /sector_supply_lots/1

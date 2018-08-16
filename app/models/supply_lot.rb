@@ -9,6 +9,7 @@ class SupplyLot < ApplicationRecord
   before_update :update_status, if: :will_save_change_to_expiry_date?
 
   # Relaciones
+  belongs_to :laboratory
   belongs_to :supply, -> { with_deleted }
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :sectors, through: :sector_supply_lots
@@ -27,7 +28,7 @@ class SupplyLot < ApplicationRecord
   validates_presence_of :supply_name
   validates_presence_of :date_received
   validates_presence_of :lot_code
-  validates :lot_code, uniqueness: {conditions: ->{with_deleted}}
+  # validates :lot_code, uniqueness: {conditions: ->{with_deleted}}
 
   filterrific(
     default_filter_params: { sorted_by: 'creacion_desc' },
@@ -79,10 +80,7 @@ class SupplyLot < ApplicationRecord
     when /^cantidad_/
       # Ordenamiento por cantidad actual del lote
       order("supply_lots.quantity #{ direction }")
-    when /^fecha_recepcion_/
-      # Ordenamiento por fecha de recepción
-      order("supply_lots.date_received #{ direction }")
-    when /^fecha_expiracion_/
+    when /^expiracion_/
       # Ordenamiento por fecha de expiración
       order("supply_lots.expiry_date #{ direction }")
     else
@@ -113,8 +111,7 @@ class SupplyLot < ApplicationRecord
      ['Insumo (a-z)', 'insumo_asc'],
      ['Cantidad (asc)', 'cantidad_asc'],
      ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
-     ['Fecha recepción (asc)', 'fecha_recepcion_asc'],
-     ['Fecha expiración (asc)', 'fecha_expiracion_asc'],
+     ['Fecha expiración (asc)', 'expiracion_asc'],
    ]
   end
 

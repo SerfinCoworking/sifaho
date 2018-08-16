@@ -1,0 +1,72 @@
+<% content_for :page_header do %>
+  <h3>Laboratorios
+  <% if policy(Laboratory).new? %>
+    <%= link_to new_laboratory_path, remote: true, class: 'btn btn-primary btn-sm' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Nuevo
+    <% end %>
+  <% end %>
+  <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+    Filtrar
+  <% end %>
+  </h3>
+<% end %>
+<div class="col-md-8">
+<div class="panel panel-info" id="filter-panel">
+  <div class="panel-collapse collapse" id="filter">
+    <div class="panel-body">
+      <%= form_for_filterrific @filterrific do |f| %>
+        <div class="col-md-3 col-sm-3">
+          <label>Razón social</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_name,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Nombre'
+          ) %>
+        </div>
+        <div class="col-md-3 col-sm-3">
+          <label>CUIT</label>
+          <%= f.text_field(
+            :search_cuit,
+            class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Número'
+            ) %>
+        </div>
+        <div class="col-md-3 col-sm-3">
+          <label>GLN</label>
+          <%= f.text_field(
+            :search_gln,
+            class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Número'
+            ) %>
+        </div>
+        <div class="col-md-2 col-sm-3">
+          <label>Ordenar por</label>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+        </div>
+        <%= link_to reset_filterrific_url, class: "btn btn-default btn-md pull-right" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+        <%= render_filterrific_spinner %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render(
+  partial: 'laboratories/list',
+  locals: { laboratories: @laboratories }
+) %>
+
+</div>
+<div class="col-md-4">
+  <%= pie_chart charts_by_laboratory_lots_path,
+    download: "Lotes por laboratorio",
+    legend:  "right",
+    title: "Lotes por laboratorio",
+    label: "Cantidad",
+    messages: { empty: "No hay lotes relacionados" },
+    adapter: "highcharts" %>
+</div>

@@ -1,0 +1,8 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+
+$('#laboratories').prepend('<%= j render (@laboratory) %>')
+
+// Efecto de ingreso
+$('#laboratory_<%= @laboratory.id %>').hide().fadeIn(500);
