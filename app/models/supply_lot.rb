@@ -22,22 +22,20 @@ class SupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply
-  validates_presence_of :quantity
-  validates_presence_of :initial_quantity
   validates_presence_of :code
   validates_presence_of :supply_name
-  validates_presence_of :date_received
   validates_presence_of :lot_code
-  # validates :lot_code, uniqueness: {conditions: ->{with_deleted}}
+  validates :lot_code, :uniqueness => { :scope => :laboratory_id, conditions: -> {with_deleted} }
 
   filterrific(
-    default_filter_params: { sorted_by: 'creacion_desc' },
+    default_filter_params: { sorted_by: 'insumo_asc' },
     available_filters: [
       :search_lot_code,
       :sorted_by,
       :with_status,
       :search_text,
-      :date_received_at
+      :search_laboratory,
+      :expired_from
     ]
   )
 
@@ -50,6 +48,13 @@ class SupplyLot < ApplicationRecord
 
   pg_search_scope :search_text,
   against: [:code, :supply_name],
+  :using => {
+    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
+  },
+  :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_laboratory,
+  associated_against: { :laboratory => :name},
   :using => {
     :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
   },
@@ -89,8 +94,8 @@ class SupplyLot < ApplicationRecord
     end
   }
 
-  scope :date_received_at, lambda { |reference_time|
-    where('supply_lots.date_received >= ?', reference_time)
+  scope :expired_from, lambda { |reference_time|
+    where('supply_lots.expiry_date <= ?', reference_time)
   }
 
   scope :with_status, lambda { |a_status|
@@ -109,8 +114,6 @@ class SupplyLot < ApplicationRecord
      ['Código de lote (asc)', 'lote_asc'],
      ['Código de insumo (asc)', 'cod_ins_asc'],
      ['Insumo (a-z)', 'insumo_asc'],
-     ['Cantidad (asc)', 'cantidad_asc'],
-     ['Cantidad inicial (asc)', 'cantidad_inicial_asc'],
      ['Fecha expiración (asc)', 'expiracion_asc'],
    ]
   end

@@ -8,19 +8,15 @@ class LaboratoriesController < ApplicationController
     @filterrific = initialize_filterrific(
       Laboratory,
       params[:filterrific],
-      select_options: {
-        sorted_by: Laboratory.options_for_sorted_by,
-      },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
+      default_filter_params: {sorted_by: 'razon_social_asc'},
       available_filters: [
-        :sorted_by,
         :search_name,
         :search_cuit,
         :search_gln,
       ],
     ) or return
-    @laboratories = @filterrific.find.page(params[:page]).per_page(8)
+    @laboratories = @filterrific.find.page(params[:page]).per_page(9)
   end
 
   # GET /laboratories/1
@@ -93,6 +89,11 @@ class LaboratoriesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def search_by_name
+    @laboratories = Laboratory.order(:name).search_name(params[:term]).limit(10)
+    render json: @laboratories.map{ |lab| { label: lab.name, id: lab.id } }
   end
 
   private

@@ -1,6 +1,10 @@
 <%= render 'shared/flash_message' %>
 
-$('#supply_lots').prepend('<%= j render (@supply_lot) %>');
+<% if @supply_lot.id.present? %>
 
-// Efecto de ingreso
-$('#supply_lot_<%= @supply_lot.id %>').hide().fadeIn(500);
+  $('#supply_lots').prepend('<%= j render (@supply_lot) %>');
+
+  // Efecto de ingreso
+  $('#supply_lot_<%= @supply_lot.id %>').hide().fadeIn(500);
+
+<% end %>

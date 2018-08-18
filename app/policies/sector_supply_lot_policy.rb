@@ -39,6 +39,10 @@ class SectorSupplyLotPolicy < ApplicationPolicy
     destroy?
   end
 
+  def purge?
+    purge_ssl.any? { |role| user.has_role?(role) }
+  end
+
   private
 
   def see_ssl
@@ -51,5 +55,9 @@ class SectorSupplyLotPolicy < ApplicationPolicy
 
   def destroy_ssl
     [ :admin, :pharmacist, :central_pharmacist, :responsable ]
+  end
+
+  def purge_ssl
+    [ :admin ]
   end
 end

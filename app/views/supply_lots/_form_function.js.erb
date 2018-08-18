@@ -1,10 +1,4 @@
-$('#supply_lot_date_received').datetimepicker({ format: 'DD/MM/YYYY' });
-$('#supply_lot_expiry_date').datetimepicker({ format: 'DD/MM/YYYY' });
-
-$("#new_supply_lot").bind("ajax:complete", function(event,xhr,status){
-  document.getElementById("new_supply_lot").reset();
-  $('#supply_lot_supply_id').focus()
-});
+$('#expiry-date').datetimepicker({ format: 'DD/MM/YYYY' });
 
 jQuery(function() {
   var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";

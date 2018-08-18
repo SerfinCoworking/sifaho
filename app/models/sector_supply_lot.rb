@@ -10,7 +10,7 @@ class SectorSupplyLot < ApplicationRecord
 
   # Relaciones
   belongs_to :sector
-  belongs_to :supply_lot, -> { with_deleted }
+  belongs_to :supply_lot, -> { with_deleted }, dependent: :destroy
 
   has_many :quantity_supply_lots
   has_many :prescriptions, -> { with_deleted },
@@ -98,6 +98,10 @@ class SectorSupplyLot < ApplicationRecord
   scope :with_status, lambda { |a_status|
     where('sector_supply_lots.status = ?', a_status)
   }
+
+  def laboratory
+    self.supply_lot.laboratory.name
+  end
 
   # Métodos públicos #---------------------------------------------------------
   def increment(a_quantity)

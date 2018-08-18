@@ -1,6 +1,5 @@
   <tr id="supply_lot_<%= supply_lot.id %>">
     <div class="js-fade fade-in is-paused">
-      <td><%= supply_lot.lot_code %></td>
       <td><%= supply_lot.code %></td>
       <td class="col-sup-name"><%= supply_lot.supply_name %></td>
       <td>
@@ -8,14 +7,8 @@
           <%= supply_lot.status.split('_').map(&:capitalize).join(' ') %>
         </span>
       </td>
-      <% if policy(SupplyLot).new? %>
-        <td>
-          <div class="progress-bar progress-bar-<%= supply_lot.quantity_label %> progress-bar-striped" id="quantity-bar" style="width: <%= supply_lot.percent_stock %>%">
-            <%= supply_lot.quantity %>/<%= supply_lot.initial_quantity %>
-          </div>
-        </td>
-      <% end %>
-      <td><%= supply_lot.created_at.strftime("%d/%m/%Y") %></td>
+      <td><%= supply_lot.lot_code %></td>
+      <td><%= supply_lot.laboratory.name %></td>
       <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
       <td class="text-center">
         <% if policy(supply_lot).show? %>
@@ -31,6 +24,12 @@
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
             <% end %>
           <% end %>
+          <% if policy(supply_lot).purge? %>
+            <%= link_to purge_confirm_supply_lot_path(supply_lot), remote: true,
+                  class: 'btn btn-danger btn-xs', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+            <% end %>
+          <% end %>
         <% else %>
           <% if policy(supply_lot).edit? %>
             <%= link_to edit_supply_lot_path(supply_lot), remote: true, class: 'btn btn-warning btn-xs',
@@ -40,7 +39,7 @@
           <% end %>
           <% if policy(supply_lot).delete? %>
             <%= link_to delete_supply_lot_path(supply_lot), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             <% end %>
           <% end %>

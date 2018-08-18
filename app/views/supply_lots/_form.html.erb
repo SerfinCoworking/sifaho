@@ -3,11 +3,10 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Cód Lote</th>
         <th>Cód Insumo</th>
         <th>Insumo</th>
-        <th>Cantidad</th>
-        <th>Fecha recepción</th>
+        <th>Lote</th>
+        <th>Laboratorio</th>
         <th>Fecha expiración</th>
         <th colspan="2"></th>
       </tr>
@@ -16,47 +15,45 @@
       <tr>
         <div class="js-fade fade-in is-paused">
           <td>
-            <%= f.text_field :lot_code, class: "form-control", size: 5, required: true,
-                              placeholder: 'Cód Lot', label: false, autocomplete: 'off' %>
-          </td>
-          <td>
             <%= f.text_field :supply_id, class: "form-control",
                               placeholder: 'Cód Ins', label: false,
                               data: { autocomplete_source: search_by_id_supplies_path },
                               size: 5,
-                              required: true %>
+                              required: true,
+                              autocomplete: 'off' %>
           </td>
           <td>
             <%= f.text_field :supply_id, id: "nom_ins", class: "form-control",
                               placeholder: 'Nombre',
                               data: { autocomplete_source: search_by_name_supplies_path },
-                              size: 40,
+                              size: 38,
                               required: true,
                               value: "#{@new_supply_lot.supply_name unless @new_supply_lot.new_record?}" %>
             <%= f.hidden_field :supply_id, id: "supply_id" %>
           </td>
           <td>
-            <%= f.input :quantity, placeholder: 'Cant', required: true,
-                        label: false, input_html: { min: '0', max:'9999' } %>
+            <%= f.text_field :lot_code, class: "form-control", size: 10, required: true,
+                              placeholder: 'Código', label: false, autocomplete: 'off' %>
           </td>
           <td>
-            <%= f.input :date_received, as: :string, label: false, :placeholder => "Una fecha",
-                        input_html: {
-                          :style => 'width: 109px',
-                          class: "form-control",
-                          required: true,
-                          autocomplete: 'off',
-                          value: "#{@new_supply_lot.new_record? ? Date.today.strftime('%d/%m/%Y') : @new_supply_lot.date_received.strftime('%d/%m/%Y') }"
-                        },
-                        html5: false %>
+            <%= f.text_field :laboratory_id, id: "laboratory",
+                              class: 'form-control',
+                              placeholder: 'Razón social',
+                              data: { autocomplete_source: search_by_name_laboratories_path },
+                              size: 20,
+                              required: true,
+                              value: "#{@new_supply_lot.laboratory.name unless @new_supply_lot.new_record?}" %>
           </td>
+          <%= f.hidden_field :laboratory_id, id: "laboratory_id" %>
           <td>
             <%= f.input :expiry_date, as: :string, label: false, :placeholder => "Una fecha",
                         input_html: {
                           :style => 'width: 109px',
                           class: "form-control",
                           required: true,
-                          autocomplete: 'off'
+                          autocomplete: 'off',
+                          id: 'expiry-date',
+                          value: "#{f.object.expiry_date.strftime('%d/%m/%Y') unless f.object.new_record?}"
                         },
                         html5: false %>
           </td>

@@ -39,6 +39,10 @@ class SupplyLotPolicy < ApplicationPolicy
     destroy?
   end
 
+  def purge?
+    purge_sl.any? { |role| user.has_role?(role) }
+  end
+
   private
 
   def see_sl
@@ -51,5 +55,9 @@ class SupplyLotPolicy < ApplicationPolicy
 
   def destroy_sl
     [ :admin, :central_pharmacist ]
+  end
+
+  def purge_sl
+    [ :admin ]
   end
 end

@@ -9,9 +9,9 @@ class Prescription < ApplicationRecord
   belongs_to :professional
   belongs_to :patient
   has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests
+  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests, dependent: :destroy
   has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots
+  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots, dependent: :destroy
 
   # Validaciones
   validates_presence_of :patient

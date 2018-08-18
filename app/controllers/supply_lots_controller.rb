@@ -1,5 +1,6 @@
 class SupplyLotsController < ApplicationController
-  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy, :delete, :restore, :restore_confirm]
+  before_action :set_supply_lot, only: [:show, :edit, :update, :destroy, :delete,
+    :restore, :restore_confirm, :purge, :purge_confirm]
 
   # GET /supply_lots
   # GET /supply_lots.json
@@ -13,13 +14,14 @@ class SupplyLotsController < ApplicationController
         with_status: SupplyLot.options_for_status
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'creacion_desc'},
+      default_filter_params: {sorted_by: 'insumo_asc'},
       available_filters: [
         :sorted_by,
         :with_status,
         :search_text,
         :search_lot_code,
-        :date_received_at
+        :search_laboratory,
+        :expired_from
       ],
     ) or return
     @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
@@ -78,12 +80,19 @@ class SupplyLotsController < ApplicationController
     authorize @supply_lot
 
     respond_to do |format|
-      if @supply_lot.save!
-        flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha creado correctamente."
-        format.js
-      else
-        flash.now[:error] = "El lote no se ha podido crear."
-        format.js
+      begin
+        if @supply_lot.save!
+          flash.now[:success] = "El lote de "+@supply_lot.supply_name+" se ha creado correctamente."
+          format.js
+        else
+          flash.now[:error] = "El lote no se ha podido crear."
+          format.js
+        end
+      rescue ActiveRecord::RecordInvalid => e
+        if e.message == 'Validation failed: Lot code ya está en uso'
+          flash.now[:alert] = "El código de lote "+@supply_lot.lot_code+" ya está registrado en "+@supply_lot.laboratory.name+"."
+          format.js
+        end
       end
     end
   end
@@ -116,21 +125,6 @@ class SupplyLotsController < ApplicationController
     end
   end
 
-  # GET /supply_lot/1/delete
-  def delete
-    authorize @supply_lot
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  # GET /supply_lot/1/restore_confirm
-  def restore_confirm
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # GET /supply_lot/1/restore
   def restore
     authorize @supply_lot
@@ -138,6 +132,17 @@ class SupplyLotsController < ApplicationController
 
     respond_to do |format|
       flash.now[:success] = "El lote con código "+@supply_lot.code+" se ha restaurado correctamente."
+      format.js
+    end
+  end
+
+  def purge
+    authorize @supply_lot
+    @code = @supply_lot.code
+    @supply_lot.really_destroy!
+
+    respond_to do |format|
+      flash.now[:success] = "El lote con código "+@code+" se ha eliminado definitivamente."
       format.js
     end
   end
@@ -151,9 +156,9 @@ class SupplyLotsController < ApplicationController
 
   def search_by_lot_code
     @supply_lots = SupplyLot.order(:lot_code).search_lot_code(params[:term]).limit(10)
-    render json: @supply_lots.map{ |sup_lot| { label: sup_lot.lot_code,
-      id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
-      code: sup_lot.code, supply_id: sup_lot.supply_id } }
+    render json: @supply_lots.map{ |sup_lot| { label: sup_lot.lot_code+" | "+sup_lot.laboratory.name,
+      id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date, value: sup_lot.lot_code,
+      code: sup_lot.code, supply_id: sup_lot.supply_id, lab_name: sup_lot.laboratory.name, lab_id: sup_lot.laboratory_id } }
   end
 
   def search_by_name
@@ -170,6 +175,6 @@ class SupplyLotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_lot_params
-      params.require(:supply_lot).permit(:lot_code, :supply_id, :quantity, :expiry_date, :date_received)
+      params.require(:supply_lot).permit(:lot_code, :supply_id,  :laboratory_id, :expiry_date)
     end
 end

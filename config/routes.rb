@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     member do
       get "delete"
     end
+    collection do
+      get "search_by_name"
+    end
   end
   resources :ordering_supplies do
     member do
@@ -23,6 +26,7 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
+      get "purge"; get "purge_confirm"
     end
     collection do
       get "trash_index"
@@ -36,6 +40,7 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
+      get "purge"; get "purge_confirm"
     end
     collection do
       get "trash_index"

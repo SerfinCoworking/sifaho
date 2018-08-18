@@ -13,9 +13,9 @@ $(document).on('turbolinks:load', function() {
     $('#supply-lot-code').focus();
   });
 
+  // Función para autocompletar código de lote
   jQuery(function() {
     var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#supply-lot-code').autocomplete({
       source: $('#supply-lot-code').data('autocomplete-source'),
       minLength: 1,
@@ -37,7 +37,9 @@ $(document).on('turbolinks:load', function() {
         $("#supply-lot-code").val(ui.item.id);
         $("#supply-code").val(ui.item.code).prop( "disabled", true );
         $("#sector_supply_lot_supply_id").val(ui.item.supply_id);
-        $("#sector_supply_lot_lot_code").val(ui.item.label);
+        $("#sector_supply_lot_lot_code").val(ui.item.value);
+        $("#laboratory-lot").val(ui.item.lab_name);
+        $("#sector_supply_lot_laboratory_id").val(ui.item.lab_id);
         $("#expiry-date").prop( "disabled", true );
         if(ui.item.expiry_date){
           var date = new Date(ui.item.expiry_date);
@@ -49,12 +51,9 @@ $(document).on('turbolinks:load', function() {
       response: function(event, ui) {
         if (!ui.content.length) {
             var noResult = { value:"",label:"Nuevo lote" };
-            $("#supply-name").val('').prop( "disabled", false );
-            $("#supply-lot-id").val('').prop( "disabled", false );
-            $("#supply-code").val('').prop( "disabled", false );
-            $("#expiry-date").val('').prop( "disabled", false );
-            $("#sector_supply_lot_expiry_date").val('');
-            $("#sector_supply_lot_supply_id").val('');
+            $("#supply-name").prop( "disabled", false );
+            $("#supply-code").prop( "disabled", false );
+            $("#expiry-date").prop( "disabled", false );
             $("#sector_supply_lot_lot_code").val($(this).val());
             ui.content.push(noResult);
         }
@@ -150,4 +149,35 @@ $(document).on('turbolinks:load', function() {
         $(this).autocomplete("widget").insertAfter($("#dialog").parent());
     })
   });
+});
+
+jQuery(function() {
+  var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+
+  return $('#laboratory-lot').autocomplete({
+    source: $('#laboratory-lot').data('autocomplete-source'),
+    autoFocus: true,
+    minLength: 2,
+    open: function (e, ui) {
+      var acData = $(this).data('ui-autocomplete');
+      acData
+      .menu
+      .element
+      .find('li')
+      .each(function () {
+          var me = $(this);
+          var keywords = acData.term.split(' ').join('|');
+          me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+      });
+    },
+    select:
+    function (event, ui) {
+      $("#sector_supply_lot_laboratory_id").val(ui.item.id);
+      $("#supply-name").prop( "disabled", false );
+      $("#supply-code").prop( "disabled", false );
+      $("#expiry-date").prop( "disabled", false );
+    }
+  }).each(function() {
+      $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+  })
 });

@@ -4,6 +4,6 @@ class ChartsController < ApplicationController
   end
 
   def by_laboratory_lots
-    render json: Laboratory.joins(:supply_lots).group('supply_lots').count
+    render json: SupplyLot.joins(:laboratory).group('laboratories.name').count
   end
 end

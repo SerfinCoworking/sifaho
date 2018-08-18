@@ -1,6 +1,5 @@
   <tr id="sector_supply_lot_<%= sector_supply_lot.id %>">
     <div class="js-fade fade-in is-paused">
-      <td><%= sector_supply_lot.lot_code %></td>
       <td><%= sector_supply_lot.code %></td>
       <td class="col-sup-name"><%= sector_supply_lot.supply_name %></td>
       <td>
@@ -13,7 +12,8 @@
           <%= sector_supply_lot.quantity %>/<%= sector_supply_lot.initial_quantity %>
         </div>
       </td>
-      <td><%= sector_supply_lot.created_at.strftime("%d/%m/%Y") %></td>
+      <td><%= sector_supply_lot.lot_code %></td>
+      <td><%= sector_supply_lot.laboratory %></td>
       <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
       <td class="text-center">
         <% if policy(sector_supply_lot).show? %>
@@ -27,6 +27,12 @@
             <%= link_to restore_confirm_sector_supply_lot_path(sector_supply_lot), remote: true,
                   class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+            <% end %>
+          <% end %>
+          <% if policy(sector_supply_lot).purge? %>
+            <%= link_to purge_confirm_sector_supply_lot_path(sector_supply_lot), remote: true,
+                  class: 'btn btn-danger btn-xs', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
             <% end %>
           <% end %>
         <% else %>

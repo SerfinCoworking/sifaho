@@ -1,0 +1,20 @@
+// Add the dialog title
+$('#dialog h4').html("<h4><i class=' glyphicon glyphicon-remove'></i>  Eliminar definitivamente lote de insumos</h4>");
+
+// Render the edit form
+$('.modal-body').html(
+  'Esta seguro que desea eliminar definitivamente el siguiente lote?<br>'+
+  "<strong>N°: </strong><%= @supply_lot.id %><br>"+
+  "<strong>Código: </strong><%= @supply_lot.code %><br>"+
+  "<strong>Insumo: </strong><%= @supply_lot.supply_name %><br>"+
+  "<strong>Enviado a la papelera: </strong><%= @supply_lot.deleted_at.strftime('%d/%m/%y %H:%M') %>"
+);
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<a data-remote='true' data-method='get' href='/supply_lots/<%= @supply_lot.id %>/purge' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");

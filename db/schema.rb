@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815220430) do
+ActiveRecord::Schema.define(version: 20180817234126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,11 +35,9 @@ ActiveRecord::Schema.define(version: 20180815220430) do
   end
 
   create_table "laboratories", force: :cascade do |t|
-    t.integer "cuit"
-    t.integer "gln"
+    t.bigint "cuit"
+    t.bigint "gln"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
   end
@@ -301,6 +299,7 @@ ActiveRecord::Schema.define(version: 20180815220430) do
     t.bigint "laboratory_id"
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_supply_lots_on_laboratory_id"
+    t.index ["lot_code", "laboratory_id"], name: "index_supply_lots_on_lot_code_and_laboratory_id", unique: true
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 

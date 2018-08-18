@@ -1,5 +1,6 @@
 class SectorSupplyLotsController < ApplicationController
-  before_action :set_sector_supply_lot, only: [:show, :destroy, :delete, :restore, :restore_confirm]
+  before_action :set_sector_supply_lot, only: [:show, :destroy, :delete, :restore,
+    :restore_confirm, :purge, :purge_confirm]
 
   # GET /sector_supply_lots
   # GET /sector_supply_lots.json
@@ -62,6 +63,7 @@ class SectorSupplyLotsController < ApplicationController
   def create
     @supply_lot = SupplyLot.where(
       lot_code: sector_supply_lot_params[:lot_code],
+      laboratory_id: sector_supply_lot_params[:laboratory_id],
       supply_id: sector_supply_lot_params[:supply_id],
     ).first_or_initialize
     @supply_lot.expiry_date = sector_supply_lot_params[:expiry_date]
@@ -90,7 +92,7 @@ class SectorSupplyLotsController < ApplicationController
         end
       rescue ActiveRecord::RecordInvalid => e
         if e.message == 'Validation failed: Lot code ya está en uso'
-          flash.now[:error] = "El lote provincial se encuentra en la papelera."
+          flash.now[:error] = "Ya existe el lote y el insumo no corresponde al mismo."
           format.js
         end
       end
@@ -109,21 +111,6 @@ class SectorSupplyLotsController < ApplicationController
     end
   end
 
-  # GET /supply_lot/1/delete
-  def delete
-    authorize @sector_supply_lot
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  # GET /supply_lot/1/restore_confirm
-  def restore_confirm
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # GET /supply_lot/1/restore
   def restore
     authorize @sector_supply_lot
@@ -131,6 +118,17 @@ class SectorSupplyLotsController < ApplicationController
 
     respond_to do |format|
       flash.now[:success] = "El lote con código "+@sector_supply_lot.code+" se ha restaurado correctamente."
+      format.js
+    end
+  end
+
+  def purge
+    authorize @sector_supply_lot
+    @code = @sector_supply_lot.code
+    @sector_supply_lot.really_destroy!
+
+    respond_to do |format|
+      flash.now[:success] = "El lote con código "+@code+" se ha eliminado definitivamente."
       format.js
     end
   end
@@ -156,7 +154,7 @@ class SectorSupplyLotsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sector_supply_lot_params
-      params.require(:sector_supply_lot).permit(:quantity, :expiry_date, :date_received,
-        :supply_lot_id, :supply_id, :lot_code, :created_at)
+      params.require(:sector_supply_lot).permit(:quantity, :expiry_date,
+        :supply_lot_id, :supply_id, :lot_code, :laboratory_id)
     end
 end
