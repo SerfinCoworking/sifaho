@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require chosen-jquery
+//= require bootstrap-select
 //= require filterrific/filterrific-jquery
 //= require highcharts
 //= require chartkick

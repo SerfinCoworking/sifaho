@@ -13,6 +13,7 @@
  *= require_tree .
  *= require_self
  *= require chosen
+ *= require bootstrap-select
  */
  @import 'bootstrap-sprockets';
  @import 'bootstrap';

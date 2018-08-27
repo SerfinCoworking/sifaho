@@ -12,6 +12,8 @@ $(document).on('turbolinks:load', function() {
 
   $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY'});
 
+  $('.selectpicker').selectpicker();
+
   var sidebar = document.getElementById('custom-sidebar');
   var page_header = document.getElementById('page-header');
   // Se cambia el color de la sombra del menú lateral

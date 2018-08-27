@@ -1,33 +1,75 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Ordering Supplies</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Sector</th>
-      <th>Observation</th>
-      <th>Date received</th>
-      <th>Status</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @ordering_supplies.each do |ordering_supply| %>
-      <tr>
-        <td><%= ordering_supply.sector %></td>
-        <td><%= ordering_supply.observation %></td>
-        <td><%= ordering_supply.date_received %></td>
-        <td><%= ordering_supply.status %></td>
-        <td><%= link_to 'Show', ordering_supply %></td>
-        <td><%= link_to 'Edit', edit_ordering_supply_path(ordering_supply) %></td>
-        <td><%= link_to 'Destroy', ordering_supply, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<% content_for :page_header do %>
+  <h3>Pedidos a abastecimiento
+  <% if policy(OrderingSupply).new? %>
+    <%= link_to new_ordering_supply_path, class: 'btn btn-primary btn-sm' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Nuevo
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+  <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+    Filtrar
+  <% end %>
+  </h3>
+<% end %>
 
-<br>
+<div class="panel panel-info" id="filter-panel">
+  <div class="panel-collapse collapse" id="filter">
+    <div class="panel-body">
+      <%= form_for_filterrific @filterrific do |f| %>
+        <div class="col-md-2 col-sm-2">
+          <label>Proveedor</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_professional_and_patient,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Nombre',
+            autocomplete: 'off',
+          ) %>
+        </div>
+        <div class="col-md-1 col-sm-1">
+          <label>Insumo</label>
+          <%= f.text_field(
+            :search_supply_code,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Cód'
+          ) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <label>Insumo</label>
+          <%= f.text_field(
+            :search_supply_name,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Nombre'
+          ) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <label>Ordenar por</label>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+           <label>Recetado desde</label>
+           <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
+              class: 'datetimepicker form-control filterrific-periodically-observed',
+              placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+           <label>Dispensado desde</label>
+           <%= f.text_field(:date_dispensed_since, autocomplete: 'off',
+              class: 'datetimepicker form-control filterrific-periodically-observed',
+              placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+        </div>
+        <%= link_to reset_filterrific_url, class: "btn btn-default btn-md pull-right" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+        <!-- Spinner para la carga -->
+        <%= render_filterrific_spinner %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<%= link_to 'New Ordering Supply', new_ordering_supply_path %>
+<%= render(
+  partial: 'ordering_supplies/list',
+  locals: { ordering_supplies: @ordering_supplies }
+) %>

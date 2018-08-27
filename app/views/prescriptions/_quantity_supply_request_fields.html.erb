@@ -19,36 +19,47 @@
                     :input_html => {
                       class: "supply-name",
                       data: { autocomplete_source: search_by_name_supplies_path },
-                      size: 38,
+                      size: 45,
                       value: "#{f.object.supply_name unless f.object.new_record?}"
                     } %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
   <td>
-    <%= f.input :quantity, label: false, placeholder: 'Cant', required: true, disabled: true,
-                        input_html: {
-                          "data-tooltip"=>true,
-                          :class=>"has-tip supply-quantity",
-                          :title=>"Seleccione un insumo",
-                          "data-placement"=>"right",
-                          min: '1', max: '9999', step:'any', :style => 'width: 67px'
-                        } %>
+    <%= f.label :treatment_duration do %>
+      <%= f.input :treatment_duration, label: false, placeholder: 'Días',
+                              required: false, disabled: true,
+                              input_html: { "data-tooltip"=>true, :class=>"has-tip treat-durat",
+                              :title=>"Seleccione un insumo", "data-placement"=>"right",
+                              min: '1', step:'any', :style => 'width: 67px'
+                              } %>
+      Días
+    <% end %>
   </td>
   <td>
-    <%= f.input :daily_dose, label: false, placeholder: 'Días', required: false, disabled: true,
-                         input_html: { "data-tooltip"=>true, :class=>"has-tip daily-dose",
-                         :title=>"Seleccione un insumo", "data-placement"=>"right",
-                          min: '1', step:'any', :style => 'width: 67px' }%>
+    <%= f.label :daily_dose, class: 'daily-dose-label' do %>
+      <%= f.input :daily_dose, label: false, placeholder: 'Cant', required: false, disabled: true,
+                           input_html: { "data-tooltip"=>true, :class=>"has-tip daily-dose",
+                           :title=>"Seleccione un insumo", "data-placement"=>"right",
+                            min: '1', step:'any', :style => 'width: 67px' } %>
+      <p><%= f.object.unity unless f.object.new_record? %></p>
+    <% end %>
   </td>
   <td>
-    <%= f.input :treatment_duration, label: false, placeholder: 'Días',
-                            required: false, disabled: true,
-                            input_html: { "data-tooltip"=>true, :class=>"has-tip treat-durat",
-                            :title=>"Seleccione un insumo", "data-placement"=>"right",
-                            min: '1', step:'any', :style => 'width: 67px' }%>
+    <%= f.label :quantity, class: 'quantity-label' do %>
+      <%= f.input :quantity, label: false, placeholder: 'Cant', required: true, disabled: true,
+                          input_html: {
+                            "data-tooltip"=>true,
+                            :class=>"has-tip supply-quantity",
+                            :title=>"Seleccione un insumo",
+                            "data-placement"=>"right",
+                            min: '1', max: '9999', step:'any', :style => 'width: 67px'
+                          } %>
+      <p><%= f.object.unity unless f.object.new_record? %></p>
+    <% end %>
   </td>
   <td>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm' do %>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
     <% end %>
   </td>

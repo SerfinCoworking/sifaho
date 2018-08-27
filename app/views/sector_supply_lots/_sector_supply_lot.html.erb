@@ -38,7 +38,7 @@
         <% else %>
           <% if policy(sector_supply_lot).delete? %>
             <%= link_to delete_sector_supply_lot_path(sector_supply_lot), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             <% end %>
           <% end %>

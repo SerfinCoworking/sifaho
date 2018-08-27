@@ -23,6 +23,9 @@ class QuantitySupplyLot < ApplicationRecord
       self.sector_supply_lot.decrement(self.quantity)
   end
 
+  def laboratory
+    self.sector_supply_lot.laboratory
+  end
 
   def supply_name
     self.sector_supply_lot.supply_name

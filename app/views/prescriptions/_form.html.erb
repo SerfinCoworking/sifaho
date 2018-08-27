@@ -51,14 +51,14 @@
   </div>
 
   <!-- Insumos solicitados -->
-  <table class="table table-hover">
+  <table class="table table-condensed table-hover">
     <thead>
       <tr>
         <th>Cód. insumo</th>
         <th>Insumos solicitados</th>
-        <th>Cantidad</th>
+        <th>Tratamiento</th>
         <th>Dosis diaria</th>
-        <th>Duración tratamiento</th>
+        <th>Cantidad</th>
         <th></th>
       </tr>
     </thead>
@@ -69,20 +69,24 @@
     </tbody>
   </table>
   <div class="links" id="links-quant-form">
-    <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-sm',
-    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    <% end %>
+    <div class="text-center">
+      <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-xs',
+      data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Insumo
+      <% end %>
+    </div>
   </div>
 
   <!-- Insumos a dispensar -->
-  <table class="table table-hover">
+  <table class="table table-condensed table-hover">
     <thead>
       <tr>
         <th>Cód. insumo</th>
         <th>Insumos a dispensar</th>
         <th>Cantidad</th>
-        <th>Cód. lote</th>
+        <th>Lote</th>
+        <th>Laboratorio</th>
         <th>Expiración</th>
         <th></th>
       </tr>
@@ -94,10 +98,13 @@
     </tbody>
   </table>
   <div class="links" id="links-quant-form">
-    <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm',
-    data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    <% end %>
+    <div class="text-center">
+      <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-xs',
+      data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Insumo
+      <% end %>
+    </div>
   </div>
 
   <div class='row'>
@@ -124,7 +131,7 @@
                                     required: true,
                                     autocomplete: 'off',
                                     :style => 'width: 110px',
-                                    value: "#{@prescription.expiry_date unless @prescription.new_record?}"
+                                    value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
                                   },
                                   html5: false
                                   %>

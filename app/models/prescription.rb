@@ -3,7 +3,7 @@ class Prescription < ApplicationRecord
   include PgSearch
 
   # Estados
-  enum status: { pendiente: 0, dispensada: 1 }
+  enum status: { pendiente: 0, dispensada: 1, vencida: 2 }
 
   # Relaciones
   belongs_to :professional
@@ -45,6 +45,8 @@ class Prescription < ApplicationRecord
       :date_dispensed_since,
     ]
   )
+
+  # SCOPES #--------------------------------------------------------------------
 
   pg_search_scope :search_professional_and_patient,
   :associated_against => { :professional => :fullname, patient: [:last_name, :first_name] },
@@ -105,27 +107,13 @@ class Prescription < ApplicationRecord
     where('prescriptions.date_dispensed >= ?', reference_time)
   }
 
-  # Método para establecer las opciones del select input del filtro
-  # Es llamado por el controlador como parte de `initialize_filterrific`.
-  def self.options_for_sorted_by
-    [
-      ['Creación', 'created_at_asc'],
-      ['Doctor (a-z)', 'doctor_asc'],
-      ['Paciente (a-z)', 'paciente_asc'],
-      ['Estado (a-z)', 'estado_asc'],
-      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
-      ['Fecha recetada (desc)', 'recetada_desc'],
-      ['Fecha recibida (desc)', 'recibida_desc'],
-      ['Fecha dispensada (asc)', 'dispensada_asc'],
-      ['Cantidad', 'cantidad_asc']
-    ]
-  end
-
-  #Métodos públicos
+  # Métodos públicos #----------------------------------------------------------
 
   # Cambia estado a dispensado y descuenta la cantidad a los insumos
   def dispense
-    if dispensada?
+    if vencida?
+      raise ArgumentError, "La prescripción está vencida"
+    elsif dispensada?
       raise ArgumentError, "Ya se ha entregado esta prescripción"
     else
       if self.quantity_supply_lots.present?
@@ -142,10 +130,12 @@ class Prescription < ApplicationRecord
 
   # Label del estado para vista.
   def status_label
-    if self.dispensada?; return 'success'; elsif self.pendiente?; return 'default'; end
+    if self.dispensada?; return 'success';
+    elsif self.pendiente?; return 'default';
+    elsif self.vencida?; return 'danger'; end
   end
 
-  # Métodos de clase
+  # Métodos de clase #----------------------------------------------------------
 
   def self.current_day
     where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })
@@ -153,5 +143,21 @@ class Prescription < ApplicationRecord
 
   def self.current_month
     where("prescribed_date >= :month", { month: DateTime.now.beginning_of_month })
+  end
+
+  # Método para establecer las opciones del select sorted_by
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
+  def self.options_for_sorted_by
+    [
+      ['Creación', 'created_at_asc'],
+      ['Doctor (a-z)', 'doctor_asc'],
+      ['Paciente (a-z)', 'paciente_asc'],
+      ['Estado (a-z)', 'estado_asc'],
+      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
+      ['Fecha recetada (desc)', 'recetada_desc'],
+      ['Fecha recibida (desc)', 'recibida_desc'],
+      ['Fecha dispensada (asc)', 'dispensada_asc'],
+      ['Cantidad', 'cantidad_asc']
+    ]
   end
 end

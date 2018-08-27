@@ -144,12 +144,14 @@ class SuppliesController < ApplicationController
 
   def search_by_name
     @supplies = Supply.order(:name).search_text(params[:term]).limit(15)
-    render json: @supplies.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration } }
+    render json: @supplies.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration,
+      unity: sup.unity } }
   end
 
   def search_by_id
     @supplies = Supply.order(:id).with_code(params[:term]).limit(8)
-    render json: @supplies.map{ |sup| { label: sup.id.to_s+" "+sup.name, value: sup.id, name: sup.name , expiry: sup.needs_expiration } }
+    render json: @supplies.map{ |sup| { label: sup.id.to_s+" "+sup.name, value: sup.id,
+      name: sup.name , expiry: sup.needs_expiration, unity: sup.unity } }
   end
 
   private

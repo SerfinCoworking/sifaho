@@ -166,6 +166,10 @@ class SupplyLot < ApplicationRecord
     end
   end
 
+  def laboratory_name
+    self.laboratory.name
+  end
+
   # Retorna el tipo de unidad
   def unity
     self.supply.unity

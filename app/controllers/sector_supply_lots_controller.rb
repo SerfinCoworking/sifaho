@@ -14,11 +14,11 @@ class SectorSupplyLotsController < ApplicationController
         with_status: SectorSupplyLot.options_for_status
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'recepcion_desc'},
+      default_filter_params: {sorted_by: 'insumo_asc'},
       available_filters: [
         :sorted_by,
         :with_status,
-        :search_text,
+        :search_supply_name,
         :with_code,
         :date_received_at
       ],
@@ -134,15 +134,22 @@ class SectorSupplyLotsController < ApplicationController
   end
 
   def search_by_code
-    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10)
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(2)
+    render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,
+      value: sup_lot.code, id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
+      quant: sup_lot.quantity, lot_code: sup_lot.lot_code, lab: sup_lot.laboratory, status_label: sup_lot.status_label } }
+  end
+
+  def get_with_code
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).without_status(2).sorted_by("expiracion_asc")
     render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,
       value: sup_lot.code, id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
       quant: sup_lot.quantity, lot_code: sup_lot.lot_code } }
   end
 
   def search_by_name
-    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).search_text(params[:term]).limit(10)
-    render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.supply_name, code: sup_lot.code, id: sup_lot.id,
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).search_supply_name(params[:term]).limit(10)
+    render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.supply_name, code: sup_lot.code, id: sup_lot.id, lab: sup_lot.laboratory,
       quant: sup_lot.quantity, expiry_date: sup_lot.expiry_date, value: sup_lot.supply_name, lot_code: sup_lot.lot_code } }
   end
 

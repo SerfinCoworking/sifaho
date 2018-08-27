@@ -47,6 +47,14 @@
 
 #custom-sidebar{
   z-index: 1;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow-y: auto;
+  position: fixed;
+}
+#custom-sidebar::-webkit-scrollbar {
+    display: none;  // Safari and Chrome
 }
 #custom-sidebar .active a,
 #custom-sidebar ul>.active a{
@@ -177,9 +185,6 @@ li .well strong{
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-#login-btn{
-  width: 100%;
 }
 .modal-dialog{
   position: relative;

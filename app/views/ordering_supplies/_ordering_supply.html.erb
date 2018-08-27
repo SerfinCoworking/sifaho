@@ -1,0 +1,59 @@
+<tr id="ordering_supply_<%= ordering_supply.id %>">
+  <td class="pres-col-pro"><%= ordering_supply.professional.full_name %></td>
+  <td class="pres-col-pat"><%= ordering_supply.patient.full_info %></td>
+  <td>
+    <span class="label label-<%= ordering_supply.status_label %>">
+      <%= ordering_supply.status.split('_').map(&:capitalize).join(' ') %>
+    </span>
+  </td>
+  <td class="pres-col-sup">
+    <% if ordering_supply.quantity_ord_supply_lots.present? %>
+      (<%= ordering_supply.quantity_ord_supply_lots.count %>)
+      <% ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+        <span class="badge">
+          <%= qosl.quantity %>
+        </span>
+        <%= qosl.supply_name %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %></td>
+    <% if ordering_supply.recibida? %>
+      <td>
+      <%= ordering_supply.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <% if policy(ordering_supply).receive? %>
+        <td class="text-center">
+        <%= link_to receive_ordering_supply_path(ordering_supply), remote: true,
+              class: 'btn btn-success btn-xs', title: 'Recibir', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        <% end %>
+      <% else %>
+        <td>
+        Sin recibir
+      <% end  %>
+    <% end %>
+  </td>
+  <td>
+    <% if policy(ordering_supply).show? %>
+      <%= link_to ordering_supply_path(ordering_supply), remote:true,
+            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+    <% if policy(ordering_supply).edit? %>
+      <% unless ordering_supply.dispensada? %>
+        <%= link_to edit_ordering_supply_path(ordering_supply), remote: true,
+              class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if policy(ordering_supply).delete? %>
+      <%= link_to delete_ordering_supply_path(ordering_supply), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

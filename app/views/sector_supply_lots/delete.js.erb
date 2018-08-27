@@ -1,9 +1,9 @@
 // Add the dialog title
-$('#dialog h4').html("<h4><i class=' glyphicon glyphicon-trash'></i>  Borrando lote de insumos</h4>");
+$('#dialog h4').html("<h4><i class=' glyphicon glyphicon-trash'></i>  Desechando lote</h4>");
 
 // Render the edit form
 $('.modal-body').html(
-  'Esta seguro que desea eliminar el siguiente lote?<br>'+
+  'Esta seguro que desea enviar a la papelera el siguiente lote?<br>'+
   "<strong>Lote: </strong><%= @sector_supply_lot.lot_code %><br>"+
   "<strong>Código insumo: </strong><%= @sector_supply_lot.code %><br>"+
   "<strong>Insumo: </strong><%= @sector_supply_lot.supply_name %>"

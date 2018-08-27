@@ -16,7 +16,7 @@
           <label>Insumo</label>
           <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
           <%= f.text_field(
-            :search_text,
+            :search_supply_name,
             class: 'filterrific-periodically-observed form-control',
             placeholder: 'Nombre de insumo',
             autocomplete: 'off'
@@ -24,11 +24,15 @@
         </div>
         <div class="col-md-2 col-sm-2">
           <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
         </div>
         <div class="col-md-2 col-sm-2">
           <label>Estado</label>
-          <%= f.select(:with_status, @filterrific.select_options[:with_status],{}, {class: 'form-control'}) %>
+          <%= f.select(:with_status,
+            @filterrific.select_options[:with_status].map {
+              |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
+            },{},
+            { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
         </div>
         <div class="col-md-2 col-sm-2">
            <label>Recibido desde</label>

@@ -29,29 +29,26 @@ class SectorSupplyLot < ApplicationRecord
   validates_presence_of :initial_quantity
 
   filterrific(
-    default_filter_params: { sorted_by: 'creacion_desc' },
+    default_filter_params: { sorted_by: 'insumo_asc' },
     available_filters: [
       :with_code,
       :sorted_by,
       :with_status,
-      :search_text,
+      :search_supply_name,
       :date_received_at
     ]
   )
+
+  # SCOPES #--------------------------------------------------------------------
 
   pg_search_scope :with_code,
   :associated_against => {
     :supply_lot => :code
   },
-  :using => {
-    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
-  },
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_text,
-  :associated_against => {
-    :supply_lot => :supply_name
-  },
+  pg_search_scope :search_supply_name,
+  associated_against: { :supply_lot => :supply_name },
   :using => {
     :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
   },
@@ -66,13 +63,13 @@ class SectorSupplyLot < ApplicationRecord
       order("sector_supply_lots.created_at #{ direction }")
     when /^lote_/
       # Ordenamiento por código de lote
-      order("LOWER(supply_lots.lot_code) #{ direction }").joins(:supply_lots)
+      order("LOWER(supply_lots.lot_code) #{ direction }").joins(:supply_lot)
     when /^cod_ins_/
       # Ordenamiento por código de lote
-      order("LOWER(supply_lots.code) #{ direction }").joins(:supply_lots)
+      order("LOWER(supply_lots.code) #{ direction }").joins(:supply_lot)
     when /^insumo_/
       # Ordenamiento por nombre del insumo
-      order("LOWER(supply_lots.supply_name) #{ direction }").joins(:supply_lots)
+      order("LOWER(supply_lots.supply_name) #{ direction }").joins(:supply_lot)
     when /^estado_/
       # Ordenamiento por estado del lote
       order("sector_supply_lots.status #{ direction }")
@@ -84,7 +81,7 @@ class SectorSupplyLot < ApplicationRecord
       order("sector_supply_lots.quantity #{ direction }")
     when /^expiracion_/
       # Ordenamiento por fecha de expiración
-      order("supply_lots.expiry_date #{ direction }").joins(:supply_lots)
+      order("supply_lots.expiry_date #{ direction }").joins(:supply_lot)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -99,11 +96,16 @@ class SectorSupplyLot < ApplicationRecord
     where('sector_supply_lots.status = ?', a_status)
   }
 
+  scope :without_status, lambda { |a_status|
+    where.not('sector_supply_lots.status = ?', a_status )
+  }
+
+  # Métodos públicos #----------------------------------------------------------
+
   def laboratory
-    self.supply_lot.laboratory.name
+    self.supply_lot.laboratory_name
   end
 
-  # Métodos públicos #---------------------------------------------------------
   def increment(a_quantity)
     self.quantity = 0 unless self.quantity.present?
     self.quantity += a_quantity
@@ -145,7 +147,7 @@ class SectorSupplyLot < ApplicationRecord
     elsif self.vencido?
       return 'danger'
     elsif self.agotado?
-      return 'danger'
+      return 'info'
     end
   end
 
@@ -228,11 +230,11 @@ class SectorSupplyLot < ApplicationRecord
 
   def self.options_for_status
    [
-     ['Todos', ''],
-     ['Vigentes', 0],
-     ['Por vencer', 1],
-     ['Vencidos', 2],
-     ['Agotados', 3],
+     ['Todos', '', 'primary'],
+     ['Vigentes', 0, 'success'],
+     ['Por vencer', 1, 'warning'],
+     ['Vencidos', 2, 'danger'],
+     ['Agotados', 3, 'info'],
    ]
   end
 end

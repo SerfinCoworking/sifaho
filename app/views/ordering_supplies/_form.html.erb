@@ -1,14 +1,55 @@
-<%= simple_form_for(@ordering_supply) do |f| %>
+<%= simple_form_for @ordering_supply, remote: true, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.association :sector %>
-    <%= f.input :observation %>
-    <%= f.input :date_received %>
-    <%= f.input :status %>
+  <div class='row'>
+    <div class='col-md-7'>
+      <%= f.input :responsable_id, as: :string,
+                        label: 'Responsable',
+                        disable: true,
+                        :input_html => {
+                          value: "#{if f.new_record?; current_user.fullname; else; f.responsable.fullname; end}",
+                          size: 7
+                        } %>
+      <%= f.hidden_field :responsable_id, value: "#{if f.new_record?; current_user.id; else; f.responsable.id; end}" %>
+      <%= f.input :sector_id, as: :string, class: 'form-control',
+                        label: "Sector",
+                        disable: true,
+                        :input_html => {
+                          value: "#{if f.new_record?; current_user.sector.sector_name; else; f.sector.sector_name; end}",
+                          size: 10
+                        } %>
+      <%= f.hidden_field :sector_id, value: "#{if f.new_record?; current_user.sector_id; else; f.sector_id; end}" %>
+    </div>
+    <div class='col-md-5'>
+      <br><br>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 30  , :rows => 5 } %>
+    </div>
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+  <!-- Insumos a dispensar -->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cód. insumo</th>
+        <th>Insumos</th>
+        <th>Cant. solicitada</th>
+        <th>Cant. recibida</th>
+        <th>Cód. lote</th>
+        <th>Laboratorio</th>
+        <th>Expiración</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_ord_supply_lots">
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "quantity_supply_lot_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
+    data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+    <% end %>
   </div>
 <% end %>

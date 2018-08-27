@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
 
 end
 
+# For pretty selects
+gem 'bootstrap-select-rails'
 # For full text search
 gem 'pg_search'
 # To avoid delete records
