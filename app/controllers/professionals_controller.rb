@@ -16,7 +16,8 @@ class ProfessionalsController < ApplicationController
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :sorted_by,
-        :search_query,
+        :search_professional,
+        :search_professional_enrollment,
         :search_dni,
         :with_professional_type_id,
       ],
@@ -105,7 +106,7 @@ class ProfessionalsController < ApplicationController
   end
 
   def doctors
-    @doctors = Professional.order(:first_name).search_query(params[:term]).limit(10)
+    @doctors = Professional.order(:first_name).search_professional(params[:term]).limit(10)
     render json: @doctors.map{ |doc| { id: doc.id, dni: doc.dni, label: doc.fullname, enrollment: doc.enrollment } }
   end
 

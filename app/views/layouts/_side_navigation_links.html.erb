@@ -14,13 +14,27 @@
     <% if policy(Prescription).index? %>
       <%= link_to prescriptions_url do %>
         Prescripciones
+        <% if policy(Prescription).new? %>
+          <div class="btn-add-pres">
+            <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
   </li>
   <li id="pedidos-li" class="<%= active_class(internal_orders_path) %>">
     <% if policy(InternalOrder).index? %>
-      <%= link_to internal_orders_path do %>
+      <%= link_to internal_orders_url do %>
         Internos
+        <% if policy(InternalOrder).new? %>
+          <div class="btn-add-int">
+            <%= link_to new_deliver_internal_orders_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
   </li>

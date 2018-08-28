@@ -19,7 +19,8 @@ class Professional < ApplicationRecord
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :sorted_by,
-      :search_query,
+      :search_professional,
+      :search_professional_enrollment,
       :search_dni,
       :with_professional_type_id,
     ]
@@ -30,32 +31,10 @@ class Professional < ApplicationRecord
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-
-  # Se definen ActiveRecord scopes para
-  # :search_query, :sorted_by, :search_dni, :with_sector_id
-  scope :search_query, lambda { |query|
-    #Se retorna nil si no hay texto en la query
-    return nil  if query.blank?
-
-    # Se pasa a minusculas para busqueda en postgresql
-    # Luego se dividen las palabras en claves individuales
-    terms = query.downcase.split(/\s+/)
-
-    # Remplaza "*" con "%" para busquedas abiertas con LIKE
-    # Agrega '%', remueve los '%' duplicados
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-
-    # Cantidad de condiciones.
-    num_or_conds = 2
-    where(
-      terms.map { |term|
-        "(LOWER(professionals.first_name) LIKE ? OR LOWER(professionals.last_name) LIKE ?)"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conds }.flatten
-    )
-  }
+  pg_search_scope :search_professional,
+  against: [:first_name, :last_name],
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

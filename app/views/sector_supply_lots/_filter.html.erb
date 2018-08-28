@@ -23,16 +23,16 @@
           ) %>
         </div>
         <div class="col-md-2 col-sm-2">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
           <label>Estado</label>
           <%= f.select(:with_status,
             @filterrific.select_options[:with_status].map {
               |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
             },{},
             { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
+        </div>
+        <div class="col-md-2 col-sm-2">
+          <label>Ordenar por</label>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
         </div>
         <div class="col-md-2 col-sm-2">
            <label>Recibido desde</label>

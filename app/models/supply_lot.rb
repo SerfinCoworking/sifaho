@@ -4,6 +4,7 @@ class SupplyLot < ApplicationRecord
 
   enum status: { vigente: 0, por_vencer: 1, vencido: 2}
 
+  # Callbacks
   before_validation :assign_constants
   after_validation :update_status
   before_update :update_status, if: :will_save_change_to_expiry_date?
@@ -38,6 +39,8 @@ class SupplyLot < ApplicationRecord
       :expired_from
     ]
   )
+
+  # SCOPES #--------------------------------------------------------------------
 
   pg_search_scope :search_lot_code,
   against: :lot_code,
@@ -106,28 +109,8 @@ class SupplyLot < ApplicationRecord
     where(sector: a_sector)
   end
 
-  # Método para establecer las opciones del select input del filtro
-  # Es llamado por el controlador como parte de `initialize_filterrific`.
-  def self.options_for_sorted_by
-   [
-     ['Creación (desc)', 'creacion_desc'],
-     ['Código de lote (asc)', 'lote_asc'],
-     ['Código de insumo (asc)', 'cod_ins_asc'],
-     ['Insumo (a-z)', 'insumo_asc'],
-     ['Fecha expiración (asc)', 'expiracion_asc'],
-   ]
-  end
+  # Métodos públicos #----------------------------------------------------------
 
-  def self.options_for_status
-   [
-     ['Todos', ''],
-     ['Vigentes', 0],
-     ['Por vencer', 1],
-     ['Vencidos', 2],
-   ]
-  end
-
-  #Métodos públicos
   # Disminuye la cantidad
   def decrement(a_quantity)
     if quantity < a_quantity
@@ -179,6 +162,8 @@ class SupplyLot < ApplicationRecord
     self.supply.needs_expiration?
   end
 
+  # Métodos privados #----------------------------------------------------------
+
   private
   # Se actualiza el estado de expiración
   def update_status
@@ -206,5 +191,28 @@ class SupplyLot < ApplicationRecord
     self.code = self.supply_id.to_s
     self.supply_name = self.supply.name
     self.date_received = DateTime.now unless date_received.present?
+  end
+
+  # Métodos de clase #----------------------------------------------------------
+
+  # Opciones para ordenar por del filtro
+  def self.options_for_sorted_by
+   [
+     ['Creación (desc)', 'creacion_desc'],
+     ['Código de lote (asc)', 'lote_asc'],
+     ['Código de insumo (asc)', 'cod_ins_asc'],
+     ['Insumo (a-z)', 'insumo_asc'],
+     ['Fecha expiración (asc)', 'expiracion_asc'],
+   ]
+  end
+
+  # Opciones para estados del filtro
+  def self.options_for_status
+   [
+     ['Todos', '', 'primary'],
+     ['Vigentes', 0, 'success'],
+     ['Por vencer', 1, 'warning'],
+     ['Vencidos', 2, 'danger'],
+   ]
   end
 end

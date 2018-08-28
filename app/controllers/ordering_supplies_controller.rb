@@ -4,27 +4,25 @@ class OrderingSuppliesController < ApplicationController
   # GET /ordering_supplies
   # GET /ordering_supplies.json
   def index
-    def index
-      authorize OrderingSupply
-      @filterrific = initialize_filterrific(
-        OrderingSupply,
-        params[:filterrific],
-        select_options: {
-          sorted_by: OrderingSupply.options_for_sorted_by
-        },
-        persistence_id: false,
-        default_filter_params: {sorted_by: 'created_at_desc'},
-        available_filters: [
-          :search_professional_and_patient,
-          :search_supply_code,
-          :search_supply_name,
-          :sorted_by,
-          :date_prescribed_since,
-          :date_dispensed_since
-        ],
-      ) or return
-      @ordering_supplies = @filterrific.find.page(params[:page]).per_page(8)
-    end
+    authorize OrderingSupply
+    @filterrific = initialize_filterrific(
+      OrderingSupply,
+      params[:filterrific],
+      select_options: {
+        sorted_by: OrderingSupply.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :search_professional_and_patient,
+        :search_supply_code,
+        :search_supply_name,
+        :sorted_by,
+        :date_prescribed_since,
+        :date_dispensed_since
+      ],
+    ) or return
+    @ordering_supplies = @filterrific.find.page(params[:page]).per_page(8)
   end
 
   # GET /ordering_supplies/1
@@ -33,7 +31,7 @@ class OrderingSuppliesController < ApplicationController
     authorize @ordering_supply
     respond_to do |format|
       format.js
-    ends
+    end
   end
 
   # GET /ordering_supplies/new
