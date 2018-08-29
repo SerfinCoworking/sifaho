@@ -38,6 +38,20 @@
       <% end %>
     <% end %>
   </li>
+  <li id="pedidos-li" class="<%= active_class(ordering_supplies_path) %>">
+    <% if policy(OrderingSupply).index? %>
+      <%= link_to ordering_supplies_url do %>
+        Abastecimiento
+        <% if policy(OrderingSupply).new? %>
+          <div class="btn-add-int">
+            <%= link_to new_ordering_supply_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </li>
 </ul>
 
 

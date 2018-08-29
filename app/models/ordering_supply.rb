@@ -2,18 +2,17 @@ class OrderingSupply < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum status: { preparando: 0, pendiente: 1, recibido: 2, anulado: 3 }
+  enum status: { auditando: 0, pendiente: 1, recibido: 2, anulado: 3 }
 
   # Relaciones
-  belongs_to :responsable, class_name: 'User'
-  has_one :profile, :through => :responsable
-  belongs_to :sector
+  belongs_to :applicant_sector, class_name: 'Sector'
+  belongs_to :provider_sector, class_name: 'Sector'
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
 
   # Validaciones
-  validates_presence_of :responsable
-  validates_presence_of :sector
+  validates_presence_of :applicant_sector
+  validates_presence_of :provider_sector
   validates_presence_of :quantity_ord_supply_requests
   validates_presence_of :supply_lots
   validates_associated :quantity_ord_supply_requests

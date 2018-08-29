@@ -2,22 +2,26 @@
   <%= f.error_notification %>
   <div class='row'>
     <div class='col-md-7'>
-      <%= f.input :responsable_id, as: :string,
-                        label: 'Responsable',
-                        disable: true,
+      <%= f.input :applicant_id, as: :string,
+                        label: 'Solicitante',
+                        placeholder: 'Perez Juan',
                         :input_html => {
-                          value: "#{if f.new_record?; current_user.fullname; else; f.responsable.fullname; end}",
-                          size: 7
+                          id: "professional",
+                          data: { autocomplete_source: search_by_name_establishments_path },
+                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
+                          size: 33
                         } %>
       <%= f.hidden_field :responsable_id, value: "#{if f.new_record?; current_user.id; else; f.responsable.id; end}" %>
-      <%= f.input :sector_id, as: :string, class: 'form-control',
-                        label: "Sector",
-                        disable: true,
+      <%= f.input :provider_id, as: :string,
+                        label: 'Proveedor',
+                        placeholder: 'Perez Juan',
                         :input_html => {
-                          value: "#{if f.new_record?; current_user.sector.sector_name; else; f.sector.sector_name; end}",
-                          size: 10
+                          id: "provider",
+                          data: { autocomplete_source: search_by_name_establishments_path },
+                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
+                          size: 33
                         } %>
-      <%= f.hidden_field :sector_id, value: "#{if f.new_record?; current_user.sector_id; else; f.sector_id; end}" %>
+      <%= f.hidden_field :provider_id, id: "provider_id", value: "#{f.object.provider_id unless f.object.new_record?}" %>
     </div>
     <div class='col-md-5'>
       <br><br>

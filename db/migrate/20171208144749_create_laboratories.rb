@@ -5,6 +5,5 @@ class CreateLaboratories < ActiveRecord::Migration[5.1]
       t.bigint :gln, index: { unique: true }
       t.string :name
     end
-    add_reference :supply_lots, :laboratory, foreign_key: true
   end
 end

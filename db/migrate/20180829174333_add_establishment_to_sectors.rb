@@ -1,0 +1,5 @@
+class AddEstablishmentToSectors < ActiveRecord::Migration[5.1]
+  def change
+    add_reference :sectors, :establishment, foreign_key: true
+  end
+end

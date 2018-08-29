@@ -6,7 +6,9 @@ git_source(:github) do |repo_name|
 
 end
 
-# For pretty selects
+# For cron jobs
+gem 'whenever', require: false
+# For pretty selects Silvio Moreto
 gem 'bootstrap-select-rails'
 # For full text search
 gem 'pg_search'

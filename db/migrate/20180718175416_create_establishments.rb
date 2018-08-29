@@ -1,6 +1,6 @@
-class CreateProviders < ActiveRecord::Migration[5.1]
+class CreateEstablishments < ActiveRecord::Migration[5.1]
   def change
-    create_table :providers do |t|
+    create_table :establishments do |t|
       t.string :code
       t.string :name
       t.string :cuit

@@ -10,7 +10,7 @@ class SectorSupplyLot < ApplicationRecord
 
   # Relaciones
   belongs_to :sector
-  belongs_to :supply_lot, -> { with_deleted }, dependent: :destroy
+  belongs_to :supply_lot, -> { with_deleted }
 
   has_many :quantity_supply_lots
   has_many :prescriptions, -> { with_deleted },

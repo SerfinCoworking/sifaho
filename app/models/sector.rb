@@ -1,5 +1,6 @@
 class Sector < ApplicationRecord
   # Relaciones
+  belongs_to :establishment
   has_many :users
   has_many :internal_orders, -> { with_deleted }
   has_many :sector_supply_lots, -> { with_deleted }

@@ -1,4 +1,4 @@
-class PrescriptionPolicy < ApplicationPolicy
+class OrderingSupplyPolicy < ApplicationPolicy
   def index?
     see_pres.any? { |role| user.has_role?(role) }
   end

@@ -10,12 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180817234126) do
+ActiveRecord::Schema.define(version: 20180829174536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "unaccent"
+
+  create_table "establishments", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.string "cuit"
+    t.string "domicile"
+    t.string "phone"
+    t.string "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "internal_orders", force: :cascade do |t|
     t.datetime "date_delivered"
@@ -161,17 +172,6 @@ ActiveRecord::Schema.define(version: 20180817234126) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
-  create_table "providers", force: :cascade do |t|
-    t.string "code"
-    t.string "name"
-    t.string "cuit"
-    t.string "domicile"
-    t.string "phone"
-    t.string "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "quantity_medications", force: :cascade do |t|
     t.integer "medication_id"
     t.string "quantifiable_type"
@@ -256,6 +256,8 @@ ActiveRecord::Schema.define(version: 20180817234126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.bigint "establishment_id"
+    t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
     t.index ["user_id"], name: "index_sectors_on_user_id"
   end
 
@@ -357,6 +359,7 @@ ActiveRecord::Schema.define(version: 20180817234126) do
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"
   add_foreign_key "professionals", "sectors"
+  add_foreign_key "sectors", "establishments"
   add_foreign_key "sectors", "users"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"

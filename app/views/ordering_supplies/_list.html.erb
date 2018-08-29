@@ -1,0 +1,23 @@
+<div id="filterrific_results">
+  <div class="panel panel-default">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th><%= filterrific_sorting_link(@filterrific, :solicitante) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :insumos_solicitados) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :enviado) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :recibido) %></th>
+          <th colspan="3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id=ordering_supplies>
+        <%= render @ordering_supplies %>
+      </tbody>
+    </table>
+  </div>
+  <div id="page_links">
+    <%= paginate @ordering_supply %>
+  </div>
+</div>
