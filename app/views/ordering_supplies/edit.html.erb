@@ -1,7 +1,32 @@
 <% content_for :page_header do %>
-  <h3>Editando pedido a abastecimiento</h3>
+  <h3>Abastecimiento</h3>
 <% end %>
-<%= render 'form', ordering_supply: @ordering_supply %>
-
-<%= link_to 'Show', @ordering_supply %> |
-<%= link_to 'Back', ordering_supplies_path %>
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando pedido a entregar
+      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <%= render 'provider_form', ordering_supply: @ordering_supply %>
+  </div>
+  <%= render 'status_bar', ordering_supply: @ordering_supply %><br>
+  <div class="panel-footer text-center">
+      <%= link_to 'Volver', ordering_supplies_path, class: 'btn pull-left' %>
+      <button type='submit' name='commit' class='btn btn-default' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Guardar y auditar'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Guardar y auditar
+      </button>
+      <button type='submit' name='commit' class='btn btn-primary pull-right' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Guardar y aceptar'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
+      </button>
+      <% if policy(@ordering_supply).send_provider? %>
+        <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
+          class: 'btn btn-primary btn-md pull-right' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+          Guardar y enviar
+        <% end %>
+      <% end %>
+  </div>
+</div>

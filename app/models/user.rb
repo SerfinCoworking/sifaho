@@ -21,6 +21,10 @@ class User < ApplicationRecord
     Profile.create(user: self)
   end
 
+  scope :with_sector_id, lambda { |an_id|
+    where(sector_id: [*an_id])
+  }
+
   def full_name
     if self.profile.last_name?
       self.profile.full_name
@@ -31,5 +35,13 @@ class User < ApplicationRecord
 
   def name_and_sector
     self.full_name+" | "+self.sector.sector_name
+  end
+
+  def sector_name
+    self.sector.sector_name
+  end
+
+  def establishment_name
+    self.sector.establishment_name
   end
 end

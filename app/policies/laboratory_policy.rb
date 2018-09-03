@@ -42,7 +42,7 @@ class LaboratoryPolicy < ApplicationPolicy
   end
 
   def create_lab
-    [ :admin ]
+    [ :admin, :pharmacist ]
   end
 
   def destroy_lab

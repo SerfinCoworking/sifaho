@@ -17,6 +17,8 @@ module ApplicationHelper
     will_paginate collection, params.merge(renderer: BootstrapPagination::Rails, previous_label: 'Atras', next_label: 'Siguiente')
   end
   def active_class(link_path)
-    current_page?(link_path) ? 'active' : ""
+    if params[:controller] == link_path
+      return 'active'
+    end 
   end
 end

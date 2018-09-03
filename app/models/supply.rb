@@ -70,14 +70,13 @@ class Supply < ApplicationRecord
     where('supplies.supply_area_id = ?', an_id)
   }
 
-
-   # Método para establecer las opciones del select input del filtro
-   # Es llamado por el controlador como parte de `initialize_filterrific`.
-   def self.options_for_sorted_by
-     [
-       ['Código (asc)', 'codigo_asc'],
-       ['Nombre (a-z)', 'nombre_asc'],
-       ['Unidad (a-z)', 'unidad_asc']
-     ]
-   end
+  # Método para establecer las opciones del select input del filtro
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
+  def self.options_for_sorted_by
+   [
+     ['Código (asc)', 'codigo_asc'],
+     ['Nombre (a-z)', 'nombre_asc'],
+     ['Unidad (a-z)', 'unidad_asc']
+   ]
+  end
 end

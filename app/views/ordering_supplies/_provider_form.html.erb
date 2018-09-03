@@ -1,0 +1,117 @@
+<%= simple_form_for @ordering_supply, html: {class: "form-inline"} do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <div class='col-md-4'>
+      <div class="text-center"><%= f.label :applicant_sector_id, "Solicitante" %></div>
+      <%= f.input :applicant_sector_id, as: :string,
+                        label: 'Establecimiento',
+                        placeholder: 'Buscar por nombre',
+                        required: true,
+                        :input_html => {
+                          autocomplete: 'off',
+                          id: "establishment",
+                          data: { autocomplete_source: search_by_name_establishments_path },
+                          value: "#{f.object.applicant_sector.establishment_name unless f.object.new_record?}",
+                          size: 41
+                        } %>
+      <%= f.input :applicant_sector_id, :as => :hidden,
+        :input_html => {
+          id: 'establishment-id',
+          value: "#{ f.object.applicant_sector.establishment_id unless f.object.new_record? }"
+        } %>
+      <br>
+      <% if f.object.new_record?%>
+        <%= f.input :applicant_sector_id, label: 'Sector',
+          collection: [],
+          :input_html => {
+            required: true,
+            id: 'applicant-sector',
+            class: 'selectpicker show-tick',
+            "data-width"=>"322px",
+            "title"=>"Seleccionar sector",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+            disabled: false
+          } %>
+      <% else %>
+        <%= f.input :applicant_sector_id, label: 'Sector',
+          collection: @sectors.map {
+            |status| [status.sector_name, status.id]
+          },
+          :input_html => {
+            required: true,
+            id: 'applicant-sector',
+            class: 'selectpicker show-tick',
+            "data-width"=>"322px",
+            "title"=>"Seleccionar sector",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+            disabled: false,
+            value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
+          } %>
+      <% end %>
+      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.provider_sector_id unless f.object.new_record?}" %>
+    </div>
+    <div class="col-md-4">
+      <div class="text-center"><%= f.label :provider_sector_id, "Proveedor" %></div>
+      <%= f.input :provider_sector_id, as: :string,
+                        label: 'Establecimiento',
+                        :input_html => {
+                          disabled: true,
+                          value: "#{if f.object.new_record?; current_user.establishment_name; else; f.object.provider_sector.establishment_name; end}",
+                          size: 41
+                        } %>
+      <%= f.input :provider_sector_id, as: :string,
+                        label: 'Sector',
+                        :input_html => {
+                          disabled: true,
+                          value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.sector_name; end}",
+                          size: 41
+                        } %>
+      <%= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
+    </div>
+    <div class='col-md-4'>
+      <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
+        :placeholder => "Seleccionar fecha",
+        input_html: {
+          id: "requested-date",
+          required: true,
+          autocomplete: 'off',
+          :style => 'width: 110px',
+          value: "#{f.object.requested_date unless f.object.new_record?}"
+        },
+        html5: false %>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+      :input_html => { :cols => 38  , :rows => 2 } %>
+    </div>
+  </div>
+  <!-- Insumos a dispensar -->
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Cód Ins</th>
+        <th>Insumo</th>
+        <th>Solicitado</th>
+        <th>Entregado</th>
+        <th>Lote</th>
+        <th>Laboratorio</th>
+        <th>Vencimiento</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_ord_supply_lots">
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <div class="text-center">
+      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Agregar insumo solicitado
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,4 +1,4 @@
-<li class="<%= active_class(root_path) %>">
+<li class="<%= active_class('welcome') %>">
   <%= link_to root_path do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-home') %>
     Inicio
@@ -10,7 +10,7 @@
 <li class="nav-header" data-toggle="collapse" data-target="#pedidos"><div id="pedidos-label" class="well well-sm">
   <span class="glyphicon glyphicon-list-alt"><strong> Pedidos</strong></div></li>
 <ul class="nav nav-list" id="pedidos">
-  <li id="pedidos-li" class="<%= active_class(prescriptions_path) %>">
+  <li id="pedidos-li" class="<%= active_class('prescriptions') %>">
     <% if policy(Prescription).index? %>
       <%= link_to prescriptions_url do %>
         Prescripciones
@@ -24,7 +24,7 @@
       <% end %>
     <% end %>
   </li>
-  <li id="pedidos-li" class="<%= active_class(internal_orders_path) %>">
+  <li id="pedidos-li" class="<%= active_class('internal_orders') %>">
     <% if policy(InternalOrder).index? %>
       <%= link_to internal_orders_url do %>
         Internos
@@ -38,13 +38,13 @@
       <% end %>
     <% end %>
   </li>
-  <li id="pedidos-li" class="<%= active_class(ordering_supplies_path) %>">
+  <li id="pedidos-li" class="<%= active_class('ordering_supplies') %>">
     <% if policy(OrderingSupply).index? %>
       <%= link_to ordering_supplies_url do %>
         Abastecimiento
         <% if policy(OrderingSupply).new? %>
           <div class="btn-add-int">
-            <%= link_to new_ordering_supply_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+            <%= link_to new_ordering_supply_path, class: 'btn btn-primary btn-xs' do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>
@@ -60,21 +60,21 @@
 <li class="nav-header" data-toggle="collapse" data-target="#stock"><div id="stock-label" class="well well-sm">
   <span class="glyphicon glyphicon-barcode"><strong> Stock</strong></div></li>
 <ul class="nav nav-list" id="stock">
-  <li id="stock-li" class="<%= active_class(sector_supply_lots_path) %><%= active_class(trash_index_sector_supply_lots_path) %>">
+  <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
     <% if policy(SectorSupplyLot).index? %>
       <%= link_to sector_supply_lots_url do %>
         <%= current_user.sector.sector_name %>
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class(supply_lots_path) %><%= active_class(trash_index_supply_lots_path) %>">
+  <li id="stock-li" class="<%= active_class('supply_lots') %>">
     <% if policy(SupplyLot).index? %>
       <%= link_to supply_lots_url do %>
         Lotes Provincia
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class(supplies_path) %><%= active_class(trash_index_supplies_path) %>">
+  <li id="stock-li" class="<%= active_class('supplies') %>">
     <% if policy(Supply).index? %>
       <%= link_to supplies_url do %>
         Listado insumos
@@ -89,21 +89,21 @@
   <li class="nav-header" data-toggle="collapse" data-target="#efectores"><div id="efectores-label" class="well well-sm">
     <span class="glyphicon glyphicon-user"><strong> Efectores</strong></div></li>
   <ul class="nav nav-list" id="efectores">
-  <li id="efectores-li" class="<%= active_class(professionals_path) %>">
+  <li id="efectores-li" class="<%= active_class('professionals') %>">
     <% if policy(Professional).index? %>
       <%= link_to professionals_url do %>
         Profesionales
       <% end %>
     <% end %>
   </li>
-  <li id="efectores-li" class="<%= active_class(patients_path) %>">
+  <li id="efectores-li" class="<%= active_class('patients') %>">
     <% if policy(Patient).index? %>
       <%= link_to patients_url do %>
         Pacientes
       <% end %>
     <% end %>
   </li>
-  <li id="efectores-li" class="<%= active_class(laboratories_path) %>">
+  <li id="efectores-li" class="<%= active_class('laboratories') %>">
     <% if policy(Laboratory).index? %>
       <%= link_to laboratories_url do %>
         Laboratorios

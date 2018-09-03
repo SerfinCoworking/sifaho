@@ -1,6 +1,6 @@
 class InternalOrderPolicy < ApplicationPolicy
   def index?
-    index_io.any? { |role| user.has_role?(role) }
+    more_than_one_sector? && index_io.any? { |role| user.has_role?(role) }
   end
 
   def show?
@@ -40,6 +40,9 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   private
+  def more_than_one_sector?
+    return user.sector.establishment.sectors.count > 1
+  end
 
   def deliver_io
     [ :admin, :pharmacist, :pharmacist_assistant ]

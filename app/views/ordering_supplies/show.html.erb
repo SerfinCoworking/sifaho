@@ -1,24 +1,152 @@
-<p id="notice"><%= notice %></p>
+<% content_for :page_header do %>
+  <h3>Abastecimiento</h3>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo pedido
+      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class='col-md-4'>
+        <div class="text-center"><strong>Solicitante</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @ordering_supply.applicant_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @ordering_supply.applicant_sector.sector_name%>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center"><strong>Proveedor</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @ordering_supply.provider_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @ordering_supply.provider_sector.sector_name%>
+      </div>
+      <div class='col-md-4'>
+        <strong>Fecha solicitado:</strong>
+        <%= @ordering_supply.requested_date.strftime("%d/%m/%Y")%><br>
+        <strong>Observaciones:</strong>
+          <%= @ordering_supply.observation? ? @ordering_supply.observation : 'Sin observaciones' %>
 
-<p>
-  <strong>Sector:</strong>
-  <%= @ordering_supply.sector %>
-</p>
+      </div>
+    </div>
+    <!-- Insumos a dispensar -->
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Cód Ins</th>
+          <th>Insumo</th>
+          <th>Solicitado</th>
+          <th>Entregado</th>
+          <th>Lote</th>
+          <th>Laboratorio</th>
+          <th>Vencimiento</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+          <tr>
+            <td>
+              <%= qosl.supply_id %>
+            </td>
+            <td>
+              <%= qosl.supply_name %>
+            </td>
+            <td>
+              <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+            </td>
+            <td>
+              <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+            </td>
+            <td>
+              <%= qosl.sector_supply_lot.present? ? qosl.lot_code : 'Sin asignar' %>
+            </td>
+            <td>
+              <%= qosl.sector_supply_lot.present? ? qosl.laboratory : 'Sin asignar' %>
+            </td>
+            <td>
+              <%= qosl.sector_supply_lot.present? ? qosl.expiry_date.strftime("%d/%m/%Y") : 'Sin asignar' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<p>
-  <strong>Observation:</strong>
-  <%= @ordering_supply.observation %>
-</p>
+  <%= render 'status_bar', ordering_supply: @ordering_supply %>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-condensed table-bordered" id="fixed-table">
+        <tbody>
+            <tr>
+              <th></th>
+              <th>Auditado</th>
+              <th>Aceptado</th>
+              <th>Enviado</th>
+              <th>Recibido</th>
+            </tr>
+            <tr>
+              <th>Usuario</th>
+              <td><%= @ordering_supply.audited_by.present? ? @ordering_supply.audited_by.full_name : '----' %></td>
+              <td><%= @ordering_supply.accepted_by.present? ? @ordering_supply.accepted_by.full_name : '----' %></td>
+            	<td><%= @ordering_supply.sent_by.present? ? @ordering_supply.sent_by.full_name : '----' %></td>
+              <td><%= @ordering_supply.received_by.present? ? @ordering_supply.received_by.full_name : '----' %></td>
+            </tr>
+            <tr>
+              <th>Fecha</th>
+              <td><%= @ordering_supply.updated_at.present? ? @ordering_supply.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
+              <td><%= @ordering_supply.accepted_date.present? ? @ordering_supply.accepted_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
+            	<td><%= @ordering_supply.sent_date.present? ? @ordering_supply.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
+              <td><%= @ordering_supply.date_received.present? ? @ordering_supply.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer text-center">
+    <%= link_to 'Volver', ordering_supplies_path, class: 'btn pull-left' %>
+    <% if policy(@ordering_supply).edit? %>
+      <%= link_to edit_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+        Editar
+      <% end %>
+    <% end %>
+    <% if policy(@ordering_supply).return_provider_status? %>
+      <a href="#return-confirm" data-id="<%= @ordering_supply.id %>" class="return-confirm btn btn-warning">
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
+        Retornar
+      </a>
+    <% end %>
+    <% if policy(@ordering_supply).send_provider? %>
+      <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
+        class: 'btn btn-primary btn-md pull-right' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        Enviar
+      <% end %>
+    <% end %>
+  </div>
+</div>
 
-<p>
-  <strong>Date received:</strong>
-  <%= @ordering_supply.date_received %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @ordering_supply.status %>
-</p>
-
-<%= link_to 'Edit', edit_ordering_supply_path(@ordering_supply) %> |
-<%= link_to 'Back', ordering_supplies_path %>
+<div class="modal" id="return-confirm">
+  <div class="modal-dialog">
+    <div class="modal-content panel-warning">
+      <div class="modal-header panel-heading">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.provider_statuses.key(@ordering_supply.provider_status_before_type_cast - 1) %></h3>
+      </div>
+      <div class="modal-body">
+        <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn pull-left">Cancelar</a>
+        <%= link_to 'Confirmar', return_provider_status_ordering_supply_path, method: :get, :class => 'btn btn-warning' %>
+      </div>
+    </div>
+  </div>
+</div>

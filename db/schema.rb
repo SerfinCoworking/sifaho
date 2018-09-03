@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180829174536) do
+ActiveRecord::Schema.define(version: 20180901171137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,17 +77,29 @@ ActiveRecord::Schema.define(version: 20180829174536) do
   end
 
   create_table "ordering_supplies", force: :cascade do |t|
-    t.bigint "sector_id"
     t.text "observation"
     t.datetime "date_received"
-    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "responsable_id"
     t.datetime "deleted_at"
+    t.bigint "applicant_sector_id"
+    t.bigint "provider_sector_id"
+    t.datetime "requested_date"
+    t.datetime "sent_date"
+    t.integer "applicant_status", default: 0
+    t.integer "provider_status", default: 0
+    t.bigint "audited_by_id"
+    t.bigint "accepted_by_id"
+    t.bigint "sent_by_id"
+    t.bigint "received_by_id"
+    t.datetime "accepted_date"
+    t.index ["accepted_by_id"], name: "index_ordering_supplies_on_accepted_by_id"
+    t.index ["applicant_sector_id"], name: "index_ordering_supplies_on_applicant_sector_id"
+    t.index ["audited_by_id"], name: "index_ordering_supplies_on_audited_by_id"
     t.index ["deleted_at"], name: "index_ordering_supplies_on_deleted_at"
-    t.index ["responsable_id"], name: "index_ordering_supplies_on_responsable_id"
-    t.index ["sector_id"], name: "index_ordering_supplies_on_sector_id"
+    t.index ["provider_sector_id"], name: "index_ordering_supplies_on_provider_sector_id"
+    t.index ["received_by_id"], name: "index_ordering_supplies_on_received_by_id"
+    t.index ["sent_by_id"], name: "index_ordering_supplies_on_sent_by_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
@@ -190,7 +202,11 @@ ActiveRecord::Schema.define(version: 20180829174536) do
     t.integer "delivered_quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "sector_supply_lot_id"
+    t.bigint "supply_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
+    t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lots_on_sector_supply_lot_id"
+    t.index ["supply_id"], name: "index_quantity_ord_supply_lots_on_supply_id"
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
@@ -353,12 +369,12 @@ ActiveRecord::Schema.define(version: 20180829174536) do
 
   add_foreign_key "internal_orders", "sectors"
   add_foreign_key "medications", "medication_brands"
-  add_foreign_key "ordering_supplies", "sectors"
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"
   add_foreign_key "professionals", "sectors"
+  add_foreign_key "quantity_ord_supply_lots", "supplies"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "sectors", "users"
   add_foreign_key "supplies", "supply_areas"

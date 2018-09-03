@@ -24,7 +24,9 @@
           <%= yield %>
           <%= render "shared/dialog" %>
           <div class="footer">
-            <p><h4><strong><%= current_user.sector.establishment.name %></strong></h4></p>
+            <% if user_signed_in? %>
+              <p><h4><strong><%= current_user.sector.establishment.name %></strong></h4></p>
+            <% end %>
           </div>
         </div>
       </div>

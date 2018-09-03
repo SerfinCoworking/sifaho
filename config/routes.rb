@@ -1,17 +1,4 @@
 Rails.application.routes.draw do
-  resources :laboratories do
-    member do
-      get "delete"
-    end
-    collection do
-      get "search_by_name"
-    end
-  end
-  resources :ordering_supplies do
-    member do
-      get "delete"
-    end
-  end
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   devise_for :users, :controllers => { registrations: 'registrations' }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -21,6 +8,25 @@ Rails.application.routes.draw do
   # Rescue errors
   match "/404", :to => "errors#not_found", :via => :all
   match "/500", :to => "errors#internal_server_error", :via => :all
+
+  resources :laboratories do
+    member do
+      get "delete"
+    end
+    collection do
+      get "search_by_name"
+    end
+  end
+
+  resources :ordering_supplies do
+    member do
+      get "delete"
+      get "send_provider"
+      get "send_applicant"
+      get "return_provider_status"
+      get "return_applicant_status"
+    end
+  end
 
   resources :supply_lots do
     member do
@@ -33,6 +39,18 @@ Rails.application.routes.draw do
       get "search_by_code"
       get "search_by_lot_code"
       get "search_by_name"
+    end
+  end
+
+  resources :establishments do
+    collection do
+      get "search_by_name"
+    end
+  end
+
+  resources :sectors do
+    collection do
+      get "with_establishment_id"
     end
   end
 

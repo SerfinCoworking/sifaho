@@ -401,7 +401,6 @@ $(document).on("focus",".supply-lot-name", function() {
 });
 
 $(document).on('change', '.select-change', function() {
-  console.log('entró');
   var nested_form = $(this).parents(".nested-fields");
   var select = nested_form.find('.selectpicker');
   $.ajax({

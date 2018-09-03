@@ -13,4 +13,16 @@ class Sector < ApplicationRecord
   def self.options_for_select
     order('LOWER(sector_name)').map { |e| [e.sector_name, e.id] }
   end
+
+  scope :with_establishment_id, lambda { |an_id|
+    where(establishment_id: [*an_id])
+  }
+
+  def establishment_name
+    self.establishment.name
+  end
+
+  def sector_and_establishment
+    self.sector_name+' de '+self.establishment.name
+  end
 end

@@ -1,5 +1,6 @@
 class OrderingSuppliesController < ApplicationController
-  before_action :set_ordering_supply, only: [:show, :edit, :update, :destroy]
+  before_action :set_ordering_supply, only: [:show, :edit, :update, :send_provider,
+    :send_applicant, :destroy, :delete, :return_provider_status, :return_applicant_status]
 
   # GET /ordering_supplies
   # GET /ordering_supplies.json
@@ -14,12 +15,11 @@ class OrderingSuppliesController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
-        :search_professional_and_patient,
+        :search_applicant,
+        :search_provider,
         :search_supply_code,
         :search_supply_name,
         :sorted_by,
-        :date_prescribed_since,
-        :date_dispensed_since
       ],
     ) or return
     @ordering_supplies = @filterrific.find.page(params[:page]).per_page(8)
@@ -29,9 +29,6 @@ class OrderingSuppliesController < ApplicationController
   # GET /ordering_supplies/1.json
   def show
     authorize @ordering_supply
-    respond_to do |format|
-      format.js
-    end
   end
 
   # GET /ordering_supplies/new
@@ -45,17 +42,32 @@ class OrderingSuppliesController < ApplicationController
   def edit
     authorize @ordering_supply
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
+    @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
   end
 
   # POST /ordering_supplies
   # POST /ordering_supplies.json
   def create
+    authorize @ordering_supply
     @ordering_supply = OrderingSupply.new(ordering_supply_params)
-
+    @ordering_supply.audited_by = current_user
     respond_to do |format|
-      if @ordering_supply.save
-        format.html { redirect_to @ordering_supply, notice: 'Ordering supply was successfully created.' }
+      if @ordering_supply.save!
+        # Si se acepta el pedido
+        if accepting?
+          begin
+            @ordering_supply.accepted_by = current_user
+            @ordering_supply.accept_order
+            flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
+          rescue ArgumentError => e
+            flash[:alert] = 'No se ha podido aceptar: '+e.message
+          end
+        else
+          flash[:notice] = 'El pedido se ha creado y se encuentra en auditoría.'
+        end
+        format.html { redirect_to @ordering_supply }
       else
+        flash[:error] = "El pedido no se ha podido crear."
         format.html { render :new }
       end
     end
@@ -64,10 +76,31 @@ class OrderingSuppliesController < ApplicationController
   # PATCH/PUT /ordering_supplies/1
   # PATCH/PUT /ordering_supplies/1.json
   def update
+    authorize @ordering_supply
     respond_to do |format|
-      if @ordering_supply.update(ordering_supply_params)
-        format.html { redirect_to @ordering_supply, notice: 'Ordering supply was successfully updated.' }
-        format.json { render :show, status: :ok, location: @ordering_supply }
+      if @ordering_supply.update!(ordering_supply_params)
+        # Si se acepta el pedido
+        if accepting?
+          begin
+            @ordering_supply.accepted_by = current_user
+            @ordering_supply.accept_order
+            flash[:success] = 'El pedido se ha modificado y aceptado correctamente'
+          rescue ArgumentError => e
+            @ordering_supply.accepted_by = nil; @ordering_supply.save
+            flash[:alert] = 'No se ha podido aceptar: '+e.message
+          end
+        elsif sending?
+          begin
+            @ordering_supply.send_order
+            flash[:success] = 'El pedido se ha enviado correctamente'
+          rescue ArgumentError => e
+            @ordering_supply.sent_by = nil; @ordering_supply.save
+            flash[:alert] = 'No se ha podido enviar: '+e.message
+          end
+        else
+          flash[:notice] = 'El pedido se ha modificado correctamente.'
+        end
+        format.html { redirect_to @ordering_supply }
       else
         format.html { render :edit }
         format.json { render json: @ordering_supply.errors, status: :unprocessable_entity }
@@ -75,13 +108,53 @@ class OrderingSuppliesController < ApplicationController
     end
   end
 
+  # GET /ordering_supplies/1/send
+  def send_provider
+    authorize @ordering_supply
+    @users = User.with_sector_id(current_user.sector_id)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def return_provider_status
+    authorize @ordering_supply
+    respond_to do |format|
+      begin
+        @ordering_supply.return_provider_status
+      rescue ArgumentError => e
+        flash[:alert] = 'No se ha podido retornar: '+e.message
+      else
+        flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
+      end
+      format.html { redirect_to @ordering_supply }
+    end
+
+  end
+
+  def return_applicant_status
+    authorize @ordering_supply
+
+
+  end
+
   # DELETE /ordering_supplies/1
   # DELETE /ordering_supplies/1.json
   def destroy
+    authorize @ordering_supply
+    @sector_name = @ordering_supply.applicant_sector.sector_name
     @ordering_supply.destroy
     respond_to do |format|
-      format.html { redirect_to ordering_supplies_url, notice: 'Ordering supply was successfully destroyed.' }
-      format.json { head :no_content }
+      flash.now[:success] = "El pedido de "+@sector_name+" se ha enviado a la papelera."
+      format.js
+    end
+  end
+
+  # GET /ordering_supply/1/delete
+  def delete
+    authorize @ordering_supply
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -93,6 +166,20 @@ class OrderingSuppliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ordering_supply_params
-      params.require(:ordering_supply).permit(:sector_id, :observation, :date_received, :status)
+      params.require(:ordering_supply).permit(:applicant_sector_id, :provider_sector_id,
+        :requested_date, :sector_id, :observation, :sent_by_id,
+        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
+                                              :requested_quantity, :delivered_quantity,
+                                              :_destroy])
+    end
+
+    def accepting?
+      submit = params[:commit]
+      return submit == "Auditar y aceptar" || submit == "Guardar y aceptar"
+    end
+
+    def sending?
+      submit = params[:commit]
+      return submit == "Enviar"
     end
 end

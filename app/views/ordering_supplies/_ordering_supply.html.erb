@@ -1,9 +1,9 @@
 <tr id="ordering_supply_<%= ordering_supply.id %>">
-  <td class="pres-col-pro"><%= ordering_supply.professional.full_name %></td>
-  <td class="pres-col-pat"><%= ordering_supply.patient.full_info %></td>
+  <td class="sol-col-aba"><%= ordering_supply.applicant_sector.sector_name %></td>
+  <td class="sol-col-aba"><%= ordering_supply.applicant_sector.establishment_name %></td>
   <td>
-    <span class="label label-<%= ordering_supply.status_label %>">
-      <%= ordering_supply.status.split('_').map(&:capitalize).join(' ') %>
+    <span class="label label-<%= ordering_supply.provider_status_label %>">
+      <%= ordering_supply.provider_status.split('_').map(&:capitalize).join(' ') %>
     </span>
   </td>
   <td class="pres-col-sup">
@@ -11,39 +11,45 @@
       (<%= ordering_supply.quantity_ord_supply_lots.count %>)
       <% ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
         <span class="badge">
-          <%= qosl.quantity %>
+          <%= qosl.requested_quantity %>
         </span>
         <%= qosl.supply_name %>
       <% end %>
     <% else %>
       ------
-    <% end %></td>
-    <% if ordering_supply.recibida? %>
-      <td>
-      <%= ordering_supply.date_received.strftime("%d/%m/%y %H:%M") %>
-    <% else %>
-      <% if policy(ordering_supply).receive? %>
-        <td class="text-center">
-        <%= link_to receive_ordering_supply_path(ordering_supply), remote: true,
-              class: 'btn btn-success btn-xs', title: 'Recibir', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-        <% end %>
-      <% else %>
-        <td>
-        Sin recibir
-      <% end  %>
     <% end %>
   </td>
   <td>
+    <%= ordering_supply.requested_date.strftime("%d/%m/%Y") %>
+  </td>
+  <% if ordering_supply.provider_en_camino? %>
+    <td>
+      En camino
+  <% elsif ordering_supply.provider_entregado? %>
+    <%= ordering_supply.sent_date.strftime("%d/%m/%y %H:%M") %>
+  <% else %>
+    <% if policy(ordering_supply).send_provider? %>
+    <td class="text-center">
+    <%= link_to send_provider_ordering_supply_path(ordering_supply), remote: true,
+          class: 'btn btn-primary btn-xs', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+    <% end %>
+    <% else %>
+      <td>
+      Sin aceptar
+    <% end %>
+  <% end %>
+  </td>
+  <td>
     <% if policy(ordering_supply).show? %>
-      <%= link_to ordering_supply_path(ordering_supply), remote:true,
+      <%= link_to ordering_supply_path(ordering_supply),
             class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
     <% if policy(ordering_supply).edit? %>
-      <% unless ordering_supply.dispensada? %>
-        <%= link_to edit_ordering_supply_path(ordering_supply), remote: true,
+      <% unless ordering_supply.provider_en_camino? || ordering_supply.provider_entregado? %>
+        <%= link_to edit_ordering_supply_path(ordering_supply), :"data-turbolinks" => false,
               class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
         <% end %>

@@ -1,0 +1,37 @@
+.status-bar-icons{
+  position: absolute;
+  margin-top: -20px;
+  z-index: 1;
+}
+
+.gi-2x{font-size: 20px;}
+.gi-3x{font-size: 3em;}
+.gi-4x{font-size: 4em;}
+.gi-5x{font-size: 5em;}
+
+#zoom-glyph{
+  margin-left: -26px;
+}
+// color: #767676;
+#thumb-glyph{
+  margin-left: 205px;
+}
+// color: #3a589d;
+#road-glyph{
+  margin-right: 175px;
+}
+// color: #73c4e5;
+#check-glyph{
+  margin-right: 5px;
+}
+// color: #40c95e;
+
+#fixed-table{
+  table-layout: fixed;
+}
+.sol-col-aba{
+  max-width: 200px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
