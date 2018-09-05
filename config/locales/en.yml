@@ -30,6 +30,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    models:
+      ordering_supply: "Pedido abastecimiento"
+    attributes:
+      applicant_sector: "Sector solicitante"
+  activerecord:
+    models:
+      account_small: "Konto"
   hello: "Hello world"
   date:
     abbr_day_names:

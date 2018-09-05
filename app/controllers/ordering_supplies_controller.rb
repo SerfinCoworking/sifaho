@@ -76,7 +76,7 @@ class OrderingSuppliesController < ApplicationController
     authorize @ordering_supply
     @ordering_supply.audited_by = current_user
     respond_to do |format|
-      if @ordering_supply.save!
+      if @ordering_supply.save
         # Si se acepta el pedido
         if accepting?
           begin
