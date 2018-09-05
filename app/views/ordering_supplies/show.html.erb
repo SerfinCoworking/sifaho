@@ -1,5 +1,5 @@
 <% content_for :page_header do %>
-  <h3>Abastecimiento</h3>
+  Abastecimiento
 <% end %>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -17,14 +17,14 @@
         <strong>Establecimiento:</strong>
         <%= @ordering_supply.applicant_sector.establishment_name%><br>
         <strong>Sector:</strong>
-        <%= @ordering_supply.applicant_sector.sector_name%>
+        <%= @ordering_supply.applicant_sector.name%>
       </div>
       <div class="col-md-4">
         <div class="text-center"><strong>Proveedor</strong></div>
         <strong>Establecimiento:</strong>
         <%= @ordering_supply.provider_sector.establishment_name%><br>
         <strong>Sector:</strong>
-        <%= @ordering_supply.provider_sector.sector_name%>
+        <%= @ordering_supply.provider_sector.name%>
       </div>
       <div class='col-md-4'>
         <strong>Fecha solicitado:</strong>
@@ -108,8 +108,8 @@
       </div>
     </div>
   </div>
-  <div class="panel-footer text-center">
-    <%= link_to 'Volver', ordering_supplies_path, class: 'btn pull-left' %>
+  <div class="panel-footer <%= @ordering_supply.provider_entregado? ? '' : 'text-center' %>">
+    <%= link_to 'Volver', ordering_supplies_path, class: "btn #{@ordering_supply.provider_entregado? ? '' : 'pull-left'}" %>
     <% if policy(@ordering_supply).edit? %>
       <%= link_to edit_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
@@ -128,6 +128,13 @@
         class: 'btn btn-primary btn-md pull-right' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
         Enviar
+      <% end %>
+    <% end %>
+    <% if policy(@ordering_supply).receive_applicant? %>
+      <%= link_to receive_applicant_confirm_ordering_supply_path(@ordering_supply), remote: true,
+        class: 'btn btn-success btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
+        Recibir
       <% end %>
     <% end %>
   </div>

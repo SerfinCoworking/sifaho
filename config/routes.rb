@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :users, :controllers => { registrations: 'registrations' }
+  # devise_for :users, :controllers => { registrations: 'registrations' }
+  devise_for :users, :skip => [:registrations]
+  as :user do
+    get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
+    put 'users' => 'devise/registrations#update', :as => 'user_registration'
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
   get '/profile/edit', to:'profiles#edit', as:'edit_profile'
@@ -25,6 +31,11 @@ Rails.application.routes.draw do
       get "send_applicant"
       get "return_provider_status"
       get "return_applicant_status"
+      get "accept_provider"; get "accept_provider_confirm"
+      get "receive_applicant"; get "receive_applicant_confirm"
+    end
+    collection do
+      get "applicant_index"
     end
   end
 

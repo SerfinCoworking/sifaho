@@ -1,16 +1,15 @@
 <% content_for :page_header do %>
-  <h3>Profesionales
+  Profesionales
   <% if policy(Professional).new? %>
-    <%= link_to new_professional_path, remote: true, class: 'btn btn-primary btn-sm' do %>
+    <%= link_to new_professional_path, remote: true, class: 'btn btn-primary btn-xs' do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
       Nuevo
     <% end %>
   <% end %>
-  <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+  <%= button_tag(class: "btn btn-info btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
     Filtrar
   <% end %>
-  </h3>
 <% end %>
 
 <div class="panel panel-info" id="filter-panel">

@@ -2,7 +2,7 @@ class OrderingSupply < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum applicant_status: { auditoria: 0, aceptado: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :applicant
+  enum applicant_status: { auditoria: 0, aceptado: 1, en_camino: 2, recibido: 3, anulado: 4 }, _prefix: :applicant
   enum provider_status: { auditoria: 0, aceptado: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
 
   # Relaciones
@@ -48,7 +48,7 @@ class OrderingSupply < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply,
-  :associated_against => { supply_lots: [:supply_name, :code] },
+  :associated_against => { applicant_sector: [:name, :code] },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
@@ -74,7 +74,7 @@ class OrderingSupply < ApplicationRecord
       order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = ordering_supplies.responsable_id")
     when /^sector_/
       # Ordenamiento por nombre de sector
-      order("sectors.sector_name #{ direction }").joins(:sector)
+      order("sectors.name #{ direction }").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("ordering_supplies.status #{ direction }")
@@ -110,6 +110,15 @@ class OrderingSupply < ApplicationRecord
       ['Fecha recibido (asc)', 'recibido_desc'],
     ]
   end
+
+  def self.applicant(a_sector)
+    where(applicant_sector: a_sector)
+  end
+
+  def self.provider(a_sector)
+    where(provider_sector: a_sector)
+  end
+
 
   def deliver
     if entregado?
@@ -195,6 +204,7 @@ class OrderingSupply < ApplicationRecord
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
       self.sent_date = DateTime.now
+      self.applicant_en_camino!
       self.provider_en_camino!
     end # End anulado?
   end
@@ -210,10 +220,33 @@ class OrderingSupply < ApplicationRecord
     else
       if self.quantity_ord_supply_lots.present?
         self.accepted_date = DateTime.now
+        self.applicant_aceptado!
         self.provider_aceptado!
       else
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end
+    end #End anulado?
+  end
+
+  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
+  def receive_order(a_sector)
+    if provider_anulado? || applicant_anulado?
+      raise ArgumentError, "El pedido está anulado"
+    elsif provider_aceptado?
+      raise ArgumentError, "El pedido se encuentra aceptado"
+    elsif provider_entregado?
+      raise ArgumentError, "El pedido ya ha sido entregado"
+    elsif provider_en_camino?
+      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+        self.quantity_ord_supply_lots.each do |qosl|
+          qosl.increment_lot_to(a_sector)
+        end
+        self.date_received = DateTime.now
+        self.provider_entregado!
+        self.applicant_recibido!
+      else
+        raise ArgumentError, 'No hay insumos para recibir en el pedido'
+      end # End chack if sector supply exists
     end #End anulado?
   end
 

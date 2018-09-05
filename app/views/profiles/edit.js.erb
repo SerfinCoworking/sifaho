@@ -1,3 +1,6 @@
+// Add styles
+$('.modal-content').addClass('panel-warning');
+
 // Add the dialog title
 $('#dialog h4').html("<i class=' glyphicon glyphicon-pencil'></i>  Editando mi perfil");
 
@@ -6,7 +9,7 @@ $('.modal-body').html('<%= j render("form") %>');
 
 // Add form button
 $('.modal-footer').html(
-  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<a class='btn pull-left' data-dismiss='modal'>Volver</a>"+
   "<button type='submit' name='commit' class='btn btn-primary pull-right' form='edit_profile_<%=@profile.id%>'>Guardar cambios</button>"
 );
 
@@ -19,3 +22,8 @@ $('#dialog').on('shown.bs.modal', function () {
 });
 
 <%= render 'form_function' %>
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-warning');
+});

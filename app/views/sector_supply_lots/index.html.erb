@@ -1,16 +1,15 @@
 <% content_for :page_header do %>
-  <h3>Stock <%= current_user.sector.sector_name %>
-    <% if policy(SectorSupplyLot).new? %>
-      <%= button_tag(class: "btn btn-primary btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Cargar
-      <% end %>
+  Stock <%= current_user.sector.name %>
+  <% if policy(SectorSupplyLot).new? %>
+    <%= button_tag(class: "btn btn-primary btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Cargar
     <% end %>
-    <%= button_tag(class: "btn btn-info btn-sm", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
-      Filtrar
-    <% end %>
-  </h3>
+  <% end %>
+  <%= button_tag(class: "btn btn-info btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
+    Filtrar
+  <% end %>
 <% end %>
 
 <% if policy(SectorSupplyLot).new? %>

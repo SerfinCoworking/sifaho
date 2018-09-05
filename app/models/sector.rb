@@ -7,11 +7,11 @@ class Sector < ApplicationRecord
   has_many :supply_lots, -> { with_deleted }, through: :sector_supply_lots
 
   # Validaciones
-  validates_presence_of :sector_name
+  validates_presence_of :name
   validates_presence_of :complexity_level
 
   def self.options_for_select
-    order('LOWER(sector_name)').map { |e| [e.sector_name, e.id] }
+    order('LOWER(name)').map { |e| [e.name, e.id] }
   end
 
   scope :with_establishment_id, lambda { |an_id|
@@ -23,6 +23,6 @@ class Sector < ApplicationRecord
   end
 
   def sector_and_establishment
-    self.sector_name+' de '+self.establishment.name
+    self.name+' de '+self.establishment.name
   end
 end

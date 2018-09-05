@@ -77,7 +77,7 @@ class InternalOrder < ApplicationRecord
       order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = internal_orders.responsable_id")
     when /^sector_/
       # Ordenamiento por nombre de sector
-      order("sectors.sector_name #{ direction }").joins(:sector)
+      order("sectors.name #{ direction }").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("internal_orders.status #{ direction }")

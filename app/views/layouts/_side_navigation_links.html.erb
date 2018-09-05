@@ -63,7 +63,7 @@
   <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
     <% if policy(SectorSupplyLot).index? %>
       <%= link_to sector_supply_lots_url do %>
-        <%= current_user.sector.sector_name %>
+        <%= current_user.sector.name %>
       <% end %>
     <% end %>
   </li>

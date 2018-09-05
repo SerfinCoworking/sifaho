@@ -3,6 +3,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
     see_pres.any? { |role| user.has_role?(role) }
   end
 
+  def applicant_index?
+    index?
+  end
+
   def show?
     index?
   end
@@ -22,7 +26,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def edit?
-    if record.provider_auditoria?
+    if record.provider_auditoria? && record.provider_sector == user.sector
       edit_provider.any? { |role| user.has_role?(role) }
     else
       return false
@@ -30,7 +34,9 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def destroy?
-    destroy_pres.any? { |role| user.has_role?(role) }
+    unless record.provider_entregado?
+      destroy_pres.any? { |role| user.has_role?(role) }
+    end
   end
 
   def delete?
@@ -46,11 +52,19 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def send_provider?
-    record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+    if record.provider_sector == user.sector
+      record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+    end
   end
 
   def send_applicant?
-    record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+    if record.applicant_sector == user.sector
+      record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+    end
+  end
+
+  def receive_applicant?
+    record.provider_en_camino? && receive_applicant.any? { |role| user.has_role?(role) }
   end
 
   def return_provider_status?
@@ -72,6 +86,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
 
 
   private
+  def receive_applicant
+    [ :admin, :pharmacist ]
+  end
+
   def edit_provider
     [ :admin, :pharmacist ]
   end

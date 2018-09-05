@@ -12,6 +12,17 @@ class QuantityOrdSupplyLot < ApplicationRecord
   accepts_nested_attributes_for :sector_supply_lot
 
   #Métodos públicos
+  def increment_lot_to(a_sector)
+    if self.sector_supply_lot.present?
+      @sector_supply_lot = SectorSupplyLot.where(
+        sector_id: a_sector.id,
+        supply_lot_id: self.sector_supply_lot.supply_lot_id
+      ).first_or_create
+      @sector_supply_lot.increment(self.delivered_quantity)
+      @sector_supply_lot.save!
+    end
+  end
+
   def decrement
     if self.sector_supply_lot.present?
       self.sector_supply_lot.decrement(self.delivered_quantity)

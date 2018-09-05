@@ -34,11 +34,11 @@ class User < ApplicationRecord
   end
 
   def name_and_sector
-    self.full_name+" | "+self.sector.sector_name
+    self.full_name+" | "+self.sector.name
   end
 
   def sector_name
-    self.sector.sector_name
+    self.sector.name
   end
 
   def establishment_name

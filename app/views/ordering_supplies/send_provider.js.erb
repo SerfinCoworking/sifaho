@@ -1,7 +1,5 @@
 // Add styles
 $('.modal-content').addClass('panel-primary');
-$('.modal-header').addClass('panel-heading');
-$('.modal').removeClass('fade');
 
 // Add the dialog title
 $('#dialog h4').html("<i class=' glyphicon glyphicon-send'></i>  Enviar el pedido");
@@ -24,3 +22,8 @@ $('.selectpicker').selectpicker(); // Se inicializa selectpicker
 $(document).on('change', '#sent-by-select', function() {
   $(".sent-by-id").val($(this).val());
 });//End on change events
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-primary');
+});

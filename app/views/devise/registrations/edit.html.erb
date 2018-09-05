@@ -1,53 +1,32 @@
-<div class="authform">
+<div class="authform" id="edit-pass-form">
   <% content_for :page_header do %>
-    <h3>Editando usuario</h3>
+    Cambiar contraseña
   <% end %>
-  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :role => 'form'}) do |f| %>
+  <%= form_for(resource, :as => resource_name, :url => user_registration_path, :html => { :method => :put, :role => 'form'}) do |f| %>
     <%= devise_error_messages! %>
     <div class="form-group">
       <%= f.label 'Usuario' %>
-      <%= f.text_field :username, :autofocus => true, class: 'form-control' %>
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>En espera de confirmación para: <%= resource.unconfirmed_email %></div>
-      <% end %>
+      <%= f.text_field :username, disabled: true, class: 'form-control' %>
     </div>
     <fieldset>
-      <p>Deja los campos en blanco si no deseas cambiar tu contraseña.</p>
       <div class="form-group">
-        <%= f.label 'Contraseña' %>
-        <%= f.password_field :password, :autocomplete => 'off', class: 'form-control' %>
+        <%= f.label 'Nueva contraseña' %>
+        <%= f.password_field :password, :autofocus => true, required: true,
+        :autocomplete => 'off', class: 'form-control' %>
       </div>
       <div class="form-group">
         <%= f.label 'Confirmar contraseña' %>
-        <%= f.password_field :password_confirmation, class: 'form-control' %>
+        <%= f.password_field :password_confirmation, required: true, class: 'form-control' %>
       </div>
     </fieldset>
     <fieldset>
       <p>Necesitas ingresar tu actual contraseña para guardar los cambios.</p>
       <div class="form-group">
         <%= f.label 'Contraseña actual' %>
-        <%= f.password_field :current_password, class: 'form-control' %>
+        <%= f.password_field :current_password, required: true, class: 'form-control' %>
       </div>
     </fieldset>
-    <%= f.fields_for :profile do |ff| %>
-     <div class="form­group">
-      <%= ff.label :first_name %>
-      <%= ff.text_field :first_name, class: 'form­control' %>
-     </div>
-     <div class="form­group">
-      <%= ff.label :last_name %>
-      <%= ff.text_field :last_name, class: 'form­control' %>
-     </div>
-     <div class="form­group">
-      <%= ff.label :date_of_birth %>
-      <%= ff.date_field :date_of_birth, class: 'form­control' %>
-     </div>
-    <% end %>
+    <%= link_to 'Volver', root_path, class: 'btn left' %>
     <%= f.submit 'Guardar cambios', :class => 'button right' %>
   <% end %>
-</div>
-<div class="authform">
-<h3>Cancelar cuenta</h3>
-<p>¿Descontento? Estaremos tristes de verte partir.</p>
-<%= button_to "Cancelar mi cuenta", registration_path(resource_name), :data => { :confirm => "Estas segur@?" }, :method => :delete, :class => 'button right' %>
 </div>

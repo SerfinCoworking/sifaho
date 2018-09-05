@@ -1,5 +1,5 @@
 <tr id="ordering_supply_<%= ordering_supply.id %>">
-  <td class="sol-col-aba"><%= ordering_supply.applicant_sector.sector_name %></td>
+  <td class="sol-col-aba"><%= ordering_supply.applicant_sector.name %></td>
   <td class="sol-col-aba"><%= ordering_supply.applicant_sector.establishment_name %></td>
   <td>
     <span class="label label-<%= ordering_supply.provider_status_label %>">
@@ -22,22 +22,12 @@
   <td>
     <%= ordering_supply.requested_date.strftime("%d/%m/%Y") %>
   </td>
-  <% if ordering_supply.provider_en_camino? %>
+  <% if ordering_supply.provider_entregado? %>
     <td>
-      En camino
-  <% elsif ordering_supply.provider_entregado? %>
-    <%= ordering_supply.sent_date.strftime("%d/%m/%y %H:%M") %>
+    <%= ordering_supply.date_received.strftime("%d/%m/%y %H:%M") %>
   <% else %>
-    <% if policy(ordering_supply).send_provider? %>
     <td class="text-center">
-    <%= link_to send_provider_ordering_supply_path(ordering_supply), remote: true,
-          class: 'btn btn-primary btn-xs', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-    <% end %>
-    <% else %>
-      <td>
-      Sin aceptar
-    <% end %>
+    <%= ordering_supply.provider_status.split('_').map(&:capitalize).join(' ') %>
   <% end %>
   </td>
   <td>
@@ -45,6 +35,12 @@
       <%= link_to ordering_supply_path(ordering_supply),
             class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+    <% if policy(ordering_supply).send_provider? %>
+      <%= link_to send_provider_ordering_supply_path(ordering_supply), remote: true,
+        class: 'btn btn-primary btn-xs', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
       <% end %>
     <% end %>
     <% if policy(ordering_supply).edit? %>

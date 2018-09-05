@@ -70,12 +70,12 @@ class InternalOrdersController < ApplicationController
         if delivering?
           begin
             @internal_order.deliver
-            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha creado y entregado correctamente."
+            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.name+" se ha creado y entregado correctamente."
           rescue ArgumentError => e
             flash.now[:notice] = "Se ha creado pero no se ha podido entregar: "+e.message
           end
         else
-          flash.now[:success] = "El pedido interno de "+@internal_order.applicant.sector.sector_name+" se ha creado correctamente."
+          flash.now[:success] = "El pedido interno de "+@internal_order.applicant.sector.name+" se ha creado correctamente."
         end
         format.js
       else
@@ -96,16 +96,16 @@ class InternalOrdersController < ApplicationController
         if delivering?
           begin
             @internal_order.deliver
-            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado y entregado correctamente."
+            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.name+" se ha modificado y entregado correctamente."
           rescue ArgumentError => e
             flash.now[:notice] = "Se ha modificado pero no se ha podido entregar: "+e.message
           end
         else
-          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" se ha modificado correctamente."
+          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.name+" se ha modificado correctamente."
         end
         format.js
       else
-        flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.sector_name+" no se ha podido modificar."
+        flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.name+" no se ha podido modificar."
         format.js
       end
     end
@@ -115,7 +115,7 @@ class InternalOrdersController < ApplicationController
   # DELETE /internal_orders/1.json
   def destroy
     authorize @internal_order
-    # @sector_name = @internal_order.responsable.sector.sector_name
+    # @name = @internal_order.responsable.sector.name
     @internal_order.destroy
     respond_to do |format|
       flash.now[:success] = "El pedido interno de se ha eliminado correctamente."

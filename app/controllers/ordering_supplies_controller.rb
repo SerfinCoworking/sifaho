@@ -1,13 +1,14 @@
 class OrderingSuppliesController < ApplicationController
   before_action :set_ordering_supply, only: [:show, :edit, :update, :send_provider,
-    :send_applicant, :destroy, :delete, :return_provider_status, :return_applicant_status]
+    :send_applicant, :destroy, :delete, :return_provider_status, :return_applicant_status,
+    :receive_applicant_confirm, :receive_applicant]
 
   # GET /ordering_supplies
   # GET /ordering_supplies.json
   def index
     authorize OrderingSupply
     @filterrific = initialize_filterrific(
-      OrderingSupply,
+      OrderingSupply.provider(current_user.sector),
       params[:filterrific],
       select_options: {
         sorted_by: OrderingSupply.options_for_sorted_by
@@ -23,6 +24,29 @@ class OrderingSuppliesController < ApplicationController
       ],
     ) or return
     @ordering_supplies = @filterrific.find.page(params[:page]).per_page(8)
+  end
+
+  # GET /ordering_supplies
+  # GET /ordering_supplies.json
+  def applicant_index
+    authorize OrderingSupply
+    @filterrific = initialize_filterrific(
+      OrderingSupply.applicant(current_user.sector),
+      params[:filterrific],
+      select_options: {
+        sorted_by: OrderingSupply.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :search_applicant,
+        :search_provider,
+        :search_supply_code,
+        :search_supply_name,
+        :sorted_by,
+      ],
+    ) or return
+    @applicant_orders = @filterrific.find.page(params[:page]).per_page(8)
   end
 
   # GET /ordering_supplies/1
@@ -48,8 +72,8 @@ class OrderingSuppliesController < ApplicationController
   # POST /ordering_supplies
   # POST /ordering_supplies.json
   def create
-    authorize @ordering_supply
     @ordering_supply = OrderingSupply.new(ordering_supply_params)
+    authorize @ordering_supply
     @ordering_supply.audited_by = current_user
     respond_to do |format|
       if @ordering_supply.save!
@@ -108,10 +132,48 @@ class OrderingSuppliesController < ApplicationController
     end
   end
 
-  # GET /ordering_supplies/1/send
+  # GET /ordering_supplies/1/send_provider
   def send_provider
     authorize @ordering_supply
     @users = User.with_sector_id(current_user.sector_id)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /ordering_supplies/1/accept_provider
+  def accept_provider
+    authorize @ordering_supply
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /ordering_supplies/1/accept_provider_confirm
+  def accept_provider_confirm
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /ordering_supplies/1/receive_applicant
+  def receive_applicant
+    authorize @ordering_supply
+    respond_to do |format|
+      begin
+        @ordering_supply.received_by = current_user
+        @ordering_supply.receive_order(current_user.sector)
+        flash[:success] = 'El pedido se ha recibido correctamente'
+      rescue ArgumentError => e
+        flash[:error] = 'No se ha podido recibir: '+e.message
+      else
+      format.html { redirect_to @ordering_supply }
+      end
+    end
+  end
+
+  # GET /ordering_supplies/1/receive_applicant_confirm
+  def receive_applicant_confirm
     respond_to do |format|
       format.js
     end
@@ -142,7 +204,7 @@ class OrderingSuppliesController < ApplicationController
   # DELETE /ordering_supplies/1.json
   def destroy
     authorize @ordering_supply
-    @sector_name = @ordering_supply.applicant_sector.sector_name
+    @sector_name = @ordering_supply.applicant_sector.name
     @ordering_supply.destroy
     respond_to do |format|
       flash.now[:success] = "El pedido de "+@sector_name+" se ha enviado a la papelera."
@@ -175,7 +237,7 @@ class OrderingSuppliesController < ApplicationController
 
     def accepting?
       submit = params[:commit]
-      return submit == "Auditar y aceptar" || submit == "Guardar y aceptar"
+      return submit == "Auditar y aceptar" || submit == "Guardar y aceptar" || submit == "Aceptar"
     end
 
     def sending?

@@ -214,3 +214,10 @@ li .well strong{
     text-align: left;
     padding-left: 17em;
 }
+.custom-header{
+  margin-top: -9px!important;
+  margin-bottom: -10px!important;
+}
+#edit-pass-form{
+  margin-top: -40px;
+}

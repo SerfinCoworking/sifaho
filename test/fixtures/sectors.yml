@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  sector_name: MyString
+  name: MyString
   description: MyText
   level_complexity: 1
   applicant: MyString
 
 two:
-  sector_name: MyString
+  name: MyString
   description: MyText
   level_complexity: 1
   applicant: MyString

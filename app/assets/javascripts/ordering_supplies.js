@@ -184,6 +184,7 @@ $(document).on('turbolinks:load', function() {
     var _this = $(this);
     jQuery(function() {
       var nested_form = _this.parents(".nested-fields");
+      nested_form.find('.deliver-quantity').attr({ "max" : _this.val() });
       nested_form.find(".deliver-quantity").prop("disabled", false).val(_this.val());
     });
   });
@@ -234,7 +235,6 @@ $(document).on('turbolinks:load', function() {
             }
           }
           nested_form.find('.supply-lot-laboratory').val(data[0].lab);
-          nested_form.find('.deliver-quantity').attr({ "max" : data[0].quant });
           nested_form.find('.supply-lot-id').val(data[0].id);
           select.selectpicker('val', data[0].id);
           select.selectpicker('refresh');
@@ -251,7 +251,6 @@ $(document).on('turbolinks:load', function() {
     var formatDate = expiry.getDate() + '/'+ (expiry.getMonth() + 1) + '/' +  expiry.getFullYear();
     var lab = $('select.selectpicker option[value="' + $(this).val() + '"]').data('lab');
 
-    nested_form.find('.deliver-quantity').attr({ "max" : quant });
     nested_form.find('.supply-lot-expiry').val(formatDate);
     nested_form.find('.supply-lot-laboratory').val(lab);
     nested_form.find(".supply-lot-id").val($(this).val());
