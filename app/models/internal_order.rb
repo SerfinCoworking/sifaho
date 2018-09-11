@@ -10,8 +10,10 @@ class InternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant, class_name: 'User'
   belongs_to :provider, class_name: 'User'
-  has_one :profile, :through => :applicant
-  has_one :profile, :through => :provider
+  has_one :applicant_sector, :through => :applicant, :source => "sector"
+  has_one :provider_sector, :through => :provider, :source => "sector"
+  has_one :applicant_profile, :through => :applicant, :source => "profile"
+  has_one :provider_profile, :through => :provider, :source => "profile"
   belongs_to :sector
   has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests, dependent: :destroy

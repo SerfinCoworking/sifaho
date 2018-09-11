@@ -1,5 +1,6 @@
 <% content_for :page_header do %>
   Pedidos internos
+  <small><%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> entregados</small>
   <%= link_to new_deliver_internal_orders_path, remote: true, class: 'btn btn-primary btn-xs' do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
     Entrega

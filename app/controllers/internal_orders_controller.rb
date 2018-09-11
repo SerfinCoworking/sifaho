@@ -23,7 +23,7 @@ class InternalOrdersController < ApplicationController
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
   end
-
+  
   # GET /internal_orders/1
   # GET /internal_orders/1.json
   def show
@@ -46,7 +46,7 @@ class InternalOrdersController < ApplicationController
   def new_deliver
     authorize InternalOrder
     @internal_order = InternalOrder.new
-    @applicants = User.where.not(sector: current_user.sector_id )
+    @applicant_sectors = Sector.where.not(id: current_user.sector_id).pluck(:name, :id)
     @internal_order.quantity_supply_requests.build
     @internal_order.quantity_supply_lots.build
   end
