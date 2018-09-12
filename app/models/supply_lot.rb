@@ -26,7 +26,8 @@ class SupplyLot < ApplicationRecord
   validates_presence_of :code
   validates_presence_of :supply_name
   validates_presence_of :lot_code
-  validates :lot_code, :uniqueness => { :scope => :laboratory_id, conditions: -> {with_deleted} }
+  validates_presence_of :laboratory
+  validates :supply, :uniqueness => { :scope => [:laboratory_id, :lot_code], conditions: -> { with_deleted } }
 
   filterrific(
     default_filter_params: { sorted_by: 'insumo_asc' },

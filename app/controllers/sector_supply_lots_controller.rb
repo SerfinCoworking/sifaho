@@ -62,9 +62,9 @@ class SectorSupplyLotsController < ApplicationController
   # POST /supply_lots.json
   def create
     @supply_lot = SupplyLot.where(
+      supply_id: sector_supply_lot_params[:supply_id],
       lot_code: sector_supply_lot_params[:lot_code],
       laboratory_id: sector_supply_lot_params[:laboratory_id],
-      supply_id: sector_supply_lot_params[:supply_id],
     ).first_or_initialize
     @supply_lot.expiry_date = sector_supply_lot_params[:expiry_date]
     @supply_lot.date_received = sector_supply_lot_params[:created_at]

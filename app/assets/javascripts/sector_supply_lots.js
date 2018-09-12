@@ -118,36 +118,27 @@ $(document).on('turbolinks:load', function() {
         .element
         .find('li')
         .each(function () {
-            var me = $(this);
-            var keywords = acData.term.split(' ').join('|');
-            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+          var me = $(this);
+          var keywords = acData.term.split(' ').join('|');
+          me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
         });
       },
       select:
       function (event, ui) {
-        $("#supply-name").val(ui.item.name).prop( "disabled", true );
-        $("#supply-lot-code").val(ui.item.id);
-        $("#supply-code").val(ui.item.code).prop( "disabled", true );
-        $("#sector_supply_lot_supply_id").val(ui.item.supply_id);
         $("#sector_supply_lot_lot_code").val(ui.item.value);
         $("#laboratory-lot").val(ui.item.lab_name);
         $("#sector_supply_lot_laboratory_id").val(ui.item.lab_id);
-        $("#expiry-date").prop( "disabled", true );
         if(ui.item.expiry_date){
           var date = new Date(ui.item.expiry_date);
-          $("#expiry-date").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear()).prop( "disabled", true );
+          $("#expiry-date").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear())
           $("#sector_supply_lot_expiry_date").val(ui.item.expiry_date);
         }
-        $("#supply-quantity").focus();
+        $("#laboratory-lot").focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {
-            var noResult = { value:"",label:"Nuevo lote" };
-            $("#supply-name").prop( "disabled", false );
-            $("#supply-code").prop( "disabled", false );
-            $("#expiry-date").prop( "disabled", false );
-            $("#sector_supply_lot_lot_code").val($(this).val());
-            ui.content.push(noResult);
+          var noResult = { value:"",label:"Nuevo lote" };
+          ui.content.push(noResult);
         }
       }
     }).each(function() {

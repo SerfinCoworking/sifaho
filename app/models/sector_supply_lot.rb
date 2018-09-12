@@ -2,7 +2,7 @@ class SectorSupplyLot < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum status: { vigente: 0, por_vencer: 1, vencido: 2, agotado: 3}
+  enum status: { vigente: 0, por_vencer: 1, vencido: 2, agotado: 3 }
 
   # Callbacks
   after_validation :update_status
