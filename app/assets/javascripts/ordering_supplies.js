@@ -2,7 +2,8 @@ $(document).on('turbolinks:load', function() {
   var today = new moment();
   $('#requested-date').datetimepicker({
     format: 'DD/MM/YYYY',
-    date: today
+    date: today,
+    locale: 'es'
   });
 
   $("#establishment").on("click", function () {

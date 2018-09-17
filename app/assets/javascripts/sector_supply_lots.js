@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
-  $('#date-received').datetimepicker({ format: 'DD/MM/YYYY' });
-  $('#expiry-date').datetimepicker({ format: 'DD/MM/YYYY' });
+  $('#date-received').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
+  $('#expiry-date').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
 
   $("#expiry-date").on("dp.change", function (e) {
     var date = new Date(e.date);

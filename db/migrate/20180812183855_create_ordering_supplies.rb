@@ -1,14 +1,24 @@
 class CreateOrderingSupplies < ActiveRecord::Migration[5.1]
   def change
     create_table :ordering_supplies do |t|
-      t.references :sector, foreign_key: true
+      t.references :applicant_sector, index: true
+      t.references :provider_sector, index: true
+      t.references :audited_by, index: true
+      t.references :accepted_by, index: true
+      t.references :sent_by, index: true
+      t.references :received_by, index: true
       t.text :observation
+
+      t.datetime :sent_date
+      t.datetime :accepted_date
       t.datetime :date_received
-      t.integer :status, default: 0
+      t.datetime :requested_date
+
+      t.integer :applicant_status, default: 0
+      t.integer :provider_status, default: 0
 
       t.timestamps
     end
-    add_reference :ordering_supplies, :responsable, index: true
     add_column :ordering_supplies, :deleted_at, :datetime
     add_index :ordering_supplies, :deleted_at
   end

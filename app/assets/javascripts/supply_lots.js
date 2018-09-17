@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
-  $('#expired-from').datetimepicker({ format: 'DD/MM/YYYY' });
-  $('#expiry-date').datetimepicker({ format: 'DD/MM/YYYY' });
+  $('#expired-from').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
+  $('#expiry-date').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
   $("#new_supply_lot").bind("ajax:complete", function(event,xhr,status){
     document.getElementById("new_supply_lot").reset();
     $('#supply_lot_supply_id').focus()

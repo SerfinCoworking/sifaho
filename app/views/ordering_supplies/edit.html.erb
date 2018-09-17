@@ -9,23 +9,22 @@
       <% end %>
     </h3>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" id="panel-body-new">
     <%= render 'provider_form', ordering_supply: @ordering_supply %>
   </div>
-  <%= render 'status_bar', ordering_supply: @ordering_supply %><br>
-  <div class="panel-footer text-center">
-      <%= link_to 'Volver', ordering_supplies_path, class: 'btn pull-left' %>
-      <button type='submit' name='commit' class='btn btn-default' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Guardar y auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Guardar y auditar
+  <div class="panel-footer text-right">
+      <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
+      <button type='submit' name='commit' class='btn btn-success' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
       </button>
-      <button type='submit' name='commit' class='btn btn-primary pull-right' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Guardar y aceptar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
+      <button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar y aceptar'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Auditar y aceptar
       </button>
       <% if policy(@ordering_supply).send_provider? %>
         <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
-          class: 'btn btn-primary btn-md pull-right' do %>
+          class: 'btn btn-primary btn-md' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Guardar y enviar
+          Auditar y enviar
         <% end %>
       <% end %>
   </div>

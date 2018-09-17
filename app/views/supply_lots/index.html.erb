@@ -6,10 +6,6 @@
       Nuevo
     <% end %>
   <% end %>
-  <%= button_tag(class: "btn btn-info btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
-    Filtrar
-  <% end %>
 <% end %>
 <% if policy(@supply_lots).new? %>
   <div class="panel panel-primary" id="filter-panel">

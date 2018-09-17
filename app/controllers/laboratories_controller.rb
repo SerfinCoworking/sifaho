@@ -16,7 +16,7 @@ class LaboratoriesController < ApplicationController
         :search_gln,
       ],
     ) or return
-    @laboratories = @filterrific.find.page(params[:page]).per_page(9)
+    @laboratories = @filterrific.find.page(params[:page]).per_page(8)
   end
 
   # GET /laboratories/1

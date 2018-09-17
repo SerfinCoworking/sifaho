@@ -10,5 +10,6 @@ class CreateEstablishments < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_reference :sectors, :establishment, foreign_key: true
   end
 end

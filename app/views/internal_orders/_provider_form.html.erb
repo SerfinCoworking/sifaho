@@ -1,45 +1,35 @@
 <%= simple_form_for @internal_order, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
   <div class="row">
-    <div class='col-md-4'>
-      <div class="text-center"><%= f.label :applicant_sector_id, "Solicitante" %></div>
-      <%= f.input :applicant_sector_id, label: 'Sector',
-        collection: @applicant_sectors.map {
-          |sector| [sector.name, sector.id]
-        },
+    <div class='col-md-3'>
+      <%= f.input :applicant_sector_id, label: 'Sector solicitante',
+        collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
         :input_html => {
           required: true,
           id: 'applicant-sector',
           class: 'selectpicker show-tick',
-          "data-width"=>"322px",
+          "data-width"=>"auto",
           "title"=>"Seleccionar sector",
           "data-size"=>"10",
           "data-live-search"=>true,
           disabled: false,
           value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
-        } %>
+        } 
+      %>
       <br>
       <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.provider_sector_id unless f.object.new_record?}" %>
     </div>
-    <div class="col-md-4">
-      <div class="text-center"><%= f.label :provider_sector_id, "Proveedor" %></div>
+    <div class="col-md-3">
       <%= f.input :provider_sector_id, as: :string,
-                        label: 'Establecimiento',
-                        :input_html => {
-                          disabled: true,
-                          value: "#{if f.object.new_record?; current_user.establishment_name; else; f.object.provider_sector.establishment_name; end}",
-                          size: 41
-                        } %>
-      <%= f.input :provider_sector_id, as: :string,
-                        label: 'Sector',
-                        :input_html => {
-                          disabled: true,
-                          value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
-                          size: 41
-                        } %>
+        label: 'Sector proveedor',
+        :input_html => {
+          disabled: true,
+          value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
+        } 
+      %>
       <%= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
     </div>
-    <div class='col-md-4'>
+    <div class='col-md-2'>
       <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
         :placeholder => "Seleccionar fecha",
         input_html: {
@@ -49,11 +39,15 @@
           :style => 'width: 110px',
           value: "#{f.object.requested_date unless f.object.new_record?}"
         },
-        html5: false %>
+        html5: false 
+      %>
+    </div>
+    <div class='col-md-4'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-      :input_html => { :cols => 38  , :rows => 2 } %>
+      :input_html => { :cols => 30  , :rows => 1 } %>
     </div>
   </div>
+  <hr>
   <!-- Insumos a dispensar -->
   <table class="table table-hover table-condensed">
     <thead>
@@ -79,7 +73,7 @@
       <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
         data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Agregar insumo solicitado
+        Agregar insumo
       <% end %>
     </div>
   </div>

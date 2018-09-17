@@ -2,41 +2,30 @@ class InternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum status: { pendiente: 0, entregado: 1, anulado: 2 }
-
-  # Callbacks
-  before_validation :assign_sector
+  enum applicant_status: { borrador: 0, solicitado: 1, auditoria: 2, en_camino: 3, recibido: 4, anulado: 5 }, _prefix: :applicant
+  enum provider_status: { nuevo: 0, auditoria: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
 
   # Relaciones
-  belongs_to :applicant, class_name: 'User'
-  belongs_to :provider, class_name: 'User'
-  has_one :applicant_sector, :through => :applicant, :source => "sector"
-  has_one :provider_sector, :through => :provider, :source => "sector"
-  has_one :applicant_profile, :through => :applicant, :source => "profile"
-  has_one :provider_profile, :through => :provider, :source => "profile"
-  belongs_to :sector
-  has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests, dependent: :destroy
-  has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots, dependent: :destroy
+  belongs_to :applicant_sector, class_name: 'Sector'
+  belongs_to :provider_sector, class_name: 'Sector'
+  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
+
+  belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :audited_by, class_name: 'User', optional: true
+  belongs_to :sent_by, class_name: 'User', optional: true
+  belongs_to :received_by, class_name: 'User', optional: true
 
   # Validaciones
-  validates_presence_of :applicant
-  validates_presence_of :provider
-  validates_presence_of :sector
-  validates_presence_of :date_received
-  validates_presence_of :quantity_supply_requests
-  validates_associated :quantity_supply_requests
-  validates_associated :supplies
-  validates_associated :quantity_supply_lots
+  validates_presence_of :provider_sector
+  validates_presence_of :applicant_sector
+  validates_presence_of :requested_date
+  validates_presence_of :quantity_ord_supply_lots
+  validates_associated :quantity_ord_supply_lots
   validates_associated :sector_supply_lots
 
   # Atributos anidados
-  accepts_nested_attributes_for :quantity_supply_requests,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :supplies
-  accepts_nested_attributes_for :quantity_supply_lots,
+  accepts_nested_attributes_for :quantity_ord_supply_lots,
           :reject_if => :all_blank,
           :allow_destroy => true
 
@@ -47,7 +36,8 @@ class InternalOrder < ApplicationRecord
       :search_supply_code,
       :search_supply_name,
       :sorted_by,
-      :date_received_at,
+      :requested_date_at,
+      :received_date_at,
     ]
   )
 
@@ -98,8 +88,12 @@ class InternalOrder < ApplicationRecord
     end
   }
 
-  scope :date_received_at, lambda { |reference_time|
-    where('internal_orders.date_received >= ?', reference_time)
+  scope :requested_date_at, lambda { |reference_time|
+    where('internal_orders.requested_date = ?', reference_time)
+  }
+
+  scope :received_date_at, lambda { |reference_time|
+    where('internal_orders.received_date = ?', reference_time)
   }
 
   scope :with_sector_id, lambda { |an_id|
@@ -122,8 +116,8 @@ class InternalOrder < ApplicationRecord
   end
 
   def deliver
-    if entregado?
-      raise ArgumentError, "Ya se ha entregado este pedido"
+    if enviado?
+      raise ArgumentError, "Ya se ha enviado este pedido"
     else
       if self.quantity_supply_lots.present?
         self.quantity_supply_lots.each do |qsls|
@@ -134,24 +128,38 @@ class InternalOrder < ApplicationRecord
         raise ArgumentError, 'No hay lotes en el pedido'
       end
       self.date_delivered = DateTime.now
-      self.entregado!
+      self.enviado!
     end #End entregado?
   end
 
   # Label del estado para vista.
-  def status_label
-    if self.entregado?
-      return 'success'
-    elsif self.pendiente?
-      return 'default'
-    elsif self.anulado?
-      return 'danger'
+  def applicant_status_label
+    if self.applicant_borrador?; return 'default'
+    elsif self.applicant_solicitado?; return 'info'
+    elsif self.applicant_auditoria?; return 'warning'
+    elsif self.applicant_en_camino?; return 'primary'
+    elsif self.applicant_recibido?; return 'success'
+    elsif self.applicant_anulado?; return 'danger'
     end
   end
 
-  private
+  # Label del estado para vista.
+  def provider_status_label
+    if self.provider_nuevo?; return 'info'
+    elsif self.provider_auditoria?; return 'warning'
+    elsif self.provider_en_camino?; return 'primary'
+    elsif self.provider_entregado?; return 'success'
+    elsif self.provider_anulado?; return 'danger'
+    end
+  end
 
-  def assign_sector
-    self.sector = self.provider.sector
+  # Porcentaje de la barra de estado
+  def percent_status
+    if self.provider_nuevo?; return 5
+    elsif self.provider_auditoria?; return 34
+    elsif self.provider_en_camino?; return 71
+    elsif self.provider_entregado?; return 100
+    elsif self.provider_anulado?; return 100
+    end
   end
 end

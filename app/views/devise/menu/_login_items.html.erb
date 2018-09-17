@@ -1,8 +1,9 @@
 <% if user_signed_in? %>
   <li class="inverse-dropdown">
     <a class="inverse-dropdown dropdown-toggle" data-toggle="dropdown" href="#">
-      <span class="glyphicon glyphicon-user"></span>
+      <span class="glyphicon glyphicon-user "></span>
       <%= current_user.full_name %>
+      &nbsp;&nbsp;
     </a>
     <ul class="inverse-dropdown dropdown-menu">
       <% if current_user.has_role? :admin %>

@@ -10,15 +10,15 @@
       <% end %>
     </h3>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" id="panel-body-new">
     <%= render 'provider_form', ordering_supply: @ordering_supply %>
   </div>
-  <div class="panel-footer text-center">
-    <%= link_to 'Volver', ordering_supplies_path, class: 'btn pull-left' %>
-    <button type='submit' name='commit' class='btn btn-default' form='new_ordering_supply' value='Auditar'>
+  <div class="panel-footer text-right">
+    <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
+    <button type='submit' name='commit' class='btn btn-success' form='new_ordering_supply' value='Auditar'>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
     </button>
-    <button type='submit' name='commit' class='btn btn-primary pull-right' form='new_ordering_supply' value='Auditar y aceptar'>
+    <button type='submit' name='commit' class='btn btn-primary' form='new_ordering_supply' value='Auditar y aceptar'>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Auditar y aceptar
     </button>
   </div>

@@ -6,6 +6,8 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply
+  validates_presence_of :requested_quantity
+  validates_presence_of :delivered_quantity
   validates_associated :supply
 
   accepts_nested_attributes_for :supply
