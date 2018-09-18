@@ -134,7 +134,7 @@ class SectorSupplyLotsController < ApplicationController
   end
 
   def search_by_code
-    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(2).without_status(3)
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(3)
     render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,
       value: sup_lot.code, id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
       quant: sup_lot.quantity, lot_code: sup_lot.lot_code, lab: sup_lot.laboratory, status_label: sup_lot.status_label } }

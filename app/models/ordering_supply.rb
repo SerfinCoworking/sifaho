@@ -119,23 +119,6 @@ class OrderingSupply < ApplicationRecord
     where(provider_sector: a_sector)
   end
 
-
-  def deliver
-    if entregado?
-      raise ArgumentError, "Ya se ha entregado este pedido"
-    else
-      if self.quantity_supply_lots.present?
-        self.quantity_supply_lots.each do |qsls|
-          qsls.decrement
-        end
-      else
-        raise ArgumentError, 'No hay lotes en el pedido'
-      end
-      self.date_delivered = DateTime.now
-      self.entregado!
-    end #End entregado?
-  end
-
   # Label del estado para vista.
   def provider_status_label
     if self.provider_auditoria?; return 'warning'
@@ -145,6 +128,16 @@ class OrderingSupply < ApplicationRecord
     elsif self.provider_anulado?; return 'danger'
     end
   end
+
+    # Label del estado para vista.
+    def applicant_status_label
+      if self.provider_auditoria?; return 'warning'
+      elsif self.provider_aceptado?; return 'primary'
+      elsif self.provider_en_camino?; return 'info'
+      elsif self.provider_entregado?; return 'success'
+      elsif self.provider_anulado?; return 'danger'
+      end
+    end
 
   # Porcentaje de la barra de estado
   def percent_status
@@ -270,5 +263,4 @@ class OrderingSupply < ApplicationRecord
   def assign_sector
     self.sector = self.responsable.sector
   end
-
 end

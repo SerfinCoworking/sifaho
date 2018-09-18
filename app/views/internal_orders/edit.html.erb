@@ -1,0 +1,28 @@
+<% content_for :page_header do %>
+  Pedidos internos
+<% end %>
+<div class="panel panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando pedido a entregar
+      <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body" id="panel-body-new">
+    <%= render 'provider_form', internal_order: @internal_order %>
+  </div>
+  <div class="panel-footer text-right">
+      <%= link_to 'Volver', internal_orders_path, class: 'btn' %>
+      <button type='submit' name='commit' class='btn btn-success' form='edit_internal_order_<%=@internal_order.id%>' value='Auditar'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
+      </button>
+      <% if policy(@internal_order).send_provider? %>
+        <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
+          class: 'btn btn-primary btn-md' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+          Auditar y enviar
+        <% end %>
+      <% end %>
+  </div>
+</div>

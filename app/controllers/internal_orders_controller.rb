@@ -1,5 +1,6 @@
 class InternalOrdersController < ApplicationController
-  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete,
+  :send_provider, :receive_applicant_confirm, :receive_applicant, :return_provider_status ]
 
   # GET /internal_orders
   # GET /internal_orders.json
@@ -53,8 +54,10 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1/edit
   def edit
     authorize @internal_order
-    @responsables = User.all
-    @supplies = SupplyLot.all
+    @applicant_sectors = Sector
+    .select(:id, :name)
+    .with_establishment_id(current_user.sector.establishment_id)
+    .where.not(id: current_user.sector_id).as_json
   end
 
   # POST /internal_orders
@@ -97,24 +100,25 @@ class InternalOrdersController < ApplicationController
   # PATCH/PUT /internal_orders/1.json
   def update
     authorize @internal_order
-
     respond_to do |format|
-      if @internal_order.update_attributes(internal_order_params)
-        # Si se carga y entrega el pedido
-        if delivering?
+      if @internal_order.update(internal_order_params)
+        # Si se acepta el pedido
+        if sending?
           begin
-            @internal_order.deliver
-            flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.name+" se ha modificado y entregado correctamente."
+            @internal_order.send_order
+            flash[:success] = 'El pedido se ha enviado correctamente'
           rescue ArgumentError => e
-            flash.now[:notice] = "Se ha modificado pero no se ha podido entregar: "+e.message
+            @internal_order.sent_by = nil; @internal_order.save
+            flash[:alert] = 'No se ha podido enviar: '+e.message
           end
         else
-          flash.now[:success] = "El pedido interno de "+@internal_order.responsable.sector.name+" se ha modificado correctamente."
+          flash[:notice] = 'El pedido se ha auditado correctamente.'
         end
-        format.js
+        format.html { redirect_to @internal_order }
       else
-        flash.now[:error] = "El pedido interno de "+@internal_order.responsable.sector.name+" no se ha podido modificar."
-        format.js
+        @sectors = Sector.with_establishment_id(@internal_order.applicant_sector.establishment_id)
+        format.html { render :edit }
+        format.json { render json: @internal_order.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -139,25 +143,49 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  # GET /internal_orders/1/dispense
-  def deliver
+  # GET /internal_order/1/send_provider
+  def send_provider
+    authorize @internal_order
+    @users = User.with_sector_id(current_user.sector_id)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # GET /internal_orders/1/receive_applicant
+  def receive_applicant
     authorize @internal_order
     respond_to do |format|
       begin
-        @internal_order.deliver
-
+        @internal_order.received_by = current_user
+        @internal_order.receive_order(current_user.sector)
+        flash[:success] = 'El pedido se ha recibido correctamente'
       rescue ArgumentError => e
-        flash.now[:error] = e.message
-        format.js
+        flash[:error] = 'No se ha podido recibir: '+e.message
       else
-        if @internal_order.save!
-          flash.now[:success] = "El pedido interno de "+@internal_order.applicant.full_name+" se ha entregado correctamente."
-          format.js
-        else
-          flash.now[:error] = "El pedido interno no se ha podido entregar."
-          format.js
-        end
+      format.html { redirect_to @internal_order }
       end
+    end
+  end
+
+  # GET /internal_orders/1/receive_applicant_confirm
+  def receive_applicant_confirm
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def return_provider_status
+    authorize @internal_order
+    respond_to do |format|
+      begin
+        @internal_order.return_provider_status
+      rescue ArgumentError => e
+        flash[:alert] = 'No se ha podido retornar: '+e.message
+      else
+        flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
+      end
+      format.html { redirect_to @internal_order }
     end
   end
 
@@ -180,7 +208,7 @@ class InternalOrdersController < ApplicationController
     # Se verifica si el value del submit del form es para enviar
     def sending?
       submit = params[:commit]
-      return submit == "Auditar y enviar"
+      return submit == "Auditar y enviar" || submit == "Enviar"
     end
 
     # Se verifica si el value del submit del form es para enviar

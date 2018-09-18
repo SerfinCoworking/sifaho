@@ -195,13 +195,10 @@ class OrderingSuppliesController < ApplicationController
       end
       format.html { redirect_to @ordering_supply }
     end
-
   end
 
   def return_applicant_status
     authorize @ordering_supply
-
-
   end
 
   # DELETE /ordering_supplies/1

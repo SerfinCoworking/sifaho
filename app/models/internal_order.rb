@@ -115,21 +115,66 @@ class InternalOrder < ApplicationRecord
     ]
   end
 
-  def deliver
-    if enviado?
-      raise ArgumentError, "Ya se ha enviado este pedido"
+  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
+  def send_order
+    if provider_anulado?
+      raise ArgumentError, "El pedido está anulado"
+    elsif provider_en_camino?
+      raise ArgumentError, "El pedido ya se encuentra en camino"
     else
-      if self.quantity_supply_lots.present?
-        self.quantity_supply_lots.each do |qsls|
-          qsls.decrement
-          qsls.increment_lot_to(self.applicant.sector)
-        end
+      if self.quantity_ord_supply_lots.exists?
+        if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+          self.quantity_ord_supply_lots.each do |qosl|
+            qosl.decrement
+          end
+        else
+          raise ArgumentError, 'No hay insumos a entregar en el pedido'
+        end # End check if sector supply exists
       else
-        raise ArgumentError, 'No hay lotes en el pedido'
+        raise ArgumentError, 'No hay insumos solicitados en el pedido'
+      end # End check if quantity_ord_supply_lots exists
+      self.sent_date = DateTime.now
+      self.applicant_en_camino!
+      self.provider_en_camino!
+    end # End anulado?
+  end
+
+  # Método para retornar perdido a estado anterior
+  def return_provider_status
+    if provider_auditoria?
+      raise ArgumentError, "No hay más estados a retornar"
+    elsif provider_en_camino?
+      self.quantity_ord_supply_lots.each do |qosl|
+        qosl.increment
       end
-      self.date_delivered = DateTime.now
-      self.enviado!
-    end #End entregado?
+      self.sent_by = nil
+      self.sent_date = nil
+      self.provider_auditoria!
+    elsif provider_entregado?
+      raise ArgumentError, "Ya se ha entregado el pedido"
+    end
+  end
+
+  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
+  def receive_order(a_sector)
+    if provider_anulado? || applicant_anulado?
+      raise ArgumentError, "El pedido está anulado"
+    elsif provider_auditoria?
+      raise ArgumentError, "El pedido se encuentra en auditoria"
+    elsif provider_entregado?
+      raise ArgumentError, "El pedido ya ha sido entregado"
+    elsif provider_en_camino?
+      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+        self.quantity_ord_supply_lots.each do |qosl|
+          qosl.increment_lot_to(a_sector)
+        end
+        self.date_received = DateTime.now
+        self.provider_entregado!
+        self.applicant_recibido!
+      else
+        raise ArgumentError, 'No hay insumos para recibir en el pedido'
+      end # End chack if sector supply exists
+    end #End anulado?
   end
 
   # Label del estado para vista.

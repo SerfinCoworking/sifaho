@@ -1,0 +1,29 @@
+// Add styles
+$('.modal-content').addClass('panel-primary');
+
+// Add the dialog title
+$('#dialog h4').html("<i class=' glyphicon glyphicon-send'></i>  Enviar el pedido");
+
+// Render the send form
+$('.modal-body').html('<%= j render("send_form") %>');
+
+// Add form button
+$('.modal-footer').html(
+  "<a class='btn' data-dismiss='modal'>Volver</a>"+
+  "<button type='submit' name='commit' class='btn btn-primary' form='edit_internal_order_<%=@internal_order.id%>' value='Enviar'>Confirmar</button>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+$('.selectpicker').selectpicker(); // Se inicializa selectpicker
+
+// Evento del select sector para rellenar hidden id
+$(document).on('change', '#sent-by-select', function() {
+  $(".sent-by-id").val($(this).val());
+});//End on change events
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-primary');
+});

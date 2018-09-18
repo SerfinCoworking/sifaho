@@ -1,5 +1,5 @@
 <% content_for :page_header do %>
-  Abastecimiento
+  Pedidos internos
 <% end %>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -83,7 +83,7 @@
               <th></th>
               <th>Creado</th>
               <th>Auditado</th>
-              <th>Enviado</th>
+              <th>Transportado</th>
               <th>Recibido</th>
             </tr>
             <tr>
@@ -141,7 +141,7 @@
     <div class="modal-content panel-warning">
       <div class="modal-header panel-heading">
         <a class="close" data-dismiss="modal">×</a>
-        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.provider_statuses.key(@internal_order.provider_status_before_type_cast - 1) %></h3>
+        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.provider_statuses.key(@internal_order.provider_status_before_type_cast - 1) %></h3>
       </div>
       <div class="modal-body">
         <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>
