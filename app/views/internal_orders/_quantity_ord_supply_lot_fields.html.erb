@@ -3,6 +3,7 @@
     <%= f.input :supply_id, as: :string,
       placeholder: 'Código',
       label: false,
+      required: false,
       :input_html => {
         class: "supply-code select-change",
         data: { autocomplete_source: search_by_id_supplies_path },
@@ -15,11 +16,12 @@
     <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
       label: false,
       placeholder: 'Nombre',
+      required: false,
       :input_html => {
         class: "supply-name select-change",
         data: { autocomplete_source: search_by_name_supplies_path },
         size: 35,
-        value: "#{ if f.object.supply.present?; f.object.supply_name; end }"
+        value: "#{if f.object.supply.present?; f.object.supply_name; end }"
       } 
     %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
@@ -42,7 +44,7 @@
         :class=>"has-tip deliver-quantity",
         :title=>"Cantidad entregada",
         "data-placement"=>"right",
-        min: '0', max: '9999', step:'any', :style => 'width: 70px'
+        min: '1', max: '9999', step:'any', :style => 'width: 70px'
       } 
     %>
   </td>
@@ -54,7 +56,7 @@
         "title"=>"Código",
         "data-size"=>"5",
         disabled: true,
-      })
+      }) 
     %>
   </td>
   <td>

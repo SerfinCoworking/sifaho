@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function() {
 
   $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
 
-  $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY'});
+  $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY', locale: 'es'});
 
   $('.selectpicker').selectpicker();
 

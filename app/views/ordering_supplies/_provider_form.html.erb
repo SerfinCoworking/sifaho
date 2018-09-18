@@ -4,24 +4,43 @@
     <div class='col-md-4'>
       <div class="text-center"><%= f.label :applicant_sector_id, "Solicitante" %></div>
       <%= f.input :applicant_sector_id, as: :string,
-                        label: 'Establecimiento',
-                        placeholder: 'Buscar por nombre',
-                        required: true,
-                        :input_html => {
-                          autocomplete: 'off',
-                          id: "establishment",
-                          data: { autocomplete_source: search_by_name_establishments_path },
-                          value: "#{f.object.applicant_sector.establishment_name unless f.object.new_record?}",
-                          size: 41
-                        } %>
+        label: 'Establecimiento',
+        placeholder: 'Buscar por nombre',
+        required: true,
+        :input_html => {
+          autocomplete: 'off',
+          id: "establishment",
+          data: { autocomplete_source: search_by_name_establishments_path },
+          value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector.establishment_name; end}",
+          size: 41
+        } 
+      %>
       <%= f.input :applicant_sector_id, :as => :hidden,
         error: "El sector es obligatorio",
         :input_html => {
           id: 'establishment-id',
-          value: "#{ f.object.applicant_sector.establishment_id unless f.object.new_record? }"
-        } %>
+          value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.establishment_id; end }"
+        } 
+      %>
       <br>
-      <% if f.object.new_record?%>
+      <% if f.object.applicant_sector.present? %>
+        <%= f.input :applicant_sector_id, label: 'Sector',
+          collection: @sectors.map {
+            |sector| [sector.name, sector.id]
+          },
+          :input_html => {
+            required: true,
+            id: 'applicant-sector',
+            class: 'selectpicker show-tick',
+            "data-width"=>"322px",
+            "title"=>"Seleccionar sector",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+            disabled: false,
+            value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.id; end }"
+          } 
+        %>
+      <% else %>
         <%= f.input :applicant_sector_id, label: 'Sector',
           collection: [],
           :input_html => {
@@ -33,25 +52,10 @@
             "data-size"=>"10",
             "data-live-search"=>true,
             disabled: false
-          } %>
-      <% else %>
-        <%= f.input :applicant_sector_id, label: 'Sector',
-          collection: @sectors.map {
-            |status| [status.name, status.id]
-          },
-          :input_html => {
-            required: true,
-            id: 'applicant-sector',
-            class: 'selectpicker show-tick',
-            "data-width"=>"322px",
-            "title"=>"Seleccionar sector",
-            "data-size"=>"10",
-            "data-live-search"=>true,
-            disabled: false,
-            value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
-          } %>
+          } 
+        %>
       <% end %>
-      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.provider_sector_id unless f.object.new_record?}" %>
+      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.id; end }" %>
     </div>
     <div class="col-md-4">
       <div class="text-center"><%= f.label :provider_sector_id, "Proveedor" %></div>

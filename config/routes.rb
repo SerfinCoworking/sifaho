@@ -79,10 +79,16 @@ Rails.application.routes.draw do
   end
 
   resources :internal_orders do
-    get "new_deliver", on: :collection
     member do
       get "delete"
       get "restore"; get "restore_confirm"
+      get "send_provider"
+      get "send_applicant"
+      get "return_provider_status"
+      get "return_applicant_status"
+    end
+    collection do
+      get "new_provider"
     end
   end
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"

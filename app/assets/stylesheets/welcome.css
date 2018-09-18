@@ -54,7 +54,7 @@
   position: fixed;
 }
 #custom-sidebar::-webkit-scrollbar {
-    display: none;  // Safari and Chrome
+    display: none;
 }
 #custom-sidebar .active a,
 #custom-sidebar ul>.active a{
@@ -172,10 +172,10 @@ li .well strong{
   background-color: rgba(124, 158, 212, 1);
   color: white;
 }
-#sector-name{
-    font-size: 20px;
+#date{
+    font-size: 15px;
     color: white;
-    padding-top: 20px;
+    padding-top: 18px;
     font-family: 'Comfortaa-regular', sans-serif;
 }
 
@@ -207,12 +207,13 @@ li .well strong{
     position: fixed;
     z-index: -1;
     left: 0;
-    bottom: 0;
+    bottom: -8px;
     width: 100%;
     background-color: transparent;
     color: #41ffc1;
     text-align: left;
     padding-left: 17em;
+    padding-bottom: 0;
 }
 .custom-header{
   margin-top: -9px!important;
@@ -220,4 +221,76 @@ li .well strong{
 }
 #edit-pass-form{
   margin-top: -40px;
+}
+@media (min-width: 768px) {
+  .navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+}
+.panel {
+  position: relative;
+}
+.panel-default > .panel-leftheading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.panel-primary > .panel-leftheading {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #428bca;
+}
+.panel-success > .panel-leftheading {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.panel-info > .panel-leftheading {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.panel-warning > .panel-leftheading {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.panel-danger > .panel-leftheading {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.panel-leftheading {
+  width: 42px;
+  padding: 10px 15px;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  float: left;
+  height: 100%;
+  position: absolute;
+}
+.panel-lefttitle {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: center;
+  width: 0;
+}
+.panel-rightbody {
+  float: left;
+  margin-left: 45px;
+  padding: 15px;
+}
+#panel-body-new {
+  /* height: 480px; */
+  height: calc(100vh - 220px);
+  overflow-y: auto; 
 }

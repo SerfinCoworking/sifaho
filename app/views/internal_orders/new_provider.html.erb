@@ -1,25 +1,25 @@
 <% content_for :page_header do %>
-  Abastecimiento
+  Pedidos internos
 <% end %>
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nueva entrega
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
     </h3>
   </div>
   <div class="panel-body" id="panel-body-new">
-    <%= render 'provider_form', ordering_supply: @ordering_supply %>
+    <%= render 'provider_form', internal_order: @internal_order %>
   </div>
   <div class="panel-footer text-right">
-    <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
-    <button type='submit' name='commit' class='btn btn-success' form='new_ordering_supply' value='Auditar'>
+    <%= link_to 'Volver', internal_orders_path, class: 'btn' %>
+    <button type='submit' name='commit' class='btn btn-success' form='new_internal_order' value='Auditar'>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
     </button>
-    <button type='submit' name='commit' class='btn btn-primary' form='new_ordering_supply' value='Auditar y aceptar'>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Auditar y aceptar
+    <button type='submit' name='commit' class='btn btn-primary' form='new_internal_order' value='Auditar y aceptar'>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> Auditar y enviar
     </button>
   </div>
 </div>

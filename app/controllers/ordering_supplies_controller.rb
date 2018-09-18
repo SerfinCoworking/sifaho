@@ -23,7 +23,7 @@ class OrderingSuppliesController < ApplicationController
         :sorted_by,
       ],
     ) or return
-    @ordering_supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @ordering_supplies = @filterrific.find.page(params[:page]).per_page(10)
   end
 
   # GET /ordering_supplies
@@ -59,7 +59,7 @@ class OrderingSuppliesController < ApplicationController
   def new
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
-    @ordering_supply.quantity_ord_supply_lots.build
+    4.times { @ordering_supply.quantity_ord_supply_lots.build }
   end
 
   # GET /ordering_supplies/1/edit
@@ -67,6 +67,7 @@ class OrderingSuppliesController < ApplicationController
     authorize @ordering_supply
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
     @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+    4.times { @ordering_supply.quantity_ord_supply_lots.build }
   end
 
   # POST /ordering_supplies
@@ -91,6 +92,8 @@ class OrderingSuppliesController < ApplicationController
         end
         format.html { redirect_to @ordering_supply }
       else
+        4.times { @ordering_supply.quantity_ord_supply_lots.build }
+        @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
         flash[:error] = "El pedido no se ha podido crear."
         format.html { render :new }
       end
@@ -102,13 +105,13 @@ class OrderingSuppliesController < ApplicationController
   def update
     authorize @ordering_supply
     respond_to do |format|
-      if @ordering_supply.update!(ordering_supply_params)
+      if @ordering_supply.update(ordering_supply_params)
         # Si se acepta el pedido
         if accepting?
           begin
             @ordering_supply.accepted_by = current_user
             @ordering_supply.accept_order
-            flash[:success] = 'El pedido se ha modificado y aceptado correctamente'
+            flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
           rescue ArgumentError => e
             @ordering_supply.accepted_by = nil; @ordering_supply.save
             flash[:alert] = 'No se ha podido aceptar: '+e.message
@@ -122,10 +125,11 @@ class OrderingSuppliesController < ApplicationController
             flash[:alert] = 'No se ha podido enviar: '+e.message
           end
         else
-          flash[:notice] = 'El pedido se ha modificado correctamente.'
+          flash[:notice] = 'El pedido se ha auditado correctamente.'
         end
         format.html { redirect_to @ordering_supply }
       else
+        @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
         format.html { render :edit }
         format.json { render json: @ordering_supply.errors, status: :unprocessable_entity }
       end
@@ -237,11 +241,11 @@ class OrderingSuppliesController < ApplicationController
 
     def accepting?
       submit = params[:commit]
-      return submit == "Auditar y aceptar" || submit == "Guardar y aceptar" || submit == "Aceptar"
+      return submit == "Auditar y aceptar" || submit == "Aceptar"
     end
 
     def sending?
       submit = params[:commit]
-      return submit == "Enviar"
+      return submit == "Enviar" || submit == "Auditar y enviar"
     end
 end

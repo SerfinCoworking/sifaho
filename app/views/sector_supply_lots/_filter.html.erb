@@ -1,55 +1,58 @@
 <div class="panel panel-info" id="filter-panel">
-  <div class="panel-collapse collapse" id="filter">
-    <div class="panel-body">
-      <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-1 col-sm-1">
-          <label>Insumo</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :with_code,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Código',
-            autocomplete: 'off'
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Insumo</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_supply_name,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre de insumo',
-            autocomplete: 'off'
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Estado</label>
-          <%= f.select(:with_status,
-            @filterrific.select_options[:with_status].map {
-              |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
-            },{},
-            { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-           <label>Recibido desde</label>
-           <%= f.text_field(:date_received_at, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
-             class: 'form-control filterrific-periodically-observed datetimepicker') %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-           <label>Vigente hasta</label>
-           <%= f.text_field(:date_received_at, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
-             class: 'form-control filterrific-periodically-observed datetimepicker') %>
-        </div>
-        <%= link_to reset_filterrific_url, class: "btn btn-default btn-md pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <!-- Spinner para la carga -->
-        <%= render_filterrific_spinner %>
+  <div class="panel-leftheading">
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+  </div>
+  <div class="panel-rightbody">
+    <%= form_for_filterrific @filterrific do |f| %>
+      <div class="col-md-1 col-sm-1">
+        <label>Insumo</label>
+        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+        <%= f.text_field(
+          :with_code,
+          class: 'filterrific-periodically-observed form-control',
+          placeholder: 'Código',
+          autocomplete: 'off'
+        ) %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Insumo</label>
+        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+        <%= f.text_field(
+          :search_supply_name,
+          class: 'filterrific-periodically-observed form-control',
+          placeholder: 'Nombre de insumo',
+          autocomplete: 'off'
+        ) %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Estado</label>
+        <%= f.select(:with_status,
+          @filterrific.select_options[:with_status].map {
+            |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
+          },{},
+          { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Ordenar por</label>
+        <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Recibido desde</label>
+        <%= f.text_field(:date_received_at, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
+          class: 'form-control filterrific-periodically-observed datetimepicker') %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Vigente hasta</label>
+        <%= f.text_field(:date_received_at, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
+          class: 'form-control filterrific-periodically-observed datetimepicker') %>
+      </div>
+      <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
       <% end %>
-    </div>
+      <!-- Spinner para la carga -->
+      <%= render_filterrific_spinner %>
+    <% end %>
+  </div>
+  <div class="clearfix">
   </div>
 </div>

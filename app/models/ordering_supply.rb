@@ -138,7 +138,7 @@ class OrderingSupply < ApplicationRecord
 
   # Label del estado para vista.
   def provider_status_label
-    if self.provider_auditoria?; return 'default'
+    if self.provider_auditoria?; return 'warning'
     elsif self.provider_aceptado?; return 'primary'
     elsif self.provider_en_camino?; return 'info'
     elsif self.provider_entregado?; return 'success'
@@ -157,28 +157,28 @@ class OrderingSupply < ApplicationRecord
   end
 
   def audited_by_info
-    if self.provider_auditoria?
+    if self.audited_by.present?
       return 'Auditado por '+self.audited_by.full_name
     else
       return 'Sin auditar'
     end
   end
   def accepted_by_info
-    if self.provider_aceptado?
+    if self.accepted_by.present?
       return 'Aceptado por '+self.accepted_by.full_name
     else
       return 'Sin aceptar'
     end
   end
   def sent_by_info
-    if self.provider_en_camino?
+    if self.sent_by.present?
       return 'En camino por '+self.sent_by.full_name
     else
       return 'Sin enviar'
     end
   end
   def received_by_info
-    if self.provider_entregado?
+    if self.received_by.present?
       return 'Recibido por '+self.received_by.full_name
     else
       return 'Sin entregar'

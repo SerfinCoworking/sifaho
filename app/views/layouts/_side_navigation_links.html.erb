@@ -30,7 +30,7 @@
         Internos
         <% if policy(InternalOrder).new? %>
           <div class="btn-add-int">
-            <%= link_to new_deliver_internal_orders_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+            <%= link_to new_provider_internal_orders_path, class: 'btn btn-primary btn-xs' do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>

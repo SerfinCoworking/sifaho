@@ -9,8 +9,8 @@ $('.modal-body').html('<%= j render("send_form") %>');
 
 // Add form button
 $('.modal-footer').html(
-  "<a class='btn pull-left' data-dismiss='modal'>Volver</a>"+
-  "<button type='submit' name='commit' class='btn btn-primary pull-right' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Enviar'>Confirmar</button>"
+  "<a class='btn' data-dismiss='modal'>Volver</a>"+
+  "<button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Enviar'>Confirmar</button>"
 );
 
 // Show the dynamic dialog

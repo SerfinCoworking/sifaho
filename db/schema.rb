@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180911231308) do
+ActiveRecord::Schema.define(version: 20180915201722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,17 +32,26 @@ ActiveRecord::Schema.define(version: 20180911231308) do
     t.datetime "date_delivered"
     t.datetime "date_received"
     t.text "observation"
-    t.integer "status", default: 0
+    t.integer "provider_status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "provider_id"
-    t.bigint "applicant_id"
     t.datetime "deleted_at"
-    t.bigint "sector_id"
-    t.index ["applicant_id"], name: "index_internal_orders_on_applicant_id"
+    t.bigint "provider_sector_id"
+    t.bigint "applicant_sector_id"
+    t.datetime "requested_date"
+    t.datetime "sent_date"
+    t.integer "applicant_status", default: 0
+    t.bigint "audited_by_id"
+    t.bigint "sent_by_id"
+    t.bigint "received_by_id"
+    t.bigint "created_by_id"
+    t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
+    t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
+    t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
     t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
-    t.index ["provider_id"], name: "index_internal_orders_on_provider_id"
-    t.index ["sector_id"], name: "index_internal_orders_on_sector_id"
+    t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
+    t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
+    t.index ["sent_by_id"], name: "index_internal_orders_on_sent_by_id"
   end
 
   create_table "laboratories", force: :cascade do |t|
@@ -365,7 +374,6 @@ ActiveRecord::Schema.define(version: 20180911231308) do
     t.index ["medication_id"], name: "index_vademecums_on_medication_id"
   end
 
-  add_foreign_key "internal_orders", "sectors"
   add_foreign_key "medications", "medication_brands"
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"

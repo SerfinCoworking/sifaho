@@ -5,33 +5,28 @@
   <div class="panel-heading">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo pedido
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
     </h3>
   </div>
   <div class="panel-body" id="panel-body-new">
     <div class="row">
-      <div class='col-md-4'>
-        <div class="text-center"><strong>Solicitante</strong></div>
-        <strong>Establecimiento:</strong>
-        <%= @ordering_supply.applicant_sector.establishment_name%><br>
-        <strong>Sector:</strong>
-        <%= @ordering_supply.applicant_sector.name%>
+      <div class='col-md-3'>
+        <strong>Sector solicitante:</strong>
+        <%= @internal_order.applicant_sector.name%>
       </div>
-      <div class="col-md-4">
-        <div class="text-center"><strong>Proveedor</strong></div>
-        <strong>Establecimiento:</strong>
-        <%= @ordering_supply.provider_sector.establishment_name%><br>
-        <strong>Sector:</strong>
-        <%= @ordering_supply.provider_sector.name%>
+      <div class="col-md-3">
+        <strong>Sector proveedor:</strong>
+        <%= @internal_order.provider_sector.name%>
+      </div>
+      <div class='col-md-2'>
+        <strong>Solicitado:</strong>
+        <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
       </div>
       <div class='col-md-4'>
-        <strong>Fecha solicitado:</strong>
-        <%= @ordering_supply.requested_date.strftime("%d/%m/%Y")%><br>
         <strong>Observaciones:</strong>
-          <%= @ordering_supply.observation? ? @ordering_supply.observation : 'Sin observaciones' %>
-
+          <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
       </div>
     </div>
     <hr>
@@ -50,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+        <% @internal_order.quantity_ord_supply_lots.each do |qosl| %>
           <tr>
             <td>
               <%= qosl.supply_id %>
@@ -78,7 +73,7 @@
       </tbody>
     </table>
   <hr>
-  <%= render 'status_bar', ordering_supply: @ordering_supply %>
+  <%= render 'status_bar', internal_order: @internal_order %>
   <br>
   <div class="row">
     <div class="col-md-12">
@@ -86,53 +81,53 @@
         <tbody>
             <tr>
               <th></th>
+              <th>Creado</th>
               <th>Auditado</th>
-              <th>Aceptado</th>
               <th>Enviado</th>
               <th>Recibido</th>
             </tr>
             <tr>
               <th>Usuario</th>
-              <td><%= @ordering_supply.audited_by.present? ? @ordering_supply.audited_by.full_name : '----' %></td>
-              <td><%= @ordering_supply.accepted_by.present? ? @ordering_supply.accepted_by.full_name : '----' %></td>
-            	<td><%= @ordering_supply.sent_by.present? ? @ordering_supply.sent_by.full_name : '----' %></td>
-              <td><%= @ordering_supply.received_by.present? ? @ordering_supply.received_by.full_name : '----' %></td>
+              <td><%= @internal_order.created_by.full_name %></td>
+              <td><%= @internal_order.audited_by.present? ? @internal_order.audited_by.full_name : '----' %></td>
+            	<td><%= @internal_order.sent_by.present? ? @internal_order.sent_by.full_name : '----' %></td>
+              <td><%= @internal_order.received_by.present? ? @internal_order.received_by.full_name : '----' %></td>
             </tr>
             <tr>
               <th>Fecha</th>
-              <td><%= @ordering_supply.updated_at.present? ? @ordering_supply.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= @ordering_supply.accepted_date.present? ? @ordering_supply.accepted_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-            	<td><%= @ordering_supply.sent_date.present? ? @ordering_supply.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= @ordering_supply.date_received.present? ? @ordering_supply.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          </tr>
+              <td><%= @internal_order.created_at.strftime("%d/%m/%y %H:%M") %></td>
+              <td><%= @internal_order.audited_by.present? ? @internal_order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
+            	<td><%= @internal_order.sent_date.present? ? @internal_order.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
+              <td><%= @internal_order.date_received.present? ? @internal_order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
   <div class="panel-footer text-right">
-    <%= link_to 'Volver', ordering_supplies_path, class: "btn" %>
-    <% if policy(@ordering_supply).edit? %>
-      <%= link_to edit_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false,
+    <%= link_to 'Volver', internal_orders_path, class: "btn" %>
+    <% if policy(@internal_order).edit? %>
+      <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
         Editar
       <% end %>
     <% end %>
-    <% if policy(@ordering_supply).return_provider_status? %>
-      <a href="#return-confirm" data-id="<%= @ordering_supply.id %>" class="return-confirm btn btn-warning">
+    <% if policy(@internal_order).return_provider_status? %>
+      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning">
         <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
         Retornar
       </a>
     <% end %>
-    <% if policy(@ordering_supply).send_provider? %>
-      <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
+    <% if policy(@internal_order).send_provider? %>
+      <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
         class: 'btn btn-primary btn-md' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
         Enviar
       <% end %>
     <% end %>
-    <% if policy(@ordering_supply).receive_applicant? %>
-      <%= link_to receive_applicant_confirm_ordering_supply_path(@ordering_supply), remote: true,
+    <% if policy(@internal_order).receive_applicant? %>
+      <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
         class: 'btn btn-success btn-md' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
         Recibir
@@ -146,14 +141,14 @@
     <div class="modal-content panel-warning">
       <div class="modal-header panel-heading">
         <a class="close" data-dismiss="modal">×</a>
-        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.provider_statuses.key(@ordering_supply.provider_status_before_type_cast - 1) %></h3>
+        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.provider_statuses.key(@internal_order.provider_status_before_type_cast - 1) %></h3>
       </div>
       <div class="modal-body">
         <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>
       </div>
       <div class="modal-footer text-right">
         <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-        <%= link_to 'Confirmar', return_provider_status_ordering_supply_path, method: :get, :class => 'btn btn-warning' %>
+        <%= link_to 'Confirmar', return_provider_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
       </div>
     </div>
   </div>
