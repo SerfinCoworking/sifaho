@@ -90,7 +90,7 @@ class SectorSupplyLotsController < ApplicationController
           flash.now[:error] = "El lote provincial no se ha podido crear."
           format.js
         end
-      rescue ActiveRecord::RecordInvalid => e
+      rescue 
         if e.message == 'Validation failed: Lot code ya está en uso'
           flash.now[:error] = "Ya existe el lote y el insumo no corresponde al mismo."
           format.js

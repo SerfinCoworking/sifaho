@@ -16,21 +16,13 @@
   <td>
     <%= internal_order.requested_date.strftime("%d/%m/%Y") %>
   </td>
-  <% if internal_order.provider_entregado? %>
-    <td>
-    <%= internal_order.received_date.strftime("%d/%m/%Y") %>
-  <% else %>
-    <% if policy(internal_order).send_provider? %>
-      <td class="text-center">
-      <%= link_to deliver_internal_order_path(internal_order), remote: true,
-            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-      <% end %>
-    <% else %>
+    <% if internal_order.provider_entregado? %>
       <td>
-      Sin enviar
+      <%= internal_order.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <td class="text-center">
+      <%= internal_order.provider_status.split('_').map(&:capitalize).join(' ') %>
     <% end %>
-  <% end %>
   </td>
   <td>
     <% if policy(internal_order).show? %>

@@ -5,6 +5,11 @@
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
     Entrega
   <% end %>
+  <%= link_to applicant_index_internal_orders_path, class: 'btn btn-default btn-xs',
+    title: 'Recibidos', data: { toggle: 'tooltip', placement: 'top' } do %>
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+    Recibidos
+  <% end %>
 <% end %>
 
 <div class="panel panel-info" id="filter-panel">
@@ -17,7 +22,7 @@
         <label>Solicitante</label>
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
-          :search_responsable,
+          :search_applicant,
           class: 'filterrific-periodically-observed form-control',
           placeholder: 'Sector',
           autocomplete: 'off'
@@ -40,8 +45,12 @@
         ) %>
       </div>
       <div class="col-md-2 col-sm-2">
-        <label>Ordenar por</label>
-        <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+        <label>Estado</label>
+        <%= f.select(:with_status,
+          @filterrific.select_options[:with_status].map {
+            |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
+          },{},
+          { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
       </div>
       <div class="col-md-2 col-sm-2">
         <label>Solicitado en</label>

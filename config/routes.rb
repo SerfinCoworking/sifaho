@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "new_provider"
+      get "applicant_index"
     end
   end
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"

@@ -88,7 +88,7 @@
             </tr>
             <tr>
               <th>Usuario</th>
-              <td><%= @internal_order.created_by.full_name %></td>
+              <td><%= @internal_order.created_by.present? ? @internal_order.created_by.full_name : '----' %></td>
               <td><%= @internal_order.audited_by.present? ? @internal_order.audited_by.full_name : '----' %></td>
             	<td><%= @internal_order.sent_by.present? ? @internal_order.sent_by.full_name : '----' %></td>
               <td><%= @internal_order.received_by.present? ? @internal_order.received_by.full_name : '----' %></td>

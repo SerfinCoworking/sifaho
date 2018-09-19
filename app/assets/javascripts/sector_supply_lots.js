@@ -139,6 +139,7 @@ $(document).on('turbolinks:load', function() {
         if (!ui.content.length) {
           var noResult = { value:"",label:"Nuevo lote" };
           ui.content.push(noResult);
+          $("#sector_supply_lot_lot_code").val($(this).val());
         }
       }
     }).each(function() {

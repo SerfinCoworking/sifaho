@@ -10,6 +10,8 @@ class InternalOrder < ApplicationRecord
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
+  has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
+  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
 
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
@@ -32,27 +34,28 @@ class InternalOrder < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
-      :search_responsable,
+      :search_applicant,
       :search_supply_code,
       :search_supply_name,
-      :sorted_by,
+      :with_status,
       :requested_date_at,
       :received_date_at,
+      :sorted_by
     ]
   )
 
   pg_search_scope :search_supply_code,
-  :associated_against => { :supplies => :id, :supply_lots => :code },
+  :associated_against => { :supply_lots => :code },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_name,
-  :associated_against => { :supplies => :name, :supply_lots => :supply_name },
+  :associated_against => { :supply_lots => :supply_name },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_responsable,
-  :associated_against => { profile: [:last_name, :first_name], :responsable => :username },
+  pg_search_scope :search_applicant,
+  :associated_against => { :applicant_sector => :name },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
@@ -64,18 +67,15 @@ class InternalOrder < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("internal_orders.created_at #{ direction }")
-    when /^responsable_/
+    when /^solicitante_/
       # Ordenamiento por nombre de responsable
-      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = internal_orders.responsable_id")
-    when /^sector_/
+      order("LOWER(applicant_sector.name) #{ direction }").joins("INNER JOIN sectors as applicant_sector ON applicant_sector.id = internal_orders.applicant_sector_id")
+    when /^insumos_solicitados_/
       # Ordenamiento por nombre de sector
-      order("sectors.name #{ direction }").joins(:sector)
+      order("supplies.name #{ direction }").joins(:supplies)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("internal_orders.status #{ direction }")
-    when /^insumos_solicitados_/
-      # Ordenamiento por nombre de insumo solicitado
-      order("supplies.name #{ direction }").joins(:supplies)
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
       order("internal_orders.date_received #{ direction }")
@@ -99,6 +99,18 @@ class InternalOrder < ApplicationRecord
   scope :with_sector_id, lambda { |an_id|
     where(sector_id: [*an_id])
   }
+
+  scope :with_status, lambda { |a_status|
+    where('internal_orders.provider_status = ?', a_status)
+  }
+
+  def self.applicant(a_sector)
+    where(applicant_sector: a_sector)
+  end
+
+  def self.provider(a_sector)
+    where(provider_sector: a_sector)
+  end
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
@@ -207,4 +219,15 @@ class InternalOrder < ApplicationRecord
     elsif self.provider_anulado?; return 100
     end
   end
+
+  def self.options_for_status
+    [
+      ['Todos', '', 'default'],
+      ['Nuevos', 0, 'info'],
+      ['Auditoria', 1, 'warning'],
+      ['En Camino', 2, 'primary'],
+      ['Entregado', 3, 'success'],
+      ['Anulado', 4, 'danger'],
+    ]
+   end
 end

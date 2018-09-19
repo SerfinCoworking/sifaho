@@ -7,24 +7,49 @@ class InternalOrdersController < ApplicationController
   def index
     authorize InternalOrder
     @filterrific = initialize_filterrific(
-      InternalOrder,
+      InternalOrder.provider(current_user.sector),
       params[:filterrific],
       select_options: {
-        sorted_by: InternalOrder.options_for_sorted_by
+        with_status: InternalOrder.options_for_status
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
-        :search_responsable,
+        :search_applicant,
         :search_supply_code,
         :search_supply_name,
-        :sorted_by,
+        :with_status,
         :requested_date_at,
+        :received_date_at
       ],
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
   end
   
+  # GET /internal_orders
+  # GET /internal_orders.json
+  def applicant_index
+    authorize InternalOrder
+    @filterrific = initialize_filterrific(
+      InternalOrder.applicant(current_user.sector),
+      params[:filterrific],
+      select_options: {
+        with_status: InternalOrder.options_for_status
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :search_provider,
+        :search_supply_code,
+        :search_supply_name,
+        :with_status,
+        :requested_date_at,
+        :received_date_at
+      ],
+    ) or return
+    @applicant_orders = @filterrific.find.page(params[:page]).per_page(8)
+  end
+
   # GET /internal_orders/1
   # GET /internal_orders/1.json
   def show
