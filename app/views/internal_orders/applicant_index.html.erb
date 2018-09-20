@@ -7,6 +7,9 @@
     Entregados
   <% end %>
 <% end %>
+
+<%= render "filter" %>
+
 <%= render(
   partial: 'internal_orders/applicant_list',
   locals: { applicant_orders: @applicant_orders }

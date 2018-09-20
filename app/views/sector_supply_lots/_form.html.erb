@@ -45,7 +45,7 @@
           </td>
           <td>
             <%= f.input :quantity, placeholder: 'Cant', required: true,
-              label: false, input_html: { id: 'supply-quantity', min: '0', max:'9999' } 
+              label: false, input_html: { id: 'supply-quantity', min: '0' } 
             %>
           </td>
           <td>
@@ -61,7 +61,7 @@
                 value: "#{f.object.lot_code unless f.object.new_record?}"
               } 
             %>
-            <%= hidden_field_tag "sector_supply_lot[lot_code]"  %>
+            <%= hidden_field_tag "sector_supply_lot[lot_code]" %>
           </td>
           <td>
             <%= f.input :supply_lot_id, as: :string,

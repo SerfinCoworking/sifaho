@@ -1,40 +1,5 @@
 <!--  Panel Prescripciones del día -->
 <div class="panel panel-default">
-  <!-- <div class="panel-heading">
-    <h3 class="panel-title">Prescripciones <small>Hoy <%= Time.now.strftime("%d/%m/%Y") %></small>
-    </h3>
-  </div>
-  <div class="panel-body">
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" style="width: <%= @percent_dispensed_prescriptions %>">
-        <%= @percent_dispensed_prescriptions %> dispensadas
-      </div>
-      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_pendient_prescriptions %>">
-        <%= @percent_pendient_prescriptions %> pendientes
-      </div>
-    </div>
-    Total: <span class="label label-primary"><%= @count_prescriptions_today %></span>
-    Dispensadas: <span class="label label-success"><%= @count_disp_pres %></span>
-    Pendientes: <span class="label label-warning"><%= @count_pend_pres %></span>
-  </div> -->
-  <!--  Panel Prescripciones Mes actual -->
-  <!-- <div class="panel-heading">
-    <h3 class="panel-title">Prescripciones <small>Mes actual</small>
-    </h3>
-  </div>
-  <div class="panel-body">
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" style="width: <%= @percent_disp_pres_month %>">
-        <%= @percent_disp_pres_month %> dispensadas
-      </div>
-      <div class="progress-bar progress-bar-warning" style="width: <%= @percent_pend_pres_month %>">
-        <%= @percent_pend_pres_month %> pendientes
-      </div>
-    </div>
-    Total: <span class="label label-primary"><%= @count_prescriptions_month %></span>
-    Dispensadas: <span class="label label-success"><%= @count_disp_pres_month %></span>
-    Pendientes: <span class="label label-warning"><%= @count_pend_pres_month %></span>
-  </div> -->
   <!--  Panel prescripciones recibidas por día -->
   <% if @prescriptions.count >= 4 %>
     <div class="panel-heading">

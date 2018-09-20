@@ -4,6 +4,15 @@ class ChartsController < ApplicationController
   end
 
   def by_laboratory_lots
-    render json: SupplyLot.joins(:laboratory).group('laboratories.name').count
+    render json: 
+      SupplyLot.joins(:laboratory)
+        .group('laboratories.name')
+        .order('COUNT(laboratories.id) DESC')
+        .count
+        .first(10)
+  end
+
+  def by_status_current_sector_supply_lots
+    render json: SectorSupplyLot.lots_for_sector(current_user.sector).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
   end
 end

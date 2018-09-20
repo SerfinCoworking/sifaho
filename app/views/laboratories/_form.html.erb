@@ -1,6 +1,6 @@
 <%= simple_form_for @laboratory, remote: true, html: {class: "form-inline"} do |f| %>
 <%= f.error_notification %>
   <%= f.input :name, placeholder: 'Nombre', required: true, label: 'Razón social', input_html: { autocomplete: 'off' } %>
-  <%= f.input :cuit, placeholder: '12345678', required: true, label: 'CUIT', input_html: { min: '10000', max:'99999999' } %>
-  <%= f.input :gln, placeholder: '12345678', required: true, label: 'GLN', input_html: { min: '10000', max:'99999999' } %>
+  <%= f.input :cuit, placeholder: '12345678', required: true, label: 'CUIT', input_html: { min: '10000' } %>
+  <%= f.input :gln, placeholder: '12345678', required: true, label: 'GLN', input_html: { min: '10000' } %>
 <% end %>

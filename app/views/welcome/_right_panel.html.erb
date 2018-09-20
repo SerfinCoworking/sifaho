@@ -1,21 +1,18 @@
 <!--  Panel Lote de medicamentos -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Lotes en Provincia <small>Expiración</small></h3>
+    <h3 class="panel-title">Lotes en stock <small>Expiración</small></h3>
   </div>
   <div class="panel-body">
-    <% data = @supply_lots.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+    <%
+      lots = SectorSupplyLot.lots_for_sector(current_user.sector).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
       status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262"}
       colors = []
-      data.each do |status, _|
+      lots.each do |status, _|
         colors << status_colors[status]
       end
-      %>
-    <%= pie_chart data, colors: colors, adapter: "highcharts" %>
-    Total: <span class="label label-primary"><%= @count_total_supply_lots %></span>
-    Vigentes: <span class="label label-success"><%= @count_good_supply_lots %></span>
-    Por vencer: <span class="label label-warning"><%= @count_near_expiry_supply_lots %></span>
-    Vencidos: <span class="label label-danger"><%= @count_expired_supply_lots %></span>
+    %>
+    <%= pie_chart lots, colors: colors, adapter: "highcharts" %>
   </div>
 </div>
 <!-- Panel Lotes expirados -->
@@ -24,9 +21,9 @@
     <div class="panel-heading">
       <h3 class="panel-title">
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-warning-sign') %>
-        Lotes expirados
+        Lotes expirados <span class="label label-danger"><%= @count_expired_supply_lots %></span>
         <div class="pull-right">
-          <%= link_to supply_lots_url(filterrific: {:with_status => 2}), class: 'btn btn-default btn-xs' do %>
+          <%= link_to sector_supply_lots_url(filterrific: {:with_status => 2}), class: 'btn btn-default btn-xs' do %>
                   Ver más
           <% end %>
         </div>
@@ -63,9 +60,9 @@
     <div class="panel-heading">
       <h3 class="panel-title">
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-time') %>
-        Lotes próximos a expirar
+        Lotes próximos a expirar <span class="label label-warning"><%= @count_near_expiry_supply_lots %></span>
         <div class="pull-right">
-          <%= link_to supply_lots_url(filterrific: {:with_status => 1}), class: 'btn btn-default btn-xs' do %>
+          <%= link_to sector_supply_lots_url(filterrific: {:with_status => 1}), class: 'btn btn-default btn-xs' do %>
                   Ver más
           <% end %>
         </div>

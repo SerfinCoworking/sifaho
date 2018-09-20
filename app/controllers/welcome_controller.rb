@@ -18,14 +18,14 @@ class WelcomeController < ApplicationController
       @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
       @last_prescriptions = Prescription.limit(5).order(date_received: :desc)
 
-      @supply_lots = SupplyLot.all
-      @expired_supply_lots = SupplyLot.vencido.limit(3)
-      @near_expiry_supply_lots = SupplyLot.por_vencer.limit(3)
+      @supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector)
+      @expired_supply_lots = @supply_lots.with_status(2).limit(3)
+      @near_expiry_supply_lots = @supply_lots.with_status(1).limit(3)
 
-      @count_total_supply_lots = SupplyLot.count
-      @count_near_expiry_supply_lots = SupplyLot.por_vencer.count
-      @count_expired_supply_lots = SupplyLot.vencido.count
-      @count_good_supply_lots = SupplyLot.vigente.count
+      @count_total_supply_lots = @supply_lots.count
+      @count_near_expiry_supply_lots = @supply_lots.with_status(1).count
+      @count_expired_supply_lots = @supply_lots.with_status(2).count
+      @count_good_supply_lots = @supply_lots.with_status(0).count
 
       @percent_good_supply_lots = _helper.number_to_percentage((@count_good_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
       @percent_near_expiry_supply_lots = _helper.number_to_percentage((@count_near_expiry_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
