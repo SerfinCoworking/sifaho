@@ -1,0 +1,60 @@
+/* line 1, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.status-bar-icons {
+  position: absolute;
+  margin-top: -20px;
+  z-index: 1;
+}
+
+/* line 7, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.gi-2x {
+  font-size: 20px;
+}
+
+/* line 8, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.gi-3x {
+  font-size: 3em;
+}
+
+/* line 9, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.gi-4x {
+  font-size: 4em;
+}
+
+/* line 10, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.gi-5x {
+  font-size: 5em;
+}
+
+/* line 12, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+#zoom-glyph {
+  margin-left: -26px;
+}
+
+/* line 16, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+#thumb-glyph {
+  margin-left: 205px;
+}
+
+/* line 20, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+#road-glyph {
+  margin-right: 175px;
+}
+
+/* line 24, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+#check-glyph {
+  margin-right: 5px;
+}
+
+/* line 29, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+#fixed-table {
+  table-layout: fixed;
+}
+
+/* line 32, /home/bashud/Documentos/SIFAHO/app/assets/stylesheets/ordering_supply.scss */
+.sol-col-aba {
+  max-width: 200px;
+  /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
