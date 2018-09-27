@@ -4,22 +4,22 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo despacho
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo recibo
       <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
     </h3>
   </div>
   <div class="panel-body" id="panel-body-new">
-    <%= render 'provider_form', ordering_supply: @ordering_supply %>
+    <%= render 'receipt_form', ordering_supply: @ordering_supply %>
   </div>
   <div class="panel-footer text-right">
     <%= link_to 'Volver', :back, class: 'btn' %>
     <button type='submit' name='commit' class='btn btn-success' form='new_ordering_supply' value='Auditar'>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Guardar
     </button>
-    <button type='submit' name='commit' class='btn btn-primary' form='new_ordering_supply' value='Auditar y aceptar'>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Auditar y aceptar
+    <button type='submit' name='commit' class='btn btn-primary' form='new_ordering_supply' value='Auditar y recibir'>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %> Guardar y recibir
     </button>
   </div>
 </div>

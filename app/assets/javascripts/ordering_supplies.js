@@ -18,7 +18,7 @@ $(document).on('turbolinks:load', function() {
     $('.selectpicker').selectpicker(); // Se inicializa selectpicker luego de agregar form
   });
 
-  // Función para autocompletar nombre de doctor establecimiento
+  // Función para autocompletar nombre de establecimiento
   jQuery(function() {
    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
 
@@ -40,8 +40,8 @@ $(document).on('turbolinks:load', function() {
      select:
      function (event, ui) {
        $("#establishment-id").val(ui.item.id);
-       $('#applicant-sector').prop("disabled", false).selectpicker('refresh');
-       $('#applicant-sector').focus();
+       $('#establishment').trigger('change');
+       $("#applicant-sector").prop('required',true);
      },
      response: function(event, ui) {
        if (!ui.content.length) {
@@ -69,13 +69,14 @@ $(document).on('turbolinks:load', function() {
      },
      success: function(data){
        if (!data.length) {
-         select.selectpicker({title: 'No tiene sectores'}).selectpicker('render');
+         select.selectpicker({title: 'No hay sectores'}).selectpicker('render');
          $("#applicant-id").val('');
          html = '';
          select.html(html);
          select.selectpicker("refresh");
-         select.prop("disabled", true).selectpicker('refresh');
        }else{
+        select.selectpicker({title: 'Seleccione un sector'}).selectpicker('render');
+        html = '';
          select.empty().selectpicker('refresh'); // Se vacía el select
          // Se itera el json
          for(var i in data)

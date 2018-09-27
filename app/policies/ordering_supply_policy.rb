@@ -11,6 +11,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
     index?
   end
 
+  def create_receipt?
+    create_receipt.any? { |role| user.has_role?(role) }
+  end
+
   def create?
     new_pres.any? { |role| user.has_role?(role) }
   end
@@ -20,13 +24,21 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def update?
-    unless ["en_camino", "entregado"].include? record.provider_status
-      update_pres.any? { |role| user.has_role?(role) }
+    if update_pres.any? { |role| user.has_role?(role) }
+      if record.despacho?
+        if record.proveedor_aceptado? || record.proveedor_auditoria?
+          return record.provider_sector == user.sector
+        end
+      elsif record.solicitud? && record.solicitud_auditoria?
+        return record.applicant_sector == user.sector
+      elsif record.recibo? && record.recibo_auditoria?
+        return record.applicant_sector == user.sector
+      end
     end
   end
 
   def edit?
-    if record.provider_auditoria? && record.provider_sector == user.sector
+    if record.proveedor_auditoria? && record.provider_sector == user.sector
       edit_provider.any? { |role| user.has_role?(role) }
     else
       return false
@@ -34,9 +46,15 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def destroy?
-    unless record.provider_entregado?
-      destroy_pres.any? { |role| user.has_role?(role) }
-    end
+    if destroy_pres.any? { |role| user.has_role?(role) }
+      if record.despacho? && record.proveedor_auditoria?
+        return record.provider_sector == user.sector
+      elsif record.solicitud? && record.solicitud_auditoria?
+        return record.applicant_sector == user.sector
+      elsif record.recibo? && record.recibo_auditoria?
+        return record.applicant_sector == user.sector
+      end
+    end 
   end
 
   def delete?
@@ -47,13 +65,17 @@ class OrderingSupplyPolicy < ApplicationPolicy
     dispense_pres.any? { |role| user.has_role?(role) }
   end
 
+  def new_receipt?
+    new_receipt.any? { |role| user.has_role?(role) }
+  end
+
   def new_provider?
     new_provider.any? { |role| user.has_role?(role) }
   end
 
   def send_provider?
     if record.provider_sector == user.sector
-      record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+      record.proveedor_aceptado? && send_order.any? { |role| user.has_role?(role) }
     end
   end
 
@@ -63,30 +85,36 @@ class OrderingSupplyPolicy < ApplicationPolicy
     end
   end
 
-  def receive_applicant?
-    record.provider_en_camino? && receive_applicant.any? { |role| user.has_role?(role) }
-  end
-
-  def return_provider_status?
-    if ["auditoria", "entregado"].include? record.provider_status
-      return false
-    else
-      record.provider_sector == user.sector && return_status.any? { |role| user.has_role?(role) }
+  def receive_order?
+    if record.applicant_sector == user.sector && receive_order.any? { |role| user.has_role?(role) }
+      if record.recibo?
+        record.recibo_auditoria?
+      elsif record.despacho?
+        record.proveedor_en_camino?
+      end
     end
   end
 
-  def return_applicant_status?
-    if ["auditoria", "enviado"].include? record.applicant_status
-      return false
-    else
-      record.applicant_sector == user.sector && return_status.any? { |role| user.has_role?(role) }
-    end
+  def return_status?
+    if destroy_pres.any? { |role| user.has_role?(role) }
+      if record.despacho?
+        if record.proveedor_aceptado? || record.proveedor_en_camino?
+          return record.provider_sector == user.sector
+        end
+      elsif record.solicitud? && record.solicitud_enviada?
+        return record.applicant_sector == user.sector
+      elsif record.recibo? && record.recibo_realizado?
+        return record.applicant_sector == user.sector
+      end
+    end 
   end
-
-
 
   private
-  def receive_applicant
+  def create_receipt
+    [ :admin, :pharmacist ]
+  end
+  
+  def receive_order
     [ :admin, :pharmacist ]
   end
 
@@ -95,6 +123,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def new_provider
+    [ :admin, :pharmacist ]
+  end
+
+  def new_receipt
     [ :admin, :pharmacist ]
   end
 

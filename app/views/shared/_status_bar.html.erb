@@ -1,0 +1,59 @@
+<% if order.despacho? %>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 text-center">
+      <label>
+        Estado actual:
+        <span class="label label-<%= ordering_status_label(order) %>">
+          <%= order.status.split('_').map(&:capitalize).join(' ') %>
+        </span>
+      </label><br>
+      <div class="col-md-12 status-bar-icons">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left',
+          :title => 'Auditado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id:'edit-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up gi-2x pull-left',
+          :title => 'Aceptado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'thumb-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right',
+          :title => 'Recibido', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'check-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-road gi-2x pull-right',
+          :title => 'En camino', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'road-glyph' ) %>
+      </div>
+      <div class="col-md-12">
+        <div class="progress" style="height: 5px;margin-bottom: -10px;">
+          <div class="progress-bar progress-bar-striped active progress-bar-<%= ordering_status_label(order) %> \
+          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+<% elsif order.recibo?%>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 text-center">
+      <label>
+        Estado actual:
+        <span class="label label-<%= ordering_status_label(order) %>">
+          <%= order.status.split('_').map(&:capitalize).join(' ') %>
+        </span>
+      </label><br>
+      <div class="col-md-12 status-bar-icons">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus gi-2x pull-left',
+          :title => 'Creado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id:'plus-recibo-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left',
+          :title => 'Auditado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'edit-recibo-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right',
+          :title => 'Recibido', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'check-recibo-glyph' ) %>
+      </div>
+      <div class="col-md-12">
+        <div class="progress" style="height: 5px;margin-bottom: -10px;">
+          <div class="progress-bar progress-bar-striped active progress-bar-<%= ordering_status_label(order) %> \
+          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+<% end %>

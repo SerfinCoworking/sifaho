@@ -2,7 +2,7 @@ class SupplyLot < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum status: { vigente: 0, por_vencer: 1, vencido: 2}
+  enum status: { vigente: 0, por_vencer: 1, vencido: 2, auditoria: 3 }
 
   # Callbacks
   before_validation :assign_constants
@@ -163,24 +163,27 @@ class SupplyLot < ApplicationRecord
     self.supply.needs_expiration?
   end
 
-  # Métodos privados #----------------------------------------------------------
-
-  private
-  # Se actualiza el estado de expiración
+  # Se actualiza el estado de expiración sin guardar
   def update_status
-    if expiry_date?
-      # If expired
-      if self.expiry_date <= DateTime.now
-        self.status = "vencido"
-        # If near_expiry
-      elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-        self.status = "por_vencer"
-        # If good
-      elsif expiry_date > DateTime.now
-        self.status = "vigente"
+    unless self.auditoria?
+      if self.expiry_date.present?
+        # If expired
+        if self.expiry_date <= DateTime.now
+          self.status = 'vencido'
+          # If near_expiry
+        elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+          self.status = 'por_vencer'
+          # If good
+        elsif expiry_date > DateTime.now
+          self.status = 'vigente'
+        end
       end
     end
   end
+
+  # Métodos privados #----------------------------------------------------------
+
+  private
 
   # Se asigna la cantidad inicial
   def assign_constants

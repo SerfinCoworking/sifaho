@@ -14,7 +14,7 @@
       </td>
       <td><%= sector_supply_lot.lot_code %></td>
       <td><%= sector_supply_lot.laboratory %></td>
-      <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
+      <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
       <td class="text-center">
         <% if policy(sector_supply_lot).show? %>
           <%= link_to sector_supply_lot_path(sector_supply_lot), remote:true, class: 'btn btn-default btn-xs',

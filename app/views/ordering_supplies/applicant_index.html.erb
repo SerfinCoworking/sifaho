@@ -1,10 +1,16 @@
 <% content_for :page_header do %>
   Abastecimiento
   <small><%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %> recibidos</small>
+  <% if policy(OrderingSupply).new_receipt? %>
+    <%= link_to new_receipt_ordering_supplies_path, class: 'btn btn-primary btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      Recibo
+    <% end %>
+  <% end %>
   <%= link_to ordering_supplies_path, class: 'btn btn-default btn-xs',
-    title: 'Entregados', data: { toggle: 'tooltip', placement: 'top' } do %>
+    title: 'Despachados', data: { toggle: 'tooltip', placement: 'top' } do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-    Entregados
+    Despachados
   <% end %>
 <% end %>
 <%= render(

@@ -79,7 +79,7 @@ class SectorSupplyLot < ApplicationRecord
     when /^cantidad_/
       # Ordenamiento por cantidad actual del lote
       order("sector_supply_lots.quantity #{ direction }")
-    when /^expiracion_/
+    when /^vencimiento_/
       # Ordenamiento por fecha de expiración
       order("supply_lots.expiry_date #{ direction }").joins(:supply_lot)
     else
@@ -148,6 +148,8 @@ class SectorSupplyLot < ApplicationRecord
       return 'danger'
     elsif self.agotado?
       return 'info'
+    elsif self.auditoria?
+      return 'info'
     end
   end
 
@@ -181,21 +183,21 @@ class SectorSupplyLot < ApplicationRecord
   private
   # Se actualiza el estado del lote
   def update_status
-    if self.supply_lot.expiry_date?
+    if self.supply_lot.expiry_date.present?
       @exp_date = self.supply_lot.expiry_date
       # If expired
       if @exp_date <= DateTime.now
-        self.status = "vencido"
-        # If near_expiry
+        self.status = 'vencido'
+      # If near_expiry
       elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
-        self.status = "por_vencer"
-        # If good
+        self.status = 'por_vencer'
+      # If good
       elsif @exp_date > DateTime.now
-        self.status = "vigente"
-      end
+        self.status = 'vigente'
+      end 
     end
     if self.quantity == 0
-      self.status = "agotado"
+      self.status = 'agotado'
     end
   end
 
@@ -218,7 +220,7 @@ class SectorSupplyLot < ApplicationRecord
   def self.options_for_sorted_by
    [
      ['Fecha recepción (desc)', 'recepcion_desc'],
-     ['Fecha expiración (asc)', 'expiracion_asc'],
+     ['Fecha vencimiento (asc)', 'vencimiento_asc'],
      ['Código de lote (asc)', 'lote_asc'],
      ['Código de insumo (asc)', 'cod_ins_asc'],
      ['Insumo (a-z)', 'insumo_asc'],

@@ -9,7 +9,7 @@ $('.modal-body').html('Enviar a papelera el pedido de <%= @ordering_supply.appli
 
 // Add form button
 $('.modal-footer').html(
-  "<a class='btn pull-left' data-dismiss='modal'>Volver</a>"+
+  "<a class='btn' data-dismiss='modal'>Cancelar</a>"+
   "<a data-remote='true' data-method='delete' href='/ordering_supplies/<%= @ordering_supply.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 

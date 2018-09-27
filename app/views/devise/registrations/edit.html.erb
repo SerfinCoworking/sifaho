@@ -26,7 +26,7 @@
         <%= f.password_field :current_password, required: true, class: 'form-control' %>
       </div>
     </fieldset>
-    <%= link_to 'Volver', root_path, class: 'btn left' %>
+    <%= link_to 'Volver', :back, class: 'btn left' %>
     <%= f.submit 'Guardar cambios', :class => 'button right' %>
   <% end %>
 </div>

@@ -3,12 +3,19 @@
     <table class="table table-hover table-striped">
       <thead>
         <tr>
-          <th><%= filterrific_sorting_link(@filterrific, :sector) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :establecimiento) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :solicitante) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :tipo) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :insumos_solicitados) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :solicitado) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :entregado) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :insumos) %></th>
+          <th>
+            <%= filterrific_sorting_link(@filterrific, :solicitado) %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %> 
+          </th>
+          <th>
+            <%= filterrific_sorting_link(@filterrific, :entregado) %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+          </th>
           <th colspan="3">Acciones</th>
         </tr>
       </thead>

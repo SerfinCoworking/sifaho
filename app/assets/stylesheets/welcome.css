@@ -6,42 +6,42 @@
 
 .datepicker{z-index:1151 !important;}
 
-#custom-bootstrap-menu.navbar-default .navbar-brand {
+#custom-bootstrap-menu.navbar-default-cust .navbar-brand {
     color: rgba(255, 255, 255, 1);
 }
-#custom-bootstrap-menu.navbar-default {
+#custom-bootstrap-menu.navbar-default-cust {
     font-size: 14px;
     background-color: rgba(11, 83, 141, 1);
     border-width: 0px;
     border-radius: 0px;
 }
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>li>a {
     color: rgba(255, 255, 255, 1);
     background-color: rgba(11, 83, 141, 1);
 }
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>li>a:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>li>a:focus {
     color: rgba(255, 255, 255, 1);
     background-color: rgba(124, 158, 212, 1);
 }
-#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
-#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
-#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>.active>a,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>.active>a:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav>.active>a:focus {
     color: rgba(255, 255, 255, 1);
     background-color: rgba(124, 158, 212, 1);
 }
-#custom-bootstrap-menu.navbar-default .navbar-toggle {
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle {
     border-color: #7c9ed4;
 }
-#custom-bootstrap-menu.navbar-default .navbar-toggle:hover,
-#custom-bootstrap-menu.navbar-default .navbar-toggle:focus {
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:focus {
     background-color: #7c9ed4;
 }
-#custom-bootstrap-menu.navbar-default .navbar-toggle .icon-bar {
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle .icon-bar {
     background-color: #7c9ed4;
 }
-#custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
-#custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:hover .icon-bar,
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:focus .icon-bar {
     background-color: #0b538d;
 }
 

@@ -1,7 +1,10 @@
 class QuantityOrdSupplyLot < ApplicationRecord
+  enum status: { sin_entregar: 0, entregado: 1 }
+
   # Relaciones
   belongs_to :supply, -> { with_deleted }
   belongs_to :sector_supply_lot, -> { with_deleted }, optional: true
+  belongs_to :supply_lot, -> { with_deleted }, optional: true
   belongs_to :quantifiable, :polymorphic => true
 
   # Validaciones
@@ -10,18 +13,54 @@ class QuantityOrdSupplyLot < ApplicationRecord
   validates_presence_of :delivered_quantity
   validates_associated :supply
 
-  accepts_nested_attributes_for :supply
-  accepts_nested_attributes_for :sector_supply_lot
-
-  #Métodos públicos
+  accepts_nested_attributes_for :supply,
+  :allow_destroy => true,
+  :reject_if => proc { |att| att[:supply_id].blank? }
+  accepts_nested_attributes_for :sector_supply_lot,
+  :reject_if => :all_blank,
+  :allow_destroy => true
+  accepts_nested_attributes_for :supply_lot,
+  :allow_destroy => true,
+  :reject_if => proc { |att| att[:supply_lot_id].blank? }
+  
+  # Métodos públicos
   def increment_lot_to(a_sector)
-    if self.sector_supply_lot.present?
+    if self.sin_entregar?
+      if self.sector_supply_lot.present?
+        @sector_supply_lot = SectorSupplyLot.where(
+          sector_id: a_sector.id,
+          supply_lot_id: self.sector_supply_lot.supply_lot_id
+        ).first_or_create
+        @sector_supply_lot.increment(self.delivered_quantity)
+        @sector_supply_lot.save!
+        self.entregado!
+      else
+        raise ArgumentError, 'No hay lotes en la relación'
+      end
+    else
+      raise ArgumentError, 'Ya se ha entregado'
+    end
+  end
+
+  def increment_new_lot_to(a_sector)
+    if self.lot_code.present? && self.laboratory_id.present?
+      @supply_lot = SupplyLot.where(
+        supply_id: self.supply_id,
+        lot_code: self.lot_code,
+        laboratory_id: self.laboratory_id,
+      ).first_or_initialize
+      @supply_lot.expiry_date = self.expiry_date
+      @supply_lot.date_received = DateTime.now
+      @supply_lot.save!
       @sector_supply_lot = SectorSupplyLot.where(
         sector_id: a_sector.id,
-        supply_lot_id: self.sector_supply_lot.supply_lot_id
+        supply_lot_id: @supply_lot.id
       ).first_or_create
       @sector_supply_lot.increment(self.delivered_quantity)
       @sector_supply_lot.save!
+      self.entregado!
+    else
+      raise ArgumentError, 'No hay lotes para recibir en la relación' 
     end
   end
 
@@ -35,13 +74,14 @@ class QuantityOrdSupplyLot < ApplicationRecord
     if self.sector_supply_lot.present?
       self.sector_supply_lot.increment(self.delivered_quantity)
     end
+    self.sin_entregar!
   end
 
   def supply_name
     self.supply.name
   end
 
-  def laboratory
+  def sector_supply_laboratory
     self.sector_supply_lot.laboratory
   end
 
@@ -50,12 +90,12 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.sector_supply_lot.code
   end
 
-  def lot_code
+  def sector_supply_lot_code
     self.sector_supply_lot.lot_code
   end
 
   # Retorna fecha de expiración del lote
-  def expiry_date
+  def sector_supply_expiry_date
     self.sector_supply_lot.expiry_date
   end
 

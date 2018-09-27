@@ -1,89 +1,170 @@
 <tr class="nested-fields">
-  <td>
-    <%= f.input :supply_id, as: :string,
-      placeholder: 'Código',
-      label: false,
-      :input_html => {
-        class: "supply-code select-change",
-        data: { autocomplete_source: search_by_id_supplies_path },
-        size: 4,
-        autocomplete: 'off'
-      } 
-    %>
-  </td>
-  <td>
-    <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
-      label: false,
-      placeholder: 'Nombre',
-      :input_html => {
-        class: "supply-name select-change",
-        data: { autocomplete_source: search_by_name_supplies_path },
-        size: 35,
-        value: "#{ if f.object.supply.present?; f.object.supply_name; end }"
-      } 
-    %>
-    <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
-  </td>
-  <td>
-    <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
-      input_html: {
-        "data-tooltip"=>true,
-        :class=>"has-tip request-quantity",
-        :title=>"Cantidad solicitada",
-        "data-placement"=>"right",
-        min: '1', max: '9999', step:'any', :style => 'width: 70px'
-      } 
-    %>
-  </td>
-  <td>
-    <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: false,
-      input_html: {
-        "data-tooltip"=>true,
-        :class=>"has-tip deliver-quantity",
-        :title=>"Cantidad entregada",
-        "data-placement"=>"right",
-        min: '0', max: '9999', step:'any', :style => 'width: 70px'
-      } 
-    %>
-  </td>
-  <td>
-    <%= f.select(:sector_supply_lot_id, [],{},
-      {
-        class: 'selectpicker show-tick',
-        "data-width"=>"fit",
-        "title"=>"Código",
-        "data-size"=>"5",
+  <% if %w(new_receipt create_receipt).include?(params[:action]) %>
+    <td>
+      <%= f.input :supply_id, as: :string,
+        placeholder: 'Código',
+        label: false,
+        :input_html => {
+          class: "new-supply-code select-change",
+          data: { autocomplete_source: search_by_id_supplies_path },
+          size: 4,
+          autocomplete: 'off'
+        } 
+      %>
+    </td>
+    <td>
+      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+        label: false,
+        placeholder: 'Nombre',
+        :input_html => {
+          class: "new-supply-name select-change",
+          data: { autocomplete_source: search_by_name_supplies_path },
+          size: 35,
+          value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
+          autocomplete: 'off'
+        } 
+      %>
+      <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
+    </td>
+    <td>
+      <%= f.input :delivered_quantity, placeholder: 'Cant', required: false,
+        label: false, :input_html => { class: 'new-deliver-quantity', min: '0', :style => 'width: 80px' } 
+      %>
+      <%= f.hidden_field :requested_quantity, :value => 0 %>
+    </td>
+    <td>
+      <%= f.input :lot_code, as: :string,
+        placeholder: 'Código',
+        label: false,
+        required: false,
+        :input_html => {
+          "data-tooltip" => true,
+          :title => "",
+          class: "new-supply-lot-code has-tip",
+          data: { autocomplete_source: search_by_lot_code_supply_lots_path },
+          size: 11,
+          autocomplete: 'off',
+          value: "#{if f.object.supply_lot.present?; f.object.supply_lot.lot_code; end }"
+        }
+      %>
+    </td>
+    <td>
+      <%= f.input :laboratory_id, as: :string,
+        placeholder: 'Razón social',
+        label: false,
+        required: false,
+        :input_html => {
+          class: "new-laboratory",
+          data: { autocomplete_source: search_by_name_laboratories_path },
+          size: 25,
+          value: "#{ if f.object.supply_lot.present?; f.object.supply_lot.laboratory_name; end }",
+          autocomplete: 'off'
+        } 
+      %>
+      <%= f.input :laboratory_id, :as => :hidden, :input_html =>  { class: "new-laboratory-id" } %>
+    </td>
+    <td>
+      <%= f.input :expiry_date, as: :string, label: false, 
+        :placeholder => "Una fecha",
+        input_html: {
+          :style => 'width: 109px',
+          class: "new-expiry-date",
+          required: false,
+          autocomplete: 'off',
+          value: "#{ if f.object.supply_lot.present?; f.object.supply_lot.expiry_date.present? ? f.object.supply_lot.expiry_date.strftime('%d/%m/%Y') : 'No expira'; end }"
+        },
+        html5: false 
+      %>
+    </td>
+  <% else %> <!-- End Form recibo -->
+    <td><!-- Start form despacho -->
+      <%= f.input :supply_id, as: :string,
+        placeholder: 'Código',
+        label: false,
+        :input_html => {
+          class: "supply-code select-change",
+          data: { autocomplete_source: search_by_id_supplies_path },
+          size: 4,
+          autocomplete: 'off'
+        } 
+      %>
+    </td>
+    <td>
+      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+        label: false,
+        placeholder: 'Nombre',
+        :input_html => {
+          class: "supply-name select-change",
+          data: { autocomplete_source: search_by_name_supplies_path },
+          size: 35,
+          value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
+          autocomplete: 'off'
+        } 
+      %>
+      <%= f.input :supply_id, :as => :hidden, :input_html => 
+        { class: "supply-id" } %>
+    </td>
+    <td>
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip request-quantity",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '1', max: '9999', step:'any', :style => 'width: 70px'
+        } 
+      %>
+    </td>
+    <td>
+      <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip deliver-quantity",
+          :title=>"Cantidad entregada",
+          "data-placement"=>"right",
+          min: '0', max: '9999', step:'any', :style => 'width: 70px'
+        } 
+      %>
+    </td>
+    <td>
+      <%= f.select(:sector_supply_lot_id, [],{},
+        {
+          class: 'selectpicker show-tick',
+          "data-width"=>"fit",
+          "title"=>"Código",
+          "data-size"=>"5",
+          disabled: true,
+        })
+      %>
+    </td>
+    <td>
+      <%= f.input :sector_supply_lot_id, as: :string,
+        label: false,
+        placeholder: "Razón social",
         disabled: true,
-      })
-    %>
-  </td>
-  <td>
-    <%= f.input :sector_supply_lot_id, as: :string,
-      label: false,
-      placeholder: "Razón social",
-      disabled: true,
-      input_html: {
-        :style => 'width: 150px',
-        class: "supply-lot-laboratory",
-        value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.laboratory; end}"
-      },
-      html5: false 
-    %>
-  </td>
-  <td>
-    <%= f.input :sector_supply_lot_id, as: :string,
-      label: false,
-      placeholder: "Una fecha",
-      disabled: true,
-      input_html: {
-        :style => 'width: 100px',
-        class: "supply-lot-expiry",
-        value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No expira'; end}"
-      },
-      html5: false 
-    %>
-  </td>
-  <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
+        input_html: {
+          size: 16,
+          class: "supply-lot-laboratory",
+          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.laboratory; end }"
+        },
+        html5: false 
+      %>
+    </td>
+    <td>
+      <%= f.input :sector_supply_lot_id, as: :string,
+        label: false,
+        placeholder: "Una fecha",
+        disabled: true,
+        input_html: {
+          :style => 'width: 100px',
+          class: "supply-lot-expiry",
+          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No expira'; end}"
+        },
+        html5: false 
+      %>
+    </td>
+    <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
+  <% end %>
   <td>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>

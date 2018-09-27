@@ -3,7 +3,7 @@
 <% end %>
 <div class="panel panel-warning">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando pedido a entregar
+    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Auditando pedido a entregar
       <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
@@ -15,16 +15,16 @@
   <div class="panel-footer text-right">
       <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
       <button type='submit' name='commit' class='btn btn-success' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %> Auditar
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Guardar cambios
       </button>
       <button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar y aceptar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Auditar y aceptar
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
       </button>
       <% if policy(@ordering_supply).send_provider? %>
         <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
           class: 'btn btn-primary btn-md' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Auditar y enviar
+          Guardar y enviar
         <% end %>
       <% end %>
   </div>

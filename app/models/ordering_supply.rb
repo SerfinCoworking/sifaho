@@ -2,8 +2,10 @@ class OrderingSupply < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum applicant_status: { auditoria: 0, aceptado: 1, en_camino: 2, recibido: 3, anulado: 4 }, _prefix: :applicant
-  enum provider_status: { auditoria: 0, aceptado: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
+  enum order_type: { despacho: 0, solicitud: 1, recibo: 2 }
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
+    proveedor_aceptado: 3, proveedor_en_camino: 4, paquete_entregado: 5, recibo_auditoria: 6,
+    recibo_realizado: 7, anulado: 8 }
 
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
@@ -12,6 +14,7 @@ class OrderingSupply < ApplicationRecord
   belongs_to :accepted_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
+  belongs_to :created_by, class_name: 'User', optional: true
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
@@ -27,8 +30,8 @@ class OrderingSupply < ApplicationRecord
   accepts_nested_attributes_for :supplies
   accepts_nested_attributes_for :sector_supply_lots
   accepts_nested_attributes_for :quantity_ord_supply_lots,
-          :reject_if => :all_blank,
-          :allow_destroy => true
+    reject_if: ->(qosl){ qosl['supply_id'].blank? },
+    :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -119,72 +122,9 @@ class OrderingSupply < ApplicationRecord
     where(provider_sector: a_sector)
   end
 
-  # Label del estado para vista.
-  def provider_status_label
-    if self.provider_auditoria?; return 'warning'
-    elsif self.provider_aceptado?; return 'primary'
-    elsif self.provider_en_camino?; return 'info'
-    elsif self.provider_entregado?; return 'success'
-    elsif self.provider_anulado?; return 'danger'
-    end
-  end
-
-    # Label del estado para vista.
-    def applicant_status_label
-      if self.provider_auditoria?; return 'warning'
-      elsif self.provider_aceptado?; return 'primary'
-      elsif self.provider_en_camino?; return 'info'
-      elsif self.provider_entregado?; return 'success'
-      elsif self.provider_anulado?; return 'danger'
-      end
-    end
-
-  # Porcentaje de la barra de estado
-  def percent_status
-    if self.provider_auditoria?; return 5
-    elsif self.provider_aceptado?; return 34
-    elsif self.provider_en_camino?; return 71
-    elsif self.provider_entregado?; return 100
-    elsif self.provider_anulado?; return 100
-    end
-  end
-
-  def audited_by_info
-    if self.audited_by.present?
-      return 'Auditado por '+self.audited_by.full_name
-    else
-      return 'Sin auditar'
-    end
-  end
-  def accepted_by_info
-    if self.accepted_by.present?
-      return 'Aceptado por '+self.accepted_by.full_name
-    else
-      return 'Sin aceptar'
-    end
-  end
-  def sent_by_info
-    if self.sent_by.present?
-      return 'En camino por '+self.sent_by.full_name
-    else
-      return 'Sin enviar'
-    end
-  end
-  def received_by_info
-    if self.received_by.present?
-      return 'Recibido por '+self.received_by.full_name
-    else
-      return 'Sin entregar'
-    end
-  end
-
   # Cambia estado a "en camino" y descuenta la cantidad a los insumos
-  def send_order
-    if provider_anulado?
-      raise ArgumentError, "El pedido está anulado"
-    elsif provider_en_camino?
-      raise ArgumentError, "El pedido ya se encuentra en camino"
-    else
+  def send_order(a_user)
+    if self.proveedor_aceptado?
       if self.quantity_ord_supply_lots.exists?
         if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
           self.quantity_ord_supply_lots.each do |qosl|
@@ -196,71 +136,75 @@ class OrderingSupply < ApplicationRecord
       else
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
+      self.sent_by = a_user
       self.sent_date = DateTime.now
-      self.applicant_en_camino!
-      self.provider_en_camino!
-    end # End anulado?
+      self.proveedor_en_camino!
+    else
+      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+    end 
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def accept_order
-    if provider_anulado? || applicant_anulado?
-      raise ArgumentError, "El pedido está anulado"
-    elsif provider_aceptado?
-      raise ArgumentError, "El pedido ya ha sido aceptado"
-    elsif provider_en_camino?
-      raise ArgumentError, "El pedido ya se encuentra en camino"
-    else
+  def accept_order(a_user)
+    if proveedor_auditoria?
       if self.quantity_ord_supply_lots.present?
         self.accepted_date = DateTime.now
-        self.applicant_aceptado!
-        self.provider_aceptado!
+        self.accepted_by = a_user
+        self.proveedor_aceptado!
       else
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end
-    end #End anulado?
-  end
-
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order(a_sector)
-    if provider_anulado? || applicant_anulado?
-      raise ArgumentError, "El pedido está anulado"
-    elsif provider_aceptado?
-      raise ArgumentError, "El pedido se encuentra aceptado"
-    elsif provider_entregado?
-      raise ArgumentError, "El pedido ya ha sido entregado"
-    elsif provider_en_camino?
-      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_sector)
-        end
-        self.date_received = DateTime.now
-        self.provider_entregado!
-        self.applicant_recibido!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End chack if sector supply exists
-    end #End anulado?
-  end
-
-  def return_provider_status
-    if provider_auditoria?
-      raise ArgumentError, "No hay más estados a retornar"
-    elsif provider_aceptado?
-      self.provider_auditoria!
-    elsif provider_en_camino?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
-      end
-      self.provider_aceptado!
-    elsif provider_entregado?
-      raise ArgumentError, "Ya se ha entregado el pedido"
+    else
+      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
     end
   end
 
-  private
+  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
+  def receive_order(a_user)
+    if proveedor_en_camino?
+      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+        self.quantity_ord_supply_lots.each do |qosl|
+          qosl.increment_lot_to(a_user.sector)
+        end
+        self.date_received = DateTime.now
+        self.received_by = a_user
+        self.paquete_entregado!
+      else
+        raise ArgumentError, 'No hay insumos para recibir en el pedido'
+      end # End check if sector supply exists
+    else 
+      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+    end
+  end
 
-  def assign_sector
-    self.sector = self.responsable.sector
+  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
+  def receive_remit(a_user)
+    if self.recibo_auditoria?
+      if self.quantity_ord_supply_lots.where.not(lot_code: nil).exists?
+        self.quantity_ord_supply_lots.each do |qosl|
+          qosl.increment_new_lot_to(a_user.sector)
+        end
+        self.date_received = DateTime.now
+        self.received_by = a_user
+        self.recibo_realizado!
+      else
+        raise ArgumentError, 'No hay insumos para recibir en el pedido'
+      end # End check if sector supply exists
+    else 
+      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+    end
+  end
+
+  def return_status
+    if proveedor_aceptado?
+      self.proveedor_auditoria!
+    elsif proveedor_en_camino?
+      self.quantity_ord_supply_lots.each do |qosl|
+        qosl.increment
+      end
+      self.proveedor_aceptado!
+    else
+      raise ArgumentError, 'No es posible retornar a un estado anterior'
+    end
   end
 end

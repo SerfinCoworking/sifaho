@@ -1,19 +1,11 @@
 <% content_for :page_header do %>
   Stock <%= current_user.sector.name %>
-  <% if policy(SectorSupplyLot).new? %>
-    <%= button_tag(class: "btn btn-primary btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#new') do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Cargar
+  <% if policy(OrderingSupply).new_receipt? %>
+    <%= link_to new_receipt_ordering_supplies_path, class: 'btn btn-primary btn-xs' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
+      Cargar stock
     <% end %>
   <% end %>
-<% end %>
-
-<% if policy(SectorSupplyLot).new? %>
-  <div class="panel panel-primary" id="filter-panel">
-    <div class="panel-collapse collapse" id="new">
-        <%= render "form" %>
-    </div>
-  </div>
 <% end %>
 
 <%= render "filter" %>

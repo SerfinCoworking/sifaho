@@ -29,12 +29,14 @@ Rails.application.routes.draw do
       get "delete"
       get "send_provider"
       get "send_applicant"
-      get "return_provider_status"
-      get "return_applicant_status"
+      get "return_status"
       get "accept_provider"; get "accept_provider_confirm"
-      get "receive_applicant"; get "receive_applicant_confirm"
+      get "receive_order"; get "receive_order_confirm"
     end
     collection do
+      get "new_receipt"
+      post "create_receipt"
+      get "new_applicant"
       get "applicant_index"
     end
   end

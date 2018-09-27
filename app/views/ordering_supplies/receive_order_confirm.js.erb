@@ -1,16 +1,20 @@
 // Add styles
 $('.modal-content').addClass('panel-success');
-
-// Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el pedido");
+<% if @ordering_supply.despacho? %>
+  // Add the dialog title
+  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el despacho");
+<% elsif @ordering_supply.recibo? %>
+  // Add the dialog title
+  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Realizar el recibo");
+<% end %>
 
 // Render the send form
 $('.modal-body').html("Esta seguro que ha recibido el pedido?");
 
 // Add form button
 $('.modal-footer').html(
-  "<a class='btn pull-left' data-dismiss='modal'>Volver</a>"+
-  "<a data-method='get' href='/ordering_supplies/<%= @ordering_supply.id %>/receive_applicant' \
+  "<a class='btn' data-dismiss='modal'>Cancelar</a>"+
+  "<a data-method='get' href='/ordering_supplies/<%= @ordering_supply.id %>/receive_order' \
   data-dismiss='modal' class='btn commit btn-success pull-right' rel='nofollow'>Confirmar</a>"
 );
 

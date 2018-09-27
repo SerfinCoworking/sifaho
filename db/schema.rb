@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180915201722) do
+ActiveRecord::Schema.define(version: 20180927135951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,16 +95,19 @@ ActiveRecord::Schema.define(version: 20180915201722) do
     t.bigint "provider_sector_id"
     t.datetime "requested_date"
     t.datetime "sent_date"
-    t.integer "applicant_status", default: 0
-    t.integer "provider_status", default: 0
+    t.integer "status", default: 0
     t.bigint "audited_by_id"
     t.bigint "accepted_by_id"
     t.bigint "sent_by_id"
     t.bigint "received_by_id"
     t.datetime "accepted_date"
+    t.integer "order_type", default: 0
+    t.bigint "created_by_id"
+    t.string "remit_code"
     t.index ["accepted_by_id"], name: "index_ordering_supplies_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_ordering_supplies_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_ordering_supplies_on_audited_by_id"
+    t.index ["created_by_id"], name: "index_ordering_supplies_on_created_by_id"
     t.index ["deleted_at"], name: "index_ordering_supplies_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_ordering_supplies_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_ordering_supplies_on_received_by_id"
@@ -213,9 +216,16 @@ ActiveRecord::Schema.define(version: 20180915201722) do
     t.datetime "updated_at", null: false
     t.bigint "sector_supply_lot_id"
     t.bigint "supply_id"
+    t.bigint "supply_lot_id"
+    t.datetime "expiry_date"
+    t.string "lot_code"
+    t.bigint "laboratory_id"
+    t.integer "status", default: 0
+    t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
     t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lots_on_sector_supply_lot_id"
     t.index ["supply_id"], name: "index_quantity_ord_supply_lots_on_supply_id"
+    t.index ["supply_lot_id"], name: "index_quantity_ord_supply_lots_on_supply_lot_id"
   end
 
   create_table "quantity_supplies", force: :cascade do |t|
@@ -380,7 +390,9 @@ ActiveRecord::Schema.define(version: 20180915201722) do
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"
   add_foreign_key "professionals", "sectors"
+  add_foreign_key "quantity_ord_supply_lots", "laboratories"
   add_foreign_key "quantity_ord_supply_lots", "supplies"
+  add_foreign_key "quantity_ord_supply_lots", "supply_lots"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
