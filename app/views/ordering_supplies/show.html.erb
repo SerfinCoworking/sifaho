@@ -2,11 +2,14 @@
   Abastecimiento
 <% end %>
 <div class="panel panel-default">
-  <div class="panel-heading">
+  <div class="panel-heading hidden-print">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @ordering_supply.order_type.split('_').join(' ') %>
       <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
       <% end %>
     </h3>
   </div>
@@ -27,6 +30,7 @@
         <%= @ordering_supply.provider_sector.name%>
       </div>
       <div class='col-md-4'>
+        <hr class="visible-print">
         <div class='row'>
           <div class='col-md-6'>
             <strong>Solicitado:</strong>
@@ -138,7 +142,7 @@
   <%= render '/shared/movements_table', order: @ordering_supply %>
 
   <!-- Botones de acción footer -->
-  <div class="panel-footer text-right">
+  <div class="panel-footer text-right hidden-print">
     <%= link_to 'Volver', if @ordering_supply.despacho?; ordering_supplies_path; else; applicant_index_ordering_supplies_path; end, class: "btn" %>
     <% if policy(@ordering_supply).edit? %>
       <%= link_to edit_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false,

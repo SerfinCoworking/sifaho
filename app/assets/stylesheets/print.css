@@ -1,0 +1,15 @@
+/*This css will only works when you print*/
+@media print {
+  header { display: none; } 
+  @page {size: landscape}
+}
+
+.print-btn{
+  margin-top: -5px;
+  margin-right: 0px;
+}
+
+.close-btn{
+  margin-top: -5px;
+  margin-right: -7px;
+}

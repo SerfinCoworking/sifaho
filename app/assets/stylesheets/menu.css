@@ -1,0 +1,159 @@
+#custom-bootstrap-menu.navbar-default-cust .navbar-brand-cust {
+  color: rgba(255, 255, 255, 1);
+}
+#custom-bootstrap-menu.navbar-default-cust {
+  font-size: 14px;
+  background-color: rgba(11, 83, 141, 1);
+  border-width: 0px;
+  border-radius: 0px;
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>li>a {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(11, 83, 141, 1);
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>li>a:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>li>a:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>.active>a,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>.active>a:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-nav-cust>.active>a:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle {
+  border-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:hover,
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:focus {
+  background-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle .icon-bar {
+  background-color: #7c9ed4;
+}
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:hover .icon-bar,
+#custom-bootstrap-menu.navbar-default-cust .navbar-toggle:focus .icon-bar {
+  background-color: #0b538d;
+}
+
+#custom-sidebar{
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow-y: auto;
+  position: fixed;
+}
+#custom-sidebar::-webkit-scrollbar {
+  display: none;
+}
+#custom-sidebar .active a,
+#custom-sidebar ul>.active a{
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-sidebar .nav-cust, .nav-pills-cust
+#custom-sidebar .nav-cust, .nav-pills-cust{
+  text-align: center;
+  background-color: #0b538d!important;
+  padding-left: 14px;
+}
+#custom-sidebar .active a, #custom-sidebar ul > .active a{
+  color: white;
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+#custom-sidebar .nav-cust, .nav-pills-cust>ul>li>a:hover,
+#custom-sidebar .nav-cust, .nav-pills-cust>li>a:hover,
+#custom-sidebar .nav-cust, .nav-pills-cust>.active>a:hover,
+#custom-sidebar .nav-cust, .nav-pills-cust>.active>a:focus {
+  color: white;
+  background-color: rgba(124, 158, 212, 1);
+  border-radius: 5px;
+}
+.nav-cust > li > a{
+  font-size: 14px;
+  color: white;
+}
+.nav-cust > li > a:hover{
+  color: white;
+  background-color: rgba(124, 158, 212, 1);
+}
+#custom-sidebar .nav-cust, .nav-pills-cust>li>a {
+  font-size: 14px;
+  color: white;
+}
+#custom-sidebar .nav-cust, .nav-pills-cust>li>div{
+  margin-left: -15px;
+  width: 20.1rem!important;
+  padding-right: 15px;
+}
+
+#pedidos-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #59457c;
+  border-radius: 0;
+  border-top-color: #7c9ed4;
+  background-color: #59457c;
+  float: inherit;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+#stock-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #10675f;
+  border-radius: 0;
+  border-top-color: #7c9ed4;
+  background-color: #10675f;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+#efectores-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #89726a;
+  border-radius: 0;
+  border-top-color: #7c9ed4;
+  background-color: #89726a;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+li .well strong{
+  font-family: 'Comfortaa-regular', sans-serif;
+  font-size: 15px;
+}
+
+#page-header{
+  padding: 0px 0px 0px 10em;
+  position: relative;
+  z-index: 0;
+  margin: -0.1em -3.85% 1.7% -10%;
+  background-color: #7c9ed4;
+  border-color: #7c9ed4;
+  border-radius: 0;
+  color: white;
+}
+
+#page-header h3{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#page-header small{
+  color: white; 
+}
+
+.navbar, .nav-pills-cust {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}

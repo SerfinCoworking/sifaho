@@ -1,5 +1,5 @@
 <% if order.despacho? %>
-  <div class="row">
+  <div class="row hidden-print">
     <div class="col-md-12">
       <table class="table table-condensed table-bordered" id="fixed-table">
         <tbody>
@@ -29,7 +29,7 @@
     </div>
   </div>
 <% elsif order.recibo? %>
-  <div class="row">
+  <div class="row hidden-print">
     <div class="col-md-12">
       <table class="table table-condensed table-bordered" id="fixed-table">
         <tbody>

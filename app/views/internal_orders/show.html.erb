@@ -2,11 +2,14 @@
   Pedidos internos
 <% end %>
 <div class="panel panel-default">
-  <div class="panel-heading">
+  <div class="panel-heading hidden-print">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo pedido
       <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
       <% end %>
     </h3>
   </div>
@@ -63,19 +66,19 @@
               <%= qosl.sector_supply_lot.present? ? qosl.lot_code : 'Sin asignar' %>
             </td>
             <td>
-              <%= qosl.sector_supply_lot.present? ? qosl.laboratory : 'Sin asignar' %>
+              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.laboratory : 'Sin asignar' %>
             </td>
             <td>
-              <%= qosl.sector_supply_lot.present? ? qosl.expiry_date.strftime("%d/%m/%Y") : 'Sin asignar' %>
+              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'Sin asignar' %>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
-  <hr>
+  <hr class="hidden-print">
   <%= render 'status_bar', internal_order: @internal_order %>
   <br>
-  <div class="row">
+  <div class="row hidden-print">
     <div class="col-md-12">
       <table class="table table-condensed table-bordered" id="fixed-table">
         <tbody>
@@ -104,7 +107,7 @@
       </div>
     </div>
   </div>
-  <div class="panel-footer text-right">
+  <div class="panel-footer text-right hidden-print">
     <%= link_to 'Volver', internal_orders_path, class: "btn" %>
     <% if policy(@internal_order).edit? %>
       <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
