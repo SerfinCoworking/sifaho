@@ -124,6 +124,56 @@ $(document).on('turbolinks:load', function() {
     });
   });
 
+  // Función para autocompletar y buscar el insumo
+  $(document).on("focus",".new-supply-name", function() {
+
+    var _this = $(this);
+  
+    jQuery(function() {
+      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+  
+      return _this.autocomplete({
+        source: _this.data('autocomplete-source'),
+        autoFocus: true,
+        minLength: 3,
+        open: function (e, ui) {
+          var acData = $(this).data('ui-autocomplete');
+          acData
+          .menu
+          .element
+          .find('li')
+          .each(function () {
+              var me = $(this);
+              var keywords = acData.term.split(' ').join('|');
+              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+          });
+        },
+        select:
+        function (event, ui) {
+          var nested_form = _this.parents(".nested-fields");
+          nested_form.find(".new-supply-id").val(ui.item.id);
+          nested_form.find(".new-supply-code").val(ui.item.id);
+          if(ui.item.expiry){
+            nested_form.find(".new-expiry-date").prop( "disabled", false );
+            nested_form.find(".new-expiry-date").val('');
+          }else{
+            nested_form.find(".new-expiry-date").val('No expira');
+            nested_form.find(".new-expiry-date").prop( "disabled", true );
+          }
+          nested_form.find('.new-deliver-quantity').focus();
+        },
+        response: function(event, ui) {
+          if (!ui.content.length) {
+              var noResult = { value:"",label:"No se encontró el insumo" };
+              ui.content.push(noResult);
+          }
+        }
+      }).each(function() {
+          $(this).autocomplete("widget").insertAfter($("#dialog").parent());
+      })
+    });
+  });
+
   $(document).on("focus",".new-supply-lot-code", function() {
     var _this = $(this);
     // Función para autocompletar código de lote
