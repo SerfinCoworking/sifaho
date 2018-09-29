@@ -178,12 +178,35 @@ class SectorSupplyLot < ApplicationRecord
     self.supply_lot.expiry_date
   end
 
+  # Se actualiza el estado del lote
+  def update_status!
+    if self.quantity == 0
+      self.agotado!
+    elsif self.supply_lot.expiry_date.present?
+      @exp_date = self.supply_lot.expiry_date
+      # If expired
+      if @exp_date <= DateTime.now
+        self.vencido!
+      # If near_expiry
+      elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
+        self.por_vencer!
+      # If good
+      elsif @exp_date > DateTime.now
+        self.vigente!
+      end 
+    else
+      self.vigente!
+    end
+  end
+
   # Métodos privados #----------------------------------------------------------
 
   private
   # Se actualiza el estado del lote
   def update_status
-    if self.supply_lot.expiry_date.present?
+    if self.quantity == 0
+      self.status = 'agotado'
+    elsif self.supply_lot.expiry_date.present?
       @exp_date = self.supply_lot.expiry_date
       # If expired
       if @exp_date <= DateTime.now
@@ -195,9 +218,8 @@ class SectorSupplyLot < ApplicationRecord
       elsif @exp_date > DateTime.now
         self.status = 'vigente'
       end 
-    end
-    if self.quantity == 0
-      self.status = 'agotado'
+    else
+      self.status = 'vigente'
     end
   end
 

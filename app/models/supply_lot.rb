@@ -163,6 +163,28 @@ class SupplyLot < ApplicationRecord
     self.supply.needs_expiration?
   end
 
+  # Se actualiza el estado de expiración guardando
+  def update_status!
+    unless self.auditoria?
+      if self.expiry_date.present?
+        # If expired
+        if self.expiry_date <= DateTime.now
+          self.vencido!
+          # If near_expiry
+        elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+          self.por_vencer!
+          # If good
+        elsif expiry_date > DateTime.now
+          self.vigente!
+        end
+      end
+    end
+  end
+
+  # Métodos privados #----------------------------------------------------------
+
+  private
+  
   # Se actualiza el estado de expiración sin guardar
   def update_status
     unless self.auditoria?
@@ -180,10 +202,6 @@ class SupplyLot < ApplicationRecord
       end
     end
   end
-
-  # Métodos privados #----------------------------------------------------------
-
-  private
 
   # Se asigna la cantidad inicial
   def assign_constants

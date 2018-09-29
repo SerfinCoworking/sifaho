@@ -97,7 +97,7 @@
               id: "remit-code",
               required: true,
               autocomplete: 'off',
-              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'des'+OrderingSupply.maximum(:id).next.to_s; end }"
+              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'des'+OrderingSupply.maximum(:id).next.to_s; else; f.object.remit_code; end }"
             }
           %>
         </div>
