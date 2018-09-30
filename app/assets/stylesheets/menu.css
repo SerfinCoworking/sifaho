@@ -157,3 +157,36 @@ li .well strong{
   -o-user-select: none;
   user-select: none;
 }
+
+#page-title{
+  font-family: 'Comfortaa-regular', sans-serif;
+  font-size: 20px;
+  margin-top: -3px;
+  margin-bottom: -5px;
+  color: white!important;
+}
+#page-title > a{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.nav-tabs-cust > li > a:focus{
+  background-color: #7c9ed4!important;
+  color: white;
+}
+
+.nav-tabs-cust {
+  border-bottom-color: transparent!important;
+}
+
+.nav-tabs-cust > li > a {
+  /* padding: 3px 3px 3px 3px; */
+  padding-top: 3px;
+  padding-bottom: 3px;
+  color: white;
+  border-radius: 4px;
+}
+.nav-tabs-cust > li > a:hover {
+  background-color: #7c9ed4;
+  border-color: #7c9ed4;
+}

@@ -1,4 +1,4 @@
-<%= simple_form_for @ordering_supply, :url =>  create_receipt_ordering_supplies_path, :method => :post, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @ordering_supply, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
   <div class="row">
     <div class="col-md-4">
@@ -97,7 +97,7 @@
               id: "remit-code",
               required: true,
               autocomplete: 'off',
-              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'rec'+OrderingSupply.maximum(:id).next.to_s; end }"
+              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'rec'+OrderingSupply.maximum(:id).next.to_s; ; else; f.object.remit_code; end }"
             }
           %>
         </div>

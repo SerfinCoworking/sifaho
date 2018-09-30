@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get "return_status"
       get "accept_provider"; get "accept_provider_confirm"
       get "receive_order"; get "receive_order_confirm"
+      get "edit_receipt"
     end
     collection do
       get "new_receipt"

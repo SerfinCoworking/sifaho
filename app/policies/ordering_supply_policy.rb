@@ -45,6 +45,12 @@ class OrderingSupplyPolicy < ApplicationPolicy
     end
   end
 
+  def edit_receipt?
+    if record.recibo_auditoria? && record.applicant_sector == user.sector
+      edit_provider.any? { |role| user.has_role?(role) }
+    end
+  end
+
   def destroy?
     if destroy_pres.any? { |role| user.has_role?(role) }
       if record.despacho? && record.proveedor_auditoria?

@@ -60,6 +60,12 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>
+    <% if policy(ordering_supply).edit_receipt? %>
+      <%= link_to edit_receipt_ordering_supply_path(ordering_supply), :"data-turbolinks" => false,
+        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% end %>
+    <% end %>
     <% if policy(ordering_supply).delete? %>
       <%= link_to delete_ordering_supply_path(ordering_supply), remote: true,
             class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>

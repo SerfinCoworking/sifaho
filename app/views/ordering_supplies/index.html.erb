@@ -1,18 +1,5 @@
-<% content_for :page_header do %>
-    Abastecimiento
-    <small><%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> despachados</small>
-    <% if policy(OrderingSupply).new_provider? %>
-      <%= link_to new_ordering_supply_path, class: 'btn btn-primary btn-xs' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Despacho
-      <% end %>
-    <% end %>
-    <%= link_to applicant_index_ordering_supplies_path, class: 'btn btn-default btn-xs',
-      title: 'Recibidos', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-      Recibidos
-    <% end %>
-<% end %>
+<%= render 'header' %>
+
 <%= render(
   partial: 'ordering_supplies/list',
   locals: { ordering_supplies: @ordering_supplies }

@@ -39,20 +39,12 @@
   </li>
   <li id="pedidos-li" class="<%= active_class('ordering_supplies') %>">
     <% if policy(OrderingSupply).index? %>
-      <%= link_to ordering_supplies_url do %>
+      <%= link_to applicant_index_ordering_supplies_url do %>
         Abastecimiento
-        <% if policy(OrderingSupply).new? %>
-          <div class="btn-add-int">
-            <%= link_to new_ordering_supply_path, class: 'btn btn-primary btn-xs' do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-        <% end %>
       <% end %>
     <% end %>
   </li>
 </ul>
-
 
 
 <!-- Menu STOCK -->
@@ -81,8 +73,6 @@
     <% end %>
   </li>
 </ul>
-
-
 
 <!-- Menu USUARIOS -->
   <li class="nav-header" data-toggle="collapse" data-target="#efectores"><div id="efectores-label" class="well well-sm">

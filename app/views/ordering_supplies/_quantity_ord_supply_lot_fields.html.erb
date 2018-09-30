@@ -1,5 +1,5 @@
 <tr class="nested-fields">
-  <% if %w(new_receipt create_receipt).include?(params[:action]) %>
+  <% if %w(new_receipt create_receipt edit_receipt).include?(params[:action]) %>
     <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
@@ -44,7 +44,7 @@
           data: { autocomplete_source: search_by_lot_code_supply_lots_path },
           size: 11,
           autocomplete: 'off',
-          value: "#{if f.object.supply_lot.present?; f.object.supply_lot.lot_code; end }"
+          value: "#{if f.object.lot_code.present?; f.object.lot_code; end }"
         }
       %>
     </td>
@@ -57,11 +57,12 @@
           class: "new-laboratory",
           data: { autocomplete_source: search_by_name_laboratories_path },
           size: 25,
-          value: "#{ if f.object.supply_lot.present?; f.object.supply_lot.laboratory_name; end }",
+          value: "#{ if f.object.laboratory_id.present?; Laboratory.find_by_id(f.object.laboratory_id).name; end }",
           autocomplete: 'off'
         } 
       %>
-      <%= f.input :laboratory_id, :as => :hidden, :input_html =>  { class: "new-laboratory-id" } %>
+      <%= f.input :laboratory_id, :as => :hidden, :input_html =>  { class: "new-laboratory-id" },
+        value: "#{ if f.object.laboratory_id.present?; f.object.laboratory_id; end }" %>
     </td>
     <td>
       <%= f.input :expiry_date, as: :string, label: false, 
@@ -71,7 +72,7 @@
           class: "new-expiry-date",
           required: false,
           autocomplete: 'off',
-          value: "#{ if f.object.supply_lot.present?; f.object.supply_lot.expiry_date.present? ? f.object.supply_lot.expiry_date.strftime('%d/%m/%Y') : 'No expira'; end }"
+          value: "#{ if f.object.expiry_date.present?; f.object.expiry_date; end }"
         },
         html5: false 
       %>

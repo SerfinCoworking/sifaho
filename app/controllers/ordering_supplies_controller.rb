@@ -1,6 +1,6 @@
 class OrderingSuppliesController < ApplicationController
   before_action :set_ordering_supply, only: [:show, :edit, :update, :send_provider,
-    :send_applicant, :destroy, :delete, :return_status,
+    :send_applicant, :destroy, :delete, :return_status, :edit_receipt,
     :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm ]
 
   # GET /ordering_supplies
@@ -76,12 +76,18 @@ class OrderingSuppliesController < ApplicationController
     4.times { @ordering_supply.quantity_ord_supply_lots.build }
   end
 
+  # GET /ordering_supplies/1/edit_receipt
+  def edit_receipt
+    authorize @ordering_supply
+    @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
+    @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+  end
+
   # GET /ordering_supplies/1/edit
   def edit
     authorize @ordering_supply
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
     @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-    4.times { @ordering_supply.quantity_ord_supply_lots.build }
   end
 
   # Creación pedido despacho con estado proveedor_auditoria.
@@ -129,7 +135,7 @@ class OrderingSuppliesController < ApplicationController
         # Si se recibe el recibo
         if receiving?
           begin
-            @ordering_supply.receive_order(current_user)
+            @ordering_supply.receive_remit(current_user)
             flash[:success] = 'El recibo se ha auditado y recibido correctamente'
           rescue ArgumentError => e
             flash[:alert] = 'No se ha podido recibir: '+e.message
@@ -197,8 +203,15 @@ class OrderingSuppliesController < ApplicationController
           rescue ArgumentError => e
             flash[:alert] = 'No se ha podido enviar: '+e.message
           end
+        elsif receiving?
+          begin
+            @ordering_supply.receive_remit(current_user)
+            flash[:success] = 'El recibo se ha realizado correctamente'
+          rescue ArgumentError => e
+            flash[:alert] = 'No se ha podido realizar: '+e.message
+          end
         else
-          flash[:notice] = 'El pedido se ha auditado correctamente.'
+          flash[:notice] = 'El '+@ordering_supply.order_type+' se ha auditado correctamente.'
         end
         format.html { redirect_to @ordering_supply }
       else
@@ -319,7 +332,7 @@ class OrderingSuppliesController < ApplicationController
 
     def receiving?
       submit = params[:commit]
-      return submit == "Recibir"
+      return submit == "Recibir" || submit == "Auditar y recibir"
     end
 
     def sending?

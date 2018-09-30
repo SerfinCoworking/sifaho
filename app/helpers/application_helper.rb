@@ -21,4 +21,9 @@ module ApplicationHelper
       return 'active'
     end 
   end
+  def active_action(link_path)
+    if params[:action] == link_path
+      return 'active'
+    end 
+  end
 end
