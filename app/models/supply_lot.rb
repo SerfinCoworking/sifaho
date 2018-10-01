@@ -237,4 +237,10 @@ class SupplyLot < ApplicationRecord
      ['Vencidos', 2, 'danger'],
    ]
   end
+
+  def self.update_status_to_all
+    self.find_each do |lot|
+      lot.update_status!
+    end
+  end
 end

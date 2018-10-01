@@ -18,3 +18,11 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+
+every 1.day, at: '4:30 am' do
+  runner "SectorSupplyLot.update_status_to_all"
+end
+
+every 1.day, at: '5:00 am' do
+  runner "SupplyLot.update_status_to_all"
+end
