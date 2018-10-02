@@ -1,84 +1,89 @@
-<%= simple_form_for @internal_order, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @internal_order, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
-  <%= f.input :applicant, as: :string, label: 'Solicitante',
-              input_html: {
-                value: current_user.name_and_sector,
-                size: 33
-              }, disabled: true %>
-  <%= f.hidden_field :applicant_id, id: "applicant_id", value: current_user.id  %>
-  <%= f.input :provider_id,
-                    label: 'Abastecedor',
-                    label_method: :name_and_sector,
-                    value_method: :id,
-                    collection: @providers,
-                    include_blank: true,
-                    required: true,
-                    input_html: { class: 'chosen-select', id: 'provider_id' },
-                    prompt: 'Seleccione un abastecedor'
-  %><br><br>
-
-  <!-- Insumos solicitados -->
-  <table class="table table-hover">
+  <div class="row">
+    <div class='col-md-3'>
+      <%= f.input :applicant_sector_id, as: :string,
+        label: 'Sector solicitante',
+        :input_html => {
+          disabled: true,
+          value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }",
+        } 
+      %>
+      <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
+      <br>
+    </div>
+    <div class="col-md-3">
+      <%= f.input :provider_sector_id, label: 'Sector proveedor',
+        collection: @provider_sectors.map {|s| [ s['name'], s['id'] ] },
+        :input_html => {
+          required: true,
+          id: 'provider-sector',
+          class: 'selectpicker show-tick',
+          "data-width"=>"auto",
+          "title"=>"Seleccionar sector",
+          "data-size"=>"10",
+          "data-live-search"=>true,
+          disabled: false,
+          value: "#{ f.object.provider_sector.id unless f.object.new_record? }"
+        } 
+      %>
+      <%= f.hidden_field :provider_sector_id, id: "provider-id", value: "#{if f.object.provider_sector.present?; f.object.provider_sector_id; end}" %>
+    </div>
+    <div class='col-md-2'>
+      <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
+        :placeholder => "Seleccionar fecha",
+        input_html: {
+          id: "requested-date",
+          required: true,
+          autocomplete: 'off',
+          :style => 'width: 110px',
+          value: "#{f.object.requested_date unless f.object.new_record?}"
+        },
+        html5: false 
+      %>
+    </div>
+    <div class='col-md-2'>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+      :input_html => { :cols => 15  , :rows => 1 } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :remit_code, label: 'Solicitud', as: :string, 
+        :placeholder => "Código",
+        input_html: {
+          size: 11,
+          id: "remit-code",
+          required: true,
+          autocomplete: 'off',
+          value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'sol'+OrderingSupply.maximum(:id).next.to_s; ; else; f.object.remit_code; end }"
+        }
+      %>
+    </div>
+  </div>
+  <hr>
+  <!-- Insumos a dispensar -->
+  <table class="table table-hover table-condensed">
     <thead>
       <tr>
-        <th>Cód insumo</th>
-        <th>Insumos solicitados</th>
-        <th>Cantidad</th>
+        <th>Cód Ins</th>
+        <th>Insumo</th>
+        <th>Solicitado</th>
+        <th>Observaciones</th>
         <th></th>
       </tr>
     </thead>
-    <tbody class="quantity_supply_requests">
-      <%= f.simple_fields_for :quantity_supply_requests do |form_quantity| %>
-        <%= render "quantity_supply_request_fields", :f => form_quantity %>
+    <tbody class="quantity_ord_supply_lots">
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
       <% end %>
     </tbody>
   </table>
   <div class="links" id="links-quant-form">
-    <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-sm',
-    data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
+    <div class="text-center">
+      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-    <% end %>
-  </div>
-  <div id='provider-form'>
-    <!-- Insumos a dispensar -->
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Cód insumo</th>
-          <th>Insumos a entregar</th>
-          <th>Cantidad</th>
-          <th>Lote</th>
-          <th>Expiración</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="quantity_supply_lots">
-        <%= f.simple_fields_for :quantity_supply_lots do |form_quantity| %>
-          <%= render "quantity_supply_lot_fields", :f => form_quantity %>
-        <% end %>
-      </tbody>
-    </table>
-    <div class="links" id="links-quant-form">
-      <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-sm',
-      data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Agregar insumo
       <% end %>
-    </div>
-  </div>
-
-  <div class='row'>
-    <div class='col-md-6'>
-      <%= f.input :observation, label: 'Observaciones', as: :text,
-          :input_html => { :cols => 27  , :rows => 4 } %>
-    </div>
-    <div class='col-md-6'>
-      <%= f.input :date_received, label: 'Fecha recibido',
-                                  as: :string,
-                                  :placeholder => "Seleccionar fecha",
-                                  input_html: {class: "form-control", required: true, autocomplete: 'off',
-                                  value: "#{@internal_order.date_received unless @internal_order.new_record?}"},
-                                  html5: false
-                                  %><br><br>
     </div>
   </div>
 <% end %>

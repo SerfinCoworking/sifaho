@@ -15,6 +15,10 @@ class InternalOrderPolicy < ApplicationPolicy
     new_pres.any? { |role| user.has_role?(role) }
   end
 
+  def create_applicant?
+    new_applicant?
+  end
+
   def new?
     create?
   end
@@ -49,6 +53,10 @@ class InternalOrderPolicy < ApplicationPolicy
 
   def new_provider?
     new_provider.any? { |role| user.has_role?(role) }
+  end
+
+  def new_applicant?
+    new_applicant.any? { |role| user.has_role?(role) }
   end
 
   def send_provider?
@@ -101,6 +109,10 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def new_provider
+    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+  end
+
+  def new_applicant
     [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
   end
 

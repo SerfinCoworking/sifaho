@@ -36,9 +36,9 @@ Rails.application.routes.draw do
     end
     collection do
       get "new_receipt"
-      post "create_receipt"
       get "new_applicant"
       get "applicant_index"
+      post "create_receipt"
     end
   end
 
@@ -92,8 +92,10 @@ Rails.application.routes.draw do
       get "receive_applicant"; get "receive_applicant_confirm"
     end
     collection do
+      get "new_applicant"
       get "new_provider"
       get "applicant_index"
+      post "create_applicant"
     end
   end
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"

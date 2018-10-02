@@ -100,7 +100,13 @@ class OrderingSuppliesController < ApplicationController
     @ordering_supply.audited_by = current_user
     respond_to do |format|
       if @ordering_supply.save
-        @ordering_supply.proveedor_auditoria!
+        if @ordering_supply.despacho?
+          @ordering_supply.proveedor_auditoria!
+        elsif @ordering_supply.recibo?
+          @ordering_supply.recibo! # Se asigna el tipo recibo
+          @ordering_supply.recibo_auditoria! # Se asigna el estado recibo auditoria
+        end
+
         # Si se acepta el pedido
         if accepting?
           begin
@@ -115,9 +121,16 @@ class OrderingSuppliesController < ApplicationController
         format.html { redirect_to @ordering_supply }
       else
         4.times { @ordering_supply.quantity_ord_supply_lots.build }
-        @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-        flash[:error] = "El pedido no se ha podido crear."
-        format.html { render :new }
+
+        if @ordering_supply.despacho?
+          @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+          flash[:error] = "El despacho no se ha podido crear."
+          format.html { render :new }
+        elsif @ordering_supply.recibo?
+          @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+          flash[:error] = "El recibo no se ha podido crear."
+          format.html { render :new_receipt }
+        end
       end
     end
   end
@@ -317,7 +330,7 @@ class OrderingSuppliesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def ordering_supply_params
       params.require(:ordering_supply).permit(:applicant_sector_id, :provider_sector_id,
-      :requested_date, :sector_id, :observation, :sent_by_id, :remit_code,
+      :requested_date, :sector_id, :observation, :sent_by_id, :remit_code, :order_type,
         quantity_ord_supply_lots_attributes: [:id, :supply_lot_id, :supply_id, :sector_supply_lot_id,
           :requested_quantity, :delivered_quantity, :lot_code, :laboratory_id, :expiry_date,
           :_destroy

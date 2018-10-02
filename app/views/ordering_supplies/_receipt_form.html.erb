@@ -2,6 +2,7 @@
   <%= f.error_notification %>
   <div class="row">
     <div class="col-md-4">
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'recibo' } %>
       <div class="text-center"><%= f.label :applicant_sector_id, "Solicitante" %></div>
       <%= f.input :applicant_establishment_id, as: :string,
         label: 'Establecimiento',
