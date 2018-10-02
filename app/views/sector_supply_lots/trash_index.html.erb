@@ -1,12 +1,6 @@
-<% content_for :page_header do %>
-  Lotes en stock
-  <small>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-    papelera
-  </small>
-<% end %>
+<%= render 'header' %>
 
-<%= render "filter" %>
+<%= render 'filter' %>
 
 <%= render(
   partial: 'sector_supply_lots/list',

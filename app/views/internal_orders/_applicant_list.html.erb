@@ -6,8 +6,14 @@
           <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :insumos_solicitados) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :solicitado) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :recibido) %></th>
+          <th>
+            <%= filterrific_sorting_link(@filterrific, :solicitado) %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+          </th>
+          <th>
+            <%= filterrific_sorting_link(@filterrific, :recibido) %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
+          </th>
           <th colspan="3">Acciones</th>
         </tr>
       </thead>

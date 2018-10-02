@@ -1,36 +1,30 @@
 <div id="filterrific_results">
-  <div class="panel panel-default">
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th><%= filterrific_sorting_link(@filterrific, :cod_ins) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :insumo) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :lote) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :laboratorio) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :expiracion) %></th>
-          <th colspan="3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id=supply_lots>
-        <%= render @supply_lots %>
-      </tbody>
-    </table>
-  </div>
-  <div id="page_links">
-    <%= paginate @supply_lot %>
-    <% if policy(SupplyLot).trash_index? %>
-      <% unless current_page?(controller: 'supply_lots', action: 'trash_index') %>
-        <%= link_to trash_index_supply_lots_path, class: "btn btn-default btn-md pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-          Papelera
-        <% end %>
-      <% else %>
-        <%= link_to supply_lots_path, class: "btn btn-default btn-md pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-arrow-left') %>
-          Volver
-        <% end %>
-      <% end %>
-    <% end %>
-  </div>
+  <% if @supply_lots.present? %>
+    <div class="panel panel-default">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :cod_ins) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :insumo) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :lote) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :laboratorio) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :expiracion) %></th>
+            <th colspan="3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id=supply_lots>
+          <%= render @supply_lots %>
+        </tbody>
+      </table>
+    </div>
+    <div id="page_links">
+      <%= paginate @supply_lot %>
+    </div>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found_filter',
+      locals: { object_name: 'lotes en provincia' }
+    ) %>
+  <% end %>
 </div>

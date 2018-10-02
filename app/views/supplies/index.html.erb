@@ -1,18 +1,6 @@
-<% content_for :page_header do %>
-  Insumos
-  <% if policy(Supply).new? %>
-    <%= link_to new_supply_path, remote: true, class: 'btn btn-primary btn-xs' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
-    <% end %>
-  <% end %>
-  <%= button_tag(class: "btn btn-info btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
-    Filtrar
-  <% end %>
-<% end %>
+<% render 'header' %>
 
-<%= render "filter" %>
+<%= render 'filter' %>
 
 <%= render(
   partial: 'supplies/list',

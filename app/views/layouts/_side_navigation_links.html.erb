@@ -25,7 +25,7 @@
   </li>
   <li id="pedidos-li" class="<%= active_class('internal_orders') %>">
     <% if policy(InternalOrder).index? %>
-      <%= link_to internal_orders_url do %>
+      <%= link_to applicant_index_internal_orders_url do %>
         Internos
         <% if policy(InternalOrder).new? %>
           <div class="btn-add-int">

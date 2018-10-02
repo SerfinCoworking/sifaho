@@ -1,19 +1,26 @@
 <div id="filterrific_results">
-  <div class="panel panel-default">
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th><%= filterrific_sorting_link(@filterrific, :razon_social) %></th>
-          <th>CUIT</th>
-          <th colspan="3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id=laboratories>
-        <%= render @laboratories %>
-      </tbody>
-    </table>
-  </div>
-  <div id="page_links">
-    <%= paginate @laboratory %>
-  </div>
+  <% if @laboratories.present? %>
+    <div class="panel panel-default">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :razon_social) %></th>
+            <th>CUIT</th>
+            <th colspan="3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id=laboratories>
+          <%= render @laboratories %>
+        </tbody>
+      </table>
+    </div>
+    <div id="page_links">
+      <%= paginate @laboratory %>
+    </div>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found_filter',
+      locals: { object_name: 'laboratorios' }
+    ) %>
+  <% end %>
 </div>

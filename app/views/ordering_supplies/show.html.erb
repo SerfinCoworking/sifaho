@@ -14,28 +14,27 @@
   </div>
   <div class="panel-body" id="panel-body-new">
     <div class="row">
-      <div class='col-md-4'>
+      <div class='col-md-4 col-xs-4'>
         <div class="text-center"><strong>Solicitante</strong></div>
         <strong>Establecimiento:</strong>
         <%= @ordering_supply.applicant_sector.establishment_name%><br>
         <strong>Sector:</strong>
         <%= @ordering_supply.applicant_sector.name%>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 col-xs-4">
         <div class="text-center"><strong>Proveedor</strong></div>
         <strong>Establecimiento:</strong>
         <%= @ordering_supply.provider_sector.establishment_name%><br>
         <strong>Sector:</strong>
         <%= @ordering_supply.provider_sector.name%>
       </div>
-      <div class='col-md-4'>
-        <hr class="visible-print">
+      <div class='col-md-4 col-xs-4'>
         <div class='row'>
-          <div class='col-md-6'>
+          <div class='col-md-6 col-xs-6'>
             <strong>Solicitado:</strong>
             <%= @ordering_supply.requested_date.strftime("%d/%m/%Y")%><br>
           </div>
-          <div class='col-md-6'>
+          <div class='col-md-6 col-xs-6'>
             <strong>Código:</strong>
             <%= @ordering_supply.remit_code %>
           </div>
@@ -133,7 +132,7 @@
         </tbody>
       </table>
     <% end %>
-  <hr>
+  <hr class="hidden-print">
   <!-- Barra de estado -->
   <%= render '/shared/status_bar', order: @ordering_supply %>
   <br>

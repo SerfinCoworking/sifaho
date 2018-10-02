@@ -1,6 +1,5 @@
-<% content_for :page_header do %>
-  Pedidos internos
-<% end %>
+<%= render 'header' %>
+
 <div class="panel panel-default">
   <div class="panel-heading hidden-print">
     <h3 class="panel-title">
@@ -15,19 +14,19 @@
   </div>
   <div class="panel-body" id="panel-body-new">
     <div class="row">
-      <div class='col-md-3'>
+      <div class='col-md-3 col-xs-3'>
         <strong>Sector solicitante:</strong>
         <%= @internal_order.applicant_sector.name%>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-3 col-xs-3">
         <strong>Sector proveedor:</strong>
         <%= @internal_order.provider_sector.name%>
       </div>
-      <div class='col-md-2'>
+      <div class='col-md-3 col-xs-3'>
         <strong>Solicitado:</strong>
         <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
       </div>
-      <div class='col-md-4'>
+      <div class='col-md-3 col-xs-3'>
         <strong>Observaciones:</strong>
           <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
       </div>
@@ -62,15 +61,23 @@
             <td>
               <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
             </td>
-            <td>
-              <%= qosl.sector_supply_lot.present? ? qosl.lot_code : 'Sin asignar' %>
-            </td>
-            <td>
-              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.laboratory : 'Sin asignar' %>
-            </td>
-            <td>
-              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'Sin asignar' %>
-            </td>
+            <% if qosl.sector_supply_lot.present? %>
+              <td>
+                <%= qosl.sector_supply_lot.lot_code %>
+              </td>
+              <td>
+                <%= qosl.sector_supply_lot.laboratory %>
+              </td>
+              <td>
+                <% if qosl.supply.needs_expiration %>
+                  <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : "Sin asignar" %>
+                <% else %>
+                  No vence
+                <% end %>
+              </td>
+            <% else %>
+              <td>Sin lote</td><td>----</td><td>----</td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
@@ -113,7 +120,7 @@
       <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-        Editar
+        Auditar
       <% end %>
     <% end %>
     <% if policy(@internal_order).return_provider_status? %>

@@ -1,0 +1,27 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" id="page-title">
+        <a href="">Pedidos internos</a>
+      </li>
+      <li role="presentation" class="<%= active_action('applicant_index') %>">
+        <%= link_to applicant_index_internal_orders_path,
+          title: 'Recibidos', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+          Recibidos
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('index') %>">
+        <%= link_to internal_orders_path, class: 'active',
+          title: 'Entregados', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+          Entregados
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('new_provider') %>">
+        <%= link_to new_provider_internal_orders_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Entrega
+        <% end %>
+      </li>
+    </ul>
+<% end %>

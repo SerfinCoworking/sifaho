@@ -1,12 +1,4 @@
-<% content_for :page_header do %>
-  Profesionales
-  <% if policy(Professional).new? %>
-    <%= link_to new_professional_path, remote: true, class: 'btn btn-primary btn-xs' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
-    <% end %>
-  <% end %>
-<% end %>
+<%= render 'header' %>
 
 <div class="panel panel-info" id="filter-panel">
   <div class="panel-leftheading">
@@ -20,7 +12,8 @@
         <%= f.text_field(
           :search_professional,
           class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Nombre o apellido'
+          placeholder: 'Nombre o apellido',
+          autocomplete: 'off'
         ) %>
       </div>
       <div class="col-md-2 col-sm-2">
@@ -59,7 +52,15 @@
   </div>
 </div>
 
-<%= render(
-  partial: 'professionals/list',
-  locals: { professionals: @professionals }
-) %>
+<% if @professionals.present? %>
+  <%= render(
+    partial: 'professionals/list',
+    locals: { professionals: @professionals }
+  ) %>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'profesionales' }
+  ) %>
+<% end %>
+

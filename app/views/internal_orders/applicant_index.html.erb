@@ -1,16 +1,15 @@
-<% content_for :page_header do %>
-  Pedidos internos
-  <small><%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %> recibidos</small>
-  <%= link_to internal_orders_path, class: 'btn btn-default btn-xs',
-    title: 'Entregados', data: { toggle: 'tooltip', placement: 'top' } do %>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-    Entregados
-  <% end %>
-<% end %>
+<%= render 'header' %>
 
 <%= render "filter" %>
 
-<%= render(
-  partial: 'internal_orders/applicant_list',
-  locals: { applicant_orders: @applicant_orders }
-) %>
+<% if @applicant_orders.present? %>
+  <%= render(
+    partial: 'internal_orders/applicant_list',
+    locals: { applicant_orders: @applicant_orders }
+  ) %>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'pedidos internos' }
+  ) %>
+<% end %>

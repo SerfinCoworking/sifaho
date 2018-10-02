@@ -7,7 +7,7 @@
           <th><%= filterrific_sorting_link(@filterrific, :nombre) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :unidad) %></th>
           <th>Area</th>
-          <th>Expira?</th>
+          <th>Vence?</th>
           <th colspan="1">Acciones</th>
         </tr>
       </thead>
@@ -18,18 +18,5 @@
   </div>
   <div id="page_links">
     <%= paginate @supply %>
-    <% if policy(Supply).trash_index? %>
-      <% unless current_page?(controller: 'supplies', action: 'trash_index') %>
-        <%= link_to trash_index_supplies_path, class: "btn btn-default btn-md pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-          Papelera
-        <% end %>
-      <% else %>
-        <%= link_to supplies_path, class: "btn btn-default btn-md pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-arrow-left') %>
-          Volver
-        <% end %>
-      <% end %>
-    <% end %>
   </div>
 </div>

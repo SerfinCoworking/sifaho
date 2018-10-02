@@ -1,59 +1,58 @@
-<% content_for :page_header do %>
-  Laboratorios
-  <% if policy(Laboratory).new? %>
-    <%= link_to new_laboratory_path, remote: true, class: 'btn btn-primary btn-xs' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
-    <% end %>
-  <% end %>
-<% end %>
-<div class="col-md-7">
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
-      <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-4 col-sm-4">
-          <label>Razón social</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_name,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre'
-          ) %>
-        </div>
-        <div class="col-md-3 col-sm-3">
-          <label>CUIT</label>
-          <%= f.text_field(
-            :search_cuit,
-            class: 'filterrific-periodically-observed form-control',
-              placeholder: 'Número'
-            ) %>
-        </div>
-        <div class="col-md-3 col-sm-3">
-          <label>GLN</label>
-          <%= f.text_field(
-            :search_gln,
-            class: 'filterrific-periodically-observed form-control',
-              placeholder: 'Número'
-            ) %>
-        </div>
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <%= render_filterrific_spinner %>
-      <% end %>
-    </div>
-    <div class="clearfix">
-    </div>
-  </div>
+<%= render 'header' %>
 
+<% if @laboratories.present? %>
+  <div class="col-md-7">
+    <div class="panel panel-info" id="filter-panel">
+      <div class="panel-leftheading">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+      </div>
+      <div class="panel-rightbody">
+        <%= form_for_filterrific @filterrific do |f| %>
+          <div class="col-md-4 col-sm-4">
+            <label>Razón social</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_name,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre'
+            ) %>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>CUIT</label>
+            <%= f.text_field(
+              :search_cuit,
+              class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Número'
+              ) %>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>GLN</label>
+            <%= f.text_field(
+              :search_gln,
+              class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Número'
+              ) %>
+          </div>
+          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+          <% end %>
+          <%= render_filterrific_spinner %>
+        <% end %>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <%= render(
+      partial: 'laboratories/list',
+      locals: { laboratories: @laboratories }
+    ) %>
+  </div>
+<% else %>
   <%= render(
-    partial: 'laboratories/list',
-    locals: { laboratories: @laboratories }
+    partial: 'shared/not_found',
+    locals: { object_name: 'laboratorios' }
   ) %>
-</div>
+<% end %>
+
 
 <div class="col-md-5">
   <!--  Panel Lote de medicamentos -->

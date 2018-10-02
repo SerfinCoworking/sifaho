@@ -1,15 +1,17 @@
 <tr id="internal_order_<%= internal_order.id %>">
   <% if current_page?(action: 'applicant_index') %>
-    <td class="sol-col-aba"><%= internal_order.provider_sector.name %></td>
-    <td class="sol-col-aba"><%= internal_order.provider_sector.establishment_name %></td>
+    <td class="sol-col-aba">
+      <%= internal_order.provider_sector.name %>
+    </td>
     <td>
       <span class="label label-<%= internal_order.applicant_status_label %>">
         <%= internal_order.applicant_status.split('_').map(&:capitalize).join(' ') %>
       </span>
     </td>
   <% else %>
-    <td class="sol-col-aba"><%= internal_order.applicant_sector.name %></td>
-    <td class="sol-col-aba"><%= internal_order.applicant_sector.establishment_name %></td> 
+    <td class="sol-col-aba">
+      <%= internal_order.applicant_sector.name %>
+    </td> 
     <td>
       <span class="label label-<%= internal_order.provider_status_label %>">
         <%= internal_order.provider_status.split('_').map(&:capitalize).join(' ') %>
@@ -35,8 +37,8 @@
       <td>
       <%= internal_order.date_received.strftime("%d/%m/%y %H:%M") %>
     <% else %>
-      <td class="text-center">
-      <%= internal_order.provider_status.split('_').map(&:capitalize).join(' ') %>
+      <td>
+      ----
     <% end %>
   </td>
   <td>

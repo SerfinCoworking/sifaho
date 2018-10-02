@@ -1,16 +1,6 @@
-<% content_for :page_header do %>
-  Insumos
-  <small>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-    papelera
-  </small>
-  <%= button_tag(class: "btn btn-info btn-xs", 'data-toggle' => 'collapse', 'data-target' => '#filter') do %>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter') %>
-    Filtrar
-  <% end %>
-<% end %>
+<% render 'header' %>
 
-<%= render "filter" %>
+<%= render 'filter' %>
 
 <%= render(
   partial: 'supplies/list',

@@ -1,0 +1,27 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" id="page-title">
+        <a href="">Insumos</a>
+      </li>
+      <li role="presentation" class="<%= active_action('index') %>">
+        <%= link_to supplies_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Listado
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('new') %>">
+        <%= link_to new_supply_path, remote: 'true' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Nuevo
+        <% end %>
+      </li>
+      <% if policy(Supply).trash_index? %>
+        <li role="presentation" class="pull-right <%= active_action('trash_index') %>">
+          <%= link_to trash_index_supplies_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            Papelera
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+<% end %>
