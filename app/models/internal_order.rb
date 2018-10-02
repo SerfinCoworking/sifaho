@@ -28,13 +28,14 @@ class InternalOrder < ApplicationRecord
 
   # Atributos anidados
   accepts_nested_attributes_for :quantity_ord_supply_lots,
-          :reject_if => :all_blank,
-          :allow_destroy => true
+    :reject_if => :all_blank,
+    :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :search_applicant,
+      :search_provider,
       :search_supply_code,
       :search_supply_name,
       :with_status,
@@ -56,6 +57,11 @@ class InternalOrder < ApplicationRecord
 
   pg_search_scope :search_applicant,
   :associated_against => { :applicant_sector => :name },
+  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_applicant,
+  :associated_against => { :provider_sector => :name },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 

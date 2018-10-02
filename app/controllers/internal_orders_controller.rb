@@ -16,6 +16,7 @@ class InternalOrdersController < ApplicationController
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :search_applicant,
+        :search_provider,
         :search_supply_code,
         :search_supply_name,
         :with_status,
