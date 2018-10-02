@@ -100,23 +100,28 @@ class OrderingSuppliesController < ApplicationController
     @ordering_supply.audited_by = current_user
     respond_to do |format|
       if @ordering_supply.save
-        if @ordering_supply.despacho?
-          @ordering_supply.proveedor_auditoria!
-        elsif @ordering_supply.recibo?
-          @ordering_supply.recibo! # Se asigna el tipo recibo
-          @ordering_supply.recibo_auditoria! # Se asigna el estado recibo auditoria
-        end
-
-        # Si se acepta el pedido
-        if accepting?
-          begin
-            @ordering_supply.accept_order(current_user)
-            flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido aceptar: '+e.message
+        begin
+          if @ordering_supply.despacho?
+            @ordering_supply.proveedor_auditoria!
+            # Si se acepta el pedido
+            if accepting?
+              @ordering_supply.accept_order(current_user)
+              flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
+            else
+              flash[:notice] = 'El pedido se ha creado y se encuentra en auditoría.'
+            end
+          elsif @ordering_supply.recibo?
+            @ordering_supply.recibo! # Se asigna el tipo recibo
+            @ordering_supply.recibo_auditoria! # Se asigna el estado recibo auditoria
+            if receiving?
+              @ordering_supply.receive_remit(current_user)
+              flash[:success] = 'El recibo se ha auditado y realizado correctamente'
+            else
+              flash[:notice] = 'El recibo se ha cargado y se encuentra en auditoría.'
+            end
           end
-        else
-          flash[:notice] = 'El pedido se ha creado y se encuentra en auditoría.'
+        rescue ArgumentError => e
+          flash[:alert] = e.message
         end
         format.html { redirect_to @ordering_supply }
       else
@@ -124,73 +129,13 @@ class OrderingSuppliesController < ApplicationController
 
         if @ordering_supply.despacho?
           @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-          flash[:error] = "El despacho no se ha podido crear."
+          flash[:error] = "El despacho no se ha podido cargar."
           format.html { render :new }
         elsif @ordering_supply.recibo?
-          @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-          flash[:error] = "El recibo no se ha podido crear."
+          @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+          flash[:error] = "El recibo no se ha podido cargar."
           format.html { render :new_receipt }
         end
-      end
-    end
-  end
-
-  # POST /ordering_supplies/create_receipt
-  def create_receipt
-    @ordering_supply = OrderingSupply.new(ordering_supply_params)
-    authorize @ordering_supply
-    @ordering_supply.created_by = current_user
-    @ordering_supply.audited_by = current_user
-    respond_to do |format|
-      if @ordering_supply.save
-        @ordering_supply.recibo! # Se asigna el tipo recibo
-        @ordering_supply.recibo_auditoria! # Se asigna el estado recibo auditoria
-        # Si se recibe el recibo
-        if receiving?
-          begin
-            @ordering_supply.receive_remit(current_user)
-            flash[:success] = 'El recibo se ha auditado y recibido correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido recibir: '+e.message
-          end
-        else
-          flash[:notice] = 'El recibo se ha cargado y se encuentra en auditoría.'
-        end
-        format.html { redirect_to @ordering_supply }
-      else
-        4.times { @ordering_supply.quantity_ord_supply_lots.build }
-        @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
-        flash[:error] = "El recibo no se ha podido cargar."
-        format.html { render :new_receipt }
-      end
-    end
-  end
-
-  # POST /ordering_supplies/create_applicant
-  def create_applicant
-    @ordering_supply = OrderingSupply.new(ordering_supply_params)
-    authorize @ordering_supply
-    @ordering_supply.audited_by = current_user
-    respond_to do |format|
-      if @ordering_supply.save
-        # Si se acepta el pedido
-        if accepting?
-          begin
-            @ordering_supply.accepted_by = current_user
-            @ordering_supply.accept_order
-            flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido aceptar: '+e.message
-          end
-        else
-          flash[:notice] = 'El pedido se ha creado y se encuentra en auditoría.'
-        end
-        format.html { redirect_to @ordering_supply }
-      else
-        4.times { @ordering_supply.quantity_ord_supply_lots.build }
-        @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-        flash[:error] = "El pedido no se ha podido crear."
-        format.html { render :new }
       end
     end
   end
@@ -201,36 +146,39 @@ class OrderingSuppliesController < ApplicationController
     authorize @ordering_supply
     respond_to do |format|
       if @ordering_supply.update(ordering_supply_params)
-        # Si se acepta el pedido
-        if accepting?
-          begin
-            @ordering_supply.accept_order(current_user)
-            flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido aceptar: '+e.message
-          end
-        elsif sending?
-          begin
-            @ordering_supply.send_order(current_user)
-            flash[:success] = 'El pedido se ha enviado correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido enviar: '+e.message
-          end
-        elsif receiving?
-          begin
-            @ordering_supply.receive_remit(current_user)
-            flash[:success] = 'El recibo se ha realizado correctamente'
-          rescue ArgumentError => e
-            flash[:alert] = 'No se ha podido realizar: '+e.message
-          end
-        else
-          flash[:notice] = 'El '+@ordering_supply.order_type+' se ha auditado correctamente.'
+        begin
+          if @ordering_supply.despacho?  
+            if accepting? # Si se acepta el despacho
+                @ordering_supply.accept_order(current_user)
+                flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
+            elsif sending? # Si se envía el despacho
+                @ordering_supply.send_order(current_user)
+                flash[:success] = 'El despacho se ha auditado y enviado correctamente'
+            else
+              flash[:success] = 'El despacho se ha auditado correctamente'
+            end
+          elsif @ordering_supply.recibo?
+            if receiving?
+              @ordering_supply.receive_remit(current_user)
+              flash[:success] = 'El recibo se ha auditado y realizado correctamente'
+            else
+              flash[:success] = 'El recibo se ha auditado correctamente'
+            end
+          end   
+        rescue ArgumentError => e
+          flash[:alert] = e.message
         end
         format.html { redirect_to @ordering_supply }
       else
-        @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-        format.html { render :edit }
-        format.json { render json: @ordering_supply.errors, status: :unprocessable_entity }
+        if @ordering_supply.despacho?
+          @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+          flash[:error] = "El despacho no se ha podido auditar."
+          format.html { render :edit }
+        elsif @ordering_supply.recibo?
+          @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+          flash[:error] = "El recibo no se ha podido auditar."
+          format.html { render :edit_receipt }
+        end
       end
     end
   end
@@ -267,16 +215,14 @@ class OrderingSuppliesController < ApplicationController
         if @ordering_supply.recibo?
           @ordering_supply.receive_remit(current_user)
           flash[:success] = 'El recibo se ha realizado correctamente'
-        elsif
-          @ordering_supply.despacho?
+        elsif @ordering_supply.despacho?
           @ordering_supply.receive_order(current_user)
           flash[:success] = 'El despacho se ha recibido correctamente'
         end
       rescue ArgumentError => e
-        flash[:error] = 'No se ha podido realizar: '+e.message
-      else
+        flash[:error] = e.message
+      end 
       format.html { redirect_to @ordering_supply }
-      end
     end
   end
 

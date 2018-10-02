@@ -60,7 +60,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
       @sector_supply_lot.save!
       self.entregado!
     else
-      raise ArgumentError, 'No hay lotes para recibir en la relación' 
+      raise ArgumentError, 'El insumo '+self.supply_name+' no tiene lote asignado.' 
     end
   end
 
