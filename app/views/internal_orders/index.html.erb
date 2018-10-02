@@ -1,8 +1,9 @@
 <%= render 'header' %>
 
-<%= render 'filter' %>
-
 <% if @internal_orders.present? %>
+
+  <%= render 'filter' %>
+
   <%= render(
     partial: 'internal_orders/list',
     locals: { internal_orders: @internal_orders }
@@ -10,6 +11,6 @@
 <% else %>
   <%= render(
     partial: 'shared/not_found',
-    locals: { object_name: 'pedidos internos' }
+    locals: { object_name: 'pedidos internos entregados' }
   ) %>
 <% end %>
