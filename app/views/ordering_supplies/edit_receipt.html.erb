@@ -14,7 +14,7 @@
   <div class="panel-footer text-right">
       <%= link_to 'Volver', applicant_index_ordering_supplies_path, class: 'btn' %>
       <button type='submit' name='commit' class='btn btn-success' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Guardar cambios
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
       </button>
       <button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar y recibir'>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %> Guardar y realizar

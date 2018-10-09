@@ -5,8 +5,8 @@ module OrderingSuppliesHelper
     elsif order.solicitud_enviada?; return 'info'
     elsif order.proveedor_auditoria?; return 'warning'
     elsif order.proveedor_aceptado?; return 'primary'
-    elsif order.proveedor_en_camino?; return 'primary'
-    elsif order.paquete_entregado?; return 'success'
+    elsif order.provision_en_camino?; return 'primary'
+    elsif order.provision_entregada?; return 'success'
     elsif order.recibo_auditoria?; return 'warning'
     elsif order.recibo_realizado?; return 'success' 
     elsif order.anulado?; return 'danger'
@@ -27,8 +27,8 @@ module OrderingSuppliesHelper
   def ordering_despacho_percent_bar(order)
     if order.proveedor_auditoria?; return 5
     elsif order.proveedor_aceptado?; return 34
-    elsif order.proveedor_en_camino?; return 71
-    elsif order.paquete_entregado?; return 100
+    elsif order.provision_en_camino?; return 71
+    elsif order.provision_entregada?; return 100
     elsif order.anulado?; return 100
     end
   end
@@ -39,8 +39,8 @@ module OrderingSuppliesHelper
     elsif order.solicitud_enviada?; return 20 
     elsif order.proveedor_auditoria?; return 30
     elsif order.proveedor_aceptado?; return 50
-    elsif order.proveedor_en_camino?; return 71
-    elsif order.paquete_entregado?; return 100
+    elsif order.provision_en_camino?; return 71
+    elsif order.provision_entregada?; return 100
     elsif order.anulado?; return 100
     end
   end

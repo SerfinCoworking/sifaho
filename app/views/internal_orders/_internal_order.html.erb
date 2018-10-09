@@ -1,39 +1,34 @@
 <tr id="internal_order_<%= internal_order.id %>">
+  <td><%= internal_order.remit_code %></td>
   <% if current_page?(action: 'applicant_index') %>
     <td class="sol-col-aba">
       <%= internal_order.provider_sector.name %>
     </td>
-    <td>
-      <span class="label label-<%= internal_order.applicant_status_label %>">
-        <%= internal_order.applicant_status.split('_').map(&:capitalize).join(' ') %>
-      </span>
-    </td>
   <% else %>
     <td class="sol-col-aba">
       <%= internal_order.applicant_sector.name %>
-    </td> 
-    <td>
-      <span class="label label-<%= internal_order.provider_status_label %>">
-        <%= internal_order.provider_status.split('_').map(&:capitalize).join(' ') %>
-      </span>
     </td>
-  <% end %>
+  <% end %> 
+    <td>
+    <span class="label label-default">
+      <%= internal_order.order_type.split('_').map(&:capitalize).join(' ') %>
+    </span>
+  </td>
+  <td>
+    <span class="label label-<%= internal_status_label(internal_order) %>">
+      <%= internal_order.status.split('_').map(&:capitalize).join(' ') %>
+    </span>
+  </td>
   <td class="col-io-sup-name">
-    <% if internal_order.quantity_ord_supply_lots.present? %>
-      (<%= internal_order.quantity_ord_supply_lots.count %>)
-      <% internal_order.quantity_ord_supply_lots.each do |qosl| %>
-        <span class="badge">
-          <%= qosl.requested_quantity %>
-        </span>
-        <%= qosl.supply_name %>
-      <% end %>
-    <% else %>
-      ------
-    <% end %></td>
+    <%= 'Solicitado'.pluralize(osCount = internal_order.quantity_ord_supply_lots.count) %>
+    <span class="badge">
+      <%= osCount %>
+    </span>
+  </td>
   <td>
     <%= internal_order.requested_date.strftime("%d/%m/%Y") %>
   </td>
-    <% if internal_order.provider_entregado? %>
+    <% if internal_order.provision_entregada? %>
       <td>
       <%= internal_order.date_received.strftime("%d/%m/%y %H:%M") %>
     <% else %>
@@ -48,9 +43,15 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
+    <% if policy(internal_order).edit_applicant? %>
+      <%= link_to edit_applicant_internal_order_path(internal_order), class: 'btn btn-warning btn-xs', 
+        title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% end %>
+    <% end %>
     <% if policy(internal_order).edit? %>
       <%= link_to edit_internal_order_path(internal_order), class: 'btn btn-warning btn-xs', 
-        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>

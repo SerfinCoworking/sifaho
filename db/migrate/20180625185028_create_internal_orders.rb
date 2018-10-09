@@ -6,6 +6,7 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
       t.datetime :date_received
       t.text :observation
       t.column :status, :integer, default: 0
+      t.column :order_type, :integer, default: 0
 
       t.timestamps
     end

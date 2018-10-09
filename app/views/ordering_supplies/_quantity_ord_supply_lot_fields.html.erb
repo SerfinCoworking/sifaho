@@ -72,7 +72,13 @@
           class: "new-expiry-date",
           required: false,
           autocomplete: 'off',
-          value: "#{ if f.object.expiry_date.present?; f.object.expiry_date; end }"
+          value: "#{
+            if f.object.expiry_date.present? 
+              f.object.expiry_date.strftime("%d/%m/%Y")
+            else 
+              'Sin asignar'
+            end
+          }"
         },
         html5: false 
       %>

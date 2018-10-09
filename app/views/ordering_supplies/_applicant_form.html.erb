@@ -3,24 +3,26 @@
   <div class='row'>
     <div class='col-md-7'>
       <%= f.input :applicant_id, as: :string,
-                        label: 'Solicitante',
-                        placeholder: 'Perez Juan',
-                        :input_html => {
-                          id: "professional",
-                          data: { autocomplete_source: search_by_name_establishments_path },
-                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
-                          size: 33
-                        } %>
+        label: 'Solicitante',
+        placeholder: 'Perez Juan',
+        :input_html => {
+          id: "professional",
+          data: { autocomplete_source: search_by_name_establishments_path },
+          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
+          size: 33
+        } 
+      %>
       <%= f.hidden_field :responsable_id, value: "#{if f.new_record?; current_user.id; else; f.responsable.id; end}" %>
       <%= f.input :provider_id, as: :string,
-                        label: 'Proveedor',
-                        placeholder: 'Perez Juan',
-                        :input_html => {
-                          id: "provider",
-                          data: { autocomplete_source: search_by_name_establishments_path },
-                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
-                          size: 33
-                        } %>
+        label: 'Proveedor',
+        placeholder: 'Perez Juan',
+        :input_html => {
+          id: "provider",
+          data: { autocomplete_source: search_by_name_establishments_path },
+          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
+          size: 33
+        } 
+      %>
       <%= f.hidden_field :provider_id, id: "provider_id", value: "#{f.object.provider_id unless f.object.new_record?}" %>
     </div>
     <div class='col-md-5'>

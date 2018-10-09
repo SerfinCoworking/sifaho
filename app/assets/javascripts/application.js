@@ -36,3 +36,26 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 5000);
+
+$('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
+
+$(document).on('turbolinks:load', function() {
+    // Se oculta el flash message
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+        });
+    }, 5000);
+
+    // Return confirmation modal
+    $('#return-confirm').on('show', function() {
+        var $submit = $(this).find('.btn-warning'),
+        href = $submit.attr('href');
+        $submit.attr('href', href.replace('pony', $(this).data('id')));
+    });
+
+    $('.return-confirm').click(function(e) {
+        e.preventDefault();
+        $('#return-confirm').data('id', $(this).data('id')).modal('show');
+    });
+});

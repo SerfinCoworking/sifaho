@@ -90,6 +90,7 @@ Rails.application.routes.draw do
       get "return_provider_status"
       get "return_applicant_status"
       get "receive_applicant"; get "receive_applicant_confirm"
+      get "edit_applicant"
     end
     collection do
       get "new_applicant"

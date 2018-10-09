@@ -9,12 +9,14 @@
           Lotes
         <% end %>
       </li>
-      <li role="presentation" class="">
-        <%= link_to new_receipt_ordering_supplies_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
-          Cargar stock
-        <% end %>
-      </li>
+      <% if policy(OrderingSupply).new_receipt? %>
+        <li role="presentation" class="">
+          <%= link_to new_receipt_ordering_supplies_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
+            Cargar stock
+          <% end %>
+        </li>
+      <% end %>
       <% if policy(SectorSupplyLot).trash_index? %>
         <li role="presentation" class="pull-right <%= active_action('trash_index') %>">
           <%= link_to trash_index_sector_supply_lots_path do %>

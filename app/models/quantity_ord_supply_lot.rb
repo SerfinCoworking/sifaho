@@ -25,20 +25,16 @@ class QuantityOrdSupplyLot < ApplicationRecord
   
   # Métodos públicos
   def increment_lot_to(a_sector)
-    if self.sin_entregar?
-      if self.sector_supply_lot.present?
-        @sector_supply_lot = SectorSupplyLot.where(
-          sector_id: a_sector.id,
-          supply_lot_id: self.sector_supply_lot.supply_lot_id
-        ).first_or_create
-        @sector_supply_lot.increment(self.delivered_quantity)
-        @sector_supply_lot.save!
-        self.entregado!
-      else
-        raise ArgumentError, 'No hay lotes en la relación'
-      end
+    if self.sector_supply_lot.present?
+      @sector_supply_lot = SectorSupplyLot.where(
+        sector_id: a_sector.id,
+        supply_lot_id: self.sector_supply_lot.supply_lot_id
+      ).first_or_create
+      @sector_supply_lot.increment(self.delivered_quantity)
+      @sector_supply_lot.save!
+      self.entregado!
     else
-      raise ArgumentError, 'Ya se ha entregado'
+      raise ArgumentError, 'No hay lotes en la relación'
     end
   end
 

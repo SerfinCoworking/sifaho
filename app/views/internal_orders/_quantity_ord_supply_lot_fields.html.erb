@@ -26,24 +26,36 @@
     %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
-  <td>
-    <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
-      input_html: {
-        "data-tooltip"=>true,
-        :class=>"has-tip request-quantity",
-        :title=>"Cantidad solicitada",
-        "data-placement"=>"right",
-        min: '1', max: '9999', step:'any', :style => 'width: 70px'
-      } 
-    %>
-  </td>
+
   <% if %w(new_applicant create_applicant edit_applicant).include?(params[:action]) %>
+    <td>
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip apply-request-quant",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '1', max: '9999', step:'any', :style => 'width: 70px'
+        }  
+      %>
+      <%= f.input :delivered_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
+    </td>
     <td>
       <%= f.input :observation, label: false, as: :text,
         :input_html => { :cols => 35  , :rows => 1 } %>
     </td>
-  <% end %>
-  <% unless %w(new_applicant create_applicant edit_applicant).include?(params[:action]) %>
+  <% else %>
+    <td>
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip request-quantity",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '1', max: '9999', step:'any', :style => 'width: 70px'  
+        } 
+      %>
+    </td>
     <td>
       <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {

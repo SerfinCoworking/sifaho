@@ -2,7 +2,22 @@
 @media print {
   header { display: none; } 
   #page-header { display: none}
-  @page {size: landscape}
+  #panel-body-new {
+    /* height: 480px; */
+    height: 100%!important; 
+  }
+  .table-condensed > thead > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > tfoot > tr > td{
+    font-size: 9px;
+  }
+  .footer{ display: none}
+
+  strong{
+    font-family: 'Lato', sans-serif;
+  }
+
+  #panel-body-new > row > .col-xs-3 > strong{
+    font-size: 9px;
+  }
 }
 
 .print-btn{

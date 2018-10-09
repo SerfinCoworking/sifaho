@@ -4,7 +4,7 @@ class OrderingSupply < ApplicationRecord
 
   enum order_type: { despacho: 0, solicitud: 1, recibo: 2 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
-    proveedor_aceptado: 3, proveedor_en_camino: 4, paquete_entregado: 5, recibo_auditoria: 6,
+    proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
     recibo_realizado: 7, anulado: 8 }
 
   # Relaciones
@@ -26,6 +26,7 @@ class OrderingSupply < ApplicationRecord
   validates_associated :quantity_ord_supply_lots
   validates_associated :supplies
   validates_associated :sector_supply_lots
+  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   accepts_nested_attributes_for :supplies
   accepts_nested_attributes_for :sector_supply_lots
@@ -138,7 +139,7 @@ class OrderingSupply < ApplicationRecord
       end # End check if quantity_ord_supply_lots exists
       self.sent_by = a_user
       self.sent_date = DateTime.now
-      self.proveedor_en_camino!
+      self.provision_en_camino!
     else
       raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
     end 
@@ -161,7 +162,7 @@ class OrderingSupply < ApplicationRecord
 
   # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
   def receive_order(a_user)
-    if proveedor_en_camino?
+    if provision_en_camino?
       if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
         self.quantity_ord_supply_lots.each do |qosl|
           qosl.increment_lot_to(a_user.sector)
@@ -198,7 +199,7 @@ class OrderingSupply < ApplicationRecord
   def return_status
     if proveedor_aceptado?
       self.proveedor_auditoria!
-    elsif proveedor_en_camino?
+    elsif provision_en_camino?
       self.quantity_ord_supply_lots.each do |qosl|
         qosl.increment
       end

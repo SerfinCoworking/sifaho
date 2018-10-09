@@ -1,5 +1,5 @@
 .col-io-sup-name{
-  max-width: 420px; /* Customise it accordingly */
+  max-width: 300px; /* Customise it accordingly */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -21,4 +21,12 @@
 
 #pedidos-li:hover .btn-add-int {
    display: table; /* On :hover of div show button */
+}
+
+#pro-aud-glyph-prov{ 
+  margin-left: 30%;
+}
+
+#pro-cam-glyph-prov{ 
+  margin-left: 30%;
 }

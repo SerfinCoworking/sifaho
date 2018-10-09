@@ -1,14 +1,6 @@
 $(document).on('turbolinks:load', function() {
   $.fn.bootstrapSwitch.defaults.onColor = 'success';
   $.fn.bootstrapSwitch.defaults.offColor = 'danger';
-  
-  window.setTimeout(function() {
-      $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          $(this).remove();
-      });
-  }, 5000);
-
-  $('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
 
   $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY', locale: 'es'});
 

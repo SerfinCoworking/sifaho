@@ -96,7 +96,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
       if record.recibo?
         record.recibo_auditoria?
       elsif record.despacho?
-        record.proveedor_en_camino?
+        record.provision_en_camino?
       end
     end
   end
@@ -104,7 +104,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
   def return_status?
     if destroy_pres.any? { |role| user.has_role?(role) }
       if record.despacho?
-        if record.proveedor_aceptado? || record.proveedor_en_camino?
+        if record.proveedor_aceptado? || record.provision_en_camino?
           return record.provider_sector == user.sector
         end
       elsif record.solicitud? && record.solicitud_enviada?

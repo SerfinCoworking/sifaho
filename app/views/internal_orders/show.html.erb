@@ -3,7 +3,7 @@
 <div class="panel panel-default">
   <div class="panel-heading hidden-print">
     <h3 class="panel-title">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo pedido
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @internal_order.order_type %>
       <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
@@ -12,13 +12,14 @@
       <% end %>
     </h3>
   </div>
+  <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
   <div class="panel-body" id="panel-body-new">
     <div class="row">
-      <div class='col-md-3 col-xs-3'>
+      <div class='col-md-2 col-xs-2'>
         <strong>Sector solicitante:</strong>
         <%= @internal_order.applicant_sector.name%>
       </div>
-      <div class="col-md-3 col-xs-3">
+      <div class="col-md-2 col-xs-2">
         <strong>Sector proveedor:</strong>
         <%= @internal_order.provider_sector.name%>
       </div>
@@ -30,6 +31,10 @@
         <strong>Observaciones:</strong>
           <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
       </div>
+      <div class='col-md-2 col-xs-2'>
+        <strong>Código:</strong>
+        <%= @internal_order.remit_code %>
+      </div>
     </div>
     <hr>
     <!-- Insumos a dispensar -->
@@ -39,7 +44,7 @@
           <th>Cód Ins</th>
           <th>Insumo</th>
           <th>Solicitado</th>
-          <th>Entregado</th>
+          <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
           <th>Lote</th>
           <th>Laboratorio</th>
           <th>Vencimiento</th>
@@ -115,15 +120,29 @@
     </div>
   </div>
   <div class="panel-footer text-right hidden-print">
-    <%= link_to 'Volver', internal_orders_path, class: "btn" %>
+    <%= link_to 'Volver', :back, class: "btn" %>
     <% if policy(@internal_order).edit? %>
       <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
         Auditar
       <% end %>
+    <% end %>   
+    <% if policy(@internal_order).edit_applicant? %>
+      <%= link_to edit_applicant_internal_order_path(@internal_order), 
+        class: 'btn btn-warning btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        Auditar
+      <% end %>
     <% end %>
-    <% if policy(@internal_order).return_provider_status? %>
+    <% if policy(@internal_order).send_applicant? %>
+      <%= link_to send_applicant_internal_order_path(@internal_order), 
+        class: 'btn btn-primary btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        Enviar
+      <% end %>
+    <% end %>
+    <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
       <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning">
         <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
         Retornar
@@ -146,20 +165,26 @@
   </div>
 </div>
 
-<div class="modal" id="return-confirm">
-  <div class="modal-dialog">
-    <div class="modal-content panel-warning">
-      <div class="modal-header panel-heading">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.provider_statuses.key(@internal_order.provider_status_before_type_cast - 1) %></h3>
-      </div>
-      <div class="modal-body">
-        <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>
-      </div>
-      <div class="modal-footer text-right">
-        <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-        <%= link_to 'Confirmar', return_provider_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
+<% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+  <div class="modal" id="return-confirm">
+    <div class="modal-dialog">
+      <div class="modal-content panel-warning">
+        <div class="modal-header panel-heading">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).split('_').map(&:capitalize).join(' ') %></h3>
+        </div>
+        <div class="modal-body">
+          <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
+        </div>
+        <div class="modal-footer text-right">
+          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+          <% if policy(@internal_order).return_applicant_status? %>
+            <%= link_to 'Confirmar', return_applicant_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
+          <% else %>
+            <%= link_to 'Confirmar', return_provider_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>

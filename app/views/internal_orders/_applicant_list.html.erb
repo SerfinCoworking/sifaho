@@ -3,9 +3,11 @@
     <table class="table table-hover table-striped">
       <thead>
         <tr>
+          <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
+          <th><%= filterrific_sorting_link(@filterrific, :origen) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :insumos_solicitados) %></th>
+          <th>Insumos</th>
           <th>
             <%= filterrific_sorting_link(@filterrific, :solicitado) %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>

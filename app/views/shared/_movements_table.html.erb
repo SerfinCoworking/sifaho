@@ -22,7 +22,8 @@
               <td><%= order.updated_at.present? ? order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
               <td><%= order.accepted_date.present? ? order.accepted_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
               <td><%= order.sent_date.present? ? order.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.date_received.present? ? order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          </tr>
+              <td><%= order.date_received.present? ? order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          
+            </tr>
           </tbody>
         </table>
       </div>

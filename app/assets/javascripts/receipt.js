@@ -1,4 +1,45 @@
-$(document).on('turbolinks:load', function() {
+document.addEventListener("turbolinks:load", function() {
+  var today = new moment();
+  $('#requested-date').datetimepicker({
+    format: 'DD/MM/YYYY',
+    date: today,
+    locale: 'es'
+  });
+
+  // Función para autocompletar nombre de establecimiento
+  jQuery(function() {
+    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
+  
+    return $('#establishment').autocomplete({
+      source: $('#establishment').data('autocomplete-source'),
+      minLength: 2,
+      open: function (e, ui) {
+        var acData = $(this).data('ui-autocomplete');
+        acData
+        .menu
+        .element
+        .find('li')
+        .each(function () {
+            var me = $(this);
+            var keywords = acData.term.split(' ').join('|');
+            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
+        });
+      },
+      select:
+      function (event, ui) {
+        $("#establishment-id").val(ui.item.id);
+        $('#establishment').trigger('change');
+        $("#applicant-sector").prop('required',true);
+      },
+      response: function(event, ui) {
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el establecimiento" };
+            ui.content.push(noResult);
+        }
+      }
+    })
+  });
+
   $('.new-expiry-date').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
   // Función para autocompletar nombre de establecimiento
   jQuery(function() {

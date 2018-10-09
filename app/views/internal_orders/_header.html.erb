@@ -17,10 +17,16 @@
           Entregados
         <% end %>
       </li>
+      <li role="presentation" class="<%= active_action('new_applicant') %>">
+        <%= link_to new_applicant_internal_orders_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Solicitud
+        <% end %>
+      </li>
       <li role="presentation" class="<%= active_action('new_provider') %>">
         <%= link_to new_provider_internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Entrega
+          Provisión
         <% end %>
       </li>
     </ul>

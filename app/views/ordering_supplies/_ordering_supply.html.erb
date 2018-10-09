@@ -35,7 +35,7 @@
     <%= ordering_supply.requested_date.strftime("%d/%m/%Y") %>
   </td>
   <td>
-    <% if ordering_supply.paquete_entregado? || ordering_supply.recibo_realizado? %>
+    <% if ordering_supply.provision_entregada? || ordering_supply.recibo_realizado? %>
       <%= ordering_supply.date_received.strftime("%d/%m/%y %H:%M") %>
     <% else %>
       ----

@@ -2,22 +2,35 @@
   <%= f.error_notification %>
   <div class="row">
     <div class='col-md-3'>
-      <%= f.input :applicant_sector_id, label: 'Sector solicitante',
-        collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
-        :input_html => {
-          required: true,
-          id: 'applicant-sector',
-          class: 'selectpicker show-tick',
-          "data-width"=>"auto",
-          "title"=>"Seleccionar sector",
-          "data-size"=>"10",
-          "data-live-search"=>true,
-          disabled: false,
-          value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
-        } 
-      %>
-      <br>
-      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.provider_sector_id unless f.object.new_record?}" %>
+      <% if @internal_order.solicitud? %>
+        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
+        <%= f.input :applicant_sector_id, as: :string,
+          label: 'Sector solicitante',
+          :input_html => {
+            disabled: true,
+            value: "#{ f.object.applicant_sector.name }",
+          } 
+        %>
+        <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{ f.object.applicant_sector_id }" %>
+      <% else %>
+        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
+        <%= f.input :applicant_sector_id, label: 'Sector solicitante',
+          collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
+          :input_html => {
+            required: true,
+            id: 'applicant-sector',
+            class: 'selectpicker show-tick',
+            "data-width"=>"auto",
+            "title"=>"Seleccionar sector",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+            disabled: false,
+            value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
+          } 
+        %>
+        <br>
+        <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
+      <% end %>
     </div>
     <div class="col-md-3">
       <%= f.input :provider_sector_id, as: :string,
@@ -42,9 +55,21 @@
         html5: false 
       %>
     </div>
-    <div class='col-md-4'>
+    <div class='col-md-2'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-      :input_html => { :cols => 30  , :rows => 1 } %>
+      :input_html => { :cols => 15  , :rows => 1 } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :remit_code, label: 'Código', as: :string, 
+        :placeholder => "Un código",
+        input_html: {
+          size: 11,
+          id: "remit-code",
+          required: true,
+          autocomplete: 'off',
+          value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).next.to_s; ; else; f.object.remit_code; end }"
+        }
+      %>
     </div>
   </div>
   <hr>

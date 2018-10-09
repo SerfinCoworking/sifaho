@@ -90,7 +90,7 @@ class OrderingSuppliesController < ApplicationController
     @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
   end
 
-  # Creación pedido despacho con estado proveedor_auditoria.
+  # Creación despacho o recibo
   # POST /ordering_supplies
   # POST /ordering_supplies.json
   def create
@@ -103,12 +103,12 @@ class OrderingSuppliesController < ApplicationController
         begin
           if @ordering_supply.despacho?
             @ordering_supply.proveedor_auditoria!
-            # Si se acepta el pedido
+            # Si se acepta el despacho
             if accepting?
               @ordering_supply.accept_order(current_user)
-              flash[:success] = 'El pedido se ha auditado y aceptado correctamente'
+              flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
             else
-              flash[:notice] = 'El pedido se ha creado y se encuentra en auditoría.'
+              flash[:notice] = 'El despacho se ha creado y se encuentra en auditoría.'
             end
           elsif @ordering_supply.recibo?
             @ordering_supply.recibo! # Se asigna el tipo recibo

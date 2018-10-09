@@ -1,10 +1,17 @@
-$(document).on('turbolinks:load', function() {
+$( document ).ready(function() {
+
+  jQuery(function() {
+    $('.supply-code').trigger("change");
+  });
+
   var today = new moment();
   $('#requested-date').datetimepicker({
     format: 'DD/MM/YYYY',
     date: today,
     locale: 'es'
   });
+
+  $("#applicant-sector").prop('required',true);
 
   $("#establishment").on("click", function () {
      $(this).select();
@@ -191,6 +198,19 @@ $(document).on('turbolinks:load', function() {
     });
   });
 
+  // Evento del código de lote para rellenar otros campos
+  $(document).on('change', '.selectpicker', function() {
+    var nested_form = $(this).parents(".nested-fields");
+    var quant = $('select.selectpicker option[value="' + $(this).val() + '"]').data('quant');
+    var expiry = new Date( $('select.selectpicker option[value="' + $(this).val() + '"]').data('expiry') );
+    var formatDate = expiry.getDate() + '/'+ (expiry.getMonth() + 1) + '/' +  expiry.getFullYear();
+    var lab = $('select.selectpicker option[value="' + $(this).val() + '"]').data('lab');
+
+    nested_form.find('.supply-lot-expiry').val(formatDate);
+    nested_form.find('.supply-lot-laboratory').val(lab);
+    nested_form.find(".supply-lot-id").val($(this).val());
+  });//End on change event
+
   // Select del lote
   $(document).on('change', '.select-change', function() {
     var nested_form = $(this).parents(".nested-fields");
@@ -239,34 +259,9 @@ $(document).on('turbolinks:load', function() {
           nested_form.find('.supply-lot-laboratory').val(data[0].lab);
           nested_form.find('.supply-lot-id').val(data[0].id);
           select.selectpicker('val', data[0].id);
-          select.selectpicker('refresh');
+          select.prop("disabled", false).selectpicker('refresh');
         } // End if
       }// End success
     });// End ajax
   });// End jquery function
-
-  // Evento del código de lote para rellenar otros campos
-  $(document).on('change', '.selectpicker', function() {
-    var nested_form = $(this).parents(".nested-fields");
-    var quant = $('select.selectpicker option[value="' + $(this).val() + '"]').data('quant');
-    var expiry = new Date( $('select.selectpicker option[value="' + $(this).val() + '"]').data('expiry') );
-    var formatDate = expiry.getDate() + '/'+ (expiry.getMonth() + 1) + '/' +  expiry.getFullYear();
-    var lab = $('select.selectpicker option[value="' + $(this).val() + '"]').data('lab');
-
-    nested_form.find('.supply-lot-expiry').val(formatDate);
-    nested_form.find('.supply-lot-laboratory').val(lab);
-    nested_form.find(".supply-lot-id").val($(this).val());
-  });//End on change event
-
-  // Return confirmation modal
-  $('#return-confirm').on('show', function() {
-    var $submit = $(this).find('.btn-warning'),
-    href = $submit.attr('href');
-    $submit.attr('href', href.replace('pony', $(this).data('id')));
-  });
-
-  $('.return-confirm').click(function(e) {
-    e.preventDefault();
-    $('#return-confirm').data('id', $(this).data('id')).modal('show');
-  });
-});// End turbolinks load
+});

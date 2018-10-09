@@ -2,7 +2,9 @@ class InternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum applicant_status: { borrador: 0, solicitado: 1, auditoria: 2, en_camino: 3, recibido: 4, anulado: 5 }, _prefix: :applicant
+  enum order_type: { provision: 0, solicitud: 1 }
+
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, provision_entregada: 4, anulada: 5 }
   enum provider_status: { nuevo: 0, auditoria: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
 
   # Relaciones
@@ -17,14 +19,17 @@ class InternalOrder < ApplicationRecord
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
+  belongs_to :sent_request_by, class_name: 'User', optional: true
 
   # Validaciones
   validates_presence_of :provider_sector
   validates_presence_of :applicant_sector
   validates_presence_of :requested_date
   validates_presence_of :quantity_ord_supply_lots
+  validates_presence_of :remit_code
   validates_associated :quantity_ord_supply_lots
   validates_associated :sector_supply_lots
+  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   # Atributos anidados
   accepts_nested_attributes_for :quantity_ord_supply_lots,
@@ -134,12 +139,8 @@ class InternalOrder < ApplicationRecord
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order
-    if provider_anulado?
-      raise ArgumentError, "El pedido está anulado"
-    elsif provider_en_camino?
-      raise ArgumentError, "El pedido ya se encuentra en camino"
-    else
+  def send_order_by_user_id(a_user_id)
+    if self.proveedor_auditoria?
       if self.quantity_ord_supply_lots.exists?
         if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
           self.quantity_ord_supply_lots.each do |qosl|
@@ -152,88 +153,71 @@ class InternalOrder < ApplicationRecord
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
       self.sent_date = DateTime.now
-      self.applicant_en_camino!
-      self.provider_en_camino!
-    end # End anulado?
+      self.sent_by_id = a_user_id
+      self.provision_en_camino!
+    else
+      raise ArgumentError, 'La '+self.order_type+' debe estar antes en proveedor auditoría.'
+    end
+  end
+
+  def send_request_of(a_user)
+    if self.solicitud_auditoria?
+      self.sent_request_by = a_user
+      self.solicitud_enviada!
+    else
+      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
+    end
   end
 
   # Método para retornar perdido a estado anterior
   def return_provider_status
-    if provider_auditoria?
-      raise ArgumentError, "No hay más estados a retornar"
-    elsif provider_en_camino?
+    if provision_en_camino?
       self.quantity_ord_supply_lots.each do |qosl|
         qosl.increment
       end
       self.sent_by = nil
       self.sent_date = nil
-      self.provider_auditoria!
-    elsif provider_entregado?
-      raise ArgumentError, "Ya se ha entregado el pedido"
+      self.proveedor_auditoria!
+    else
+      raise ArgumentError, "No es posible retornar a un estado anterior"
+    end
+  end
+
+  # Método para retornar perdido a estado anterior
+  def return_applicant_status
+    if solicitud_enviada?
+      self.solicitud_auditoria!
+    else
+      raise ArgumentError, "No es posible retornar a un estado anterior"
     end
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order(a_sector)
-    if provider_anulado? || applicant_anulado?
-      raise ArgumentError, "El pedido está anulado"
-    elsif provider_auditoria?
-      raise ArgumentError, "El pedido se encuentra en auditoria"
-    elsif provider_entregado?
-      raise ArgumentError, "El pedido ya ha sido entregado"
-    elsif provider_en_camino?
+    if self.provision_en_camino?
       if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
         self.quantity_ord_supply_lots.each do |qosl|
           qosl.increment_lot_to(a_sector)
         end
         self.date_received = DateTime.now
-        self.provider_entregado!
-        self.applicant_recibido!
+        self.provision_entregada!
       else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End chack if sector supply exists
-    end #End anulado?
-  end
-
-  # Label del estado para vista.
-  def applicant_status_label
-    if self.applicant_borrador?; return 'default'
-    elsif self.applicant_solicitado?; return 'info'
-    elsif self.applicant_auditoria?; return 'warning'
-    elsif self.applicant_en_camino?; return 'primary'
-    elsif self.applicant_recibido?; return 'success'
-    elsif self.applicant_anulado?; return 'danger'
-    end
-  end
-
-  # Label del estado para vista.
-  def provider_status_label
-    if self.provider_nuevo?; return 'info'
-    elsif self.provider_auditoria?; return 'warning'
-    elsif self.provider_en_camino?; return 'primary'
-    elsif self.provider_entregado?; return 'success'
-    elsif self.provider_anulado?; return 'danger'
-    end
-  end
-
-  # Porcentaje de la barra de estado
-  def percent_status
-    if self.provider_nuevo?; return 5
-    elsif self.provider_auditoria?; return 34
-    elsif self.provider_en_camino?; return 71
-    elsif self.provider_entregado?; return 100
-    elsif self.provider_anulado?; return 100
+        raise ArgumentError, 'No hay insumos para recibir en la provisión.'
+      end # End check if sector supply exists
+    else
+      raise ArgumentError, 'La provisión aún no está en camino.'
     end
   end
 
   def self.options_for_status
     [
       ['Todos', '', 'default'],
-      ['Nuevos', 0, 'info'],
-      ['Auditoria', 1, 'warning'],
-      ['En Camino', 2, 'primary'],
-      ['Entregado', 3, 'success'],
-      ['Anulado', 4, 'danger'],
+      ['Solicitud auditoria', 0, 'warning'],
+      ['Solicitud enviada', 1, 'info'],
+      ['Proveedor auditoria', 2, 'warning'],
+      ['Provision en camino', 3, 'primary'],
+      ['Provision entregada', 4, 'success'],
+      ['Anulada', 5, 'danger'],
     ]
    end
 end
