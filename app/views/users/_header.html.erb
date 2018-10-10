@@ -1,0 +1,13 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" id="page-title">
+        <a href="">Usuarios</a>
+      </li>
+      <li role="presentation" class="<%= active_action('index') %>">
+        <%= link_to users_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Listado
+        <% end %>
+      </li>
+    </ul>
+<% end %>

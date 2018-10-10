@@ -1,0 +1,62 @@
+<tr id="user_<%= user.id %>">
+  <td class="pres-col-pro"><%= user.username %></td>
+  <td class="pres-col-pat"><%= user.profile.first_name %></td>
+  <td class="pres-col-pat"><%= user.profile.last_name %></td>
+  <td class="pres-col-sup">
+    <% if user.quantity_supply_requests.present? %>
+      (<%= user.quantity_supply_requests.count %>)
+      <% user.quantity_supply_requests.each do |qsr| %>
+        <span class="badge">
+          <%= qsr.quantity %>
+        </span>
+        <%= qsr.supply_name %>
+      <% end %>
+    <% else %>
+      ------
+    <% end %></td>
+  <td>
+    <% if user.prescribed_date.present? %>
+      <%= user.prescribed_date.strftime("%d/%m/%Y") %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+    <% if user.dispensada? %>
+      <td>
+      <%= user.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <% if policy(user).dispense? %>
+        <td class="text-center">
+        <%= link_to dispense_user_path(user), remote: true,
+              class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        <% end %>
+      <% else %>
+        <td>
+        Sin dispensar
+      <% end  %>
+    <% end %>
+  </td>
+  <td>
+    <% if policy(user).show? %>
+      <%= link_to user_path(user), remote:true,
+            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+    <% if policy(user).edit? %>
+      <% unless user.dispensada? %>
+        <%= link_to edit_user_path(user), remote: true,
+              class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if policy(user).delete? %>
+      <%= link_to delete_user_path(user), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

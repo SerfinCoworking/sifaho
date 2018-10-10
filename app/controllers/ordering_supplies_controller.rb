@@ -60,6 +60,7 @@ class OrderingSuppliesController < ApplicationController
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
     4.times { @ordering_supply.quantity_ord_supply_lots.build }
+    @order_type = 'despacho'
   end
 
   # GET /ordering_supplies/new_receipt
@@ -67,6 +68,7 @@ class OrderingSuppliesController < ApplicationController
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
     4.times { @ordering_supply.quantity_ord_supply_lots.build }
+    @order_type = 'recibo'
   end
 
   # GET /ordering_supplies/new_applicant
@@ -127,11 +129,13 @@ class OrderingSuppliesController < ApplicationController
       else
         4.times { @ordering_supply.quantity_ord_supply_lots.build }
 
-        if @ordering_supply.despacho?
+        if ordering_supply_params[:order_type] == 'despacho'
+          @order_type = 'despacho'
           @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
           flash[:error] = "El despacho no se ha podido cargar."
           format.html { render :new }
-        elsif @ordering_supply.recibo?
+        elsif ordering_supply_params[:order_type] == 'recibo'
+          @order_type = 'recibo'
           @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
           flash[:error] = "El recibo no se ha podido cargar."
           format.html { render :new_receipt }

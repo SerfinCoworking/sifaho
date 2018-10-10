@@ -1,5 +1,5 @@
 <tr class="nested-fields">
-  <% if %w(new_receipt create_receipt edit_receipt).include?(params[:action]) %>
+  <% if @order_type == 'recibo' %>
     <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
@@ -85,6 +85,7 @@
     </td>
   <% else %> <!-- End Form recibo -->
     <td><!-- Start form despacho -->
+      <%= params[:action]%>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
         label: false,

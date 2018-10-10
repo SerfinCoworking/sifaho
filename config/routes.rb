@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
   end
 
+  resources :users, only: [:index]
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
   get '/profile/edit', to:'profiles#edit', as:'edit_profile'
