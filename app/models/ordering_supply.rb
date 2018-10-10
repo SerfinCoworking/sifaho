@@ -23,6 +23,7 @@ class OrderingSupply < ApplicationRecord
   validates_presence_of :applicant_sector
   validates_presence_of :provider_sector
   validates_presence_of :quantity_ord_supply_lots
+  validates_presence_of :remit_code
   validates_associated :quantity_ord_supply_lots
   validates_associated :supplies
   validates_associated :sector_supply_lots

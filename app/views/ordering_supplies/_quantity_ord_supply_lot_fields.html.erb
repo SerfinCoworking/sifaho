@@ -133,17 +133,32 @@
         } 
       %>
     </td>
-    <td>
-      <%= f.select(:sector_supply_lot_id, [],{},
-        {
-          class: 'selectpicker show-tick',
-          "data-width"=>"fit",
-          "title"=>"Código",
-          "data-size"=>"5",
-          disabled: true,
-        })
-      %>
-    </td>
+    <% if f.object.sector_supply_lot_id.present? %>
+      <td>
+        <%= f.select(:sector_supply_lot_id, [],{},
+          {
+            class: 'selectpicker show-tick',
+            "data-width"=>"fit",
+            "title"=>"#{f.object.sector_supply_lot.lot_code }",
+            "data-size"=>"5",
+            disabled: true,
+            value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.id end }"
+          })
+        %>
+      </td>
+    <% else %>
+      <td>
+        <%= f.select(:sector_supply_lot_id, [],{},
+          {
+            class: 'selectpicker show-tick',
+            "data-width"=>"fit",
+            "title"=>"Código",
+            "data-size"=>"5",
+            disabled: true
+          })
+        %>
+      </td>
+    <% end %>
     <td>
       <%= f.input :sector_supply_lot_id, as: :string,
         label: false,

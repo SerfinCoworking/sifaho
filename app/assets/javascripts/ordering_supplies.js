@@ -1,8 +1,10 @@
-$( document ).ready(function() {
-
+function triggerChange(){
+  console.log("clickeó");
   jQuery(function() {
     $('.supply-code').trigger("change");
   });
+}
+$( document ).ready(function() {
 
   var today = new moment();
   $('#requested-date').datetimepicker({
@@ -256,9 +258,6 @@ $( document ).ready(function() {
                 nested_form.find('.supply-lot-expiry').val(date);
             }
           }
-          nested_form.find('.supply-lot-laboratory').val(data[0].lab);
-          nested_form.find('.supply-lot-id').val(data[0].id);
-          select.selectpicker('val', data[0].id);
           select.prop("disabled", false).selectpicker('refresh');
         } // End if
       }// End success
