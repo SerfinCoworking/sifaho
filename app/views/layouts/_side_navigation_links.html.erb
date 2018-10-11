@@ -53,7 +53,7 @@
 <ul class="nav nav-cust nav-list" id="stock">
   <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
     <% if policy(SectorSupplyLot).index? %>
-      <%= link_to sector_supply_lots_url do %>
+      <%= link_to group_by_supply_sector_supply_lots_url do %>
         <%= current_user.sector.name %>
       <% end %>
     <% end %>

@@ -1,7 +1,7 @@
 <!--  Panel Lote de medicamentos -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Lotes en stock <span class="label label-default"><%= @count_total_supply_lots %></span> <small> Expiración</small></h3>
+    <h3 class="panel-title">Lotes en stock <span class="label label-default"><%= @count_total_supply_lots %></span> <small> Estados</small></h3>
   </div>
   <div class="panel-body">
     <%
@@ -12,7 +12,7 @@
         colors << status_colors[status]
       end
     %>
-    <%= pie_chart lots, colors: colors, label: 'Cantidad', adapter: "highcharts" %>
+    <%= pie_chart lots, colors: colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
   </div>
 </div>
 <!-- Panel Lotes vencidos -->

@@ -24,8 +24,6 @@ class SectorSupplyLotsController < ApplicationController
       ],
     ) or return
     @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
-
-    @new_sector_supply_lot = SectorSupplyLot.new
   end
 
   def trash_index
@@ -46,6 +44,32 @@ class SectorSupplyLotsController < ApplicationController
     @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
   end
 
+  def group_by_supply
+    authorize SectorSupplyLot
+    @filterrific = initialize_filterrific(
+      current_user.sector.supplies.distinct,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Supply.options_for_sorted_by
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'codigo_asc'},
+      available_filters: [
+        :sorted_by,
+        :search_text,
+        :with_code,
+        :with_area_id,
+      ],
+    ) or return
+    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+  end
+
+  def lots_for_supply
+    authorize SectorSupplyLot
+
+    @supply = Supply.with_deleted.find(params[:id])
+  end
+
   # GET /sector_supply_lots/1
   # GET /sector_supply_lots/1.json
   def show
@@ -55,47 +79,6 @@ class SectorSupplyLotsController < ApplicationController
 
     respond_to do |format|
       format.js
-    end
-  end
-
-  # POST /supply_lots
-  # POST /supply_lots.json
-  def create
-    @supply_lot = SupplyLot.where(
-      supply_id: sector_supply_lot_params[:supply_id],
-      lot_code: sector_supply_lot_params[:lot_code],
-      laboratory_id: sector_supply_lot_params[:laboratory_id],
-    ).first_or_initialize
-    @supply_lot.expiry_date = sector_supply_lot_params[:expiry_date]
-    @supply_lot.date_received = sector_supply_lot_params[:created_at]
-
-    respond_to do |format|
-      begin
-        if @supply_lot.save!
-          @sector_supply_lot = SectorSupplyLot.where(
-            supply_lot_id: @supply_lot.id,
-            sector_id: current_user.sector_id,
-          ).first_or_initialize
-          authorize @sector_supply_lot
-          @sector_supply_lot.increment(sector_supply_lot_params[:quantity].to_i)
-
-          if @sector_supply_lot.save!
-            flash.now[:success] = "El lote de "+@sector_supply_lot.supply_name+" se ha cargado correctamente."
-            format.js
-          else
-            flash.now[:error] = "El lote no se ha podido cargar."
-            format.js
-          end
-        else
-          flash.now[:error] = "El lote provincial no se ha podido crear."
-          format.js
-        end
-      rescue ActiveRecord::RecordInvalid => e
-        if e.message == 'Validation failed: Lot code ya está en uso'
-          flash.now[:error] = "Ya existe el lote y el insumo no corresponde al mismo."
-          format.js
-        end
-      end
     end
   end
 

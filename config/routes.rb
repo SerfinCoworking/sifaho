@@ -75,9 +75,11 @@ Rails.application.routes.draw do
       get "delete"
       get "restore"; get "restore_confirm"
       get "purge"; get "purge_confirm"
+      get "lots_for_supply"
     end
     collection do
       get "trash_index"
+      get "group_by_supply"
       get "search_by_code"
       get "search_by_name"
     end

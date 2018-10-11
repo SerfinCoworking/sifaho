@@ -231,7 +231,7 @@ class SupplyLot < ApplicationRecord
   # Opciones para estados del filtro
   def self.options_for_status
    [
-     ['Todos', '', 'primary'],
+     ['Todos', '', 'default'],
      ['Vigentes', 0, 'success'],
      ['Por vencer', 1, 'warning'],
      ['Vencidos', 2, 'danger'],

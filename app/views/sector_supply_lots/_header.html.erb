@@ -3,6 +3,14 @@
       <li role="presentation" id="page-title">
         <a href="">Stock <%= current_user.sector.name %></a>
       </li>
+      <% if policy(SectorSupplyLot).group_by_supply? %>
+        <li role="presentation" class="<%= active_action('group_by_supply') %>">
+          <%= link_to group_by_supply_sector_supply_lots_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+            Insumos
+          <% end %>
+        </li>
+      <% end %>
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to sector_supply_lots_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>

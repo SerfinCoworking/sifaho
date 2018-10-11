@@ -8,6 +8,10 @@ class SupplyPolicy < ApplicationPolicy
     trash_index_sup.any? { |role| user.has_role?(role) }
   end
 
+  def lots_for_supply?
+    index_sup.any? { |role| user.has_role?(role) }
+  end
+
   def show?
     index?
   end

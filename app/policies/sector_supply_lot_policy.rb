@@ -7,6 +7,14 @@ class SectorSupplyLotPolicy < ApplicationPolicy
     see_ssl.any? { |role| user.has_role?(role) }
   end
 
+  def group_by_supply?
+    see_ssl.any? { |role| user.has_role?(role) }
+  end
+
+  def lots_for_supply?
+    see_ssl.any? { |role| user.has_role?(role) }
+  end
+
   def show?
     index?
   end

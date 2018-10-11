@@ -1,38 +1,61 @@
-  <tr id="supply_<%= supply.id %>">
-    <div class="js-fade fade-in is-paused">
-    <td><%= supply.id %></td>
-    <td><%= supply.name %></td>
-    <td><%= supply.unity %></td>
-    <td><%= supply.supply_area.name %></td>
-    <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
-    <td>
-      <% if policy(supply).show? %>
-        <%= link_to supply_path(supply), remote:true, class: 'btn btn-default btn-xs',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-        <% end %>
-      <% end %>
-      <% if current_page?(controller: 'supplies', action: 'trash_index') %>
-        <% if policy(supply).restore? %>
-          <%= link_to restore_confirm_supply_path(supply), remote: true,
-                class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+<tr id="supply_<%= supply.id %>">
+  <div class="js-fade fade-in is-paused">
+      <% if params[:controller] == 'sector_supply_lots' %>
+        <td><%= supply.id %></td>
+        <td><%= supply.name %></td>
+        <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(supply) %>
+        <td><%@sum_lots = @lots.sum(:quantity)%>
+          <span class="label label-default">
+            <%= @sum_lots %>
+          </span>
+        <td><span class="label label-success"><%= @lots.with_status(0).sum(:quantity) %></span></td>
+        <td><span class="label label-warning"><%= @lots.with_status(1).sum(:quantity) %></span></td>
+        <td><span class="label label-danger"><%= @lots.with_status(2).sum(:quantity) %></span></td>
+        <td><span class="badge"><%= @lots.count %></span></td>
+        <td><%= supply.supply_area.name %></td>
+        <td>
+          <% if policy(supply).lots_for_supply? %>
+            <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-default btn-xs',
+                  title: 'Lotes del insumo', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+            <% end %>
           <% end %>
-        <% end %>
+        </td>
       <% else %>
-        <% if policy(supply).edit? %>
-          <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs',
-                title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <td><%= supply.id %></td>
+        <td><%= supply.name %></td>
+        <td><%= supply.supply_area.name %></td>
+        <td><%= supply.unity %></td>
+        <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
+        <td>
+        <% if policy(supply).show? %>
+          <%= link_to supply_path(supply), remote:true, class: 'btn btn-default btn-xs',
+                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
           <% end %>
         <% end %>
-        <% if policy(supply).delete? %>
-          <%= link_to delete_supply_path(supply), remote: true,
-                class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <% if current_page?(controller: 'supplies', action: 'trash_index') %>
+          <% if policy(supply).restore? %>
+            <%= link_to restore_confirm_supply_path(supply), remote: true,
+                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <% if policy(supply).edit? %>
+            <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs',
+                  title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+            <% end %>
+          <% end %>
+          <% if policy(supply).delete? %>
+            <%= link_to delete_supply_path(supply), remote: true,
+                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </td>
+      </td>
+    <% end %>
   </div>
-  </tr>
+</tr>

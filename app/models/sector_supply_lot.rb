@@ -100,6 +100,10 @@ class SectorSupplyLot < ApplicationRecord
     where.not('sector_supply_lots.status = ?', a_status )
   }
 
+  scope :with_supply, lambda { |a_supply| 
+    where('supply_lots.supply_id = ?', a_supply.id).joins(:supply_lot)
+  }
+
   # Métodos públicos #----------------------------------------------------------
 
   def laboratory
@@ -254,7 +258,7 @@ class SectorSupplyLot < ApplicationRecord
 
   def self.options_for_status
    [
-     ['Todos', '', 'primary'],
+     ['Todos', '', 'default'],
      ['Vigentes', 0, 'success'],
      ['Por vencer', 1, 'warning'],
      ['Vencidos', 2, 'danger'],
