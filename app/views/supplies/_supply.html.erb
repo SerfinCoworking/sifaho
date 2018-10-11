@@ -2,7 +2,7 @@
   <div class="js-fade fade-in is-paused">
       <% if params[:controller] == 'sector_supply_lots' %>
         <td><%= supply.id %></td>
-        <td><%= supply.name %></td>
+        <td class="col-sup-name"><%= supply.name %></td>
         <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(supply) %>
         <td><%@sum_lots = @lots.sum(:quantity)%>
           <span class="label label-default">
