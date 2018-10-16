@@ -8,9 +8,36 @@
           <span class="label label-default">
             <%= @sum_lots %>
           </span>
-        <td><span class="label label-success"><%= @lots.with_status(0).sum(:quantity) %></span></td>
-        <td><span class="label label-warning"><%= @lots.with_status(1).sum(:quantity) %></span></td>
-        <td><span class="label label-danger"><%= @lots.with_status(2).sum(:quantity) %></span></td>
+        <% if @sum_lots > 0 %>
+          <% 
+            @lots_vigentes = @lots.with_status(0).sum(:quantity) 
+            @lots_por_vencer = @lots.with_status(1).sum(:quantity)
+            @lots_vencidos = @lots.with_status(2).sum(:quantity)
+
+            _num_helper = ActiveSupport::NumberHelper
+
+            @lots_vig_perc = @lots_vigentes.to_f / @sum_lots  * 100 unless @sum_lots == 0
+            @lots_por_perc = @lots_por_vencer.to_f / @sum_lots  * 100 unless @sum_lots == 0
+            @lots_ven_perc = @lots_vencidos.to_f / @sum_lots  * 100 unless @sum_lots == 0
+          %>
+          <td class="col-md-2">
+              <div class="progress-bar progress-bar-success" id="quantity-bar" style="width:<%= '%.0f' % @lots_vig_perc.to_s%>%">
+                <%= if @lots_vigentes > 0; @lots_vigentes; end %>
+              </div>
+              <div class="progress-bar progress-bar-warning" id="quantity-bar" style="width:<%= '%.0f' % @lots_por_perc.to_s%>%">
+                <%= if @lots_por_vencer > 0; @lots_por_vencer; end %>
+              </div>
+              <div class="progress-bar progress-bar-danger" id="quantity-bar" style="width:<%= '%.0f' % @lots_ven_perc.to_s%>%">
+                <%= if @lots_vencidos > 0; @lots_vencidos; end %>
+              </div>
+          </td>
+        <% else %>
+          <td>
+            <div class="progress-bar progress-bar-info" id="quantity-bar" style="width: 100%">
+              Agotado
+            </div>
+          </td>
+        <% end %>
         <td><span class="badge"><%= @lots.count %></span></td>
         <td><%= supply.supply_area.name %></td>
         <td>

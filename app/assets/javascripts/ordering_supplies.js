@@ -127,11 +127,14 @@ $( document ).ready(function() {
        },
        select:
        function (event, ui) {
+         console.log("hola");
          var nested_form = _this.parents(".nested-fields");
          nested_form.find(".supply-id").val(ui.item.value);
          nested_form.find(".supply-name").val(ui.item.name);
+         nested_form.find(".unity").val(ui.item.unity)
          nested_form.find('.selectpicker').prop("disabled", false).selectpicker('refresh');
          nested_form.find(".request-quantity").prop('disabled', false);
+         nested_form.find(".select-change").trigger('change');
          nested_form.find('.request-quantity').focus();
        },
        response: function(event, ui) {
@@ -140,8 +143,6 @@ $( document ).ready(function() {
              ui.content.push(noResult);
          }
        }
-     }).each(function() {
-         $(this).autocomplete("widget").insertAfter($("#dialog").parent());
      })
    });
   });
@@ -177,6 +178,7 @@ $( document ).ready(function() {
          nested_form.find(".supply-code").val(ui.item.id);
          nested_form.find('.selectpicker').prop("disabled", false).selectpicker('refresh');
          nested_form.find(".request-quantity").prop('disabled', false);
+         nested_form.find(".select-change").trigger('change');
          nested_form.find('.request-quantity').focus();
        },
        response: function(event, ui) {
@@ -217,6 +219,7 @@ $( document ).ready(function() {
   $(document).on('change', '.select-change', function() {
     var nested_form = $(this).parents(".nested-fields");
     var select = nested_form.find('.selectpicker');
+    console.log("cambió!");
     $.ajax({
       url: "/sector_supply_lots/search_by_code", // Ruta del controlador
       type: 'GET',
@@ -253,14 +256,36 @@ $( document ).ready(function() {
             class="bg-'+data[i].status_label+'"  data-lab="'+data[i].lab+'" \
             data-quant="'+data[i].quant+'" data-expiry="'+data[i].expiry_date+'" \
             value="'+id+'" title="'+data[i].lot_code+' <span class='+'badge'+'>'+data[i].quant+'</span>">'+data[i].lot_code+'</option>');
-
-            if (i == 0) {
-                nested_form.find('.supply-lot-expiry').val(date);
-            }
           }
           select.prop("disabled", false).selectpicker('refresh');
         } // End if
       }// End success
     });// End ajax
   });// End jquery function
+
+  // Completar cantidad de stock
+  $(document).on('change', '.select-change', function() {
+    var nested_form = $(this).parents(".nested-fields");
+    console.log("cambió 2!");
+    $.ajax({
+      url: "/sector_supply_lots/get_stock_quantity", // Ruta del controlador
+      type: 'GET',
+      data: {
+        term: nested_form.find('.supply-code').val()
+      },
+      async: false,
+      dataType: "json",
+      error: function(XMLHttpRequest, errorTextStatus, error){
+        alert("Failed: "+ errorTextStatus+" ;"+error);
+      },
+      success: function(data){
+        nested_form.find('.stock-quantity').val(data);
+      }// End success
+    });// End ajax
+  });// End jquery function completar cantidad en stock
+
+  $('.search-lots').click(function (event) {
+    var nested_form = $(this).parents(".nested-fields");
+    nested_form.find(".select-change").trigger('change');
+  });
 });

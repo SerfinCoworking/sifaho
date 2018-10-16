@@ -4,7 +4,7 @@
         <a href="">Lotes en provincia</a>
       </li>
       <% if policy(SupplyLot).trash_index? %>
-        <li role="presentation" class="pull-right <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
           <%= link_to trash_index_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

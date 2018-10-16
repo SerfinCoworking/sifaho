@@ -10,7 +10,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.lab-col{  
+  max-width: 200px; /* Customise it accordingly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+div.tooltip-inner {
+  max-width: 350px;
+}
 .btn-add-int{
   position: absolute;
   z-index: 4;

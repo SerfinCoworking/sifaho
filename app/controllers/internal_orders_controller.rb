@@ -71,6 +71,7 @@ class InternalOrdersController < ApplicationController
   def new_provider
     authorize InternalOrder
     @internal_order = InternalOrder.new
+    @order_type = 'provision'
     @applicant_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
@@ -82,6 +83,7 @@ class InternalOrdersController < ApplicationController
   def new_applicant
     authorize InternalOrder
     @internal_order = InternalOrder.new
+    @order_type = 'solicitud'
     @provider_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
@@ -92,6 +94,7 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1/edit
   def edit
     authorize @internal_order
+    @order_type = 'provision'
     @applicant_sectors = Sector
     .select(:id, :name)
     .with_establishment_id(current_user.sector.establishment_id)
@@ -101,6 +104,7 @@ class InternalOrdersController < ApplicationController
   # GET /ordering_supplies/1/edit_receipt
   def edit_applicant
     authorize @internal_order
+    @order_type = 'solicitud'
     @provider_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
@@ -143,6 +147,7 @@ class InternalOrdersController < ApplicationController
       else
         5.times { @internal_order.quantity_ord_supply_lots.build }
         if @internal_order.provision?
+          @order_type = 'provision'
           @applicant_sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
@@ -151,6 +156,7 @@ class InternalOrdersController < ApplicationController
           flash[:error] = "La provision no se ha podido crear."
           format.html { render :new_provider }
         elsif @internal_order.solicitud?
+          @order_type = 'solicitud'
           @provider_sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
@@ -170,39 +176,40 @@ class InternalOrdersController < ApplicationController
     @user_id = internal_order_params.extract!(:sent_by_id)
     audited_by = current_user
     respond_to do |format|
-      if @internal_order.update(internal_order_params)
-        begin
-          if @internal_order.provision?
-            if sending_by_provider?
-              @internal_order.send_order_by_user_id(@user_id)
-              flash[:success] = 'La provision se ha enviado correctamente.'
-            else
-              flash[:notice] = 'La provision se ha auditado correctamente.'
+      begin
+        if @internal_order.update(internal_order_params)
+            if @internal_order.provision?
+              if sending_by_provider?
+                @internal_order.send_order_by_user_id(@user_id)
+                flash[:success] = 'La provision se ha enviado correctamente.'
+              else
+                flash[:notice] = 'La provision se ha auditado correctamente.'
+              end
+            elsif @internal_order.solicitud?
+              if sending?
+                @internal_order.send_request_of(current_user)
+                flash[:success] = 'La solicitud se ha enviado correctamente.'
+              elsif sending_by_provider?
+                @internal_order.send_order_by_user_id(@user_id)
+                flash[:success] = 'La solicitud se ha provisto correctamente.'
+              elsif applicant?
+                @internal_order.solicitud_auditoria!
+                flash[:notice] = 'La solicitud se ha auditado correctamente.'
+              elsif provider?
+                @internal_order.proveedor_auditoria!
+                flash[:notice] = 'La solicitud se ha auditado correctamente.'
+              end
             end
-          elsif @internal_order.solicitud?
-            if sending?
-              @internal_order.send_request_of(current_user)
-              flash[:success] = 'La solicitud se ha enviado correctamente.'
-            elsif sending_by_provider?
-              @internal_order.send_order_by_user_id(@user_id)
-              flash[:success] = 'La solicitud se ha provisto correctamente.'
-            elsif applicant?
-              @internal_order.solicitud_auditoria!
-              flash[:notice] = 'La solicitud se ha auditado correctamente.'
-            elsif provider?
-              @internal_order.proveedor_auditoria!
-              flash[:notice] = 'La solicitud se ha auditado correctamente.'
-            end
-          end
-        rescue ArgumentError => e
-          flash[:alert] = e.message
-        end 
-        format.html { redirect_to @internal_order }
-      else
-        @sectors = Sector.with_establishment_id(@internal_order.applicant_sector.establishment_id)
-        format.html { render :edit }
-        format.json { render json: @internal_order.errors, status: :unprocessable_entity }
-      end
+          format.html { redirect_to @internal_order }
+        else
+          @sectors = Sector.with_establishment_id(@internal_order.applicant_sector.establishment_id)
+          format.html { render :edit }
+          format.json { render json: @internal_order.errors, status: :unprocessable_entity }
+        end
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      end 
+      format.html { redirect_to @internal_order }
     end
   end
 

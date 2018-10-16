@@ -63,7 +63,7 @@
       <%= f.input :remit_code, label: 'Código', as: :string, 
         :placeholder => "Un código",
         input_html: {
-          size: 11,
+          size: 13,
           id: "remit-code",
           required: true,
           autocomplete: 'off',
@@ -79,11 +79,11 @@
       <tr>
         <th>Cód Ins</th>
         <th>Insumo</th>
+        <th>Tu stock</th>
         <th>Solicitado</th>
-        <th>Entregado</th>
-        <th>Lote</th>
-        <th>Laboratorio</th>
-        <th>Vencimiento</th>
+        <th>A entregar</th>
+        <th colspan="2">Lote</th>
+        <th>Tu observación</th>
         <th></th>
       </tr>
     </thead>

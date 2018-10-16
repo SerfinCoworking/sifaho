@@ -1,5 +1,5 @@
 class QuantityOrdSupplyLot < ApplicationRecord
-  enum status: { sin_entregar: 0, entregado: 1 }
+  enum status: { sin_entregar: 0, entregado: 1, sin_stock: 2 }
 
   # Relaciones
   belongs_to :supply, -> { with_deleted }

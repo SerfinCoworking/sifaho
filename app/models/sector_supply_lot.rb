@@ -11,6 +11,7 @@ class SectorSupplyLot < ApplicationRecord
   # Relaciones
   belongs_to :sector
   belongs_to :supply_lot, -> { with_deleted }
+  has_one :supply, :through => :supply_lot
 
   has_many :quantity_supply_lots
   has_many :prescriptions, -> { with_deleted },
@@ -29,7 +30,7 @@ class SectorSupplyLot < ApplicationRecord
   validates_presence_of :initial_quantity
 
   filterrific(
-    default_filter_params: { sorted_by: 'insumo_asc' },
+    default_filter_params: { sorted_by: 'codigo_asc' },
     available_filters: [
       :with_code,
       :sorted_by,
@@ -113,16 +114,18 @@ class SectorSupplyLot < ApplicationRecord
   def increment(a_quantity)
     self.quantity = 0 unless self.quantity.present?
     self.quantity += a_quantity
+    self.save!
   end
 
   # Disminuye la cantidad
   def decrement(a_quantity)
     if self.quantity < a_quantity
-      raise ArgumentError, "Cantidad en stock insuficiente de lote N°"+self.id.to_s+" insumo "+self.supply_name
+      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" insumo "+self.supply_name
     elsif self.deleted?
-      raise ArgumentError, "El lote N°"+self.id.to_s+" de "+self.supply_name+" se encuentra en la papelera"
+      raise ArgumentError, "El lote "+self.lot_code+" de "+self.supply_name+" se encuentra en la papelera"
     else
       self.quantity -= a_quantity
+      self.save!
     end
   end
 

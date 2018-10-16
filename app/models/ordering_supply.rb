@@ -170,7 +170,7 @@ class OrderingSupply < ApplicationRecord
         end
         self.date_received = DateTime.now
         self.received_by = a_user
-        self.paquete_entregado!
+        self.provsion_entregada!
       else
         raise ArgumentError, 'No hay insumos para recibir en el pedido'
       end # End check if sector supply exists

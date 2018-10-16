@@ -16,7 +16,7 @@
         <% end %>
       </li>
       <% if policy(Supply).trash_index? %>
-        <li role="presentation" class="pull-right <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
           <%= link_to trash_index_supplies_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

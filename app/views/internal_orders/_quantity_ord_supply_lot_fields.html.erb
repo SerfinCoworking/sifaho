@@ -26,23 +26,49 @@
     %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
-
-  <% if %w(new_applicant create_applicant edit_applicant).include?(params[:action]) %>
+  <td>
+    <% @stock = 1 %>
+    <%= f.input :stock, as: :fake, label: false, disabled: true, 
+      input_html: {
+        class: 'stock-quantity',
+        size: 6, 
+        placeholder: "Cant",
+        value: "#{
+          if f.object.supply.present? 
+            @stock = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(f.object.supply).sum(:quantity)
+          end
+        }"
+      } %>
+  </td>
+  <% if @order_type == 'solicitud' %>
     <td>
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"has-tip apply-request-quant",
+          :class=>"has-tip apply-request-quant request-quantity",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
-          min: '1', max: '9999', step:'any', :style => 'width: 70px'
+          min: '1', step:'any', :style => 'width: 75px'
         }  
       %>
       <%= f.input :delivered_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
     </td>
     <td>
-      <%= f.input :observation, label: false, as: :text,
-        :input_html => { :cols => 35  , :rows => 1 } %>
+      <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'unity',
+          size: 10,
+          placeholder: "Unidad",
+          value: "#{
+            if f.object.supply.present? 
+              f.object.supply.unity
+            end
+        }"
+      } %>
+    </td>
+    <td>
+      <%= f.input :applicant_observation, label: false, as: :text,
+        :input_html => { :cols => 35  , :rows => 1, placeholder: "Una observación" } %>
     </td>
   <% else %>
     <td>
@@ -52,7 +78,7 @@
           :class=>"has-tip request-quantity",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
-          min: '1', max: '9999', step:'any', :style => 'width: 70px'  
+          min: '0', step:'any', :style => 'width: 70px'  
         } 
       %>
     </td>
@@ -63,65 +89,70 @@
           :class=>"has-tip deliver-quantity",
           :title=>"Cantidad entregada",
           "data-placement"=>"right",
-          min: '1', max: '9999', step:'any', :style => 'width: 70px'
+          min: '0', step:'any', :style => 'width: 70px'
         } 
       %>
     </td>
-    <% if f.object.sector_supply_lot_id.present? %>
-      <td>
+    <td colspan="2">
+      <% if f.object.supply_id.present? && @stock > 0 %>
+        <%= button_tag type: 'button', class: 'btn btn-xs search-lots',
+          title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+        <% end %>
+      <% end %>
+      <% if f.object.sector_supply_lot_id.present? %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
             class: 'selectpicker show-tick',
             "data-width"=>"fit",
-            "title"=>"#{f.object.sector_supply_lot.lot_code }",
+            "title"=>"#{f.object.sector_supply_lot.lot_code+" <span class='badge'>"+f.object.sector_supply_lot.quantity.to_s+"</span>" }",
             "data-size"=>"5",
             disabled: true,
             value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.id end }"
           })
         %>
-      </td>
-    <% else %>
-      <td>
+      <% else %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
             class: 'selectpicker show-tick',
             "data-width"=>"fit",
-            "title"=>"Código",
+            "title"=>"#{if @stock == 0; "No hay stock"; else; "Código"; end}",
             "data-size"=>"5",
             disabled: true
           })
         %>
-      </td>
-    <% end %>
-    <td>
-      <%= f.input :sector_supply_lot_id, as: :string,
-        label: false,
-        placeholder: "Razón social",
-        disabled: true,
-        input_html: {
-          :style => 'width: 150px',
-          class: "supply-lot-laboratory",
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.laboratory; end}"
-        },
-        html5: false 
-      %>
+      <% end %>
     </td>
     <td>
-      <%= f.input :sector_supply_lot_id, as: :string,
-        label: false,
-        placeholder: "Una fecha",
-        disabled: true,
-        input_html: {
-          :style => 'width: 100px',
-          class: "supply-lot-expiry",
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No expira'; end}"
-        },
-        html5: false 
-      %>
+      <%= f.input :provider_observation, label: false, as: :text,
+        :input_html => { :cols => 20  , :rows => 1 } %>
     </td>
-    <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
   <% end %>
   <td>
+    <% if f.object.sector_supply_lot_id.present? %>
+      <%= button_tag type: 'button', class: 'btn btn-xs',
+        title: '
+        <table>
+          <thead>
+            <tr>
+              <th>Lote</th> 
+              <th>Stock</th>
+              <th class="text-center">Laboratorio</th>
+              <th>Vencimiento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>'+f.object.sector_supply_lot.lot_code+'</td>
+              <td>'+f.object.sector_supply_lot.quantity.to_s+'</td>
+              <td class="lab-col">'+f.object.sector_supply_lot.laboratory+'</td>
+              <td>'+if f.object.sector_supply_lot.expiry_date.present?; f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y"); else; 'No vence'; end+'</td>
+            </tr>
+          </tbody>
+        </table>', data: { html: true, toggle: 'tooltip', placement: 'left' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-info-sign') %>
+      <% end %>
+    <% end %>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-sm',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>

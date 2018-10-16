@@ -116,6 +116,11 @@ class SectorSupplyLotsController < ApplicationController
     end
   end
 
+  def get_stock_quantity
+    @lot = SectorSupplyLot.where(sector_id: current_user.sector_id).with_code(params[:term]).sum(:quantity)
+    render json: @lot
+  end
+
   def search_by_code
     @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(3)
     render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,

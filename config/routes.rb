@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     collection do
       get "trash_index"
       get "group_by_supply"
+      get "get_stock_quantity"
       get "search_by_code"
       get "search_by_name"
     end

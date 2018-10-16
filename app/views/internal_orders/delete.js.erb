@@ -1,12 +1,14 @@
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Borrando pedido interno");
+$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Enviar a papelera la <%= @internal_order.order_type%>");
 
 // Render the edit form
-$('.modal-body').html('Esta seguro que desea eliminar el pedido interno de <%= @internal_order %>?');
+$('.modal-body').html(
+  'Esta seguro que desea enviar a la papelera la <%= @internal_order.order_type %> \
+  a <%= @internal_order.provision? ? @internal_order.applicant_sector.name : @internal_order.provider_sector.name %>?');
 
 // Add form button
 $('.modal-footer').html(
-  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<button type='button' class='btn pull-left' data-dismiss='modal'>Volver</button>"+
   "<a data-remote='true' data-method='delete' href='/internal_orders/<%= @internal_order.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 

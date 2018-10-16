@@ -39,9 +39,24 @@
                 <%= @sum_lots %>
               </span>
             </td>
-            <td><span class="label label-success"><%= @lots.with_status(0).sum(:quantity) %></span></td>
-            <td><span class="label label-warning"><%= @lots.with_status(1).sum(:quantity) %></span></td>
-            <td><span class="label label-danger"><%= @lots.with_status(2).sum(:quantity) %></span></td>
+            <td>
+              <span class="label label-success">
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-ok') %>
+                <%= @lots.with_status(0).sum(:quantity) %>
+              </span>
+            </td>
+            <td>
+              <span class="label label-warning">
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-time') %>
+                <%= @lots.with_status(1).sum(:quantity) %>
+              </span>
+            </td>
+            <td>
+              <span class="label label-danger">
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-warning-sign') %>
+                <%= @lots.with_status(2).sum(:quantity) %>
+              </span>
+            </td>
             <td><span class="badge"><%= @lots.count %></span></td>
             <td><%= @supply.supply_area.name %></td>
           </tr>
@@ -50,7 +65,7 @@
       <hr>
     </div>
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-8">
         <table class="table table-hover table-condensed">
           <thead>
             <tr>
@@ -82,7 +97,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-4">
         <%
           lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
           status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }

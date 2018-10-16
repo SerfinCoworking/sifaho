@@ -37,9 +37,16 @@ window.setTimeout(function() {
     });
 }, 5000);
 
-$('[data-toggle="tooltip"]').tooltip({delay: { "show": 700, "hide": 100 }});
+$('[data-toggle="tooltip"]').tooltip({
+    'selector': '',
+    'container':'body'
+  });
 
 $(document).on('turbolinks:load', function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        'selector': '',
+        'container':'body'
+      });
     // Se oculta el flash message
     window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){

@@ -4,15 +4,13 @@
         <a href="">Abastecimiento</a>
       </li>
       <li role="presentation" class="<%= active_action('applicant_index') %>">
-        <%= link_to applicant_index_ordering_supplies_path,
-          title: 'Recibidos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= link_to applicant_index_ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           Recibidos
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('index') %>">
-        <%= link_to ordering_supplies_path, class: 'active',
-          title: 'Despachados', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           Despachados
         <% end %>

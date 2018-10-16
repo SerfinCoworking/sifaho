@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181009022102) do
+ActiveRecord::Schema.define(version: 20181015163602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,7 +228,8 @@ ActiveRecord::Schema.define(version: 20181009022102) do
     t.string "lot_code"
     t.bigint "laboratory_id"
     t.integer "status", default: 0
-    t.text "observation"
+    t.text "applicant_observation"
+    t.text "provider_observation"
     t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
     t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lots_on_sector_supply_lot_id"

@@ -82,3 +82,10 @@
     transform: translatex(-50%);
   }
 }
+
+input[type=text]{
+  padding:2px;
+}
+input[type=number]{
+  padding:2px;
+}
