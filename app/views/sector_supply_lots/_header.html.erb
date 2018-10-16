@@ -17,16 +17,25 @@
           Lotes
         <% end %>
       </li>
-      <% if policy(OrderingSupply).new_receipt? %>
-        <li role="presentation" class="">
-          <%= link_to new_receipt_ordering_supplies_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
-            Cargar stock
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
+          Cargar stock
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-cust">
+          <% if policy(OrderingSupply).new_receipt? %>
+            <li>
+              <%= link_to new_receipt_ordering_supplies_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-plus') %>
+                Recibo
+              <% end %>
+            </li>
           <% end %>
-        </li>
-      <% end %>
+        </ul>
+      </li>
       <% if policy(SectorSupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-3 <%= active_action('trash_index') %>">
           <%= link_to trash_index_sector_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

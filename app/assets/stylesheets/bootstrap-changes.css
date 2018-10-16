@@ -30,6 +30,10 @@
   color: white;
 }
 
+.dropdown-menu-cust{
+  background-color: #0b538d;
+}
+
 #date{
     font-size: 15px;
     color: white;

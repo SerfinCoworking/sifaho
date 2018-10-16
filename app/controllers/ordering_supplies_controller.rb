@@ -81,6 +81,7 @@ class OrderingSuppliesController < ApplicationController
   # GET /ordering_supplies/1/edit_receipt
   def edit_receipt
     authorize @ordering_supply
+    @order_type = 'recibo'
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
     @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
   end
@@ -88,6 +89,7 @@ class OrderingSuppliesController < ApplicationController
   # GET /ordering_supplies/1/edit
   def edit
     authorize @ordering_supply
+    @order_type = 'despacho'
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
     @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
   end
