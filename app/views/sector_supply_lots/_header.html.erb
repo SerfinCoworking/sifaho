@@ -27,8 +27,16 @@
           <% if policy(OrderingSupply).new_receipt? %>
             <li>
               <%= link_to new_receipt_ordering_supplies_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-plus') %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
                 Recibo
+              <% end %>
+            </li>
+          <% end %>
+          <% if policy(InternalOrder).new_applicant? %>
+            <li>
+              <%= link_to new_applicant_internal_orders_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                Solicitud interna
               <% end %>
             </li>
           <% end %>
