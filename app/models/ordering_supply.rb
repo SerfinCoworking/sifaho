@@ -128,13 +128,11 @@ class OrderingSupply < ApplicationRecord
   def send_order(a_user)
     if self.proveedor_aceptado?
       if self.quantity_ord_supply_lots.exists?
-        if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+        if self.validate_quantity_lots
           self.quantity_ord_supply_lots.each do |qosl|
             qosl.decrement
           end
-        else
-          raise ArgumentError, 'No hay insumos a entregar en el pedido'
-        end # End chack if sector supply exists
+        end
       else
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
@@ -208,5 +206,23 @@ class OrderingSupply < ApplicationRecord
     else
       raise ArgumentError, 'No es posible retornar a un estado anterior'
     end
+  end
+
+  # Método para validar las cantidades a entregar de los lotes en stock
+  def validate_quantity_lots
+    @lots = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
+    if @lots.present?
+      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
+      # Se itera el hash por cada lote sumando y verificando las cantidades.
+      @sect_lots.each do |key, values|
+        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
+        @sector_lot = SectorSupplyLot.find(key)
+        if @sector_lot.quantity < @sum_quantities
+          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+        end
+      end
+    else
+      raise ArgumentError, 'No hay lotes asignados.'
+    end   
   end
 end

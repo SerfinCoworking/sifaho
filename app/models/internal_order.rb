@@ -7,9 +7,6 @@ class InternalOrder < ApplicationRecord
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, provision_entregada: 4, anulada: 5 }
   enum provider_status: { nuevo: 0, auditoria: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
 
-  # Callbacks
-  before_save :validate_quantity_lots
-
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
@@ -145,13 +142,11 @@ class InternalOrder < ApplicationRecord
   def send_order_by_user_id(a_user_id)
     if self.proveedor_auditoria?
       if self.quantity_ord_supply_lots.exists?
-        if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
+        if self.validate_quantity_lots
           self.quantity_ord_supply_lots.each do |qosl|
             qosl.decrement
           end
-        else
-          raise ArgumentError, 'No hay insumos a entregar en el pedido'
-        end # End check if sector supply exists
+        end
       else
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
@@ -222,22 +217,24 @@ class InternalOrder < ApplicationRecord
       ['Provision entregada', 4, 'success'],
       ['Anulada', 5, 'danger'],
     ]
-   end
+  end
 
-   private
-
-   # Método para validar las cantidades a entregar de los lotes en stock
-   def validate_quantity_lots
+  # Método para validar las cantidades a entregar de los lotes en stock
+  def validate_quantity_lots
     @lots = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-    # Se itera el hash por cada lote sumando y verificando las cantidades.
-    @sect_lots.each do |key, values|
-      @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-      @sector_lot = SectorSupplyLot.find(key)
-      if @sector_lot.quantity < @sum_quantities
-        raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+    if @lots.present?
+      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
+      # Se itera el hash por cada lote sumando y verificando las cantidades.
+      @sect_lots.each do |key, values|
+        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
+        @sector_lot = SectorSupplyLot.find(key)
+        if @sector_lot.quantity < @sum_quantities
+          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+        end
       end
-    end
-   end
+    else
+      raise ArgumentError, 'No hay lotes asignados.'
+    end   
+  end
 
 end

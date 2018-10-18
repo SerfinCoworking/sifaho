@@ -3,6 +3,14 @@ class ChartsController < ApplicationController
     render json: Prescription.group_by_month_of_year(:prescribed_date).count.map{ |k, v| [I18n.t("date.month_names")[k], v]}
   end
 
+  def by_month_applicant_ordering_supplies
+    render json: OrderingSupply.applicant(current_user.sector).group_by_month_of_year(:requested_date).count.map{ |k, v| [I18n.t("date.month_names")[k], v]}
+  end
+
+  def by_month_provider_ordering_supplies
+    render json: OrderingSupply.provider(current_user.sector).group_by_month_of_year(:requested_date).count.map{ |k, v| [I18n.t("date.month_names")[k], v]}
+  end
+
   def by_laboratory_lots
     render json: 
       SupplyLot.joins(:laboratory)
