@@ -17,7 +17,7 @@ class ChartsController < ApplicationController
         .group('laboratories.name')
         .order('COUNT(laboratories.id) DESC')
         .count
-        .first(10)
+        .first(8)
   end
 
   def by_status_current_sector_supply_lots

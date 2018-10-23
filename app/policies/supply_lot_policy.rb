@@ -46,7 +46,7 @@ class SupplyLotPolicy < ApplicationPolicy
   private
 
   def see_sl
-    [ :admin, :pharmacist, :pharmacist_assistant, :responsable, :central_pharmacist, :medic ]
+    [ :admin ]
   end
 
   def new_sl

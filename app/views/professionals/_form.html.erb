@@ -2,17 +2,17 @@
 <%= f.error_notification %>
   <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
   <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
-  <%= f.input :dni, placeholder: '12345678', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
+  <%= f.input :dni, placeholder: '12345678', required: false, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
   <br><br>
-  <%= f.input :enrollment, placeholder: '1234', label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
+  <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
   <%= f.input :professional_type_id,
-                    label: false,
-                    label_method: :name,
-                    value_method: :id,
-                    collection: @professional_types,
-                    include_blank: false,
-                    input_html: { class: 'chosen-select'},
-                    prompt: 'Seleccione una especialidad'
+    label: false,
+    label_method: :name,
+    value_method: :id,
+    collection: @professional_types,
+    include_blank: false,
+    input_html: { class: 'chosen-select'},
+    prompt: 'Seleccione una especialidad'
   %>
   <br><br>
   <%= f.label :is_active, 'Estado' %>

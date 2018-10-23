@@ -1,3 +1,6 @@
+// Style modal
+$('.modal-content').addClass('panel-danger');
+
 // Add the dialog title
 $('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Borrando paciente");
 
@@ -12,3 +15,8 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-danger');
+});

@@ -1,3 +1,6 @@
+// Style modal
+$('.modal-content').addClass('panel-primary');
+
 // Add the dialog title
 $('#dialog h4').html("<i class='glyphicon glyphicon-plus'></i>  Nuevo paciente");
 
@@ -6,7 +9,7 @@ $('.modal-body').html('<%= j render("form") %>');
 
 // Add form button
 $('.modal-footer').html(
-  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
   "<button type='submit' name='commit' class='btn btn-primary pull-right' form='new_patient'>Cargar paciente</button>"
 );
 
@@ -19,3 +22,8 @@ $('#dialog').on('shown.bs.modal', function () {
 });
 
 <%= render 'form_function' %>
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-primary');
+});

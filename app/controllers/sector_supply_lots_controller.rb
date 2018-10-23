@@ -47,7 +47,7 @@ class SectorSupplyLotsController < ApplicationController
   def group_by_supply
     authorize SectorSupplyLot
     @filterrific = initialize_filterrific(
-      current_user.sector.supplies.distinct,
+      current_user.sector.supplies,
       params[:filterrific],
       select_options: {
         sorted_by: Supply.options_for_sorted_by
@@ -56,7 +56,7 @@ class SectorSupplyLotsController < ApplicationController
       default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
-        :search_text,
+        :search_supply,
         :with_code,
         :with_area_id,
       ],

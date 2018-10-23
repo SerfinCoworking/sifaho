@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181015163602) do
+ActiveRecord::Schema.define(version: 20181022140549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,9 +158,11 @@ ActiveRecord::Schema.define(version: 20181015163602) do
     t.datetime "prescribed_date"
     t.datetime "expiry_date"
     t.datetime "deleted_at"
+    t.string "remit_code"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
+    t.index ["remit_code"], name: "index_prescriptions_on_remit_code", unique: true
   end
 
   create_table "professional_types", force: :cascade do |t|
@@ -230,6 +232,8 @@ ActiveRecord::Schema.define(version: 20181015163602) do
     t.integer "status", default: 0
     t.text "applicant_observation"
     t.text "provider_observation"
+    t.integer "treatment_duration"
+    t.integer "daily_dose"
     t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
     t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lots_on_sector_supply_lot_id"
@@ -245,28 +249,6 @@ ActiveRecord::Schema.define(version: 20181015163602) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_poly"
-  end
-
-  create_table "quantity_supply_lots", force: :cascade do |t|
-    t.string "quantifiable_type"
-    t.bigint "quantifiable_id"
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "sector_supply_lot_id"
-    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_lot_poly"
-  end
-
-  create_table "quantity_supply_requests", force: :cascade do |t|
-    t.integer "supply_id"
-    t.string "quantifiable_type"
-    t.bigint "quantifiable_id"
-    t.integer "quantity"
-    t.integer "daily_dose"
-    t.integer "treatment_duration"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_req_poly"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|

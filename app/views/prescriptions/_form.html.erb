@@ -1,51 +1,69 @@
-<%= simple_form_for @prescription, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @prescription, html: {class: "form-inline"} do |f| %>
   <%= f.error_notification %>
   <div class='row'>
-    <div class='col-md-7'>
-      <%= f.label :professional_id, "Doctor" %>
+    <div class='col-md-6'>
+      <%= f.label :professional_id, "Profesional" %>
       <%= f.input :professional_id, as: :string,
-                        label: 'Matrícula',
-                        placeholder: '1234',
-                        :input_html => {
-                          id: "prof_enrollment",
-                          data: { autocomplete_source: doctors_by_enrollment_professionals_path },
-                          value: "#{@prescription.professional.enrollment unless @prescription.new_record?}",
-                          size: 7
-                        } %>
+        label: 'Matrícula',
+        placeholder: '1234',
+        required: true,
+        :input_html => {
+          id: "prof_enrollment",
+          data: { autocomplete_source: doctors_by_enrollment_professionals_path },
+          value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
+          size: 7
+        } 
+      %>
       <%= f.input :professional_id, as: :string,
-                        label: 'Apellido y nombre',
-                        placeholder: 'Perez Juan',
-                        :input_html => {
-                          id: "professional",
-                          data: { autocomplete_source: doctors_professionals_path },
-                          value: "#{@prescription.professional.fullname unless @prescription.new_record?}",
-                          size: 33
-                        } %>
-      <%= f.hidden_field :professional_id, id: "professional_id" %><br><br>
+        label: 'Apellido y nombre',
+        placeholder: 'Perez Juan',
+        required: true,
+        :input_html => {
+          id: "professional",
+          data: { autocomplete_source: doctors_professionals_path },
+          value: "#{if f.object.professional.present?; f.object.professional.fullname; end }",
+          size: 33
+        } 
+      %>
+      &nbsp;
+      <%= link_to new_professional_path, class: "btn btn-info btn-sm", remote: 'true',
+        title: 'Nuevo profesional', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <% end %>
+      <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %><br><br>
       <%= f.label :patient_id, "Paciente" %>
       <%= f.input :patient_id, as: :string, class: 'form-control',
-                        label: "DNI",
-                        placeholder: '12345678',
-                        :input_html => {
-                          id: 'patient_dni',
-                          data: { autocomplete_source: search_by_dni_patients_path },
-                          value: "#{@prescription.patient.dni unless @prescription.new_record?}",
-                          size: 10
-                        } %>
+        label: "DNI",
+        placeholder: '12345678',
+        required: true,
+        :input_html => {
+          id: 'patient_dni',
+          data: { autocomplete_source: search_by_dni_patients_path },
+          value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+          size: 10
+        } 
+      %>
       <%= f.input :patient_id, as: :string,
-                        label: "Nombre y apellido",
-                        placeholder: 'Juan Perez',
-                        :input_html => {
-                          id: 'patient',
-                          data: { autocomplete_source: search_patients_path },
-                          value: "#{@prescription.patient.fullname unless @prescription.new_record?}",
-                          size: 30
-                        } %>
-      <%= f.hidden_field :patient_id, id: "patient_id" %><br><br>
+        label: "Nombre y apellido",
+        placeholder: 'Juan Perez',
+        required: true,
+        :input_html => {
+          id: 'patient',
+          data: { autocomplete_source: search_patients_path },
+          value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
+          size: 30
+        }
+      %>
+      &nbsp;
+      <%= link_to new_patient_path, class: "btn btn-info btn-sm", remote: 'true',
+        title: 'Nuevo paciente', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <% end %>
+      <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %><br>
     </div>
-    <div class='col-md-5'>
+    <div class='col-md-6'>
       <div class='row'>
-        <div class='col-md-6'>
+        <div class='col-md-3'>
           <%= f.input :prescribed_date, label: 'Fecha recetada',
             as: :string,
             :placeholder => "Seleccionar fecha",
@@ -58,7 +76,7 @@
             },
             html5: false %>
         </div>
-        <div class='col-md-6'>
+        <div class='col-md-3'>
           <%= f.input :expiry_date, label: 'Fecha expiración',
             as: :string,
             :placeholder => "Seleccionar fecha",
@@ -71,10 +89,22 @@
             },
             html5: false %>
         </div>
+        <div class="col-md-2">
+          <%= f.input :remit_code, label: 'Código', as: :string, 
+            :placeholder => "Un código",
+            input_html: {
+              size: 13,
+              id: "remit-code",
+              required: true,
+              autocomplete: 'off',
+              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'pres'+Prescription.maximum(:id).next.to_s; ; else; f.object.remit_code; end }"
+            }
+          %>
+        </div>
       </div>
       <br>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-          :input_html => { :cols => 37  , :rows => 3 } %>
+          :input_html => { :cols => 50  , :rows => 3 } %>
     </div>
   </div>
 
@@ -82,55 +112,30 @@
   <table class="table table-condensed table-hover">
     <thead>
       <tr>
-        <th>Cód. insumo</th>
-        <th>Insumos solicitados</th>
+        <th>Cód</th>
+        <th>Insumo</th>
+        <th>Tu stock</th>
         <th>Tratamiento</th>
         <th>Dosis diaria</th>
-        <th>Cantidad</th>
+        <th>Solicitado</th>
+        <th>Dispensado</th>
+        <th colspan="2">Lote</th>
+        <th>Observación</th>
         <th></th>
       </tr>
     </thead>
-    <tbody class="quantity_supply_requests">
-      <%= f.simple_fields_for :quantity_supply_requests do |form_quantity| %>
-        <%= render "quantity_supply_request_fields", :f => form_quantity %>
+    <tbody class="quantity_ord_supply_lots">
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
       <% end %>
     </tbody>
   </table>
   <div class="links" id="links-quant-form">
     <div class="text-center">
-      <%= link_to_add_association f, :quantity_supply_requests, class: 'btn btn-primary btn-xs',
-      data: {"association-insertion-node" => "tbody.quantity_supply_requests", "association-insertion-method" => "append"} do %>
+      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+      data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           Insumo solicitado
-      <% end %>
-    </div>
-  </div>
-
-  <!-- Insumos a dispensar -->
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr>
-        <th>Cód. insumo</th>
-        <th>Insumos a dispensar</th>
-        <th>Cantidad</th>
-        <th>Lote</th>
-        <th>Laboratorio</th>
-        <th>Expiración</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody class="quantity_supply_lots">
-      <%= f.simple_fields_for :quantity_supply_lots do |form_quantity| %>
-        <%= render "quantity_supply_lot_fields", :f => form_quantity %>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="links" id="links-quant-form">
-    <div class="text-center">
-      <%= link_to_add_association f, :quantity_supply_lots, class: 'btn btn-primary btn-xs',
-      data: {"association-insertion-node" => "tbody.quantity_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Insumo a dispensar
       <% end %>
     </div>
   </div>

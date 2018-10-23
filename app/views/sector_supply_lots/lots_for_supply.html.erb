@@ -74,6 +74,7 @@
               <th>Vencimiento</th>
               <th>Estado</th>
               <th>Cantidad</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -91,6 +92,20 @@
                   <div class="progress-bar progress-bar-<%= lot.quantity_label %> progress-bar-striped" id="quantity-bar" style="width: <%= lot.percent_stock %>%">
                     <%= lot.quantity %>/<%= lot.initial_quantity %>
                   </div>
+                </td>
+                <td>
+                  <% if policy(lot).show? %>
+                    <%= link_to sector_supply_lot_path(lot), remote:true, class: 'btn btn-default btn-xs',
+                          title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+                    <% end %>
+                  <% end %>
+                  <% if policy(lot).delete? %>
+                    <%= link_to delete_sector_supply_lot_path(lot), remote: true,
+                      class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                    <% end %>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
@@ -113,6 +128,6 @@
 
   <!-- Botones de acción footer -->
   <div class="panel-footer text-right hidden-print">
-    <%= link_to 'Volver', :back, class: "btn" %>
+    <%= link_to 'Volver', group_by_supply_sector_supply_lots_path, class: "btn" %>
   </div>
 </div>

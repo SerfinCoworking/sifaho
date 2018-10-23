@@ -164,21 +164,22 @@ class SupplyLot < ApplicationRecord
   end
 
   # Se actualiza el estado de expiración guardando
-  def update_status!
+  def update_status_without_validate!
     unless self.auditoria?
       if self.expiry_date.present?
         # If expired
         if self.expiry_date <= DateTime.now
-          self.vencido!
+          self.status = 'vencido'
           # If near_expiry
         elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-          self.por_vencer!
+          self.status = 'por_vencer'
           # If good
         elsif expiry_date > DateTime.now
-          self.vigente!
+          self.status = 'vigente'
         end
       end
     end
+    self.save(validate: false)
   end
 
   # Métodos privados #----------------------------------------------------------
@@ -240,7 +241,7 @@ class SupplyLot < ApplicationRecord
 
   def self.update_status_to_all
     self.find_each do |lot|
-      lot.update_status!
+      lot.update_status_without_validate!
     end
   end
 end

@@ -13,16 +13,21 @@ class SectorSupplyLot < ApplicationRecord
   belongs_to :supply_lot, -> { with_deleted }
   has_one :supply, :through => :supply_lot
 
-  has_many :quantity_supply_lots
+  has_many :quantity_ord_supply_lots
   has_many :prescriptions, -> { with_deleted },
-    :through => :quantity_supply_lots,
+    :through => :quantity_ord_supply_lots,
     :source => :quantifiable,
     :source_type => 'Prescription'
 
   has_many :internal_orders, -> { with_deleted },
-    :through => :quantity_supply_lots,
+    :through => :quantity_ord_supply_lots,
     :source => :quantifiable,
     :source_type => 'InternalOrder'
+
+  has_many :ordering_supplies, -> { with_deleted },
+    :through => :quantity_ord_supply_lots,
+    :source => :quantifiable,
+    :source_type => 'OrderingSupply'
 
   # Validaciones
   validates_presence_of :supply_lot
@@ -41,7 +46,7 @@ class SectorSupplyLot < ApplicationRecord
   )
 
   # SCOPES #--------------------------------------------------------------------
-
+  
   pg_search_scope :with_code,
   :associated_against => {
     :supply_lot => :code
@@ -186,24 +191,25 @@ class SectorSupplyLot < ApplicationRecord
   end
 
   # Se actualiza el estado del lote
-  def update_status!
+  def update_status_without_validate!
     if self.quantity == 0
-      self.agotado!
+      self.status = 'agotado'
     elsif self.supply_lot.expiry_date.present?
       @exp_date = self.supply_lot.expiry_date
       # If expired
       if @exp_date <= DateTime.now
-        self.vencido!
+        self.status = 'vencido'
       # If near_expiry
       elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
-        self.por_vencer!
+        self.status = 'por_vencer'
       # If good
       elsif @exp_date > DateTime.now
-        self.vigente!
+        self.status = 'vigente'
       end 
     else
-      self.vigente!
+      self.status = 'vigente'
     end
+    self.save(validate: false)
   end
 
   # Métodos privados #----------------------------------------------------------
@@ -271,7 +277,7 @@ class SectorSupplyLot < ApplicationRecord
 
   def self.update_status_to_all
     self.find_each do |lot|
-      lot.update_status!
+      lot.update_status_without_validate!
     end
   end
 end

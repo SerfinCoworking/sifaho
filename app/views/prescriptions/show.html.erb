@@ -1,0 +1,116 @@
+<%= render 'header' %>
+
+<div class="panel panel-default">
+  <div class="panel-heading hidden-print">
+    <h3 class="panel-title">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo prescripción
+      <%= link_to prescriptions_path, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+      <% end %>
+    </h3>
+  </div>
+  <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
+  <div class="panel-body" id="panel-body-new">
+    <div class="row">
+      <div class='col-md-6 col-xs-6'>
+        <strong>Doctor:</strong>
+        <%= @prescription.professional.full_name %>
+        <br><hr>
+        <strong>Paciente:</strong>
+        <%= @prescription.patient.fullname%>
+      </div>
+      <div class='col-md-6 col-xs-6'>
+        <div class='row'>
+          <div class='col-md-3 col-xs-3'>
+            <strong>Recetada:</strong><br>
+            <%= @prescription.prescribed_date.strftime("%d/%m/%Y")%>
+          </div>
+          <div class='col-md-3 col-xs-3'>
+            <strong>Vencimiento:</strong><br>
+            <%= @prescription.expiry_date.strftime("%d/%m/%Y")%>
+          </div>
+          <div class='col-md-3 col-xs-3'>
+            <strong>Código:</strong>
+            <%= @prescription.remit_code %>
+          </div>
+        </div>
+        <hr>
+        <strong>Observaciones:</strong>
+        <%= @prescription.observation.present? ? @prescription.observation : 'Sin observaciones' %>
+      </div>
+    </div>
+    <hr>
+    <!-- Insumos a dispensar -->
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Cód Ins</th>
+          <th>Insumo</th>
+          <th>Tratamiento</th>
+          <th>Dosis diaria</th>
+          <th>Solicitado</th>
+          <th><%= @prescription.dispensada? ? 'Entregado' : 'A entregar' %></th>
+          <th>Lote</th>
+          <th>Laboratorio</th>
+          <th>Vencimiento</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @prescription.quantity_ord_supply_lots.each do |qosl| %>
+          <tr>
+            <td>
+              <%= qosl.supply_id %>
+            </td>
+            <td>
+              <%= qosl.supply_name %>
+            </td>
+            <td>
+              <%= qosl.treatment_duration %> <%= 'Día'.pluralize(qosl.treatment_duration) %>
+            </td>
+            <td>
+              <%= qosl.daily_dose %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+            </td>
+            <td>
+              <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+            </td>
+            <td>
+              <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+            </td>
+            <% if qosl.sector_supply_lot.present? %>
+              <td>
+                <%= qosl.sector_supply_lot.lot_code %>
+              </td>
+              <td>
+                <%= qosl.sector_supply_lot.laboratory %>
+              </td>
+              <td>
+                <% if qosl.supply.needs_expiration %>
+                  <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : "Sin asignar" %>
+                <% else %>
+                  No vence
+                <% end %>
+              </td>
+            <% else %>
+              <td>Sin lote</td><td>----</td><td>----</td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel-footer text-right hidden-print">
+    <%= link_to 'Volver', prescriptions_path, class: "btn" %>
+    <% if policy(@prescription).edit? %>
+      <%= link_to edit_prescription_path(@prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+        Auditar
+      <% end %>
+    <% end %>
+  </div>
+</div>

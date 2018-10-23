@@ -12,20 +12,18 @@
   Cantidad inicial: <span class="label label-primary"><%= @sector_supply_lot.initial_quantity %></span>
 </div>
 <div class="row">
-  <div class="col-md-6">
-    <h5><strong>Recibido:</strong></h5>
+  <div class="col-md-12">
+    <strong>Recibido:</strong>
     <%= @sector_supply_lot.created_at.strftime("%d/%m/%Y") %>
-
-    <% if @sector_supply_lot.needs_expiration? %>
-      <h5><strong>Expiración:</strong></h5>
-      <%= @sector_supply_lot.supply_lot.expiry_date.strftime("%d/%m/%Y") %>
-    <% end %>
-
-    <h5><strong>Última modificación:</strong></h5>
+    <hr>
+    <strong>Vencimiento:</strong>
+    <%= @sector_supply_lot.supply_lot.expiry_date.present? ? @sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
+    <hr>
+    <strong>Última modificación:</strong>
     <%= @sector_supply_lot.updated_at.strftime("%d/%m/%y %H:%M") %>
-
     <% if @sector_supply_lot.deleted? %>
-    <h5><strong>Eliminado:</strong></h5>
+    <hr>
+    <strong>Eliminado:</strong>
     <%= @sector_supply_lot.deleted_at.strftime("%d/%m/%y %H:%M") %>
     <% end %>
   </div>

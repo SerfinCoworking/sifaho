@@ -1,4 +1,5 @@
 <tr id="prescription_<%= prescription.id %>">
+  <td><%= prescription.remit_code %></th>
   <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
   <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
@@ -6,18 +7,12 @@
       <%= prescription.status.split('_').map(&:capitalize).join(' ') %>
     </span>
   </td>
-  <td class="pres-col-sup">
-    <% if prescription.quantity_supply_requests.present? %>
-      (<%= prescription.quantity_supply_requests.count %>)
-      <% prescription.quantity_supply_requests.each do |qsr| %>
-        <span class="badge">
-          <%= qsr.quantity %>
-        </span>
-        <%= qsr.supply_name %>
-      <% end %>
-    <% else %>
-      ------
-    <% end %></td>
+  <td>
+    <%= 'Solicitado'.pluralize(osCount = prescription.quantity_ord_supply_lots.count) %>
+    <span class="badge">
+      <%= osCount %>
+    </span>
+  </td>
   <td>
     <% if prescription.prescribed_date.present? %>
       <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
@@ -43,15 +38,15 @@
   </td>
   <td>
     <% if policy(prescription).show? %>
-      <%= link_to prescription_path(prescription), remote:true,
-            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
     <% if policy(prescription).edit? %>
       <% unless prescription.dispensada? %>
-        <%= link_to edit_prescription_path(prescription), remote: true,
-              class: 'btn btn-warning btn-xs', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= link_to edit_prescription_path(prescription), 
+              class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
         <% end %>
       <% end %>

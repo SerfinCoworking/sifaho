@@ -27,7 +27,7 @@ class Supply < ApplicationRecord
     available_filters: [
       :with_code,
       :sorted_by,
-      :search_text,
+      :search_supply,
       :with_area_id,
     ]
   )
@@ -69,6 +69,10 @@ class Supply < ApplicationRecord
   scope :with_area_id, lambda { |an_id|
     where('supplies.supply_area_id = ?', an_id)
   }
+
+  def self.search_supply(a_name)
+    Supply.search_text(a_name).with_pg_search_rank
+  end
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.

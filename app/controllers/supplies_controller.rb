@@ -15,7 +15,7 @@ class SuppliesController < ApplicationController
       default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
-        :search_text,
+        :search_supply,
         :with_code,
         :with_area_id,
       ],
@@ -38,7 +38,7 @@ class SuppliesController < ApplicationController
       default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
-        :search_text,
+        :search_supply,
         :with_code,
         :with_area_id,
       ],
@@ -163,7 +163,7 @@ class SuppliesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_params
       params.require(:supply).permit(:name, :period_alarm, :period_control, :expiration_alarm,
-                                     :is_active, :needs_expiration, :unity, :supply_area_id,
-                                     :description, :observation, :active_alarm, :quantity_alarm)
+        :is_active, :needs_expiration, :unity, :supply_area_id, :description, :observation, 
+        :active_alarm, :quantity_alarm)
     end
 end

@@ -15,7 +15,7 @@
         Prescripciones
         <% if policy(Prescription).new? %>
           <div class="btn-add-pres">
-            <%= link_to new_prescription_path, remote: true, class: 'btn btn-primary btn-xs' do %>
+            <%= link_to new_prescription_path, class: 'btn btn-primary btn-xs' do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             <% end %>
           </div>
@@ -68,7 +68,7 @@
   <li id="stock-li" class="<%= active_class('supplies') %>">
     <% if policy(Supply).index? %>
       <%= link_to supplies_url do %>
-        Listado insumos
+        Vademécum
       <% end %>
     <% end %>
   </li>

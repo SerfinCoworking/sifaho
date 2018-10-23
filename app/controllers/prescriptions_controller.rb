@@ -29,24 +29,18 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/1.json
   def show
     authorize @prescription
-    respond_to do |format|
-      format.js
-    end
   end
 
   # GET /prescriptions/new
   def new
     authorize Prescription
     @prescription = Prescription.new
-    @prescription.quantity_supply_requests.build
-    @prescription.quantity_supply_lots.build
+    @prescription.quantity_ord_supply_lots.build
   end
 
   # GET /prescriptions/1/edit
   def edit
     authorize @prescription
-    @prescription.quantity_supply_requests || @prescription.quantity_supply_requests.build
-    @prescription.quantity_supply_lots || @prescription.quantity_supply_lots.build
   end
 
   # POST /prescriptions
@@ -56,22 +50,22 @@ class PrescriptionsController < ApplicationController
     authorize @prescription
 
     respond_to do |format|
-      if @prescription.save!
+      if @prescription.save
         # Si se entrega la prescripción
         if dispensing?
           begin
-            @prescription.dispense
-            flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y entregado correctamente."
+            @prescription.dispense_by_user_id(current_user.id)
+            flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y dispensado correctamente."
           rescue ArgumentError => e
-            flash.now[:notice] = "Se ha creado pero no se ha podido entregar: "+e.message
+            flash[:notice] = e.message
           end
         else
-          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+          flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
         end
-        format.js
+        format.html { redirect_to @prescription }
       else
-        flash.now[:error] = "La prescripción no se ha podido crear."
-        format.js
+        flash[:error] = "La prescripción no se ha podido crear."
+        format.html { render :new }
       end
     end
   end
@@ -85,18 +79,18 @@ class PrescriptionsController < ApplicationController
       if @prescription.update_attributes(prescription_params)
         if dispensing?
           begin
-            @prescription.dispense
-            flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado y entregado correctamente."
+            @prescription.dispense_by_user_id(current_user.id)
+            flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado y dispensado correctamente."
           rescue ArgumentError => e
-            flash.now[:notice] = "La prescripción se ha modificado pero no se entregó: "+e.message
+            flash[:notice] = e.message
           end
         else
-          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
+          flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
         end
-        format.js
+        format.html { redirect_to @prescription }
       else
-        flash.now[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
-        format.js
+        flash[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
+        format.html { render :edit }
       end
     end
   end
@@ -151,12 +145,13 @@ class PrescriptionsController < ApplicationController
 
     def prescription_params
       params.require(:prescription).permit(
-                                             :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
-                                             :prescribed_date, :expiry_date,
-                                             quantity_supply_requests_attributes: [:id, :supply_id, :quantity, :daily_dose,
-                                                                                   :treatment_duration, :_destroy],
-                                             quantity_supply_lots_attributes: [:id, :sector_supply_lot_id, :quantity, :_destroy]
-                                          )
+        :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
+        :prescribed_date, :expiry_date, :remit_code,
+        quantity_ord_supply_lots_attributes: [
+          :id, :supply_id, :daily_dose, :treatment_duration, :requested_quantity, :delivered_quantity,
+          :sector_supply_lot_id, :provider_observation, :_destroy
+        ]
+      )
     end
 
     def dispensing?

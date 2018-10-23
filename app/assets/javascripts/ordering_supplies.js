@@ -1,10 +1,4 @@
-function triggerChange(){
-  console.log("clickeó");
-  jQuery(function() {
-    $('.supply-code').trigger("change");
-  });
-}
-$( document ).ready(function() {
+$(document).on('turbolinks:load', function() {
 
   var today = new moment();
   $('#requested-date').datetimepicker({
@@ -34,18 +28,6 @@ $( document ).ready(function() {
    return $('#establishment').autocomplete({
      source: $('#establishment').data('autocomplete-source'),
      minLength: 2,
-     open: function (e, ui) {
-       var acData = $(this).data('ui-autocomplete');
-       acData
-       .menu
-       .element
-       .find('li')
-       .each(function () {
-           var me = $(this);
-           var keywords = acData.term.split(' ').join('|');
-           me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-       });
-     },
      select:
      function (event, ui) {
        $("#establishment-id").val(ui.item.id);
@@ -113,18 +95,6 @@ $( document ).ready(function() {
        source: _this.data('autocomplete-source'),
        autoFocus: true,
        minLength: 1,
-       open: function (e, ui) {
-         var acData = $(this).data('ui-autocomplete');
-         acData
-         .menu
-         .element
-         .find('li')
-         .each(function () {
-             var me = $(this);
-             var keywords = acData.term.split(' ').join('|');
-             me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-         });
-       },
        select:
        function (event, ui) {
          console.log("hola");
@@ -135,7 +105,7 @@ $( document ).ready(function() {
          nested_form.find('.selectpicker').prop("disabled", false).selectpicker('refresh');
          nested_form.find(".request-quantity").prop('disabled', false);
          nested_form.find(".select-change").trigger('change');
-         nested_form.find('.request-quantity').focus();
+         nested_form.find('.focus-quantity').focus();
        },
        response: function(event, ui) {
          if (!ui.content.length) {
@@ -159,18 +129,6 @@ $( document ).ready(function() {
        source: _this.data('autocomplete-source'),
        autoFocus: true,
        minLength: 3,
-       open: function (e, ui) {
-         var acData = $(this).data('ui-autocomplete');
-         acData
-         .menu
-         .element
-         .find('li')
-         .each(function () {
-             var me = $(this);
-             var keywords = acData.term.split(' ').join('|');
-             me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-         });
-       },
        select:
        function (event, ui) {
          var nested_form = _this.parents(".nested-fields");
@@ -179,7 +137,7 @@ $( document ).ready(function() {
          nested_form.find('.selectpicker').prop("disabled", false).selectpicker('refresh');
          nested_form.find(".request-quantity").prop('disabled', false);
          nested_form.find(".select-change").trigger('change');
-         nested_form.find('.request-quantity').focus();
+         nested_form.find('.focus-quantity').focus();
        },
        response: function(event, ui) {
          if (!ui.content.length) {
@@ -187,8 +145,6 @@ $( document ).ready(function() {
              ui.content.push(noResult);
          }
        }
-     }).each(function() {
-         $(this).autocomplete("widget").insertAfter($("#dialog").parent());
      })
    });
   });
@@ -266,7 +222,6 @@ $( document ).ready(function() {
   // Completar cantidad de stock
   $(document).on('change', '.select-change', function() {
     var nested_form = $(this).parents(".nested-fields");
-    console.log("cambió 2!");
     $.ajax({
       url: "/sector_supply_lots/get_stock_quantity", // Ruta del controlador
       type: 'GET',

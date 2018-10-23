@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
       <li role="presentation" id="page-title">
-        <a href="">Insumos</a>
+        <a href="">Vademécum</a>
       </li>
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to supplies_path do %>
@@ -12,7 +12,7 @@
       <li role="presentation" class="<%= active_action('new') %>">
         <%= link_to new_supply_path, remote: 'true' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Nuevo
+          Insumo
         <% end %>
       </li>
       <% if policy(Supply).trash_index? %>

@@ -13,18 +13,6 @@ document.addEventListener("turbolinks:load", function() {
     return $('#establishment').autocomplete({
       source: $('#establishment').data('autocomplete-source'),
       minLength: 2,
-      open: function (e, ui) {
-        var acData = $(this).data('ui-autocomplete');
-        acData
-        .menu
-        .element
-        .find('li')
-        .each(function () {
-            var me = $(this);
-            var keywords = acData.term.split(' ').join('|');
-            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-        });
-      },
       select:
       function (event, ui) {
         $("#establishment-id").val(ui.item.id);
@@ -48,18 +36,6 @@ document.addEventListener("turbolinks:load", function() {
     return $('#provider-establishment').autocomplete({
       source: $('#provider-establishment').data('autocomplete-source'),
       minLength: 2,
-      open: function (e, ui) {
-        var acData = $(this).data('ui-autocomplete');
-        acData
-        .menu
-        .element
-        .find('li')
-        .each(function () {
-            var me = $(this);
-            var keywords = acData.term.split(' ').join('|');
-            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-        });
-      },
       select:
       function (event, ui) {
         $("#provider-establishment-id").val(ui.item.id);
@@ -127,18 +103,6 @@ document.addEventListener("turbolinks:load", function() {
         source: $('.new-supply-code').data('autocomplete-source'),
         autoFocus: true,
         minLength: 1,
-        open: function (e, ui) {
-          var acData = $(this).data('ui-autocomplete');
-          acData
-          .menu
-          .element
-          .find('li')
-          .each(function () {
-              var me = $(this);
-              var keywords = acData.term.split(' ').join('|');
-              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-          });
-        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -159,8 +123,6 @@ document.addEventListener("turbolinks:load", function() {
               ui.content.push(noResult);
           }
         }
-      }).each(function() {
-          $(this).autocomplete("widget").insertAfter($("#dialog").parent());
       })
     });
   });
@@ -177,18 +139,6 @@ document.addEventListener("turbolinks:load", function() {
         source: _this.data('autocomplete-source'),
         autoFocus: true,
         minLength: 3,
-        open: function (e, ui) {
-          var acData = $(this).data('ui-autocomplete');
-          acData
-          .menu
-          .element
-          .find('li')
-          .each(function () {
-              var me = $(this);
-              var keywords = acData.term.split(' ').join('|');
-              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-          });
-        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -209,8 +159,6 @@ document.addEventListener("turbolinks:load", function() {
               ui.content.push(noResult);
           }
         }
-      }).each(function() {
-          $(this).autocomplete("widget").insertAfter($("#dialog").parent());
       })
     });
   });
@@ -223,18 +171,6 @@ document.addEventListener("turbolinks:load", function() {
       return $('.new-supply-lot-code').autocomplete({
         source: $('.new-supply-lot-code').data('autocomplete-source'),
         minLength: 1,
-        open: function (e, ui) {
-          var acData = $(this).data('ui-autocomplete');
-          acData
-          .menu
-          .element
-          .find('li')
-          .each(function () {
-            var me = $(this);
-            var keywords = acData.term.split(' ').join('|');
-            me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-          });
-        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -263,7 +199,7 @@ document.addEventListener("turbolinks:load", function() {
 
   // Evento del select sector para rellenar hidden id
   $(document).on('focusout', '.new-supply-lot-code', function() {
-      $(this).tooltip('hide');
+    $(this).tooltip('hide');
   });//End on change events
 
   $(document).on("focus",".new-laboratory", function() {
@@ -275,18 +211,6 @@ document.addEventListener("turbolinks:load", function() {
         source: $('.new-laboratory').data('autocomplete-source'),
         autoFocus: true,
         minLength: 2,
-        open: function (e, ui) {
-          var acData = $(this).data('ui-autocomplete');
-          acData
-          .menu
-          .element
-          .find('li')
-          .each(function () {
-              var me = $(this);
-              var keywords = acData.term.split(' ').join('|');
-              me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<b><u>$1</u></b>'));
-          });
-        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");

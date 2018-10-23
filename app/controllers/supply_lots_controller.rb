@@ -25,8 +25,6 @@ class SupplyLotsController < ApplicationController
       ],
     ) or return
     @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
-
-    @new_supply_lot = SupplyLot.new
   end
 
   def trash_index

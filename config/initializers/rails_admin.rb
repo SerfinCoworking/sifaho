@@ -1,10 +1,4 @@
 RailsAdmin.config do |config|
-  config.model Prescription do
-    field :quantity_supply_lots do
-      inverse_of :prescription
-    end
-  end
-
   config.authorize_with do |controller|
     unless current_user.has_role? :admin
       redirect_to main_app.root_path

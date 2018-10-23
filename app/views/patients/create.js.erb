@@ -6,3 +6,8 @@ $('#patients').prepend('<%= j render (@patient) %>')
 
 // Efecto de ingreso
 $('#patient_<%= @patient.id %>').hide().fadeIn(500);
+
+// Se rellena la prescripción
+$('#patient').val('<%= @patient.fullname %>');
+$('#patient_dni').val('<%= @patient.dni %>');
+$('#patient_id').val('<%= @patient.id %>');

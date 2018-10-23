@@ -8,31 +8,27 @@ class Prescription < ApplicationRecord
   # Relaciones
   belongs_to :professional
   belongs_to :patient
-  has_many :quantity_supply_requests, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_supply_requests, dependent: :destroy
-  has_many :quantity_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_supply_lots, dependent: :destroy
+
+  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
+  has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
+  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+
 
   # Validaciones
   validates_presence_of :patient
   validates_presence_of :professional
   validates_presence_of :prescribed_date
   validates_presence_of :expiry_date
-  validates_presence_of :quantity_supply_requests
-  validates_associated :quantity_supply_requests
-  validates_associated :supplies
-  validates_associated :quantity_supply_lots
-  validates_associated :sector_supply_lots
+  validates_presence_of :remit_code
+  validates_presence_of :quantity_ord_supply_lots
+  validates_associated :quantity_ord_supply_lots
+  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   # Atributos anidados
-  accepts_nested_attributes_for :quantity_supply_requests,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :supplies
-  accepts_nested_attributes_for :quantity_supply_lots,
-          :reject_if => :all_blank,
-          :allow_destroy => true
-  accepts_nested_attributes_for :sector_supply_lots
+  accepts_nested_attributes_for :quantity_ord_supply_lots,
+    :reject_if => :all_blank,
+    :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -128,6 +124,26 @@ class Prescription < ApplicationRecord
     end #End dispensada?
   end
 
+    # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
+    def dispense_by_user_id(a_user_id)
+      if self.pendiente?
+        if self.quantity_ord_supply_lots.exists?
+          if self.validate_quantity_lots
+            self.quantity_ord_supply_lots.each do |qosl|
+              qosl.decrement
+            end
+          end
+        else
+          raise ArgumentError, 'No hay insumos solicitados la prescripción'
+        end # End check if quantity_ord_supply_lots exists
+        self.dispensed_date = DateTime.now
+        self.dispensed_by_id = a_user_id
+        self.dispensada!
+      else
+        raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
+      end
+    end
+
   # Label del estado para vista.
   def status_label
     if self.dispensada?; return 'success';
@@ -159,5 +175,23 @@ class Prescription < ApplicationRecord
       ['Fecha dispensada (asc)', 'dispensada_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
+  end
+
+  # Método para validar las cantidades a entregar de los lotes en stock
+  def validate_quantity_lots
+    @lots = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
+    if @lots.present?
+      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
+      # Se itera el hash por cada lote sumando y verificando las cantidades.
+      @sect_lots.each do |key, values|
+        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
+        @sector_lot = SectorSupplyLot.find(key)
+        if @sector_lot.quantity < @sum_quantities
+          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+        end
+      end
+    else
+      raise ArgumentError, 'No hay lotes asignados.'
+    end   
   end
 end

@@ -1,16 +1,8 @@
 <%= render 'header' %>
 
-<% if @supply_lots.present? %>
-
   <%= render 'filter' %>
 
   <%= render(
     partial: 'supply_lots/list',
     locals: { supply_lots: @supply_lots }
   ) %>
-<% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'lotes en provincia' }
-  ) %>
-<% end %>

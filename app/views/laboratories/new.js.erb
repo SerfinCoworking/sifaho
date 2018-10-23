@@ -1,3 +1,6 @@
+// Style modal
+$('.modal-content').addClass('panel-primary');
+
 // Add the dialog title
 $('#dialog h4').html("<i class='glyphicon glyphicon-plus'></i>  Nuevo laboratorio");
 
@@ -19,3 +22,8 @@ $('#dialog').on('shown.bs.modal', function () {
 });
 
 <%= render 'form_function' %>
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-primary');
+});
