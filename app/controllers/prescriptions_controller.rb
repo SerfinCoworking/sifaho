@@ -112,7 +112,7 @@ class PrescriptionsController < ApplicationController
     authorize @prescription
     respond_to do |format|
       begin
-        @prescription.dispense
+        @prescription.dispense_by_user_id(current_user.id)
 
       rescue ArgumentError => e
         flash.now[:error] = e.message

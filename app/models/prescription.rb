@@ -13,7 +13,9 @@ class Prescription < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
-
+  belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :audited_by, class_name: 'User', optional: true
+  belongs_to :dispensed_by, class_name: 'User', optional: true
 
   # Validaciones
   validates_presence_of :patient
@@ -136,7 +138,7 @@ class Prescription < ApplicationRecord
         else
           raise ArgumentError, 'No hay insumos solicitados la prescripción'
         end # End check if quantity_ord_supply_lots exists
-        self.dispensed_date = DateTime.now
+        self.dispensed_at = DateTime.now
         self.dispensed_by_id = a_user_id
         self.dispensada!
       else

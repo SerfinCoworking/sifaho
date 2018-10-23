@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181022140549) do
+ActiveRecord::Schema.define(version: 20181023015734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,7 +159,15 @@ ActiveRecord::Schema.define(version: 20181022140549) do
     t.datetime "expiry_date"
     t.datetime "deleted_at"
     t.string "remit_code"
+    t.bigint "created_by_id"
+    t.bigint "audited_by_id"
+    t.bigint "dispensed_by_id"
+    t.datetime "audited_at"
+    t.datetime "dispensed_at"
+    t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
+    t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
+    t.index ["dispensed_by_id"], name: "index_prescriptions_on_dispensed_by_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
     t.index ["remit_code"], name: "index_prescriptions_on_remit_code", unique: true

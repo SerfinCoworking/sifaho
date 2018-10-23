@@ -22,7 +22,7 @@
   </td>
     <% if prescription.dispensada? %>
       <td>
-      <%= prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+      <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
     <% else %>
       <% if policy(prescription).dispense? %>
         <td class="text-center">
