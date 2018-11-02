@@ -1,5 +1,5 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status ]
 
   # GET /prescriptions
   # GET /prescriptions.json
@@ -126,6 +126,20 @@ class PrescriptionsController < ApplicationController
           format.js
         end
       end
+    end
+  end
+
+  def return_status
+    authorize @prescription
+    respond_to do |format|
+      begin
+        @prescription.return_status
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      else
+        flash[:notice] = 'La prescripción se ha retornado a '+@prescription.status+'.'
+      end
+      format.html { redirect_to @prescription }
     end
   end
 

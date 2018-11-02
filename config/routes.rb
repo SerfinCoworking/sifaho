@@ -123,6 +123,7 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
+      get "return_status"
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"

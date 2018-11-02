@@ -126,25 +126,36 @@ class Prescription < ApplicationRecord
     end #End dispensada?
   end
 
-    # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
-    def dispense_by_user_id(a_user_id)
-      if self.pendiente?
-        if self.quantity_ord_supply_lots.exists?
-          if self.validate_quantity_lots
-            self.quantity_ord_supply_lots.each do |qosl|
-              qosl.decrement
-            end
+  # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
+  def dispense_by_user_id(a_user_id)
+    if self.pendiente?
+      if self.quantity_ord_supply_lots.exists?
+        if self.validate_quantity_lots
+          self.quantity_ord_supply_lots.each do |qosl|
+            qosl.decrement
           end
-        else
-          raise ArgumentError, 'No hay insumos solicitados la prescripción'
-        end # End check if quantity_ord_supply_lots exists
-        self.dispensed_at = DateTime.now
-        self.dispensed_by_id = a_user_id
-        self.dispensada!
+        end
       else
-        raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
-      end
+        raise ArgumentError, 'No hay insumos solicitados la prescripción'
+      end # End check if quantity_ord_supply_lots exists
+      self.dispensed_at = DateTime.now
+      self.dispensed_by_id = a_user_id
+      self.dispensada!
+    else
+      raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
     end
+  end
+
+  def return_status
+    if self.dispensada?
+      self.quantity_ord_supply_lots.each do |qosl|
+        qosl.increment
+      end
+      self.pendiente!
+    else
+      raise ArgumentError, 'No es posible retornar a un estado anterior'
+    end
+  end
 
   # Label del estado para vista.
   def status_label

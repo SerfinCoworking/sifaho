@@ -24,7 +24,9 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    destroy_pres.any? { |role| user.has_role?(role) }
+    unless record.dispensada?
+      destroy_pres.any? { |role| user.has_role?(role) }
+    end
   end
 
   def delete?
@@ -33,6 +35,12 @@ class PrescriptionPolicy < ApplicationPolicy
 
   def dispense?
     dispense_pres.any? { |role| user.has_role?(role) }
+  end
+
+  def return_status?
+    if record.dispensada? && record.created_by.sector == user.sector
+      update_pres.any? { |role| user.has_role?(role) }
+    end
   end
 
 

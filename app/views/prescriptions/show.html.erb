@@ -105,6 +105,12 @@
 
   <div class="panel-footer text-right hidden-print">
     <%= link_to 'Volver', prescriptions_path, class: "btn" %>
+    <% if policy(@prescription).return_status? %>
+      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning">
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
+        Retornar
+      </a>
+    <% end %>
     <% if policy(@prescription).edit? %>
       <%= link_to edit_prescription_path(@prescription), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
@@ -114,3 +120,26 @@
     <% end %>
   </div>
 </div>
+
+
+<% if policy(@prescription).return_status? %>
+  <!-- Modal para retornar estado -->
+  <div class="modal" id="return-confirm">
+    <div class="modal-dialog">
+      <div class="modal-content panel-warning">
+        <div class="modal-header panel-heading">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = Prescription.statuses.key(@prescription.status_before_type_cast - 1).split('_').map(&:capitalize).join(' ') %></h3>
+        </div>
+        <div class="modal-body">
+          <p>Seguro que desea retornar la prescripción a <%= prev_status %>?</p>
+          <p>Se devolverán todos los insumos a tu stock.</p>
+        </div>
+        <div class="modal-footer text-right">
+          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+          <%= link_to 'Confirmar', return_status_prescription_path, method: :get, :class => 'btn btn-warning' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
