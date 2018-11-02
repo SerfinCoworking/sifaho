@@ -16,7 +16,9 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def update?
-    update_pres.any? { |role| user.has_role?(role) }
+    if record.pendiente?
+      update_pres.any? { |role| user.has_role?(role) }
+    end
   end
 
   def edit?
