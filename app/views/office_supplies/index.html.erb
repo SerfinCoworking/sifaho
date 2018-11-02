@@ -1,0 +1,15 @@
+<%= render 'header'%>
+
+<%= render 'filter' %>
+
+<% if @office_supplies.present? %>
+  <%= render(
+    partial: 'office_supplies/list',
+    locals: { office_supplies: @office_supplies }
+  ) %>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'insumos de oficina' }
+  ) %>
+<% end %>

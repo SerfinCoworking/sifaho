@@ -2,10 +2,10 @@
 $('.modal-content').addClass('panel-danger');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Borrando prescripción");
+$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Enviar a papelera");
 
 // Render the edit form
-$('.modal-body').html('Esta seguro que desea eliminar la prescripción de <%= @prescription.professional.full_name %>?');
+$('.modal-body').html('Esta seguro que desea enviar a la papelera la prescripción de <%= @prescription.professional.full_name %>?');
 
 // Add form button
 $('.modal-footer').html(

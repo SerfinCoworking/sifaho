@@ -16,6 +16,6 @@ class CreateSupplyLots < ActiveRecord::Migration[5.1]
     add_index :supply_lots, :deleted_at
     add_column :supply_lots, :lot_code, :string, :limit => 20
     add_reference :supply_lots, :laboratory, foreign_key: true
-    add_index :supply_lots, [:lot_code, :laboratory_id], unique: true
+    add_index :supply_lots, [:supply_id, :lot_code, :laboratory_id], unique: true
   end
 end

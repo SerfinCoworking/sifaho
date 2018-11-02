@@ -7,15 +7,17 @@ class CreateOrderingSupplies < ActiveRecord::Migration[5.1]
       t.references :accepted_by, index: true
       t.references :sent_by, index: true
       t.references :received_by, index: true
+      t.references :created_by, index: true
       t.text :observation
+      t.string :remit_code
 
       t.datetime :sent_date
       t.datetime :accepted_date
       t.datetime :date_received
       t.datetime :requested_date
 
-      t.integer :applicant_status, default: 0
-      t.integer :provider_status, default: 0
+      t.integer :status, default: 0
+      t.ineger :order_type, default: 0
 
       t.timestamps
     end

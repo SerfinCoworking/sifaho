@@ -10,12 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181023015734) do
+ActiveRecord::Schema.define(version: 20181029000501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "unaccent"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "establishments", force: :cascade do |t|
     t.string "code"
@@ -89,6 +96,31 @@ ActiveRecord::Schema.define(version: 20181023015734) do
     t.bigint "vademecum_id"
     t.index ["medication_brand_id"], name: "index_medications_on_medication_brand_id"
     t.index ["vademecum_id"], name: "index_medications_on_vademecum_id"
+  end
+
+  create_table "office_supplies", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "quantity"
+    t.integer "status", default: 0
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "remit_code"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_office_supplies_on_deleted_at"
+    t.index ["remit_code"], name: "index_office_supplies_on_remit_code", unique: true
+    t.index ["sector_id"], name: "index_office_supplies_on_sector_id"
+  end
+
+  create_table "office_supply_categorizations", force: :cascade do |t|
+    t.bigint "office_supply_id"
+    t.bigint "category_id"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_office_supply_categorizations_on_category_id"
+    t.index ["office_supply_id"], name: "index_office_supply_categorizations_on_office_supply_id"
   end
 
   create_table "ordering_supplies", force: :cascade do |t|

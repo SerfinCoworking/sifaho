@@ -5,22 +5,22 @@
   <div class="panel-rightbody">
     <%= form_for_filterrific @filterrific do |f| %>
       <div class="col-md-3 col-sm-3">
-        <label>Insumo</label>
-        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-        <%= f.text_field(
-          :search_supply,
-          class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Nombre',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <div class="col-md-3 col-sm-3">
-        <label>Insumo</label>
+        <label>Código</label>
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
           :with_code,
           class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Código'
+          placeholder: 'Un número'
+        ) %>
+      </div>
+      <div class="col-md-3 col-sm-3">
+        <label>Nombre</label>
+        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+        <%= f.text_field(
+          :search_supply,
+          class: 'filterrific-periodically-observed form-control',
+          placeholder: 'Un nombre',
+          autocomplete: 'off'
         ) %>
       </div>
       <% if current_page?(controller: 'supplies') %>

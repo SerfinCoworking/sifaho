@@ -1,0 +1,62 @@
+<%= render 'header' %>
+
+<div class="panel panel-default">
+  <div class="panel-heading hidden-print">
+    <h3 class="panel-title">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo insumo de oficina
+      <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+      <% end %>
+    </h3>
+  </div>
+  <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
+  <div class="panel-body" id="panel-body-new">
+    <p>
+      <strong>Nombre:</strong>
+      <%= @office_supply.name %>
+    </p>
+
+    <p>
+      <strong>Descripción:</strong>
+      <%= @office_supply.description %>
+    </p>
+
+    <p>
+      <strong>Cantidad:</strong>
+      <%= @office_supply.quantity %>
+    </p>
+
+    <p>
+      <strong>Estado:</strong>
+      <span class="label label-<%= @office_supply.status_label %>">
+        <%= @office_supply.status.split('_').map(&:capitalize).join(' ') %>
+      </span>
+    </p>
+
+    <p>
+      <strong>Categorías:</strong>
+      <% if @office_supply.categories.present? %>
+        <% @office_supply.categories.each do |category| %>
+          <span class="label label­primary">
+            <%= category.name %>
+          </span>
+        <% end %>
+      <% else %>
+        Ninguna
+      <% end %>
+    </p>
+  </div>
+  <div class="panel-footer text-right hidden-print">
+    <%= link_to 'Volver', office_supplies_path, class: "btn" %>  
+    <% if policy(@office_supply).edit? %>
+      <%= link_to edit_office_supply_path(@office_supply), 
+        class: 'btn btn-warning btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
+</div>

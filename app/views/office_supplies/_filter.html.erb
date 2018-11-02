@@ -1,0 +1,40 @@
+<div class="panel panel-info" id="filter-panel">
+  <div class="panel-leftheading">
+    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+  </div>
+  <div class="panel-rightbody">
+    <%= form_for_filterrific @filterrific do |f| %>
+      <div class="col-md-3 col-sm-3">
+        <label>Insumo</label>
+        <%= f.text_field(
+          :search_supply,
+          class: 'filterrific-periodically-observed form-control',
+          placeholder: 'Nombre'
+        ) %>
+      </div>
+      <div class="col-md-3 col-sm-3">
+        <label>Descripción</label>
+        <%= f.text_field(
+          :search_description,
+          class: 'filterrific-periodically-observed form-control',
+          placeholder: 'Texto'
+        ) %>
+      </div>
+      <div class="col-md-2 col-sm-2">
+        <label>Estado</label>
+        <%= f.select(:with_status,
+          @filterrific.select_options[:with_status].map {
+            |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
+          },{},
+          { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
+      </div>
+      <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+      <% end %>
+      <!-- Spinner para la carga -->
+      <%= render_filterrific_spinner %>
+    <% end %>
+  </div>
+  <div class="clearfix"> 
+  </div>
+</div>

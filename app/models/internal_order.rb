@@ -51,24 +51,24 @@ class InternalOrder < ApplicationRecord
   )
 
   pg_search_scope :search_supply_code,
-  :associated_against => { :supply_lots => :code },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :supply_lots => :code },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_name,
-  :associated_against => { :supply_lots => :supply_name },
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :supply_lots => :supply_name },
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-  :associated_against => { :applicant_sector => :name },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :applicant_sector => :name },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-  :associated_against => { :provider_sector => :name },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :provider_sector => :name },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
 
   scope :sorted_by, lambda { |sort_option|

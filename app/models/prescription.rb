@@ -184,7 +184,7 @@ class Prescription < ApplicationRecord
     @lots = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
     if @lots.present?
       @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y verificando las cantidades.
+      # Se itera el hash por cada lote sumando y se verifica que las cantidades a dispensar no superen las que hay en stock.
       @sect_lots.each do |key, values|
         @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
         @sector_lot = SectorSupplyLot.find(key)
