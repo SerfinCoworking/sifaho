@@ -174,8 +174,7 @@ $(document).on('turbolinks:load', function() {
   // Select del lote
   $(document).on('change', '.select-change', function() {
     var nested_form = $(this).parents(".nested-fields");
-    var select = nested_form.find('.selectpicker');
-    console.log("cambió!");
+    var select = nested_form.find('.selectpicker'); 
     $.ajax({
       url: "/sector_supply_lots/search_by_code", // Ruta del controlador
       type: 'GET',

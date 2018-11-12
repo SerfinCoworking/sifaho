@@ -43,26 +43,48 @@ $('[data-toggle="tooltip"]').tooltip({
   });
 
 $(document).on('turbolinks:load', function() {
-    $('[data-toggle="tooltip"]').tooltip({
-        'selector': '',
-        'container':'body'
-      });
-    // Se oculta el flash message
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove();
-        });
-    }, 5000);
+  $('[data-toggle="tooltip"]').tooltip({
+    'selector': '',
+    'container':'body'
+  });
 
-    // Return confirmation modal
-    $('#return-confirm').on('show', function() {
-        var $submit = $(this).find('.btn-warning'),
-        href = $submit.attr('href');
-        $submit.attr('href', href.replace('pony', $(this).data('id')));
+  // Se oculta el flash message
+  window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+      $(this).remove();
     });
+  }, 5000);
 
-    $('.return-confirm').click(function(e) {
-        e.preventDefault();
-        $('#return-confirm').data('id', $(this).data('id')).modal('show');
-    });
+  // Return confirmation modal
+  $('#return-confirm').on('show', function() {
+    var $submit = $(this).find('.btn-warning'),
+    href = $submit.attr('href');
+    $submit.attr('href', href.replace('pony', $(this).data('id')));
+  });
+
+  $('.return-confirm').click(function(e) {
+    e.preventDefault();
+    $('#return-confirm').data('id', $(this).data('id')).modal('show');
+  });
+
+  
+  // Monitor dynamic inputs
+  $(document).on('change', ':input', function(){ //triggers change in all input fields including text type
+    unsaved = true;
+  });
+  
+  // Another way to bind the event
+  $(window).bind('beforeunload', function() {
+      if(unsaved){
+          return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+      }
+  });
+  
+  // Turbolinks 4 and 5
+  $(document).on("page:before-change turbolinks:before-visit", function() {
+    if (unsaved) {
+      unsaved = false;
+      return confirm("Tiene cambios sin guardar. Desea salir igualmente?");
+    }
+  });
 });

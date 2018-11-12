@@ -4,7 +4,7 @@
   <div class="panel-heading">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nueva solicitud
-      <%= link_to :back, class: 'btn pull-right close-btn' do %>
+      <%= link_to applicant_index_internal_orders_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
     </h3>
@@ -13,7 +13,7 @@
     <%= render 'applicant_form', internal_order: @internal_order %>
   </div>
   <div class="panel-footer text-right">
-    <%= link_to 'Volver', :back, class: 'btn' %>
+    <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn' %>
     <button type='submit' name='commit' class='btn btn-success' form='new_internal_order' value='Auditar'>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
     </button>
