@@ -1,9 +1,5 @@
 <% if user_signed_in? %>
   <li id="date">
       <%= Time.now.strftime("%d/%m/%Y") %>
-      <span class="visible-md">MD</span>
-      <span class="visible-sm">SM</span>
-      <span class="visible-xs">xs</span>
-      <span class="visible-lg">LG</span>
   </li>
 <% end %>
