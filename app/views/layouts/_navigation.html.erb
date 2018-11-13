@@ -1,7 +1,7 @@
 <%# navigation styled for Bootstrap 3.0 %>
 <div class="col-sm-2 col-md-2 sidebar-nav">
   <% if current_user.present? %>
-    <div class="span3 bs-docs-sidebar">
+    <div class="span3 bs-docs-sidebar collapse navbar-collapse">
       <ul id="custom-sidebar" class="nav nav-pills nav-pills-cust nav-stacked affix col-md-3" style="top: 50px;max-width: 200px;background-color:#222222;left:0px;height: 100%;">
         <%= render 'layouts/side_navigation_links' %>
       </ul>
@@ -21,11 +21,11 @@
         <%= image_tag('sifaho-brand.png')%>
       <% end %>
     </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav nav-cust navbar-nav navbar-nav-cust navbar-right">
+    <div class="">
+      <ul class="nav nav-cust navbar-nav navbar-nav-cust navbar-right hidden-xs">
         <%= render 'devise/menu/login_items' %>
       </ul>
-      <ul class="nav nav-cust navbar-nav navbar-nav-cust navbar-right">
+      <ul class="nav nav-cust navbar-nav navbar-nav-cust navbar-right hidden-xs">
         <%= render 'layouts/navigation_links' %>
       </ul>
     </div>

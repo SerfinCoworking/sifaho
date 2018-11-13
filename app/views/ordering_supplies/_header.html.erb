@@ -6,27 +6,27 @@
       <li role="presentation" class="<%= active_action('applicant_index') %>">
         <%= link_to applicant_index_ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-          Recibidos
+          <span class="hidden-xs">Recibidos</span>
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Despachados
+          <span class="hidden-xs">Despachados</span>
         <% end %>
       </li>
       <% if policy(OrderingSupply).new_receipt? %>
         <li role="presentation" class="<%= active_action('new_receipt') %>">
           <%= link_to new_receipt_ordering_supplies_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Recibo
+            R<span class="hidden-xs">ecibo</span>
           <% end %>
         </li>
       <% end %>
       <li role="presentation" class="<%= active_action('new') %>">
         <%= link_to new_ordering_supply_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Despacho
+          D<span class="hidden-xs">espacho</span>
         <% end %>
       </li>
     </ul>

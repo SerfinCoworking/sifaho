@@ -3,7 +3,7 @@
     <td><%= patient.first_name %></td>
     <td><%= patient.last_name %></td>
     <td><%= patient.dni %></td>
-    <td><%= patient.birthdate.strftime("%d/%m/%Y") %></td>
+    <td><%= patient.birthdate.next_day().strftime("%d/%m/%Y") %></td>
     <td><%= patient.is_chronic? ? "Si" : "No" %></td>
     <td>
       <% if policy(patient).show? %>

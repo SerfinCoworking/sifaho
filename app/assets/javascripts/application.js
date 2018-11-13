@@ -72,14 +72,7 @@ $(document).on('turbolinks:load', function() {
   $(document).on('change', ':input', function(){ //triggers change in all input fields including text type
     unsaved = true;
   });
-  
-  // Another way to bind the event
-  $(window).bind('beforeunload', function() {
-      if(unsaved){
-          return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
-      }
-  });
-  
+    
   // Turbolinks 4 and 5
   $(document).on("page:before-change turbolinks:before-visit", function() {
     if (unsaved) {
