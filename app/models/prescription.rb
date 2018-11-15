@@ -4,6 +4,7 @@ class Prescription < ApplicationRecord
 
   # Estados
   enum status: { pendiente: 0, dispensada: 1, vencida: 2 }
+  enum order_type: { receta: 0 }
 
   # Relaciones
   belongs_to :professional
@@ -106,6 +107,18 @@ class Prescription < ApplicationRecord
   }
 
   # Métodos públicos #----------------------------------------------------------
+
+  def sum_to?(a_sector)
+    if self.dispensada?
+      return true unless self.dispensed_by.sector == a_sector
+    end
+  end
+
+  def with_sector?(a_sector)
+    if self.dispensada?
+      return self.dispensed_by.sector == a_sector
+    end
+  end
 
   # Cambia estado a dispensado y descuenta la cantidad a los insumos
   def dispense

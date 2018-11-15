@@ -43,8 +43,8 @@
         <td>
           <% if policy(supply).lots_for_supply? %>
             <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-default btn-xs',
-                  title: 'Lotes del insumo', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+                  title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
             <% end %>
           <% end %>
         </td>

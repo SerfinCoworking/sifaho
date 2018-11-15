@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181102144605) do
+ActiveRecord::Schema.define(version: 20181115121709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20181102144605) do
     t.bigint "dispensed_by_id"
     t.datetime "audited_at"
     t.datetime "dispensed_at"
+    t.integer "order_type", default: 0
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"

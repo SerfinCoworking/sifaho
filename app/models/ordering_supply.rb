@@ -124,6 +124,16 @@ class OrderingSupply < ApplicationRecord
     where(provider_sector: a_sector)
   end
 
+  def sum_to?(a_sector)
+    return self.applicant_sector == a_sector
+  end
+
+  def with_sector?(a_sector)
+    if self.provision_en_camino? || self.recibo_realizado? || self.provision_entregada?
+      return self.applicant_sector == a_sector || self.provider_sector == a_sector
+    end
+  end
+
   # Cambia estado a "en camino" y descuenta la cantidad a los insumos
   def send_order(a_user)
     if self.proveedor_aceptado?

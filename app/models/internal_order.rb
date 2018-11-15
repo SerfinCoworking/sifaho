@@ -5,8 +5,7 @@ class InternalOrder < ApplicationRecord
   enum order_type: { provision: 0, solicitud: 1 }
 
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, provision_entregada: 4, anulada: 5 }
-  enum provider_status: { nuevo: 0, auditoria: 1, en_camino: 2, entregado: 3, anulado: 4 }, _prefix: :provider
-
+  
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
@@ -136,6 +135,16 @@ class InternalOrder < ApplicationRecord
       ['Fecha entregado (asc)', 'entregado_asc'],
       ['Cantidad (asc)', 'cantidad_asc']
     ]
+  end
+
+  def sum_to?(a_sector)
+    return self.applicant_sector == a_sector
+  end
+
+  def with_sector?(a_sector)
+    if self.provision_en_camino? || self.provision_entregada?
+      return self.provider_sector == a_sector || self.applicant_sector == a_sector
+    end
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos

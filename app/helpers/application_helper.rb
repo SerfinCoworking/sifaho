@@ -26,4 +26,13 @@ module ApplicationHelper
       return 'active'
     end 
   end
+  def order_status_label(an_order)
+    if an_order.is_a?(Prescription)
+      prescription_status_label(an_order)
+    elsif an_order.is_a?(InternalOrder)
+      internal_status_label(an_order)
+    elsif an_order.is_a?(OrderingSupply)
+      ordering_status_label(an_order)
+    end
+  end
 end

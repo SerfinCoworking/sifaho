@@ -6,6 +6,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
   belongs_to :sector_supply_lot, -> { with_deleted }, optional: true
   belongs_to :supply_lot, -> { with_deleted }, optional: true
   belongs_to :quantifiable, :polymorphic => true
+  has_one :sector, :through => :sector_supply_lot
 
   # Validaciones
   validates_presence_of :supply
@@ -98,5 +99,17 @@ class QuantityOrdSupplyLot < ApplicationRecord
   # Retorna el tipo de unidad
   def unity
     self.supply.unity
+  end
+
+  def with_sector?(a_sector)
+    self.quantifiable.with_sector?(a_sector)
+  end
+
+  def with_supply_code?(a_code)
+    return self.supply.id == a_code
+  end 
+
+  def self.quantity_orders_to_sector(a_sector, a_code)
+    select { |record| record.with_sector?(a_sector) && record.with_supply_code?(a_code)}
   end
 end

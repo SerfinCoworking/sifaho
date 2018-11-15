@@ -3,8 +3,8 @@
 <div class="panel panel-default">
   <div class="panel-heading hidden-print">
     <h3 class="panel-title">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo lotes del insumo
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo detalles del insumo
+      <%= link_to group_by_supply_sector_supply_lots_path, class: 'btn pull-right close-btn' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
       <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
@@ -62,69 +62,163 @@
           </tr>
         </tbody>
       </table>
-      <hr>
     </div>
+    <br><br>
     <div class="row">
-      <div class="col-md-8">
-        <table class="table table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>Lote</th>
-              <th>Laboratorio</th>
-              <th>Vencimiento</th>
-              <th>Estado</th>
-              <th>Cantidad</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(@supply).each do |lot| %>
-              <tr>
-                <td><%= lot.lot_code %></td>
-                <td><%= lot.laboratory %></td>
-                <td><%= lot.supply_lot.expiry_date? ? lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
-                <td>
-                  <span class="label label-<%= lot.status_label %>">
-                    <%= lot.status.split('_').map(&:capitalize).join(' ') %>
-                  </span>
-                </td>
-                <td>
-                  <div class="progress-bar progress-bar-<%= lot.quantity_label %> progress-bar-striped" id="quantity-bar" style="width: <%= lot.percent_stock %>%">
-                    <%= lot.quantity %>/<%= lot.initial_quantity %>
-                  </div>
-                </td>
-                <td>
-                  <% if policy(lot).show? %>
-                    <%= link_to sector_supply_lot_path(lot), remote:true, class: 'btn btn-default btn-xs',
-                          title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-                    <% end %>
-                  <% end %>
-                  <% if policy(lot).delete? %>
-                    <%= link_to delete_sector_supply_lot_path(lot), remote: true,
-                      class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-                    <% end %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+      <div class='col-md-12'>
+        <div class='row'>
+          <div class='col-md-12' style='margin-top: -50px;'>
+            <ul class='nav nav-tabs nav-justified'>
+              <li class='active'>
+                <a data-toggle='tab' href='#sector_lots'>
+                  <span class="glyphicon glyphicon-barcode"></span>
+                  Lotes
+                </a>
+              </li>
+              <li>
+                <a data-toggle='tab' href='#last_movements'>
+                  <span class="glyphicon glyphicon-transfer"></span>
+                  Movimientos
+                </a>
+              </li>
+              <li>
+                <a data-toggle='tab' href='#graphs'>
+                  <span class="glyphicon glyphicon-stats"></span>
+                  Estadísticas
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="col-md-4">
-        <%
-          lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
-          status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
-          colors = []
-          lots.each do |status, _|
-            colors << status_colors[status]
-          end
-        %>
-        <%= pie_chart lots, colors: colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
-      </div>
-    </div>
-  </div>
+      <div class="col-md-12">
+        <div class="tab-content">
+          <div id='sector_lots' class='tab-pane fade in active'>
+            <div class="col-md-8">
+              <table class="table table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>Lote</th>
+                    <th>Laboratorio</th>
+                    <th>Vencimiento</th>
+                    <th>Estado</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(@supply).each do |lot| %>
+                    <tr>
+                      <td><%= lot.lot_code %></td>
+                      <td><%= lot.laboratory %></td>
+                      <td><%= lot.supply_lot.expiry_date? ? lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
+                      <td>
+                        <span class="label label-<%= lot.status_label %>">
+                          <%= lot.status.split('_').map(&:capitalize).join(' ') %>
+                        </span>
+                      </td>
+                      <td>
+                        <div class="progress-bar progress-bar-<%= lot.quantity_label %> progress-bar-striped" id="quantity-bar" style="width: <%= lot.percent_stock %>%">
+                          <%= lot.quantity %>/<%= lot.initial_quantity %>
+                        </div>
+                      </td>
+                      <td>
+                        <% if policy(lot).show? %>
+                          <%= link_to sector_supply_lot_path(lot), remote:true, class: 'btn btn-default btn-xs',
+                                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+                            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+                          <% end %>
+                        <% end %>
+                        <% if policy(lot).delete? %>
+                          <%= link_to delete_sector_supply_lot_path(lot), remote: true,
+                            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+                            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                          <% end %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-4">
+              <%
+                lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+                status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
+                colors = []
+                lots.each do |status, _|
+                  colors << status_colors[status]
+                end
+              %>
+              <%= pie_chart lots, colors: colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
+            </div>
+          </div>
+          <div id='last_movements' class='tab-pane fade'>
+            <div class="row">
+              <div class="col-md-12">       
+                <table class="table table-hover table-condensed">
+                  <thead>
+                    <tr>
+                      <th>Lote</th>
+                      <th>Movimiento</th>
+                      <th>Código</th>
+                      <th>Estado</th>
+                      <th>Cantidad</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <% @quantity_ord_supply_lots.each do | qosl | %>
+                        <% @order = qosl.quantifiable %>
+                        <tr class="<%= @order.sum_to?(current_user.sector) ? 'success' : 'danger' %>">
+                          <td><%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : qosl.lot_code %></td>
+                          <td>
+                              <%= @order.order_type.split('_').map(&:capitalize).join(' ') %>
+                          </td>
+                          <td><%= @order.remit_code %></td>
+                          <td>
+                            <span class="label label-<%= order_status_label(@order) %>">
+                              <%= @order.status.split('_').map(&:capitalize).join(' ') %>
+                            </span>
+                          </td>
+                          <td><span class="label label-<%= @order.sum_to?(current_user.sector) ? 'success' : 'danger' %>"><%= qosl.delivered_quantity %></span></td>
+                          <td><%= @order.created_at.strftime("%d/%m/%Y")%></td>
+                          <td>                        
+                            <%= link_to polymorphic_path(@order), target: :_blank, class: 'btn btn-default btn-xs',
+                              title: 'Ver '+@order.order_type, data: { toggle: 'tooltip', placement: 'top' } do %>
+                              <%= content_tag(:span, '', class: 'glyphicon glyphicon-new-window') %>
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+                </table>
+              </div><!-- End column -->
+            </div> <!-- End row -->
+          </div> <!-- End last movements tab pane -->
+          <div id='graphs' class='tab-pane fade'>
+            <div class="row">
+              <div class="col-md-12">
+                <%= line_chart @quantity_ord_supply_lots.collect{|i| [i['created_at'], i['delivered_quantity']]}, 
+                  discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+              </div>
+              <div class="col-md-12">
+                <%
+                  lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+                  status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
+                  colors = []
+                  lots.each do |status, _|
+                    colors << status_colors[status]
+                  end
+                %>
+                <%= pie_chart lots, colors: colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End Tab content-->
+      </div> <!-- End row -->
+    </div> <!-- End panel-body -->
+  </div><!-- End Col-md-12 -->
 
   <!-- Botones de acción footer -->
   <div class="panel-footer text-right hidden-print">

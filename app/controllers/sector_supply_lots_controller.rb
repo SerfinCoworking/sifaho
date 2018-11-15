@@ -68,6 +68,8 @@ class SectorSupplyLotsController < ApplicationController
     authorize SectorSupplyLot
 
     @supply = Supply.with_deleted.find(params[:id])
+
+    @quantity_ord_supply_lots = QuantityOrdSupplyLot.quantity_orders_to_sector(current_user.sector, @supply.id).sort_by(&:created_at).reverse!
   end
 
   # GET /sector_supply_lots/1
