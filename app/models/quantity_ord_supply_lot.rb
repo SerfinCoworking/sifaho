@@ -107,9 +107,12 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   def with_supply_code?(a_code)
     return self.supply.id == a_code
-  end 
-
-  def self.quantity_orders_to_sector(a_sector, a_code)
-    select { |record| record.with_sector?(a_sector) && record.with_supply_code?(a_code)}
+  end
+  
+  def self.orders_to(a_sector, a_code)
+    QuantityOrdSupplyLot.where.not(quantifiable: nil)
+      .where(supply_id: a_code)
+      .includes(:quantifiable)
+      .select { |ord| ord.with_sector?(a_sector) }
   end
 end

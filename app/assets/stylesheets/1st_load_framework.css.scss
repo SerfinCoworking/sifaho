@@ -2,9 +2,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-html {
-  // background-color: #eee;
-}
 // make all images responsive by default
 img {
   @extend .img-responsive;

@@ -168,7 +168,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                      <% @quantity_ord_supply_lots.each do | qosl | %>
+                      <% @orders.each do | qosl | %>
                         <% @order = qosl.quantifiable %>
                         <tr class="<%= @order.sum_to?(current_user.sector) ? 'success' : 'danger' %>">
                           <td><%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : qosl.lot_code %></td>
@@ -199,7 +199,7 @@
           <div id='graphs' class='tab-pane fade'>
             <div class="row">
               <div class="col-md-12">
-                <%= line_chart @quantity_ord_supply_lots.collect{|i| [i['created_at'], i['delivered_quantity']]}, 
+                <%= line_chart @orders.collect{|i| [i['created_at'], i['delivered_quantity']]}, 
                   discrete: true, label: 'Cantidad', adapter: "highcharts"%>
               </div>
               <div class="col-md-12">
