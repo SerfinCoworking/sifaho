@@ -161,6 +161,7 @@
                     <tr>
                       <th>Lote</th>
                       <th>Movimiento</th>
+                      <th>Origen/Destino</th>
                       <th>Código</th>
                       <th>Estado</th>
                       <th>Cantidad</th>
@@ -174,6 +175,15 @@
                           <td><%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : qosl.lot_code %></td>
                           <td>
                               <%= @order.order_type.split('_').map(&:capitalize).join(' ') %>
+                          </td>
+                          <td>
+                            <% if @order.class ==  InternalOrder %>
+                              <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.name : @order.applicant_sector.name %>
+                            <% elsif @order.class == OrderingSupply %>
+                              <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.establishment_name : @order.applicant_sector.establishment_name %>
+                            <% else %>
+                              <%= @order.professional.last_name+" / "+@order.patient.last_name  %>
+                            <% end %>
                           </td>
                           <td><%= @order.remit_code %></td>
                           <td>

@@ -120,7 +120,11 @@
     </div>
   </div>
   <div class="panel-footer text-right hidden-print">
-    <%= link_to 'Volver', :back, class: "btn" %>
+    <% if @internal_order.provision? %>
+      <%= link_to internal_orders_path, class: "btn" do %>Volver<% end %>
+    <% else %>
+      <%= link_to applicant_index_internal_orders_path, class: "btn" do %>Volver<% end %>
+    <% end %> 
     <% if policy(@internal_order).edit? %>
       <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
