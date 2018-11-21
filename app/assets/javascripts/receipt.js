@@ -169,10 +169,12 @@ document.addEventListener("turbolinks:load", function() {
     jQuery(function() {
       var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
       return $('.new-supply-lot-code').autocomplete({
-        source: $('.new-supply-lot-code').data('autocomplete-source'),
+        // $('.new-supply-lot-code').data('autocomplete-source')
+        // '/supply_lots/search_by_code?supply_code=5782'
+        source: '/supply_lots/search_by_lot_code?supply_code='+_this.parents(".nested-fields").find(".new-supply-code").val(),
         minLength: 1,
         select:
-        function (event, ui) {
+        function (event, ui){
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-lot-code").val(ui.item.value);
           nested_form.find(".new-laboratory").val(ui.item.lab_name);

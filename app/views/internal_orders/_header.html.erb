@@ -6,13 +6,13 @@
       <li role="presentation" class="<%= active_action('applicant_index') %>">
         <%= link_to applicant_index_internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-          Recibidos
+          Recibos
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Entregados
+          Entregas
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('new_applicant') %>">

@@ -110,6 +110,10 @@ class SupplyLot < ApplicationRecord
     where(sector: a_sector)
   end
 
+  scope :with_supply_id, lambda { |a_supply_id| 
+    where('supply_id = ?', a_supply_id)
+  }
+
   # Métodos públicos #----------------------------------------------------------
 
   # Disminuye la cantidad

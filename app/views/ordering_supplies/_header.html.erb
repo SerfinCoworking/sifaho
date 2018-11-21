@@ -6,13 +6,13 @@
       <li role="presentation" class="<%= active_action('applicant_index') %>">
         <%= link_to applicant_index_ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-          <span class="hidden-xs">Recibidos</span>
+          <span class="hidden-xs">Recibos</span>
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          <span class="hidden-xs">Despachados</span>
+          <span class="hidden-xs">Despachos</span>
         <% end %>
       </li>
       <% if policy(OrderingSupply).new_receipt? %>

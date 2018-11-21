@@ -97,7 +97,6 @@ $(document).on('turbolinks:load', function() {
        minLength: 1,
        select:
        function (event, ui) {
-         console.log("hola");
          var nested_form = _this.parents(".nested-fields");
          nested_form.find(".supply-id").val(ui.item.value);
          nested_form.find(".supply-name").val(ui.item.name);

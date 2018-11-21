@@ -153,7 +153,12 @@ class SupplyLotsController < ApplicationController
   end
 
   def search_by_lot_code
-    @supply_lots = SupplyLot.order(:lot_code).search_lot_code(params[:term]).limit(10)
+    if params[:supply_code].present?
+      @supply_lots = SupplyLot.order(:lot_code).with_supply_id(params[:supply_code]).search_lot_code(params[:term]).limit(10)
+    else
+      @supply_lots = SupplyLot.order(:lot_code).search_lot_code(params[:term]).limit(10)
+    end
+    
     render json: @supply_lots.map{ |sup_lot| { label: sup_lot.lot_code+" | "+sup_lot.laboratory.name,
       id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date, value: sup_lot.lot_code,
       code: sup_lot.code, supply_id: sup_lot.supply_id, lab_name: sup_lot.laboratory.name, lab_id: sup_lot.laboratory_id } }
