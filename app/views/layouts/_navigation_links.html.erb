@@ -2,4 +2,13 @@
   <li id="date">
       <%= Time.now.strftime("%d/%m/%Y") %>
   </li>
+  <li class="<%= active_class('notifications/notifications') %>">
+    <%= link_to main_app.notifications_path do %>
+      <span class="glyphicon glyphicon-bell"></span>
+      <% count = Notification.unread_count(current_user) %>
+      <% if count > 0 %>
+        <div class="label label-danger"><%=count%></div>
+      <% end %>
+    <% end %>
+  </li>
 <% end %>

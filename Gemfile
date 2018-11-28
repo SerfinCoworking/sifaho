@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# To notifications
+gem 'notifications'
 # For cron jobs
 gem 'whenever', require: false
 # For pretty selects Silvio Moreto

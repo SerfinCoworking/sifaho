@@ -8,26 +8,26 @@
     <ul class="inverse-dropdown dropdown-menu">
       <% if current_user.has_role? :admin %>
         <li>
-          <%= link_to rails_admin_path do %>
+          <%= link_to main_app.rails_admin_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-sunglasses') %>
             Administración
           <% end %>
         </li>
       <% end %>
       <li>
-        <%= link_to edit_profile_path, remote: true do %>
+        <%= link_to main_app.edit_profile_path, remote: true do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
           Mi perfil
         <% end %>
       </li>
       <li>
-        <%= link_to edit_user_registration_path do %>
+        <%= link_to main_app.edit_user_registration_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %>
           Cambiar contraseña
         <% end %>
       </li>
       <li>
-        <%= link_to destroy_user_session_path, :method => :delete do %>
+        <%= link_to main_app.destroy_user_session_path, :method => :delete do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-off') %>
           Cerrar sesión
         <% end %>

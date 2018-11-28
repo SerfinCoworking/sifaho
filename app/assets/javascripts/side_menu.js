@@ -21,6 +21,10 @@ $(document).on('turbolinks:load', function() {
     sidebar.style.boxShadow = "8px 0 3px 5px #89726a";
     page_header.style.background = "#89726a";
     page_header.style.borderColor = "#89726a";
+  }else if ( $(".active").is("#notificaciones-li") ){
+    sidebar.style.boxShadow = "8px 0 3px 5px #d36262";
+    page_header.style.background = "#d36262";
+    page_header.style.borderColor = "#d36262";
   }else {
     sidebar.style.boxShadow = "8px 0 3px 5px #7c9ed4";
     page_header.style.background = "#7c9ed4";

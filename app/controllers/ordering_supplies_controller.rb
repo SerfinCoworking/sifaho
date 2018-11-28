@@ -110,6 +110,7 @@ class OrderingSuppliesController < ApplicationController
             # Si se acepta el despacho
             if accepting?
               @ordering_supply.accept_order(current_user)
+              @ordering_supply.create_notification(current_user, "creó y aceptó")
               flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
             else
               flash[:notice] = 'El despacho se ha creado y se encuentra en auditoría.'
@@ -119,8 +120,10 @@ class OrderingSuppliesController < ApplicationController
             @ordering_supply.recibo_auditoria! # Se asigna el estado recibo auditoria
             if receiving?
               @ordering_supply.receive_remit(current_user)
+              @ordering_supply.create_notification(current_user, "creó y realizó")
               flash[:success] = 'El recibo se ha auditado y realizado correctamente'
             else
+              @ordering_supply.create_notification(current_user, "creó")
               flash[:notice] = 'El recibo se ha cargado y se encuentra en auditoría.'
             end
           end
@@ -156,18 +159,23 @@ class OrderingSuppliesController < ApplicationController
           if @ordering_supply.despacho?  
             if accepting? # Si se acepta el despacho
                 @ordering_supply.accept_order(current_user)
+                @ordering_supply.create_notification(current_user, "auditó y aceptó")
                 flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
             elsif sending? # Si se envía el despacho
                 @ordering_supply.send_order(current_user)
+                @ordering_supply.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'El despacho se ha auditado y enviado correctamente'
             else
+              @ordering_supply.create_notification(current_user, "auditó")
               flash[:success] = 'El despacho se ha auditado correctamente'
             end
           elsif @ordering_supply.recibo?
             if receiving?
               @ordering_supply.receive_remit(current_user)
+              @ordering_supply.create_notification(current_user, "auditó y realizó")
               flash[:success] = 'El recibo se ha auditado y realizado correctamente'
             else
+              @ordering_supply.create_notification(current_user, "auditó")
               flash[:success] = 'El recibo se ha auditado correctamente'
             end
           end   
@@ -220,9 +228,11 @@ class OrderingSuppliesController < ApplicationController
       begin
         if @ordering_supply.recibo?
           @ordering_supply.receive_remit(current_user)
+          @ordering_supply.create_notification(current_user, "realizó")
           flash[:success] = 'El recibo se ha realizado correctamente'
         elsif @ordering_supply.despacho?
           @ordering_supply.receive_order(current_user)
+          @ordering_supply.create_notification(current_user, "recibió")
           flash[:success] = 'El despacho se ha recibido correctamente'
         end
       rescue ArgumentError => e
@@ -247,6 +257,7 @@ class OrderingSuppliesController < ApplicationController
       rescue ArgumentError => e
         flash[:alert] = e.message
       else
+        @ordering_supply.create_notification(current_user, "retornó a un estado anterior")
         flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
       end
       format.html { redirect_to @ordering_supply }
@@ -259,6 +270,7 @@ class OrderingSuppliesController < ApplicationController
     authorize @ordering_supply
     @sector_name = @ordering_supply.applicant_sector.name
     @ordering_supply.destroy
+    @ordering_supply.create_notification(current_user, "envió a la papelera")
     respond_to do |format|
       flash.now[:success] = "El pedido de "+@sector_name+" se ha enviado a la papelera."
       format.js

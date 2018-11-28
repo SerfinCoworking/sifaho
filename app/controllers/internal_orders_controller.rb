@@ -126,17 +126,21 @@ class InternalOrdersController < ApplicationController
             # Si se carga y provision el pedido
             if sending?
               @internal_order.send
+              @internal_order.create_notification(current_user, "creó y envió")
               flash[:success] = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente."
             else
               @internal_order.proveedor_auditoria!
+              @internal_order.create_notification(current_user, "creó y auditó")
               flash[:success] = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
             end
           elsif @internal_order.solicitud?
             if sending?
               @internal_order.solicitud_enviada!
+              @internal_order.create_notification(current_user, "creó y envió")
               flash[:success] = "La solicitud se ha auditado y enviado correctamente."
             else
               @internal_order.solicitud_auditoria!
+              @internal_order.create_notification(current_user, "creó y auditó")
               flash[:success] = "La solicitud se ha creado y se encuentra en auditoria."
             end
           end
@@ -181,22 +185,28 @@ class InternalOrdersController < ApplicationController
             if @internal_order.provision?
               if sending_by_provider?
                 @internal_order.send_order_by_user_id(@user_id)
+                @internal_order.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'La provision se ha enviado correctamente.'
               else
+                @internal_order.create_notification(current_user, "auditó")
                 flash[:notice] = 'La provision se ha auditado correctamente.'
               end
             elsif @internal_order.solicitud?
               if sending?
                 @internal_order.send_request_of(current_user)
+                @internal_order.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'La solicitud se ha enviado correctamente.'
               elsif sending_by_provider?
                 @internal_order.send_order_by_user_id(@user_id)
+                @internal_order.create_notification(current_user, "envió")
                 flash[:success] = 'La solicitud se ha provisto correctamente.'
               elsif applicant?
                 @internal_order.solicitud_auditoria!
+                @internal_order.create_notification(current_user, "auditó")
                 flash[:notice] = 'La solicitud se ha auditado correctamente.'
               elsif provider?
                 @internal_order.proveedor_auditoria!
+                @internal_order.create_notification(current_user, "auditó")
                 flash[:notice] = 'La solicitud se ha auditado correctamente.'
               end
             end
@@ -217,10 +227,11 @@ class InternalOrdersController < ApplicationController
   # DELETE /internal_orders/1.json
   def destroy
     authorize @internal_order
-    # @name = @internal_order.responsable.sector.name
+
     @internal_order.destroy
     respond_to do |format|
-      flash.now[:success] = "El pedido interno de se ha eliminado correctamente."
+      @internal_order.create_notification(current_user, "envió a la papelera")
+      flash.now[:success] = "El pedido interno de se ha enviado a la papelera correctamente."
       format.js
     end
   end
@@ -259,6 +270,7 @@ class InternalOrdersController < ApplicationController
       begin
         @internal_order.received_by = current_user
         @internal_order.receive_order(current_user.sector)
+        @internal_order.create_notification(current_user, "recibió")
         flash[:success] = 'La '+@internal_order.order_type+' se ha recibido correctamente'
       rescue ArgumentError => e
         flash[:error] = e.message
@@ -279,6 +291,7 @@ class InternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @internal_order.return_provider_status
+        @internal_order.create_notification(current_user, "retornó a un estado anterior")
         flash[:notice] = 'La '+@internal_order.order_type+' se ha retornado a un estado anterior.'
       rescue ArgumentError => e
         flash[:alert] = e.message
@@ -292,6 +305,7 @@ class InternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @internal_order.return_applicant_status
+        @internal_order.create_notification(current_user, "retornó a un estado anterior")
         flash[:notice] = 'La solicitud se ha retornado a un estado anterior.'
       rescue ArgumentError => e
         flash[:alert] = e.message

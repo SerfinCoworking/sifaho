@@ -24,7 +24,7 @@ module ApplicationHelper
   def active_action(link_path)
     if params[:action] == link_path
       return 'active'
-    end 
+    end
   end
   def order_status_label(an_order)
     if an_order.is_a?(Prescription)

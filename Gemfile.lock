@@ -153,6 +153,9 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    notifications (0.6.0)
+      kaminari (>= 0.15)
+      rails (~> 5)
     orm_adapter (0.5.0)
     paranoia (2.4.1)
       activerecord (>= 4.0, < 5.3)
@@ -302,6 +305,7 @@ DEPENDENCIES
   jquery-ui-rails
   listen
   momentjs-rails (>= 2.9.0)
+  notifications
   paranoia (~> 2.2)
   pg (~> 0.18)
   pg_search
@@ -328,4 +332,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.3
+   1.17.1

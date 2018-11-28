@@ -1,0 +1,44 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" id="page-title">
+        <%= link_to notifications.notifications_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-bell') %>
+          Notificaciones
+        <% end %>
+      </li>
+    </ul>
+<% end %>
+<% if @notifications.blank? %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'notificaciones' }
+  ) %>
+<% else %>
+  <div class="panel panel-default">
+    <div class="panel-heading hidden-print">
+      <h3 class="panel-title">
+        Lista de notificationes
+        <%= link_to notifications.clean_notifications_path, class: 'btn btn-xs btn-default', method: 'delete' do %>
+          <%= t('notifications.clean_all') %>
+        <% end %>
+        <%= link_to main_app.root_path, class: 'btn pull-right close-btn' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+        <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <% @notification_groups.each do |group, notifications| %>
+        <div class="notification-group">
+          <div class="group-title"><%= group %></div>
+          <%= render notifications %>
+        </div>
+      <% end %>
+      <hr>
+      <%= paginate @notifications %>
+    </div>
+  </div>
+<% end %>
+

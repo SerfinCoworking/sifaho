@@ -125,6 +125,19 @@
   margin-bottom: 0px;
 }
 
+#notificaciones-label{
+  font-size: 14px;
+  color: rgba(255, 255, 255, 1);
+  border-color: #d36262;
+  border-radius: 0;
+  border-top-color: #7c9ed4;
+  background-color: #d36262;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+
 li .well strong{
   font-family: 'Comfortaa-regular', sans-serif;
   font-size: 15px;

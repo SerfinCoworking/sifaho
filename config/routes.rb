@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :categories
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount Notifications::Engine => "/notifications"
   # devise_for :users, :controllers => { registrations: 'registrations' }
   devise_for :users, :skip => [:registrations]
   as :user do

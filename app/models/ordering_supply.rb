@@ -235,4 +235,13 @@ class OrderingSupply < ApplicationRecord
       raise ArgumentError, 'No hay lotes asignados.'
     end   
   end
+
+  def create_notification(of_user, action_type)
+    (self.applicant_sector.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
+    end
+    (self.provider_sector.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
+    end
+  end
 end

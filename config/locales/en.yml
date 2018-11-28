@@ -247,3 +247,7 @@ en:
       long: "%-d de %B de %Y %H:%M"
       short: "%-d de %b %H:%M"
     pm: pm
+  notifications:
+    all_notifications: "Todas las notificaciones"
+    no_records: "No hay notificaciones"
+    clean_all: "Limpiar todas"
