@@ -3,13 +3,17 @@
   <div class='container-fluid'>
       <%= f.input :first_name, label: "Nombre", required: true %>
       <%= f.input :last_name, label: "Apellido", required: true %><br><br>
-      <%= f.input :dni, placeholder: 'DNI', input_html: { min: '10000', max:'99999999' }, required: false %>
+      <%= f.input :dni, placeholder: 'DNI', 
+        input_html: { min: '10000', max:'99999999' }, 
+        required: false 
+      %>
       <%= f.input :date_of_birth, label: 'Fecha de nacimiento',
-                  as: :string,
-                  :placeholder => "Seleccionar fecha",
-                  input_html: {class: "form-control", required: false, autocomplete: 'off',
-                  value: "#{@profile.date_of_birth unless @profile.new_record?}"},
-                  html5: false%><br><br>
+        as: :string,
+        :placeholder => "Seleccionar fecha",
+        input_html: {class: "form-control", required: false, autocomplete: 'off',
+        value: "#{@profile.date_of_birth unless @profile.new_record?}"},
+        html5: false
+      %><br><br>
       <%= f.input :email, placeholder: 'usuario@dominio.com', required: false %>
       <%= f.input :address, label: "Domicilio", required: false %><br><br>
       <%= f.input :enrollment, placeholder: "Ej: TU455654", label: "Matrícula", required: false %><br><br>
@@ -18,6 +22,7 @@
         label: "Sexo",
         label_method: :second,
         value_method: :first,
-        input_html: {class: "radio"} %>
+        input_html: {class: "radio"} 
+      %>
   </div>
 <% end %>

@@ -15,28 +15,29 @@
       <br><br>
       <%= f.label 'Unidad' %>
       <%= f.input_field :unity,
-                        label_method: :name,
-                        value_method: :name,
-                        collection: @unities,
-                        include_blank: true,
-                        input_html: { id: 'unities'},
-                        prompt: 'Seleccione unidad' %>
+        label_method: :name,
+        value_method: :name,
+        collection: @unities,
+        include_blank: true,
+        input_html: { id: 'unities'},
+        prompt: 'Seleccione unidad' 
+      %>
       &emsp;
       <%= f.input_field :supply_area_id,
-                        label: 'Area',
-                        label_method: :name,
-                        value_method: :id,
-                        collection: @supply_areas,
-                        include_blank: true,
-                        input_html: { id: 'supply_areas'},
-                        prompt: 'Seleccione un área'
+        label: 'Area',
+        label_method: :name,
+        value_method: :id,
+        collection: @supply_areas,
+        include_blank: true,
+        input_html: { id: 'supply_areas'},
+        prompt: 'Seleccione un área'
       %>
       <br><br>
       <%= f.input :description, label: 'Descripción', as: :text,
-          :input_html => { :cols => 50, :rows => 2 } %>
+        :input_html => { :cols => 50, :rows => 2 } %>
       <br><br>
       <%= f.input :observation, label: 'Observación', as: :text,
-          :input_html => { :cols => 50, :rows => 2 } %>
+        :input_html => { :cols => 50, :rows => 2 } %>
     </div>
 
     <div class="col-md-4">
@@ -44,16 +45,16 @@
       <input type="checkbox" name="alarm-check">
       <br><br>
       <%= f.input :quantity_alarm, placeholder: 'Cantidad', required: true,
-                  label: 'Alarma de cantidad', input_html: { min: '0', max:'9999', value: 1 } %>
+        label: 'Alarma de cantidad', input_html: { min: '0', max:'9999', value: 1 } %>
       <br><br>
       <%= f.input :period_alarm, placeholder: 'Días', required: true,
-                  label: 'Período de alarma', input_html: { min: '0', max:'9999', value: 52 } %>
+        label: 'Período de alarma', input_html: { min: '0', max:'9999', value: 52 } %>
       <br><br>
       <%= f.input :period_control, placeholder: 'Días', required: true,
-                  label: 'Período de control', input_html: { min: '0', max:'9999', value: 52 } %>
+        label: 'Período de control', input_html: { min: '0', max:'9999', value: 52 } %>
       <br><br>
       <%= f.input :expiration_alarm, placeholder: 'Días', required: true,
-                  label: 'Alarma de expiración', input_html: { min: '0', max:'9999', value: 30 } %>
+        label: 'Alarma de expiración', input_html: { min: '0', max:'9999', value: 30 } %>
       <br><br>
     </div>
   </div>

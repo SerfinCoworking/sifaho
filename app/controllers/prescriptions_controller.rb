@@ -48,6 +48,7 @@ class PrescriptionsController < ApplicationController
   def create
     @prescription = Prescription.new(prescription_params)
     authorize @prescription
+    @prescription.created_by = current_user
 
     respond_to do |format|
       if @prescription.save
