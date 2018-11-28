@@ -1,4 +1,4 @@
-<%= simple_form_for @professional, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @professional, remote: true, html: {class: "form-inline", role: 'check-modified'} do |f| %>
 <%= f.error_notification %>
   <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
   <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>

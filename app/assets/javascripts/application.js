@@ -66,18 +66,4 @@ $(document).on('turbolinks:load', function() {
     e.preventDefault();
     $('#return-confirm').data('id', $(this).data('id')).modal('show');
   });
-
-  
-  // Monitor dynamic inputs
-  $(document).on('change', ':input', function(){ //triggers change in all input fields including text type
-    unsaved = true;
-  });
-    
-  // Turbolinks 4 and 5
-  $(document).on("page:before-change turbolinks:before-visit", function() {
-    if (unsaved) {
-      unsaved = false;
-      return confirm("Tiene cambios sin guardar. Desea salir igualmente?");
-    }
-  });
 });

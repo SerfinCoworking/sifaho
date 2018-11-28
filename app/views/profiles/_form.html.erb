@@ -1,4 +1,4 @@
-<%= simple_form_for @profile, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @profile, remote: true, html: {class: "form-inline", role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
   <div class='container-fluid'>
       <%= f.input :first_name, label: "Nombre", required: true %>

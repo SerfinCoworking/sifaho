@@ -1,4 +1,4 @@
-<%= simple_form_for @patient, remote: true, html: {class: "form-inline"} do |f| %>
+<%= simple_form_for @patient, remote: true, html: {class: "form-inline", role: 'check-modified'} do |f| %>
 <%= f.error_notification %>
   <%= f.input :first_name, placeholder: 'Nombre', required: true, label: 'Nombre' %>
   <%= f.input :last_name, placeholder: 'Apellido', required: true, label: 'Apellido' %>
