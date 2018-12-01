@@ -2,8 +2,9 @@
 
 <div class="panel panel-warning">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Auditando despacho
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Auditando <%= @ordering_supply.order_type.underscore.humanize.downcase %>
+      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
     </h3>

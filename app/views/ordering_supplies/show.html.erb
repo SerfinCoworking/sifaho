@@ -4,10 +4,12 @@
   <div class="panel-heading hidden-print">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @ordering_supply.order_type.split('_').join(' ') %>
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
-      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
+        :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
       <% end %>
     </h3>
@@ -58,6 +60,7 @@
             <th>Lote</th>
             <th>Laboratorio</th>
             <th>Vencimiento</th>
+            <th>Observaciones</th>
             <th></th>
           </tr>
         </thead>
@@ -89,6 +92,9 @@
               <% else %>
                 <td>Sin asignar</td><td>Sin asignar</td><td>Sin asignar</td>
               <% end %>
+              <td>
+                <%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %>
+              </td>
             </tr>
           <% end %>
         </tbody>
@@ -104,6 +110,7 @@
             <th>Lote</th>
             <th>Laboratorio</th>
             <th>Vencimiento</th>
+            <th>Observaciones</th>
             <th></th>
           </tr>
         </thead>
@@ -128,6 +135,60 @@
               <td>
                 <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
               </td>
+              <td>
+                <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% elsif @ordering_supply.solicitud_abastecimiento? %>
+      <!-- Insumos a recibir -->
+      <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>Cód Ins</th>
+            <th>Insumo</th>
+            <th>Recibido</th>
+            <th>Lote</th>
+            <th>Laboratorio</th>
+            <th>Vencimiento</th>
+            <th>Obs. Sol.</th>
+            <% unless @ordering_supply.solicitud_auditoria? || @ordering_supply.solicitud_enviada? %>
+              <th>Obs. Prov.</th>
+            <% end %>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+            <tr>
+              <td>
+                <%= qosl.supply_id %>
+              </td>
+              <td>
+                <%= qosl.supply_name %>
+              </td>
+              <td>
+                <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+              </td>
+              <td>
+                <%= qosl.lot_code.present? ? qosl.lot_code : 'Sin asignar' %>
+              </td>
+              <td>
+                <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'Sin asignar' %>
+              </td>
+              <td>
+                <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
+              </td>
+              <td>
+                <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>
+              </td>
+              <% unless @ordering_supply.solicitud_auditoria? || @ordering_supply.solicitud_enviada? %>
+                <td>
+                  <%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %>
+                </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
@@ -187,7 +248,7 @@
       <div class="modal-content panel-warning">
         <div class="modal-header panel-heading">
           <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.statuses.key(@ordering_supply.status_before_type_cast - 1).split('_').map(&:capitalize).join(' ') %></h3>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.statuses.key(@ordering_supply.status_before_type_cast - 1).underscore.humanize %></h3>
         </div>
         <div class="modal-body">
           <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>

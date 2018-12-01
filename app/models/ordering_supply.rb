@@ -2,11 +2,11 @@ class OrderingSupply < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum order_type: { despacho: 0, solicitud: 1, recibo: 2 }
+  enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
     proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
     recibo_realizado: 7, anulado: 8 }
-
+ 
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
@@ -15,6 +15,7 @@ class OrderingSupply < ApplicationRecord
   belongs_to :sent_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
   belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :sent_request_by, class_name: 'User', optional: true
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
@@ -205,6 +206,15 @@ class OrderingSupply < ApplicationRecord
     end
   end
 
+  def send_request_of(a_user)
+    if self.solicitud_auditoria?
+      self.sent_request_by = a_user
+      self.solicitud_enviada!
+    else
+      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
+    end
+  end
+
   def return_status
     if proveedor_aceptado?
       self.proveedor_auditoria!
@@ -213,6 +223,8 @@ class OrderingSupply < ApplicationRecord
         qosl.increment
       end
       self.proveedor_aceptado!
+    elsif solicitud_enviada?
+      self.solicitud_auditoria!
     else
       raise ArgumentError, 'No es posible retornar a un estado anterior'
     end

@@ -11,12 +11,12 @@
   <% end %> 
     <td>
     <span class="label label-default">
-      <%= internal_order.order_type.split('_').map(&:capitalize).join(' ') %>
+      <%= internal_order.order_type.underscore.humanize %>
     </span>
   </td>
   <td>
     <span class="label label-<%= internal_status_label(internal_order) %>">
-      <%= internal_order.status.split('_').map(&:capitalize).join(' ') %>
+      <%= internal_order.status.underscore.humanize %>
     </span>
   </td>
   <td class="col-io-sup-name">

@@ -93,13 +93,15 @@
       <% end %>
     </tbody>
   </table>
-  <div class="links" id="links-quant-form">
-    <div class="text-center">
-      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Agregar insumo
-      <% end %>
+  <% unless f.object.solicitud? %>
+    <div class="links" id="links-quant-form">
+      <div class="text-center">
+        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Agregar insumo
+        <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>

@@ -23,6 +23,14 @@
           <% end %>
         </li>
       <% end %>
+      <% if policy(OrderingSupply).new_applicant? %>
+        <li role="presentation" class="<%= active_action('new_applicant') %>">
+          <%= link_to new_applicant_ordering_supplies_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            S<span class="hidden-xs">olicitud</span>
+          <% end %>
+        </li>
+      <% end %>
       <li role="presentation" class="<%= active_action('new') %>">
         <%= link_to new_ordering_supply_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>

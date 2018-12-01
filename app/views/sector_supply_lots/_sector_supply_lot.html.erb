@@ -4,7 +4,7 @@
       <td class="col-sup-name"><%= sector_supply_lot.supply_name %></td>
       <td>
         <span class="label label-<%= sector_supply_lot.status_label %>">
-          <%= sector_supply_lot.status.split('_').map(&:capitalize).join(' ') %>
+          <%= sector_supply_lot.status.underscore.humanize %>
         </span>
       </td>
       <td>

@@ -4,8 +4,9 @@ $('.modal-content').addClass('panel-success');
   // Add the dialog title
   $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el despacho");
 <% elsif @ordering_supply.recibo? %>
-  // Add the dialog title
   $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Realizar el recibo");
+<% elsif @ordering_supply.solicitud_abastecimiento? %>
+  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el pedido solicitado");
 <% end %>
 
 // Render the send form

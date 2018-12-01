@@ -240,5 +240,6 @@ $(document).on('turbolinks:load', function() {
   $('.search-lots').click(function (event) {
     var nested_form = $(this).parents(".nested-fields");
     nested_form.find(".select-change").trigger('change');
+    nested_form.find('.search-lots').hide();
   });
 });

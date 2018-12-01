@@ -29,7 +29,9 @@ class OrderingSupplyPolicy < ApplicationPolicy
         if record.proveedor_aceptado? || record.proveedor_auditoria?
           return record.provider_sector == user.sector
         end
-      elsif record.solicitud? && record.solicitud_auditoria?
+      elsif record.solicitud_abastecimiento? || record.solicitud.solicitud_enviada?
+        return record.provider_sector == user.sector
+      elsif record.solicitud_abastecimiento? && record.solicitud_auditoria?
         return record.applicant_sector == user.sector
       elsif record.recibo? && record.recibo_auditoria?
         return record.applicant_sector == user.sector
@@ -38,10 +40,8 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def edit?
-    if record.proveedor_auditoria? && record.provider_sector == user.sector
+    if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
       edit_provider.any? { |role| user.has_role?(role) }
-    else
-      return false
     end
   end
 
@@ -51,11 +51,17 @@ class OrderingSupplyPolicy < ApplicationPolicy
     end
   end
 
+  def edit_applicant?
+    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+      edit_applicant.any? { |role| user.has_role?(role) }
+    end
+  end
+
   def destroy?
     if destroy_pres.any? { |role| user.has_role?(role) }
       if record.despacho? && record.proveedor_auditoria?
         return record.provider_sector == user.sector
-      elsif record.solicitud? && record.solicitud_auditoria?
+      elsif record.solicitud_abastecimiento? && record.solicitud_auditoria?
         return record.applicant_sector == user.sector
       elsif record.recibo? && record.recibo_auditoria?
         return record.applicant_sector == user.sector
@@ -70,7 +76,11 @@ class OrderingSupplyPolicy < ApplicationPolicy
   def receive?
     dispense_pres.any? { |role| user.has_role?(role) }
   end
-
+  
+  def new_applicant?
+    new_receipt.any? { |role| user.has_role?(role) }
+  end
+  
   def new_receipt?
     new_receipt.any? { |role| user.has_role?(role) }
   end
@@ -95,7 +105,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
     if record.applicant_sector == user.sector && receive_order.any? { |role| user.has_role?(role) }
       if record.recibo?
         record.recibo_auditoria?
-      elsif record.despacho?
+      elsif record.despacho? || record.solicitud_abastecimiento?
         record.provision_en_camino?
       end
     end
@@ -107,7 +117,9 @@ class OrderingSupplyPolicy < ApplicationPolicy
         if record.proveedor_aceptado? || record.provision_en_camino?
           return record.provider_sector == user.sector
         end
-      elsif record.solicitud? && record.solicitud_enviada?
+      elsif record.solicitud_abastecimiento? && record.proveedor_aceptado?
+        return record.provider_sector == user.sector
+      elsif record.solicitud_abastecimiento? && record.solicitud_enviada?
         return record.applicant_sector == user.sector
       elsif record.recibo? && record.recibo_realizado?
         return record.applicant_sector == user.sector
@@ -125,6 +137,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def edit_provider
+    [ :admin, :pharmacist ]
+  end
+
+  def edit_applicant
     [ :admin, :pharmacist ]
   end
 

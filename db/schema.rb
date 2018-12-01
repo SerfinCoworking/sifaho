@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181127204508) do
+ActiveRecord::Schema.define(version: 20181128181655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20181127204508) do
     t.integer "order_type", default: 0
     t.bigint "created_by_id"
     t.string "remit_code"
+    t.bigint "sent_request_by_id"
     t.index ["accepted_by_id"], name: "index_ordering_supplies_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_ordering_supplies_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_ordering_supplies_on_audited_by_id"
@@ -169,6 +170,7 @@ ActiveRecord::Schema.define(version: 20181127204508) do
     t.index ["received_by_id"], name: "index_ordering_supplies_on_received_by_id"
     t.index ["remit_code"], name: "index_ordering_supplies_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_ordering_supplies_on_sent_by_id"
+    t.index ["sent_request_by_id"], name: "index_ordering_supplies_on_sent_request_by_id"
   end
 
   create_table "patient_types", force: :cascade do |t|

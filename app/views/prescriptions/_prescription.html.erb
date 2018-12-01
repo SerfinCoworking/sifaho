@@ -4,7 +4,7 @@
   <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
     <span class="label label-<%= prescription.status_label %>">
-      <%= prescription.status.split('_').map(&:capitalize).join(' ') %>
+      <%= prescription.status.underscore.humanize %>
     </span>
   </td>
   <td>

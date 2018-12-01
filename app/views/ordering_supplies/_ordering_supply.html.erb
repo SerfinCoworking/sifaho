@@ -13,12 +13,12 @@
   <% end %>
   <td>
     <span class="label label-default">
-      <%= ordering_supply.order_type.split('_').map(&:capitalize).join(' ') %>
+      <%= ordering_supply.order_type.underscore.humanize %>
     </span>
   </td>
   <td>
     <span class="label label-<%= ordering_status_label(ordering_supply) %>">
-      <%= ordering_supply.status.split('_').map(&:capitalize).join(' ') %>
+      <%= ordering_supply.status.underscore.humanize %>
     </span>
   </td>
   <td class="pres-col-sup">
@@ -52,6 +52,12 @@
       <%= link_to send_provider_ordering_supply_path(ordering_supply), remote: true,
         class: 'btn btn-primary btn-xs', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+      <% end %>
+    <% end %>
+    <% if policy(ordering_supply).edit_applicant? %>
+      <%= link_to edit_applicant_ordering_supply_path(ordering_supply), :"data-turbolinks" => false, 
+        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>
     <% if policy(ordering_supply).edit? %>

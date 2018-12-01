@@ -28,24 +28,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :ordering_supplies do
-    member do
-      get "delete"
-      get "send_provider"
-      get "send_applicant"
-      get "return_status"
-      get "accept_provider"; get "accept_provider_confirm"
-      get "receive_order"; get "receive_order_confirm"
-      get "edit_receipt"
-    end
-    collection do
-      get "new_receipt"
-      get "new_applicant"
-      get "applicant_index"
-      post "create_receipt"
-    end
-  end
-
   resources :supply_lots do
     member do
       get "delete"
@@ -103,9 +85,27 @@ Rails.application.routes.draw do
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
-      post "create_applicant"
     end
   end
+
+  resources :ordering_supplies do
+    member do
+      get "delete"
+      get "send_provider"
+      get "send_applicant"
+      get "return_status"
+      get "accept_provider"; get "accept_provider_confirm"
+      get "receive_order"; get "receive_order_confirm"
+      get "edit_receipt"
+      get "edit_applicant"
+    end
+    collection do
+      get "new_receipt"
+      get "new_applicant"
+      get "applicant_index"
+    end
+  end
+
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
 
   resources :supplies do

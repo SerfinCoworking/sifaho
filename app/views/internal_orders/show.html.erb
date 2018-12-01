@@ -4,10 +4,12 @@
   <div class="panel-heading hidden-print">
     <h3 class="panel-title">
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @internal_order.order_type %>
-      <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
+      <%= link_to internal_orders_path, class: 'btn pull-right close-btn',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
       <% end %>
-      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
+      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
+        :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
       <% end %>
     </h3>
@@ -48,6 +50,10 @@
           <th>Lote</th>
           <th>Laboratorio</th>
           <th>Vencimiento</th>
+          <% if @internal_order.solicitud? %>
+            <th>Obs. Sol.</th>
+          <% end %>
+          <th>Obs. Prov.</th>
           <th></th>
         </tr>
       </thead>
@@ -83,6 +89,10 @@
             <% else %>
               <td>Sin lote</td><td>----</td><td>----</td>
             <% end %>
+            <% if @internal_order.solicitud? %>
+              <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
+            <% end %>
+            <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
           </tr>
         <% end %>
       </tbody>
@@ -175,7 +185,7 @@
       <div class="modal-content panel-warning">
         <div class="modal-header panel-heading">
           <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).split('_').map(&:capitalize).join(' ') %></h3>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h3>
         </div>
         <div class="modal-body">
           <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>

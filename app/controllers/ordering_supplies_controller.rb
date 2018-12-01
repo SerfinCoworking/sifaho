@@ -1,6 +1,6 @@
 class OrderingSuppliesController < ApplicationController
   before_action :set_ordering_supply, only: [:show, :edit, :update, :send_provider,
-    :send_applicant, :destroy, :delete, :return_status, :edit_receipt,
+    :send_applicant, :destroy, :delete, :return_status, :edit_receipt, :edit_applicant,
     :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm ]
 
   # GET /ordering_supplies
@@ -76,6 +76,15 @@ class OrderingSuppliesController < ApplicationController
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
     4.times { @ordering_supply.quantity_ord_supply_lots.build }
+    @order_type = 'solicitud_abastecimiento'
+  end
+
+  # GET /ordering_supplies/1/edit
+  def edit
+    authorize @ordering_supply
+    @order_type = 'despacho'
+    @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
+    @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
   end
 
   # GET /ordering_supplies/1/edit_receipt
@@ -86,12 +95,12 @@ class OrderingSuppliesController < ApplicationController
     @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
   end
 
-  # GET /ordering_supplies/1/edit
-  def edit
+  # GET /ordering_supplies/1/edit_applicant
+  def edit_applicant
     authorize @ordering_supply
-    @order_type = 'despacho'
+    @order_type = 'solicitud_abastecimiento'
     @ordering_supply.quantity_ord_supply_lots || @ordering_supply.quantity_ord_supply_lots.build
-    @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+    @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
   end
 
   # Creación despacho o recibo
@@ -111,7 +120,7 @@ class OrderingSuppliesController < ApplicationController
             if accepting?
               @ordering_supply.accept_order(current_user)
               @ordering_supply.create_notification(current_user, "creó y aceptó")
-              flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
+              flash[:success] = 'El despacho se ha creado y aceptado correctamente'
             else
               flash[:notice] = 'El despacho se ha creado y se encuentra en auditoría.'
             end
@@ -121,10 +130,21 @@ class OrderingSuppliesController < ApplicationController
             if receiving?
               @ordering_supply.receive_remit(current_user)
               @ordering_supply.create_notification(current_user, "creó y realizó")
-              flash[:success] = 'El recibo se ha auditado y realizado correctamente'
+              flash[:success] = 'El recibo se ha creado y realizado correctamente'
             else
               @ordering_supply.create_notification(current_user, "creó")
-              flash[:notice] = 'El recibo se ha cargado y se encuentra en auditoría.'
+              flash[:notice] = 'El recibo se ha creado y se encuentra en auditoría.'
+            end
+          elsif @ordering_supply.solicitud_abastecimiento?
+            @ordering_supply.solicitud_abastecimiento! # Se asigna el tipo solicitud abastecimiento.
+            @ordering_supply.solicitud_auditoria!
+            if sending?
+              @ordering_supply.send_request_of(current_user)
+              @ordering_supply.create_notification(current_user, "creó y envió")
+              flash[:success] = 'La solicitud de abastecimiento se ha creado y enviado correctamente'
+            else
+              @ordering_supply.create_notification(current_user, "creó")
+              flash[:notice] = 'La solicitud de abastecimiento se ha creado y se encuentra en auditoría.'
             end
           end
         rescue ArgumentError => e
@@ -137,13 +157,18 @@ class OrderingSuppliesController < ApplicationController
         if ordering_supply_params[:order_type] == 'despacho'
           @order_type = 'despacho'
           @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
-          flash[:error] = "El despacho no se ha podido cargar."
+          flash[:error] = "El despacho no se ha podido crear."
           format.html { render :new }
         elsif ordering_supply_params[:order_type] == 'recibo'
           @order_type = 'recibo'
           @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
-          flash[:error] = "El recibo no se ha podido cargar."
+          flash[:error] = "El recibo no se ha podido crear."
           format.html { render :new_receipt }
+        elsif ordering_supply_params[:order_type] == 'solicitud_abastecimiento'
+          @order_type = 'solicitud_abastecimiento'
+          @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+          flash[:error] = "La solicitud de abastecimiento no se ha podido crear."
+          format.html { render :new_applicant }
         end
       end
     end
@@ -178,6 +203,28 @@ class OrderingSuppliesController < ApplicationController
               @ordering_supply.create_notification(current_user, "auditó")
               flash[:success] = 'El recibo se ha auditado correctamente'
             end
+          elsif @ordering_supply.solicitud_abastecimiento?
+            if sending?
+              if @ordering_supply.provider_sector == current_user.sector
+                @ordering_supply.send_order(current_user)
+                flash[:success] = 'La solicitud de abastecimiento se ha auditado y aprovisionado correctamente'
+              else
+                @ordering_supply.send_request_of(current_user)
+                @ordering_supply.create_notification(current_user, "auditó y envió")
+                flash[:success] = 'La solicitud de abastecimiento se ha auditado y enviado correctamente'
+              end
+            else
+              if @ordering_supply.solicitud_enviada?
+                @ordering_supply.proveedor_auditoria!
+                flash[:success] = 'La solicitud de abastecimiento se ha auditado correctamente'
+              elsif @ordering_supply.proveedor_auditoria?
+                @ordering_supply.accept_order(current_user)
+                flash[:success] = 'La solicitud de abastecimiento se ha auditado y aceptado correctamente'
+              else
+                @ordering_supply.create_notification(current_user, "auditó")
+                flash[:success] = 'La solicitud de abastecimiento se ha auditado correctamente'
+              end
+            end
           end   
         rescue ArgumentError => e
           flash[:alert] = e.message
@@ -192,6 +239,10 @@ class OrderingSuppliesController < ApplicationController
           @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
           flash[:error] = "El recibo no se ha podido auditar."
           format.html { render :edit_receipt }
+        elsif @ordering_supply.solicitud_abastecimiento?
+          @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+          flash[:error] = "La solicitud de abastecimiento no se ha podido auditar."
+          format.html { render :edit_applicant }
         end
       end
     end
@@ -234,6 +285,10 @@ class OrderingSuppliesController < ApplicationController
           @ordering_supply.receive_order(current_user)
           @ordering_supply.create_notification(current_user, "recibió")
           flash[:success] = 'El despacho se ha recibido correctamente'
+        elsif @ordering_supply.solicitud_abastecimiento?
+          @ordering_supply.receive_order(current_user)
+          @ordering_supply.create_notification(current_user, "recibió")
+          flash[:success] = 'El pedido soliciado se ha recibido correctamente'
         end
       rescue ArgumentError => e
         flash[:error] = e.message

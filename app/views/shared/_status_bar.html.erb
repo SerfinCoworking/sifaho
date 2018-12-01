@@ -5,7 +5,7 @@
       <label>
         Estado actual:
         <span class="label label-<%= ordering_status_label(order) %>">
-          <%= order.status.split('_').map(&:capitalize).join(' ') %>
+          <%= order.status.underscore.humanize %>
         </span>
       </label><br>
       <div class="col-md-12 status-bar-icons">
@@ -35,7 +35,7 @@
       <label>
         Estado actual:
         <span class="label label-<%= ordering_status_label(order) %>">
-          <%= order.status.split('_').map(&:capitalize).join(' ') %>
+          <%= order.status.underscore.humanize %>
         </span>
       </label><br>
       <div class="col-md-12 status-bar-icons">
@@ -45,6 +45,42 @@
           :title => 'Auditado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'edit-recibo-glyph') %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right',
           :title => 'Recibido', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'check-recibo-glyph' ) %>
+      </div>
+      <div class="col-md-12">
+        <div class="progress" style="height: 5px;margin-bottom: -10px;">
+          <div class="progress-bar progress-bar-striped active progress-bar-<%= ordering_status_label(order) %> \
+          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+<% elsif order.solicitud_abastecimiento? %>
+  <div class="row hidden-print">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 text-center">
+      <label>
+        Estado actual:
+        <span class="label label-<%= ordering_status_label(order) %>">
+          <%= order.status.underscore.humanize %>
+        </span>
+      </label><br>
+      <div class="col-md-12 status-bar-icons">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus gi-2x pull-left',
+          :title => 'Solicitud creada', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id:'sCre-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left',
+          :title => 'Solicitud auditada', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id:'sAud-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send gi-2x pull-left',
+          :title => 'Solicitud enviada', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id:'sEnv-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in gi-2x pull-left',
+          :title => 'Proveedor auditoría', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'pAud-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up gi-2x pull-left',
+          :title => 'Proveedor aceptado', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'pAce-glyph') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-road gi-2x pull-left',
+          :title => 'En camino', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'pCam-glyph' ) %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right',
+          :title => 'Recibido', :'data-placement'=>'top', :'data-toggle'=>'tooltip', id: 'sRec-glyph') %>
       </div>
       <div class="col-md-12">
         <div class="progress" style="height: 5px;margin-bottom: -10px;">

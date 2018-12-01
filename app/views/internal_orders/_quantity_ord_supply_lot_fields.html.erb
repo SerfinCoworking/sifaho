@@ -1,6 +1,7 @@
 <tr class="nested-fields">
   <td>
     <%= f.input :supply_id, as: :string,
+      disabled: f.object.quantifiable.solicitud?,
       placeholder: 'Código',
       label: false,
       required: false,
@@ -14,6 +15,7 @@
   </td>
   <td>
     <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+      disabled: f.object.quantifiable.solicitud?,
       label: false,
       placeholder: 'Nombre',
       required: false,
@@ -63,8 +65,9 @@
             if f.object.supply.present? 
               f.object.supply.unity
             end
-        }"
-      } %>
+          }"
+        } 
+      %>
     </td>
     <td>
       <%= f.input :applicant_observation, label: false, as: :text,
@@ -73,6 +76,7 @@
   <% else %>
     <td>
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        disabled: f.object.quantifiable.solicitud?,
         input_html: {
           "data-tooltip"=>true,
           :class=>"has-tip request-quantity",

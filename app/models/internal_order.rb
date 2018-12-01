@@ -254,5 +254,5 @@ class InternalOrder < ApplicationRecord
       Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
     end
   end
-
+  
 end

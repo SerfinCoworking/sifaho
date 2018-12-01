@@ -83,11 +83,12 @@
         html5: false 
       %>
     </td>
-  <% else %> <!-- End Form recibo -->
-    <td><!-- Start form despacho -->
+  <% elsif @order_type == 'solicitud_abastecimiento' %> <!-- End Form recibo -->
+    <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
         label: false,
+        required: false,
         :input_html => {
           class: "supply-code select-change",
           data: { autocomplete_source: search_by_id_supplies_path },
@@ -100,6 +101,83 @@
       <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
         label: false,
         placeholder: 'Nombre',
+        required: false,
+        :input_html => {
+          class: "supply-name select-change",
+          data: { autocomplete_source: search_by_name_supplies_path },
+          size: 36,
+          value: "#{if f.object.supply.present?; f.object.supply_name; end }"
+        } 
+      %>
+      <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
+    </td>
+    <td>
+      <% @stock = 1 %>
+      <%= f.input :stock, as: :fake, label: false, disabled: true, 
+        input_html: {
+          class: 'stock-quantity',
+          size: 6, 
+          placeholder: "Cant",
+          value: "#{
+            if f.object.supply.present? 
+              @stock = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(f.object.supply).sum(:quantity)
+            end
+          }"
+        } %>
+    </td>
+    <td>
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip apply-request-quant request-quantity focus-quantity",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '1', step:'any', :style => 'width: 75px'
+        }
+      %>
+      <%= f.input :delivered_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
+    </td>
+    <td>
+      <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'unity',
+          size: 10,
+          placeholder: "Unidad",
+          value: "#{
+            if f.object.supply.present? 
+              f.object.supply.unity
+            end
+        }"
+      } %>
+    </td>
+    <td>
+      <%= f.input :applicant_observation, label: false, as: :text,
+        :input_html => { :cols => 35  , :rows => 1, placeholder: "Una observación" } %>
+    </td>
+  <% else %>
+    <%
+      if f.object.supply.present? 
+        @stock = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(f.object.supply).sum(:quantity)
+      end
+    %>
+    <td><!-- Start form despacho -->
+      <%= f.input :supply_id, as: :string,
+        placeholder: 'Código',
+        label: false,
+        disabled: f.object.quantifiable.solicitud_abastecimiento?,
+        :input_html => {
+          class: "supply-code select-change",
+          data: { autocomplete_source: search_by_id_supplies_path },
+          size: 4,
+          autocomplete: 'off'
+        } 
+      %>
+    </td>
+    <td>
+      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+        label: false,
+        placeholder: 'Nombre',
+        disabled: f.object.quantifiable.solicitud_abastecimiento?,
         :input_html => {
           class: "supply-name select-change",
           data: { autocomplete_source: search_by_name_supplies_path },
@@ -112,7 +190,8 @@
         { class: "supply-id" } %>
     </td>
     <td>
-      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false, 
+        disabled: f.object.quantifiable.solicitud_abastecimiento?,
         input_html: {
           "data-tooltip"=>true,
           :class=>"has-tip request-quantity focus-quantity",
@@ -133,8 +212,14 @@
         } 
       %>
     </td>
+    <td>
+      <% if f.object.supply_id.present?  %>
+        <%= button_tag type: 'button', class: 'btn btn-xs search-lots',
+          title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+        <% end %>
+      <% end %>
     <% if f.object.sector_supply_lot_id.present? %>
-      <td>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
             class: 'selectpicker show-tick',
@@ -147,7 +232,7 @@
         %>
       </td>
     <% else %>
-      <td>
+      
         <%= f.select(:sector_supply_lot_id, [],{},
           {
             class: 'selectpicker show-tick',
