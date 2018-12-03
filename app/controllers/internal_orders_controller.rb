@@ -325,8 +325,8 @@ class InternalOrdersController < ApplicationController
       params.require(:internal_order).permit(:applicant_sector_id, :sent_by_id, :order_type,
         :provider_sector_id, :requested_date, :date_received, :observation, :remit_code,
         quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-          :requested_quantity, :delivered_quantity, :observation,
-          :_destroy]
+          :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
+          :provider_observation, :_destroy]
         )
     end
 

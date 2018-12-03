@@ -351,8 +351,8 @@ class OrderingSuppliesController < ApplicationController
       params.require(:ordering_supply).permit(:applicant_sector_id, :provider_sector_id,
       :requested_date, :sector_id, :observation, :sent_by_id, :remit_code, :order_type,
         quantity_ord_supply_lots_attributes: [:id, :supply_lot_id, :supply_id, :sector_supply_lot_id,
-          :requested_quantity, :delivered_quantity, :lot_code, :laboratory_id, :expiry_date,
-          :_destroy
+          :requested_quantity, :delivered_quantity, :lot_code, :laboratory_id, :expiry_date, 
+          :applicant_observation, :provider_observation, :_destroy
         ]
       )
     end
