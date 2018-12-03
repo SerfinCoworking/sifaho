@@ -164,7 +164,6 @@
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
         label: false,
-        disabled: f.object.quantifiable.solicitud_abastecimiento?,
         :input_html => {
           class: "supply-code select-change",
           data: { autocomplete_source: search_by_id_supplies_path },
@@ -177,7 +176,6 @@
       <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
         label: false,
         placeholder: 'Nombre',
-        disabled: f.object.quantifiable.solicitud_abastecimiento?,
         :input_html => {
           class: "supply-name select-change",
           data: { autocomplete_source: search_by_name_supplies_path },
@@ -190,8 +188,7 @@
         { class: "supply-id" } %>
     </td>
     <td>
-      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false, 
-        disabled: f.object.quantifiable.solicitud_abastecimiento?,
+      <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
           :class=>"has-tip request-quantity focus-quantity",

@@ -1,7 +1,6 @@
 <tr class="nested-fields">
   <td>
     <%= f.input :supply_id, as: :string,
-      disabled: f.object.quantifiable.solicitud?,
       placeholder: 'Código',
       label: false,
       required: false,
@@ -15,7 +14,6 @@
   </td>
   <td>
     <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
-      disabled: f.object.quantifiable.solicitud?,
       label: false,
       placeholder: 'Nombre',
       required: false,
