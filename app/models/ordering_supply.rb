@@ -19,6 +19,7 @@ class OrderingSupply < ApplicationRecord
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :ordering_supply_movements
 
   # Validaciones
   validates_presence_of :applicant_sector
@@ -249,6 +250,7 @@ class OrderingSupply < ApplicationRecord
   end
 
   def create_notification(of_user, action_type)
+    OrderingSupplyMovement.create(user: of_user, ordering_supply: self, action: action_type)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
       Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
     end

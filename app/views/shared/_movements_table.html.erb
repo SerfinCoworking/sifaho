@@ -1,94 +1,26 @@
-<% if order.despacho? %>
-  <div class="row hidden-print">
-    <div class="col-md-12">
-      <table class="table table-condensed table-bordered" id="fixed-table">
-        <tbody>
-            <tr>
-              <th></th>
-              <th>Auditado</th>
-              <th>Aceptado</th>
-              <th>Enviado</th>
-              <th>Recibido</th>
-            </tr>
-            <tr>
-              <th>Usuario</th>
-              <td><%= order.audited_by.present? ? order.audited_by.full_name : '----' %></td>
-              <td><%= order.accepted_by.present? ? order.accepted_by.full_name : '----' %></td>
-              <td><%= order.sent_by.present? ? order.sent_by.full_name : '----' %></td>
-              <td><%= order.received_by.present? ? order.received_by.full_name : '----' %></td>
-            </tr>
-            <tr>
-              <th>Fecha</th>
-              <td><%= order.updated_at.present? ? order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.accepted_date.present? ? order.accepted_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.sent_date.present? ? order.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.date_received.present? ? order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="row hidden-print">
+  <div class="col-md-12">
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Movimiento</th>
+          <th>Usuario</th>
+          <th>Sector</th>
+          <th>Establecimiento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% order.ordering_supply_movements.order(created_at: :desc).each do |mov| %>
+          <tr>
+            <td><%= mov.created_at.strftime("%d/%m/%y %H:%M") %></td>
+            <td><%= mov.action.humanize %></td>
+            <td><%= mov.user.full_name %></td>
+            <td><%= mov.sector.name %></td>
+            <td><%= mov.sector.establishment.name%></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-<% elsif order.recibo? %>
-  <div class="row hidden-print">
-    <div class="col-md-12">
-      <table class="table table-condensed table-bordered" id="fixed-table">
-        <tbody>
-            <tr>
-              <th></th>
-              <th>Creado</th>
-              <th>Auditado</th>
-              <th>Recibido</th>
-            </tr>
-            <tr>
-              <th>Usuario</th>
-              <td><%= order.created_by.present? ? order.created_by.full_name : '----' %></td>
-              <td><%= order.audited_by.present? ? order.audited_by.full_name : '----' %></td>
-              <td><%= order.received_by.present? ? order.received_by.full_name : '----' %></td>
-            </tr>
-            <tr>
-              <th>Fecha</th>
-              <td><%= order.created_at.present? ? order.created_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.updated_at.present? ? order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.date_received.present? ? order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-<% elsif order.solicitud_abastecimiento? %>
-  <div class="row hidden-print">
-    <div class="col-md-12">
-      <table class="table table-condensed table-bordered" id="fixed-table">
-        <tbody>
-            <tr>
-              <th></th>
-              <th>Creado</th>
-              <th>Auditado</th>
-              <th>Aceptado</th>
-              <th>Enviado</th>
-              <th>Recibido</th>
-            </tr>
-            <tr>
-              <th>Usuario</th>
-              <td><%= order.created_by.present? ? order.created_by.full_name : '----' %></td>
-              <td><%= order.audited_by.present? ? order.audited_by.full_name : '----' %></td>
-              <td><%= order.accepted_by.present? ? order.accepted_by.full_name : '----' %></td>
-              <td><%= order.sent_by.present? ? order.sent_by.full_name : '----' %></td>
-              <td><%= order.received_by.present? ? order.received_by.full_name : '----' %></td>
-            </tr>
-            <tr>
-              <th>Fecha</th>
-              <td><%= order.created_at.present? ? order.created_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.updated_at.present? ? order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.accepted_date.present? ? order.accepted_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.sent_date.present? ? order.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= order.date_received.present? ? order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-<% end %>
+</div>

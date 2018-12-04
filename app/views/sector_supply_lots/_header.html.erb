@@ -40,6 +40,14 @@
               <% end %>
             </li>
           <% end %>
+          <% if policy(OrderingSupply).new_applicant? %>
+            <li>
+              <%= link_to new_applicant_ordering_supplies_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                Solicitud externa
+              <% end %>
+            </li>
+          <% end %>
         </ul>
       </li>
       <% if policy(SectorSupplyLot).trash_index? %>
