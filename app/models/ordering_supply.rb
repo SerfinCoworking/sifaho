@@ -250,7 +250,7 @@ class OrderingSupply < ApplicationRecord
   end
 
   def create_notification(of_user, action_type)
-    OrderingSupplyMovement.create(user: of_user, ordering_supply: self, action: action_type)
+    OrderingSupplyMovement.create(user: of_user, ordering_supply: self, action: action_type, sector: of_user.sector)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
       Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
     end

@@ -122,6 +122,7 @@ class OrderingSuppliesController < ApplicationController
               @ordering_supply.create_notification(current_user, "creó y aceptó")
               flash[:success] = 'El despacho se ha creado y aceptado correctamente'
             else
+              @ordering_supply.create_notification(current_user, "creó")
               flash[:notice] = 'El despacho se ha creado y se encuentra en auditoría.'
             end
           elsif @ordering_supply.recibo?
