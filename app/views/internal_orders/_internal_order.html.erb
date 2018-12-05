@@ -19,11 +19,11 @@
       <%= internal_order.status.underscore.humanize %>
     </span>
   </td>
-  <td class="col-io-sup-name">
-    <%= 'Solicitado'.pluralize(osCount = internal_order.quantity_ord_supply_lots.count) %>
-    <span class="badge">
-      <%= osCount %>
-    </span>
+  <td>
+    <span class="badge"><%= internal_order.quantity_ord_supply_lots.count %></span>
+  </td>
+  <td>
+    <span class="badge"><%= internal_order.movements.count %></span>
   </td>
   <td>
     <%= internal_order.requested_date.strftime("%d/%m/%Y") %>

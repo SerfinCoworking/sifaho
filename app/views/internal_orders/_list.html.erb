@@ -7,7 +7,14 @@
           <th><%= filterrific_sorting_link(@filterrific, :solicitante) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :origen) %></th>
           <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-          <th>Insumos</th>
+          <th>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+            <%= filterrific_sorting_link(@filterrific, :ins) %></th>
+          </th>
+          <th>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
+            <%= filterrific_sorting_link(@filterrific, :mov) %>
+          </th>
           <th>
             <%= filterrific_sorting_link(@filterrific, :solicitado) %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>

@@ -21,15 +21,11 @@
       <%= ordering_supply.status.underscore.humanize %>
     </span>
   </td>
-  <td class="pres-col-sup">
-    <% if ordering_supply.quantity_ord_supply_lots.present? %>
-      <%= 'Solicitado'.pluralize(osCount = ordering_supply.quantity_ord_supply_lots.count) %>
-      <span class="badge">
-        <%= osCount %>
-      </span> 
-    <% else %>
-      <span class="badge">0</span>Solicitado
-    <% end %>
+  <td>
+    <span class="badge"><%= ordering_supply.quantity_ord_supply_lots.count %></span>
+  </td>
+  <td>
+    <span class="badge"><%= ordering_supply.movements.count %></span>
   </td>
   <td>
     <%= ordering_supply.requested_date.strftime("%d/%m/%Y") %>
