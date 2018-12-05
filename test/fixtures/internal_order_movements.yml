@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  internal_order: one
+  sector: one
+  action: MyString
+
+two:
+  user: two
+  internal_order: two
+  sector: two
+  action: MyString

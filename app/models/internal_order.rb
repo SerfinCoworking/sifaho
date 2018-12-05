@@ -13,6 +13,7 @@ class InternalOrder < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :movements, class_name: "InternalOrderMovement"
 
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
@@ -247,6 +248,7 @@ class InternalOrder < ApplicationRecord
   end
 
   def create_notification(of_user, action_type)
+    InternalOrderMovement.create(user: of_user, ordering_supply: self, action: action_type, sector: of_user.sector)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
       Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type )
     end

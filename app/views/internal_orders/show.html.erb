@@ -39,95 +39,98 @@
       </div>
     </div>
     <hr>
+    <!-- Barra de estado -->
+    <%= render 'status_bar', internal_order: @internal_order %>
     <!-- Insumos a dispensar -->
-    <table class="table table-hover table-condensed">
-      <thead>
-        <tr>
-          <th>Cód Ins</th>
-          <th>Insumo</th>
-          <th>Solicitado</th>
-          <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
-          <th>Lote</th>
-          <th>Laboratorio</th>
-          <th>Vencimiento</th>
-          <% if @internal_order.solicitud? %>
-            <th>Obs. Sol.</th>
-          <% end %>
-          <th>Obs. Prov.</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @internal_order.quantity_ord_supply_lots.each do |qosl| %>
-          <tr>
-            <td>
-              <%= qosl.supply_id %>
-            </td>
-            <td>
-              <%= qosl.supply_name %>
-            </td>
-            <td>
-              <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-            </td>
-            <td>
-              <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
-            </td>
-            <% if qosl.sector_supply_lot.present? %>
-              <td>
-                <%= qosl.sector_supply_lot.lot_code %>
-              </td>
-              <td>
-                <%= qosl.sector_supply_lot.laboratory %>
-              </td>
-              <td>
-                <% if qosl.supply.needs_expiration %>
-                  <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : "Sin asignar" %>
-                <% else %>
-                  No vence
-                <% end %>
-              </td>
-            <% else %>
-              <td>Sin lote</td><td>----</td><td>----</td>
-            <% end %>
-            <% if @internal_order.solicitud? %>
-              <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
-            <% end %>
-            <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <hr class="hidden-print">
-  <%= render 'status_bar', internal_order: @internal_order %>
-  <br>
-  <div class="row hidden-print">
-    <div class="col-md-12">
-      <table class="table table-condensed table-bordered" id="fixed-table">
-        <tbody>
-            <tr>
-              <th></th>
-              <th>Creado</th>
-              <th>Auditado</th>
-              <th>Transportado</th>
-              <th>Recibido</th>
-            </tr>
-            <tr>
-              <th>Usuario</th>
-              <td><%= @internal_order.created_by.present? ? @internal_order.created_by.full_name : '----' %></td>
-              <td><%= @internal_order.audited_by.present? ? @internal_order.audited_by.full_name : '----' %></td>
-            	<td><%= @internal_order.sent_by.present? ? @internal_order.sent_by.full_name : '----' %></td>
-              <td><%= @internal_order.received_by.present? ? @internal_order.received_by.full_name : '----' %></td>
-            </tr>
-            <tr>
-              <th>Fecha</th>
-              <td><%= @internal_order.created_at.strftime("%d/%m/%y %H:%M") %></td>
-              <td><%= @internal_order.audited_by.present? ? @internal_order.updated_at.strftime("%d/%m/%y %H:%M") : '----' %></td>
-            	<td><%= @internal_order.sent_date.present? ? @internal_order.sent_date.strftime("%d/%m/%y %H:%M") : '----' %></td>
-              <td><%= @internal_order.date_received.present? ? @internal_order.date_received.strftime("%d/%m/%y %H:%M") : '----' %></td>          </tr>
-          </tbody>
-        </table>
+    <br><br><br><br>
+    <div class='row'>
+      <div class='col-md-12' style='margin-top: -50px;'>
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='active'>
+            <a data-toggle='tab' href='#supplies'>
+              <span class="glyphicon glyphicon-barcode"></span>
+              Insumos
+              <span class="badge"><%= @internal_order.quantity_ord_supply_lots.count %></span>
+            </a>
+          </li>
+          <li>
+            <a data-toggle='tab' href='#last_movements'>
+              <span class="glyphicon glyphicon-transfer"></span>
+              Movimientos
+              <span class="badge"><%= @internal_order.movements.count %></span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
+    <div class="col-md-12">
+      <div class="tab-content">
+        <div id='supplies' class='tab-pane fade in active'>
+          <!-- Insumos a dispensar -->
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Solicitado</th>
+                <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
+                <th>Lote</th>
+                <th>Laboratorio</th>
+                <th>Vencimiento</th>
+                <% if @internal_order.solicitud? %>
+                  <th>Obs. Sol.</th>
+                <% end %>
+                <th>Obs. Prov.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @internal_order.quantity_ord_supply_lots.each do |qosl| %>
+                <tr>
+                  <td>
+                    <%= qosl.supply_id %>
+                  </td>
+                  <td>
+                    <%= qosl.supply_name %>
+                  </td>
+                  <td>
+                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                  </td>
+                  <td>
+                    <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                  </td>
+                  <% if qosl.sector_supply_lot.present? %>
+                    <td>
+                      <%= qosl.sector_supply_lot.lot_code %>
+                    </td>
+                    <td>
+                      <%= qosl.sector_supply_lot.laboratory %>
+                    </td>
+                    <td>
+                      <% if qosl.supply.needs_expiration %>
+                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : "Sin asignar" %>
+                      <% else %>
+                        No vence
+                      <% end %>
+                    </td>
+                  <% else %>
+                    <td>Sin lote</td><td>----</td><td>----</td>
+                  <% end %>
+                  <% if @internal_order.solicitud? %>
+                    <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
+                  <% end %>
+                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div id='last_movements' class='tab-pane fade'>
+          <!-- Tabla de movimientos -->
+          <%= render '/shared/movements_table', order: @internal_order %>
+        </div> <!-- End last movements tab pane -->
+      </div> <!-- End Tab content-->
+    </div> <!-- End col-md-12 -->
   </div>
   <div class="panel-footer text-right hidden-print">
     <% if @internal_order.provision? %>

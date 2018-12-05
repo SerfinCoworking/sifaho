@@ -19,7 +19,7 @@ class OrderingSupply < ApplicationRecord
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  has_many :ordering_supply_movements
+  has_many :movements, class_name: "OrderingSupplyMovement"
 
   # Validaciones
   validates_presence_of :applicant_sector

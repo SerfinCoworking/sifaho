@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <% order.ordering_supply_movements.order(created_at: :desc).each do |mov| %>
+        <% order.movements.order(created_at: :desc).each do |mov| %>
           <tr>
             <td><%= mov.created_at.strftime("%d/%m/%y %H:%M") %></td>
             <td><%= mov.action.humanize %></td>

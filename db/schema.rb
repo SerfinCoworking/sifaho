@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181204133413) do
+ActiveRecord::Schema.define(version: 20181205140415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,18 @@ ActiveRecord::Schema.define(version: 20181204133413) do
     t.string "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "internal_order_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "internal_order_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_id"], name: "index_internal_order_movements_on_internal_order_id"
+    t.index ["sector_id"], name: "index_internal_order_movements_on_sector_id"
+    t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
   end
 
   create_table "internal_orders", force: :cascade do |t|
