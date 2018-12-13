@@ -93,7 +93,6 @@
       <% end %>
     </tbody>
   </table>
-  <% unless f.object.solicitud? %>
     <div class="links" id="links-quant-form">
       <div class="text-center">
         <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
@@ -103,5 +102,4 @@
         <% end %>
       </div>
     </div>
-  <% end %>
 <% end %>
