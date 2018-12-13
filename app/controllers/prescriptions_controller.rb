@@ -22,7 +22,7 @@ class PrescriptionsController < ApplicationController
         :date_dispensed_since
       ],
     ) or return
-    @prescriptions = @filterrific.find.page(params[:page]).per_page(8)
+    @prescriptions = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /prescriptions/1

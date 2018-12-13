@@ -23,7 +23,7 @@ class OrderingSuppliesController < ApplicationController
         :sorted_by,
       ],
     ) or return
-    @ordering_supplies = @filterrific.find.page(params[:page]).per_page(10)
+    @ordering_supplies = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /ordering_supplies
@@ -46,7 +46,7 @@ class OrderingSuppliesController < ApplicationController
         :sorted_by,
       ],
     ) or return
-    @applicant_orders = @filterrific.find.page(params[:page]).per_page(10)
+    @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /ordering_supplies/1

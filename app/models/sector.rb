@@ -5,6 +5,8 @@ class Sector < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :supply_lots, -> { with_deleted }, through: :sector_supply_lots
   has_many :supplies, -> { with_deleted.distinct }, through: :supply_lots
+  has_many :user_sectors
+  has_many :users, :through => :user_sectors
 
   # Validaciones
   validates_presence_of :name

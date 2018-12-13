@@ -20,7 +20,7 @@ class OfficeSuppliesController < ApplicationController
         :sorted_by
       ],
     ) or return
-    @office_supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @office_supplies = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /office_supplies/1

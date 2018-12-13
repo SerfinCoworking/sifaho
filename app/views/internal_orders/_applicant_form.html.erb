@@ -11,6 +11,12 @@
         } 
       %>
       <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
+      <% if policy(current_user).change_sector? %>
+        <%= link_to main_app.change_sector_users_admin_path(current_user), class:'btn btn-warning btn-sm change-btn', remote: true,
+          :title => 'Cambiar sector', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+      <% end %>
       <br>
     </div>
     <div class="col-md-3">
@@ -26,7 +32,7 @@
           "data-live-search"=>true,
           disabled: false,
           value: "#{ f.object.provider_sector.id unless f.object.new_record? }"
-        } 
+        }
       %>
       <%= f.hidden_field :provider_sector_id, id: "provider-id", value: "#{if f.object.provider_sector.present?; f.object.provider_sector_id; end}" %>
     </div>

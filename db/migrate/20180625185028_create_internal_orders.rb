@@ -14,6 +14,7 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
       t.column :applicant_status, :integer, default: 0
       t.integer :status, default: 0
       t.column :order_type, :integer, default: 0
+      t.string :remit_code
 
       t.timestamps
     end

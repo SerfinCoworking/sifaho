@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181205140415) do
+ActiveRecord::Schema.define(version: 20181213145106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -418,6 +418,15 @@ ActiveRecord::Schema.define(version: 20181205140415) do
     t.string "name", limit: 100
     t.integer "simela_group"
     t.decimal "simela_relation", precision: 10, scale: 4
+  end
+
+  create_table "user_sectors", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sector_id"], name: "index_user_sectors_on_sector_id"
+    t.index ["user_id"], name: "index_user_sectors_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

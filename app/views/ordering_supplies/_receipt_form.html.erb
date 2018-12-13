@@ -21,6 +21,12 @@
         } 
       %>
       <%= f.hidden_field :applicant_sector_id, value: "#{ if f.object.new_record?; current_user.sector_id; else; f.object.applicant_sector.id; end }" %>
+      <% if policy(current_user).change_sector? %>
+        <%= link_to main_app.change_sector_users_admin_path(current_user), class:'btn btn-warning btn-sm change-btn', remote: true,
+          :title => 'Cambiar sector', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+      <% end %>
     </div>
     <div class='col-md-4'>
       <div class="text-center"><%= f.label :provider_establishment_id, "Proveedor" %></div>

@@ -27,6 +27,14 @@
         <% end %>
       </li>
       <li>
+        <% if policy(current_user).change_sector? %>
+          <%= link_to main_app.change_sector_users_admin_path(current_user), remote: true do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+            Cambiar sector
+          <% end %>
+        <% end %>
+      </li>
+      <li>
         <%= link_to main_app.destroy_user_session_path, :method => :delete do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-off') %>
           Cerrar sesión

@@ -17,7 +17,7 @@ class CreateOrderingSupplies < ActiveRecord::Migration[5.1]
       t.datetime :requested_date
 
       t.integer :status, default: 0
-      t.ineger :order_type, default: 0
+      t.integer :order_type, default: 0
 
       t.timestamps
     end

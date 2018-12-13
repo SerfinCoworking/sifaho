@@ -7,6 +7,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :authentication_keys => [:username]
 
   # Relaciones
+  has_many :user_sectors
+  has_many :sectors, :through => :user_sectors
   belongs_to :sector
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy

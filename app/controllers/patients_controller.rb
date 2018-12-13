@@ -20,7 +20,7 @@ class PatientsController < ApplicationController
         :with_patient_type_id,
       ],
     ) or return
-    @patients = @filterrific.find.page(params[:page]).per_page(8)
+    @patients = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /patients/1

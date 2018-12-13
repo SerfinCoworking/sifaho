@@ -20,7 +20,7 @@ class SuppliesController < ApplicationController
         :with_area_id,
       ],
     ) or return
-    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @supplies = @filterrific.find.page(params[:page]).per_page(15)
     @supply_areas = SupplyArea.all
   end
 
@@ -43,7 +43,7 @@ class SuppliesController < ApplicationController
         :with_area_id,
       ],
     ) or return
-    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @supplies = @filterrific.find.page(params[:page]).per_page(15)
     @supply_areas = SupplyArea.all
   end
 

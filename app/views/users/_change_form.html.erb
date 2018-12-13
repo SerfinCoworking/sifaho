@@ -1,0 +1,6 @@
+<p>A cuál sector desea cambiar?</p>
+<%= simple_form_for @user, url: users_admin_path, remote: true, html: { method: :put, class: 'form-inline', id: 'change_form'} do |f| %>
+  <%= f.select :sector_id, 
+    options_for_select( @sectors.map { |sector| [sector.name+' '+sector.establishment.name, sector.id] }, f.object.sector_id), 
+    {}, {class: 'form-control'} %>
+<% end %>

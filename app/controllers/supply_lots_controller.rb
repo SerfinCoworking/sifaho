@@ -24,7 +24,7 @@ class SupplyLotsController < ApplicationController
         :expired_from
       ],
     ) or return
-    @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+    @supply_lots = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   def trash_index
@@ -43,7 +43,7 @@ class SupplyLotsController < ApplicationController
         :date_received_at
       ],
     ) or return
-    @supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+    @supply_lots = @filterrific.find.page(params[:page]).per_page(15)
   end
 
 

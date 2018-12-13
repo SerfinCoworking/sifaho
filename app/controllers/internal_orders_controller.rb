@@ -25,7 +25,7 @@ class InternalOrdersController < ApplicationController
         :received_date_at
       ],
     ) or return
-    @internal_orders = @filterrific.find.page(params[:page]).per_page(8)
+    @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
   
   # GET /internal_orders
@@ -49,7 +49,7 @@ class InternalOrdersController < ApplicationController
         :received_date_at
       ],
     ) or return
-    @applicant_orders = @filterrific.find.page(params[:page]).per_page(8)
+    @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /internal_orders/1

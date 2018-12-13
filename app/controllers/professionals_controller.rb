@@ -22,7 +22,7 @@ class ProfessionalsController < ApplicationController
         :with_professional_type_id,
       ],
     ) or return
-    @professionals = @filterrific.find.page(params[:page]).per_page(8)
+    @professionals = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /professionals/1

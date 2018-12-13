@@ -23,7 +23,7 @@ class SectorSupplyLotsController < ApplicationController
         :date_received_at
       ],
     ) or return
-    @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+    @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   def trash_index
@@ -41,7 +41,7 @@ class SectorSupplyLotsController < ApplicationController
         :sorted_by, :with_status, :search_text, :with_code, :date_received_at
       ],
     ) or return
-    @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(8)
+    @sector_supply_lots = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   def group_by_supply
@@ -61,7 +61,7 @@ class SectorSupplyLotsController < ApplicationController
         :with_area_id,
       ],
     ) or return
-    @supplies = @filterrific.find.page(params[:page]).per_page(8)
+    @supplies = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   def lots_for_supply
