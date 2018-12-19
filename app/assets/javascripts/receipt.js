@@ -61,7 +61,6 @@ document.addEventListener("turbolinks:load", function() {
       data: {
         term: $('#provider-establishment-id').val()
       },
-      async: false,
       dataType: "json",
       error: function(XMLHttpRequest, errorTextStatus, error){
         alert("Failed: No se encontraron sectores"+ errorTextStatus+" ;"+error);

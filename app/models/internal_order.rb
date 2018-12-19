@@ -51,7 +51,7 @@ class InternalOrder < ApplicationRecord
   )
 
   pg_search_scope :search_supply_code,
-    :associated_against => { :supply_lots => :code },
+    :associated_against => { :supplies => :id },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
@@ -65,7 +65,7 @@ class InternalOrder < ApplicationRecord
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_applicant,
+  pg_search_scope :search_provider,
     :associated_against => { :provider_sector => :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
@@ -112,7 +112,7 @@ class InternalOrder < ApplicationRecord
   }
 
   scope :with_status, lambda { |a_status|
-    where('internal_orders.provider_status = ?', a_status)
+    where('internal_orders.status = ?', a_status)
   }
 
   def self.applicant(a_sector)
@@ -135,6 +135,18 @@ class InternalOrder < ApplicationRecord
       ['Fecha recibido (asc)', 'recibido_desc'],
       ['Fecha entregado (asc)', 'entregado_asc'],
       ['Cantidad (asc)', 'cantidad_asc']
+    ]
+  end
+
+  def self.options_for_status
+    [
+      ['Todos', '', 'default'],
+      ['Solicitud auditoria', 0, 'warning'],
+      ['Solicitud enviada', 1, 'info'],
+      ['Proveedor auditoria', 2, 'warning'],
+      ['Provision en camino', 3, 'primary'],
+      ['Provision entregada', 4, 'success'],
+      ['Anulada', 5, 'danger'],
     ]
   end
 
@@ -215,18 +227,6 @@ class InternalOrder < ApplicationRecord
     else
       raise ArgumentError, 'La provisión aún no está en camino.'
     end
-  end
-
-  def self.options_for_status
-    [
-      ['Todos', '', 'default'],
-      ['Solicitud auditoria', 0, 'warning'],
-      ['Solicitud enviada', 1, 'info'],
-      ['Proveedor auditoria', 2, 'warning'],
-      ['Provision en camino', 3, 'primary'],
-      ['Provision entregada', 4, 'success'],
-      ['Anulada', 5, 'danger'],
-    ]
   end
 
   # Método para validar las cantidades a entregar de los lotes en stock

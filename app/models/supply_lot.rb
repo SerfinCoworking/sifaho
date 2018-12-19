@@ -99,7 +99,7 @@ class SupplyLot < ApplicationRecord
   }
 
   scope :expired_from, lambda { |reference_time|
-    where('supply_lots.expiry_date <= ?', reference_time)
+    where('supply_lots.expiry_date >= ?', reference_time)
   }
 
   scope :with_status, lambda { |a_status|

@@ -1,37 +1,44 @@
-<div id="filterrific_results">
-  <div class="panel panel-default">
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :origen) %></th>
-          <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-          <th>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-            <%= filterrific_sorting_link(@filterrific, :ins) %></th>
-          </th>
-          <th>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
-            <%= filterrific_sorting_link(@filterrific, :mov) %>
-          </th>
-          <th>
-            <%= filterrific_sorting_link(@filterrific, :solicitado) %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-          </th>
-          <th>
-            <%= filterrific_sorting_link(@filterrific, :recibido) %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
-          </th>
-          <th colspan="3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id=applicant_orders>
-        <%= render @applicant_orders %>
-      </tbody>
-    </table>
+<% if @applicant_orders.exists? %>
+  <div id="filterrific_results">
+    <div class="panel panel-default">
+      <table class="table table-hover table-striped table-condensed">
+        <thead>
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :origen) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+              <%= filterrific_sorting_link(@filterrific, :ins) %></th>
+            </th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
+              <%= filterrific_sorting_link(@filterrific, :mov) %>
+            </th>
+            <th>
+              <%= filterrific_sorting_link(@filterrific, :solicitado) %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+            </th>
+            <th>
+              <%= filterrific_sorting_link(@filterrific, :recibido) %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
+            </th>
+            <th colspan="3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id=applicant_orders>
+          <%= render @applicant_orders %>
+        </tbody>
+      </table>
+    </div>
+    <div id="page_links">
+      <%= paginate @applicant_orders %>
+    </div>
   </div>
-  <div id="page_links">
-    <%= paginate @applicant_orders %>
-  </div>
-</div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'pedidos internos recibidos' }
+  ) %>
+<% end %>

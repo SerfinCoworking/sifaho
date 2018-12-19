@@ -1,6 +1,6 @@
 <%= render 'header' %>
 
-<% if @applicant_orders.present? %>
+<% if @applicant_orders.exists? %>
 
   <%= render "filter" %>
 

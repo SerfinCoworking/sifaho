@@ -53,15 +53,24 @@
           placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
       </div>
       <div class="col-md-2 col-sm-2">
-        <label>Entregado en</label>
-        <%= f.text_field(:requested_date_at, class: 'form-control filterrific-periodically-observed datetimepicker',
+        <label><%= current_page?(action: 'applicant_index') ? 'Recibido en' : 'Entregado en' %></label>
+        <%= f.text_field(:received_date_at, class: 'form-control filterrific-periodically-observed datetimepicker',
           placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
       </div>
-      <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-      <% end %>
-      <!-- Spinner para la carga -->
-      <%= render_filterrific_spinner %>
+      <div class="col-md-1">
+        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right", 
+          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+        <% if current_page?(action: 'applicant_index') %>
+          <%= link_to applicant_index_internal_orders_path(format: 'pdf'), class: 'btn btn-sm pull-right',  
+            :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+          <% end %>
+        <% else %>
+        <% end %>
+        <%= render_filterrific_spinner %>
+      </div>
     <% end %>
   </div>
   <div class="clearfix"> 

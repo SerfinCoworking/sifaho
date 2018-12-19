@@ -53,7 +53,6 @@ $(document).on('turbolinks:load', function() {
      data: {
        term: $('#establishment-id').val()
      },
-     async: false,
      dataType: "json",
      error: function(XMLHttpRequest, errorTextStatus, error){
        alert("Failed: No se encontraron sectores"+ errorTextStatus+" ;"+error);
@@ -180,7 +179,6 @@ $(document).on('turbolinks:load', function() {
       data: {
         term: nested_form.find('.supply-code').val()
       },
-      async: false,
       dataType: "json",
       error: function(XMLHttpRequest, errorTextStatus, error){
         alert("Failed: "+ errorTextStatus+" ;"+error);
@@ -226,7 +224,6 @@ $(document).on('turbolinks:load', function() {
       data: {
         term: nested_form.find('.supply-code').val()
       },
-      async: false,
       dataType: "json",
       error: function(XMLHttpRequest, errorTextStatus, error){
         alert("Failed: "+ errorTextStatus+" ;"+error);

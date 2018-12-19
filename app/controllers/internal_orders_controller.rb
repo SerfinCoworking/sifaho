@@ -17,12 +17,12 @@ class InternalOrdersController < ApplicationController
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :search_applicant,
-        :search_provider,
         :search_supply_code,
         :search_supply_name,
         :with_status,
         :requested_date_at,
-        :received_date_at
+        :received_date_at,
+        :sorted_by
       ],
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
@@ -41,15 +41,27 @@ class InternalOrdersController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_applicant,
         :search_provider,
         :search_supply_code,
         :search_supply_name,
         :with_status,
         :requested_date_at,
-        :received_date_at
+        :received_date_at,
+        :sorted_by
       ],
     ) or return
     @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        send_data generate_apply_report(@applicant_orders),
+          filename: 'pedidos_internos.pdf',
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   # GET /internal_orders/1
@@ -349,5 +361,26 @@ class InternalOrdersController < ApplicationController
     def provider?
       submit = params[:commit]
       return submit == "Proveedor"
+    end
+
+    def generate_apply_report(orders)
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'i_o_list.tlf')
+
+      orders.each do |order|
+        report.list.add_row do |row|
+          row.values  code: order.remit_code,
+                      sector_name: order.provider_sector.name,
+                      origin: order.order_type.underscore.humanize,
+                      status: order.status.underscore.humanize,
+                      supplies: order.quantity_ord_supply_lots.count,
+                      movements: order.movements.count,
+                      requested_date: order.requested_date.strftime("%d/%m/%Y"),
+                      received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+        end
+      end
+      report.page[:page_count] = report.page_count
+      report.page[:title] = 'Reporte recibos pedidos internos'
+
+      report.generate
     end
 end
