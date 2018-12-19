@@ -31,7 +31,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
         end
       elsif record.solicitud_abastecimiento? && record.solicitud_enviada?
         return record.provider_sector == user.sector
-      elsif record.solicitud_abastecimiento? && record.proveedor_auditoria?
+      elsif (record.solicitud_abastecimiento? && record.proveedor_auditoria?) || (record.solicitud_abastecimiento? && record.proveedor_aceptado?)
         return record.provider_sector == user.sector
       elsif record.solicitud_abastecimiento? && record.solicitud_auditoria?
         return record.applicant_sector == user.sector
