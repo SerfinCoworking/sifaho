@@ -208,6 +208,7 @@ class OrderingSuppliesController < ApplicationController
             if sending?
               if @ordering_supply.provider_sector == current_user.sector
                 @ordering_supply.send_order(current_user)
+                @ordering_supply.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'La solicitud de abastecimiento se ha auditado y aprovisionado correctamente'
               else
                 @ordering_supply.send_request_of(current_user)
@@ -217,9 +218,11 @@ class OrderingSuppliesController < ApplicationController
             else
               if @ordering_supply.solicitud_enviada?
                 @ordering_supply.proveedor_auditoria!
+                @ordering_supply.create_notification(current_user, "auditó")
                 flash[:success] = 'La solicitud de abastecimiento se ha auditado correctamente'
               elsif @ordering_supply.proveedor_auditoria?
                 @ordering_supply.accept_order(current_user)
+                @ordering_supply.create_notification(current_user, "auditó y aceptó")
                 flash[:success] = 'La solicitud de abastecimiento se ha auditado y aceptado correctamente'
               else
                 @ordering_supply.create_notification(current_user, "auditó")

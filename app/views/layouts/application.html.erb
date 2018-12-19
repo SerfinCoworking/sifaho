@@ -21,13 +21,15 @@
           <div class="panel-heading" id="page-header"><h3 class="panel-heading custom-header"><%= yield :page_header %></h3></div>
         <% end %>
         <div class="container-fluid">
-        <%= render "layouts/flash_notices" %>
-          <%= yield %>
-          <%= render "shared/dialog" %>
-          <div class="footer">
-            <% if user_signed_in? %>
-              <p><h4><strong><%= current_user.sector.establishment.name %></strong></h4></p>
-            <% end %>
+          <div class="row">
+            <%= render "layouts/flash_notices" %>
+            <%= yield %>
+            <%= render "shared/dialog" %>
+            <div class="footer">
+              <% if user_signed_in? %>
+                <p><h4><strong><%= current_user.sector.establishment.name %></strong></h4></p>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
