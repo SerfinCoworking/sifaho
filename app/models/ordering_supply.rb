@@ -20,8 +20,8 @@ class OrderingSupply < ApplicationRecord
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "OrderingSupplyMovement"
-  has_one :establishment, :through => :provider_sector
-  has_one :establishment, :through => :applicant_sector
+  has_one :provider_establishment, :through => :provider_sector, :source => :establishment
+  has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
 
   # Validaciones
   validates_presence_of :applicant_sector
@@ -61,12 +61,12 @@ class OrderingSupply < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-    :associated_against => { :applicant_sector => :name, :establishment => :name },
+    :associated_against => { :applicant_sector => :name, :applicant_establishment => :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-    :associated_against => { :provider_sector => :name, :establishment => :name },
+    :associated_against => { :provider_sector => :name, :provider_establishment => :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 

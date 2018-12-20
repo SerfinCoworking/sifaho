@@ -47,7 +47,6 @@ class OrderingSuppliesController < ApplicationController
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :search_code,
-        :search_applicant,
         :search_provider,
         :with_order_type,
         :with_status,
