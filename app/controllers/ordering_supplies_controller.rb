@@ -11,16 +11,22 @@ class OrderingSuppliesController < ApplicationController
       OrderingSupply.provider(current_user.sector),
       params[:filterrific],
       select_options: {
-        sorted_by: OrderingSupply.options_for_sorted_by
+        sorted_by: OrderingSupply.options_for_sorted_by,
+        with_status: OrderingSupply.options_for_status
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_code,
         :search_applicant,
         :search_provider,
-        :search_supply_code,
-        :search_supply_name,
-        :sorted_by,
+        :with_order_type,
+        :with_status,
+        :requested_date_since,
+        :requested_date_to,
+        :date_received_since,
+        :date_received_to,
+        :sorted_by
       ],
     ) or return
     @ordering_supplies = @filterrific.find.page(params[:page]).per_page(15)
@@ -34,16 +40,22 @@ class OrderingSuppliesController < ApplicationController
       OrderingSupply.applicant(current_user.sector),
       params[:filterrific],
       select_options: {
-        sorted_by: OrderingSupply.options_for_sorted_by
+        sorted_by: OrderingSupply.options_for_sorted_by,
+        with_status: OrderingSupply.options_for_status
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_code,
         :search_applicant,
         :search_provider,
-        :search_supply_code,
-        :search_supply_name,
-        :sorted_by,
+        :with_order_type,
+        :with_status,
+        :requested_date_since,
+        :requested_date_to,
+        :date_received_since,
+        :date_received_to,
+        :sorted_by
       ],
     ) or return
     @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
@@ -184,13 +196,13 @@ class OrderingSuppliesController < ApplicationController
         begin
           if @ordering_supply.despacho?  
             if accepting? # Si se acepta el despacho
-                @ordering_supply.accept_order(current_user)
-                @ordering_supply.create_notification(current_user, "auditó y aceptó")
-                flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
+              @ordering_supply.accept_order(current_user)
+              @ordering_supply.create_notification(current_user, "auditó y aceptó")
+              flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
             elsif sending? # Si se envía el despacho
-                @ordering_supply.send_order(current_user)
-                @ordering_supply.create_notification(current_user, "auditó y envió")
-                flash[:success] = 'El despacho se ha auditado y enviado correctamente'
+              @ordering_supply.send_order(current_user)
+              @ordering_supply.create_notification(current_user, "auditó y envió")
+              flash[:success] = 'El despacho se ha auditado y enviado correctamente'
             else
               @ordering_supply.create_notification(current_user, "auditó")
               flash[:success] = 'El despacho se ha auditado correctamente'

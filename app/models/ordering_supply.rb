@@ -20,6 +20,8 @@ class OrderingSupply < ApplicationRecord
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "OrderingSupplyMovement"
+  has_one :establishment, :through => :provider_sector
+  has_one :establishment, :through => :applicant_sector
 
   # Validaciones
   validates_presence_of :applicant_sector
@@ -40,34 +42,33 @@ class OrderingSupply < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
+      :search_code,
       :search_applicant,
       :search_provider,
-      :search_lot_code,
-      :search_supply,
-      :sorted_by,
-      :date_received_at,
+      :with_order_type,
+      :with_status,
+      :requested_date_since,
+      :requested_date_to,
+      :date_received_since,
+      :date_received_to,
+      :sorted_by
     ]
   )
 
-  pg_search_scope :search_lot_code,
-  :associated_against => { :supply_lots => :lot_code },
+  pg_search_scope :search_code,
+  against: :remit_code,
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_supply,
-  :associated_against => { applicant_sector: [:name, :code] },
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-  :associated_against => { profile: [:last_name, :first_name], :responsable => :username },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :applicant_sector => :name, :establishment => :name },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-  :associated_against => { profile: [:last_name, :first_name], :responsable => :username },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { :provider_sector => :name, :establishment => :name },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -85,9 +86,12 @@ class OrderingSupply < ApplicationRecord
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("ordering_supplies.status #{ direction }")
-    when /^insumos_solicitados_/
+    when /^tipo_/
+      # Ordenamiento por nombre de estado
+      order("ordering_supplies.order_type #{ direction }")
+    when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
-      order("supply_lots.supply_name #{ direction }").joins(:supply_lots)
+      order("quantity_ord_supply_lots.count #{ direction }")
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
       order("ordering_supplies.date_received #{ direction }")
@@ -97,12 +101,28 @@ class OrderingSupply < ApplicationRecord
     end
   }
 
-  scope :date_received_at, lambda { |reference_time|
-    where('ordering_supplies.date_received >= ?', reference_time)
+  scope :date_received_since, lambda { |a_date|
+    where('ordering_supplies.date_received >= ?', a_date)
   }
 
-  scope :with_sector_id, lambda { |an_id|
-    where(sector_id: [*an_id])
+  scope :date_received_to, lambda { |a_date|
+    where('ordering_supplies.date_received <= ?', a_date)
+  }
+
+  scope :requested_date_since, lambda { |a_date|
+    where('ordering_supplies.requested_date >= ?', a_date)
+  }
+
+  scope :requested_date_to, lambda { |a_date|
+    where('ordering_supplies.requested_date <= ?', a_date)
+  }
+
+  scope :with_status, lambda { |a_status|
+    where('ordering_supplies.status = ?', a_status)
+  }
+
+  scope :with_order_type, lambda { |a_order_type|
+    where('ordering_supplies.order_type = ?', a_order_type)
   }
 
   # Método para establecer las opciones del select input del filtro
@@ -115,6 +135,21 @@ class OrderingSupply < ApplicationRecord
       ['Estado (a-z)', 'estado_asc'],
       ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
       ['Fecha recibido (asc)', 'recibido_desc'],
+    ]
+  end
+
+  def self.options_for_status
+    [
+      ['Todos', '', 'default'],
+      ['Solicitud auditoria', 0, 'warning'],
+      ['Solicitud enviada', 1, 'info'],
+      ['Proveedor auditoria', 2, 'warning'],
+      ['Proveedor aceptado', 3, 'primary'],
+      ['Provisión en camino', 4, 'primary'],
+      ['Provisión entregada', 5, 'success'],
+      ['Recibo auditoria', 6, 'warning'],
+      ['Recibo realizado', 7, 'success'],
+      ['Anulado', 8, 'danger'],
     ]
   end
 

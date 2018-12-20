@@ -55,6 +55,7 @@ class InternalOrdersController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.js
       format.pdf do
         send_data generate_apply_report(@applicant_orders),
           filename: 'pedidos_internos.pdf',

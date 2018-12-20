@@ -1,6 +1,8 @@
 <%= render 'header' %>
 
 <% if @ordering_supplies.present? %>
+  <%= render "filter" %>
+  
   <%= render(
     partial: 'ordering_supplies/list',
     locals: { ordering_supplies: @ordering_supplies }
