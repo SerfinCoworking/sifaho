@@ -16,12 +16,14 @@ class InternalOrdersController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_code,
         :search_applicant,
-        :search_supply_code,
-        :search_supply_name,
+        :with_order_type,
         :with_status,
-        :requested_date_at,
-        :received_date_at,
+        :requested_date_since,
+        :requested_date_to,
+        :date_received_since,
+        :date_received_to,
         :sorted_by
       ],
     ) or return
@@ -41,13 +43,15 @@ class InternalOrdersController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
+        :search_code,
         :search_applicant,
         :search_provider,
-        :search_supply_code,
-        :search_supply_name,
+        :with_order_type,
         :with_status,
-        :requested_date_at,
-        :received_date_at,
+        :requested_date_since,
+        :requested_date_to,
+        :date_received_since,
+        :date_received_to,
         :sorted_by
       ],
     ) or return

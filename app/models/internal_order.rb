@@ -39,25 +39,22 @@ class InternalOrder < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
+      :search_code,
       :search_applicant,
       :search_provider,
-      :search_supply_code,
-      :search_supply_name,
+      :with_order_type,
       :with_status,
-      :requested_date_at,
-      :received_date_at,
+      :requested_date_since,
+      :requested_date_to,
+      :date_received_since,
+      :date_received_to,
       :sorted_by
     ]
   )
 
-  pg_search_scope :search_supply_code,
-    :associated_against => { :supplies => :id },
+  pg_search_scope :search_code,
+    :against => :remit_code,
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_supply_name,
-    :associated_against => { :supply_lots => :supply_name },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
@@ -99,16 +96,24 @@ class InternalOrder < ApplicationRecord
     end
   }
 
-  scope :requested_date_at, lambda { |reference_time|
-    where('internal_orders.requested_date = ?', reference_time)
+  scope :date_received_since, lambda { |a_date|
+    where('internal_orders.date_received >= ?', a_date)
   }
 
-  scope :received_date_at, lambda { |reference_time|
-    where('internal_orders.received_date = ?', reference_time)
+  scope :date_received_to, lambda { |a_date|
+    where('internal_orders.date_received <= ?', a_date)
   }
 
-  scope :with_sector_id, lambda { |an_id|
-    where(sector_id: [*an_id])
+  scope :requested_date_since, lambda { |a_date|
+    where('internal_orders.requested_date >= ?', a_date)
+  }
+
+  scope :requested_date_to, lambda { |a_date|
+    where('internal_orders.requested_date <= ?', a_date)
+  }
+
+  scope :with_order_type, lambda { |a_type|
+    where('internal_orders.order_type = ?', a_type)
   }
 
   scope :with_status, lambda { |a_status|
