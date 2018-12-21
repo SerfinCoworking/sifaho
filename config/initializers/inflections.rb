@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.plural 'Unidad', 'Unidades'
+  inflect.plural 'Par', 'Pares'
+  inflect.plural 'Bidon', 'Bidones'
+end
