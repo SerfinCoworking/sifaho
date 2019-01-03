@@ -108,7 +108,7 @@
                     </td>
                     <td>
                       <% if qosl.supply.needs_expiration %>
-                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : "Sin asignar" %>
+                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
                       <% else %>
                         No vence
                       <% end %>

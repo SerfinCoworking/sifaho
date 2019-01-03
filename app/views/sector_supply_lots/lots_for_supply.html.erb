@@ -111,7 +111,7 @@
                     <tr>
                       <td><%= lot.lot_code %></td>
                       <td><%= lot.laboratory %></td>
-                      <td><%= lot.supply_lot.expiry_date? ? lot.supply_lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
+                      <td><%= lot.supply_lot.expiry_date? ? lot.supply_lot.expiry_date.strftime("%m/%y") : "No vence" %></td>
                       <td>
                         <span class="label label-<%= lot.status_label %>">
                           <%= lot.status.split('_').map(&:capitalize).join(' ') %>

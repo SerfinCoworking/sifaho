@@ -113,7 +113,7 @@
                         <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'Sin asignar' %>
                       </td>
                       <td>
-                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
+                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
                       </td>
                     <% else %>
                       <td>Sin asignar</td><td>Sin asignar</td><td>Sin asignar</td>
@@ -159,7 +159,7 @@
                       <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'Sin asignar' %>
                     </td>
                     <td>
-                      <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
+                      <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%m/%y") : 'No vence' %>
                     </td>
                     <td>
                       <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>
@@ -210,7 +210,7 @@
                         <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'Sin asignar' %>
                       </td>
                       <td>
-                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No vence' %>
+                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
                       </td>
                     <% else %>
                       <td>Sin asignar</td><td>Sin asignar</td><td>Sin asignar</td>

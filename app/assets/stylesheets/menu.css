@@ -207,3 +207,11 @@ li .well strong{
   background-color: #7c9ed4;
   border-color: #7c9ed4;
 }
+.userinfo{
+  line-height: 15px;
+  padding-top: 8px;
+  margin-left: 14.5em; 
+  text-align: left;
+  color: #41ffc1;
+  width: 170%;
+}
