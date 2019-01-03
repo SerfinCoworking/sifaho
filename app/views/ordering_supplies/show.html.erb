@@ -79,7 +79,7 @@
             <table class="table table-hover table-condensed">
               <thead>
                 <tr>
-                  <th>Cód Ins</th>
+                  <th>Cód.</th>
                   <th>Insumo</th>
                   <th>Solicitado</th>
                   <th>Entregado</th>
@@ -130,7 +130,7 @@
             <table class="table table-hover table-condensed">
               <thead>
                 <tr>
-                  <th>Cód Ins</th>
+                  <th>Cód.</th>
                   <th>Insumo</th>
                   <th>Recibido</th>
                   <th>Lote</th>
@@ -173,7 +173,7 @@
             <table class="table table-hover table-condensed">
               <thead>
                 <tr>
-                  <th>Cód Ins</th>
+                  <th>Cód.</th>
                   <th>Insumo</th>
                   <th>Solicitado</th>
                   <th>Entregado</th>
@@ -260,6 +260,13 @@
         Enviar
       <% end %>
     <% end %>
+    <% if policy(@ordering_supply).edit_applicant? %>
+      <%= link_to edit_applicant_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false, 
+        class: 'btn btn-warning btn-md', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        Auditar
+      <% end %>
+    <% end %>
     <% if policy(@ordering_supply).edit_receipt? %>
       <%= link_to edit_receipt_ordering_supply_path(@ordering_supply), :"data-turbolinks" => false,
         class: 'btn btn-warning btn-md', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
@@ -284,7 +291,7 @@
       <div class="modal-content panel-warning">
         <div class="modal-header panel-heading">
           <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.statuses.key(@ordering_supply.status_before_type_cast - 1).underscore.humanize %></h3>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = OrderingSupply.statuses.key(@ordering_supply.status_before_type_cast - 1).humanize %></h3>
         </div>
         <div class="modal-body">
           <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>

@@ -66,9 +66,9 @@
     </td>
     <td>
       <%= f.input :expiry_date, as: :string, label: false, 
-        :placeholder => "Una fecha",
+        :placeholder => "M/A",
         input_html: {
-          :style => 'width: 109px',
+          :style => 'width: 70px',
           class: "new-expiry-date",
           required: false,
           autocomplete: 'off',
@@ -83,6 +83,7 @@
         html5: false 
       %>
     </td>
+    <%= f.hidden_field :expiry_date, as: :string, class: "new-expiry-date-hidden" %>
   <% elsif @order_type == 'solicitud_abastecimiento' %> <!-- End Form recibo -->
     <td>
       <%= f.input :supply_id, as: :string,

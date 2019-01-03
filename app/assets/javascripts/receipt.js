@@ -28,7 +28,34 @@ document.addEventListener("turbolinks:load", function() {
     })
   });
 
-  $('.new-expiry-date').datetimepicker({ format: 'DD/MM/YYYY', locale: 'es' });
+  $('.new-expiry-date')
+  .datetimepicker({ 
+    format: 'MM/YY',
+    viewMode: 'years',
+    locale: 'es',
+    useCurrent: false
+  })
+  .on('dp.change',function(e)
+  {                               
+    var nested_form = $(this).parents(".nested-fields");
+    if ( !$(this).val()){
+      nested_form.find(".new-expiry-date-hidden").val('');
+    }else{
+      var end_of_month = new Date(e.date.endOf('month'));
+      $(this).data("DateTimePicker").date(end_of_month);
+      nested_form.find(".new-expiry-date-hidden").val(end_of_month);
+    }
+  });
+
+  $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
+    $('.new-expiry-date').datetimepicker({ format: 'MM/YY', viewMode: 'years', locale: 'es', useCurrent: false });
+    $('[data-toggle="tooltip"]').tooltip({ 'selector': '', 'container':'body' });
+  });
+
+  $(document).on('cocoon:before-remove', '.quantity_ord_supply_lots', function(e, task) {
+    $("[data-toggle='tooltip']").tooltip('hide');
+  });
+
   // Función para autocompletar nombre de establecimiento
   jQuery(function() {
     var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
@@ -107,13 +134,8 @@ document.addEventListener("turbolinks:load", function() {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.value);
           nested_form.find(".new-supply-name").val(ui.item.name);
-          if(ui.item.expiry){
-            nested_form.find(".new-expiry-date").prop( "disabled", false );
-            nested_form.find(".new-expiry-date").val('');
-          }else{
-            nested_form.find(".new-expiry-date").val('No expira');
-            nested_form.find(".new-expiry-date").prop( "disabled", true );
-          }
+          nested_form.find(".new-expiry-date").prop( "disabled", false );
+          nested_form.find(".new-expiry-date").val('');
           nested_form.find(".new-deliver-quantity").focus();
         },
         response: function(event, ui) {
@@ -142,14 +164,9 @@ document.addEventListener("turbolinks:load", function() {
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.id);
-          nested_form.find(".new-supply-code").val(ui.item.id);
-          if(ui.item.expiry){
-            nested_form.find(".new-expiry-date").prop( "disabled", false );
-            nested_form.find(".new-expiry-date").val('');
-          }else{
-            nested_form.find(".new-expiry-date").val('No expira');
-            nested_form.find(".new-expiry-date").prop( "disabled", true );
-          }
+          nested_form.find(".new-supply-code").val(ui.item.id);    
+          nested_form.find(".new-expiry-date").prop( "disabled", false );
+          nested_form.find(".new-expiry-date").val('');
           nested_form.find('.new-deliver-quantity').focus();
         },
         response: function(event, ui) {
@@ -181,8 +198,8 @@ document.addEventListener("turbolinks:load", function() {
           nested_form.find(".new-supply-lot-id").val(ui.item.id);
           if(ui.item.expiry_date){
             var date = new Date(ui.item.expiry_date);
-            nested_form.find(".new-expiry-date").val((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear())
-            nested_form.find(".new-expiry-datetime").val(ui.item.expiry_date);
+            nested_form.find(".new-expiry-date").val( (date.getMonth() + 1) + '/' +  date.getFullYear().toString().substr(-2));
+            nested_form.find(".new-expiry-date-hidden").val(date);
           }
           nested_form.find(".new-laboratory").focus();
         },

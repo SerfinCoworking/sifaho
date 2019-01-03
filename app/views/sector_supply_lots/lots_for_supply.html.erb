@@ -195,7 +195,7 @@
                           <td><%= @order.created_at.strftime("%d/%m/%Y")%></td>
                           <td>                        
                             <%= link_to polymorphic_path(@order), target: :_blank, class: 'btn btn-default btn-xs',
-                              title: 'Ver '+@order.order_type, data: { toggle: 'tooltip', placement: 'top' } do %>
+                              title: 'Ver '+@order.order_type.humanize.underscore, data: { toggle: 'tooltip', placement: 'top' } do %>
                               <%= content_tag(:span, '', class: 'glyphicon glyphicon-new-window') %>
                             <% end %>
                           </td>
