@@ -22,7 +22,7 @@
       <% end %>
       <% if user_signed_in? %>
         <div class="userinfo"> 
-          <span><%= current_user.sector.name %></span></a>
+          <span><%= current_user.sector.name.upcase %></span></a>
           <br>
           <span><small><%= current_user.establishment_name %></small></span>
         </div>
