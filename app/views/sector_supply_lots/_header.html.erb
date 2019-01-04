@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
       <li role="presentation" id="page-title">
-        <a href="">Stock <%= current_user.sector.name %></a>
+        <a href="">Insumos en stock</a>
       </li>
       <% if policy(SectorSupplyLot).group_by_supply? %>
         <li role="presentation" class="<%= active_action('group_by_supply') %>">

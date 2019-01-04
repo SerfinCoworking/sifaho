@@ -49,12 +49,12 @@
 
 <!-- Menu STOCK -->
 <li class="nav-header" data-toggle="collapse" data-target="#stock"><div id="stock-label" class="well well-sm">
-  <span class="glyphicon glyphicon-barcode"><strong> Stock</strong></div></li>
+  <span class="glyphicon glyphicon-barcode"><strong> Insumos</strong></div></li>
 <ul class="nav nav-cust nav-list" id="stock">
   <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
     <% if policy(SectorSupplyLot).index? %>
       <%= link_to main_app.group_by_supply_sector_supply_lots_path do %>
-        <%= current_user.sector.name %>
+        Stock
       <% end %>
     <% end %>
   </li>

@@ -7,7 +7,7 @@ $(document).on('turbolinks:load', function() {
     locale: 'es'
   });
 
-  $("#applicant-sector").prop('required',true);
+  $("#applicant-sector").prop('required', true);
 
   $("#establishment").on("click", function () {
      $(this).select();
@@ -94,6 +94,11 @@ $(document).on('turbolinks:load', function() {
        source: _this.data('autocomplete-source'),
        autoFocus: true,
        minLength: 1,
+       focus: function( event, ui ) {
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-name").val(ui.item.name);
+        return false;
+      },
        select:
        function (event, ui) {
          var nested_form = _this.parents(".nested-fields");

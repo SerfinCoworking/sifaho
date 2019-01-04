@@ -129,6 +129,11 @@ document.addEventListener("turbolinks:load", function() {
         source: $('.new-supply-code').data('autocomplete-source'),
         autoFocus: true,
         minLength: 1,
+        focus: function( event, ui ) {
+          var nested_form = _this.parents(".nested-fields");
+          nested_form.find(".new-supply-name").val(ui.item.name);
+          return false;
+        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -189,6 +194,13 @@ document.addEventListener("turbolinks:load", function() {
         // '/supply_lots/search_by_code?supply_code=5782'
         source: '/supply_lots/search_by_lot_code?supply_code='+_this.parents(".nested-fields").find(".new-supply-code").val(),
         minLength: 1,
+        focus: function( event, ui ) {
+          var nested_form = _this.parents(".nested-fields");
+          nested_form.find(".new-laboratory").val(ui.item.lab_name);
+          var date = new Date(ui.item.expiry_date);
+          nested_form.find(".new-expiry-date").val( (date.getMonth() + 1) + '/' +  date.getFullYear().toString().substr(-2));
+          return false;
+        },
         select:
         function (event, ui){
           var nested_form = _this.parents(".nested-fields");
