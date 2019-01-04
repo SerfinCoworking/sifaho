@@ -142,6 +142,9 @@ document.addEventListener("turbolinks:load", function() {
           nested_form.find(".new-expiry-date").prop( "disabled", false );
           nested_form.find(".new-expiry-date").val('');
           nested_form.find(".new-deliver-quantity").focus();
+          if (event.keyCode == 9) {
+            nested_form.find(".new-supply-name").focus();
+          }
         },
         response: function(event, ui) {
           if (!ui.content.length) {
