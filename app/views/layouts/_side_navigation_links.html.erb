@@ -7,7 +7,7 @@
 
 <!--  Menu PEDIDOS -->
 <li class="nav-header" data-toggle="collapse" data-target="#pedidos"><div id="pedidos-label" class="well well-sm">
-  <span class="glyphicon glyphicon-list-alt"><strong> Pedidos</strong></div></li>
+  <span class="glyphicon glyphicon-list-alt"></span><strong> Pedidos</strong></div></li>
 <ul class="nav nav-cust nav-list" id="pedidos">
   <li id="pedidos-li" class="<%= active_class('prescriptions') %>">
     <% if policy(Prescription).index? %>
@@ -49,7 +49,7 @@
 
 <!-- Menu STOCK -->
 <li class="nav-header" data-toggle="collapse" data-target="#stock"><div id="stock-label" class="well well-sm">
-  <span class="glyphicon glyphicon-barcode"><strong> Insumos</strong></div></li>
+  <span class="glyphicon glyphicon-barcode"></span><strong> Insumos</strong></div></li>
 <ul class="nav nav-cust nav-list" id="stock">
   <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
     <% if policy(SectorSupplyLot).index? %>
@@ -83,7 +83,7 @@
 
 <!-- Menu USUARIOS -->
   <li class="nav-header" data-toggle="collapse" data-target="#efectores"><div id="efectores-label" class="well well-sm">
-    <span class="glyphicon glyphicon-user"><strong> Efectores</strong></div>
+    <span class="glyphicon glyphicon-user"></span><strong> Efectores</strong></div>
   </li>
   <ul class="nav nav-cust nav-list" id="efectores">
     <li id="efectores-li" class="<%= active_class('professionals') %>">

@@ -197,8 +197,8 @@ class InternalOrdersController < ApplicationController
     @user_id = internal_order_params.extract!(:sent_by_id)
     audited_by = current_user
     respond_to do |format|
-      begin
-        if @internal_order.update(internal_order_params)
+      if @internal_order.update(internal_order_params)
+        begin
             if @internal_order.provision?
               if sending_by_provider?
                 @internal_order.send_order_by_user_id(@user_id)
@@ -228,15 +228,31 @@ class InternalOrdersController < ApplicationController
               end
             end
           format.html { redirect_to @internal_order }
-        else
-          @sectors = Sector.with_establishment_id(@internal_order.applicant_sector.establishment_id)
+        rescue ArgumentError => e
+          flash[:alert] = e.message
+        end 
+        format.html { redirect_to @internal_order }
+      else
+        if @internal_order.provision?
+          @order_type = 'provision'
+          @applicant_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+          
+          flash[:error] = "La provision no se ha podido crear."
           format.html { render :edit }
-          format.json { render json: @internal_order.errors, status: :unprocessable_entity }
+        elsif @internal_order.solicitud?
+          @order_type = 'solicitud'
+          @provider_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+          
+          flash[:error] = "La solicitud no se ha podido crear."
+          format.html { render :edit_applicant }
         end
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      end 
-      format.html { redirect_to @internal_order }
+      end
     end
   end
 

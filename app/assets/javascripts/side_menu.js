@@ -39,10 +39,10 @@ $(document).on('turbolinks:load', function() {
   });
 
   $("#stock").on("hide.bs.collapse", function(){
-    $("#stock-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Stock</strong>');
+    $("#stock-label").html('<span class="glyphicon glyphicon-chevron-down"></span> <strong>Insumos</strong>');
   });
   $("#stock").on("show.bs.collapse", function(){
-    $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Stock</strong>');
+    $("#stock-label").html('<span class="glyphicon glyphicon-barcode"></span> <strong>Insumos</strong>');
   });
 
   $("#efectores").on("hide.bs.collapse", function(){

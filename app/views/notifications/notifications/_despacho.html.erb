@@ -1,3 +1,4 @@
+<% unless notification.target.nil? %>
 <div class="">
   <%= notification.actor.full_name %> de <%= notification.actor_sector.establishment.name %>
   <%= notification.action_type %> un <span class="visible-print">despacho</span>
@@ -5,3 +6,4 @@
   <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
   para <%= notification.target.applicant_sector.name %> de <%= notification.target.applicant_sector.establishment.name %>.
 </div>
+<% end%>

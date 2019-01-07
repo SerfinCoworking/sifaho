@@ -164,8 +164,6 @@ class OrderingSuppliesController < ApplicationController
         end
         format.html { redirect_to @ordering_supply }
       else
-        4.times { @ordering_supply.quantity_ord_supply_lots.build }
-
         if ordering_supply_params[:order_type] == 'despacho'
           @order_type = 'despacho'
           @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
@@ -247,15 +245,18 @@ class OrderingSuppliesController < ApplicationController
         format.html { redirect_to @ordering_supply }
       else
         if @ordering_supply.despacho?
+          @order_type = 'despacho'
           @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
           flash[:error] = "El despacho no se ha podido auditar."
           format.html { render :edit }
         elsif @ordering_supply.recibo?
+          @order_type = 'recibo'
           @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
           flash[:error] = "El recibo no se ha podido auditar."
           format.html { render :edit_receipt }
         elsif @ordering_supply.solicitud_abastecimiento?
           @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+          @order_type = 'solicitud_abastecimiento'
           flash[:error] = "La solicitud de abastecimiento no se ha podido auditar."
           format.html { render :edit_applicant }
         end
@@ -339,10 +340,12 @@ class OrderingSuppliesController < ApplicationController
   def destroy
     authorize @ordering_supply
     @sector_name = @ordering_supply.applicant_sector.name
+    @order_type = @ordering_supply.order_type
+    Notification.destroy_with_target_id(@ordering_supply.id)
     @ordering_supply.destroy
     @ordering_supply.create_notification(current_user, "envió a la papelera")
     respond_to do |format|
-      flash.now[:success] = "El pedido de "+@sector_name+" se ha enviado a la papelera."
+      flash.now[:success] = @order_type.humanize+" de "+@sector_name+" se ha enviado a la papelera."
       format.js
     end
   end

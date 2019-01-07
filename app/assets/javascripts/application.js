@@ -35,7 +35,7 @@ window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
-}, 5000);
+}, 10000);
 
 $('[data-toggle="tooltip"]').tooltip({
     'selector': '',
@@ -53,7 +53,7 @@ $(document).on('turbolinks:load', function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
       $(this).remove();
     });
-  }, 5000);
+  }, 10000);
 
   // Return confirmation modal
   $('#return-confirm').on('show', function() {

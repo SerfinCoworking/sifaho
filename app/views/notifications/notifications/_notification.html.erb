@@ -9,6 +9,7 @@
     <% end %>
   </div>
   <div class="media-body">
+    <%= notification.id %>
     <%= render partial: "/notifications/notifications/#{notification.notify_type}", locals: { notification: notification } %>
     <small><%= time_ago_in_words(notification.created_at) %></small>
   </div>

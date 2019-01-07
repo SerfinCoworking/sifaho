@@ -1,7 +1,9 @@
-<div class="">
-  <%= notification.actor.full_name %> de <%= notification.actor_sector.establishment.name %>
-  <%= notification.action_type %> un <span class="visible-print">recibo</span>
-  <strong><%= link_to 'recibo', main_app.ordering_supply_path(notification.target), class:'hidden-print' %></strong> de 
-  <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
-  proveniente de <%= notification.target.provider_sector.establishment.name %>.
-</div>
+<% unless notification.target.nil? %>
+  <div class="">
+    <%= notification.actor.full_name %> de <%= notification.actor_sector.establishment.name %>
+    <%= notification.action_type %> un <span class="visible-print">recibo</span>
+    <strong><%= link_to 'recibo', main_app.ordering_supply_path(notification.target), class:'hidden-print' %></strong> de 
+    <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
+    proveniente de <%= notification.target.provider_sector.establishment.name %>.
+  </div>
+<% end %>
