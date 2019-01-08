@@ -166,7 +166,6 @@ class InternalOrdersController < ApplicationController
         end
         format.html { redirect_to @internal_order }
       else
-        5.times { @internal_order.quantity_ord_supply_lots.build }
         if @internal_order.provision?
           @order_type = 'provision'
           @applicant_sectors = Sector
