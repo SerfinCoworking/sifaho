@@ -3,6 +3,10 @@ class OrderingSuppliesController < ApplicationController
     :send_applicant, :destroy, :delete, :return_status, :edit_receipt, :edit_applicant,
     :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm ]
 
+  def statistics
+    
+  end
+
   # GET /ordering_supplies
   # GET /ordering_supplies.json
   def index

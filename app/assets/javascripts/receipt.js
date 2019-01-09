@@ -200,8 +200,6 @@ document.addEventListener("turbolinks:load", function() {
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
-          var date = new Date(ui.item.expiry_date);
-          nested_form.find(".new-expiry-date").val( (date.getMonth() + 1) + '/' +  date.getFullYear().toString().substr(-2));
           return false;
         },
         select:
