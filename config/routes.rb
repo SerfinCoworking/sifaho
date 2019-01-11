@@ -108,6 +108,7 @@ Rails.application.routes.draw do
       get "new_receipt"
       get "new_applicant"
       get "applicant_index"
+      get "statistics"
     end
   end
 

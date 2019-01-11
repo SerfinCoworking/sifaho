@@ -4,7 +4,7 @@ class OrderingSuppliesController < ApplicationController
     :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm ]
 
   def statistics
-    
+    @ordering_supplies = OrderingSupply.all
   end
 
   # GET /ordering_supplies

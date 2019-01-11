@@ -42,7 +42,7 @@ class ProfessionalPolicy < ApplicationPolicy
   end
 
   def create_pro
-    [ :admin ]
+    [ :admin, :pharmacist ]
   end
 
   def destroy_pro
