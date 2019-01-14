@@ -28,6 +28,7 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-sprockets
 //= require bootstrap
+//= require bootstrap.min
 //= require_tree .
 
 // Se oculta el flash message

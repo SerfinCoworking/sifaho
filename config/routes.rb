@@ -170,6 +170,7 @@ Rails.application.routes.draw do
     get "by-status-current-sector-supply-lots"
     get "by-month-applicant-ordering-supplies"
     get "by-month-provider-ordering-supplies"
+    get "by-order-type-ordering-supplies"
   end
 
   resources :office_supplies do

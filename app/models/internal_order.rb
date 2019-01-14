@@ -159,7 +159,7 @@ class InternalOrder < ApplicationRecord
     return self.applicant_sector == a_sector
   end
 
-  def with_sector?(a_sector)
+  def delivered_with_sector?(a_sector)
     if self.provision_en_camino? || self.provision_entregada?
       return self.provider_sector == a_sector || self.applicant_sector == a_sector
     end

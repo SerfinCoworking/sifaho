@@ -36,7 +36,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
         @sector_supply_lot.save!
         self.entregado!
       else
-        raise ArgumentError, 'No hay lotes en la relación'
+        self.sin_stock!
       end
     end 
   end
@@ -103,10 +103,10 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.supply.unity
   end
 
-  def with_sector?(a_sector)
-    self.quantifiable.with_sector?(a_sector)
+  def delivered_with_sector?(a_sector)
+    self.quantifiable.delivered_with_sector?(a_sector)
   end
-
+  
   def with_supply_code?(a_code)
     return self.supply.id == a_code
   end
@@ -115,6 +115,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
     QuantityOrdSupplyLot.where.not(quantifiable: nil)
       .where(supply_id: a_code)
       .includes(:quantifiable)
-      .select { |ord| ord.with_sector?(a_sector) }
+      .select { |qosl| qosl.delivered_with_sector?(a_sector) }
   end
 end
