@@ -85,7 +85,7 @@
               </tr>
             </thead>
             <tbody>
-              <% @internal_order.quantity_ord_supply_lots.each do |qosl| %>
+              <% @internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
                 <tr>
                   <td>
                     <%= qosl.supply_id %>

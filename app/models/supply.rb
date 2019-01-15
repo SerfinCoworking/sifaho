@@ -1,26 +1,25 @@
 class Supply < ApplicationRecord
   acts_as_paranoid
   include PgSearch
-  # Relaciones
-  belongs_to :supply_area
 
+  # Relaciones
+  belongs_to :supply_area  
+  has_many :quantity_ord_supply_lots
+  has_many :prescriptions, -> { with_deleted },
+  :through => :quantity_ord_supply_lots,
+  :source => :quantifiable,
+  :source_type => 'Prescription'
+  
+  has_many :internal_orders, -> { with_deleted },
+  :through => :quantity_ord_supply_lots,
+  :source => :quantifiable,
+  :source_type => 'InternalOrder'
+  
   # Validaciones
   validates_presence_of :name
   validates_presence_of :unity
   validates_presence_of :quantity_alarm
   validates_presence_of :period_control
-
-  has_many :quantity_ord_supply_lots
-  has_many :prescriptions, -> { with_deleted },
-    :through => :quantity_ord_supply_lots,
-    :source => :quantifiable,
-    :source_type => 'Prescription'
-
-  has_many :internal_orders, -> { with_deleted },
-    :through => :quantity_ord_supply_lots,
-    :source => :quantifiable,
-    :source_type => 'InternalOrder'
-
 
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },

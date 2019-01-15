@@ -1,7 +1,7 @@
 class InternalOrdersController < ApplicationController
   before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete, 
   :edit_applicant, :send_provider, :receive_applicant_confirm, :receive_applicant, 
-  :return_provider_status, :return_applicant_status,:send_applicant ]
+  :return_provider_status, :return_applicant_status, :send_applicant ]
 
   # GET /internal_orders
   # GET /internal_orders.json
@@ -93,7 +93,6 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    5.times { @internal_order.quantity_ord_supply_lots.build }
   end
 
   # GET /internal_orders/new_applicant
@@ -105,7 +104,6 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    5.times { @internal_order.quantity_ord_supply_lots.build }
   end
 
   # GET /internal_orders/1/edit

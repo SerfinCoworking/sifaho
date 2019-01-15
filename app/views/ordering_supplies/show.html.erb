@@ -91,7 +91,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+                <% @ordering_supply.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
                   <tr>
                     <td>
                       <%= qosl.supply_id %>
@@ -141,7 +141,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+                <% @ordering_supply.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
                   <tr>
                     <td>
                       <%= qosl.supply_id %>
@@ -188,7 +188,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @ordering_supply.quantity_ord_supply_lots.each do |qosl| %>
+                <% @ordering_supply.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
                   <tr>
                     <td>
                       <%= qosl.supply_id %>

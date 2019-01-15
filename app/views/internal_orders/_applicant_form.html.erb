@@ -81,8 +81,14 @@
       </tr>
     </thead>
     <tbody class="quantity_ord_supply_lots">
-      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-        <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+      <% if @internal_order.quantity_ord_supply_lots.any? %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
+      <% else %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @internal_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
       <% end %>
     </tbody>
   </table>

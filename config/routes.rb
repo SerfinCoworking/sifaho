@@ -165,7 +165,7 @@ Rails.application.routes.draw do
   end
 
   namespace :charts do
-    get "by-month-prescriptions"
+    get "by-month-prescriptions"  
     get "by-laboratory-lots"
     get "by-status-current-sector-supply-lots"
     get "by-month-applicant-ordering-supplies"

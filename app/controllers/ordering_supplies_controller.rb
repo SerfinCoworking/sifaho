@@ -74,7 +74,6 @@ class OrderingSuppliesController < ApplicationController
   def new
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
-    4.times { @ordering_supply.quantity_ord_supply_lots.build }
     @order_type = 'despacho'
   end
 
@@ -82,7 +81,6 @@ class OrderingSuppliesController < ApplicationController
   def new_receipt
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
-    4.times { @ordering_supply.quantity_ord_supply_lots.build }
     @order_type = 'recibo'
   end
 
@@ -90,7 +88,6 @@ class OrderingSuppliesController < ApplicationController
   def new_applicant
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
-    4.times { @ordering_supply.quantity_ord_supply_lots.build }
     @order_type = 'solicitud_abastecimiento'
   end
 
