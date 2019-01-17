@@ -67,4 +67,13 @@ $(document).on('turbolinks:load', function() {
     e.preventDefault();
     $('#return-confirm').data('id', $(this).data('id')).modal('show');
   });
+
+});
+
+$(document).on('page:fetch', function(e) {
+  $('.spinner').css('display', 'none');  //<--- hide again
+});
+
+$(document).on('click', '.show-spin', function() {
+  $(this).find(".spinner").css("display", "table");
 });

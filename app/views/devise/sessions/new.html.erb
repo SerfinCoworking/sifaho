@@ -29,7 +29,9 @@ body {
           </label>
         </div>
       <% end -%>
-      <%= f.submit 'Iniciar sesión', class: 'btn btn-success btn-md btn-block' %>
+      <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block show-spin") do %>
+        <%= image_tag("eclipse.gif", size: "25x25", class: "spinner") %> Iniciar sesión
+      <% end %>
   <% end %>
 </div>
 	

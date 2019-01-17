@@ -89,13 +89,17 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.sector_supply_lot.code
   end
 
-  def sector_supply_lot_code
-    self.sector_supply_lot.lot_code
+  def sector_supply_lot_lot_code
+    self.sector_supply_lot.present? ? self.sector_supply_lot.lot_code : 'Sin asignar'
   end
 
   # Retorna fecha de expiración del lote
-  def sector_supply_expiry_date
-    self.sector_supply_lot.expiry_date
+  def sector_supply_lot_expiry_date
+    self.sector_supply_lot.present? ? self.sector_supply_lot.expiry_date : 's/a'
+  end
+
+  def sector_supply_lot_laboratory_name
+    self.sector_supply_lot.present? ? self.sector_supply_lot.format_expiry_date : 'Sin asignar'
   end
 
   # Retorna el tipo de unidad

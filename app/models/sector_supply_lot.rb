@@ -111,6 +111,9 @@ class SectorSupplyLot < ApplicationRecord
   }
 
   # Métodos públicos #----------------------------------------------------------
+  def format_expiry_date
+    self.supply_lot.format_expiry_date
+  end
 
   def laboratory
     self.supply_lot.laboratory_name

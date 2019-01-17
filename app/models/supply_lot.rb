@@ -154,6 +154,10 @@ class SupplyLot < ApplicationRecord
     end
   end
 
+  def format_expiry_date
+    self.expiry_date.present? ? self.expiry_date.strftime('%m/%y') : 'No vence'
+  end
+
   def laboratory_name
     self.laboratory.name
   end

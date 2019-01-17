@@ -68,6 +68,17 @@ class OrderingSuppliesController < ApplicationController
   # GET /ordering_supplies/1.json
   def show
     authorize @ordering_supply
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.pdf do
+        send_data generate_order_report(@ordering_supply),
+          filename: 'Despacho_'+@ordering_supply.remit_code+'.pdf',
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   # GET /ordering_supplies/new
@@ -357,6 +368,32 @@ class OrderingSuppliesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def generate_order_report(ordering_supply)
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'despacho.tlf')
+
+    ordering_supply.quantity_ord_supply_lots.each do |qosl|
+      report.list.add_row do |row|
+        row.values  supply_code: qosl.supply_id,
+                    supply_name: qosl.supply.name,
+                    requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+                    delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+                    lot: qosl.sector_supply_lot_lot_code,
+                    laboratory: qosl.sector_supply_lot_laboratory_name,
+                    expiry_date: qosl.sector_supply_lot_expiry_date, 
+                    applicant_obs: qosl.applicant_observation
+      end
+    end
+    report.page[:page_count] = report.page_count
+    report.page[:applicant_sector] = ordering_supply.applicant_sector.name
+    report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
+    # report.page[:total_supplies] = ordering_supply.quantity_ord_supply_lots.count
+    # report.page[:total_requested] = ordering_supply.quantity_ord_supply_lots.sum(&:requested_quantity)
+    # report.page[:total_delivered] = ordering_supply.quantity_ord_supply_lots.sum(&:delivered_quantity)
+    report.page[:title] = 'Despacho de abastecimiento'
+
+    report.generate
   end
 
   private

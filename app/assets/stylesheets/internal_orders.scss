@@ -20,16 +20,9 @@
 div.tooltip-inner {
   max-width: 350px;
 }
-.btn-add-int{
-  position: absolute;
-  z-index: 4;
-  margin-top: -2em;
-  margin-left: 10em;
-  display: none;
-}
 
 #pedidos-li:hover .btn-add-int {
-   display: table; /* On :hover of div show button */
+  display: table; /* On :hover of div show button */
 }
 
 #pro-aud-glyph-prov{ 

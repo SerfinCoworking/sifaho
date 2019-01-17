@@ -13,13 +13,6 @@
     <% if policy(Prescription).index? %>
       <%= link_to main_app.prescriptions_path do %>
         Prescripciones
-        <% if policy(Prescription).new? %>
-          <div class="btn-add-pres">
-            <%= link_to main_app.new_prescription_path, class: 'btn btn-primary btn-xs' do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-        <% end %>
       <% end %>
     <% end %>
   </li>
@@ -27,13 +20,6 @@
     <% if policy(InternalOrder).index? %>
       <%= link_to main_app.applicant_index_internal_orders_path do %>
         Internos
-        <% if policy(InternalOrder).new? %>
-          <div class="btn-add-int">
-            <%= link_to main_app.new_provider_internal_orders_path, class: 'btn btn-primary btn-xs' do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            <% end %>
-          </div>
-        <% end %>
       <% end %>
     <% end %>
   </li>
