@@ -74,9 +74,9 @@
           autocomplete: 'off',
           value: "#{
             if f.object.expiry_date.present? 
-              f.object.expiry_date.strftime("%d/%m/%Y")
+              f.object.expiry_date.strftime("%m/%Y")
             else 
-              'Sin asignar'
+              'n/a'
             end
           }"
         },
@@ -262,7 +262,7 @@
         input_html: {
           :style => 'width: 65px',
           class: "supply-lot-expiry",
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y") : 'No expira'; end}"
+          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%m/%Y") : 'n/a'; end}"
         },
         html5: false 
       %>

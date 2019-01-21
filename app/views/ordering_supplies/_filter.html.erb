@@ -1,6 +1,8 @@
 <div class="panel panel-info" id="filter-panel">
   <div class="panel-leftheading">
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+    <br>
+    <%= render_filterrific_spinner %>
   </div>
   <div class="panel-rightbody">
     <%= form_for_filterrific @filterrific do |f| %>
@@ -76,7 +78,6 @@
           :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
         <% end %>
-        <%= render_filterrific_spinner %>
       </div>
     <% end %>
   </div>
