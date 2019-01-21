@@ -1,0 +1,13 @@
+@media (max-width: 800px) {
+  .nav-tabs-cust > li > a{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #page-title{
+    font-size: 18px;
+    margin-top: 0px;
+  }
+  #page-header{
+    padding: 0px 0px 0px 1em!important;
+  }
+}

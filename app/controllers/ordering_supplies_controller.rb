@@ -371,27 +371,59 @@ class OrderingSuppliesController < ApplicationController
   end
 
   def generate_order_report(ordering_supply)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'despacho.tlf')
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'first_page_despacho.tlf')
 
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'first_page_despacho.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'other_page_despacho.tlf'), id: :other_page
+    
     ordering_supply.quantity_ord_supply_lots.each do |qosl|
-      report.list.add_row do |row|
-        row.values  supply_code: qosl.supply_id,
-                    supply_name: qosl.supply.name,
-                    requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                    delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                    lot: qosl.sector_supply_lot_lot_code,
-                    laboratory: qosl.sector_supply_lot_laboratory_name,
-                    expiry_date: qosl.sector_supply_lot_expiry_date, 
-                    applicant_obs: qosl.applicant_observation
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page layout: :other_page do |page|
+        end
+      end
+
+      if report.page_count == 1
+        report.page[:applicant_sector] = ordering_supply.applicant_sector.name
+        report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
+        report.page[:provider_sector] = ordering_supply.applicant_sector.name
+        report.page[:provider_establishment] = ordering_supply.applicant_establishment.name
+        report.page[:observations] = ordering_supply.observation
+      end
+      
+      report.list do |list|
+        list.add_row do |row|
+          row.values  supply_code: qosl.supply_id,
+                      supply_name: qosl.supply.name,
+                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+                      lot: qosl.sector_supply_lot_lot_code,
+                      laboratory: qosl.sector_supply_lot_laboratory_name,
+                      expiry_date: qosl.sector_supply_lot_expiry_date, 
+                      applicant_obs: ordering_supply.despacho? ? qosl.provider_observation : qosl.applicant_observation
+        end
+
+        report.list.on_page_footer_insert do |footer|
+          footer.item(:total_supplies).value(ordering_supply.quantity_ord_supply_lots.count)
+          footer.item(:total_requested).value(ordering_supply.quantity_ord_supply_lots.sum(&:requested_quantity))
+          footer.item(:total_delivered).value(ordering_supply.quantity_ord_supply_lots.sum(&:delivered_quantity))
+          if ordering_supply.despacho?
+            footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+          else
+            footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
+          end
+        end
       end
     end
-    report.page[:page_count] = report.page_count
-    report.page[:applicant_sector] = ordering_supply.applicant_sector.name
-    report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
-    # report.page[:total_supplies] = ordering_supply.quantity_ord_supply_lots.count
-    # report.page[:total_requested] = ordering_supply.quantity_ord_supply_lots.sum(&:requested_quantity)
-    # report.page[:total_delivered] = ordering_supply.quantity_ord_supply_lots.sum(&:delivered_quantity)
-    report.page[:title] = 'Despacho de abastecimiento'
+    
+
+    report.pages.each do |page|
+      page[:title] = 'Reporte de '+ordering_supply.order_type.humanize.underscore
+      page[:remit_code] = ordering_supply.remit_code
+      page[:requested_date] = ordering_supply.requested_date.strftime('%d/%m/%YY')
+      page[:page_count] = report.page_count
+      page[:sector] = current_user.sector_name
+      page[:establishment] = current_user.establishment_name
+    end
 
     report.generate
   end

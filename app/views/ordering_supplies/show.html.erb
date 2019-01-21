@@ -12,10 +12,6 @@
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
       <% end %>
-      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
-        :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-      <% end %>
     </h3>
   </div>
   <div class="visible-print-block"><%= current_user.establishment_name %></div>
@@ -111,16 +107,16 @@
                     </td>
                     <% if qosl.sector_supply_lot.present? %>
                       <td>
-                        <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'Sin asignar' %>
+                        <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'n/a' %>
                       </td>
                       <td>
-                        <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'Sin asignar' %>
+                        <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'n/a' %>
                       </td>
                       <td>
                         <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
                       </td>
                     <% else %>
-                      <td>Sin asignar</td><td>Sin asignar</td><td>Sin asignar</td>
+                      <td>n/a</td><td>n/a</td><td>n/a</td>
                     <% end %>
                     <td>
                       <%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %>
@@ -157,10 +153,10 @@
                       <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
                     </td>
                     <td>
-                      <%= qosl.lot_code.present? ? qosl.lot_code : 'Sin asignar' %>
+                      <%= qosl.lot_code.present? ? qosl.lot_code : 'n/a' %>
                     </td>
                     <td>
-                      <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'Sin asignar' %>
+                      <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'n/a' %>
                     </td>
                     <td>
                       <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%m/%y") : 'No vence' %>
@@ -208,16 +204,16 @@
                     </td>
                     <% if qosl.sector_supply_lot.present? %>
                       <td>
-                        <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'Sin asignar' %>
+                        <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'n/a' %>
                       </td>
                       <td>
-                        <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'Sin asignar' %>
+                        <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'n/a' %>
                       </td>
                       <td>
                         <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
                       </td>
                     <% else %>
-                      <td>Sin asignar</td><td>Sin asignar</td><td>Sin asignar</td>
+                      <td>n/a</td><td>n/a</td><td>n/a</td>
                     <% end %>
                     <td>
                       <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>

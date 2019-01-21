@@ -92,6 +92,9 @@ class OrderingSupply < ApplicationRecord
     when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
       order("quantity_ord_supply_lots.count #{ direction }")
+    when /^solicitado_/
+      # Ordenamiento por la fecha de recepción
+      order("ordering_supplies.requested_date #{ direction }") 
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
       order("ordering_supplies.date_received #{ direction }")

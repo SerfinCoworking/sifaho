@@ -1,19 +1,19 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title">
-        <a href="">Prescripciones</a>
-      </li>
-      <li role="presentation" class="<%= active_action('index') %>">
-        <%= link_to prescriptions_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-          Listado
-        <% end %>
-      </li>
-      <li role="presentation" class="<%= active_action('new') %>">
-        <%= link_to new_prescription_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Nueva
-        <% end %>
-      </li>
-    </ul>
+  <ul class="nav nav-tabs nav-tabs-cust">
+    <li role="presentation" id="page-title">
+      <a href="">Prescripciones</a>
+    </li>
+    <li role="presentation" class="<%= active_action('index') %>">
+      <%= link_to prescriptions_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+        Listado
+      <% end %>
+    </li>
+    <li role="presentation" class="<%= active_action('new') %>">
+      <%= link_to new_prescription_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Nueva
+      <% end %>
+    </li>
+  </ul>
 <% end %>
