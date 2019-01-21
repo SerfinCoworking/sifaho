@@ -385,8 +385,8 @@ class OrderingSuppliesController < ApplicationController
       if report.page_count == 1
         report.page[:applicant_sector] = ordering_supply.applicant_sector.name
         report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
-        report.page[:provider_sector] = ordering_supply.applicant_sector.name
-        report.page[:provider_establishment] = ordering_supply.applicant_establishment.name
+        report.page[:provider_sector] = ordering_supply.provider_sector.name
+        report.page[:provider_establishment] = ordering_supply.provider_establishment.name
         report.page[:observations] = ordering_supply.observation
       end
       
