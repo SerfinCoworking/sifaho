@@ -1,0 +1,24 @@
+<%= render 'header' %>
+<div class="row">
+<div class="col-md-7 col-md-offset-2">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo insumo
+      <%= link_to :back, class: 'btn pull-right close-btn' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+      <% end %>
+    </h3>
+  </div>
+  <div class="panel-body" id="panel-body-new">
+    <%= render 'form', supply: @supply %>
+  </div>
+  <div class="panel-footer text-right">
+    <%= link_to 'Volver', supplies_path, class: 'btn' %>
+    <button type='submit' name='commit' class='btn btn-success' form='new_supply' value='Crear insumo'>
+      Crear insumo
+    </button>
+  </div>
+</div>
+</div>
+</div>

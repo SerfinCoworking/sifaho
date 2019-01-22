@@ -9,12 +9,14 @@
           Listado
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('new') %>">
-        <%= link_to new_supply_path, remote: 'true' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Insumo
-        <% end %>
-      </li>
+      <% if policy(Supply).new? %>
+        <li role="presentation" class="<%= active_action('new') %>">
+          <%= link_to new_supply_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Insumo
+          <% end %>
+        </li>
+      <% end %>
       <% if policy(Supply).trash_index? %>
         <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
           <%= link_to trash_index_supplies_path do %>

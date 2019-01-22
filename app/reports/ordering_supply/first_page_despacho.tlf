@@ -22,7 +22,7 @@
       "description": "",
       "x": 20,
       "y": 20,
-      "width": 270.5,
+      "width": 254.8,
       "height": 17,
       "style": {
         "font-family": [
@@ -1091,7 +1091,7 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 387.6,
+      "x": 370,
       "y": 20,
       "width": 42,
       "height": 14,
@@ -1119,9 +1119,9 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 426.4,
+      "x": 410,
       "y": 23,
-      "width": 61.4,
+      "width": 78.3,
       "height": 12,
       "style": {
         "font-family": [
@@ -1151,7 +1151,7 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 293.7,
+      "x": 275,
       "y": 20,
       "width": 33.9,
       "height": 14,
@@ -1179,7 +1179,7 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 328.7,
+      "x": 310,
       "y": 23,
       "width": 56.9,
       "height": 12,

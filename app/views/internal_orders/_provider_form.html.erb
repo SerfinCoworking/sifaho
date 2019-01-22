@@ -88,8 +88,12 @@
       </tr>
     </thead>
     <tbody class="quantity_ord_supply_lots">
-      <% if @internal_order.quantity_ord_supply_lots.any? %>
+      <% if params[:action] == "edit" %>
         <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
+      <% elsif params[:action] == "create" %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
           <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
         <% end %>
       <% else %>
