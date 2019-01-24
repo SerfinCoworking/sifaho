@@ -5,6 +5,18 @@ class OrderingSuppliesController < ApplicationController
 
   def statistics
     @ordering_supplies = OrderingSupply.all
+    @requests_sent = OrderingSupply.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+    status_colors = { "Recibo Realizado" => "#40c95e", "Provision Entregada" => "#40c95e", "Solicitud Auditoria" => "#f1ae45", "Proveedor Aceptado" => "#336bb6", 
+      "Recibo Auditoria" => "#f1ae45", "Provision En Camino" => "#336bb6", "Proveedor Auditoria" => "#f1ae45", "Vencido" => "#d36262", "Solicitud Enviada" => "#5bbae1" }
+    @r_s_colors = []
+    @requests_sent.each do |status, _|
+      @r_s_colors << status_colors[status]
+    end
+    @requests_received = OrderingSupply.provider(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+    @r_r_colors = []
+    @requests_received.each do |status, _|
+      @r_r_colors << status_colors[status]
+    end
   end
 
   # GET /ordering_supplies

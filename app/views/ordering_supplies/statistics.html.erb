@@ -39,15 +39,12 @@
             <h3 class="panel-title">Solicitudes <small>Enviadas</small></h3>
           </div>
           <div class="panel-body">
-            <%
-              lots = OrderingSupply.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
-              status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
-              colors = []
-              lots.each do |status, _|
-                colors << status_colors[status]
-              end
-            %>
-            <%= pie_chart lots, colors: colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
+            <div class="col-md-6">
+              <%= pie_chart @requests_sent, colors: @r_s_colors, label: 'Cantidad', adapter: "highcharts", title: "Enviadas #{@requests_sent.count}" %>
+            </div>
+            <div class="col-md-6">
+              <%= pie_chart @requests_received, colors: @r_r_colors, label: 'Cantidad', adapter: "highcharts", title: "Recibidas #{@requests_received.count}" %>
+            </div>
           </div>
         </div>
       </div>

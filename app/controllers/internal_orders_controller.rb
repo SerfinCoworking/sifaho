@@ -73,6 +73,17 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1.json
   def show
     authorize @internal_order
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.pdf do
+        send_data generate_internal_order_report(@internal_order),
+          filename: 'Pedido_interno_'+@internal_order.remit_code+'.pdf',
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   # GET /internal_orders/new
@@ -344,61 +355,116 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_internal_order
-      @internal_order = InternalOrder.find(params[:id])
-    end
+  def generate_internal_order_report(internal_order)
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf')
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def internal_order_params
-      params.require(:internal_order).permit(:applicant_sector_id, :sent_by_id, :order_type,
-        :provider_sector_id, :requested_date, :date_received, :observation, :remit_code,
-        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-          :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
-          :provider_observation, :_destroy]
-        )
-    end
-
-    # Se verifica si el value del submit del form es para enviar
-    def sending?
-      submit = params[:commit]
-      return submit == "Auditar y enviar" || submit == "Enviar"
-    end
-
-    def sending_by_provider?
-      submit = params[:commit]
-      return submit == "Enviar proveedor"
-    end
-
-    def applicant?
-      submit = params[:commit]
-      return submit == "Solicitante"
-    end
-
-    def provider?
-      submit = params[:commit]
-      return submit == "Proveedor"
-    end
-
-    def generate_apply_report(orders)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'i_o_list.tlf')
-
-      orders.each do |order|
-        report.list.add_row do |row|
-          row.values  code: order.remit_code,
-                      sector_name: order.provider_sector.name,
-                      origin: order.order_type.underscore.humanize,
-                      status: order.status.underscore.humanize,
-                      supplies: order.quantity_ord_supply_lots.count,
-                      movements: order.movements.count,
-                      requested_date: order.requested_date.strftime("%d/%m/%Y"),
-                      received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page_order.tlf'), id: :other_page
+    
+    internal_order.quantity_ord_supply_lots.each do |qosl|
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page layout: :other_page do |page|
         end
       end
-      report.page[:page_count] = report.page_count
-      report.page[:title] = 'Reporte recibos pedidos internos'
 
-      report.generate
+      if report.page_count == 1
+        report.page[:applicant_sector] = internal_order.applicant_sector.name
+        report.page[:provider_sector] = internal_order.provider_sector.name
+        report.page[:observations] = internal_order.observation
+      end
+      
+      report.list do |list|
+        list.add_row do |row|
+          row.values  supply_code: qosl.supply_id,
+                      supply_name: qosl.supply.name,
+                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+                      lot: qosl.sector_supply_lot_lot_code,
+                      laboratory: qosl.sector_supply_lot_laboratory_name,
+                      expiry_date: qosl.sector_supply_lot_expiry_date, 
+                      applicant_obs: internal_order.provision? ? qosl.provider_observation : qosl.applicant_observation
+        end
+
+        report.list.on_page_footer_insert do |footer|
+          footer.item(:total_supplies).value(internal_order.quantity_ord_supply_lots.count)
+          footer.item(:total_requested).value(internal_order.quantity_ord_supply_lots.sum(&:requested_quantity))
+          footer.item(:total_delivered).value(internal_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
+          if internal_order.solicitud?
+            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+          else
+            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
+          end
+        end
+      end
     end
+    report.pages.each do |page|
+      page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
+      page[:remit_code] = internal_order.remit_code
+      page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
+      page[:page_count] = report.page_count
+      page[:sector] = current_user.sector_name
+      page[:establishment] = current_user.establishment_name
+    end
+
+    report.generate
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_internal_order
+    @internal_order = InternalOrder.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def internal_order_params
+    params.require(:internal_order).permit(:applicant_sector_id, :sent_by_id, :order_type,
+      :provider_sector_id, :requested_date, :date_received, :observation, :remit_code,
+      quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
+        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
+        :provider_observation, :_destroy]
+      )
+  end
+
+  # Se verifica si el value del submit del form es para enviar
+  def sending?
+    submit = params[:commit]
+    return submit == "Auditar y enviar" || submit == "Enviar"
+  end
+
+  def sending_by_provider?
+    submit = params[:commit]
+    return submit == "Enviar proveedor"
+  end
+
+  def applicant?
+    submit = params[:commit]
+    return submit == "Solicitante"
+  end
+
+  def provider?
+    submit = params[:commit]
+    return submit == "Proveedor"
+  end
+
+  def generate_apply_report(orders)
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'i_o_list.tlf')
+
+    orders.each do |order|
+      report.list.add_row do |row|
+        row.values  code: order.remit_code,
+                    sector_name: order.provider_sector.name,
+                    origin: order.order_type.underscore.humanize,
+                    status: order.status.underscore.humanize,
+                    supplies: order.quantity_ord_supply_lots.count,
+                    movements: order.movements.count,
+                    requested_date: order.requested_date.strftime("%d/%m/%Y"),
+                    received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+      end
+    end
+    report.page[:page_count] = report.page_count
+    report.page[:title] = 'Reporte recibos pedidos internos'
+
+    report.generate
+  end
 end
