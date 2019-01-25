@@ -10,10 +10,9 @@ class Professional < ApplicationRecord
   belongs_to :professional_type
   has_one :user
 
-  validates_presence_of :first_name
-  validates_presence_of :last_name
-  validates_presence_of :dni
-  validates_presence_of :professional_type
+  # Validaciones
+  validates_presence_of :first_name, :last_name, :dni, :professional_type, :enrollment
+  validates_uniqueness_of :enrollment, :dni
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

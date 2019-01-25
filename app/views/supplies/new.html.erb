@@ -15,8 +15,8 @@
   </div>
   <div class="panel-footer text-right">
     <%= link_to 'Volver', supplies_path, class: 'btn' %>
-    <button type='submit' name='commit' class='btn btn-success' form='new_supply' value='Crear insumo'>
-      Crear insumo
+    <button type='submit' name='commit' class='btn btn-success' form='new_supply'>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Crear
     </button>
   </div>
 </div>

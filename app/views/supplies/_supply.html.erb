@@ -56,7 +56,7 @@
         <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
         <td>
         <% if policy(supply).show? %>
-          <%= link_to supply_path(supply), remote:true, class: 'btn btn-default btn-xs',
+          <%= link_to supply_path(supply), class: 'btn btn-default btn-xs',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
           <% end %>

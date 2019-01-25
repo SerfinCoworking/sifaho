@@ -16,10 +16,8 @@ class Supply < ApplicationRecord
   :source_type => 'InternalOrder'
   
   # Validaciones
-  validates_presence_of :name
-  validates_presence_of :unity
-  validates_presence_of :quantity_alarm
-  validates_presence_of :period_control
+  validates_presence_of :name, :unity, :quantity_alarm, :period_control
+  validates_uniqueness_of :id
 
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },

@@ -52,6 +52,7 @@ class SuppliesController < ApplicationController
   def show
     authorize @supply
     respond_to do |format|
+      format.html
       format.js
     end
   end
@@ -81,10 +82,10 @@ class SuppliesController < ApplicationController
     respond_to do |format|
       if @supply.save
         flash.now[:success] = "El suministro "+@supply.name+" se ha creado correctamente."
-        format.js
+        format.html { redirect_to @supply }
       else
         flash.now[:error] = "El suministro no se ha podido crear."
-        format.js
+        format.html { render :new }
       end
     end
   end
@@ -162,7 +163,7 @@ class SuppliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supply_params
-      params.require(:supply).permit(:name, :period_alarm, :period_control, :expiration_alarm,
+      params.require(:supply).permit(:id, :name, :period_alarm, :period_control, :expiration_alarm,
         :is_active, :needs_expiration, :unity, :supply_area_id, :description, :observation, 
         :active_alarm, :quantity_alarm)
     end
