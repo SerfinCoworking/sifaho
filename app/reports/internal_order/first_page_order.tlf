@@ -1372,7 +1372,7 @@
       }
     ]
   },
-  "title": "Reporte_pedido_interno",
+  "title": "Reporte pedido interno",
   "report": {
     "paper-type": "A4",
     "orientation": "portrait",
