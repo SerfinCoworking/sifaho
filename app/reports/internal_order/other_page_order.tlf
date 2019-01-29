@@ -1160,7 +1160,7 @@
       }
     ]
   },
-  "title": "reporte_mensual",
+  "title": "Reporte_pedido_interno",
   "report": {
     "paper-type": "A4",
     "orientation": "portrait",

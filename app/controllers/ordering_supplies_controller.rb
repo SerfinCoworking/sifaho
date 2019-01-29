@@ -393,14 +393,6 @@ class OrderingSuppliesController < ApplicationController
         report.start_new_page layout: :other_page do |page|
         end
       end
-
-      if report.page_count == 1
-        report.page[:applicant_sector] = ordering_supply.applicant_sector.name
-        report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
-        report.page[:provider_sector] = ordering_supply.provider_sector.name
-        report.page[:provider_establishment] = ordering_supply.provider_establishment.name
-        report.page[:observations] = ordering_supply.observation
-      end
       
       report.list do |list|
         list.add_row do |row|
@@ -424,6 +416,14 @@ class OrderingSuppliesController < ApplicationController
             footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
           end
         end
+      end
+      
+      if report.page_count == 1
+        report.page[:applicant_sector] = ordering_supply.applicant_sector.name
+        report.page[:applicant_establishment] = ordering_supply.applicant_establishment.name
+        report.page[:provider_sector] = ordering_supply.provider_sector.name
+        report.page[:provider_establishment] = ordering_supply.provider_establishment.name
+        report.page[:observations] = ordering_supply.observation
       end
     end
     

@@ -366,12 +366,6 @@ class InternalOrdersController < ApplicationController
         report.start_new_page layout: :other_page do |page|
         end
       end
-
-      if report.page_count == 1
-        report.page[:applicant_sector] = internal_order.applicant_sector.name
-        report.page[:provider_sector] = internal_order.provider_sector.name
-        report.page[:observations] = internal_order.observation
-      end
       
       report.list do |list|
         list.add_row do |row|
@@ -395,6 +389,12 @@ class InternalOrdersController < ApplicationController
             footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
           end
         end
+      end
+
+      if report.page_count == 1
+        report.page[:applicant_sector] = internal_order.applicant_sector.name
+        report.page[:provider_sector] = internal_order.provider_sector.name
+        report.page[:observations] = internal_order.observation
       end
     end
     report.pages.each do |page|
