@@ -5,9 +5,7 @@ class Laboratory < ApplicationRecord
   has_many :supply_lots, -> { with_deleted }
 
   # Validaciones
-  validates_presence_of :name
-  validates_presence_of :cuit
-  validates_presence_of :gln
+  validates_presence_of :name, :cuit, :gln
 
   filterrific(
     default_filter_params: { sorted_by: 'razon_social_asc' },

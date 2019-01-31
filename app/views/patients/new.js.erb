@@ -5,12 +5,12 @@ $('.modal-content').addClass('panel-primary');
 $('#dialog h4').html("<i class='glyphicon glyphicon-plus'></i>  Nuevo paciente");
 
 // Render the new form
-$('.modal-body').html('<%= j render("form") %>');
+$('.modal-body').html('<%= j render("form_remote") %>');
 
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<button type='submit' name='commit' class='btn btn-primary pull-right' form='new_patient'>Cargar paciente</button>"
+  "<button type='submit' name='commit' class='btn btn-success pull-right' form='new_patient'>Cargar paciente</button>"
 );
 
 // Show the dynamic dialog
@@ -18,7 +18,7 @@ $('#dialog').modal("show");
 
 // Set focus to the first element
 $('#dialog').on('shown.bs.modal', function () {
-  $('.first_input').focus();
+  $('#patient_first_name').focus();
 });
 
 <%= render 'form_function' %>

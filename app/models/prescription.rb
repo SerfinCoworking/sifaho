@@ -19,12 +19,7 @@ class Prescription < ApplicationRecord
   belongs_to :dispensed_by, class_name: 'User', optional: true
 
   # Validaciones
-  validates_presence_of :patient
-  validates_presence_of :professional
-  validates_presence_of :prescribed_date
-  validates_presence_of :expiry_date
-  validates_presence_of :remit_code
-  validates_presence_of :quantity_ord_supply_lots
+  validates_presence_of :patient, :professional, :prescribed_date, :expiry_date, :remit_code, :quantity_ord_supply_lots
   validates_associated :quantity_ord_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 

@@ -13,8 +13,7 @@ class User < ApplicationRecord
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy
 
-  accepts_nested_attributes_for :profile
-  accepts_nested_attributes_for :professional
+  accepts_nested_attributes_for :profile, :professional
 
   after_create :create_profile
 

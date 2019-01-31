@@ -9,8 +9,7 @@ class Sector < ApplicationRecord
   has_many :users, :through => :user_sectors
 
   # Validaciones
-  validates_presence_of :name
-  validates_presence_of :complexity_level
+  validates_presence_of :name, :complexity_level
 
   def self.options_for_select
     order('LOWER(name)').map { |e| [e.name, e.id] }

@@ -1,0 +1,20 @@
+<%= simple_form_for @patient, remote: true, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :first_name, placeholder: 'Nombre', required: true, label: 'Nombre' %>
+  <%= f.input :last_name, placeholder: 'Apellido', required: true, label: 'Apellido' %>
+  <%= f.input :dni, placeholder: 'DNI', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
+  <%= f.input :sex, label: 'Sexo', include_blank: false,
+    collection: Patient.sexes,
+    :value_method => :first,
+    :input_html => {
+      required: true,
+      include_blank: false,
+      id: 'supply-select',
+      class: 'selectpicker supply',
+      "data-width"=>"100%",
+      "data-size"=>"10",
+      "title"=>"Indeterminado",
+      value: "#{ f.object.sex }"
+    } 
+  %>
+<% end %>

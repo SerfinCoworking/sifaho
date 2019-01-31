@@ -22,11 +22,7 @@ class SupplyLot < ApplicationRecord
     :source_type => 'OrderingSupply'
 
   # Validaciones
-  validates_presence_of :supply
-  validates_presence_of :code
-  validates_presence_of :supply_name
-  validates_presence_of :lot_code
-  validates_presence_of :laboratory
+  validates_presence_of :supply, :code, :supply_name, :lot_code, :laboratory
   validates :supply, :uniqueness => { :scope => [:laboratory_id, :lot_code], conditions: -> { with_deleted } }
 
   filterrific(
@@ -45,23 +41,17 @@ class SupplyLot < ApplicationRecord
 
   pg_search_scope :search_lot_code,
   against: :lot_code,
-  :using => {
-    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
-  },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_text,
   against: [:code, :supply_name],
-  :using => {
-    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
-  },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_laboratory,
   associated_against: { :laboratory => :name},
-  :using => {
-    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
-  },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|

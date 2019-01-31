@@ -22,13 +22,8 @@ class InternalOrder < ApplicationRecord
   belongs_to :sent_request_by, class_name: 'User', optional: true
 
   # Validaciones
-  validates_presence_of :provider_sector
-  validates_presence_of :applicant_sector
-  validates_presence_of :requested_date
-  validates_presence_of :quantity_ord_supply_lots
-  validates_presence_of :remit_code
-  validates_associated :quantity_ord_supply_lots
-  validates_associated :sector_supply_lots
+  validates_presence_of :provider_sector, :applicant_sector, :requested_date, :quantity_ord_supply_lots, :remit_code 
+  validates_associated :quantity_ord_supply_lots, :sector_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   # Atributos anidados
@@ -261,5 +256,4 @@ class InternalOrder < ApplicationRecord
       Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector )
     end
   end
-  
 end

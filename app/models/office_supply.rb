@@ -11,10 +11,7 @@ class OfficeSupply < ApplicationRecord
   enum status: { activo: 0, inactivo: 1, mantenimiento: 2 }
 
   # Validaciones
-  validates_presence_of :name
-  validates_presence_of :quantity
-  validates_presence_of :status
-  validates_presence_of :remit_code
+  validates_presence_of :name, :quantity, :status, :remit_code
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   filterrific(

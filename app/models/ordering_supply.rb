@@ -24,17 +24,11 @@ class OrderingSupply < ApplicationRecord
   has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
 
   # Validaciones
-  validates_presence_of :applicant_sector
-  validates_presence_of :provider_sector
-  validates_presence_of :quantity_ord_supply_lots
-  validates_presence_of :remit_code
-  validates_associated :quantity_ord_supply_lots
-  validates_associated :supplies
-  validates_associated :sector_supply_lots
+  validates_presence_of :applicant_sector, :provider_sector, :quantity_ord_supply_lots, :remit_code  
+  validates_associated :quantity_ord_supply_lots, :supplies, :sector_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
-  accepts_nested_attributes_for :supplies
-  accepts_nested_attributes_for :sector_supply_lots
+  accepts_nested_attributes_for :supplies, :sector_supply_lots
   accepts_nested_attributes_for :quantity_ord_supply_lots,
     reject_if: ->(qosl){ qosl['supply_id'].blank? },
     :allow_destroy => true

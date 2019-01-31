@@ -30,9 +30,7 @@ class SectorSupplyLot < ApplicationRecord
     :source_type => 'OrderingSupply'
 
   # Validaciones
-  validates_presence_of :supply_lot
-  validates_presence_of :quantity
-  validates_presence_of :initial_quantity
+  validates_presence_of :supply_lot, :quantity, :initial_quantity
 
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },

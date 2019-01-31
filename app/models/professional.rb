@@ -7,12 +7,13 @@ class Professional < ApplicationRecord
 
   # Relaciones
   has_many :prescriptions
-  belongs_to :professional_type
+  belongs_to :professional_type, optional: true
   has_one :user
 
   # Validaciones
-  validates_presence_of :first_name, :last_name, :dni, :professional_type, :enrollment
-  validates_uniqueness_of :enrollment, :dni
+  validates_presence_of :first_name, :last_name, :enrollment
+  validates_uniqueness_of :enrollment
+  validates :dni, uniqueness: true, if: 'dni.present?'
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

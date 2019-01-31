@@ -48,12 +48,12 @@ class PatientsController < ApplicationController
     @patient = Patient.new(patient_params)
 
     respond_to do |format|
-      if @patient.save
+      if @patient.save!
         flash.now[:success] = @patient.full_info+" se ha creado correctamente."
         format.js
       else
         flash.now[:error] = "El paciente no se ha podido crear."
-        format.js
+        format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
   end

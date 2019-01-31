@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181217124520) do
+ActiveRecord::Schema.define(version: 20190130172331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,7 +219,7 @@ ActiveRecord::Schema.define(version: 20181217124520) do
     t.string "email", limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.bigint "patient_type_id"
+    t.bigint "patient_type_id", default: 1
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
@@ -265,12 +265,12 @@ ActiveRecord::Schema.define(version: 20181217124520) do
     t.string "email"
     t.string "phone"
     t.integer "sex", default: 1
-    t.boolean "is_active"
+    t.boolean "is_active", default: true
     t.string "docket", limit: 10
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "professional_type_id"
+    t.bigint "professional_type_id", default: 5
     t.bigint "sector_id"
     t.index ["professional_type_id"], name: "index_professionals_on_professional_type_id"
     t.index ["sector_id"], name: "index_professionals_on_sector_id"

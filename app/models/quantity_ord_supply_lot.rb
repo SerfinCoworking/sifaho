@@ -9,9 +9,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
   has_one :sector, :through => :sector_supply_lot
 
   # Validaciones
-  validates_presence_of :supply
-  validates_presence_of :requested_quantity
-  validates_presence_of :delivered_quantity
+  validates_presence_of :supply, :requested_quantity, :delivered_quantity
   validates_associated :supply
 
   accepts_nested_attributes_for :supply,
