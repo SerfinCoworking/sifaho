@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'report/newOrderingSupply'
+
   resources :categories
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount Notifications::Engine => "/notifications"

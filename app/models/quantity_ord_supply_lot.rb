@@ -13,14 +13,14 @@ class QuantityOrdSupplyLot < ApplicationRecord
   validates_associated :supply
 
   accepts_nested_attributes_for :supply,
-  :allow_destroy => true,
-  :reject_if => proc { |att| att[:supply_id].blank? }
+    :allow_destroy => true,
+    :reject_if => proc { |att| att[:supply_id].blank? }
   accepts_nested_attributes_for :sector_supply_lot,
-  :reject_if => :all_blank,
-  :allow_destroy => true
+    :reject_if => :all_blank,
+    :allow_destroy => true
   accepts_nested_attributes_for :supply_lot,
-  :allow_destroy => true,
-  :reject_if => proc { |att| att[:supply_lot_id].blank? }
+    :allow_destroy => true,
+    :reject_if => proc { |att| att[:supply_lot_id].blank? }
   
   # Métodos públicos
   def increment_lot_to(a_sector)
@@ -31,7 +31,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
           supply_lot_id: self.sector_supply_lot.supply_lot_id
         ).first_or_create
         @sector_supply_lot.increment(self.delivered_quantity)
-        @sector_supply_lot.save!
         self.entregado!
       else
         self.sin_stock!
@@ -54,7 +53,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
         supply_lot_id: @supply_lot.id
       ).first_or_create
       @sector_supply_lot.increment(self.delivered_quantity)
-      @sector_supply_lot.save!
       self.entregado!
     else
       raise ArgumentError, 'El insumo '+self.supply_name+' no tiene lote asignado.' 
