@@ -29,6 +29,10 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/1.json
   def show
     authorize @prescription
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # GET /prescriptions/new

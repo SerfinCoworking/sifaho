@@ -64,7 +64,7 @@ class Prescription < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("prescriptions.created_at #{ direction }")
-    when /^doctor_/
+    when /^profesional_/
       # Ordenamiento por nombre de droga
       order("LOWER(professionals.first_name) #{ direction }").joins(:professional)
     when /^paciente_/

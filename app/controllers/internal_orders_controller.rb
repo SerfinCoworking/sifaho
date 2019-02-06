@@ -298,6 +298,7 @@ class InternalOrdersController < ApplicationController
   def send_applicant
     authorize @internal_order
     @internal_order.solicitud_enviada!
+    @internal_order.create_notification(current_user, "envió")
     respond_to do |format|
       flash[:success] = "La solicitud se ha enviado correctamente."
       format.html { redirect_to @internal_order }

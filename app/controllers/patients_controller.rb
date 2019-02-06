@@ -27,6 +27,7 @@ class PatientsController < ApplicationController
   # GET /patients/1.json
   def show
     respond_to do |format|
+      format.html
       format.js
     end
   end
