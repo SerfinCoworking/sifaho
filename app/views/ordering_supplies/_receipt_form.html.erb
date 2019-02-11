@@ -18,7 +18,7 @@
           disabled: true,
           value: "#{ if f.object.new_record?; current_user.sector_name; else; f.object.applicant_sector.name; end}",
           size: 41
-        } 
+        }
       %>
       <%= f.hidden_field :applicant_sector_id, value: "#{ if f.object.new_record?; current_user.sector_id; else; f.object.applicant_sector.id; end }" %>
       <% if policy(current_user).change_sector? %>

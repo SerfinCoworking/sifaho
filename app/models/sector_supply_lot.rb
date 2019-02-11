@@ -38,7 +38,7 @@ class SectorSupplyLot < ApplicationRecord
       :with_code,
       :sorted_by,
       :with_status,
-      :search_supply_name,
+      :search_supply_by_name_or_code,
       :date_received_at
     ]
   )
@@ -51,7 +51,7 @@ class SectorSupplyLot < ApplicationRecord
   },
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_supply_name,
+  pg_search_scope :search_supply_by_name_or_code,
   associated_against: { :supply_lot => :supply_name },
   :using => {
     :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.

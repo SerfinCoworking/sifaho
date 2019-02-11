@@ -4,19 +4,19 @@
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo insumo
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo profesional
           <%= link_to :back, class: 'btn pull-right close-btn' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
           <% end %>
         </h3>
       </div>
       <div class="panel-body" id="panel-body-new">
-        <%= render 'form', supply: @supply %>
+        <%= render 'form', professional: @professional %>
       </div>
       <div class="panel-footer text-right">
-        <%= link_to 'Volver', supplies_path, class: 'btn' %>
-        <button type='submit' name='commit' class='btn btn-success' form='new_supply'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Crear
+        <%= link_to 'Volver', professionals_path, class: 'btn' %>
+        <button type='submit' name='commit' class='btn btn-success' form='new_professional'>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Crear
         </button>
       </div>
     </div>

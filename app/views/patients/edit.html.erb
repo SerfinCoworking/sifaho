@@ -1,0 +1,25 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="col-md-7 col-md-offset-2">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando paciente
+          <%= link_to patients_path, class: 'btn pull-right close-btn',
+            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="panel-body" id="panel-body-new">
+        <%= render 'form', patient: @patient %>
+      </div>
+      <div class="panel-footer text-right">
+          <%= link_to 'Volver', patients_path, class: 'btn' %>
+          <button type='submit' name='commit' class='btn btn-success' form='edit_patient_<%=@patient.id%>' value='Solicitante'>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
+          </button>
+      </div>
+    </div>
+  </div>
+</div>

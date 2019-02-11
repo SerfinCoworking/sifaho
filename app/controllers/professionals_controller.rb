@@ -30,6 +30,7 @@ class ProfessionalsController < ApplicationController
   def show
     authorize @professional
     respond_to do |format|
+      format.html
       format.js
     end
   end
@@ -56,7 +57,7 @@ class ProfessionalsController < ApplicationController
     respond_to do |format|
       if @professional.save!
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
-        format.js
+        if remote?; format.js; else; format.html { redirect_to @professional }; end
       else
         flash.now[:error] = "El profesional no se ha podido crear."
         format.js
@@ -120,5 +121,10 @@ class ProfessionalsController < ApplicationController
     def professional_params
       params.require(:professional).permit( :id, :first_name, :last_name, :dni,
                                             :enrollment, :professional_type_id, :is_active)
+    end
+
+    def remote?
+      submit = params[:commit]
+      return submit == "remote"
     end
 end

@@ -4,7 +4,7 @@ class Prescription < ApplicationRecord
 
   # Estados
   enum status: { pendiente: 0, dispensada: 1, vencida: 2 }
-  enum order_type: { receta: 0 }
+  enum order_type: { ambulatorio: 0, cronico: 1 }
 
   # Relaciones
   belongs_to :professional

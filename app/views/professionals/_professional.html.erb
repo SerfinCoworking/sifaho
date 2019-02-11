@@ -3,6 +3,8 @@
     <td><%= professional.first_name %></td>
     <td><%= professional.last_name %></td>
     <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
+    <% @count_pres = professional.prescriptions.count %>
+    <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
     <td>
       <span class="label label-<%= professional.is_active? ? "success" : "danger" %>">
         <%= professional.is_active? ? "Activo" : "Inactivo" %>
@@ -12,7 +14,7 @@
     <td><%= professional.professional_type.name %></td>
     <td>
       <% if policy(professional).show? %>
-        <%= link_to professional_path(professional), remote:true, class: 'btn btn-default btn-xs',
+        <%= link_to professional_path(professional), class: 'btn btn-default btn-xs',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
         <% end %>

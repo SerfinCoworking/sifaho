@@ -18,7 +18,7 @@ class SectorSupplyLotsController < ApplicationController
       available_filters: [
         :sorted_by,
         :with_status,
-        :search_supply_name,
+        :search_supply_by_name_or_code,
         :with_code,
         :date_received_at
       ],

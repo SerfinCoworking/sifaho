@@ -250,4 +250,15 @@ document.addEventListener("turbolinks:load", function() {
       })
     });
   });
+
+  $('.table-responsive').on('show.bs.select', function () { 
+    console.log("triggered show bs select");
+    $('.table-responsive').css( "overflow", "inherit" );
+    $('.bootstrap-table').css( "overflow", "inherit" ); 
+    $('.fixed-table-body').css( "overflow", "inherit" );  
+  }); 
+  $('.table-responsive').on('hide.bs.select', function () { 
+    console.log("triggered hide bs select");
+    $('.table-responsive').css( "overflow", "auto" ); 
+  })
 });

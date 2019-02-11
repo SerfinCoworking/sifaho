@@ -35,10 +35,10 @@
 }
 
 #date{
-    font-size: 15px;
-    color: white;
-    padding-top: 18px;
-    font-family: 'Comfortaa-regular', sans-serif;
+  font-size: 15px;
+  color: white;
+  padding-top: 18px;
+  font-family: 'Comfortaa-regular', sans-serif;
 }
 
 .modal-dialog{
@@ -58,16 +58,16 @@
 }
 
 .footer {
-    position: fixed;
-    z-index: -1;
-    left: 0;
-    bottom: -8px;
-    width: 100%;
-    background-color: transparent;
-    color: #41ffc1;
-    text-align: left;
-    padding-left: 17em;
-    padding-bottom: 0;
+  position: fixed;
+  z-index: -1;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  background-color: transparent;
+  color: #41ffc1;
+  text-align: left;
+  padding-left: 17em;
+  padding-bottom: 0;
 }
 
 .custom-header{
@@ -94,4 +94,41 @@
       -ms-transition: opacity 0.10s linear;
        -o-transition: opacity 0.10s linear;
           transition: opacity 0.10s linear;
+}
+
+.spin {
+  -webkit-animation: spin .6s infinite linear;
+  -moz-animation: spin .6s infinite linear;
+  -o-animation: spin .6s infinite linear;
+  animation: spin .6s infinite linear;
+     -webkit-transform-origin: 50% 58%;
+         transform-origin:50% 58%;
+         -ms-transform-origin:50% 58%; /* IE 9 */
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
