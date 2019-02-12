@@ -20,12 +20,14 @@
           Mi perfil
         <% end %>
       </li>
+      <!--
       <li>
         <%= link_to main_app.edit_user_registration_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %>
           Cambiar contraseña
         <% end %>
       </li>
+      -->
       <li>
         <% if policy(current_user).change_sector? %>
           <%= link_to main_app.change_sector_users_admin_path(current_user), remote: true do %>

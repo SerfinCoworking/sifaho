@@ -12,27 +12,36 @@ body {
       <%- if devise_mapping.registerable? %>
         <%= link_to 'Registrarse', new_registration_path(resource_name), class: 'right'  %>
       <% end -%>
-      <%= f.label 'Usuario' %>
+      <%= f.label :username, "Usuario provincial OneLogin" %>
       <%= f.text_field :username, :autofocus => true, class: 'form-control' %>
     </div>
     <div class="form-group">
       <%- if devise_mapping.recoverable? %>
         <%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: 'right' %>
       <% end -%>
-      <%= f.label 'Contraseña' %>
+      <%= f.label :password, 'Contraseña' %>
       <%= f.password_field :password, class: 'form-control' %>
-    </div>
-      <% if devise_mapping.rememberable? -%>
-        <div class="checkbox" style="width:150px">
-          <label>
-            <%= f.check_box :remember_me %> Recordarme
-          </label>
-        </div>
-      <% end -%>
+    </div><br>
       <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block show-spin") do %>
         <%= image_tag("eclipse.gif", size: "25x25", class: "spinner") %> Iniciar sesión
       <% end %>
   <% end %>
 </div>
+<% content_for :page_footer do %>
+  <div class="col-md-5">
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-md-4">
+        <%= image_tag("tics.svg", size: "150x150", alt: "Logo Tics") %>
+      </div>
+      <div class="col-md-4">
+        <%= image_tag("neuquen-provincia.png", size: "150x150", alt: "Logo One Login") %>
+      </div> 
+      <div class="col-md-4">
+        <%= image_tag("one-login.png", size: "80x80", alt: "Logo One Login") %>
+      </div>  
+    </div>
+  </div>
+<% end %>
 	
 

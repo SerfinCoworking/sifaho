@@ -21,11 +21,19 @@
         <%= image_tag('sifaho-brand.png')%>
       <% end %>
       <% if user_signed_in? %>
+        <% if current_user.sector.present? %>
         <div class="userinfo"> 
-          <span><%= current_user.sector.name.upcase %></span></a>
+          <span><%= current_user.sector.name.upcase %></span>
           <br>
           <span><small><%= current_user.establishment_name %></small></span>
         </div>
+        <% else %>
+          <div class="userinfo"> 
+            <span>Usted no pertenece a ningún sector</span>
+            <br>
+            <span><small>Solicite a un administrador la asignación de uno</small></span>
+          </div>
+        <% end %>
       <% end %>
     </div>
     <div class="">

@@ -95,6 +95,9 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise_ldap_authenticatable (0.8.6)
+      devise (>= 3.4.1)
+      net-ldap (>= 0.16.0)
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
@@ -150,6 +153,7 @@ GEM
       railties (>= 3.1)
     multi_json (1.13.1)
     nested_form (0.3.2)
+    net-ldap (0.16.1)
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
@@ -305,6 +309,7 @@ DEPENDENCIES
   cocoon
   coffee-rails (~> 4.2)
   devise
+  devise_ldap_authenticatable
   filterrific
   groupdate
   highcharts-rails
