@@ -27,7 +27,7 @@ class User < ApplicationRecord
     Profile.create(user: self, first_name: first_name, last_name: last_name, email: email, dni: dni)
   end
 
-  before_save :verify_profile
+  after_save :verify_profile
   def verify_profile
     unless self.profile.present?
       self.create_profile
