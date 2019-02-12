@@ -71,7 +71,7 @@ class User < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   def full_name
-    if self.profile?
+    if self.profile.present?
       self.profile.full_name
     else
       self.username
