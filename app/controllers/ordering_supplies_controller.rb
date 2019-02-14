@@ -388,7 +388,7 @@ class OrderingSuppliesController < ApplicationController
     report.use_layout File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'first_page_despacho.tlf'), :default => true
     report.use_layout File.join(Rails.root, 'app', 'reports', 'ordering_supply', 'other_page_despacho.tlf'), id: :other_page
     
-    ordering_supply.quantity_ord_supply_lots.each do |qosl|
+    ordering_supply.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page layout: :other_page do |page|
         end

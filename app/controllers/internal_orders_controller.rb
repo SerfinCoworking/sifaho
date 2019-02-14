@@ -362,7 +362,7 @@ class InternalOrdersController < ApplicationController
     report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
     report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page_order.tlf'), id: :other_page
     
-    internal_order.quantity_ord_supply_lots.each do |qosl|
+    internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page layout: :other_page do |page|
         end
