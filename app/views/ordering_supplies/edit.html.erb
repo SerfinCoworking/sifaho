@@ -1,31 +1,33 @@
 <%= render 'header' %>
 
-<div class="panel panel-warning">
-  <div class="panel-heading">
-    <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Auditando <%= @ordering_supply.order_type.underscore.humanize.downcase %>
-      <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-      <% end %>
-    </h3>
-  </div>
-  <div class="panel-body" id="panel-body-new">
-    <%= render 'provider_form', ordering_supply: @ordering_supply %>
-  </div>
-  <div class="panel-footer text-right">
-      <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
-      </button>
-      <button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar y aceptar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
-      </button>
-      <% if policy(@ordering_supply).send_provider? %>
-        <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
-          class: 'btn btn-primary btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Guardar y enviar
+<div class="row">
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Auditando <%= @ordering_supply.order_type.underscore.humanize.downcase %>
+        <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
         <% end %>
-      <% end %>
+      </h3>
+    </div>
+    <div class="panel-body" id="panel-body-new">
+      <%= render 'provider_form', ordering_supply: @ordering_supply %>
+    </div>
+    <div class="panel-footer text-right">
+        <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
+        <button type='submit' name='commit' class='btn btn-success' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar'>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
+        </button>
+        <button type='submit' name='commit' class='btn btn-primary' form='edit_ordering_supply_<%=@ordering_supply.id%>' value='Auditar y aceptar'>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
+        </button>
+        <% if policy(@ordering_supply).send_provider? %>
+          <%= link_to send_provider_ordering_supply_path(@ordering_supply), remote: true,
+            class: 'btn btn-primary btn-md' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+            Guardar y enviar
+          <% end %>
+        <% end %>
+    </div>
   </div>
 </div>

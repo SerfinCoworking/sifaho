@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
       <li role="presentation" id="page-title">
-        <a href="">Insumos en stock</a>
+        <a href="">Stock</a>
       </li>
       <% if policy(SectorSupplyLot).group_by_supply? %>
         <li role="presentation" class="<%= active_action('group_by_supply') %>">
@@ -51,7 +51,7 @@
         </ul>
       </li>
       <% if policy(SectorSupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-3 <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
           <%= link_to trash_index_sector_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

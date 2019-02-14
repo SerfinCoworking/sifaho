@@ -118,6 +118,10 @@ class OrderingSupply < ApplicationRecord
     where('ordering_supplies.status = ?', a_status)
   }
 
+  scope :without_status, lambda { |a_status|
+    where.not('ordering_supplies.status = ?', a_status )
+  }
+
   scope :with_order_type, lambda { |a_order_type|
     where('ordering_supplies.order_type = ?', a_order_type)
   }

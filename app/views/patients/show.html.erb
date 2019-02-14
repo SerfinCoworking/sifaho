@@ -17,41 +17,43 @@
   <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
     <div class="panel-body" id="panel-body-new">
       <div class="row">
-        <div class="col-md-2">
-          <h5><strong>Nombre</strong></h5>
-          <%= @patient.first_name %>
+        <div class="well col-md-3">
+          <div class="col-md-6">
+            <h5><strong>Nombre</strong></h5>
+            <%= @patient.first_name %>
 
-          <h5><strong>Apellido</strong></h5>
-          <%= @patient.last_name %>
+            <h5><strong>Apellido</strong></h5>
+            <%= @patient.last_name %>
 
-          <h5><strong>DNI:</strong></h5>
-          <%= @patient.dni %>
+            <h5><strong>DNI:</strong></h5>
+            <%= @patient.dni %>
 
-          <h5><strong>Teléfono</strong></h5>
-          <%= @patient.phone.present? ? @patient.phone : "----" %>
+            <h5><strong>Teléfono</strong></h5>
+            <%= @patient.phone.present? ? @patient.phone : "----" %>
 
-          <h5><strong>Celular</strong></h5>
-          <%= @patient.cell_phone.present? ? @patient.cell_phone : "----" %>
+            <h5><strong>Celular</strong></h5>
+            <%= @patient.cell_phone.present? ? @patient.cell_phone : "----" %>
 
-          <h5><strong>Email</strong></h5>
-          <%= @patient.email.present? ? @patient.email : "----" %>
+            <h5><strong>Email</strong></h5>
+            <%= @patient.email.present? ? @patient.email : "----" %>
 
-          <h5><strong>Tipo de paciente </strong></h5>
-          <%= @patient.patient_type.present? ? @patient.patient_type.name : "----" %>
+            <h5><strong>Tipo de paciente </strong></h5>
+            <%= @patient.patient_type.present? ? @patient.patient_type.name : "----" %>
 
-          <% if @patient.created_at.present? %>
-            <h5><strong>Se cargó el </strong></h5>
-            <%= @patient.created_at.strftime("%d/%m/%Y") %>
-          <% end %>
-        </div>
-        <div class="col-md-1">
-          <h5><strong>Sexo</strong></h5>
-            <%= @patient.sex.humanize %>
-          <h5><strong>Crónico?</strong></h5>
-          <%= @patient.is_chronic? ? "Si" : "No" %>
+            <% if @patient.created_at.present? %>
+              <h5><strong>Se cargó el </strong></h5>
+              <%= @patient.created_at.strftime("%d/%m/%Y") %>
+            <% end %>
+          </div>
+          <div class="col-md-6">
+            <h5><strong>Sexo</strong></h5>
+              <%= @patient.sex.humanize %>
+            <h5><strong>Crónico?</strong></h5>
+            <%= @patient.is_chronic? ? "Si" : "No" %>
 
-          <h5><strong>Urbano?</strong></h5>
-          <%= @patient.is_urban? ? "Si" : "No" %>
+            <h5><strong>Urbano?</strong></h5>
+            <%= @patient.is_urban? ? "Si" : "No" %>
+          </div>
         </div>
         <div class="col-md-9">
           <h5 class="panel-title">

@@ -8,7 +8,7 @@ class InternalOrdersController < ApplicationController
   def index
     authorize InternalOrder
     @filterrific = initialize_filterrific(
-      InternalOrder.provider(current_user.sector),
+      InternalOrder.provider(current_user.sector).without_status(0),
       params[:filterrific],
       select_options: {
         with_status: InternalOrder.options_for_status

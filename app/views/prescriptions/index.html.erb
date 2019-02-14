@@ -1,71 +1,73 @@
 <%= render 'header' %>
 
-<% if @prescriptions.present? %>
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
-      <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-2 col-sm-2">
-          <label>Doctor y paciente</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_professional_and_patient,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre o apellido',
-            autocomplete: 'off',
-          ) %>
-        </div>
-        <div class="col-md-1 col-sm-1">
-          <label>Insumo</label>
-          <%= f.text_field(
-            :search_supply_code,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Cód'
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Insumo</label>
-          <%= f.text_field(
-            :search_supply_name,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre'
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-            <label>Recetado desde</label>
-            <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
-              class: 'datetimepicker form-control filterrific-periodically-observed',
-              placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-            <label>Dispensado desde</label>
-            <%= f.text_field(:date_dispensed_since, autocomplete: 'off',
-              class: 'datetimepicker form-control filterrific-periodically-observed',
-              placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
-        </div>
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+<div class="row">
+  <% if @prescriptions.present? %>
+    <div class="panel panel-info" id="filter-panel">
+      <div class="panel-leftheading">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+      </div>
+      <div class="panel-rightbody">
+        <%= form_for_filterrific @filterrific do |f| %>
+          <div class="col-md-2 col-sm-2">
+            <label>Doctor y paciente</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_professional_and_patient,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre o apellido',
+              autocomplete: 'off',
+            ) %>
+          </div>
+          <div class="col-md-1 col-sm-1">
+            <label>Insumo</label>
+            <%= f.text_field(
+              :search_supply_code,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Cód'
+            ) %>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <label>Insumo</label>
+            <%= f.text_field(
+              :search_supply_name,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre'
+            ) %>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <label>Ordenar por</label>
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+          </div>
+          <div class="col-md-2 col-sm-2">
+              <label>Recetado desde</label>
+              <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
+                class: 'datetimepicker form-control filterrific-periodically-observed',
+                placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+          </div>
+          <div class="col-md-2 col-sm-2">
+              <label>Dispensado desde</label>
+              <%= f.text_field(:date_dispensed_since, autocomplete: 'off',
+                class: 'datetimepicker form-control filterrific-periodically-observed',
+                placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+          </div>
+          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+          <% end %>
+          <!-- Spinner para la carga -->
+          <%= render_filterrific_spinner %>
         <% end %>
-        <!-- Spinner para la carga -->
-        <%= render_filterrific_spinner %>
-      <% end %>
+      </div>
+      <div class="clearfix">
+      </div>
     </div>
-    <div class="clearfix">
-    </div>
-  </div>
-  <%= render(
-    partial: 'prescriptions/list',
-    locals: { prescriptions: @prescriptions }
-  ) %>
-<% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'prescripciones' }
-  ) %>
-<% end %>
+    <%= render(
+      partial: 'prescriptions/list',
+      locals: { prescriptions: @prescriptions }
+    ) %>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found',
+      locals: { object_name: 'prescripciones' }
+    ) %>
+  <% end %>
+</div>

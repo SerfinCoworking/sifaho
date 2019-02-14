@@ -3,6 +3,12 @@
     <li role="presentation" id="page-title">
       <a href="">Profesionales</a>
     </li>
+    <li role="presentation" class="<%= active_action('index') %>">
+        <%= link_to professionals_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Listado
+        <% end %>
+      </li>
     <li role="presentation" class="<%= active_action('new') %>">
       <%= link_to new_professional_path do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>

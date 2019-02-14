@@ -115,6 +115,10 @@ class InternalOrder < ApplicationRecord
     where('internal_orders.status = ?', a_status)
   }
 
+  scope :without_status, lambda { |a_status|
+    where.not('internal_orders.status = ?', a_status )
+  }
+
   def self.applicant(a_sector)
     where(applicant_sector: a_sector)
   end

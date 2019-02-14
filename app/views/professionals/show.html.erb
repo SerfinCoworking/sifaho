@@ -1,141 +1,145 @@
 <%= render 'header' %>
 
-<div class="panel panel-default">
-  <div class="panel-heading hidden-print">
-    <h3 class="panel-title">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo professional
-      <%= link_to professionals_path, class: 'btn pull-right close-btn',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-      <% end %>
-      <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
-        :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-      <% end %>
-    </h3>
-  </div>
-  <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
-    <div class="panel-body" id="panel-body-new">
-      <div class="row">
-        <div class="col-md-3">
-          <h5><strong>Nombres</strong></h5>
-          <%= @professional.first_name %>
-          <h5><strong>Apellidos</strong></h5>
-            <%= @professional.last_name %>
-          <h5><strong>DNI: </strong></h5>
-          <%= @professional.dni %>
-          <h5><strong>Activo?: </strong></h5>
-          <%= @professional.is_active? ? "Si" : "No" %>
-          <h5><strong>Matrícula: </strong></h5>
-          <%= @professional.enrollment %>
-          <h5><strong>Legajo: </strong></h5>
-          <%= @professional.docket %>
-          <h5><strong>Especialdad </strong></h5>
-          <%= @professional.professional_type.name %>
-          <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @professional.prescriptions.count %><span></h5>
-        </div>
-        <div class="col-md-9">
-          <h5 class="panel-title">
-            <strong>Prescripciones recetadas </strong><span class="badge"><%= @professional.prescriptions.count %></span>
-            <div class="pull-right">
-              Pendientes <span class="label label-default"><%= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
-              Dispensadas <span class="label label-success"><%= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading hidden-print">
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo professional
+        <%= link_to professionals_path, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+        <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
+          :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+        <% end %>
+      </h3>
+    </div>
+    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
+      <div class="panel-body" id="panel-body-new">
+        <div class="row">
+          <div class="well col-md-3">
+            <div class="col-md-12">
+              <h5><strong>Nombres</strong></h5>
+              <%= @professional.first_name %>
+              <h5><strong>Apellidos</strong></h5>
+                <%= @professional.last_name %>
+              <h5><strong>DNI: </strong></h5>
+              <%= @professional.dni %>
+              <h5><strong>Activo?: </strong></h5>
+              <%= @professional.is_active? ? "Si" : "No" %>
+              <h5><strong>Matrícula: </strong></h5>
+              <%= @professional.enrollment %>
+              <h5><strong>Legajo: </strong></h5>
+              <%= @professional.docket %>
+              <h5><strong>Especialdad </strong></h5>
+              <%= @professional.professional_type.name %>
+              <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @professional.prescriptions.count %><span></h5>
             </div>
-          </h5>
-          <table class="table table-hover table-condensed">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Médico</th>
-                <th>Estado</th>
-                <th>Insumos</th>
-                <th>
-                  Recetada
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                </th>
-                <th>
-                  Dispensada
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
-                </th>
-                <th colspan="3">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id=professionals>
-            <% @professional.prescriptions.each do |prescription| %>
-              <tr id="prescription_<%= prescription.id %>">
-                <td><%= prescription.remit_code %></th>
-                <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
-                <td>
-                  <span class="label label-<%= prescription.status_label %>">
-                    <%= prescription.status.underscore.humanize %>
-                  </span>
-                </td>
-                <td>
-                  <span class="badge">
-                    <%= prescription.quantity_ord_supply_lots.count %>
-                  </span>
-                </td>
-                <td>
-                  <% if prescription.prescribed_date.present? %>
-                    <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
-                  <% else %>
-                    ------
-                  <% end %>
-                </td>
-                  <% if prescription.dispensada? %>
-                    <td>
-                    <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
-                  <% else %>
-                    <% if policy(prescription).dispense? %>
-                      <td class="text-center">
-                      <%= link_to dispense_prescription_path(prescription), remote: true,
-                            class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-                      <% end %>
+          </div>
+          <div class="col-md-9">
+            <h5 class="panel-title">
+              <strong>Prescripciones recetadas </strong><span class="badge"><%= @professional.prescriptions.count %></span>
+              <div class="pull-right">
+                Pendientes <span class="label label-default"><%= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
+                Dispensadas <span class="label label-success"><%= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
+              </div>
+            </h5>
+            <table class="table table-hover table-condensed">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Médico</th>
+                  <th>Estado</th>
+                  <th>Insumos</th>
+                  <th>
+                    Recetada
+                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+                  </th>
+                  <th>
+                    Dispensada
+                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
+                  </th>
+                  <th colspan="3">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id=professionals>
+              <% @professional.prescriptions.each do |prescription| %>
+                <tr id="prescription_<%= prescription.id %>">
+                  <td><%= prescription.remit_code %></th>
+                  <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
+                  <td>
+                    <span class="label label-<%= prescription.status_label %>">
+                      <%= prescription.status.underscore.humanize %>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge">
+                      <%= prescription.quantity_ord_supply_lots.count %>
+                    </span>
+                  </td>
+                  <td>
+                    <% if prescription.prescribed_date.present? %>
+                      <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
                     <% else %>
-                      <td>
-                      Sin dispensar
-                    <% end  %>
-                  <% end %>
-                </td>
-                <td>
-                  <% if policy(prescription).show? %>
-                    <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
-                      title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+                      ------
                     <% end %>
-                  <% end %>
-                  <% if policy(prescription).edit? %>
-                    <% unless prescription.dispensada? %>
-                      <%= link_to edit_prescription_path(prescription), 
-                            class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+                  </td>
+                    <% if prescription.dispensada? %>
+                      <td>
+                      <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
+                    <% else %>
+                      <% if policy(prescription).dispense? %>
+                        <td class="text-center">
+                        <%= link_to dispense_prescription_path(prescription), remote: true,
+                              class: 'btn btn-success btn-xs', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+                        <% end %>
+                      <% else %>
+                        <td>
+                        Sin dispensar
+                      <% end  %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if policy(prescription).show? %>
+                      <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
+                        title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
                       <% end %>
                     <% end %>
-                  <% end %>
-                  <% if policy(prescription).delete? %>
-                    <%= link_to delete_prescription_path(prescription), remote: true,
-                          class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                    <% if policy(prescription).edit? %>
+                      <% unless prescription.dispensada? %>
+                        <%= link_to edit_prescription_path(prescription), 
+                              class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+                        <% end %>
+                      <% end %>
                     <% end %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+                    <% if policy(prescription).delete? %>
+                      <%= link_to delete_prescription_path(prescription), remote: true,
+                            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="panel-footer text-right hidden-print">
-    <%= link_to 'Volver', professionals_path, class: "btn" %>
-    <% if policy(@professional).edit? %>
-      <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
-        <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-        Auditar
+    <div class="panel-footer text-right hidden-print">
+      <%= link_to 'Volver', professionals_path, class: "btn" %>
+      <% if policy(@professional).edit? %>
+        <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false,
+          class: "btn btn-warning" do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+          Auditar
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>

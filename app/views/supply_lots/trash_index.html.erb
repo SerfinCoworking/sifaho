@@ -6,9 +6,11 @@
   </small>
 <% end %>
 
-<%= render "filter" %>
+<div class="row">
+  <%= render "filter" %>
 
-<%= render(
-  partial: 'supply_lots/list',
-  locals: { supply_lots: @supply_lots }
-) %>
+  <%= render(
+    partial: 'supply_lots/list',
+    locals: { supply_lots: @supply_lots }
+  ) %>
+</div>

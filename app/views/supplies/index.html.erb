@@ -1,8 +1,10 @@
 <% render 'header' %>
 
-<%= render 'filter' %>
+<div class="row">
+  <%= render 'filter' %>
 
-<%= render(
-  partial: 'supplies/list',
-  locals: { supplies: @supplies }
-) %>
+  <%= render(
+    partial: 'supplies/list',
+    locals: { supplies: @supplies }
+  ) %>
+</div>
