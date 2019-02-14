@@ -71,11 +71,11 @@ class ProfessionalsController < ApplicationController
     authorize @professional
     respond_to do |format|
       if @professional.update(professional_params)
-        flash.now[:success] = @professional.fullname+" se ha modificado correctamente."
-        format.js
+        flash[:success] = @professional.fullname+" se ha modificado correctamente."
+        format.html { redirect_to @professional }
       else
-        flash.now[:error] = @professional.fullname+" no se ha podido modificar."
-        format.js
+        flash[:error] = @professional.fullname+" no se ha podido modificar."
+        format.html { redirect_to @professional }
       end
     end
   end

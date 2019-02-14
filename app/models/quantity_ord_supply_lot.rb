@@ -3,6 +3,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Relaciones
   belongs_to :supply, -> { with_deleted }
+  belongs_to :laboratory, optional: true
   belongs_to :sector_supply_lot, -> { with_deleted }, optional: true
   belongs_to :supply_lot, -> { with_deleted }, optional: true
   belongs_to :quantifiable, :polymorphic => true
@@ -86,16 +87,36 @@ class QuantityOrdSupplyLot < ApplicationRecord
   end
 
   def sector_supply_lot_lot_code
-    self.sector_supply_lot.present? ? self.sector_supply_lot.lot_code : 'n/a'
+    if self.sector_supply_lot.present?  
+      self.sector_supply_lot.lot_code
+    elsif self.lot_code.present?
+      self.lot_code
+    else
+      'n/a'
+    end
   end
 
   # Retorna fecha de expiración del lote
   def sector_supply_lot_expiry_date
-    self.sector_supply_lot.present? ? self.sector_supply_lot.format_expiry_date : 'n/a'
+    if self.sector_supply_lot.present?
+      self.sector_supply_lot.format_expiry_date
+    elsif self.expiry_date.present?
+      self.expiry_date.strftime('%m/%y')
+    elsif self.lot_code.present?
+      'No vence'
+    else 
+      'n/a'  
+    end
   end
 
   def sector_supply_lot_laboratory_name
-    self.sector_supply_lot.present? ? self.sector_supply_lot.laboratory : 'n/a'
+    if self.sector_supply_lot.present?
+      self.sector_supply_lot.laboratory
+    elsif self.laboratory.present?
+      self.laboratory.name
+    else
+      'n/a'
+    end
   end
 
   # Retorna el tipo de unidad

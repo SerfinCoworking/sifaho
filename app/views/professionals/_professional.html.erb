@@ -20,7 +20,7 @@
         <% end %>
       <% end %>
       <% if policy(professional).edit? %>
-        <%= link_to edit_professional_path(professional), remote: true, class: 'btn btn-warning btn-xs',
+        <%= link_to edit_professional_path(professional), class: 'btn btn-warning btn-xs',
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
         <% end %>
