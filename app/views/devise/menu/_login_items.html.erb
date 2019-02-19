@@ -10,14 +10,14 @@
         <li>
           <%= link_to main_app.rails_admin_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-sunglasses') %>
-            Administración
+            &nbsp;Administración
           <% end %>
         </li>
       <% end %>
       <li>
         <%= link_to main_app.edit_profile_path, remote: true do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
-          Mi perfil
+          &nbsp;Editar perfil
         <% end %>
       </li>
       <!--
@@ -32,14 +32,14 @@
         <% if policy(current_user).change_sector? %>
           <%= link_to main_app.change_sector_users_admin_path(current_user), remote: true do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-            Cambiar sector
+            &nbsp;Cambiar sector
           <% end %>
         <% end %>
       </li>
       <li>
         <%= link_to main_app.destroy_user_session_path, :method => :delete do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-off') %>
-          Cerrar sesión
+          &nbsp;Cerrar sesión
         <% end %>
       </li>
     </ul>

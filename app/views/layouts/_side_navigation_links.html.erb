@@ -1,4 +1,4 @@
-<li class="<%= active_class('welcome') %>">
+<li class="<%= active_class('welcome') %> text-left">
   <%= link_to main_app.root_path do %>
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-home') %>
     Inicio
@@ -9,24 +9,32 @@
 <li class="nav-header" data-toggle="collapse" data-target="#pedidos"><div id="pedidos-label" class="well well-sm">
   <span class="glyphicon glyphicon-list-alt"></span><strong> Pedidos</strong></div></li>
 <ul class="nav nav-cust nav-list" id="pedidos">
-  <li id="pedidos-li" class="<%= active_class('prescriptions') %>">
+  <li id="pedidos-li" class="<%= active_class('prescriptions') %> text-left">
     <% if policy(Prescription).index? %>
       <%= link_to main_app.prescriptions_path do %>
         Prescripciones
       <% end %>
     <% end %>
   </li>
-  <li id="pedidos-li" class="<%= active_class('internal_orders') %>">
+  <li id="pedidos-li" class="<%= active_class('internal_orders') %> text-left">
     <% if policy(InternalOrder).index? %>
       <%= link_to main_app.applicant_index_internal_orders_path do %>
-        Internos
+        Sectores
+        <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+        <% if count > 0 %>
+          <div class="label label-info pull-right"><%= count %></div>
+        <% end %>
       <% end %>
     <% end %>
   </li>
-  <li id="pedidos-li" class="<%= active_class('ordering_supplies') %>">
+  <li id="pedidos-li" class="<%= active_class('ordering_supplies') %> text-left">
     <% if policy(OrderingSupply).index? %>
       <%= link_to main_app.applicant_index_ordering_supplies_path do %>
         Abastecimiento
+        <% count =  OrderingSupply.provider(current_user.sector).solicitud_enviada.count %>
+        <% if count > 0 %>
+          <div class="label label-info pull-right"><%= count %></div>
+        <% end %>
       <% end %>
     <% end %>
   </li>
@@ -37,28 +45,28 @@
 <li class="nav-header" data-toggle="collapse" data-target="#stock"><div id="stock-label" class="well well-sm">
   <span class="glyphicon glyphicon-barcode"></span><strong> Insumos</strong></div></li>
 <ul class="nav nav-cust nav-list" id="stock">
-  <li id="stock-li" class="<%= active_class('sector_supply_lots') %>">
+  <li id="stock-li" class="<%= active_class('sector_supply_lots') %> text-left">
     <% if policy(SectorSupplyLot).index? %>
       <%= link_to main_app.group_by_supply_sector_supply_lots_path do %>
         Stock
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class('supply_lots') %>">
+  <li id="stock-li" class="<%= active_class('supply_lots') %> text-left">
     <% if policy(SupplyLot).index? %>
       <%= link_to main_app.supply_lots_path do %>
         Lotes Provincia
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class('office_supplies') %>">
+  <li id="stock-li" class="<%= active_class('office_supplies') %> text-left">
     <% if policy(OfficeSupply).index? %>
       <%= link_to main_app.office_supplies_path do %>
         Insumos Oficina
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class('supplies') %>">
+  <li id="stock-li" class="<%= active_class('supplies') %> text-left">
     <% if policy(Supply).index? %>
       <%= link_to main_app.supplies_path do %>
         Vademécum
@@ -72,21 +80,21 @@
     <span class="glyphicon glyphicon-user"></span><strong> Efectores</strong></div>
   </li>
   <ul class="nav nav-cust nav-list" id="efectores">
-    <li id="efectores-li" class="<%= active_class('professionals') %>">
+    <li id="efectores-li" class="<%= active_class('professionals') %> text-left">
       <% if policy(Professional).index? %>
         <%= link_to main_app.professionals_path do %>
           Profesionales
         <% end %>
       <% end %>
     </li>
-    <li id="efectores-li" class="<%= active_class('patients') %>">
+    <li id="efectores-li" class="<%= active_class('patients') %> text-left">
       <% if policy(Patient).index? %>
         <%= link_to main_app.patients_path do %>
           Pacientes
         <% end %>
       <% end %>
     </li>
-    <li id="efectores-li" class="<%= active_class('laboratories') %>">
+    <li id="efectores-li" class="<%= active_class('laboratories') %> text-left">
       <% if policy(Laboratory).index? %>
         <%= link_to main_app.laboratories_path do %>
           Laboratorios
@@ -102,7 +110,7 @@
     </div>
   </li>
   <ul class="nav nav-cust nav-list hidden"  id="notificaciones">
-    <li id="notificaciones-li" class="<%= active_class('notifications/notifications') %>">
+    <li id="notificaciones-li" class="<%= active_class('notifications/notifications') %> text-left">
       <%= link_to main_app.notifications_path do %>
         Notificaciones
       <% end %>

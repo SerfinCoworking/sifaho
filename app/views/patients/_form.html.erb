@@ -1,34 +1,43 @@
-<%= simple_form_for @patient, remote: true, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+<%= simple_form_for @patient, remote: true, html: {class: "", role: 'check-modified'} do |f| %>
 <%= f.error_notification %>
-  <%= f.input :first_name, placeholder: 'Nombre', required: true, label: 'Nombre' %>
-  <%= f.input :last_name, placeholder: 'Apellido', required: true, label: 'Apellido' %>
-  <%= f.input :dni, placeholder: 'DNI', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
-  <%= f.hidden_field :sex, id: "sex", value: 1%>
-  <input type="checkbox" name="sex-check">
-  <br><br>
-  <%= f.input :patient_type_id,
-    label: false,
-    label_method: :name,
-    value_method: :id,
-    collection: @patient_types,
-    include_blank: false,
-    input_html: { id: 'patient_type'},
-    prompt: 'Seleccione un tipo'
-  %>
-  <%= f.hidden_field :is_chronic, id: "is_chronic", value: false %>
-  <input type="checkbox" name="chronic-check">&nbsp;&nbsp;
-  <%= f.hidden_field :is_urban, id: "is_urban", value: true %>
-  <input type="checkbox" name="urban-check">
-  <br><br>
-  <%= f.input :birthdate, label: 'Fecha de nacimiento',
-    as: :string,
-    :placeholder => "Seleccionar fecha",
-    input_html: {class: "form-control", required: true, autocomplete: 'off',
-    value: "#{@patient.birthdate unless @patient.new_record?}"},
-    html5: false,
-    required: false
-    %><br><br>
-  <%= f.input :phone, placeholder: 'Número', label: 'Teléfono fijo' %>
-  <%= f.input :cell_phone, placeholder: 'Número', label: 'Celular' %>
-  <%= f.input :email, placeholder: 'ejemplo@dominio.com', label: 'Email' %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :first_name, placeholder: 'Nombre', required: true, label: 'Nombre' %>
+      <%= f.input :last_name, placeholder: 'Apellido', required: true, label: 'Apellido' %>
+      <%= f.input :dni, placeholder: 'DNI', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
+      <%= f.input :sex, as: :radio_buttons,
+        collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
+        label: "Sexo",
+        label_method: :second,
+        value_method: :first,
+        input_html: {class: "radio"} 
+      %>
+      <%= f.input :patient_type_id,
+        label: 'Tipo de paciente',
+        label_method: :name,
+        value_method: :id,
+        collection: @patient_types,
+        include_blank: false,
+        input_html: { id: 'patient_type'},
+        prompt: 'Seleccione un tipo'
+      %>
+      <%= f.hidden_field :is_chronic, id: "is_chronic", value: false %>
+      <input type="checkbox" name="chronic-check">&nbsp;&nbsp;
+      <%= f.hidden_field :is_urban, id: "is_urban", value: true %>
+      <input type="checkbox" name="urban-check">
+    </div>
+    <div class="col-md-6">
+      <%= f.input :birthdate, label: 'Fecha de nacimiento',
+        as: :string,
+        :placeholder => "Seleccionar fecha",
+        input_html: {class: "form-control", required: true, autocomplete: 'off',
+        value: "#{@patient.birthdate unless @patient.new_record?}"},
+        html5: false,
+        required: false
+        %>
+      <%= f.input :phone, placeholder: 'Número', label: 'Teléfono fijo' %>
+      <%= f.input :cell_phone, placeholder: 'Número', label: 'Celular' %>
+      <%= f.input :email, placeholder: 'ejemplo@dominio.com', label: 'Email' %>
+    </div>
+  </div>
 <% end %>

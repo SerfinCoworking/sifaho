@@ -1,7 +1,9 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title">
-        <a href="">Pedidos internos</a>
+      <li role="presentation" class="<%= active_action('statistics') %>" id="page-title">
+        <%= link_to statistics_internal_orders_path do %>
+          Sectores
+        <% end %>
       </li>
       <li role="presentation" class="<%= active_action('applicant_index') %>">
         <%= link_to applicant_index_internal_orders_path do %>
@@ -12,7 +14,11 @@
       <li role="presentation" class="<%= active_action('index') %>">
         <%= link_to internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Entregas
+          Entregas&nbsp;
+          <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+          <% if count > 0 %>
+            <div class="label label-info pull-right"><%= count %></div>
+          <% end %>
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('new_applicant') %>">
@@ -25,6 +31,12 @@
         <%= link_to new_provider_internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           Provisión
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('new_report') %>">
+        <%= link_to new_report_internal_orders_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Reporte
         <% end %>
       </li>
     </ul>

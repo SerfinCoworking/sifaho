@@ -1,0 +1,62 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading hidden-print">
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo reporte
+        <%= link_to internal_orders_path, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="panel-body" id="panel-body-new">
+      <div class="row">
+        <div class='col-md-2 col-xs-2'>
+          <strong>Desde:</strong>
+          <%= @since_date.strftime("%d/%m/%Y") %>
+        </div>
+        <div class="col-md-2 col-xs-2">
+          <strong>Hasta:</strong>
+          <%= @to_date.strftime("%d/%m/%Y") %>
+        </div>
+        <div class="col-md-6 col-xs-6">
+          <strong>Proveedor:</strong>
+          <%= current_user.sector.name.upcase %> <small><%= current_user.sector.establishment_name %></small>
+        </div>
+        <div class="col-md-2 col-xs-2 pull-right">
+          <strong>Fecha reporte:</strong>
+          <%= DateTime.now.strftime('%d/%m/%Y') %>
+        </div>
+      </div>
+      <hr>
+      <div class="col-md-12">
+        <% if @filtered_orders.present? %>
+        <table class="table table-hover table-condensed">
+          <thead>
+            <tr>
+              <th>Sector</th>
+              <th>Cantidad pedidos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @filtered_orders.each do |order| %>
+              <tr>
+                <td><%= order.first %></td>
+                <td><%= order.second %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% else %>
+          No hay elementos para ese período de tiempo.
+        <% end %>
+        <% @filtered_orders %>
+      </div> <!-- End col-md-12 -->
+    </div>
+    <div class="panel-footer text-right hidden-print">
+      <%= link_to internal_orders_path, class: "btn" do %>Volver<% end %>
+    </div>
+  </div>
+</div>

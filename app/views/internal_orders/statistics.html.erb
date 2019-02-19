@@ -1,0 +1,31 @@
+<%= render "header" %>
+<div class="row">
+  <div class="col-md-6">
+    <!--  Panel Prescripciones del día -->
+    <div class="panel panel-default">
+      <!--  Panel prescripciones recibidas por día -->
+      <% count_i_p = @internal_applicants.where('created_at >= ?', DateTime.now - 6.days).count %>
+        <div class="panel-heading">
+          <h3 class="panel-title">Recibos <small>Última semana </small><span class="label label-default"><%= count_i_p %></span></h3>
+        </div>
+        <div class="panel-body">
+          <%= line_chart @internal_applicants
+            .group_by_day(:created_at,range: 1.week.ago.midnight..Time.now, format: "%a %d/%m").count, 
+            discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+        </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <% count_i_a = @internal_providers.where('created_at >= ?', DateTime.now - 6.days).count %>
+      <div class="panel-heading">
+        <h3 class="panel-title">Entregas <small>Última semana </small><span class="label label-default"><%= count_i_a %></span></h3>
+      </div>
+      <div class="panel-body">
+        <%= line_chart @internal_providers
+          .group_by_day(:created_at,range: 1.week.ago.midnight..Time.now, format: "%a %d/%m").count, 
+          discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+      </div>
+    </div>
+  </div>
+</div>

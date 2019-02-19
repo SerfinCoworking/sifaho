@@ -65,6 +65,14 @@ class InternalOrderPolicy < ApplicationPolicy
     new_provider.any? { |role| user.has_role?(role) }
   end
 
+  def new_report?
+    new_report.any? { |role| user.has_role?(role) }
+  end
+
+  def generate_report?
+    new_report?
+  end
+
   def new_applicant?
     new_applicant.any? { |role| user.has_role?(role) }
   end
@@ -113,6 +121,10 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def new_provider
+    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+  end
+
+  def new_report
     [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
   end
 

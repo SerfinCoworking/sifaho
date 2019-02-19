@@ -15,6 +15,10 @@
         <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
+          <% count =  OrderingSupply.provider(current_user.sector).solicitud_enviada.count %>
+          <% if count > 0 %>
+            <div class="label label-info pull-right"><%= count %></div>
+          <% end %>
         <% end %>
       </li>
       <% if policy(OrderingSupply).new_receipt? %>

@@ -89,9 +89,11 @@ Rails.application.routes.draw do
       get "edit_applicant"
     end
     collection do
+      get "new_report"; get "generate_report"
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
+      get "statistics"
     end
   end
 

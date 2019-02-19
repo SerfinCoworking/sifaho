@@ -215,3 +215,16 @@ li .well strong{
   color: #41ffc1;
   width: 170%;
 }
+.brandinfo{
+  padding-top: 20px;
+  margin-left: 14.5em; 
+  text-align: left;
+  color: #41ffc1;
+  width: 170%;
+}
+.badge-notify{
+  background:red;
+  position:relative;
+  top: -11px;
+  left: -9px;
+}

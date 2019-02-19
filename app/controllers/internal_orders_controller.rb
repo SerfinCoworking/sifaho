@@ -3,6 +3,11 @@ class InternalOrdersController < ApplicationController
   :edit_applicant, :send_provider, :receive_applicant_confirm, :receive_applicant, 
   :return_provider_status, :return_applicant_status, :send_applicant ]
 
+  def statistics
+    @internal_providers = InternalOrder.provider(current_user.sector)
+    @internal_applicants = InternalOrder.applicant(current_user.sector)
+  end
+
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -93,6 +98,12 @@ class InternalOrdersController < ApplicationController
     @providers = User.where.not(sector: current_user.sector_id )
 
     @internal_order.ord_quantity_supply_lots.build
+  end
+
+  # GET /internal_orders/new
+  def new_report
+    authorize InternalOrder
+    @internal_order = InternalOrder.new
   end
 
   # GET /internal_orders/new_deliver
@@ -353,6 +364,23 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       end
       format.html { redirect_to @internal_order }
+    end
+  end
+
+  def generate_report
+    authorize InternalOrder
+    respond_to do |format|
+      if params[:internal_order][:since_date].present? && params[:internal_order][:to_date].present?
+        @since_date = DateTime.parse(params[:internal_order][:since_date])
+        @to_date = DateTime.parse(params[:internal_order][:to_date])
+        @filtered_orders =  InternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_sector).group('sectors.name').count
+        flash.now[:success] = "Reporte generado."
+        format.html { render :generate_report}
+      else
+        @internal_order = InternalOrder.new
+        flash.now[:error] = "Verifique los campos."
+        format.html { render :new_report }
+      end  
     end
   end
 

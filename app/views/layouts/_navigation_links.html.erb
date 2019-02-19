@@ -3,12 +3,11 @@
       <%= Time.now.strftime("%d/%m/%Y") %>
   </li>
   <li class="<%= active_class('notifications/notifications') %>">
-    <%= link_to main_app.notifications_path, 
-      :title => 'Ver notificaciones', :'data-placement'=>'bottom', :'data-toggle'=>'tooltip' do %>
+    <%= link_to main_app.notifications_path, :title => 'Ver notificaciones', :'data-placement'=>'bottom', :'data-toggle'=>'tooltip' do %>
       <% count = Notification.unread_count(current_user) %>
       <span class="glyphicon glyphicon-bell"></span>
       <% if count > 0 %>
-        <div class="label label-danger"><%= count %></div>
+        <div class="label label-danger badge-notify"><%= count %></div>
       <% end %>
     <% end %>
   </li>

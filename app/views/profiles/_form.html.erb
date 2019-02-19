@@ -7,7 +7,7 @@
       <%= f.input :dni, placeholder: 'DNI', readonly: true %>
       <%= f.input :email, placeholder: 'usuario@dominio.com', readonly: true %>
       <%= f.input :sex, as: :radio_buttons,
-        collection: [['hombre', 'Hombre'], ['mujer', 'Mujer']],
+        collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
         label: "Sexo",
         label_method: :second,
         value_method: :first,

@@ -21,9 +21,9 @@
         <% end %>
         <div class="container-fluid">
           <div class="row">
+            <%= render "shared/dialog" %>
             <%= render "layouts/flash_notices" %>
             <%= yield %>
-            <%= render "shared/dialog" %>
             <div class="footer">
               <%= yield :page_footer %>
             </div>
