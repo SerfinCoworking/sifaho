@@ -1,0 +1,137 @@
+
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" id="page-title">
+        <a href="">Inicio</a>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
+          Prescripciones
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-cust">
+          <% if policy(Prescription).index? %>
+            <li>
+              <%= link_to prescriptions_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+                Listado
+              <% end %>
+            </li>
+          <% end %>
+          <% if policy(Prescription).new? %>
+            <li>
+              <%= link_to new_prescription_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                Nueva ambulatoria
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-th') %>
+          Sectores
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-cust">
+            <li>
+              <%= link_to applicant_index_internal_orders_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+                Recibos
+              <% end %>
+            </li>
+          <li>
+            <%= link_to internal_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+              Entregas&nbsp;
+              <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+              <% if count > 0 %>
+                <div class="label label-info pull-right"><%= count %></div>
+              <% end %>
+            <% end %>
+          </li>
+          <% if policy(Prescription).new? %>
+            <li>
+              <%= link_to new_prescription_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                Nueva ambulatoria
+              <% end %>
+            </li>
+          <% end %>
+          <li role="presentation" class="<%= active_action('new_applicant') %>">
+            <%= link_to new_applicant_internal_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              Solicitud
+            <% end %>
+          </li>
+          <li role="presentation" class="<%= active_action('new_provider') %>">
+            <%= link_to new_provider_internal_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              Provisión
+            <% end %>
+          </li>
+          <li role="presentation" class="<%= active_action('new_report') %>">
+            <%= link_to new_report_internal_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+              Reporte
+            <% end %>
+          </li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-th-large') %>
+          Abastecimiento
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-cust">
+          <li>
+            <%= link_to applicant_index_ordering_supplies_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+              <span class="hidden-xs">Recibos</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to ordering_supplies_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+              <span class="hidden-xs">Despachos</span>
+              <% count =  OrderingSupply.provider(current_user.sector).solicitud_enviada.count %>
+              <% if count > 0 %>
+                <div class="label label-info pull-right"><%= count %></div>
+              <% end %>
+            <% end %>
+          </li>
+          <% if policy(OrderingSupply).new_receipt? %>
+            <li>
+              <%= link_to new_receipt_ordering_supplies_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                R<span class="hidden-xs">ecibo</span>
+              <% end %>
+            </li>
+          <% end %>
+          <% if policy(OrderingSupply).new_applicant? %>
+            <li>
+              <%= link_to new_applicant_ordering_supplies_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                S<span class="hidden-xs">olicitud</span>
+              <% end %>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to new_ordering_supply_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              D<span class="hidden-xs">espacho</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to new_report_ordering_supplies_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+              Reporte
+            <% end %>
+          </li>
+        </ul>
+      </li>
+    </ul>
+<% end %>
