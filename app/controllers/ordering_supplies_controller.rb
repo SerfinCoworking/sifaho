@@ -107,6 +107,12 @@ class OrderingSuppliesController < ApplicationController
     @order_type = 'recibo'
   end
 
+  # GET /ordering_supplies/new
+  def new_report
+    authorize OrderingSupply
+    @ordering_supply = OrderingSupply.new
+  end
+
   # GET /ordering_supplies/new_applicant
   def new_applicant
     authorize OrderingSupply
@@ -356,6 +362,23 @@ class OrderingSuppliesController < ApplicationController
         flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
       end
       format.html { redirect_to @ordering_supply }
+    end
+  end
+
+  def generate_report
+    authorize OrderingSupply
+    respond_to do |format|
+      if params[:ordering_supply][:since_date].present? && params[:ordering_supply][:to_date].present?
+        @since_date = DateTime.parse(params[:ordering_supply][:since_date])
+        @to_date = DateTime.parse(params[:ordering_supply][:to_date])
+        @filtered_orders =  OrderingSupply.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
+        flash.now[:success] = "Reporte generado."
+        format.html { render :generate_report}
+      else
+        @ordering_supply = OrderingSupply.new
+        flash.now[:error] = "Verifique los campos."
+        format.html { render :new_report }
+      end  
     end
   end
 

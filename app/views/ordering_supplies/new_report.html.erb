@@ -6,13 +6,13 @@
       <div class="panel-heading">
         <h3 class="panel-title">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %> Reporte
-          <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
+          <%= link_to ordering_supplies_path, class: 'btn pull-right close-btn' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
           <% end %>
         </h3>
       </div>
       <div class="panel-body">
-        <%= simple_form_for @internal_order, method: :get, :url => { :action => :generate_report }, html: {role: 'check-modified'} do |f| %>
+        <%= simple_form_for @ordering_supply, method: :get, :url => { :action => :generate_report }, html: {role: 'check-modified'} do |f| %>
           <%= f.error_notification %>
           <div class="row">
             <div class="col-md-6">
@@ -60,8 +60,8 @@
         <% end %>
       </div>
       <div class="panel-footer text-right">
-        <%= link_to 'Volver', internal_orders_path, class: 'btn' %>
-        <button type='submit' name='commit' class='btn btn-success' form='new_internal_order'>
+        <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>
+        <button type='submit' name='commit' class='btn btn-success' form='new_ordering_supply'>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-ok') %> Generar reporte
         </button>
       </div>

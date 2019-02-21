@@ -43,5 +43,11 @@
           D<span class="hidden-xs">espacho</span>
         <% end %>
       </li>
+      <li role="presentation" class="<%= active_action('new_report') %>">
+        <%= link_to new_report_ordering_supplies_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Reporte
+        <% end %>
+      </li>
     </ul>
 <% end %>

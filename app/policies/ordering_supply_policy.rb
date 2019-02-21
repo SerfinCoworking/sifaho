@@ -23,6 +23,15 @@ class OrderingSupplyPolicy < ApplicationPolicy
     create?
   end
 
+  def new_report?
+    new_report.any? { |role| user.has_role?(role) }
+  end
+
+  def generate_report?
+    new_report?
+  end
+
+
   def update?
     if update_pres.any? { |role| user.has_role?(role) }
       if record.despacho?
@@ -151,6 +160,10 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def new_receipt
+    [ :admin, :pharmacist ]
+  end
+  
+  def new_report
     [ :admin, :pharmacist ]
   end
 
