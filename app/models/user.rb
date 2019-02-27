@@ -86,6 +86,10 @@ class User < ApplicationRecord
     self.sector.name
   end
 
+  def sector_and_establisment
+    self.sector_name+" "+self.establishment_name
+  end
+
   def establishment_name
     self.sector.establishment_name
   end

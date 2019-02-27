@@ -62,6 +62,17 @@ class SectorSupplyLotsController < ApplicationController
       ],
     ) or return
     @supplies = @filterrific.find.page(params[:page]).per_page(15)
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.pdf do
+        send_data generate_stock_report(current_user.sector.supplies),
+          filename: 'insumos_stock.pdf',
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   def lots_for_supply
@@ -153,5 +164,25 @@ class SectorSupplyLotsController < ApplicationController
     def sector_supply_lot_params
       params.require(:sector_supply_lot).permit(:quantity, :expiry_date,
         :supply_lot_id, :supply_id, :lot_code, :laboratory_id)
+    end
+
+    def generate_stock_report(supplies)
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'sector_supply_lot', 'stock.tlf')
+  
+      supplies.each do |order|
+        report.list.add_row do |row|
+          row.values  sector_name: order.provider_sector.name,
+                      origin: order.order_type.underscore.humanize,
+                      status: order.status.underscore.humanize,
+                      supplies: order.quantity_ord_supply_lots.count,
+                      movements: order.movements.count,
+                      requested_date: order.requested_date.strftime("%d/%m/%Y"),
+                      received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+        end
+      end
+      report.page[:page_count] = report.page_count
+      report.page[:title] = 'Reporte recibos pedidos internos'
+  
+      report.generate
     end
 end

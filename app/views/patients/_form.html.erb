@@ -4,7 +4,7 @@
     <div class="col-md-6">
       <%= f.input :first_name, placeholder: 'Nombre', required: true, label: 'Nombre' %>
       <%= f.input :last_name, placeholder: 'Apellido', required: true, label: 'Apellido' %>
-      <%= f.input :dni, placeholder: 'DNI', required: true, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
+      <%= f.input :dni, placeholder: 'DNI', required: true, label: 'DNI', input_html: { min: '10000', max:'999999999' } %>
       <%= f.input :sex, as: :radio_buttons,
         collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
         label: "Sexo",
