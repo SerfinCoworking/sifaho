@@ -86,7 +86,7 @@ class User < ApplicationRecord
     self.sector.name
   end
 
-  def sector_and_establisment
+  def sector_and_establishment
     self.sector_name+" "+self.establishment_name
   end
 

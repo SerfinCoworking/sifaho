@@ -31,7 +31,7 @@ document.addEventListener("turbolinks:load", function() {
   $('.new-expiry-date')
   .datetimepicker({ 
     format: 'MM/YY',
-    viewMode: 'years',
+    viewMode: 'months',
     locale: 'es',
     useCurrent: false
   })
@@ -48,7 +48,24 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
-    $('.new-expiry-date').datetimepicker({ format: 'MM/YY', viewMode: 'years', locale: 'es', useCurrent: false });
+    $('.new-expiry-date')
+    .datetimepicker({ 
+      format: 'MM/YY',
+      viewMode: 'months',
+      locale: 'es',
+      useCurrent: false
+    })
+    .on('dp.change',function(e)
+    {                               
+      var nested_form = $(this).parents(".nested-fields");
+      if ( !$(this).val()){
+        nested_form.find(".new-expiry-date-hidden").val('');
+      }else{
+        var end_of_month = new Date(e.date.endOf('month'));
+        $(this).data("DateTimePicker").date(end_of_month);
+        nested_form.find(".new-expiry-date-hidden").val(end_of_month);
+      }
+    });
     $('[data-toggle="tooltip"]').tooltip({ 'selector': '', 'container':'body' });
   });
 
@@ -172,9 +189,7 @@ document.addEventListener("turbolinks:load", function() {
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.id);
-          nested_form.find(".new-supply-code").val(ui.item.id);    
-          nested_form.find(".new-expiry-date").prop( "disabled", false );
-          nested_form.find(".new-expiry-date").val('');
+          nested_form.find(".new-supply-code").val(ui.item.id);
           nested_form.find('.new-deliver-quantity').focus();
         },
         response: function(event, ui) {

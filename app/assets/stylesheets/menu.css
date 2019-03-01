@@ -227,3 +227,7 @@ li .well strong{
   top: -11px;
   left: -9px;
 }
+.nav .open>a, .nav .open>a:hover, .nav .open>a:focus{
+  background-color: rgba(11, 83, 141, 1);
+  border-color: rgba(11, 83, 141, 1);
+}

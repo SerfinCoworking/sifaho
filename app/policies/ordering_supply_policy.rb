@@ -132,8 +132,8 @@ class OrderingSupplyPolicy < ApplicationPolicy
         return record.provider_sector == user.sector
       elsif record.solicitud_abastecimiento? && record.solicitud_enviada?
         return record.applicant_sector == user.sector
-      elsif record.recibo? && record.recibo_realizado?
-        return record.applicant_sector == user.sector
+      elsif record.recibo?
+        return false
       end
     end 
   end

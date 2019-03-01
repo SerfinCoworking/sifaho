@@ -426,6 +426,7 @@ class InternalOrdersController < ApplicationController
         report.page[:observations] = internal_order.observation
       end
     end
+    
     report.pages.each do |page|
       page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
       page[:remit_code] = internal_order.remit_code

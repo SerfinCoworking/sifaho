@@ -167,22 +167,38 @@ class SectorSupplyLotsController < ApplicationController
     end
 
     def generate_stock_report(supplies)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'sector_supply_lot', 'stock.tlf')
+      report = Thinreports::Report.new
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'sector_supply_lot', 'stock.tlf'), :default => true
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'sector_supply_lot', 'stock_other_page.tlf'), id: :other_page  
   
-      supplies.each do |order|
-        report.list.add_row do |row|
-          row.values  sector_name: order.provider_sector.name,
-                      origin: order.order_type.underscore.humanize,
-                      status: order.status.underscore.humanize,
-                      supplies: order.quantity_ord_supply_lots.count,
-                      movements: order.movements.count,
-                      requested_date: order.requested_date.strftime("%d/%m/%Y"),
-                      received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+      supplies.order(:name).each do |supply|
+        if report.page_count == 1 && report.list.overflow?
+          report.start_new_page layout: :other_page do |page|
+          end
+        end
+
+        report.list do |list|
+          list.add_row do |row|
+            row.values  code: supply.id,
+                        supply_name: supply.name,
+                        quantity: SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(supply).sum(:quantity),
+                        area: supply.supply_area.name
+            end
+          
+          report.list.on_page_footer_insert do |footer|
+            footer.item(:total).value(supplies.count)
+          end
         end
       end
-      report.page[:page_count] = report.page_count
-      report.page[:title] = 'Reporte recibos pedidos internos'
-  
+
+
+      report.pages.each do |page|
+        page[:report_date] = DateTime.now.strftime("%d/%m/%Y")
+        page[:report_date_footer] = DateTime.now.strftime("%d/%m/%Y")
+        page[:page_count] = report.page_count
+        page[:sector_establishment] = current_user.sector_and_establishment
+        page[:sector_establishment_footer] = current_user.sector_and_establishment
+      end
       report.generate
     end
 end

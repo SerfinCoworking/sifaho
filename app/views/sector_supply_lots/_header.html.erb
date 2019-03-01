@@ -58,5 +58,11 @@
           <% end %>
         </li>
       <% end %>
+      <li role="presentation">
+        <%= link_to group_by_supply_sector_supply_lots_path(format: 'pdf'), target: :_blank do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+          Imprimir
+        <% end %>
+      </li>
     </ul>
 <% end %>
