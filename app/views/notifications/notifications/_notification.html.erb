@@ -3,7 +3,11 @@
      data-id="<%= notification.id %>"
      class="media notification notification-<%= notification.notify_type %><%= ' unread' unless notification.read? %>">
   <div class="media-left">
-    <span class="glyphicon glyphicon-user"></span>
+    <% if notification.actor.profile.present? %>
+      <span><%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object" %></span>
+    <% else %>
+      <span class="glyphicon glyphicon-user"></span>
+    <% end %>
     <% if notification.actor_profile_url && notification.actor_avatar_url %>
       <%= link_to image_tag(notification.actor_avatar_url), notification.actor_profile_url, title: notification.actor_name, class: 'user-avatar' %>
     <% end %>

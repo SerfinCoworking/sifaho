@@ -31,8 +31,8 @@
         </h2>
       </div>
       <div class="panel-body text-center">
+        <% if @user.profile.present? %>
         <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
-          <% if @user.profile.present? %>
         <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
       
         <h5>DNI <%= @user.profile.dni %></h5>
