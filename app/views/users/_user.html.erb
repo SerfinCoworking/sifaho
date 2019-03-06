@@ -2,8 +2,6 @@
   <td>
     <% if user.profile.present? %>
       <span><%= image_tag user_avatar(user, 25), class:"img-circle" %></span>
-    <% else %>
-      <span class="glyphicon glyphicon-user"></span>
     <% end %>
   </td>
   <td><%= user.username %></td>
@@ -17,6 +15,7 @@
     <td>s/p</td>
   <% end %>
   <td><span class="badge"><%= user.sectors.count %></span></td>
+  <td><%= user.updated_at.strftime("%d/%m/%Y")%> </td>
   <td>
     <% if policy(user).show? %>
       <%= link_to users_admin_path(user), class: 'btn btn-default btn-xs', 

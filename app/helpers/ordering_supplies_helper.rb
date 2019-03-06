@@ -51,4 +51,10 @@ module OrderingSuppliesHelper
     elsif order.recibo_realizado?; return 100
     end
   end
+
+  def ordering_td(order)
+    if order.solicitud_enviada?; return "info"
+    else return ""
+    end
+  end
 end

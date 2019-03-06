@@ -11,13 +11,55 @@
         <% end %>
       </h3>
     </div>
-    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
     <div class="panel-body" id="panel-body-new">
-      <div class="row">
-        <div class="col-md-4">
+      <br><br>
+      <div class='row'>
+        <div class='col-md-12' style='margin-top: -50px;'>
+          <ul class='nav nav-tabs nav-justified'>
+            <li class='active'>
+              <a data-toggle='tab' href='#profile'>
+                <span class="glyphicon glyphicon-user"></span>
+                Perfil
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#permissions'>
+                <span class="glyphicon glyphicon-lock"></span>
+                Permisos
+              </a>
+            </li>
+          </ul>
         </div>
-      </div>
-    </div>
+        <div class="col-md-12">
+          <div class="tab-content">
+            <div id='profile' class='tab-pane fade in active'>
+              <div class="col-md-4 text-center">
+                <% if @user.profile.present? %>
+                  <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
+                  <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
+                
+                  <h5>DNI <%= @user.profile.dni %></h5>
+
+                  <h5> <%= @user.profile.email %> </h5>
+                <% else %>
+                  <h5>Sin perfil</h5>
+                <% end %>
+              </div>
+              <div class="col-md-8">
+                <strong>Sectores habilitados:</strong>
+                <ul class="list-group text-left">
+                  <% @user.sectors.each do |sector| %>
+                  <li class="list-group-item"><%= sector.sector_and_establishment %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            <div id='permissions' class='tab-pane fade'>
+            </div> <!-- End last movements tab pane -->
+          </div> <!-- End Tab content-->
+        </div> <!-- End col-md-12 -->
+      </div> <!-- End row -->
+    </div><!-- End panel body -->
 
     <div class="panel-footer text-right">
       <%= link_to 'Volver', users_admin_index_path, class: "btn" %>
