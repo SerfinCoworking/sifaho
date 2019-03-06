@@ -1,8 +1,14 @@
 <tr id="user_<%= user.id %>">
   <td><%= user.username %></td>
-  <td><%= user.profile.last_name.present? ? user.profile.last_name : '----' %></td>
-  <td><%= user.profile.first_name.present? ? user.profile.first_name : '----'%></td>
-  <td><%= user.profile.email.present? ? user.profile.email : '----' %></td>
+  <% if user.profile.last_name.present? %>
+    <td><%= user.profile.last_name.present? ? user.profile.last_name : '----' %></td>
+    <td><%= user.profile.first_name.present? ? user.profile.first_name : '----'%></td>
+    <td><%= user.profile.email.present? ? user.profile.email : '----' %></td>
+  <% else %>
+    <td>Sin perfil</td>
+    <td>s/p</td>
+    <td>s/p</td>
+  <% end %>
   <td><span class="badge"><%= user.sectors.count %></span></td>
   <td>
     <% if policy(user).show? %>
