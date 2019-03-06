@@ -44,10 +44,36 @@
   height: 100%;
   overflow-y: auto;
   position: fixed;
+  overflow: hidden;
 }
-#custom-sidebar::-webkit-scrollbar {
-  display: none;
+
+
+#custom-sidebar:hover {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
 #custom-sidebar .active a,
 #custom-sidebar ul>.active a{
   background-color: rgba(124, 158, 212, 1);
@@ -230,4 +256,9 @@ li .well strong{
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus{
   background-color: rgba(11, 83, 141, 1);
   border-color: rgba(11, 83, 141, 1);
+}
+.img-profile-nav{
+  float: left;
+  margin-right: 4px;
+  margin-top: -2px;
 }

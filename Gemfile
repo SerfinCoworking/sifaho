@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# To resize images
+gem "mini_magick"
 # To ldap athentication
 gem "devise_ldap_authenticatable"
 # To generate reports
@@ -54,7 +56,7 @@ gem 'rails_admin', '~> 1.3'
 # Use devise as users' administrator
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.4'
+gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server

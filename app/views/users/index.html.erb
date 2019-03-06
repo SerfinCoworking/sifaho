@@ -7,36 +7,37 @@
     </div>
     <div class="panel-rightbody">
       <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-2 col-sm-2">
-          <label>Doctor y paciente</label>
+        <div class="col-md-4 col-sm-4">
           <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
           <%= f.text_field(
             :search_username,
             class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre usuario',
+            placeholder: 'DNI',
             autocomplete: 'off',
           ) %>
         </div>
-        <div class="col-md-1 col-sm-1">
+        <div class="col-md-4 col-sm-4">
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_by_fullname,
+            class: 'filterrific-periodically-observed form-control',
+            placeholder: 'Nombre o apellido',
+            autocomplete: 'off',
+          ) %>
         </div>
-        <div class="col-md-2 col-sm-2">
+        <div class="col-md-2 col-sm-4">
+          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+          <% end %>
+          <!-- Spinner para la carga -->
+          <%= render_filterrific_spinner %>
         </div>
-        <div class="col-md-2 col-sm-2">
-        </div>
-        <div class="col-md-2 col-sm-2">
-        </div>
-        <div class="col-md-2 col-sm-2">
-        </div>
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <!-- Spinner para la carga -->
-        <%= render_filterrific_spinner %>
       <% end %>
     </div>
     <div class="clearfix">
     </div>
   </div>
+  <br>
   <%= render(
     partial: 'users/list',
     locals: { users: @users }

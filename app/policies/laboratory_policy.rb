@@ -38,11 +38,11 @@ class LaboratoryPolicy < ApplicationPolicy
   end
 
   def show_lab
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :farmaceutico_central ]
   end
 
   def create_lab
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def destroy_lab

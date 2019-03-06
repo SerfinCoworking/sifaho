@@ -13,7 +13,7 @@ class Professional < ApplicationRecord
   # Validaciones
   validates_presence_of :first_name, :last_name, :enrollment
   validates_uniqueness_of :enrollment
-  validates :dni, uniqueness: true, if: 'dni.present?'
+  validates :dni, uniqueness: true, if: -> { dni.present? }
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

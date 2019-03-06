@@ -44,9 +44,20 @@ class User < ApplicationRecord
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :search_username,
+      :search_by_fullname,
       :sorted_by
     ]
   )
+
+  pg_search_scope :search_username,
+    against: :username,
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_by_fullname,
+    :associated_against => { profile: [:first_name, :last_name] },
+    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -65,10 +76,6 @@ class User < ApplicationRecord
     where(sector_id: [*an_id])
   }
  
-  pg_search_scope :search_username,
-  against: :username,
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
 
   def full_name
     if self.profile.present?

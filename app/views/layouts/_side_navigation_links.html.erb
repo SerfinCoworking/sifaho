@@ -101,6 +101,13 @@
         <% end %>
       <% end %>
     </li>
+    <li id="efectores-li" class="<%= active_class('users') %> text-left">
+      <% if policy(User).index? %>
+        <%= link_to main_app.users_admin_index_path do %>
+          Usuarios
+        <% end %>
+      <% end %>
+    </li>
   </ul>
 
 <!-- Menu NOTIFICACIONES -->
@@ -116,4 +123,6 @@
       <% end %>
     </li>
   </ul>
-  
+  <br>
+  <br>
+  <br>

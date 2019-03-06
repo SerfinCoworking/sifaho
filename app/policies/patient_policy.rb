@@ -30,15 +30,15 @@ class PatientPolicy < ApplicationPolicy
   private
 
   def update_pat
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def show_pat
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def create_pat
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def destroy_pat

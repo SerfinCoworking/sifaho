@@ -38,11 +38,11 @@ class ProfessionalPolicy < ApplicationPolicy
   end
 
   def show_pro
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def create_pro
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def destroy_pro

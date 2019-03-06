@@ -50,11 +50,11 @@ class SupplyLotPolicy < ApplicationPolicy
   end
 
   def new_sl
-    [ :admin, :central_pharmacist ]
+    [ :admin ]
   end
 
   def destroy_sl
-    [ :admin, :central_pharmacist ]
+    [ :admin ]
   end
 
   def purge_sl

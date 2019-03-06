@@ -2,17 +2,23 @@
   <%= f.error_notification %>
   <div class='container-fluid'>
     <div class="row">
-      <%= f.input :first_name, label: "Nombres", readonly: true %>
-      <%= f.input :last_name, label: "Apellidos", readonly: true %>
-      <%= f.input :dni, placeholder: 'DNI', readonly: true %>
-      <%= f.input :email, placeholder: 'usuario@dominio.com', readonly: true %>
-      <%= f.input :sex, as: :radio_buttons,
-        collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
-        label: "Sexo",
-        label_method: :second,
-        value_method: :first,
-        input_html: {class: "radio"} 
-      %>
+      <div class="col-md-6">
+        <%= image_tag user_avatar(f.object.user, 200), class:"img-thumbnail" %>
+        <%= f.input :avatar %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :first_name, label: "Nombres", readonly: true %>
+        <%= f.input :last_name, label: "Apellidos", readonly: true %>
+        <%= f.input :dni, placeholder: 'DNI', readonly: true %>
+        <%= f.input :email, placeholder: 'usuario@dominio.com', readonly: true %>
+        <%= f.input :sex, as: :radio_buttons,
+          collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
+          label: "Sexo",
+          label_method: :second,
+          value_method: :first,
+          input_html: {class: "radio"} 
+        %>
+      </div>
     </div>
   </div>
 <% end %>

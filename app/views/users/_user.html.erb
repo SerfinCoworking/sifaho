@@ -1,5 +1,21 @@
 <tr id="user_<%= user.id %>">
-  <td class="pres-col-pro"><%= user.username %></td>
-  <td class="pres-col-pat"><%= user.profile.first_name.present? ? user.profile.first_name : '----'%></td>
-  <td class="pres-col-pat"><%= user.profile.last_name.present? ? user.profile.last_name : '----' %></td>
+  <td><%= user.username %></td>
+  <td><%= user.profile.last_name.present? ? user.profile.last_name : '----' %></td>
+  <td><%= user.profile.first_name.present? ? user.profile.first_name : '----'%></td>
+  <td><%= user.profile.email.present? ? user.profile.email : '----' %></td>
+  <td><span class="badge"><%= user.sectors.count %></span></td>
+  <td>
+    <% if policy(user).show? %>
+      <%= link_to users_admin_path(user), class: 'btn btn-default btn-xs', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+    <% if policy(user).edit_permissions? %>
+      <%= link_to edit_permissions_users_admin_path(user), class: 'btn btn-warning btn-xs', 
+        title: 'Editar permisos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %>
+      <% end %>
+    <% end %>
+  </td>
 </tr>

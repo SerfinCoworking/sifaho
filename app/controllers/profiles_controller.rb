@@ -1,16 +1,15 @@
 class ProfilesController < ApplicationController
+  before_action :set_profile, only: [ :edit, :update ] 
   after_action :verify_authorized
 
   def edit
-    @profile = current_user.profile
     authorize @profile
   end
 
   def update
-    @profile = current_user.profile
     authorize @profile
 
-    if @profile.update(profile_params)
+    if @profile.update_attributes(profile_params)
       flash[:success] = "Tu perfil se ha modificado correctamente."
       redirect_to request.referrer
     else
@@ -21,8 +20,12 @@ class ProfilesController < ApplicationController
 
   private
 
+  # Use callbacks to share common setup or constraints between actions.
+  def set_profile
+    @profile = Profile.find(params[:id])
+  end
+
   def profile_params
-    params.require(:profile).permit(:first_name, :last_name, :dni, :date_of_birth,
-                                    :enrollment, :address, :email, :sex)
+    params.require(:profile).permit(:id, :sex, :avatar)
   end
 end

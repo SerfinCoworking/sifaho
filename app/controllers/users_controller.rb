@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :change_sector ]
+  before_action :set_user, only: [:show, :update, :change_sector, :edit_permissions, :update_permissions ]
 
   def index
     authorize User
@@ -13,19 +13,48 @@ class UsersController < ApplicationController
       default_filter_params: { sorted_by: 'created_at_desc' },
       available_filters: [
         :search_username,
+        :search_by_fullname,
         :sorted_by
       ],
     ) or return
     @users = @filterrific.find.page(params[:page]).per_page(15)
   end
 
+  def show
+    authorize @user
+  end
+
   def change_sector
     authorize @user
-    @sectors = @user.sectors
+    @sectors = @user.sectors.joins(:establishment).pluck(:id, :name, "establishments.name")
 
     respond_to do |format|  
       format.js
     end 
+  end
+
+  def edit_permissions
+    authorize @user
+    @sectors = Sector.joins(:establishment).pluck(:id, :name, "establishments.name")
+    if @user.has_role? :admin
+      @roles = Role.all.order(:name).pluck(:id, :name)
+    else
+      @roles = Role.where.not(name: "admin").order(:name).pluck(:id, :name)
+    end
+  end
+
+  def update_permissions
+    authorize @user
+    
+    respond_to do |format|
+      if @user.update(user_params)
+        flash[:success] = @user.full_name+" se ha modificado correctamente."
+        format.html { redirect_to action: "show", id: @user.id }
+      else
+        flash[:error] = @user.full_name+" no se ha podido modificar."
+        format.html { render :edit_permissions }
+      end
+    end
   end
 
   def update
@@ -33,10 +62,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        flash[:success] = @user.full_name+" se ha modificado correctamente."
+        flash[:success] = "Ahora estás en "+@user.sector.name
         format.js {render inline: "location.reload();" }
       else
-        flash[:error] = @user.full_name+" no se ha podido modificar."
+        flash[:error] = "No se ha podido modificar el sector."
         format.js {render inline: "location.reload();" }
       end
     end
@@ -48,6 +77,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:sector_id)
+    params.require(:user).permit(:sector_id, sector_ids: [], role_ids: [])
   end
 end 

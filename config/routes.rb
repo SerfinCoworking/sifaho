@@ -11,17 +11,20 @@ Rails.application.routes.draw do
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
   end
 
-  resources :users_admin, :controller => 'users', only: [:index, :update] do
+  resources :users_admin, :controller => 'users', only: [:index, :update, :show] do
     member do
       get "change_sector"
+      get "edit_permissions" 
+      put "update_permissions"
     end
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
 
-  get '/profile/edit', to:'profiles#edit', as:'edit_profile'
-  patch '/profile', to: 'profiles#update'
+  resources :profiles, only: [ :edit, :update ]
+  # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
+  # patch '/profile', to: 'profiles#update'
   # Rescue errors
   match "/404", :to => "errors#not_found", :via => :all
   match "/500", :to => "errors#internal_server_error", :via => :all

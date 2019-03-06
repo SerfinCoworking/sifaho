@@ -1,7 +1,7 @@
 <% if user_signed_in? %>
   <li class="inverse-dropdown">
     <a class="inverse-dropdown dropdown-toggle" data-toggle="dropdown" href="#">
-      <span class="glyphicon glyphicon-user "></span>
+      <span><%= image_tag user_avatar(current_user, 25), class:"img-circle img-profile-nav" %></span>
       <%= current_user.full_name %>
       &nbsp;&nbsp;
     </a>
@@ -15,7 +15,7 @@
         </li>
       <% end %>
       <li>
-        <%= link_to main_app.edit_profile_path, remote: true do %>
+        <%= link_to main_app.edit_profile_path(current_user.profile), remote: true do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
           &nbsp;Editar perfil
         <% end %>

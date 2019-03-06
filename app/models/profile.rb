@@ -3,6 +3,7 @@ class Profile < ApplicationRecord
 
   #Relaciones
   belongs_to :user
+  has_one_attached :avatar
 
   def full_name
     self.last_name+" "+self.first_name
