@@ -1,6 +1,6 @@
 <tr id="user_<%= user.id %>">
   <td><%= user.username %></td>
-  <% if user.profile.last_name.present? %>
+  <% if user.profile.present? %>
     <td><%= user.profile.last_name.present? ? user.profile.last_name : '----' %></td>
     <td><%= user.profile.first_name.present? ? user.profile.first_name : '----'%></td>
     <td><%= user.profile.email.present? ? user.profile.email : '----' %></td>

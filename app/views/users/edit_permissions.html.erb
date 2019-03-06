@@ -32,7 +32,7 @@
       </div>
       <div class="panel-body text-center">
         <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
-          <% if @user.profile.last_name.present? %>
+          <% if @user.profile.present? %>
         <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
       
         <h5>DNI <%= @user.profile.dni %></h5>
@@ -42,7 +42,7 @@
           <h5>Sin perfil</h5>
         <% end %>
         <strong>Sectores habilitados:</strong>
-        <ul class="list-group text-left"> 
+        <ul class="list-group text-left">
           <% @user.sectors.each do |sector| %>
             <li class="list-group-item"><%= sector.sector_and_establishment %></li>
           <% end %>
