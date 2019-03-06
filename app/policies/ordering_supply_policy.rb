@@ -140,58 +140,58 @@ class OrderingSupplyPolicy < ApplicationPolicy
 
   private
   def create_receipt
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
   
   def receive_order
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def edit_provider
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def edit_applicant
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def new_provider
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def new_receipt
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
   
   def new_report
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def send_order
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def return_status
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def update_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 
   def see_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
   end
 
   def new_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def destroy_pres
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def dispense_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 end

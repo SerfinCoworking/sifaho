@@ -109,54 +109,54 @@ class InternalOrderPolicy < ApplicationPolicy
 
   private
   def receive_applicant
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def edit_provider
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def edit_applicant
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def new_provider
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def new_report
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def new_applicant
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def send_order
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def return_status
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def update_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 
   def see_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
   end
 
   def new_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def destroy_pres
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def dispense_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 end

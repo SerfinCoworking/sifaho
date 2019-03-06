@@ -49,22 +49,22 @@ class PrescriptionPolicy < ApplicationPolicy
   private
 
   def update_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 
   def see_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :central_pharmacist, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
   end
 
   def new_pres
-    [ :admin, :pharmacist, :pharmacist_assistant, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
   end
 
   def destroy_pres
-    [ :admin, :pharmacist ]
+    [ :admin, :farmaceutico ]
   end
 
   def dispense_pres
-    [ :admin, :pharmacist, :pharmacist_assistant ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 end
