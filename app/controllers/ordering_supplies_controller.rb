@@ -111,6 +111,7 @@ class OrderingSuppliesController < ApplicationController
   def new_report
     authorize OrderingSupply
     @ordering_supply = OrderingSupply.new
+    @establishments = OrderingSupply.provided_establishments_by(current_user.sector)
   end
 
   # GET /ordering_supplies/new_applicant
@@ -369,12 +370,24 @@ class OrderingSuppliesController < ApplicationController
     authorize OrderingSupply
     respond_to do |format|
       if params[:ordering_supply][:since_date].present? && params[:ordering_supply][:to_date].present?
+        @report_type = "2"
         @since_date = DateTime.parse(params[:ordering_supply][:since_date])
         @to_date = DateTime.parse(params[:ordering_supply][:to_date])
-        @filtered_orders =  OrderingSupply.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
+        if params[:ordering_supply][:applicant_sector_id].present?
+          @applicant_establishment = Establishment.find(params[:ordering_supply][:applicant_sector_id])
+          @filtered_orders = OrderingSupply.applicant_establishment(@applicant_establishment).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0)
+          @supplies = Array.new
+          @filtered_orders.each do |ord|
+            @supplies.concat(ord.quantity_ord_supply_lots.pluck(:supply_id, :delivered_quantity))
+          end
+          @supplies = @supplies.group_by(&:first).map { |k, v| [k, v.map(&:last).inject(:+)] }
+        else
+          @filtered_orders =  OrderingSupply.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
+        end
         flash.now[:success] = "Reporte generado."
         format.html { render :generate_report}
       else
+        @report_type = "1"
         @ordering_supply = OrderingSupply.new
         flash.now[:error] = "Verifique los campos."
         format.html { render :new_report }

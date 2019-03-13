@@ -1,15 +1,15 @@
 <% content_for :page_header do %>
   <ul class="nav nav-tabs nav-tabs-cust">
-    <li role="presentation" id="page-title">
+    <li role="presentation" id="page-title" class="non-sel">
       <a href="">Pacientes</a>
     </li>
-    <li role="presentation" class="<%= active_action('index') %>">
+    <li role="presentation" class="<%= active_action('index') %> non-sel">
       <%= link_to supplies_path do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
         Listado
       <% end %>
     </li>
-    <li role="presentation" class="<%= active_action('new') %>">
+    <li role="presentation" class="<%= active_action('new') %> non-sel">
       <%= link_to new_patient_path do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
         Nuevo

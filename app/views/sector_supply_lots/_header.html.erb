@@ -1,24 +1,24 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title">
+      <li role="presentation" id="page-title" class="non-sel">
         <a href="">Stock</a>
       </li>
       <% if policy(SectorSupplyLot).group_by_supply? %>
-        <li role="presentation" class="<%= active_action('group_by_supply') %>">
+        <li role="presentation" class="<%= active_action('group_by_supply') %> non-sel">
           <%= link_to group_by_supply_sector_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
             Insumos
           <% end %>
         </li>
       <% end %>
-      <li role="presentation" class="<%= active_action('index') %>">
+      <li role="presentation" class="<%= active_action('index') %> non-sel">
         <%= link_to sector_supply_lots_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
           Lotes
         <% end %>
       </li>
       <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
           Cargar stock
           <span class="caret"></span>
@@ -51,14 +51,14 @@
         </ul>
       </li>
       <% if policy(SectorSupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
           <%= link_to trash_index_sector_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera
           <% end %>
         </li>
       <% end %>
-      <li role="presentation">
+      <li role="presentation" class="non-sel">
         <%= link_to group_by_supply_sector_supply_lots_path(format: 'pdf'), target: :_blank do %>
           <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
           Imprimir

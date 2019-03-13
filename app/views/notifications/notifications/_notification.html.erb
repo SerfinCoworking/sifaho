@@ -4,7 +4,11 @@
      class="media notification notification-<%= notification.notify_type %><%= ' unread' unless notification.read? %>">
   <div class="media-left">
     <% if notification.actor.profile.present? %>
-      <span><%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object" %></span>
+      <span tabindex="-1" data-toggle="popover" data-trigger="hover" data-placement="auto"\ 
+        data-content='<%= image_tag user_avatar(notification.actor, 60), class:"img-thumbnail" %>
+        <%= notification.actor.full_name.titleize %>'>
+        <%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object" %>
+      </span>
     <% else %>
       <span class="glyphicon glyphicon-user"></span>
     <% end %>
@@ -20,3 +24,12 @@
   </div>
 </div>
 <% end %>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({
+      trigger: 'hover',
+      html: true
+    });
+
+});
+</script>

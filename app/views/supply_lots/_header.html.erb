@@ -1,10 +1,10 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust">
+    <ul class="nav nav-tabs nav-tabs-cust non-sel">
       <li role="presentation" id="page-title">
         <a href="">Lotes en provincia</a>
       </li>
       <% if policy(SupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %>">
+        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
           <%= link_to trash_index_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

@@ -97,9 +97,11 @@
   background-color: rgba(124, 158, 212, 1);
   border-radius: 5px;
 }
+
 .nav-cust > li > a{
   font-size: 14px;
   color: white;
+  transition: 0.2s;
 }
 .nav-cust > li > a:hover{
   color: white;
@@ -108,6 +110,7 @@
 #custom-sidebar .nav-cust, .nav-pills-cust>li>a {
   font-size: 14px;
   color: white;
+  transition: 0.2s;
 }
 #custom-sidebar .nav-cust, .nav-pills-cust>li>div{
   margin-left: -15px;
@@ -228,6 +231,7 @@ li .well strong{
   padding-bottom: 3px;
   color: white;
   border-radius: 4px;
+  transition: 0.2s;
 }
 .nav-tabs-cust > li > a:hover {
   background-color: #7c9ed4;

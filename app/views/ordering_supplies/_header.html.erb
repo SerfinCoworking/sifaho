@@ -1,17 +1,17 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" class="<%= active_action('statistics') %>" id="page-title">
+      <li role="presentation" class="<%= active_action('statistics') %> non-sel" id="page-title">
         <%= link_to statistics_ordering_supplies_path do %>
           Abastecimiento
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('applicant_index') %>">
+      <li role="presentation" class="<%= active_action('applicant_index') %> non-sel">
         <%= link_to applicant_index_ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('index') %>">
+      <li role="presentation" class="<%= active_action('index') %> non-sel">
         <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
@@ -22,7 +22,7 @@
         <% end %>
       </li>
       <% if policy(OrderingSupply).new_receipt? %>
-        <li role="presentation" class="<%= active_action('new_receipt') %>">
+        <li role="presentation" class="<%= active_action('new_receipt') %> non-sel">
           <%= link_to new_receipt_ordering_supplies_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             R<span class="hidden-xs">ecibo</span>
@@ -30,20 +30,20 @@
         </li>
       <% end %>
       <% if policy(OrderingSupply).new_applicant? %>
-        <li role="presentation" class="<%= active_action('new_applicant') %>">
+        <li role="presentation" class="<%= active_action('new_applicant') %> non-sel">
           <%= link_to new_applicant_ordering_supplies_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             S<span class="hidden-xs">olicitud</span>
           <% end %>
         </li>
       <% end %>
-      <li role="presentation" class="<%= active_action('new') %>">
+      <li role="presentation" class="<%= active_action('new') %> non-sel">
         <%= link_to new_ordering_supply_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           D<span class="hidden-xs">espacho</span>
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('new_report') %>">
+      <li role="presentation" class="<%= active_action('new_report') %> non-sel">
         <%= link_to new_report_ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
           Reporte

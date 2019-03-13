@@ -1,9 +1,9 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title">
+      <li role="presentation" id="page-title" class="non-sel">
         <a href="">Usuarios</a>
       </li>
-      <li role="presentation" class="<%= active_action('index') %>">
+      <li role="presentation" class="<%= active_action('index') %> non-sel">
         <%= link_to users_admin_index_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
           Listado

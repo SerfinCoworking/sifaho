@@ -17,13 +17,31 @@
           <div class="row">
             <div class="col-md-6">
               <label>Seleccione reporte</label>
-              <select class="selectpicker">
-                <option>Pedidos por establecimiento</option>
-                <option disabled data-subtext="Próximamente">Insumos de un establecimiento</option>
-                <option disabled data-subtext="Próximamente">Insumo específico por establecimiento</option>
-                <option disabled data-subtext="Próximamente">Pedidos de un establecimiento</option>
-                <option disabled data-subtext="Próximamente">Insumos por establecimiento</option>
+              <select class="selectpicker" data-width="fit" id="report-select">
+                <option data-show="none">Pedidos por establecimiento</option>
+                <option data-show="establishment">Insumos entregados a un establecimiento</option>
+                <option disabled data-subtext="Próximamente" data-show="supply">Insumo específico por establecimiento</option>
+                <option disabled data-subtext="Próximamente" data-show="establishment">Pedidos de un establecimiento</option>
+                <option disabled data-subtext="Próximamente" data-show="none">Insumos por establecimiento</option>
               </select>
+            </div>
+            <div class="col-md-6 establishment" style="display: none;">
+                <%= f.input :applicant_sector_id, label: 'Establecimiento',
+                  collection:
+                    @establishments.map {
+                      |est| [est.second, est.first]
+                    },
+                  :input_html => {
+                    required: true,
+                    include_blank: false,
+                    class: 'selectpicker establishment',
+                    "data-width"=>"100%",
+                    "data-size"=>"15",
+                    "title"=>"Seleccionar establecimiento",
+                    "data-live-search"=>true,
+                    "data-none-results-text" => "No se encontró el establecimiento"
+                  }
+                %>
             </div>
           </div>
           <br>

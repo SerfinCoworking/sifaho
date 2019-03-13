@@ -1,16 +1,16 @@
 
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title">
+      <li role="presentation" id="page-title" class="non-sel">
         <a href="">Inicio</a>
       </li>
       <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
           Prescripciones
           <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-cust">
+        <ul class="dropdown-menu dropdown-menu-cust non-sel">
           <% if policy(Prescription).index? %>
             <li>
               <%= link_to prescriptions_path do %>
@@ -30,12 +30,12 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-th') %>
           Sectores
           <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-cust">
+        <ul class="dropdown-menu dropdown-menu-cust non-sel">
             <li>
               <%= link_to applicant_index_internal_orders_path do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
@@ -81,7 +81,7 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-th-large') %>
           Abastecimiento
           <span class="caret"></span>
