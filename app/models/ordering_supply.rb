@@ -156,7 +156,7 @@ class OrderingSupply < ApplicationRecord
 
   def self.provided_establishments_by(a_sector)
     @sector_ids = OrderingSupply.provider(a_sector).pluck(:applicant_sector_id).to_set
-    return Establishment.joins(:sectors).where(sectors: { id: @sector_ids }).pluck(:id, :name)
+    return Establishment.joins(:sectors).where(sectors: { id: @sector_ids }).pluck(:id, :name).to_set
   end
 
   def self.applicant_establishment(a_establishment)
