@@ -11,6 +11,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply, :requested_quantity, :delivered_quantity
+  validates_presence_of :sector_supply_lot, :if => :are_quantity_to_dispense? 
   validates_associated :supply
 
   accepts_nested_attributes_for :supply,
@@ -22,6 +23,10 @@ class QuantityOrdSupplyLot < ApplicationRecord
   accepts_nested_attributes_for :supply_lot,
     :allow_destroy => true,
     :reject_if => proc { |att| att[:supply_lot_id].blank? }
+  
+  def are_quantity_to_dispense?
+    return self.delivered_quantity > 0
+  end
   
   # Métodos públicos
   def increment_lot_to(a_sector)

@@ -1,0 +1,21 @@
+<%= simple_form_for(@bed_order) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :status %>
+    <%= f.input :remit_code %>
+    <%= f.association :created_by %>
+    <%= f.association :audited_by %>
+    <%= f.input :sent_dy %>
+    <%= f.association :received_by %>
+    <%= f.association :sent_request_by_id %>
+    <%= f.input :sent_date %>
+    <%= f.input :deleted_at %>
+    <%= f.input :date_received %>
+    <%= f.association :patient %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

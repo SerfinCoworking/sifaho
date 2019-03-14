@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :bed_orders
   get 'report/newOrderingSupply'
 
   resources :categories

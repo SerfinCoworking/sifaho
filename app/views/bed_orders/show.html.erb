@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bed_order.status %>
+</p>
+
+<p>
+  <strong>Remit code:</strong>
+  <%= @bed_order.remit_code %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @bed_order.created_by %>
+</p>
+
+<p>
+  <strong>Audited by:</strong>
+  <%= @bed_order.audited_by %>
+</p>
+
+<p>
+  <strong>Sent dy:</strong>
+  <%= @bed_order.sent_dy %>
+</p>
+
+<p>
+  <strong>Received by:</strong>
+  <%= @bed_order.received_by %>
+</p>
+
+<p>
+  <strong>Sent request by:</strong>
+  <%= @bed_order.sent_request_by_id %>
+</p>
+
+<p>
+  <strong>Sent date:</strong>
+  <%= @bed_order.sent_date %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @bed_order.deleted_at %>
+</p>
+
+<p>
+  <strong>Date received:</strong>
+  <%= @bed_order.date_received %>
+</p>
+
+<p>
+  <strong>Patient:</strong>
+  <%= @bed_order.patient %>
+</p>
+
+<%= link_to 'Edit', edit_bed_order_path(@bed_order) %> |
+<%= link_to 'Back', bed_orders_path %>

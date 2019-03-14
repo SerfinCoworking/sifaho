@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bed Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Remit code</th>
+      <th>Created by</th>
+      <th>Audited by</th>
+      <th>Sent dy</th>
+      <th>Received by</th>
+      <th>Sent request by</th>
+      <th>Sent date</th>
+      <th>Deleted at</th>
+      <th>Date received</th>
+      <th>Patient</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bed_orders.each do |bed_order| %>
+      <tr>
+        <td><%= bed_order.status %></td>
+        <td><%= bed_order.remit_code %></td>
+        <td><%= bed_order.created_by %></td>
+        <td><%= bed_order.audited_by %></td>
+        <td><%= bed_order.sent_dy %></td>
+        <td><%= bed_order.received_by %></td>
+        <td><%= bed_order.sent_request_by_id %></td>
+        <td><%= bed_order.sent_date %></td>
+        <td><%= bed_order.deleted_at %></td>
+        <td><%= bed_order.date_received %></td>
+        <td><%= bed_order.patient %></td>
+        <td><%= link_to 'Show', bed_order %></td>
+        <td><%= link_to 'Edit', edit_bed_order_path(bed_order) %></td>
+        <td><%= link_to 'Destroy', bed_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bed Order', new_bed_order_path %>

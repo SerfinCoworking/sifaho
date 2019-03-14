@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_05_151604) do
+ActiveRecord::Schema.define(version: 2019_03_14_142552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -36,6 +36,47 @@ ActiveRecord::Schema.define(version: 2019_03_05_151604) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "bed_orders", force: :cascade do |t|
+    t.bigint "sent_by_id"
+    t.bigint "created_by_id"
+    t.bigint "audited_by_id"
+    t.bigint "received_by_id"
+    t.bigint "sent_request_by_id_id"
+    t.bigint "patient_id"
+    t.string "observation"
+    t.string "remit_code"
+    t.datetime "sent_date"
+    t.datetime "deleted_at"
+    t.datetime "date_received"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "bedroom_id"
+    t.index ["audited_by_id"], name: "index_bed_orders_on_audited_by_id"
+    t.index ["bedroom_id"], name: "index_bed_orders_on_bedroom_id"
+    t.index ["created_by_id"], name: "index_bed_orders_on_created_by_id"
+    t.index ["patient_id"], name: "index_bed_orders_on_patient_id"
+    t.index ["received_by_id"], name: "index_bed_orders_on_received_by_id"
+    t.index ["sent_by_id"], name: "index_bed_orders_on_sent_by_id"
+    t.index ["sent_request_by_id_id"], name: "index_bed_orders_on_sent_request_by_id_id"
+  end
+
+  create_table "bedrooms", force: :cascade do |t|
+    t.string "name"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sector_id"], name: "index_bedrooms_on_sector_id"
+  end
+
+  create_table "beds", force: :cascade do |t|
+    t.string "name"
+    t.bigint "bedroom_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -493,6 +534,9 @@ ActiveRecord::Schema.define(version: 2019_03_05_151604) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bed_orders", "patients"
+  add_foreign_key "bedrooms", "sectors"
+  add_foreign_key "beds", "bedrooms"
   add_foreign_key "medications", "medication_brands"
   add_foreign_key "patients", "patient_types"
   add_foreign_key "prescriptions", "patients"
