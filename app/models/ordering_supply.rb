@@ -210,12 +210,10 @@ class OrderingSupply < ApplicationRecord
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def accept_order(a_user)
     if proveedor_auditoria?
-      if self.quantity_ord_supply_lots.present?
+      if self.validate_quantity_lots
         self.accepted_date = DateTime.now
         self.accepted_by = a_user
         self.proveedor_aceptado!
-      else
-        raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end
     else
       raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
@@ -299,7 +297,7 @@ class OrderingSupply < ApplicationRecord
     elsif @qosl_without_ssl.present?
       @qosl_without_ssl.each do |qosl|
         if qosl.delivered_quantity > 0
-          raise ArgumentError, 'No hay lotes asignados.'
+          raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
         end
       end
     else
