@@ -22,12 +22,6 @@
                 Perfil
               </a>
             </li>
-            <li>
-              <a data-toggle='tab' href='#permissions'>
-                <span class="glyphicon glyphicon-lock"></span>
-                Permisos
-              </a>
-            </li>
           </ul>
         </div>
         <div class="col-md-12">
@@ -44,52 +38,19 @@
                 <% else %>
                   <h5>Sin perfil</h5>
                 <% end %>
+                <strong>Roles activados:</strong> <%= @user.roles.map(&:name).join(", ").humanize %>.
               </div>
               <div class="col-md-8">
                 <strong>Sectores habilitados:</strong>
                 <ul class="list-group text-left">
                   <% @user.sectors.each do |sector| %>
-                  <li class="list-group-item"><%= sector.sector_and_establishment %></li>
+                    <li class="list-group-item"><%= sector.sector_and_establishment %></li>
                   <% end %>
                 </ul>
               </div>
             </div>
-            <div id='permissions' class='tab-pane fade'>
-              <strong>Roles activados:</strong> <%= Role.all.map(&:name).join(", ").humanize %>.
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Index</th>
-                    <th scope="col">Show</th>
-                    <th scope="col">New</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                    <th scope="col">Report</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">Cars</th>
-                    <%  %>
-                    <td><span class="glyphicon glyphicon-<%= policy(Prescription).index? ? "ok text-success" : "remove text-danger"%>"></span></td>
-                    <td><span class="glyphicon glyphicon-<%= policy(Prescription.first).show? ? "ok text-success" : "remove text-danger"%>"></span></td>
-                    <td><span class="glyphicon glyphicon-<%= policy(Prescription).new? ? "ok text-success" : "remove text-danger"%>"></span></td>
-                    <td><span class="glyphicon glyphicon-<%= policy(Prescription.new).edit? ? "ok text-success" : "remove text-danger"%>"></span></td>
-                    <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
-                    <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Animals</th>
-                    <td><span class="glyphicon glyphicon-ok text-success"></span></td>
-                    <td><span class="glyphicon glyphicon-ok text-success"></span></td>
-                    <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
-                    <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
-                    <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
-                    <td><span class="glyphicon glyphicon-ok text-success"></span></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div id='last-movements' class='tab-pane fade'>
+            
             </div> <!-- End last movements tab pane -->
           </div> <!-- End Tab content-->
         </div> <!-- End col-md-12 -->

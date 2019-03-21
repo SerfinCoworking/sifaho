@@ -14,6 +14,11 @@ class Supply < ApplicationRecord
   :through => :quantity_ord_supply_lots,
   :source => :quantifiable,
   :source_type => 'InternalOrder'
+
+  has_many :internal_orders, -> { with_deleted },
+  :through => :quantity_ord_supply_lots,
+  :source => :quantifiable,
+  :source_type => 'BedOrder'
   
   # Validaciones
   validates_presence_of :name, :unity, :quantity_alarm, :period_control

@@ -1,35 +1,35 @@
 <%= cache(['notifications', Notifications::VERSION, notification]) do %>
-<div id="notification-<%= notification.id %>"
-     data-id="<%= notification.id %>"
-     class="media notification notification-<%= notification.notify_type %><%= ' unread' unless notification.read? %>">
-  <div class="media-left">
-    <% if notification.actor.profile.present? %>
-      <span tabindex="-1" data-toggle="popover" data-trigger="hover" data-placement="auto"\ 
-        data-content='<%= image_tag user_avatar(notification.actor, 60), class:"img-thumbnail" %>
-        <%= notification.actor.full_name.titleize %>'>
-        <%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object" %>
-      </span>
-    <% else %>
-      <span class="glyphicon glyphicon-user"></span>
-    <% end %>
-    <% if notification.actor_profile_url && notification.actor_avatar_url %>
-      <%= link_to image_tag(notification.actor_avatar_url), notification.actor_profile_url, title: notification.actor_name, class: 'user-avatar' %>
-    <% end %>
+  <div id="notification-<%= notification.id %>"
+      data-id="<%= notification.id %>"
+      class="media notification notification-<%= notification.notify_type %><%= ' unread' unless notification.read? %>">
+    <div class="media-left">
+      <% if notification.actor.profile.present? %>
+        <span tabindex="-1" data-toggle="popover" data-trigger="hover" data-placement="auto"\ 
+          data-content='
+          <%= image_tag user_avatar(notification.actor, 60), class:"img-thumbnail" %>
+          <%= notification.actor.full_name.titleize %>'>
+          <%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object" %>
+        </span>
+      <% else %>
+        <span class="glyphicon glyphicon-user"></span>
+      <% end %>
+      <% if notification.actor_profile_url && notification.actor_avatar_url %>
+        <%= link_to image_tag(notification.actor_avatar_url), notification.actor_profile_url, title: notification.actor_name, class: 'user-avatar' %>
+      <% end %>
+    </div>
+    <div class="media-body">
+      <%= render partial: "/notifications/notifications/#{notification.notify_type}", locals: { notification: notification } %>
+      <small><%= time_ago_in_words(notification.created_at) %></small>
+    </div>
+    <div class="media-right">
+    </div>
   </div>
-  <div class="media-body">
-    <%= render partial: "/notifications/notifications/#{notification.notify_type}", locals: { notification: notification } %>
-    <small><%= time_ago_in_words(notification.created_at) %></small>
-  </div>
-  <div class="media-right">
-  </div>
-</div>
 <% end %>
 <script>
-$(document).ready(function(){
-    $('[data-toggle="popover"]').popover({
-      trigger: 'hover',
-      html: true
-    });
-
-});
+  $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({
+        trigger: 'hover',
+        html: true
+      });
+  });
 </script>

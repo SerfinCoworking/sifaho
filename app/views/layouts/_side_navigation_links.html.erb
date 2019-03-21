@@ -16,6 +16,13 @@
       <% end %>
     <% end %>
   </li>
+  <li id="pedidos-li" class="<%= active_class('bed_orders') %> text-left">
+    <% if policy(BedOrder).index? %>
+      <%= link_to main_app.bed_orders_path do %>
+        Internación
+      <% end %>
+    <% end %>
+  </li>
   <li id="pedidos-li" class="<%= active_class('internal_orders') %> text-left">
     <% if policy(InternalOrder).index? %>
       <%= link_to main_app.applicant_index_internal_orders_path do %>

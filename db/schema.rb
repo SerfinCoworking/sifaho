@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_14_142552) do
+ActiveRecord::Schema.define(version: 2019_03_18_141207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -54,9 +54,13 @@ ActiveRecord::Schema.define(version: 2019_03_14_142552) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "bedroom_id"
+    t.bigint "bed_id"
+    t.bigint "establishment_id"
     t.index ["audited_by_id"], name: "index_bed_orders_on_audited_by_id"
+    t.index ["bed_id"], name: "index_bed_orders_on_bed_id"
     t.index ["bedroom_id"], name: "index_bed_orders_on_bedroom_id"
     t.index ["created_by_id"], name: "index_bed_orders_on_created_by_id"
+    t.index ["establishment_id"], name: "index_bed_orders_on_establishment_id"
     t.index ["patient_id"], name: "index_bed_orders_on_patient_id"
     t.index ["received_by_id"], name: "index_bed_orders_on_received_by_id"
     t.index ["sent_by_id"], name: "index_bed_orders_on_sent_by_id"

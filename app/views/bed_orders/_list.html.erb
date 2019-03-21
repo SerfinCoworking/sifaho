@@ -1,0 +1,46 @@
+<% if @bed_orders.present? %>
+  <div id="filterrific_results">
+    <div class="panel panel-default">
+      <table class="table table-hover table-striped table-condensed">
+        <thead>
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :cod) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :cama) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :habitacion) %></th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+              <%= filterrific_sorting_link(@filterrific, :ins) %></th>
+            </th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
+              <%= filterrific_sorting_link(@filterrific, :mov) %>
+            </th>
+            <th>
+              <%= filterrific_sorting_link(@filterrific, :solicitado) %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+            </th>
+            <th>
+              <%= filterrific_sorting_link(@filterrific, :entregado) %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+            </th>
+            <th colspan="3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id=bed_orders>
+          <%= render @bed_orders %>
+        </tbody>
+      </table>
+    </div>
+    <div id="page_links">
+      <%= paginate @bed_order %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'entregas' }
+  ) %>
+<% end %>
+

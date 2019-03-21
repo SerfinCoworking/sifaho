@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :bed_orders
   get 'report/newOrderingSupply'
 
   resources :categories
@@ -29,6 +28,12 @@ Rails.application.routes.draw do
   # Rescue errors
   match "/404", :to => "errors#not_found", :via => :all
   match "/500", :to => "errors#internal_server_error", :via => :all
+
+  resources :bed_orders do
+    member do
+      get "delete"
+    end
+  end 
 
   resources :laboratories do
     member do

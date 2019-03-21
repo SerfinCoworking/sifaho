@@ -4,7 +4,26 @@ class BedOrdersController < ApplicationController
   # GET /bed_orders
   # GET /bed_orders.json
   def index
-    @bed_orders = BedOrder.all
+    authorize BedOrder
+    @filterrific = initialize_filterrific(
+      BedOrder.establishment(current_user.sector.establishment),
+      params[:filterrific],
+      select_options: {
+        with_status: BedOrder.options_for_status
+      },
+      persistence_id: false,
+      default_filter_params: {sorted_by: 'created_at_desc'},
+      available_filters: [
+        :search_patient,
+        :search_bed,
+        :with_order_type,
+        :with_status,
+        :requested_date_since,
+        :requested_date_to,
+        :sorted_by
+      ],
+    ) or return
+    @bed_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
   # GET /bed_orders/1
@@ -15,6 +34,7 @@ class BedOrdersController < ApplicationController
   # GET /bed_orders/new
   def new
     @bed_order = BedOrder.new
+    @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
   end
 
   # GET /bed_orders/1/edit
@@ -31,6 +51,7 @@ class BedOrdersController < ApplicationController
         format.html { redirect_to @bed_order, notice: 'Bed order was successfully created.' }
         format.json { render :show, status: :created, location: @bed_order }
       else
+        @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
         format.html { render :new }
         format.json { render json: @bed_order.errors, status: :unprocessable_entity }
       end
@@ -69,6 +90,11 @@ class BedOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bed_order_params
-      params.require(:bed_order).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, :sent_request_by_id_id, :sent_date, :deleted_at, :date_received, :patient_id)
+      params.require(:bed_order).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, :sent_request_by_id_id, 
+        :order_type, :bed_id, :requested_date, :observation, :sent_date, :deleted_at, :date_received, :patient_id, :establishment_id,
+        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
+        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
+        :provider_observation, :_destroy]
+      )
     end
 end

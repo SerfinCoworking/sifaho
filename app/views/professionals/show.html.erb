@@ -49,7 +49,7 @@
               <thead>
                 <tr>
                   <th>Código</th>
-                  <th>Médico</th>
+                  <th>Paciente</th>
                   <th>Estado</th>
                   <th>Insumos</th>
                   <th>
@@ -67,7 +67,7 @@
               <% @professional.prescriptions.each do |prescription| %>
                 <tr id="prescription_<%= prescription.id %>">
                   <td><%= prescription.remit_code %></th>
-                  <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
+                  <td class="pres-col-pro"><%= prescription.patient.fullname %></td>
                   <td>
                     <span class="label label-<%= prescription.status_label %>">
                       <%= prescription.status.underscore.humanize %>

@@ -96,8 +96,6 @@ class InternalOrdersController < ApplicationController
     authorize InternalOrder
     @internal_order = InternalOrder.new
     @providers = User.where.not(sector: current_user.sector_id )
-
-    @internal_order.ord_quantity_supply_lots.build
   end
 
   # GET /internal_orders/new
