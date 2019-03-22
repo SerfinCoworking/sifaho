@@ -1,8 +1,8 @@
-<%= simple_form_for @bed_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+<%= simple_form_for @internal_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
   <div class="row">
     <div class='col-md-3'>
-      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
       <%= f.input :applicant_sector_id, as: :string,
         label: 'Sector solicitante',
         :input_html => {
