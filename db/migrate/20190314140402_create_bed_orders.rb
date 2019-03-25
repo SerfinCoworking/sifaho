@@ -18,6 +18,9 @@ class CreateBedOrders < ActiveRecord::Migration[5.2]
       t.integer :status, default: 0
       
       t.timestamps
+
+      t.references :bed, index: true
+      t.references :establishment, index: true
     end
   end
 end
