@@ -1,0 +1,44 @@
+<div class="row hidden-print">
+  <div class="col-md-2"></div>
+  <div class="col-md-8 text-center">
+    <label>
+      Estado actual:
+      <span class="label label-<%= bed_order_status_label(bed_order) %>">
+        <%= bed_order.status.split('_').map(&:capitalize).join(' ') %>
+      </span>
+    </label><br>
+    <div class="col-md-12 status-bar-icons">
+      <% if bed_order.provision? %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus gi-2x pull-left', id:'cre-glyph',
+          :title => 'Creado', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left', id: 'pro-aud-glyph-prov',
+          :title => 'Borrador', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-road gi-2x pull-left', id: 'pro-cam-glyph-prov',
+          :title => 'Provisión en camino', :'data-placement'=>'top', :'data-toggle'=>'tooltip' ) %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right', id: 'check-glyph',
+          :title => 'Provisión entregada', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+      <% elsif bed_order.solicitud? %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus gi-2x pull-left', id:'cre-glyph',
+          :title => 'Creado', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left', id:'sol-aud-glyph',
+          :title => 'Solicitud auditada', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send gi-2x pull-left', id:'sol-env-glyph',
+          :title => 'Solicitud enviada', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit gi-2x pull-left', id: 'pro-aud-glyph',
+          :title => 'Proveedor auditado', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-road gi-2x pull-left', id: 'pro-cam-glyph',
+          :title => 'Provisión en camino', :'data-placement'=>'top', :'data-toggle'=>'tooltip' ) %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check gi-2x pull-right', id: 'check-glyph',
+          :title => 'Provisión entregada', :'data-placement'=>'top', :'data-toggle'=>'tooltip') %>
+      <% end %>
+    </div>
+    <div class="col-md-12">
+      <div class="progress" style="height: 5px;margin-bottom: -10px;">
+        <div class="progress-bar progress-bar-striped active progress-bar-<%= bed_order_status_label(@bed_order) %> \
+          align-left" role="progressbar" style="width:<%= bed_order_percent_status(@bed_order) %>%" id="status-bar">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2"></div>
+</div>

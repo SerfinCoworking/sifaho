@@ -7,7 +7,7 @@
     </span>
   </td>
   <td><%= bed_order.bed.name %></td>
-  <td><%= bed_order.bedroom.name %></td>
+  <td><%= bed_order.bedroom_name %></td>
   <td>
     <span class="badge"><%= bed_order.quantity_ord_supply_lots.count %></span>
   </td>
@@ -15,9 +15,9 @@
     <span class="badge"><%= bed_order.movements.count %></span>
   </td>
   <td>
-    <%= bed_order.requested_date.strftime("%d/%m/%Y") %>
+    <%= bed_order.created_at.strftime("%d/%m/%Y") %>
   </td>
-    <% if bed_order.provision_entregada? %>
+    <% if bed_order.entregada? %>
       <td>
       <%= bed_order.date_received.strftime("%d/%m/%y %H:%M") %>
     <% else %>

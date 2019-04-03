@@ -27,6 +27,20 @@
       <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
     </td>
     <td>
+      <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'unity',
+          size: 10,
+          placeholder: "Unidad",
+          value: "#{
+            if f.object.supply.present? 
+              f.object.supply.unity
+            end
+          }"
+        } 
+      %>
+    </td>
+    <td>
       <%= f.input :delivered_quantity, placeholder: 'Cant', required: false,
         label: false, :input_html => { class: 'new-deliver-quantity', min: '0', :style => 'width: 80px' } 
       %>

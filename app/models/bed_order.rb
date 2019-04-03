@@ -7,13 +7,13 @@ class BedOrder < ApplicationRecord
   enum status: { borrador: 0, pendiente: 1, en_camino: 3, entregada: 4, anulada: 5 }
 
   belongs_to :bed
-  belongs_to :bedroom
   belongs_to :patient
   belongs_to :establishment
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :movements, class_name: "BedOrderMovement"
 
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
@@ -30,9 +30,6 @@ class BedOrder < ApplicationRecord
   accepts_nested_attributes_for :quantity_ord_supply_lots,
     :reject_if => :all_blank,
     :allow_destroy => true
-
-  # Callbacks
-  after_create :assign_establishment
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -54,22 +51,19 @@ class BedOrder < ApplicationRecord
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
-      order("internal_orders.created_at #{ direction }")
-    when /^solicitante_/
-      # Ordenamiento por nombre de responsable
-      order("LOWER(applicant_sector.name) #{ direction }").joins("INNER JOIN sectors as applicant_sector ON applicant_sector.id = internal_orders.applicant_sector_id")
+      order("bed_orders.created_at #{ direction }")
     when /^insumos_solicitados_/
       # Ordenamiento por nombre de sector
       order("supplies.name #{ direction }").joins(:supplies)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("internal_orders.status #{ direction }")
+      order("bed_orders.status #{ direction }")
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
-      order("internal_orders.date_received #{ direction }")
+      order("bed_orders.date_received #{ direction }")
     when /^entregado_/
       # Ordenamiento por la fecha de dispensación
-      order("internal_orders.date_delivered #{ direction }")
+      order("bed_orders.date_delivered #{ direction }")
     elseforeign_keyforeign_key
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -92,16 +86,20 @@ class BedOrder < ApplicationRecord
   end
 
   def bedroom_name
-    self.bedroom.name
+    self.bed.bedroom.name
   end
 
   def bed_name
     self.bed.name
   end
 
-  private
-
-  def assign_bedroom
-    self.bedroom = self.bed.bedroom
+  def create_notification(of_user, action_type)
+    BedOrderMovement.create(user: of_user, bed_order: self, action: action_type, sector: of_user.sector)
+    (self.applicant_sector.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector )
+    end
+    (self.provider_sector.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector )
+    end
   end
 end

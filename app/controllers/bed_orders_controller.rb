@@ -47,7 +47,7 @@ class BedOrdersController < ApplicationController
     @bed_order = BedOrder.new(bed_order_params)
 
     respond_to do |format|
-      if @bed_order.save
+      if @bed_order.save!
         format.html { redirect_to @bed_order, notice: 'Bed order was successfully created.' }
         format.json { render :show, status: :created, location: @bed_order }
       else

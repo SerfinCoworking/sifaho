@@ -148,7 +148,9 @@ document.addEventListener("turbolinks:load", function() {
         minLength: 1,
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
+          nested_form.find(".new-supply-id").val(ui.item.value);
           nested_form.find(".new-supply-name").val(ui.item.name);
+          nested_form.find(".unity").val(ui.item.unity);
           return false;
         },
         select:
@@ -190,6 +192,7 @@ document.addEventListener("turbolinks:load", function() {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.id);
           nested_form.find(".new-supply-code").val(ui.item.id);
+          nested_form.find(".unity").val(ui.item.unity);
           nested_form.find('.new-deliver-quantity').focus();
         },
         response: function(event, ui) {

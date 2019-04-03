@@ -28,7 +28,7 @@
         </div>
         <div class='col-md-3 col-xs-3'>
           <strong>Solicitado:</strong>
-          <%= @bed_order.requested_date.strftime("%d/%m/%Y")%>
+          <%= @bed_order.created_at.strftime("%d/%m/%Y")%>
         </div>
         <div class='col-md-3 col-xs-3'>
           <strong>Observaciones:</strong>
@@ -74,7 +74,7 @@
                   <th>Cód Ins</th>
                   <th>Insumo</th>
                   <th>Solicitado</th>
-                  <th><%= @bed_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
+                  <th><%= @bed_order.entregada? ? 'Entregado' : 'A entregar' %></th>
                   <th>Lote</th>
                   <th>Laboratorio</th>
                   <th>Vencimiento</th>
@@ -134,37 +134,13 @@
       </div> <!-- End col-md-12 -->
     </div>
     <div class="panel-footer text-right hidden-print">
-      <% if @bed_order.provision? %>
-        <%= link_to bed_orders_path, class: "btn" do %>Volver<% end %>
-      <% else %>
-        <%= link_to applicant_index_bed_orders_path, class: "btn" do %>Volver<% end %>
-      <% end %> 
+      <%= link_to bed_orders_path, class: "btn" do %>Volver<% end %>
       <% if policy(@bed_order).edit? %>
         <%= link_to edit_bed_order_path(@bed_order), :"data-turbolinks" => false,
           class: "btn btn-warning" do %>
           <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
           Auditar
         <% end %>
-      <% end %>   
-      <% if policy(@bed_order).edit_applicant? %>
-        <%= link_to edit_applicant_bed_order_path(@bed_order), 
-          class: 'btn btn-warning btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
-          Auditar
-        <% end %>
-      <% end %>
-      <% if policy(@bed_order).send_applicant? %>
-        <%= link_to send_applicant_bed_order_path(@bed_order), 
-          class: 'btn btn-primary btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Enviar
-        <% end %>
-      <% end %>
-      <% if policy(@bed_order).return_provider_status? || policy(@bed_order).return_applicant_status? %>
-        <a href="#return-confirm" data-id="<%= @bed_order.id %>" class="return-confirm btn btn-warning">
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
-          Retornar
-        </a>
       <% end %>
       <% if policy(@bed_order).send_provider? %>
         <%= link_to send_provider_bed_order_path(@bed_order), remote: true,
@@ -173,37 +149,6 @@
           Enviar
         <% end %>
       <% end %>
-      <% if policy(@bed_order).receive_applicant? %>
-        <%= link_to receive_applicant_confirm_bed_order_path(@bed_order), remote: true,
-          class: 'btn btn-success btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
-          Recibir
-        <% end %>
-      <% end %>
     </div>
   </div>
 </div>
-
-<% if policy(@bed_order).return_provider_status? || policy(@bed_order).return_applicant_status? %>
-  <div class="modal" id="return-confirm">
-    <div class="modal-dialog">
-      <div class="modal-content panel-warning">
-        <div class="modal-header panel-heading">
-          <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.statuses.key(@bed_order.status_before_type_cast - 1).underscore.humanize %></h3>
-        </div>
-        <div class="modal-body">
-          <p>Seguro que desea retornar la <%= @bed_order.order_type %> actual a <%= prev_status %>?</p>
-        </div>
-        <div class="modal-footer text-right">
-          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-          <% if policy(@bed_order).return_applicant_status? %>
-            <%= link_to 'Confirmar', return_applicant_status_bed_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% else %>
-            <%= link_to 'Confirmar', return_provider_status_bed_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>

@@ -1,13 +1,13 @@
 <%= render 'header' %>
 
 <div class="row">
-  <% if @internal_orders.present? %>
+  <% if @bed_orders.present? %>
 
     <%= render 'filter' %>
 
     <%= render(
-      partial: 'internal_orders/list',
-      locals: { internal_orders: @internal_orders }
+      partial: 'bed_orders/list',
+      locals: { bed_orders: @bed_orders }
     ) %>
   <% else %>
     <%= render(
