@@ -11,6 +11,9 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+    <% if ENV['DEMO_RIBBON'] %>
+      <div class="corner-ribbon bottom-right sticky green shadow"><strong>DEMO</strong></div>
+    <% end %>
     <header>
       <%= render 'layouts/navigation' %>
     </header>
