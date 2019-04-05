@@ -439,7 +439,7 @@ class OrderingSuppliesController < ApplicationController
                       lot: qosl.sector_supply_lot_lot_code,
                       laboratory: qosl.sector_supply_lot_laboratory_name,
                       expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: ordering_supply.despacho? ? qosl.provider_observation : qosl.applicant_observation
+                      applicant_obs: qosl.provider_observation
         end
 
         report.list.on_page_footer_insert do |footer|
