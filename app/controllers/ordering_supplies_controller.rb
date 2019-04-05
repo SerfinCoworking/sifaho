@@ -446,11 +446,7 @@ class OrderingSuppliesController < ApplicationController
           footer.item(:total_supplies).value(ordering_supply.quantity_ord_supply_lots.count)
           footer.item(:total_requested).value(ordering_supply.quantity_ord_supply_lots.sum(&:requested_quantity))
           footer.item(:total_delivered).value(ordering_supply.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          if ordering_supply.despacho?
-            footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
-          else
-            footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
-          end
+          footer.item(:total_obs).value(ordering_supply.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
         end
       end
       
