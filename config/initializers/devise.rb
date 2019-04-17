@@ -18,6 +18,7 @@ Devise.setup do |config|
   # config.ldap_check_attributes = false
   # config.ldap_check_attributes_presence = false
   config.ldap_ad_group_check = false
+  config.ldap_auth_username_builder = Proc.new() {|attribute, login, ldap| login}
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing

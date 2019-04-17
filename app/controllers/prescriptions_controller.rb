@@ -42,6 +42,14 @@ class PrescriptionsController < ApplicationController
     @prescription.quantity_ord_supply_lots.build
   end
 
+
+  # GET /prescriptions/new_cronic
+  def new_cronic
+    authorize Prescription
+    @prescription = Prescription.new
+    @prescription.quantity_ord_supply_lots.build
+  end
+
   # GET /prescriptions/1/edit
   def edit
     authorize @prescription
@@ -57,17 +65,26 @@ class PrescriptionsController < ApplicationController
     respond_to do |format|
       if @prescription.save
         # Si se entrega la prescripción
-        if dispensing?
-          begin
-            @prescription.dispense_by_user_id(current_user.id)
-            flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y dispensado correctamente."
-          rescue ArgumentError => e
-            flash[:notice] = e.message
+        begin
+          if @prescription.ambulatoria?
+            if dispensing?
+              @prescription.dispense_by_user_id(current_user.id)
+              flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y dispensado correctamente."
+            else
+              flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+            end
+          elsif @prescription.cronica?
+            if dispensing?
+              @prescription.dispense_cronic_by(current_user)
+              flash[:success] = "La prescripción crónica de "*@prescription.patient.full_name+" se ha creado y dispensado correctamente."
+            else
+              flash[:success] = "La prescripción crónica de "+@prescription.patient.full_name+" se ha creado correctamente." 
+            end
           end
-        else
-          flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
+          format.html { redirect_to @prescription }
+        rescue ArgumentError => e
+          flash[:alert] = e.message
         end
-        format.html { redirect_to @prescription }
       else
         flash[:error] = "La prescripción no se ha podido crear."
         format.html { render :new }

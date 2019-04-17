@@ -12,7 +12,13 @@
     <li role="presentation" class="<%= active_action('new') %> non-sel">
       <%= link_to new_prescription_path do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Nueva
+        Ambulatoria
+      <% end %>
+    </li>
+    <li role="presentation" class="<%= active_action('new_cronic') %> non-sel">
+      <%= link_to new_cronic_prescriptions_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Crónica
       <% end %>
     </li>
   </ul>

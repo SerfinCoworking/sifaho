@@ -3,8 +3,8 @@ class Prescription < ApplicationRecord
   include PgSearch
 
   # Estados
-  enum status: { pendiente: 0, dispensada: 1, vencida: 2 }
-  enum order_type: { ambulatorio: 0, cronico: 1 }
+  enum status: { pendiente: 0, dispensada: 1, dispensada_parcial: 2, vencida: 3 }
+  enum order_type: { ambulatoria: 0, cronico: 1 }
 
   # Relaciones
   belongs_to :professional
@@ -14,6 +14,7 @@ class Prescription < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :movements, class_name: "PrescriptionMovement"
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :dispensed_by, class_name: 'User', optional: true

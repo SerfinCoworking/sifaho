@@ -28,9 +28,16 @@ class User < ApplicationRecord
   end
 
   after_save :verify_profile
+  
   def verify_profile
     unless self.profile.present?
       self.create_profile
+    end
+    unless self.sector.present?
+      if self.sectors.present?
+        self.sector = self.sectors.first
+        self.save
+      end
     end
   end
 

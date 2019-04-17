@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_02_172932) do
+ActiveRecord::Schema.define(version: 2019_04_10_182751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -301,6 +301,18 @@ ActiveRecord::Schema.define(version: 2019_04_02_172932) do
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
+  create_table "prescription_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "prescription_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["prescription_id"], name: "index_prescription_movements_on_prescription_id"
+    t.index ["sector_id"], name: "index_prescription_movements_on_sector_id"
+    t.index ["user_id"], name: "index_prescription_movements_on_user_id"
+  end
+
   create_table "prescriptions", force: :cascade do |t|
     t.text "observation"
     t.datetime "date_received"
@@ -321,6 +333,7 @@ ActiveRecord::Schema.define(version: 2019_04_02_172932) do
     t.datetime "audited_at"
     t.datetime "dispensed_at"
     t.integer "order_type", default: 0
+    t.integer "times_dispensation"
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"

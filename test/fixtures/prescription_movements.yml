@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  prescription: one
+  sector: one
+  action: MyString
+
+two:
+  user: two
+  prescription: two
+  sector: two
+  action: MyString

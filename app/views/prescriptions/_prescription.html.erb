@@ -1,5 +1,6 @@
 <tr id="prescription_<%= prescription.id %>">
   <td><%= prescription.remit_code %></th>
+  <td><%= prescription.order_type.humanize %></th>
   <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
   <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
@@ -8,9 +9,13 @@
     </span>
   </td>
   <td>
-    <%= 'Solicitado'.pluralize(osCount = prescription.quantity_ord_supply_lots.count) %>
     <span class="badge">
-      <%= osCount %>
+      <%= prescription.quantity_ord_supply_lots.count %>
+    </span>
+  </td>
+  <td>
+    <span class="badge">
+      <%= prescription.movements.count %>
     </span>
   </td>
   <td>

@@ -20,7 +20,7 @@
       :input_html => {
         class: "supply-name select-change",
         data: { autocomplete_source: search_by_name_supplies_path },
-        size: 25,
+        size: 35,
         value: "#{if f.object.supply.present?; f.object.supply_name; end }"
       } 
     %>
@@ -40,6 +40,7 @@
         }"
       } %>
   </td>
+  <!--
   <td>
     <%= f.input :treatment_duration, label: false, placeholder: 'Días',
       required: true,
@@ -55,6 +56,7 @@
       :title=>"Seleccione un insumo", "data-placement"=>"right",
       min: '1', step:'any', :style => 'width: 67px' } %>
   </td>
+  -->
   <td>
     <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: true,
       input_html: {
@@ -109,7 +111,7 @@
   </td>
   <td>
     <%= f.input :provider_observation, label: false, as: :text,
-      :input_html => { :cols => 15  , :rows => 1 } %>
+      :input_html => { :cols => 25  , :rows => 1 } %>
   </td>
   <td>
     <% if f.object.sector_supply_lot_id.present? %>

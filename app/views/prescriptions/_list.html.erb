@@ -5,10 +5,18 @@
         <thead>
           <tr>
             <th>Código</th>
+            <th>Tipo</th>
             <th><%= filterrific_sorting_link(@filterrific, :profesional) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :insumos_solicitados) %></th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+              <%= filterrific_sorting_link(@filterrific, :ins) %>
+            </th>
+            <th>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
+              <%= filterrific_sorting_link(@filterrific, :mov) %>
+            </th>
             <th>
               <%= filterrific_sorting_link(@filterrific, :recetada) %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>

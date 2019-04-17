@@ -146,6 +146,9 @@ Rails.application.routes.draw do
       get "restore"; get "restore_confirm"
       get "return_status"
     end
+    collection do
+      get "new_cronic"
+    end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
 

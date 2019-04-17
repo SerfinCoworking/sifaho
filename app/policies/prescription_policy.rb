@@ -15,6 +15,10 @@ class PrescriptionPolicy < ApplicationPolicy
     create?
   end
 
+  def new_cronic?
+    create?
+  end
+
   def update?
     if record.pendiente?
       update_pres.any? { |role| user.has_role?(role) }
