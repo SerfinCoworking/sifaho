@@ -3,8 +3,8 @@ class User < ApplicationRecord
   include PgSearch
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :ldap_authenticatable, :authentication_keys => [:username]
   devise :rememberable, :trackable, :database_authenticatable
+  devise :ldap_authenticatable, :authentication_keys => [:username]
 
   # Relaciones
   has_many :user_sectors
