@@ -7,8 +7,7 @@ class SessionsController < Devise::SessionsController
       if ping("192.168.20.112")
         resource = warden.authenticate!(:scope => resource_name, :recall => "#{controller_path}#new")
         set_flash_message(:notice, :signed_in) if is_navigational_format?
-        sign_in(resource_name, resource)
-        resource.password = resource.password_confirmation = params[:user][:password]
+        resource.password = params[:user][:password]
         resource.save!
       else
         user = User.find_by_username(params[:user][:username])
@@ -33,7 +32,6 @@ class SessionsController < Devise::SessionsController
   end
 
   private
-
   def ping(host)
     begin
       Timeout.timeout(5) do 

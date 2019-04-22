@@ -41,7 +41,10 @@ class User < ApplicationRecord
     end
   end
 
-
+  def valid_password?(password)
+    Devise::Encryptor.compare(self.class, encrypted_password, password)
+  end
+  
   # hack for remember_token
   def authenticatable_salt
     Digest::SHA1.hexdigest(username)[0,29]
