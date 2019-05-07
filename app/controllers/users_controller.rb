@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|  
       format.js
-    end 
+    end
   end
 
   def edit_permissions
