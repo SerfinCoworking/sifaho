@@ -1,0 +1,11 @@
+<% unless notification.target.nil? %>
+  <div class="">
+    <%= notification.actor.profile.first_name.titleize %> 
+    <%= notification.action_type %> 
+    una
+    <span class="visible-print">prescripción ambulatoria</span>
+    <strong><%= link_to 'prescripción ambulatoria', main_app.ordering_supply_path(notification.target), class:'hidden-print' %></strong> de 
+    <%= osCount = notification.target.professional.full_name %>
+    para <%= notification.target.patient.fullname %>.
+  </div>
+<% end%>
