@@ -2,12 +2,12 @@ document.addEventListener("turbolinks:load", function() {
   $('#supply_date_received').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
   $('#supply_expiry_date').datetimepicker({format: 'DD/MM/YYYY HH:mm'});
 
-  $('#supply_unity').chosen({
+  $('#new-supply-unity').chosen({
       allow_single_deselect: true,
       no_results_text: 'No se encontró la unidad',
       width: '150px'
   });
-  $('#supply_supply_area_id').chosen({
+  $('#new-supply-area').chosen({
       allow_single_deselect: true,
       no_results_text: 'No se encontró el area',
       width: '200px'

@@ -2,6 +2,7 @@
   <%= f.error_notification %>
   <div class='row'>
     <div class='col-md-6'>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
       <%= f.label :professional_id, "Profesional" %>
       <%= f.input :professional_id, as: :string,
         label: 'Matrícula',

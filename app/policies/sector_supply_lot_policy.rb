@@ -54,15 +54,15 @@ class SectorSupplyLotPolicy < ApplicationPolicy
   private
 
   def see_ssl
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def new_ssl
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def destroy_ssl
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def purge_ssl

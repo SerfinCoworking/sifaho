@@ -4,7 +4,7 @@ class Prescription < ApplicationRecord
 
   # Estados
   enum status: { pendiente: 0, dispensada: 1, dispensada_parcial: 2, vencida: 3 }
-  enum order_type: { ambulatoria: 0, cronico: 1 }
+  enum order_type: { ambulatoria: 0, cronica: 1 }
 
   # Relaciones
   belongs_to :professional
@@ -15,15 +15,15 @@ class Prescription < ApplicationRecord
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "PrescriptionMovement"
+  has_many :cronic_dispensations, :through => :quantity_ord_supply_lots
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :dispensed_by, class_name: 'User', optional: true
 
   # Validaciones
-  validates_presence_of :patient, :professional, :prescribed_date, :expiry_date, :remit_code, :quantity_ord_supply_lots
+  validates_presence_of :patient, :professional, :prescribed_date, :remit_code, :quantity_ord_supply_lots
   validates_associated :quantity_ord_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
-
   # Atributos anidados
   accepts_nested_attributes_for :quantity_ord_supply_lots,
     :reject_if => :all_blank,
@@ -103,7 +103,6 @@ class Prescription < ApplicationRecord
   }
 
   # Métodos públicos #----------------------------------------------------------
-
   def sum_to?(a_sector)
     if self.dispensada?
       return true unless self.dispensed_by.sector == a_sector
@@ -136,7 +135,7 @@ class Prescription < ApplicationRecord
   end
 
   # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
-  def dispense_by_user_id(a_user_id)
+  def dispense_by(a_user_id)
     if self.pendiente?
       if self.quantity_ord_supply_lots.exists?
         if self.validate_quantity_lots
@@ -150,6 +149,31 @@ class Prescription < ApplicationRecord
       self.dispensed_at = DateTime.now
       self.dispensed_by_id = a_user_id
       self.dispensada!
+    else
+      raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
+    end
+  end
+
+  # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
+  def dispense_cronic_by(a_user)
+    if self.pendiente?
+      if self.times_dispensed < self.times_dispensation
+        if self.quantity_ord_supply_lots.sin_entregar.exists?
+          if self.validate_undelivered_quantity_lots(a_user.sector)
+            self.quantity_ord_supply_lots.sin_entregar.each do |qosl|
+              cp = CronicDispensation.new(prescription: self)
+              qosl.decrement_to_cronic(cp)
+            end
+          end
+        else
+          raise ArgumentError, 'No hay insumos sin entregar en la prescripción'
+        end # End check if quantity_ord_supply_lots exists
+        self.times_dispensed += 1
+        if self.times_dispensed == self.times_dispensation; self.dispensada!; end
+        self.dispensed_at = DateTime.now
+        self.dispensed_by = a_user
+        self.save
+      end
     else
       raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
     end
@@ -215,5 +239,35 @@ class Prescription < ApplicationRecord
     else
       raise ArgumentError, 'No hay lotes asignados.'
     end   
+  end
+
+  def validate_undelivered_quantity_lots(sector)
+    @lots = self.quantity_ord_supply_lots.sin_entregar.where.not(sector_supply_lot_id: nil) # Donde existe el lote
+    if @lots.present?
+      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
+      # Se itera el hash por cada lote sumando y se verifica que las cantidades a dispensar no superen las que hay en stock.
+      @sect_lots.each do |key, values|
+        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
+        @sector_lot = SectorSupplyLot.find(key)
+        if @sector_lot.sector != sector
+          raise ArgumentError, 'El lote '+@sector_lot.lot_code+' no pertenece a tu sector.' 
+        end
+        if @sector_lot.quantity < @sum_quantities
+          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+        end
+      end
+    else
+      raise ArgumentError, 'No hay lotes asignados.'
+    end
+  end
+
+  def create_notification(of_user, action_type)
+    PrescriptionMovement.create(user: of_user, prescription: self, action: action_type, sector: of_user.sector)
+    (of_user.sector.users.uniq - [of_user]).each do |user|
+      @not = Notification.where( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector ).first_or_create
+      @not.updated_at = DateTime.now
+      @not.read_at = nil
+      @not.save
+    end
   end
 end

@@ -34,7 +34,7 @@ class PatientPolicy < ApplicationPolicy
   end
 
   def show_pat
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def create_pat

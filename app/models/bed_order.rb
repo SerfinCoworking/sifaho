@@ -6,9 +6,11 @@ class BedOrder < ApplicationRecord
 
   enum status: { borrador: 0, pendiente: 1, en_camino: 3, entregada: 4, anulada: 5 }
 
+  # Relaciones
   belongs_to :bed
   belongs_to :patient
   belongs_to :establishment
+  belongs_to :applicant_sector, class_name: 'Sector'
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
@@ -95,11 +97,11 @@ class BedOrder < ApplicationRecord
 
   def create_notification(of_user, action_type)
     BedOrderMovement.create(user: of_user, bed_order: self, action: action_type, sector: of_user.sector)
-    (self.applicant_sector.users.uniq - [of_user]).each do |user|
-      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector )
+    (of_user.sector.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: "provisión", action_type: action_type, actor_sector: of_user.sector )
     end
-    (self.provider_sector.users.uniq - [of_user]).each do |user|
-      Notification.create( actor: of_user, user: user, target: self, notify_type: self.order_type, action_type: action_type, actor_sector: of_user.sector )
+    (self.bed.service.users.uniq - [of_user]).each do |user|
+      Notification.create( actor: of_user, user: user, target: self, notify_type: "provisión", action_type: action_type, actor_sector: of_user.sector )
     end
   end
 end

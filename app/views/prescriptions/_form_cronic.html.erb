@@ -2,11 +2,13 @@
   <%= f.error_notification %>
   <div class='row'>
     <div class='col-md-6'>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'cronica' } %>
       <%= f.label :professional_id, "Profesional" %>
       <%= f.input :professional_id, as: :string,
         label: 'Matrícula',
         placeholder: '1234',
         required: true,
+        readonly: f.object.cronic_dispensations.count > 0,
         :input_html => {
           id: "prof_enrollment",
           data: { autocomplete_source: doctors_by_enrollment_professionals_path },
@@ -18,6 +20,7 @@
         label: 'Apellido y nombre',
         placeholder: 'Perez Juan',
         required: true,
+        readonly: f.object.cronic_dispensations.count > 0,
         :input_html => {
           id: "professional",
           data: { autocomplete_source: doctors_professionals_path },
@@ -26,16 +29,13 @@
         } 
       %>
       &nbsp;
-      <%= link_to new_professional_path, class: "btn btn-info btn-sm", remote: 'true',
-        title: 'Nuevo profesional', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      <% end %>
       <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %><br><br>
       <%= f.label :patient_id, "Paciente" %>
       <%= f.input :patient_id, as: :string, class: 'form-control',
         label: "DNI",
         placeholder: '12345678',
         required: true,
+        readonly: f.object.cronic_dispensations.count > 0,
         :input_html => {
           id: 'patient_dni',
           data: { autocomplete_source: search_by_dni_patients_path },
@@ -46,6 +46,7 @@
       <%= f.input :patient_id, as: :string,
         label: "Nombre y apellido",
         placeholder: 'Juan Perez',
+        readonly: f.object.cronic_dispensations.count > 0,
         required: true,
         :input_html => {
           id: 'patient',
@@ -55,10 +56,6 @@
         }
       %>
       &nbsp;
-      <%= link_to new_patient_path, class: "btn btn-info btn-sm", remote: 'true',
-        title: 'Nuevo paciente', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      <% end %>
       <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %><br>
     </div>
     <div class='col-md-6'>
@@ -114,28 +111,36 @@
             <th>Cód</th>
             <th>Insumo</th>
             <th>Tu stock</th>
-            <th>Solicitado</th>
-            <th>Dispensado</th>
+            <th>Consumo/Mes</th>
+            <th>Entregar</th>
             <th colspan="2">Lote</th>
             <th>Observación</th>
             <th></th>
           </tr>
         </thead>
         <tbody class="quantity_ord_supply_lots">
-          <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-            <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+          <% if params[:action] == "edit" %>
+            <%= f.simple_fields_for :quantity_ord_supply_lots, @prescription.quantity_ord_supply_lots.sin_entregar do |form_quantity| %>
+              <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+            <% end %>
+          <% else %>
+            <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+              <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+            <% end %>
           <% end %>
         </tbody>
       </table>
-      <div class="links" id="links-quant-form">
-        <div class="text-center">
-          <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              Insumo solicitado
-          <% end %>
+      <% if f.object.cronic_dispensations.count == 0 %>
+        <div class="links" id="links-quant-form">
+          <div class="text-center">
+            <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+            data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                Insumo solicitado
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
 <% end %>

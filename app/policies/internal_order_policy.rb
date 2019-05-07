@@ -1,10 +1,10 @@
 class InternalOrderPolicy < ApplicationPolicy
   def index?
-    see_pres.any? { |role| user.has_role?(role) }
+    show.any? { |role| user.has_role?(role) }
   end
 
   def applicant_index?
-    index?
+    show.any? { |role| user.has_role?(role) }
   end
 
   def show?
@@ -12,7 +12,7 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def create?
-    new_pres.any? { |role| user.has_role?(role) }
+    new.any? { |role| user.has_role?(role) }
   end
 
   def create_applicant?
@@ -44,21 +44,17 @@ class InternalOrderPolicy < ApplicationPolicy
   def destroy?
     if record.solicitud? 
       if record.solicitud_auditoria? && record.applicant_sector == user.sector
-        destroy_pres.any? { |role| user.has_role?(role) }
+        destroy.any? { |role| user.has_role?(role) }
       end
     elsif record.provision? 
       if record.proveedor_auditoria? && record.provider_sector == user.sector
-        destroy_pres.any? { |role| user.has_role?(role) }
+        destroy.any? { |role| user.has_role?(role) }
       end
     end
   end
 
   def delete?
     destroy?
-  end
-
-  def receive?
-    dispense_pres.any? { |role| user.has_role?(role) }
   end
 
   def new_provider?
@@ -108,52 +104,53 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   private
+
   def receive_applicant
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
   def edit_provider
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
   def edit_applicant
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
   def new_provider
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
   def new_report
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
-  end
-
-  def new_applicant
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
-  end
-
-  def send_order
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
-  end
-
-  def return_status
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
-  end
-
-  def update_pres
     [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 
-  def see_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
+  def new_applicant
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
-  def new_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+  def send_order
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
-  def destroy_pres
-    [ :admin, :farmaceutico ]
+  def return_status
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
+  end
+
+  def update_pres
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
+  end
+
+  def show
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medico, :enfermero ]
+  end
+
+  def new
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
+  end
+
+  def destroy
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def dispense_pres

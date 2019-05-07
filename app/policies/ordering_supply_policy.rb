@@ -89,7 +89,7 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
   
   def new_applicant?
-    new_receipt.any? { |role| user.has_role?(role) }
+    new_applicant.any? { |role| user.has_role?(role) }
   end
   
   def new_receipt?
@@ -148,15 +148,19 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def edit_provider
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def edit_applicant
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def new_provider
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
+  end
+
+  def new_applicant
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def new_receipt
@@ -168,30 +172,30 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def send_order
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def return_status
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def update_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
   end
 
   def see_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medic ]
   end
 
   def new_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero ]
   end
 
   def destroy_pres
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def dispense_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
   end
 end

@@ -4,6 +4,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
   # Relaciones
   belongs_to :supply, -> { with_deleted }
   belongs_to :laboratory, optional: true
+  belongs_to :cronic_dispensation, optional: true
   belongs_to :sector_supply_lot, -> { with_deleted }, optional: true
   belongs_to :supply_lot, -> { with_deleted }, optional: true
   belongs_to :quantifiable, :polymorphic => true
@@ -63,6 +64,20 @@ class QuantityOrdSupplyLot < ApplicationRecord
   def decrement
     if self.sector_supply_lot.present?
       self.sector_supply_lot.decrement(self.delivered_quantity)
+    end
+    self.entregado!
+  end
+
+  def decrement_to_cronic(cronic_dispensation)
+    if self.sector_supply_lot.present?
+      if self.sector_supply_lot.decrement(self.delivered_quantity)
+        new_qosl = self.dup
+        new_qosl.save!
+        self.cronic_dispensation = cronic_dispensation
+        self.entregado!
+      end
+    else
+      raise ArgumentError, 'No hay lote asignado para '+self.supply_name
     end
   end
 

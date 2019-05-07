@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_22_145355) do
+ActiveRecord::Schema.define(version: 2019_05_06_115943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -68,6 +68,8 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.bigint "bedroom_id"
     t.bigint "bed_id"
     t.bigint "establishment_id"
+    t.bigint "applicant_sector_id"
+    t.index ["applicant_sector_id"], name: "index_bed_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_bed_orders_on_audited_by_id"
     t.index ["bed_id"], name: "index_bed_orders_on_bed_id"
     t.index ["bedroom_id"], name: "index_bed_orders_on_bedroom_id"
@@ -92,7 +94,9 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.bigint "bedroom_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "service_id"
     t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
+    t.index ["service_id"], name: "index_beds_on_service_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -100,6 +104,14 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "cronic_dispensations", force: :cascade do |t|
+    t.bigint "prescription_id"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["prescription_id"], name: "index_cronic_dispensations_on_prescription_id"
   end
 
   create_table "establishments", force: :cascade do |t|
@@ -163,6 +175,23 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.string "name"
     t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
+  end
+
+  create_table "ldap_users", force: :cascade do |t|
+    t.string "username", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reset_password_token"], name: "index_ldap_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_ldap_users_on_username", unique: true
   end
 
   create_table "medication_brands", force: :cascade do |t|
@@ -334,6 +363,7 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.datetime "dispensed_at"
     t.integer "order_type", default: 0
     t.integer "times_dispensation"
+    t.integer "times_dispensed", default: 0
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
@@ -412,6 +442,9 @@ ActiveRecord::Schema.define(version: 2019_04_22_145355) do
     t.text "provider_observation"
     t.integer "treatment_duration"
     t.integer "daily_dose"
+    t.datetime "dispensed_at"
+    t.bigint "cronic_dispensation_id"
+    t.index ["cronic_dispensation_id"], name: "index_quantity_ord_supply_lots_on_cronic_dispensation_id"
     t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
     t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lots_on_sector_supply_lot_id"

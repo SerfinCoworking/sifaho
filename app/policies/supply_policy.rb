@@ -47,15 +47,15 @@ class SupplyPolicy < ApplicationPolicy
   private
 
   def index_sup
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :responsable, :medico, :farmaceutico_central ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
   end
 
   def trash_index_sup
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :responsable, :medico, :farmaceutico_central ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
   end
 
   def see_supplies
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :responsable, :medico, :farmaceutico_central ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
   end
 
   def destroy_sup

@@ -15,22 +15,22 @@
         <div class="col-md-6">
           <%= f.label 'Unidad' %>
           <%= f.input_field :unity,
+            id: "new-supply-unity",
             label_method: :name,
             value_method: :name,
             collection: @unities,
             include_blank: true,
-            input_html: { id: 'unities'},
             prompt: 'Seleccione unidad' 
           %>
         </div>
         <div class="col-md-6">
           <%= f.label 'Área'%>
           <%= f.input_field :supply_area_id,
+            id: "new-supply-area",
             label_method: :name,
             value_method: :id,
             collection: @supply_areas,
             include_blank: true,
-            input_html: { id: 'supply_areas'},
             prompt: 'Seleccione un área'
           %>
         </div>

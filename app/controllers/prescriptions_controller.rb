@@ -66,28 +66,29 @@ class PrescriptionsController < ApplicationController
       if @prescription.save
         # Si se entrega la prescripción
         begin
-          if @prescription.ambulatoria?
-            if dispensing?
-              @prescription.dispense_by_user_id(current_user.id)
-              flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado y dispensado correctamente."
-            else
-              flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha creado correctamente."
-            end
-          elsif @prescription.cronica?
-            if dispensing?
+          if dispensing?
+            if @prescription.ambulatoria?
+              @prescription.dispense_by(current_user.id)
+            elsif @prescription.cronica?
               @prescription.dispense_cronic_by(current_user)
-              flash[:success] = "La prescripción crónica de "*@prescription.patient.full_name+" se ha creado y dispensado correctamente."
-            else
-              flash[:success] = "La prescripción crónica de "+@prescription.patient.full_name+" se ha creado correctamente." 
             end
+              @prescription.create_notification(current_user, "creó y dispensó")
+              flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado y dispensado correctamente."
+          else
+            @prescription.create_notification(current_user, "creó")
+            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado correctamente." 
           end
-          format.html { redirect_to @prescription }
         rescue ArgumentError => e
           flash[:alert] = e.message
         end
+        format.html { redirect_to @prescription }
       else
         flash[:error] = "La prescripción no se ha podido crear."
-        format.html { render :new }
+        if prescription_params[:order_type] == 'ambulatoria'
+          format.html { render :new }
+        elsif prescription_params[:order_type] == 'cronica'
+          format.html { render :new_cronic }
+        end
       end
     end
   end
@@ -99,19 +100,27 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.update_attributes(prescription_params)
-        if dispensing?
-          begin
-            @prescription.dispense_by_user_id(current_user.id)
-            flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado y dispensado correctamente."
-          rescue ArgumentError => e
-            flash[:notice] = e.message
+        begin
+          if dispensing?
+            if @prescription.ambulatoria?
+              @prescription.dispense_by(current_user)
+            elsif @prescription.cronica?
+              @prescription.dispense_cronic_by(current_user)
+            end
+            @prescription.create_notification(current_user, "auditó y dispensó")
+            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.professional.fullname+" se ha modificado y dispensado correctamente."
+          else
+            @prescription.create_notification(current_user, "auditó")
+            flash[:success] = "La prescripción de "+@prescription.professional.fullname+" se ha modificado correctamente."
           end
+        rescue ArgumentError => e
+          flash[:notice] = e.message
+          format.html { render :edit }
         else
-          flash[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha modificado correctamente."
+          format.html { redirect_to @prescription }
         end
-        format.html { redirect_to @prescription }
       else
-        flash[:error] = "La prescripción de "+@prescription.professional.full_name+" no se ha podido modificar."
+        flash[:error] = "La prescripción de "+@prescription.professional.fullname+" no se ha podido modificar."
         format.html { render :edit }
       end
     end
@@ -121,10 +130,10 @@ class PrescriptionsController < ApplicationController
   # DELETE /prescriptions/1.json
   def destroy
     authorize @prescription
-    @professional_full_name = @prescription.professional.full_name
+    @professional_fullname = @prescription.professional.fullname
     @prescription.destroy
     respond_to do |format|
-      flash.now[:success] = "La prescripción de "+@professional_full_name+" se ha eliminado correctamente."
+      flash.now[:success] = "La prescripción de "+@professional_fullname+" se ha eliminado correctamente."
       format.js
     end
   end
@@ -134,14 +143,14 @@ class PrescriptionsController < ApplicationController
     authorize @prescription
     respond_to do |format|
       begin
-        @prescription.dispense_by_user_id(current_user.id)
+        @prescription.dispense_by(current_user.id)
 
       rescue ArgumentError => e
         flash.now[:error] = e.message
         format.js
       else
         if @prescription.save!
-          flash.now[:success] = "La prescripción de "+@prescription.professional.full_name+" se ha dispensado correctamente."
+          flash.now[:success] = "La prescripción de "+@prescription.professional.fullname+" se ha dispensado correctamente."
           format.js
         else
           flash.now[:error] = "La prescripción no se ha podido dispensar."
@@ -182,7 +191,7 @@ class PrescriptionsController < ApplicationController
     def prescription_params
       params.require(:prescription).permit(
         :observation, :date_received, :professional_id, :patient_id, :prescription_status_id,
-        :prescribed_date, :expiry_date, :remit_code,
+        :prescribed_date, :expiry_date, :remit_code, :times_dispensation, :order_type,
         quantity_ord_supply_lots_attributes: [
           :id, :supply_id, :daily_dose, :treatment_duration, :requested_quantity, :delivered_quantity,
           :sector_supply_lot_id, :provider_observation, :_destroy
@@ -192,6 +201,6 @@ class PrescriptionsController < ApplicationController
 
     def dispensing?
       submit = params[:commit]
-      return submit == "Cargar y dispensar" || submit == "Guardar y dispensar"
+      return submit == "Dispensar"
     end
 end

@@ -10,7 +10,11 @@
   </td>
   <td>
     <span class="badge">
-      <%= prescription.quantity_ord_supply_lots.count %>
+      <% if prescription.ambulatoria? %>
+        <%= prescription.quantity_ord_supply_lots.count %>
+      <% else %>
+        <%= prescription.quantity_ord_supply_lots.sin_entregar.count %>
+      <% end %>
     </span>
   </td>
   <td>

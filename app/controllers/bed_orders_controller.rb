@@ -26,6 +26,13 @@ class BedOrdersController < ApplicationController
     @bed_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
+  # GET /bed_orders/bed_map
+  def bed_map
+    authorize BedOrder
+    @beds = Bed.establishment(current_user.sector.establishment)
+    @bedrooms = Bedroom.establishment(current_user.sector.establishment)
+  end
+    
   # GET /bed_orders/1
   # GET /bed_orders/1.json
   def show
@@ -47,8 +54,9 @@ class BedOrdersController < ApplicationController
     @bed_order = BedOrder.new(bed_order_params)
 
     respond_to do |format|
-      if @bed_order.save!
-        format.html { redirect_to @bed_order, notice: 'Bed order was successfully created.' }
+      if @bed_order.save
+        @bed_order.create_notification(current_user, "creó")
+        format.html { redirect_to @bed_order, notice: 'El pedido de internación se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @bed_order }
       else
         @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
@@ -63,7 +71,7 @@ class BedOrdersController < ApplicationController
   def update
     respond_to do |format|
       if @bed_order.update(bed_order_params)
-        format.html { redirect_to @bed_order, notice: 'Bed order was successfully updated.' }
+        format.html { redirect_to @bed_order, notice: 'El pedido de internación se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @bed_order }
       else
         format.html { render :edit }
@@ -77,7 +85,7 @@ class BedOrdersController < ApplicationController
   def destroy
     @bed_order.destroy
     respond_to do |format|
-      format.html { redirect_to bed_orders_url, notice: 'Bed order was successfully destroyed.' }
+      format.html { redirect_to bed_orders_url, notice: 'El pedido de internación se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
     end
   end

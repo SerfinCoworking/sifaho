@@ -1,6 +1,7 @@
 <%= simple_form_for @bed_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
   <div class="row">
+    <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id; end}" %>
     <div class='col-md-3'>
       <%= f.hidden_field :establishment_id, value: "#{if f.object.establishment_id.present?; f.object.establishment.id; else; current_user.sector.establishment_id; end }" %>
       <label class="text-center"><span class="glyphicon glyphicon-user"></span> Paciente</label>
@@ -13,7 +14,7 @@
           data: { autocomplete_source: search_by_dni_patients_path },
           value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
           size: 30
-        } 
+        }
       %><br><br>
       <%= f.input :patient_id, as: :string,
         label: "Nombre y apellido",
@@ -78,7 +79,6 @@
         <th></th>
       </tr>
     </thead>
-    <%= params[:action] %>
     <tbody class="quantity_ord_supply_lots">
       <% if params[:action] == "edit" %>
         <%= f.simple_fields_for :quantity_ord_supply_lots, @bed_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>

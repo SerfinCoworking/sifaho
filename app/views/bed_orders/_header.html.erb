@@ -8,13 +8,19 @@
       <li role="presentation" class="<%= active_action('index') %> non-sel">
         <%= link_to bed_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-          Pedidos
+          Provisiones
         <% end %>
       </li>
       <li role="presentation" class="<%= active_action('new') %> non-sel">
         <%= link_to new_bed_order_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           Provisión
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('bed_map') %> non-sel">
+        <%= link_to bed_map_bed_orders_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-map-marker') %>
+          Mapa de camas
         <% end %>
       </li>
     </ul>

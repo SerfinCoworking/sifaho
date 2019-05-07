@@ -4,39 +4,41 @@
       <li role="presentation" id="page-title" class="non-sel">
         <a href="">Inicio</a>
       </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
-          Prescripciones
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-cust non-sel">
-          <% if policy(Prescription).index? %>
-            <li>
-              <%= link_to prescriptions_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-                Listado
-              <% end %>
-            </li>
-          <% end %>
-          <% if policy(Prescription).new? %>
-            <li>
-              <%= link_to new_prescription_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Ambulatoria
-              <% end %>
-            </li>
-          <% end %>
-          <% if policy(Prescription).new_cronic? %>
-            <li>
-              <%= link_to new_cronic_prescriptions_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Crónica
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </li>
+      <% if policy(Prescription).index? %>
+        <li class="dropdown">
+          <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
+            Prescripciones
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-cust non-sel">
+            <% if policy(Prescription).index? %>
+              <li>
+                <%= link_to prescriptions_path do %>
+                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+                  Listado
+                <% end %>
+              </li>
+            <% end %>
+            <% if policy(Prescription).new? %>
+              <li>
+                <%= link_to new_prescription_path do %>
+                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                  Ambulatoria
+                <% end %>
+              </li>
+            <% end %>
+            <% if policy(Prescription).new_cronic? %>
+              <li>
+                <%= link_to new_cronic_prescriptions_path do %>
+                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                  Crónica
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
       <li class="dropdown">
         <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-th') %>
@@ -72,12 +74,14 @@
               Provisión
             <% end %>
           </li>
-          <li role="presentation" class="<%= active_action('new_report') %>">
-            <%= link_to new_report_internal_orders_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-              Reporte
-            <% end %>
-          </li>
+          <% if policy(InternalOrder).new_report? %>
+            <li role="presentation" class="<%= active_action('new_report') %>">
+              <%= link_to new_report_internal_orders_path do %>
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+                Reporte
+              <% end %>
+            </li>
+          <% end %>
         </ul>
       </li>
       <li class="dropdown">

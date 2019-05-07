@@ -3,10 +3,9 @@ class BedOrderPolicy < ApplicationPolicy
     see_pres.any? { |role| user.has_role?(role) }
   end
 
-  def applicant_index?
-    index?
+  def bed_map?
+    bed_map.any? { |role| user.has_role?(role) }
   end
-
   def show?
     index?
   end
@@ -30,7 +29,9 @@ class BedOrderPolicy < ApplicationPolicy
   end
 
   def edit?
-    if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
+    if record.borrador?
+      edit.any? { |role| user.has_role?(role) }
+    elsif record.pendiente?
       edit_provider.any? { |role| user.has_role?(role) }
     end
   end
@@ -109,44 +110,48 @@ class BedOrderPolicy < ApplicationPolicy
 
   private
   
+  def bed_map
+    [ :admin, :enfermero, :farmaceutico ]
+  end
+
   def receive_applicant
     [ :admin ]
   end
 
-  def edit_provider
-    [ :admin ]
+  def edit
+    [ :admin, :enfermero, :farmaceutico ]
   end
 
-  def edit_applicant
-    [ :admin ]
+  def edit_provider
+    [ :admin, :farmaceutico ]
   end
 
   def new_provider
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def new_report
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def new_applicant
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def send_order
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def return_status
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def update_pres
-    [ :admin ]
+    [ :admin, :enfermero ]
   end
 
   def see_pres
-    [ :admin]
+    [ :admin, :enfermero]
   end
 
   def new_pres

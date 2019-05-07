@@ -33,6 +33,9 @@ Rails.application.routes.draw do
     member do
       get "delete"
     end
+    collection do
+      get "bed_map"
+    end 
   end 
 
   resources :laboratories do

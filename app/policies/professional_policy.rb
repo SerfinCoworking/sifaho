@@ -38,7 +38,7 @@ class ProfessionalPolicy < ApplicationPolicy
   end
 
   def show_pro
-    [ :admin, :farmaceutico ]
+    [ :admin, :farmaceutico, :enfermero ]
   end
 
   def create_pro

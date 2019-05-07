@@ -40,23 +40,6 @@
         }"
       } %>
   </td>
-  <!--
-  <td>
-    <%= f.input :treatment_duration, label: false, placeholder: 'Días',
-      required: true,
-      input_html: { 
-        "data-tooltip"=>true, :class=>"has-tip treat-durat focus-quantity",
-        :title=>"Seleccione un insumo", "data-placement"=>"right",
-        min: '1', step:'any', :style => 'width: 67px'
-      } %>
-  </td>
-  <td>
-    <%= f.input :daily_dose, label: false, placeholder: 'Cant', required: true,
-      input_html: { "data-tooltip"=>true, :class=>"has-tip daily-dose",
-      :title=>"Seleccione un insumo", "data-placement"=>"right",
-      min: '1', step:'any', :style => 'width: 67px' } %>
-  </td>
-  -->
   <td>
     <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: true,
       input_html: {
@@ -138,9 +121,11 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-info-sign') %>
       <% end %>
     <% end %>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
-      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+    <% unless @prescription.cronic_dispensations.count > 0 %>
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+      <% end %>
     <% end %>
   </td>
 </tr>
