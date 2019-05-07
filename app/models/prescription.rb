@@ -160,8 +160,8 @@ class Prescription < ApplicationRecord
       if self.times_dispensed < self.times_dispensation
         if self.quantity_ord_supply_lots.sin_entregar.exists?
           if self.validate_undelivered_quantity_lots(a_user.sector)
+            cp = CronicDispensation.create(prescription: self)
             self.quantity_ord_supply_lots.sin_entregar.each do |qosl|
-              cp = CronicDispensation.new(prescription: self)
               qosl.decrement_to_cronic(cp)
             end
           end

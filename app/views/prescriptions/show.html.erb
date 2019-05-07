@@ -143,10 +143,10 @@
                 </a>
               </li>
               <li>
-                <a data-toggle='<%= @prescription.cronic_dispensations.count > 0 ? 'tab' : '' %>' href='#dispensations'>
+                <a data-toggle='<%= @prescription.cronic_dispensations.to_set.count > 0 ? 'tab' : '' %>' href='#dispensations'>
                   <span class="glyphicon glyphicon-send"></span>
                   Dispensaciones
-                  <span class="badge"><%= @prescription.cronic_dispensations.count %>/<%= @prescription.times_dispensation %></span>
+                  <span class="badge"><%= @prescription.cronic_dispensations.to_set.count %>/<%= @prescription.times_dispensation %></span>
                 </a>
               </li>
               <li>
@@ -192,7 +192,7 @@
               </table>
             </div>
             <!-- Insumos a dispensar -->
-            <% cronic_dispensations = @prescription.cronic_dispensations.order(created_at: :desc) %>
+            <% cronic_dispensations = @prescription.cronic_dispensations.order(created_at: :desc).to_set %>
             <div id='dispensations' class='tab-pane fade'>
               <div role="tabpanel">
                 <div class="col-sm-2">

@@ -77,6 +77,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
         self.entregado!
       end
     else
+      cronic_dispensation.destroy
       raise ArgumentError, 'No hay lote asignado para '+self.supply_name
     end
   end
