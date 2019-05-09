@@ -18,6 +18,7 @@ class PrescriptionsController < ApplicationController
         :search_supply_code,
         :search_supply_name,
         :sorted_by,
+        :with_order_type,
         :date_prescribed_since,
         :date_dispensed_since
       ],

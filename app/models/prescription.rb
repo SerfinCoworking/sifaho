@@ -36,6 +36,7 @@ class Prescription < ApplicationRecord
       :search_supply_code,
       :search_supply_name,
       :sorted_by,
+      :with_order_type,
       :date_prescribed_since,
       :date_dispensed_since,
     ]
@@ -100,6 +101,10 @@ class Prescription < ApplicationRecord
   # Prescripciones dispensadas desde una fecha
   scope :date_dispensed_since, lambda { |reference_time|
     where('prescriptions.date_dispensed >= ?', reference_time)
+  }
+
+  scope :with_order_type, lambda { |a_order_type|
+    where('prescriptions.order_type = ?', a_order_type)
   }
 
   # Métodos públicos #----------------------------------------------------------
