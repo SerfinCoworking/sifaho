@@ -38,10 +38,16 @@ window.setTimeout(function() {
     });
 }, 10000);
 
+$('input').focus(function(e){
+  $(this).on("blur", function(e){
+  e.stopImmediatePropagation();
+  e.preventDefault();
+});
+
 $('[data-toggle="tooltip"]').tooltip({
-    'selector': '',
-    'container':'body'
-  });
+  'selector': '',
+  'container':'body'
+});
 
 $(document).on('turbolinks:load', function() {
   $('[data-toggle="tooltip"]').tooltip({

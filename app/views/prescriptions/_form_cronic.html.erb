@@ -119,7 +119,7 @@
           </tr>
         </thead>
         <tbody class="quantity_ord_supply_lots">
-          <% if params[:action] == "edit" %>
+          <% if ["edit", "update"].include?(params[:action]) %>
             <%= f.simple_fields_for :quantity_ord_supply_lots, @prescription.quantity_ord_supply_lots.sin_entregar do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>
@@ -130,17 +130,15 @@
           <% end %>
         </tbody>
       </table>
-      <% if f.object.cronic_dispensations.count == 0 %>
-        <div class="links" id="links-quant-form">
-          <div class="text-center">
-            <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-            data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Insumo solicitado
-            <% end %>
-          </div>
+      <div class="links" id="links-quant-form">
+        <div class="text-center">
+          <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              Insumo solicitado
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 <% end %>

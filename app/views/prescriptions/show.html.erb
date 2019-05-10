@@ -200,10 +200,10 @@
                     <% i = 0 %>
                     <% cronic_dispensations.each do |cd| %>
                       <li role="presentation" class="brand-nav <%= i == 0 ? "active" : ""%>">
-                        <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" role="tab" data-toggle="tab">
-                          <span class="badge"><%= cronic_dispensations.count - i %>°</span> 
+                        <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" class="text-right" role="tab" data-toggle="tab">
+                          <span class="badge"><%= cronic_dispensations.count - i %>°</span> &nbsp;
                           <%= cd.created_at.strftime("%d/%m/%Y") %>
-                          <span class="glyphicon glyphicon-calendar"></span>
+                          <%= cd.created_at.strftime("%H:%M")%>
                         </a>
                       </li>
                       <% i += 1 %>

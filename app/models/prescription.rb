@@ -50,12 +50,12 @@ class Prescription < ApplicationRecord
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_code,
-  :associated_against => { :supplies => :id, :sector_supply_lots => :code },
+  :associated_against => { :supplies => :id },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_supply_name,
-  :associated_against => { :supplies => :name, :sector_supply_lots => :supply_name },
+  :associated_against => { :supplies => :name },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
