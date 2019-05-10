@@ -192,8 +192,22 @@ class OrderingSuppliesController < ApplicationController
           end
         rescue ArgumentError => e
           flash[:alert] = e.message
+          if ordering_supply_params[:order_type] == 'despacho'
+            @order_type = 'despacho'
+            @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+            format.html { render :new }
+          elsif ordering_supply_params[:order_type] == 'recibo'
+            @order_type = 'recibo'
+            @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+            format.html { render :new_receipt }
+          elsif ordering_supply_params[:order_type] == 'solicitud_abastecimiento'
+            @order_type = 'solicitud_abastecimiento'
+            @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+            format.html { render :new_applicant }
+          end
+        else
+          format.html { redirect_to @ordering_supply }
         end
-        format.html { redirect_to @ordering_supply }
       else
         if ordering_supply_params[:order_type] == 'despacho'
           @order_type = 'despacho'
@@ -272,8 +286,22 @@ class OrderingSuppliesController < ApplicationController
           end   
         rescue ArgumentError => e
           flash[:alert] = e.message
+          if @ordering_supply.despacho?
+            @order_type = 'despacho'
+            @sectors = Sector.with_establishment_id(@ordering_supply.applicant_sector.establishment_id)
+            format.html { render :edit }
+          elsif @ordering_supply.recibo?
+            @order_type = 'recibo'
+            @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+            format.html { render :edit_receipt }
+          elsif @ordering_supply.solicitud_abastecimiento?
+            @sectors = Sector.with_establishment_id(@ordering_supply.provider_sector.establishment_id)
+            @order_type = 'solicitud_abastecimiento'
+            format.html { render :edit_applicant }
+          end
+        else
+          format.html { redirect_to @ordering_supply }
         end
-        format.html { redirect_to @ordering_supply }
       else
         if @ordering_supply.despacho?
           @order_type = 'despacho'

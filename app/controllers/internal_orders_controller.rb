@@ -181,26 +181,39 @@ class InternalOrdersController < ApplicationController
           end
         rescue ArgumentError => e
           flash[:alert] = e.message
+          if @internal_order.provision?
+            @order_type = 'provision'
+            @applicant_sectors = Sector
+              .select(:id, :name)
+              .with_establishment_id(current_user.sector.establishment_id)
+              .where.not(id: current_user.sector_id).as_json
+            format.html { render :new_provider }
+          elsif @internal_order.solicitud?
+            @order_type = 'solicitud'
+            @provider_sectors = Sector
+              .select(:id, :name)
+              .with_establishment_id(current_user.sector.establishment_id)
+              .where.not(id: current_user.sector_id).as_json
+            format.html { render :new_applicant }
+          end
+        else
+          format.html { redirect_to @internal_order }
         end
-        format.html { redirect_to @internal_order }
       else
+        flash[:error] = "La "+@internal_order.order_type+" no se ha podido crear."
         if @internal_order.provision?
           @order_type = 'provision'
           @applicant_sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          
-          flash[:error] = "La provision no se ha podido crear."
+            .select(:id, :name)
+            .with_establishment_id(current_user.sector.establishment_id)
+            .where.not(id: current_user.sector_id).as_json
           format.html { render :new_provider }
         elsif @internal_order.solicitud?
           @order_type = 'solicitud'
           @provider_sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          
-          flash[:error] = "La solicitud no se ha podido crear."
+            .select(:id, :name)
+            .with_establishment_id(current_user.sector.establishment_id)
+            .where.not(id: current_user.sector_id).as_json
           format.html { render :new_applicant }
         end
       end
@@ -250,23 +263,20 @@ class InternalOrdersController < ApplicationController
         end 
         format.html { redirect_to @internal_order }
       else
+        flash[:error] = "La provision no se ha podido guardar."
         if @internal_order.is_provider?(current_user)
           @order_type = 'provision'
           @applicant_sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          
-          flash[:error] = "La provision no se ha podido guardar."
+            .select(:id, :name)
+            .with_establishment_id(current_user.sector.establishment_id)
+            .where.not(id: current_user.sector_id).as_json          
           format.html { render :edit }
         elsif @internal_order.is_applicant?(current_user) 
           @order_type = 'solicitud'
           @provider_sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          
-          flash[:error] = "La solicitud no se ha podido guardar."
+            .select(:id, :name)
+            .with_establishment_id(current_user.sector.establishment_id)
+            .where.not(id: current_user.sector_id).as_json
           format.html { render :edit_applicant }
         end
       end
