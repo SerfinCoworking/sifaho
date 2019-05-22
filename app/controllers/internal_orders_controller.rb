@@ -159,8 +159,8 @@ class InternalOrdersController < ApplicationController
         begin
           if @internal_order.provision?
             # Si se carga y provision el pedido
-            if sending?
-              @internal_order.send
+            if sending_by_provider?
+              @internal_order.send_order_by(current_user)
               @internal_order.create_notification(current_user, "creó y envió")
               flash[:success] = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente."
             else
@@ -222,16 +222,15 @@ class InternalOrdersController < ApplicationController
 
   # PATCH/PUT /internal_orders/1
   # PATCH/PUT /internal_orders/1.json
-  def update
+  def update 
     authorize @internal_order
-    @user_id = internal_order_params.extract!(:sent_by_id)
     audited_by = current_user
     respond_to do |format|
       if @internal_order.update(internal_order_params)
         begin
             if @internal_order.provision?
               if sending_by_provider?
-                @internal_order.send_order_by_user_id(@user_id)
+                @internal_order.send_order_by(current_user)
                 @internal_order.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'La provision se ha enviado correctamente.'
               else
@@ -244,7 +243,7 @@ class InternalOrdersController < ApplicationController
                 @internal_order.create_notification(current_user, "auditó y envió")
                 flash[:success] = 'La solicitud se ha enviado correctamente.'
               elsif sending_by_provider?
-                @internal_order.send_order_by_user_id(@user_id)
+                @internal_order.send_order_by(current_user)
                 @internal_order.create_notification(current_user, "envió")
                 flash[:success] = 'La solicitud se ha provisto correctamente.'
               elsif applicant?

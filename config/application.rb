@@ -19,5 +19,16 @@ module Sifaho
     # -- all .rb files in that directory are automatically loaded.
     config.time_zone = 'Buenos Aires'
     config.active_record.default_timezone = :utc
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :options]
+      end
+    end
+
+    config.middleware.use Rack::Attack
+
+    config.generators.system_tests = nil
   end
 end

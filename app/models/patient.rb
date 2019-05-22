@@ -3,7 +3,7 @@ class Patient < ApplicationRecord
 
   # Relaciones
   belongs_to :patient_type, optional: true
-  has_many :prescriptions, -> { with_deleted }
+  has_many :prescriptions, -> { with_deleted }, dependent: :destroy
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :dni

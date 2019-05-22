@@ -10,15 +10,18 @@ $(document).on('turbolinks:load', function() {
     no_results_text: 'No se encontró el resultado',
     width: '200px'
   });
+
   $('input[name="my-checkbox"]').on('init.bootstrapSwitch', function(event, state) {
     document.getElementById("is_active").value = state;
   });
+
   $("[name='my-checkbox']").bootstrapSwitch({
     onColor: "danger",
     offColor: "success",
     onText: "Inactivo",
     offText: "Activo",
   });
+
   $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
     if(state){
       document.getElementById("is_active").value = false;
@@ -27,6 +30,7 @@ $(document).on('turbolinks:load', function() {
     }
   });
 });
+
 $("form#new_professional").bind("ajax:success", function(e, data, status, xhr) {
   if (data.success) {
     console.log("paso!");

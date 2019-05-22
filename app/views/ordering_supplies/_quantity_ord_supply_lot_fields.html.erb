@@ -5,7 +5,7 @@
         placeholder: 'Código',
         label: false,
         :input_html => {
-          class: "new-supply-code select-change",
+          class: "new-supply-code select-change input-sm",
           data: { autocomplete_source: search_by_id_supplies_path },
           size: 4,
           autocomplete: 'off'
@@ -13,15 +13,15 @@
       %>
     </td>
     <td>
-      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+      <%= f.input :supply_id, as: :string, id: "nom_ins",
         label: false,
         placeholder: 'Nombre',
         :input_html => {
-          class: "new-supply-name select-change",
+          class: "new-supply-name select-change input-sm",
           data: { autocomplete_source: search_by_name_supplies_path },
           size: 35,
           value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
-          autocomplete: 'off'
+          autocomplete: false
         } 
       %>
       <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
@@ -29,7 +29,7 @@
     <td>
       <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
         input_html: {
-          class: 'unity',
+          class: 'unity input-sm',
           size: 10,
           placeholder: "Unidad",
           value: "#{
@@ -42,7 +42,7 @@
     </td>
     <td>
       <%= f.input :delivered_quantity, placeholder: 'Cant', required: false,
-        label: false, :input_html => { class: 'new-deliver-quantity', min: '0', :style => 'width: 80px' } 
+        label: false, :input_html => { class: 'new-deliver-quantity input-sm', min: '0', :style => 'width: 80px' } 
       %>
       <%= f.hidden_field :requested_quantity, :value => 0 %>
     </td>
@@ -54,7 +54,7 @@
         :input_html => {
           "data-tooltip" => true,
           :title => "",
-          class: "new-supply-lot-code has-tip",
+          class: "new-supply-lot-code has-tip input-sm",
           data: { autocomplete_source: search_by_lot_code_supply_lots_path },
           size: 11,
           autocomplete: 'off',
@@ -68,7 +68,7 @@
         label: false,
         required: false,
         :input_html => {
-          class: "new-laboratory",
+          class: "new-laboratory input-sm",
           data: { autocomplete_source: search_by_name_laboratories_path },
           size: 25,
           value: "#{ if f.object.laboratory_id.present?; Laboratory.find_by_id(f.object.laboratory_id).name; end }",
@@ -83,7 +83,7 @@
         :placeholder => "M/A",
         input_html: {
           :style => 'width: 70px',
-          class: "new-expiry-date",
+          class: "new-expiry-date input-sm",
           required: false,
           autocomplete: 'off',
           value: "#{
@@ -105,7 +105,7 @@
         label: false,
         required: false,
         :input_html => {
-          class: "supply-code select-change",
+          class: "supply-code select-change input-sm",
           data: { autocomplete_source: search_by_id_supplies_path },
           size: 4,
           autocomplete: 'off'
@@ -118,7 +118,7 @@
         placeholder: 'Nombre',
         required: false,
         :input_html => {
-          class: "supply-name select-change",
+          class: "supply-name select-change input-sm",
           data: { autocomplete_source: search_by_name_supplies_path },
           size: 36,
           value: "#{if f.object.supply.present?; f.object.supply_name; end }"
@@ -130,7 +130,7 @@
       <% @stock = 1 %>
       <%= f.input :stock, as: :fake, label: false, disabled: true,
         input_html: {
-          class: 'stock-quantity',
+          class: 'stock-quantity input-sm',
           size: 6, 
           placeholder: "Cant",
           value: "#{
@@ -144,7 +144,7 @@
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"has-tip apply-request-quant request-quantity focus-quantity",
+          :class=>"has-tip apply-request-quant request-quantity focus-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
           min: '1', step:'any', :style => 'width: 75px'
@@ -155,7 +155,7 @@
     <td>
       <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
         input_html: {
-          class: 'unity',
+          class: 'unity input-sm',
           size: 10,
           placeholder: "Unidad",
           value: "#{
@@ -167,7 +167,7 @@
     </td>
     <td>
       <%= f.input :applicant_observation, label: false, as: :text,
-        :input_html => { :cols => 35  , :rows => 1, placeholder: "Una observación" } %>
+        :input_html => { :cols => 35  , :rows => 1, class: 'input-sm', placeholder: "Una observación" } %>
     </td>
   <% else %>
     <%
@@ -180,7 +180,7 @@
         placeholder: 'Código',
         label: false,
         :input_html => {
-          class: "supply-code select-change",
+          class: "supply-code select-change input-sm",
           data: { autocomplete_source: search_by_id_supplies_path },
           size: 4,
           autocomplete: 'off'
@@ -192,7 +192,7 @@
         label: false,
         placeholder: 'Nombre',
         :input_html => {
-          class: "supply-name select-change",
+          class: "supply-name select-change input-sm",
           data: { autocomplete_source: search_by_name_supplies_path },
           size: 35,
           value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
@@ -206,7 +206,7 @@
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"has-tip request-quantity focus-quantity",
+          :class=>"has-tip request-quantity focus-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
           min: '1', step:'any', :style => 'width: 70px'
@@ -217,7 +217,7 @@
       <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"has-tip deliver-quantity",
+          :class=>"has-tip deliver-quantity input-sm",
           :title=>"Cantidad entregada",
           "data-placement"=>"right",
           min: '0', step:'any', :style => 'width: 70px'
@@ -226,7 +226,7 @@
     </td>
     <td>
       <% if f.object.supply_id.present?  %>
-        <%= button_tag type: 'button', class: 'btn btn-xs search-lots',
+        <%= button_tag type: 'button', class: 'btn btn-xs search-lots input-sm',
           title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
         <% end %>
@@ -234,7 +234,7 @@
     <% if f.object.sector_supply_lot_id.present? %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
-            class: 'selectpicker show-tick',
+            class: 'selectpicker show-tick input-sm',
             "data-width"=>"fit",
             "title"=>"#{f.object.sector_supply_lot.lot_code }",
             "data-size"=>"5",
@@ -262,7 +262,7 @@
         disabled: true,
         input_html: {
           size: 16,
-          class: "supply-lot-laboratory",
+          class: "supply-lot-laboratory input-sm",
           value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.laboratory; end }"
         },
         html5: false 
@@ -275,7 +275,7 @@
         disabled: true,
         input_html: {
           :style => 'width: 65px',
-          class: "supply-lot-expiry",
+          class: "supply-lot-expiry input-sm",
           value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%m/%Y") : 'n/a'; end}"
         },
         html5: false 
@@ -284,7 +284,7 @@
     <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
     <td>
       <%= f.input :provider_observation, label: false, as: :text,
-        :input_html => { :cols => 23  , :rows => 1, placeholder: "Una observación" } %>
+        :input_html => { :cols => 23  , :rows => 1, class: 'input-sm', placeholder: "Una observación" } %>
     </td>
   <% end %>
   <td>

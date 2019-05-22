@@ -15,10 +15,12 @@ $(document).on('turbolinks:load', function() {
 
   $("#establishment").trigger("change");
 
-  $('.selectpicker').selectpicker(); // Se inicializa selectpicker
+  $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker
+
+  $('.selectpicker-md').selectpicker({style: 'btn-default'});
 
   $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
-    $('.selectpicker').selectpicker(); // Se inicializa selectpicker luego de agregar form
+    $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
 
   // Función para autocompletar nombre de establecimiento
@@ -79,10 +81,10 @@ $(document).on('turbolinks:load', function() {
    });
   });
 
-   // Evento del select sector para rellenar hidden id
-   $(document).on('change', '#applicant-sector', function() {
-     $("#applicant-id").val($(this).val());
-   });//End on change events
+  // Evento del select sector para rellenar hidden id
+  $(document).on('change', '#applicant-sector', function() {
+    $("#applicant-id").val($(this).val());
+  });//End on change events
 
   // Función para autocompletar y buscar el insumo por código
   $(document).on("focus",".supply-code", function() {

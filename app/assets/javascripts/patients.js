@@ -13,6 +13,7 @@ $(document).on('turbolinks:load', function() {
     onText: "Hombre",
     offText: "Mujer"
   });
+
   $('input[name="sex-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
     if(state){
       document.getElementById("sex").value = 3;
@@ -20,6 +21,7 @@ $(document).on('turbolinks:load', function() {
       document.getElementById("sex").value = 2;
     }
   });
+
   $("[name='chronic-check']").bootstrapSwitch({
     offColor: "default",
     onColor: "primary",
@@ -27,9 +29,11 @@ $(document).on('turbolinks:load', function() {
     offText: "No",
     labelText: "Crónico?",
   });
+
   $('input[name="chronic-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
     document.getElementById("is_chronic").value = state;
   });
+
   $("[name='urban-check']").bootstrapSwitch({
     offColor: "default",
     onColor: "primary",
@@ -37,6 +41,7 @@ $(document).on('turbolinks:load', function() {
     offText: "Si",
     labelText: "Urbano?"
   });
+  
   $('input[name="chronic-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
     if(state){
       document.getElementById("is_urban").value = false;

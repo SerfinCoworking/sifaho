@@ -126,7 +126,7 @@ $(document).on('turbolinks:load', function() {
   $.ui.autocomplete.prototype._renderItem = function (ul, item) {   
     if(item.length > 0 ){
       console.log("hay elementos");
-    }     
+    }
     var t = String(item.value).replace(
             new RegExp(this.term, "gi"),
             "<strong>$&</strong>");

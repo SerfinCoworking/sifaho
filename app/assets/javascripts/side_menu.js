@@ -4,7 +4,7 @@ $(document).on('turbolinks:load', function() {
 
   $('.datetimepicker').datetimepicker({format: 'DD/MM/YYYY', locale: 'es'});
 
-  $('.selectpicker').selectpicker();
+  $('.selectpicker').selectpicker({style: 'btn-sm btn-default'});
 
   var sidebar = document.getElementById('custom-sidebar');
   var page_header = document.getElementById('page-header');

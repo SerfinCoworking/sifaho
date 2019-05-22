@@ -36,10 +36,10 @@ development:
   #<<: *AUTHORIZATIONS
 
 test:
-  host: 192.168.20.112
+  host: ldap.forumsys.com
   port: 389
   attribute: uid
-  base: ou=People,o=integrabilidad,o=neuquen
+  base: cn=read-only-admin,dc=example,dc=com
   ssl: false
   # <<: *AUTHORIZATIONS
 

@@ -173,8 +173,8 @@ class InternalOrder < ApplicationRecord
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by_user_id(a_user_id)
-    if self.proveedor_auditoria?
+  def send_order_by(a_user)
+    if self.provider_sector == a_user.sector
       if self.quantity_ord_supply_lots.exists?
         if self.validate_quantity_lots
           self.quantity_ord_supply_lots.each do |qosl|
@@ -185,10 +185,10 @@ class InternalOrder < ApplicationRecord
         raise ArgumentError, 'No hay insumos solicitados en el pedido'
       end # End check if quantity_ord_supply_lots exists
       self.sent_date = DateTime.now
-      self.sent_by_id = a_user_id
+      self.sent_by_id = a_user.id
       self.provision_en_camino!
     else
-      raise ArgumentError, 'La '+self.order_type+' debe estar antes en proveedor auditoría.'
+      raise ArgumentError, 'Usted no pertenece al sector proveedor.'
     end
   end
 

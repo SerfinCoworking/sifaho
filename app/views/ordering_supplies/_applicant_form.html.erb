@@ -57,7 +57,7 @@
           :input_html => {
             required: true,
             id: 'provider-sector',
-            class: 'selectpicker show-tick',
+            class: 'selectpicker-md show-tick',
             "data-width"=>"322px",
             "title"=>"Seleccionar sector",
             "data-size"=>"10",
@@ -71,7 +71,7 @@
           :input_html => {
             required: true,
             id: 'provider-sector',
-            class: 'selectpicker show-tick',
+            class: 'selectpicker-md show-tick',
             "data-width"=>"322px",
             "title"=>"Seleccione un establecimiento",
             "data-size"=>"10",
@@ -147,7 +147,7 @@
       <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
         data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Agregar insumo recibido
+        Agregar insumo a solicitar
       <% end %>
     </div>
   </div>
