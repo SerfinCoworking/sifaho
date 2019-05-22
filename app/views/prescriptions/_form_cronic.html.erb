@@ -29,6 +29,10 @@
         } 
       %>
       &nbsp;
+      <%= link_to new_professional_path, class: "btn btn-info btn-sm", remote: 'true',
+        title: 'Nuevo profesional', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <% end %>
       <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %><br><br>
       <%= f.label :patient_id, "Paciente" %>
       <%= f.input :patient_id, as: :string, class: 'form-control',
@@ -56,6 +60,10 @@
         }
       %>
       &nbsp;
+      <%= link_to new_patient_path, class: "btn btn-info btn-sm", remote: 'true',
+        title: 'Nuevo paciente', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <% end %>
       <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %><br>
     </div>
     <div class='col-md-6'>

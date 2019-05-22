@@ -1,6 +1,5 @@
 module Api::V1
   class PatientsController < ApiController
-
     # GET /v1/patients
     def index
       patients = Patient.all
