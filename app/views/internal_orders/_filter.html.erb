@@ -8,7 +8,7 @@
         <label>Código</label>
         <%= f.text_field(
           :search_code,
-          class: 'filterrific-periodically-observed form-control',
+          class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Cód'
         ) %>
       </div>
@@ -17,7 +17,7 @@
           <label>Proveedor</label>
           <%= f.text_field(
             :search_provider,
-            class: 'filterrific-periodically-observed form-control',
+            class: 'filterrific-periodically-observed form-control input-sm',
             placeholder: 'Sector',
             autocomplete: 'off'
           ) %>
@@ -25,7 +25,7 @@
           <label>Solicitante</label>
           <%= f.text_field(
             :search_applicant,
-            class: 'filterrific-periodically-observed form-control',
+            class: 'filterrific-periodically-observed form-control input-sm',
             placeholder: 'Sector',
             autocomplete: 'off'
           ) %>
@@ -49,11 +49,11 @@
         <label>Solicitado</label>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker  input-sm',
               placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
@@ -62,26 +62,19 @@
         <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
       </div>
       <div class="col-md-1">
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right", 
+        <%= link_to reset_filterrific_url, class: "btn btn-sm btn-reset", 
           :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <% if current_page?(action: 'applicant_index') %>
-          <%= link_to applicant_index_internal_orders_path(format: 'pdf'), class: 'btn btn-sm pull-right',  
-            :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-          <% end %>
-        <% else %>
         <% end %>
         <%= render_filterrific_spinner %>
       </div>

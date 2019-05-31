@@ -2,7 +2,7 @@ class SectorSupplyLot < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum status: { vigente: 0, por_vencer: 1, vencido: 2, agotado: 3 }
+  enum status: { vigente: 0, por_vencer: 1, vencido: 2, agotado: 3, archivado: 4 }
 
   # Callbacks
   after_validation :update_status
@@ -161,8 +161,8 @@ class SectorSupplyLot < ApplicationRecord
       return 'danger'
     elsif self.agotado?
       return 'info'
-    elsif self.auditoria?
-      return 'info'
+    elsif self.archivado?
+      return 'default'
     end
   end
 
@@ -193,22 +193,24 @@ class SectorSupplyLot < ApplicationRecord
 
   # Se actualiza el estado del lote
   def update_status_without_validate!
-    if self.quantity == 0
-      self.status = 'agotado'
-    elsif self.supply_lot.expiry_date.present?
-      @exp_date = self.supply_lot.expiry_date
-      # If expired
-      if @exp_date <= DateTime.now
-        self.status = 'vencido'
-      # If near_expiry
-      elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
-        self.status = 'por_vencer'
-      # If good
-      elsif @exp_date > DateTime.now
+    unless self.archivado?
+      if self.quantity == 0
+        self.status = 'agotado'
+      elsif self.supply_lot.expiry_date.present?
+        @exp_date = self.supply_lot.expiry_date
+        # If expired
+        if @exp_date <= DateTime.now
+          self.status = 'vencido'
+        # If near_expiry
+        elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
+          self.status = 'por_vencer'
+        # If good
+        elsif @exp_date > DateTime.now
+          self.status = 'vigente'
+        end 
+      else
         self.status = 'vigente'
-      end 
-    else
-      self.status = 'vigente'
+      end
     end
     self.save(validate: false)
   end
@@ -218,22 +220,24 @@ class SectorSupplyLot < ApplicationRecord
   private
   # Se actualiza el estado del lote
   def update_status
-    if self.quantity == 0
-      self.status = 'agotado'
-    elsif self.supply_lot.expiry_date.present?
-      @exp_date = self.supply_lot.expiry_date
-      # If expired
-      if @exp_date <= DateTime.now
-        self.status = 'vencido'
-      # If near_expiry
-      elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
-        self.status = 'por_vencer'
-      # If good
-      elsif @exp_date > DateTime.now
+    unless self.archivado?
+      if self.quantity == 0
+        self.status = 'agotado'
+      elsif self.supply_lot.expiry_date.present?
+        @exp_date = self.supply_lot.expiry_date
+        # If expired
+        if @exp_date <= DateTime.now
+          self.status = 'vencido'
+        # If near_expiry
+        elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
+          self.status = 'por_vencer'
+        # If good
+        elsif @exp_date > DateTime.now
+          self.status = 'vigente'
+        end 
+      else
         self.status = 'vigente'
-      end 
-    else
-      self.status = 'vigente'
+      end
     end
   end
 

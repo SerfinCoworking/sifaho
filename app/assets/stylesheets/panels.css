@@ -66,3 +66,8 @@
 #filter-panel{
   margin-bottom: 0px!important;
 }
+.panel-pres {
+  /* height: 480px; */
+  height: 170px;
+  overflow-y: auto; 
+}

@@ -4,7 +4,10 @@
   <div class="panel panel-warning">
     <div class="panel-heading">
       <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> 
-        Auditando prescripción <%= @prescription.ambulatoria? ? 'ambulatoria' : 'crónica' %>
+        Auditando prescripción <%= @prescription.ambulatoria? ? 'ambulatoria.' : 'crónica.' %>
+        <% if @prescription.cronica? %>
+          (Dispensación <%= @prescription.cronic_dispensations.to_set.count.next %> de <%= @prescription.times_dispensation %>)
+        <% end %>
         <%= link_to :back, class: 'btn pull-right close-btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>

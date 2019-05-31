@@ -100,10 +100,9 @@ class ProfessionalsController < ApplicationController
     end
   end
 
-  def doctors_by_enrollment
-    @doctors = Professional.order(:first_name).search_professional_enrollment(params[:term]).limit(10)
-    render json: @doctors.map{ |doc| { id: doc.id, value: doc.enrollment, label: doc.enrollment+" | "+doc.fullname,
-                                       fullname: doc.fullname } }
+  def get_by_enrollment_and_fullname
+    @doctors = Professional.get_by_enrollment_and_fullname(params[:term]).limit(10).order(:last_name)
+    render json: @doctors.map{ |doc| { id: doc.id, label: doc.enrollment+" "+doc.last_name+" "+doc.first_name } }
   end
 
   def doctors

@@ -32,9 +32,9 @@ class Prescription < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
-      :search_professional_and_patient,
-      :search_supply_code,
-      :search_supply_name,
+      :search_by_professional,
+      :search_by_patient,
+      :search_by_supply,
       :sorted_by,
       :with_order_type,
       :date_prescribed_since,
@@ -44,19 +44,19 @@ class Prescription < ApplicationRecord
 
   # SCOPES #--------------------------------------------------------------------
 
-  pg_search_scope :search_professional_and_patient,
-  :associated_against => { :professional => :fullname, patient: [:last_name, :first_name] },
+  pg_search_scope :search_by_professional,
+  :associated_against => { professional: [ :last_name, :first_name ] },
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_supply_code,
-  :associated_against => { :supplies => :id },
+  pg_search_scope :search_by_patient,
+  :associated_against => { patient: [ :last_name, :first_name, :dni ] },
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_by_supply,
+  :associated_against => { supplies: [ :id, :name ] },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_supply_name,
-  :associated_against => { :supplies => :name },
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
@@ -120,23 +120,8 @@ class Prescription < ApplicationRecord
     end
   end
 
-  # Cambia estado a dispensado y descuenta la cantidad a los insumos
-  def dispense
-    if vencida?
-      raise ArgumentError, "La prescripción está vencida"
-    elsif dispensada?
-      raise ArgumentError, "Ya se ha entregado esta prescripción"
-    else
-      if self.quantity_supply_lots.present?
-        self.quantity_supply_lots.each do |qsls|
-          qsls.decrement
-        end
-      else
-        raise ArgumentError, 'No hay insumos en la prescripción'
-      end
-      self.date_dispensed = DateTime.now
-      self.dispensada!
-    end #End dispensada?
+  def professional_fullname
+    self.professional.full_name
   end
 
   # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
@@ -203,6 +188,9 @@ class Prescription < ApplicationRecord
   end
 
   # Métodos de clase #----------------------------------------------------------
+  scope :with_patient_id, lambda { |an_id|
+    where(patient_id: [*an_id])
+  }
 
   def self.current_day
     where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })

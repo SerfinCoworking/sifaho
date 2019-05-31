@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       get "delete"
       get "restore"; get "restore_confirm"
       get "purge"; get "purge_confirm"
+      get "archive"; get "archive_confirm"
       get "lots_for_supply"
     end
     collection do
@@ -154,9 +155,11 @@ Rails.application.routes.draw do
       get "delete"
       get "restore"; get "restore_confirm"
       get "return_status"
+      get "return_cronic_dispensation"
     end
-    collection do
+      collection do
       get "new_cronic"
+      get "get_by_patient_id"
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
@@ -168,7 +171,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "search"
-      get "search_by_dni"
+      get "get_by_dni_and_fullname"
     end
   end
 
@@ -179,14 +182,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "doctors"
-      get "doctors_by_enrollment"
-    end
-  end
-
-  resources :patients do
-    member do
-      get "delete"
-      get "restore"; get "restore_confirm"
+      get "get_by_enrollment_and_fullname"
     end
   end
 

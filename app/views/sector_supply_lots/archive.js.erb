@@ -1,0 +1,7 @@
+// Se oculta el original
+$('#lot_<%= @sector_supply_lot.id %>').hide()
+
+$('#lots').prepend('<%= j render(:partial => 'lot', :locals => {:lot => @sector_supply_lot}) %>')
+
+// Efecto de ingreso
+$('#lot_<%= @sector_supply_lot.id %>').hide().fadeIn(500);

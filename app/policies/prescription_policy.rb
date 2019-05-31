@@ -49,8 +49,18 @@ class PrescriptionPolicy < ApplicationPolicy
     end
   end
 
+  def return_cronic_dispensation?
+    if record.cronica? && record.cronic_dispensations.to_set.count > 0
+      return_pres.any? { |role| user.has_role?(role) }
+    end
+  end
+
 
   private
+
+  def return_pres
+    [ :admin, :farmaceutico ]
+  end
 
   def update_pres
     [ :admin, :farmaceutico, :auxiliar_farmacia ]

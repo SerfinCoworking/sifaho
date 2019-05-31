@@ -38,8 +38,8 @@ $(document).on('turbolinks:load', function() {
      },
      response: function(event, ui) {
        if (!ui.content.length) {
-           var noResult = { value:"",label:"No se encontró el establecimiento" };
-           ui.content.push(noResult);
+          var noResult = { value:"",label:"No se encontró el establecimiento" };
+          ui.content.push(noResult);
        }
      }
    })

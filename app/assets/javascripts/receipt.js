@@ -21,8 +21,8 @@ document.addEventListener("turbolinks:load", function() {
       },
       response: function(event, ui) {
         if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró el establecimiento" };
-            ui.content.push(noResult);
+          var noResult = { value:"", label:"No se encontró el establecimiento" };
+          ui.content.push(noResult);
         }
       }
     })
@@ -87,9 +87,13 @@ document.addEventListener("turbolinks:load", function() {
         $("#provider-sector").prop('required',true);
       },
       response: function(event, ui) {
-        if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró el establecimiento" };
-            ui.content.push(noResult);
+        console.log(ui.content);
+  
+        if (JSON.stringify(ui.content) == '[{}]') {
+          console.log("Entró");
+          ui.content[0] = { label:"No se encontró el establecimiento", value:"" };
+          ui.content[1] = { label:"No se encontró el establecimiento", value:"" };
+          console.log(ui.content);
         }
       }
     })

@@ -26,6 +26,11 @@ class Professional < ApplicationRecord
     ]
   )
 
+  pg_search_scope :get_by_enrollment_and_fullname,
+  against: [:enrollment, :last_name, :first_name],
+  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+  :ignoring => :accents # Ignorar tildes.
+
   pg_search_scope :search_professional_enrollment,
   against: :enrollment,
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.

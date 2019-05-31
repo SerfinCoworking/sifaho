@@ -1,5 +1,6 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status ]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status, 
+    :return_cronic_confirm, :return_cronic_dispensation ]
 
   # GET /prescriptions
   # GET /prescriptions.json
@@ -14,9 +15,9 @@ class PrescriptionsController < ApplicationController
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
-        :search_professional_and_patient,
-        :search_supply_code,
-        :search_supply_name,
+        :search_by_professional,
+        :search_by_patient,
+        :search_by_supply,
         :sorted_by,
         :with_order_type,
         :date_prescribed_since,
@@ -62,6 +63,7 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new(prescription_params)
     authorize @prescription
     @prescription.created_by = current_user
+    @prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+Prescription.with_deleted.maximum(:id).to_i.next.to_s
 
     respond_to do |format|
       if @prescription.save
@@ -161,6 +163,21 @@ class PrescriptionsController < ApplicationController
     end
   end
 
+  def return_cronic_dispensation
+    authorize @prescription
+    respond_to do |format|
+      begin
+        @prescription.return_cronic_dispensation
+        @prescription.create_notification(current_user, "retornó una dispensación")
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      else
+        flash[:notice] = 'Se ha retornado una dispensación de la prescripción crónica.'
+      end
+      format.html { redirect_to @prescription }
+    end
+  end
+
   def return_status
     authorize @prescription
     respond_to do |format|
@@ -181,6 +198,12 @@ class PrescriptionsController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def get_by_patient_id
+    @prescriptions = Prescription.with_patient_id(params[:term]).order(created_at: :desc).limit(10)
+    render json: @prescriptions.map{ |pre| { id: pre.id, order_type: pre.order_type.humanize, status: pre.status.humanize, professional: pre.professional_fullname, 
+    supply_count: pre.quantity_ord_supply_lots.count, created_at: pre.created_at.strftime("%d/%m/%Y") } }
   end
 
   private

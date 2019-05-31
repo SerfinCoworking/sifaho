@@ -1,6 +1,6 @@
 class SectorSupplyLotsController < ApplicationController
   before_action :set_sector_supply_lot, only: [:show, :destroy, :delete, :restore,
-    :restore_confirm, :purge, :purge_confirm]
+    :restore_confirm, :archive, :archive_confirm, :purge, :purge_confirm]
 
   # GET /sector_supply_lots
   # GET /sector_supply_lots.json
@@ -107,7 +107,19 @@ class SectorSupplyLotsController < ApplicationController
     end
   end
 
-  # GET /supply_lot/1/restore
+  # GET /sector_supply_lot/1/archive
+  def archive
+    authorize @sector_supply_lot
+    
+    @sector_supply_lot.archivado!
+
+    respond_to do |format|
+      flash.now[:success] = "El lote código "+@sector_supply_lot.code+" se ha archivado correctamente."
+      format.js
+    end
+  end
+
+  # GET /sector_supply_lot/1/restore
   def restore
     authorize @sector_supply_lot
     SectorSupplyLot.restore(@sector_supply_lot.id, :recursive => true)
@@ -135,14 +147,14 @@ class SectorSupplyLotsController < ApplicationController
   end
 
   def search_by_code
-    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(3)
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).limit(10).without_status(3).without_status(4)
     render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,
       value: sup_lot.code, id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
       quant: sup_lot.quantity, lot_code: sup_lot.lot_code, lab: sup_lot.laboratory, status_label: sup_lot.status_label } }
   end
 
   def get_with_code
-    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).without_status(2).sorted_by("vencimiento_asc")
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:term]).without_status(2).without_status(4).sorted_by("vencimiento_asc")
     render json: @sector_supply_lots.map{ |sup_lot| { label: sup_lot.code.to_s+" | "+sup_lot.supply_name,
       value: sup_lot.code, id: sup_lot.id, name: sup_lot.supply_name, expiry_date: sup_lot.expiry_date,
       quant: sup_lot.quantity, lot_code: sup_lot.lot_code } }

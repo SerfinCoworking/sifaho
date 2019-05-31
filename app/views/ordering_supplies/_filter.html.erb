@@ -10,7 +10,7 @@
         <label>Código</label>
         <%= f.text_field(
           :search_code,
-          class: 'filterrific-periodically-observed form-control',
+          class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Cód'
         ) %>
       </div>
@@ -19,7 +19,7 @@
           <label>Proveedor</label>
           <%= f.text_field(
             :search_provider,
-            class: 'filterrific-periodically-observed form-control',
+            class: 'filterrific-periodically-observed form-control input-sm',
             placeholder: 'Sector/Establecimiento.',
             autocomplete: 'off'
           ) %>
@@ -27,7 +27,7 @@
           <label>Solicitante</label>
           <%= f.text_field(
             :search_applicant,
-            class: 'filterrific-periodically-observed form-control',
+            class: 'filterrific-periodically-observed form-control input-sm',
             placeholder: 'Sector/Establecimiento',
             autocomplete: 'off'
           ) %>
@@ -51,11 +51,11 @@
         <label>Solicitado</label>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
@@ -64,11 +64,11 @@
         <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker',
+            <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
               placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>

@@ -1,0 +1,27 @@
+// Style modal
+$('.modal-content').addClass('panel-warning');
+
+// Add the dialog title
+$('#dialog h4').html("<h4><i class=' glyphicon glyphicon-folder-close'></i>  Archivar lote</h4>");
+
+// Render the edit form
+$('.modal-body').html(
+  '<p>Desea archivar el lote <%= @sector_supply_lot.lot_code %>?</p>'+
+  "<p><strong>Cantidad en stock: </strong><%= @sector_supply_lot.quantity %></p>"+
+  "<p>Una vez archivado no formará parte del stock, pero podrá recuperarlo en cualquier momento.</p>"
+);
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default' data-dismiss='modal'>Volver</button>"+
+  "<a data-remote='true' data-method='get' href='/sector_supply_lots/<%= @sector_supply_lot.id %>/archive' data-dismiss='modal' class='btn commit btn-warning pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-warning');
+});
+

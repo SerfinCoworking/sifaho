@@ -3,7 +3,7 @@
       <% if params[:controller] == 'sector_supply_lots' %>
         <td><%= supply.id %></td>
         <td class="col-sup-name"><%= supply.name %></td>
-        <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(supply) %>
+        <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).without_status(4).with_supply(supply) %>
         <td><%@sum_lots = @lots.sum(:quantity)%>
           <span class="label label-default">
             <%= @sum_lots %>

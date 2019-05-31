@@ -1,4 +1,5 @@
 class Patient < ApplicationRecord
+  include PgSearch
   enum sex: { indeterminado: 1, femenino: 2, masculino: 3 }
 
   # Relaciones
@@ -18,6 +19,11 @@ class Patient < ApplicationRecord
       :with_patient_type_id,
     ]
   )
+
+  pg_search_scope :get_by_dni_and_fullname,
+    against: [ :dni, :first_name, :last_name ],
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   # Se definen ActiveRecord scopes para
   # :search_query, :sorted_by, :search_dni, :with_patient_type_id

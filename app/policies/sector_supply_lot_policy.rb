@@ -35,6 +35,12 @@ class SectorSupplyLotPolicy < ApplicationPolicy
     update?
   end
 
+  def archive?
+    unless record.archivado?
+      archive_ssl.any? { |role| user.has_role?(role) }
+    end
+  end
+
   def destroy?
     destroy_ssl.any? { |role| user.has_role?(role) }
   end
@@ -54,15 +60,19 @@ class SectorSupplyLotPolicy < ApplicationPolicy
   private
 
   def see_ssl
-    [ :admin, :farmaceutico, :enfermero ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
   end
 
   def new_ssl
-    [ :admin, :farmaceutico, :enfermero ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
+  end
+
+  def archive_ssl
+    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 
   def destroy_ssl
-    [ :admin, :farmaceutico, :enfermero ]
+    [ :admin ]
   end
 
   def purge_ssl

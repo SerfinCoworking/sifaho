@@ -106,9 +106,9 @@
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="lots">
                     <% SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(@supply).each do |lot| %>
-                      <tr>
+                      <tr id="lot_<%= lot.id %>">
                         <td><%= lot.lot_code %></td>
                         <td><%= lot.laboratory %></td>
                         <td><%= lot.supply_lot.expiry_date? ? lot.supply_lot.expiry_date.strftime("%m/%y") : "No vence" %></td>
@@ -129,10 +129,10 @@
                               <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
                             <% end %>
                           <% end %>
-                          <% if policy(lot).delete? %>
-                            <%= link_to delete_sector_supply_lot_path(lot), remote: true,
-                              class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-                              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                          <% if policy(lot).archive? %>
+                            <%= link_to archive_confirm_sector_supply_lot_path(lot), remote: true,
+                              class: 'btn btn-warning btn-xs', title: 'Archivar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                              <%= content_tag(:span, '', class: 'glyphicon glyphicon-folder-close') %>
                             <% end %>
                           <% end %>
                         </td>
@@ -143,7 +143,7 @@
               </div>
               <div class="col-md-4">
                 <%
-                  lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+                  lots = SectorSupplyLot.lots_for_sector(current_user.sector).without_status(4).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
                   status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
                   colors = []
                   lots.each do |status, _|
@@ -214,7 +214,7 @@
                 </div>
                 <div class="col-md-12">
                   <%
-                    lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
+                    lots = SectorSupplyLot.lots_for_sector(current_user.sector).without_status(4).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
                     status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }
                     colors = []
                     lots.each do |status, _|

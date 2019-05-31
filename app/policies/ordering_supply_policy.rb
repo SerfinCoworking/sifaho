@@ -172,11 +172,11 @@ class OrderingSupplyPolicy < ApplicationPolicy
   end
 
   def send_order
-    [ :admin, :farmaceutico, :enfermero ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
   end
 
   def return_status
-    [ :admin, :farmaceutico, :enfermero ]
+    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
   end
 
   def update_pres

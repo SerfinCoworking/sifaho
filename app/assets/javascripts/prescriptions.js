@@ -34,29 +34,6 @@ $(document).on('turbolinks:load', function() {
     $(this).select();
   });
 
-
-  // Función para autocompletar matrícula del doctor
-  jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
-    return $('#prof_enrollment').autocomplete({
-      source: $('#prof_enrollment').data('autocomplete-source'),
-      minLength: 2,
-      select:
-      function (event, ui) {
-        $("#professional_id").val(ui.item.id);
-        $("#professional").val(ui.item.fullname);
-        $('#patient_dni').focus();
-      },
-      response: function(event, ui) {
-        if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró al doctor" };
-            ui.content.push(noResult);
-        }
-      }
-    })
-  });
-
   // Función para autocompletar nombre y apellido del doctor
   jQuery(function() {
     var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
@@ -67,30 +44,31 @@ $(document).on('turbolinks:load', function() {
       select:
       function (event, ui) {
         $("#professional_id").val(ui.item.id);
-        $("#prof_enrollment").val(ui.item.enrollment);
-        $('#patient_dni').focus();
       },
       response: function(event, ui) {
         if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró al doctor" };
-            ui.content.push(noResult);
+          var noResult = { value:"",label:"No se encontró al doctor" };
+          ui.content.push(noResult);
+        }else{
+          $.ajax({
+            url: "/prescriptions/get_by_patient_id", // Ruta del controlador
+            type: 'GET',
+            data: {
+              term: $('#patient_id').val()
+            },
+            dataType: "json",
+            error: function(XMLHttpRequest, errorTextStatus, error){
+              alert("Failed: "+ errorTextStatus+" ;"+error);
+            },
+            success: function(data){
+              if (!data.length) {
+                $('#non-pre-mes').collapse();
+              }else{
+                $('#non-pre-mes').collapse();
+              } // End if
+            }// End success
+          });// End ajax
         }
-      }
-    })
-  });
-
-  // Función para autocompletar DNI del paciente
-  jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
-    return $('#patient_dni').autocomplete({
-      source: $('#patient_dni').data('autocomplete-source'),
-      minLength: 2,
-      select:
-      function (event, ui) {
-        $("#patient_id").val(ui.item.id);
-        $("#patient").val(ui.item.fullname);
-        $('.supply-code').focus();
       }
     })
   });
@@ -113,7 +91,39 @@ $(document).on('turbolinks:load', function() {
         $("#patient").tooltip('hide');
         $("#patient_id").val(ui.item.id);
         $("#patient_dni").val(ui.item.dni);
-        $('.supply-code').focus();
+        $.ajax({
+          url: "/prescriptions/get_by_patient_id", // Ruta del controlador
+          type: 'GET',
+          data: {
+            term: ui.item.id
+          },
+          dataType: "json",
+          error: function(XMLHttpRequest, errorTextStatus, error){
+            alert("Failed: "+ errorTextStatus+" ;"+error);
+          },
+          success: function(data){
+            console.log(data);
+            if (!data.length) {
+              $('#non-pres').toggleClass('hidden', false);
+              $('#pat-pres').toggleClass('hidden', true);
+            }else{
+              for(var i in data)
+              {
+                $("#pat-pres-body").append(
+                  "<tr>"+
+                    '<td>'+data[i].order_type+'</td>'+
+                    '<td>'+data[i].professional+'</td>'+
+                    '<td>'+data[i].supply_count+'</td>'+
+                    '<td>'+data[i].status+'</td>'+
+                    '<td>'+data[i].created_at+'</td>'+
+                  "</tr>"
+                );
+              }
+              $('#non-pres').toggleClass('hidden', true);
+              $('#pat-pres').toggleClass('hidden', false);
+            } // End if
+          }// End success
+        });// End ajax
       }
     })
   });
@@ -154,12 +164,6 @@ $(document).on('turbolinks:load', function() {
       var request_quantity = nested_form.find(".request-quantity");
       var treat_durat = nested_form.find(".treat-durat");
       request_quantity.val( treat_durat.val() * _this.val());
-    });
-  });
-
-  $(document).on("keyup change",".request-quantity", function() {
-    var _this = $(this);
-    jQuery(function() {
     });
   });
 });
