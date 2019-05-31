@@ -55,7 +55,6 @@
             <tr>
               <th>Cód Ins</th>
               <th>Insumo</th>
-              <th>Dosis</th>
               <th><%= @prescription.dispensada? ? 'Entregado' : 'A entregar' %></th>
               <th>Lote</th>
               <th>Laboratorio</th>
@@ -72,12 +71,6 @@
                 </td>
                 <td>
                   <%= qosl.supply_name %>
-                </td>
-                <td>
-                  <%= qosl.treatment_duration %> <%= 'Día'.pluralize(qosl.treatment_duration) %>
-                </td>
-                <td>
-                  <%= qosl.daily_dose %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
                 </td>
                 <td>
                   <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>

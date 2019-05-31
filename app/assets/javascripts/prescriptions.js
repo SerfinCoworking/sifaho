@@ -49,25 +49,6 @@ $(document).on('turbolinks:load', function() {
         if (!ui.content.length) {
           var noResult = { value:"",label:"No se encontró al doctor" };
           ui.content.push(noResult);
-        }else{
-          $.ajax({
-            url: "/prescriptions/get_by_patient_id", // Ruta del controlador
-            type: 'GET',
-            data: {
-              term: $('#patient_id').val()
-            },
-            dataType: "json",
-            error: function(XMLHttpRequest, errorTextStatus, error){
-              alert("Failed: "+ errorTextStatus+" ;"+error);
-            },
-            success: function(data){
-              if (!data.length) {
-                $('#non-pre-mes').collapse();
-              }else{
-                $('#non-pre-mes').collapse();
-              } // End if
-            }// End success
-          });// End ajax
         }
       }
     })
@@ -112,7 +93,7 @@ $(document).on('turbolinks:load', function() {
                 $("#pat-pres-body").append(
                   "<tr>"+
                     '<td>'+data[i].order_type+'</td>'+
-                    '<td>'+data[i].professional+'</td>'+
+                    '<td class="pres-col-pro">'+data[i].professional+'</td>'+
                     '<td>'+data[i].supply_count+'</td>'+
                     '<td>'+data[i].status+'</td>'+
                     '<td>'+data[i].created_at+'</td>'+
