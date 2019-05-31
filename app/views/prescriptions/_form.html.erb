@@ -4,7 +4,7 @@
     <div class='col-md-6'>
       <div class='row'>
         <div class="col-md-6">
-          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'cronica' } %>
+          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
           <%= f.label :professional_id do %>
             Profesional
             <% if f.object.cronic_dispensations.count == 0 %>
