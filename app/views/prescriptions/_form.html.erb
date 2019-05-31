@@ -88,7 +88,33 @@
         </div>
       </div>
     </div>
-    <div class='col-md-6'>
+    <div class="col-md-6 hidden" id="non-pres">
+      <div class="panel panel-info">
+          <div class="panel-heading">Aún no tiene prescripciones.</div>
+      </div>
+    </div>
+    <div class='col-md-6 hidden' id="pat-pres">
+      <div class="row panel-pres">
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Últimas prescripciones</div>
+            <table class="table table-hover table-condensed">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Profesional</th>
+                  <th>Insumos</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="pat-pres-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <hr>
