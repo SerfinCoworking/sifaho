@@ -88,6 +88,7 @@ $(document).on('turbolinks:load', function() {
               $('#non-pres').toggleClass('hidden', false);
               $('#pat-pres').toggleClass('hidden', true);
             }else{
+              $("#pat-pres-body").html("");
               for(var i in data)
               {
                 $("#pat-pres-body").append(
