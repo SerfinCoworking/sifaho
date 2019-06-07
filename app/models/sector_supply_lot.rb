@@ -118,8 +118,12 @@ class SectorSupplyLot < ApplicationRecord
   end
 
   def increment(a_quantity)
-    self.quantity = 0 unless self.quantity.present?
-    self.quantity += a_quantity
+    if self.quantity.present?
+      self.quantity += a_quantity
+    else
+      self.quantity = 0
+    end
+    if self.archivado?; self.vigente!; end
     self.save!
   end
 

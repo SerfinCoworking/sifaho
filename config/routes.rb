@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   mount Notifications::Engine => "/notifications"
   # devise_for :users, :controllers => { registrations: 'registrations' }
   devise_for :users, :skip => [:registrations], :controllers => {:sessions => :sessions}
+
   as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
@@ -44,6 +45,7 @@ Rails.application.routes.draw do
     end 
   end 
 
+  resources :laboratories, path_names: { new: 'nuevo', edit: 'editar' }
   resources :laboratories do
     member do
       get "delete"

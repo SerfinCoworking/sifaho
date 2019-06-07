@@ -1,5 +1,7 @@
 module Api::V1
   class PatientsController < ApiController
+    skip_before_action :verify_authenticity_token
+    
     # GET /v1/patients
     def index
       patients = Patient.all
