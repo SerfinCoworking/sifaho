@@ -243,10 +243,9 @@ class SectorSupplyLot < ApplicationRecord
 
   # Se asigna la cantidad inicial
   def assign_constants
-    if self.initial_quantity.present? && self.initial_quantity < self.quantity # Si se edita y coloca una cantidad mayor a la inicial
+    if self.initial_quantity < self.quantity # Si se edita y coloca una cantidad mayor a la inicial
       self.initial_quantity = self.quantity # Se vuelve a asignar la cantidad inicial
     end
-    self.initial_quantity = self.quantity unless initial_quantity.present?
   end
 
   # Métodos de clase #----------------------------------------------------------
