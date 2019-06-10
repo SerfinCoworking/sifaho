@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_135248) do
+ActiveRecord::Schema.define(version: 2019_06_10_175007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -167,11 +167,6 @@ ActiveRecord::Schema.define(version: 2019_06_07_135248) do
     t.index ["remit_code"], name: "index_internal_orders_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_internal_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_internal_orders_on_sent_request_by_id"
-  end
-
-  create_table "jwt_blacklist", force: :cascade do |t|
-    t.string "jti", null: false
-    t.index ["jti"], name: "index_jwt_blacklist_on_jti"
   end
 
   create_table "laboratories", force: :cascade do |t|
@@ -482,7 +477,7 @@ ActiveRecord::Schema.define(version: 2019_06_07_135248) do
     t.integer "sector_id"
     t.integer "supply_lot_id"
     t.integer "status", default: 0
-    t.integer "quantity"
+    t.integer "quantity", default: 0
     t.integer "initial_quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
