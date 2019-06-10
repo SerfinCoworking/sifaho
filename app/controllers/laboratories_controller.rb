@@ -1,6 +1,6 @@
 class LaboratoriesController < ApplicationController
   before_action :set_laboratory, only: [:show, :edit, :update, :destroy, :delete]
-
+  
   # GET /laboratories
   # GET /laboratories.json
   def index

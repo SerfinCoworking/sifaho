@@ -45,7 +45,6 @@ Rails.application.routes.draw do
     end 
   end 
 
-  resources :laboratories, path_names: { new: 'nuevo', edit: 'editar' }
   resources :laboratories do
     member do
       get "delete"
