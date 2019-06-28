@@ -15,7 +15,7 @@ class PatientsController < ApplicationController
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :sorted_by,
-        :search_query,
+        :search_fullname,
         :search_dni,
         :with_patient_type_id,
       ],
@@ -36,6 +36,7 @@ class PatientsController < ApplicationController
   def new
     @patient = Patient.new
     @patient_types = PatientType.all
+    @patient.patient_phones.build
   end
 
   # GET /patients/1/edit
@@ -49,11 +50,13 @@ class PatientsController < ApplicationController
     @patient = Patient.new(patient_params)
 
     respond_to do |format|
-      if @patient.save!
+      if @patient.save
         flash.now[:success] = @patient.full_info+" se ha creado correctamente."
+        format.html { redirect_to @patient }
         format.js
       else
-        flash.now[:error] = "El paciente no se ha podido crear."
+        flash[:error] = "El paciente no se ha podido crear."
+        format.html { render :new }
         format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
@@ -110,7 +113,7 @@ class PatientsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def patient_params
       params.require(:patient).permit(:first_name, :last_name, :dni,
-                            :email, :birthdate, :phone, :sex, :patient_type_id,
-                            :is_chronic, :is_urban, :cell_phone)
+        :email, :birthdate, :sex, :marital_status,
+        patient_phones_attributes: [:id, :phone_type, :number, :_destroy])
     end
 end

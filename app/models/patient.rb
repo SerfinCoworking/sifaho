@@ -1,10 +1,15 @@
 class Patient < ApplicationRecord
   include PgSearch
-  enum sex: { indeterminado: 1, femenino: 2, masculino: 3 }
+  enum status: { Temporal: 0, Validado: 1 }
+  enum sex: { Otro: 1, Femenino: 2, Masculino: 3 }
+  enum marital_status: { Soltero: 1, Casado: 2, Separado: 3, Divorciado: 4, Viudo: 5, otro: 6 }
 
   # Relaciones
-  belongs_to :patient_type, optional: true
+  belongs_to :address, optional: true
   has_many :prescriptions, -> { with_deleted }, dependent: :destroy
+  has_one_attached :avatar
+  has_many :patient_phones, :dependent => :destroy
+    accepts_nested_attributes_for :patient_phones, :allow_destroy => true
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :dni
@@ -14,7 +19,7 @@ class Patient < ApplicationRecord
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :sorted_by,
-      :search_query,
+      :search_fullname,
       :search_dni,
       :with_patient_type_id,
     ]
@@ -25,31 +30,15 @@ class Patient < ApplicationRecord
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
-  # Se definen ActiveRecord scopes para
-  # :search_query, :sorted_by, :search_dni, :with_patient_type_id
-  scope :search_query, lambda { |query|
-    #Se retorna nil si no hay texto en la query
-    return nil  if query.blank?
-
-    # Se pasa a minusculas para busqueda en postgresql
-    # Luego se dividen las palabras en claves individuales
-    terms = query.downcase.split(/\s+/)
-
-    # Remplaza "*" con "%" para busquedas abiertas con LIKE
-    # Agrega '%', remueve los '%' duplicados
-    terms = terms.map { |e|
-      (e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-
-    # Cantidad de condiciones.
-    num_or_conds = 2
-    where(
-      terms.map { |term|
-        "(LOWER(patients.first_name) LIKE ? OR LOWER(patients.last_name) LIKE ?)"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conds }.flatten
-    )
-  }
+  pg_search_scope :search_fullname,
+    against: [ :first_name, :last_name ],
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+    
+  pg_search_scope :search_dni,
+    against: [ :dni ],
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes. 
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -58,7 +47,7 @@ class Patient < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("patients.created_at #{ direction }")
-    when /^fecha_nacimiento_/
+    when /^nacimiento_/
       # Ordenamiento por fecha de creación en la BD
       order("patients.birthdate #{ direction }")
     when /^dni_/
@@ -70,25 +59,11 @@ class Patient < ApplicationRecord
     when /^apellido_/
       # Ordenamiento por apellido de paciente
       order("LOWER(patients.last_name) #{ direction }")
-    when /^tipo_de_paciente_/
-      # Ordenamiento por nombre de tipo de paciente
-      order("patient_types.name #{ direction }").joins(:patient_type)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
-
-  scope :search_dni, lambda { |query|
-    string = query.to_s
-    where('patients.dni::text LIKE ?', "#{string}%")
-  }
-
-  # filters on 'sector_id' foreign key
-  scope :with_patient_type_id, lambda { |type_ids|
-    where(patient_type_id: [*type_ids])
-  }
-
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
@@ -97,7 +72,6 @@ class Patient < ApplicationRecord
       ['Creación (desc)', 'created_at_desc'],
       ['Nombre (a-z)', 'nombre_asc'],
       ['Apellido (a-z)', 'apellido_asc'],
-      ['Tipo de paciente', 'tipo_de_paciente_asc'],
     ]
   end
 
@@ -108,5 +82,14 @@ class Patient < ApplicationRecord
 
   def fullname
     self.first_name+" "+self.last_name
+  end
+
+  def age_string
+    if self.birthdate.present?
+      age = ((Time.zone.now - self.birthdate.to_time) / 1.year.seconds).floor
+      age.to_s+" años"
+    else
+      "----"
+    end
   end
 end

@@ -49,4 +49,14 @@ module ApplicationHelper
       main_app.url_for(user.profile.avatar.variant(resize: "#{size}x#{size}^", gravity: "center",crop: "#{size}x#{size}+0+0"))
     end
   end
+
+  def patient_avatar(patient, size=40)
+    if patient.avatar.attached?
+      main_app.url_for(patient.avatar.variant(resize: "#{size}x#{size}^", gravity: "center",crop: "#{size}x#{size}+0+0"))
+    else
+      patient.avatar.attach(io: File.open(Rails.root.join("app", "assets", "images", "profile-placeholder.png")), filename: 'profile-placeholder.png' , content_type: "image/png")
+      patient.save
+      main_app.url_for(patient.avatar.variant(resize: "#{size}x#{size}^", gravity: "center",crop: "#{size}x#{size}+0+0"))
+    end
+  end
 end

@@ -20,7 +20,8 @@ class User < ApplicationRecord
   after_create :create_profile
 
   def create_profile
-    first_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "givenname").first
+    # first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
+    first_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "givenname").first # Comment in production
     last_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "sn").first
     email = Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").first
     dni = Devise::LDAP::Adapter.get_ldap_param(self.username, "uid").first

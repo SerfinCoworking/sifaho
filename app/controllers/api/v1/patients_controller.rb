@@ -14,8 +14,42 @@ module Api::V1
     end
 
     def create
-      patient = Patient.new(patient_params)
+      _dni = params[:_json][0][:identifier][0][:value]
+      _last_name = params[:_json][0][:name][0][:family]
+      _first_name = params[:_json][0][:name][0][:given]
+      if is_birthdate_in_params?
+        _birthdate = params[:_json][0][:birthDate].to_datetime
+      end
+      # Create Country, State and City.
+      if is_address_in_params?
+        _country = Country.where(name: params[:_json][0][:address][0][:country]).first_or_create(name: params[:_json][0][:address][0][:country])
+        _state = State.where(name: params[:_json][0][:address][0][:state]).first_or_create(name: params[:_json][0][:address][0][:state], country_id: _country.id)
+        _city = City.where(name: params[:_json][0][:address][0][:city]).first_or_create(name: params[:_json][0][:address][0][:city], state_id: _state.id )
+      end
+      _marital_status = initialize_marital_status
+      _gender = initialize_gender
+          
+      patient = Patient.where(dni: _dni).first_or_initialize(dni: _dni, last_name: _last_name, first_name: _first_name)
+      patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, sex: _gender)
+      if is_address_in_params?
+        if patient.address.present?
+          patient.address.update_attributes(
+            postal_code: params[:_json][0][:address][0][:postalCode],
+            city_id: _city.id,
+            line: params[:_json][0][:address][0][:line][0]
+          )
+        else
+          patient.address = Address.create(
+            postal_code: params[:_json][0][:address][0][:postalCode],
+            city_id: _city.id,
+            line: params[:_json][0][:address][0][:line][0]
+          )
+        end
+      end
+
+      # Update or create the address.
       if patient.save
+        patient.Validado!
         render json: patient, status: :created
       else
         render json: { errors: patient.errors }, status: :unprocessable_entity
@@ -32,9 +66,56 @@ module Api::V1
     end
 
     private
-  
+    def is_address_in_params?
+      params[:_json][0][:address].present?
+    end
+
+    def is_birthdate_in_params?
+      params[:_json][0][:birthDate].present?
+    end
+
+    def initialize_marital_status
+      if params[:_json][0][:maritalStatus].present?
+        return case params[:_json][0][:maritalStatus][:text]
+        when "unmarried"
+          "Soltero"
+        when "married"
+          "Casado"
+        when "legallySeparated"
+          "Separado"
+        when "divorced"
+          "Divorciado"
+        when "widowded"
+          "Viudo"
+        else
+          "otro"
+        end      
+      else
+        return "Soltero"
+      end
+    end
+
+    def initialize_gender
+      if params[:_json][0][:gender].present?
+        return case params[:_json][0][:gender]
+        when "male"
+          "Masculino"
+        when "female"
+          "Femenino"
+        else
+          "Otro"
+        end
+      else
+        return "Otro"
+      end
+    end
+
     def patient_params
-      params.require(:patient).permit(:dni, :first_name, :last_name, :birthdate, :patient_type)
+      params.require(:active)
+            .require(:name)
+            .require(:gender)
+            .require(:birthdate)
+            .require(:maritalStatus)
     end
   end
 end

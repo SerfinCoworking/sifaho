@@ -8,31 +8,24 @@
     <div class="panel-rightbody">
       <%= form_for_filterrific @filterrific do |f| %>
           <div class="col-md-3 col-sm-3">
-            <label>Buscar</label>
+            <label>DNI</label>
+            <%= f.text_field(
+              :search_dni,
+              class: 'filterrific-periodically-observed form-control input-sm'
+                ) %>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <label>Nombre o Apellido</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
-              :search_query,
-              class: 'filterrific-periodically-observed form-control',
-              placeholder: 'Nombre o apellido',
+              :search_fullname,
+              class: 'filterrific-periodically-observed form-control input-sm',
               autocomplete: 'off'
             ) %>
           </div>
           <div class="col-md-3 col-sm-3">
-            <label>Buscar</label>
-            <%= f.text_field(
-              :search_dni,
-              class: 'filterrific-periodically-observed form-control',
-                placeholder: 'DNI'
-                ) %>
-              </div>
-          <div class="col-md-2 col-sm-3">
-            <label>Tipo de paciente</label>
-            <%= f.select( :with_patient_type_id, @filterrific.select_options[:with_patient_type_id],
-                { include_blank: 'Todos' }, {class: 'form-control'} ) %>
-          </div>
-          <div class="col-md-2 col-sm-3">
             <label>Ordenar por</label>
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
           </div>
           <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>

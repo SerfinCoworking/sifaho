@@ -1,0 +1,26 @@
+
+<tr class="nested-fields">
+  <td>
+    <%= f.input :phone_type, label: false, include_blank: false,
+      collection: PatientPhone.phone_types,
+      :value_method => :first,
+      :input_html => {
+        required: true,
+        include_blank: false,
+        class: 'selectpicker',
+        "data-width"=>"100%",
+        "data-size"=>"10",
+        value: "#{ f.object.phone_type }"
+      } 
+    %>
+  </td>
+  <td>
+    <%= f.input :number, label: false, :input_html => { class: "input-sm"} %>
+  </td>
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+    <% end %>
+  </td>
+</tr>

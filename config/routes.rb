@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'report/newOrderingSupply'
 
+  post 'auth/login', to: 'authentication#authenticate'
   resources :categories
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount Notifications::Engine => "/notifications"

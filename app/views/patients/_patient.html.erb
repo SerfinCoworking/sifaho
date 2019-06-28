@@ -1,13 +1,19 @@
 <tr id="patient_<%= patient.id %>">
   <div class="js-fade fade-in is-paused">
-    <td><%= patient.first_name %></td>
-    <td><%= patient.last_name %></td>
     <td><%= patient.dni %></td>
-    <td><%= patient.birthdate.present? ? patient.birthdate.next_day().strftime("%d/%m/%Y") : '----' %></td>
+    <td><strong><%= patient.last_name %></strong>, <%= patient.first_name %></td>
+    <td>
+      <span class="label label-<%= patient.Temporal? ? "warning" : "success"%>">
+        <%= patient.status %>
+      </span>
+    </td>
+    <td>
+      <%= patient.birthdate.present? ? patient.birthdate.strftime("%d/%m/%Y")  : '----' %>
+    </td>
+    <td><%= patient.age_string %></td>
     <% @count_pres = patient.prescriptions.count %>
-    <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
     <td><%= patient.sex.humanize %></td>
-    <td><%= patient.patient_type.name %></td>
+    <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
     <td>
       <% if policy(patient).show? %>
         <%= link_to patient_path(patient), class: 'btn btn-default btn-xs',

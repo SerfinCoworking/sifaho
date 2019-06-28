@@ -1,52 +1,21 @@
 $(document).on('turbolinks:load', function() { 
-  $('#patient_birthdate').datetimepicker({ format: 'DD/MM/YYYY' });
-  $('#patient_type').chosen({
-      allow_single_deselect: true,
-      no_results_text: 'No se encontró el resultado',
-      width: '150px'});
-  $("[name='sex-check']").bootstrapSwitch({
-    offColor: "default",
-    onColor: "default",
-    labelWidth: 5,
-    labelText: "Sexo",
-    indeterminate: true,
-    onText: "Hombre",
-    offText: "Mujer"
-  });
-
-  $('input[name="sex-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    if(state){
-      document.getElementById("sex").value = 3;
-    }else{
-      document.getElementById("sex").value = 2;
-    }
-  });
-
-  $("[name='chronic-check']").bootstrapSwitch({
-    offColor: "default",
-    onColor: "primary",
-    onText: "Si",
-    offText: "No",
-    labelText: "Crónico?",
-  });
-
-  $('input[name="chronic-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    document.getElementById("is_chronic").value = state;
-  });
-
-  $("[name='urban-check']").bootstrapSwitch({
-    offColor: "default",
-    onColor: "primary",
-    onText: "No",
-    offText: "Si",
-    labelText: "Urbano?"
+  $('.patient_phones').on('cocoon:after-insert', function(e, insertedItem) {
+    console.log("agrego")
+    $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
   
-  $('input[name="chronic-check"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    if(state){
-      document.getElementById("is_urban").value = false;
-    }else{
-      document.getElementById("is_urban").value = true;
-    }
+  $(document).on('click', '#pat-pres tr', function() {
+    var link = $(this).data('href');
+    console.log("entro")
+     $.ajax({
+         type: 'GET',
+         url: link
+     });
   });
+});
+$(document).on('turbolinks:load', function() { 
+  const $pickerInput = $('.date_time_picker input.date_time_picker');
+  const initialValue = $pickerInput.val();
+  $('.date_time_picker > .input-group.date').datetimepicker({ format: 'DD/MM/YYYY' });
+  return $pickerInput.val(initialValue);
 });

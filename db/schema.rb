@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_10_181427) do
+ActiveRecord::Schema.define(version: 2019_06_25_164653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -36,6 +36,15 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "postal_code"
+    t.text "line"
+    t.bigint "city_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_addresses_on_city_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -104,6 +113,19 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.bigint "state_id"
+    t.string "name"
+    t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.string "iso2"
+    t.string "iso3"
+    t.string "phone_code"
   end
 
   create_table "cronic_dispensations", force: :cascade do |t|
@@ -306,6 +328,15 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
     t.index ["user_id"], name: "index_ordering_supply_movements_on_user_id"
   end
 
+  create_table "patient_phones", force: :cascade do |t|
+    t.integer "phone_type", default: 1
+    t.string "number"
+    t.bigint "patient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_patient_phones_on_patient_id"
+  end
+
   create_table "patient_types", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -319,15 +350,13 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
     t.integer "dni"
     t.integer "sex", default: 1
     t.datetime "birthdate"
-    t.boolean "is_chronic"
-    t.boolean "is_urban"
-    t.string "phone", limit: 20
-    t.string "cell_phone", limit: 20
     t.string "email", limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.bigint "patient_type_id", default: 1
-    t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
+    t.bigint "address_id"
+    t.integer "marital_status", default: 1
+    t.integer "status", default: 0
+    t.index ["address_id"], name: "index_patients_on_address_id"
   end
 
   create_table "prescription_movements", force: :cascade do |t|
@@ -496,6 +525,12 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
+  create_table "states", force: :cascade do |t|
+    t.bigint "country_id"
+    t.string "name"
+    t.index ["country_id"], name: "index_states_on_country_id"
+  end
+
   create_table "supplies", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -596,11 +631,13 @@ ActiveRecord::Schema.define(version: 2019_06_10_181427) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addresses", "cities"
   add_foreign_key "bed_orders", "patients"
   add_foreign_key "bedrooms", "sectors"
   add_foreign_key "beds", "bedrooms"
   add_foreign_key "medications", "medication_brands"
-  add_foreign_key "patients", "patient_types"
+  add_foreign_key "patient_phones", "patients"
+  add_foreign_key "patients", "addresses"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"

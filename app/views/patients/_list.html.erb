@@ -1,16 +1,16 @@
 <div id="filterrific_results">
   <% if @patients.present? %>
     <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
+      <table class="table table-hover table-striped">
         <thead>
           <tr>
-            <th><%= filterrific_sorting_link(@filterrific, :nombre) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :apellido) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :dni) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :fecha_nacimiento) %></th>
-            <th>Prescripciones</th>
+            <th><%= filterrific_sorting_link(@filterrific, :apellido_y_nombre) %></th>
+            <th>Estado</th>
+            <th><%= filterrific_sorting_link(@filterrific, :nacimiento) %></th>
+            <th>Edad</th>
             <th>Sexo</th>
-            <th>Tipo</th>
+            <th>Prescripciones</th>
             <th colspan="3">Acciones</th>
           </tr>
         </thead>

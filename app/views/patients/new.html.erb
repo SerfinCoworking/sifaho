@@ -1,10 +1,10 @@
 <%= render 'header' %>
 <div class="row">
-  <div class="col-md-7 col-md-offset-2">
+  <div class="col-md-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo paciente
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo paciente temporal
           <%= link_to :back, class: 'btn pull-right close-btn' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
           <% end %>
@@ -16,7 +16,7 @@
       <div class="panel-footer text-right">
         <%= link_to 'Volver', patients_path, class: 'btn' %>
         <button type='submit' name='commit' class='btn btn-success' form='new_patient'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Crear
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
         </button>
       </div>
     </div>

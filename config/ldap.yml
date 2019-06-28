@@ -39,7 +39,7 @@ test:
   host: ldap.forumsys.com
   port: 389
   attribute: uid
-  base: cn=read-only-admin,dc=example,dc=com
+  base: dc=example,dc=com
   ssl: false
   # <<: *AUTHORIZATIONS
 

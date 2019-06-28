@@ -5,7 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# To authorize Jason Web Token
 gem 'jwt'
 # To protect API from attacks
 gem 'rack-attack'
