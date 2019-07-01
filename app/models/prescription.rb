@@ -115,7 +115,7 @@ class Prescription < ApplicationRecord
   end
 
   def delivered_with_sector?(a_sector)
-    if self.dispensada?
+    if self.dispensada? && self.dispensed_by.present?
       return self.dispensed_by.sector == a_sector
     end
   end
