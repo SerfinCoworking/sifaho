@@ -17,8 +17,13 @@
     <header>
       <%= render 'layouts/navigation' %>
     </header>
-    <main role="main">
-      <div class="col-md-10 cols-sm-10">
+
+    <div id="mySidebar" class="sidebar">
+      <%= render 'layouts/side_navigation_links' %>
+    </div>
+
+    <main role="main" id="main">
+      <div class="col-md-12 cols-sm-12" id="body-col">
         <% if user_signed_in? %>
           <div class="panel-heading" id="page-header"><h3 class="panel-heading custom-header"><%= yield :page_header %></h3></div>
         <% end %>
@@ -26,6 +31,7 @@
           <div class="row">
             <%= render "shared/dialog" %>
             <%= render "layouts/flash_notices" %>
+            <button id="openbtn" class="openbtn" onmouseover="openNav()">☰</button> 
             <%= yield %>
             <div class="footer">
               <%= yield :page_footer %>
@@ -36,3 +42,5 @@
     </main>
   </body>
 </html>
+<script>
+</script>

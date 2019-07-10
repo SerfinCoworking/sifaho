@@ -7,8 +7,8 @@
       </div>
       <div class="panel-body">
         <%= line_chart @prescriptions
-          .group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%d/%m/%Y").count, 
-          discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+          .group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%a %d/%m").count, 
+          discrete: true, label: 'Cantidad', adapter: "highcharts" %>
       </div>
     <% end %>
     <div class="panel-heading">

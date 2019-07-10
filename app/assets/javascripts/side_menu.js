@@ -9,24 +9,19 @@ $(document).on('turbolinks:load', function() {
   var sidebar = document.getElementById('custom-sidebar');
   var page_header = document.getElementById('page-header');
   // Se cambia el color de la sombra del menú lateral
-  if( $(".active").is("#pedidos-li") ) {
-    sidebar.style.boxShadow = "8px 0 3px 5px #59457c";
+  if( $(".active").is("#pedido") ) {
     page_header.style.background = "#59457c";
     page_header.style.borderColor = "#59457c";
-  }else if ( $(".active").is("#stock-li") ) {
-    sidebar.style.boxShadow = "8px 0 3px 5px #10675f";
+  }else if ( $(".active").is("#stock") ) {
     page_header.style.background = "#10675f";
     page_header.style.borderColor = "#10675f";
-  }else if ( $(".active").is("#efectores-li") ){
-    sidebar.style.boxShadow = "8px 0 3px 5px #89726a";
+  }else if ( $(".active").is("#efector") ){
     page_header.style.background = "#89726a";
     page_header.style.borderColor = "#89726a";
-  }else if ( $(".active").is("#notificaciones-li") ){
-    sidebar.style.boxShadow = "8px 0 3px 5px #d36262";
+  }else if ( $(".active").is("#notificacion") ){
     page_header.style.background = "#d36262";
     page_header.style.borderColor = "#d36262";
   }else {
-    sidebar.style.boxShadow = "8px 0 3px 5px #7c9ed4";
     page_header.style.background = "#7c9ed4";
     page_header.style.borderColor = "#7c9ed4";
   }

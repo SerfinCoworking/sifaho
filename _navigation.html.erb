@@ -1,3 +1,13 @@
+<%# navigation styled for Bootstrap 3.0 %>
+<div class="col-sm-2 col-md-2 sidebar-nav">
+  <% if current_user.present? %>
+    <div class="span3 bs-docs-sidebar">
+      <ul id="custom-sidebar" class="nav nav-pills nav-pills-cust nav-stacked col-md-3" style="top: 50px;max-width: 200px;background-color:#222222;left:0px;height: 100%;">
+        <%= render 'layouts/side_navigation_links' %>
+      </ul>
+    </div>
+  <% end %>
+</div>
 <nav id="custom-bootstrap-menu" class="navbar navbar-default navbar-default-cust navbar-fixed-top">
   <div class="container-fullwidth">
     <div class="navbar-header">
