@@ -33,7 +33,9 @@
           <div class="row">
             <%= render "shared/dialog" %>
             <%= render "layouts/flash_notices" %>
-            <button id="openbtn" class="openbtn" onmouseover="openNav()">☰</button> 
+            <% if current_user.present? %>
+              <button id="openbtn" class="openbtn" onmouseover="openNav()">☰</button>
+            <%  end %> 
             <%= yield %>
             <div class="footer">
               <%= yield :page_footer %>
