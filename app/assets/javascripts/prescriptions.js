@@ -21,8 +21,6 @@ $(document).on('turbolinks:load', function() {
     });
   });
 
-  $('.selectpicker').selectpicker();
-
   $('.quantity_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
     $('.selectpicker').selectpicker();
   });

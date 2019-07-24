@@ -9,7 +9,7 @@
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
           :with_code,
-          class: 'filterrific-periodically-observed form-control',
+          class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Un número'
         ) %>
       </div>
@@ -18,7 +18,7 @@
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
           :search_supply,
-          class: 'filterrific-periodically-observed form-control',
+          class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Un nombre',
           autocomplete: 'off'
         ) %>
@@ -26,7 +26,7 @@
       <% if current_page?(controller: 'supplies') %>
         <div class="col-md-3 col-sm-3">
           <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
         </div>
       <% else %>
       <div class="col-md-3 col-sm-3">

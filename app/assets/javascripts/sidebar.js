@@ -6,10 +6,11 @@ function openNav() {
   jQuery(function() {
     $("#openbtn").hide(500);
   })
-  Highcharts.charts[0].reflow();
-  Highcharts.charts[1].reflow();
-  Highcharts.charts[2].reflow();
-  Highcharts.charts[3].reflow();
+  if ( Highcharts.charts.length > 0 ){
+    Highcharts.charts.forEach(function(chart) {
+      chart.reflow();
+    });
+  }
 }
 
 function closeNav() {
@@ -18,12 +19,13 @@ function closeNav() {
   document.getElementById("body-col").classList.remove('col-md-10');
   document.getElementById("body-col").classList.add('col-md-12');
   setTimeout(function() {
-   jQuery(function() {
-    $("#openbtn").fadeToggle(500);
-  })
-}, 300);
-  Highcharts.charts[0].reflow();
-  Highcharts.charts[1].reflow();
-  Highcharts.charts[2].reflow();
-  Highcharts.charts[3].reflow();
+    jQuery(function() {
+      $("#openbtn").fadeToggle(500);
+    })
+  }, 300);
+  if ( Highcharts.charts.length > 0 ){
+    Highcharts.charts.forEach(function(chart) {
+      chart.reflow();
+    });
+  }
 }

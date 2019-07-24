@@ -28,24 +28,6 @@ document.addEventListener("turbolinks:load", function() {
     })
   });
 
-  $('.new-expiry-date')
-  .datetimepicker({ 
-    format: 'MM/YY',
-    viewMode: 'months',
-    locale: 'es',
-    useCurrent: false
-  })
-  .on('dp.change',function(e)
-  {                               
-    var nested_form = $(this).parents(".nested-fields");
-    if ( !$(this).val()){
-      nested_form.find(".new-expiry-date-hidden").val('');
-    }else{
-      var end_of_month = new Date(e.date.endOf('month'));
-      $(this).data("DateTimePicker").date(end_of_month);
-      nested_form.find(".new-expiry-date-hidden").val(end_of_month);
-    }
-  });
 
   $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
     $('.new-expiry-date')

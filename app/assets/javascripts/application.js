@@ -44,6 +44,23 @@ $('[data-toggle="tooltip"]').tooltip({
 });
 
 $(document).on('turbolinks:load', function() {
+  $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
+    $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
+  });
+
+  $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker
+
+  $('.selectpicker-md').selectpicker({style: 'btn-default'});
+
+  var today = new moment();
+  $('#requested-date').datetimepicker({
+    format: 'DD/MM/YYYY',
+    date: today,
+    locale: 'es'
+  });
+
+  $(".required").prop('required', true);
+
   $('[data-toggle="tooltip"]').tooltip({
     'selector': '',
     'container':'body'
@@ -62,13 +79,44 @@ $(document).on('turbolinks:load', function() {
     href = $submit.attr('href');
     $submit.attr('href', href.replace('pony', $(this).data('id')));
   });
-
+  
   $('.return-confirm').click(function(e) {
     e.preventDefault();
     $('#return-confirm').data('id', $(this).data('id')).modal('show');
   });
 
+  $('#filterrific_with_professional_type_id').chosen({
+    allow_single_deselect: true,
+    no_results_text: 'No se encontró el resultado',
+    width: '150px'
+  });
+
+  $('.chosen-select').chosen({
+    allow_single_deselect: true,
+    no_results_text: 'No se encontró el resultado',
+    width: '200px'
+  });
+
+  $('.new-expiry-date')
+  .datetimepicker({ 
+    format: 'MM/YY',
+    viewMode: 'months',
+    locale: 'es',
+    useCurrent: false
+  })
+  .on('dp.change',function(e)
+  {                               
+    var nested_form = $(this).parents(".nested-fields");
+    if ( !$(this).val()){
+      nested_form.find(".new-expiry-date-hidden").val('');
+    }else{
+      var end_of_month = new Date(e.date.endOf('month'));
+      $(this).data("DateTimePicker").date(end_of_month);
+      nested_form.find(".new-expiry-date-hidden").val(end_of_month);
+    }
+  });
 });
+
 
 $(document).on('page:fetch', function(e) {
   $('.spinner').css('display', 'none');  //<--- hide again

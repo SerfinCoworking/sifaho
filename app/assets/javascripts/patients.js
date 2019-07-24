@@ -1,6 +1,5 @@
 $(document).on('turbolinks:load', function() { 
   $('.patient_phones').on('cocoon:after-insert', function(e, insertedItem) {
-    console.log("agrego")
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
   

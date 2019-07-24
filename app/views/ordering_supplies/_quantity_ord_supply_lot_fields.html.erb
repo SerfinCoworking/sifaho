@@ -7,7 +7,7 @@
         :input_html => {
           class: "new-supply-code select-change input-sm",
           data: { autocomplete_source: search_by_id_supplies_path },
-          size: 4,
+          size: 5,
           autocomplete: 'off'
         } 
       %>
@@ -19,10 +19,10 @@
         :input_html => {
           class: "new-supply-name select-change input-sm",
           data: { autocomplete_source: search_by_name_supplies_path },
-          size: 35,
+          size: 45,
           value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
           autocomplete: false
-        } 
+        }
       %>
       <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
     </td>
@@ -70,7 +70,7 @@
         :input_html => {
           class: "new-laboratory input-sm",
           data: { autocomplete_source: search_by_name_laboratories_path },
-          size: 25,
+          size: 35,
           value: "#{ if f.object.laboratory_id.present?; Laboratory.find_by_id(f.object.laboratory_id).name; end }",
           autocomplete: 'off'
         } 
