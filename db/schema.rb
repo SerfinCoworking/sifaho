@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_25_164653) do
+ActiveRecord::Schema.define(version: 2019_07_24_142653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -314,6 +314,16 @@ ActiveRecord::Schema.define(version: 2019_06_25_164653) do
     t.index ["remit_code"], name: "index_ordering_supplies_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_ordering_supplies_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_ordering_supplies_on_sent_request_by_id"
+  end
+
+  create_table "ordering_supply_comments", force: :cascade do |t|
+    t.bigint "ordering_supply_id"
+    t.bigint "user_id"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ordering_supply_id"], name: "index_ordering_supply_comments_on_ordering_supply_id"
+    t.index ["user_id"], name: "index_ordering_supply_comments_on_user_id"
   end
 
   create_table "ordering_supply_movements", force: :cascade do |t|
@@ -636,6 +646,8 @@ ActiveRecord::Schema.define(version: 2019_06_25_164653) do
   add_foreign_key "bedrooms", "sectors"
   add_foreign_key "beds", "bedrooms"
   add_foreign_key "medications", "medication_brands"
+  add_foreign_key "ordering_supply_comments", "ordering_supplies"
+  add_foreign_key "ordering_supply_comments", "users"
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "prescriptions", "patients"

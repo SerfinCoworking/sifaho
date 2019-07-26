@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :profiles, only: [ :edit, :update ]
+  resources :ordering_supply_comments, only: [ :create ]
   # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
   # patch '/profile', to: 'profiles#update'
   # Rescue errors

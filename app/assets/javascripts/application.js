@@ -115,6 +115,11 @@ $(document).on('turbolinks:load', function() {
       nested_form.find(".new-expiry-date-hidden").val(end_of_month);
     }
   });
+  $('.search-lots').click(function (event) {
+    var nested_form = $(this).parents(".nested-fields");
+    nested_form.find(".select-change").trigger('change');
+    nested_form.find('.search-lots').hide();
+  });
 });
 
 

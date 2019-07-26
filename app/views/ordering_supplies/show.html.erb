@@ -69,6 +69,13 @@
                 <span class="badge"><%= @ordering_supply.movements.count %></span>
               </a>
             </li>
+            <li>
+              <a data-toggle='tab' href='#comments'>
+                <span class="glyphicon glyphicon-comment"></span>
+                Comentarios
+                <span class="badge"><%= @ordering_supply.comments.count %></span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -233,6 +240,10 @@
           <div id='last_movements' class='tab-pane fade'>
             <!-- Tabla de movimientos -->
             <%= render '/shared/movements_table', order: @ordering_supply %>
+          </div> <!-- End last movements tab pane -->
+          <div id='comments' class='tab-pane fade'>
+            <!-- Tabla de movimientos -->
+            <%= render '/shared/comments', order: @ordering_supply, comment: OrderingSupplyComment.new %>
           </div> <!-- End last movements tab pane -->
         </div> <!-- End Tab content-->
       </div> <!-- End col-md-12 -->

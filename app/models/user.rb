@@ -12,6 +12,7 @@ class User < ApplicationRecord
   belongs_to :sector, optional: true
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy
+  has_many :ordering_supply_comments
 
   accepts_nested_attributes_for :profile, :professional
 

@@ -1,0 +1,2 @@
+class OrderingSupplyCommentController < ApplicationController
+end
