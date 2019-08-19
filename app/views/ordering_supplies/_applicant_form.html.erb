@@ -96,18 +96,6 @@
           html5: false 
         %>
         </div>
-        <div class="col-md-6">
-          <%= f.input :remit_code, label: 'Recibo', as: :string, 
-            :placeholder => "Código",
-            input_html: {
-              size: 11,
-              id: "remit-code",
-              required: true,
-              autocomplete: 'off',
-              value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'sla'+OrderingSupply.with_deleted.maximum(:id).to_i.next.to_s; else; f.object.remit_code; end }"
-            }
-          %>
-        </div>
       </div>
       <%= f.input :observation, label: 'Observaciones', as: :text,
       :input_html => { :cols => 38  , :rows => 2 } %>

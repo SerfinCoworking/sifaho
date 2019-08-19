@@ -9,6 +9,10 @@ class Prescription < ApplicationRecord
   # Relaciones
   belongs_to :professional
   belongs_to :patient
+  belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :audited_by, class_name: 'User', optional: true
+  belongs_to :dispensed_by, class_name: 'User', optional: true
+  belongs_to :provider_sector, class_name: 'Sector'
 
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
@@ -16,9 +20,6 @@ class Prescription < ApplicationRecord
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "PrescriptionMovement"
   has_many :cronic_dispensations, :through => :quantity_ord_supply_lots
-  belongs_to :created_by, class_name: 'User', optional: true
-  belongs_to :audited_by, class_name: 'User', optional: true
-  belongs_to :dispensed_by, class_name: 'User', optional: true
 
   # Validaciones
   validates_presence_of :patient, :professional, :prescribed_date, :remit_code, :quantity_ord_supply_lots
@@ -115,8 +116,8 @@ class Prescription < ApplicationRecord
   end
 
   def delivered_with_sector?(a_sector)
-    if self.dispensada? && self.dispensed_by.present?
-      return self.dispensed_by.sector == a_sector
+    if self.dispensada? || self.dispensada_parcial?
+      return self.provider_sector == a_sector
     end
   end
 
@@ -146,7 +147,7 @@ class Prescription < ApplicationRecord
 
   # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
   def dispense_cronic_by(a_user)
-    if self.pendiente?
+    if self.pendiente? || self.dispensada_parcial?
       if self.times_dispensed < self.times_dispensation
         if self.quantity_ord_supply_lots.sin_entregar.exists?
           if self.validate_undelivered_quantity_lots(a_user.sector)
@@ -159,13 +160,13 @@ class Prescription < ApplicationRecord
           raise ArgumentError, 'No hay insumos sin entregar en la prescripción'
         end # End check if quantity_ord_supply_lots exists
         self.times_dispensed += 1
-        if self.times_dispensed == self.times_dispensation; self.dispensada!; end
+        if self.times_dispensed == self.times_dispensation; self.dispensada!;else; self.dispensada_parcial!; end
         self.dispensed_at = DateTime.now
         self.dispensed_by = a_user
         self.save
       end
     else
-      raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
+      raise ArgumentError, 'La prescripción debe está '+self.status
     end
   end
 
@@ -173,6 +174,7 @@ class Prescription < ApplicationRecord
     if self.dispensada?
       self.quantity_ord_supply_lots.each do |qosl|
         qosl.increment
+        qosl.sin_entregar!
       end
       self.pendiente!
     else

@@ -63,10 +63,11 @@ class PrescriptionsController < ApplicationController
     @prescription = Prescription.new(prescription_params)
     authorize @prescription
     @prescription.created_by = current_user
+    @prescription.provider_sector = current_user.sector
     @prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+Prescription.with_deleted.maximum(:id).to_i.next.to_s
 
     respond_to do |format|
-      if @prescription.save
+      if @prescription.save!
         # Si se entrega la prescripción
         begin
           if dispensing?

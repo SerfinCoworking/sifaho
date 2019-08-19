@@ -1,0 +1,15 @@
+<%= render 'header' %>
+
+<div class="row">
+  <% if @reports.present? %>
+    <%= render(
+      partial: 'reports/list',
+      locals: { reports: @reports }
+    ) %>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found',
+      locals: { object_name: 'reportes' }
+    ) %>
+  <% end %>
+</div>

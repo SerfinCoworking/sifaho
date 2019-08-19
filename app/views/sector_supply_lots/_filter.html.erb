@@ -3,7 +3,7 @@
     <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
   </div>
   <div class="panel-rightbody">
-    <%= form_for_filterrific @filterrific do |f| %>
+    <%= form_for_filterrific @filterrific, id: "filterrific_filter" do |f| %>
       <div class="col-md-1 col-sm-1">
         <label>Insumo</label>
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>

@@ -21,6 +21,10 @@ class User < ApplicationRecord
 
   after_create :create_profile
 
+  # Delegaciones
+  delegate :name, to: :sector, prefix: :sector
+  delegate :establishment_name, to: :sector
+
   def create_profile
     # first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
     first_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "givenname").first.encode("Windows-1252", invalid: :replace, undef: :replace) # Comment in production
@@ -102,15 +106,7 @@ class User < ApplicationRecord
     self.full_name+" | "+self.sector.name
   end
 
-  def sector_name
-    self.sector.name
-  end
-
   def sector_and_establishment
     self.sector_name+" "+self.establishment_name
-  end
-
-  def establishment_name
-    self.sector.establishment_name
   end
 end

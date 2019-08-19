@@ -202,5 +202,12 @@ Rails.application.routes.draw do
     member do
       get "delete"
     end
-  end 
+  end
+
+  resources :reports, only: [:show, :index] do
+    collection do
+      get "new_supply_consumption_to_date"
+      post "create_supply_consumption_to_date"
+    end
+  end
 end

@@ -208,11 +208,11 @@
             </div> <!-- End last movements tab pane -->
             <div id='graphs' class='tab-pane fade'>
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                   <%= line_chart @orders.collect{|i| [i['created_at'], i['delivered_quantity']]}, 
                     discrete: true, label: 'Cantidad', adapter: "highcharts"%>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-6">
                   <%
                     lots = SectorSupplyLot.lots_for_sector(current_user.sector).without_status(4).with_supply(@supply).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
                     status_colors = {"Vigente" => "#40c95e", "Por Vencer" => "#f1ae45", "Vencido" => "#d36262", "Agotado" => "#5bbae1" }

@@ -1,0 +1,17 @@
+<tr id="report_<%= report.id %>" >
+  <td><%= report.name %></td>
+  <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
+  <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
+  <td>
+    <span><%= image_tag user_avatar(current_user, 25), class:"img-circle img-profile-nav" %></span>
+    <%= report.user.full_name %></td>
+  <td><%= report.created_at.strftime("%d/%m/%Y") %></td>
+  <td>
+    <% if policy(report).show? %>
+      <%= link_to report_path(report),
+            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

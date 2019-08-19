@@ -20,7 +20,7 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def update?
-    if record.pendiente?
+    if record.pendiente? || record.dispensada_parcial?
       update_pres.any? { |role| user.has_role?(role) }
     end
   end
@@ -40,11 +40,13 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def dispense?
-    dispense_pres.any? { |role| user.has_role?(role) }
+    if record.provider_sector == user.sector
+      dispense_pres.any? { |role| user.has_role?(role) }
+    end
   end
 
   def return_status?
-    if record.dispensada? && record.created_by.sector == user.sector
+    if record.dispensada? && record.provider_sector == user.sector
       update_pres.any? { |role| user.has_role?(role) }
     end
   end

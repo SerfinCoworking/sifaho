@@ -24,6 +24,19 @@ class QuantityOrdSupplyLot < ApplicationRecord
     :allow_destroy => true,
     :reject_if => proc { |att| att[:supply_lot_id].blank? }
 
+  # Delegaciones
+  delegate :unity, to: :supply
+  delegate :name, to: :supply, prefix: :supply
+  delegate :code, to: :sector_supply_lot, prefix: :supply
+  delegate :laboratory, to: :sector_supply_lot, prefix: :sector_supply
+
+
+  scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
+  scope :to_sector, lambda { |a_sector| joins(:sector_supply_lot).where(sector_supply_lots: { sector: a_sector }) }
+
+  scope :dispensed_since, lambda { |a_date| where('quantity_ord_supply_lots.dispensed_at >= ?', a_date) }
+  scope :dispensed_to, lambda { |a_date| where('quantity_ord_supply_lots.dispensed_at <= ?', a_date ) }
+
   # Métodos públicos
   def increment_lot_to(a_sector)
     if self.delivered_quantity > 0
@@ -37,7 +50,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
       else
         self.sin_stock!
       end
-    end 
+    end
   end
 
   def increment_new_lot_to(a_sector)
@@ -89,19 +102,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.sin_entregar!
   end
 
-  def supply_name
-    self.supply.name
-  end
-
-  def sector_supply_laboratory
-    self.sector_supply_lot.laboratory
-  end
-
-  # Retorna el código del insumo del lote
-  def supply_code
-    self.sector_supply_lot.code
-  end
-
   def sector_supply_lot_lot_code
     if self.sector_supply_lot.present?  
       self.sector_supply_lot.lot_code
@@ -133,11 +133,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
     else
       'n/a'
     end
-  end
-
-  # Retorna el tipo de unidad
-  def unity
-    self.supply.unity
   end
 
   def delivered_with_sector?(a_sector)

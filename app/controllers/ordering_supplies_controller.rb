@@ -154,7 +154,7 @@ class OrderingSuppliesController < ApplicationController
     @ordering_supply.created_by = current_user
     @ordering_supply.audited_by = current_user
     respond_to do |format|
-      if @ordering_supply.save
+      if @ordering_supply.save!
         begin
           if @ordering_supply.despacho?
             @ordering_supply.proveedor_auditoria!
@@ -410,7 +410,8 @@ class OrderingSuppliesController < ApplicationController
           end
           @supplies = @supplies.group_by(&:first).map { |k, v| [k, v.map(&:last).inject(:+)] }
         else
-          @filtered_orders =  OrderingSupply.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
+          @report_type = "1"
+          @filtered_orders = OrderingSupply.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
         end
         flash.now[:success] = "Reporte generado."
         format.html { render :generate_report}

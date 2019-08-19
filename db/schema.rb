@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_24_142653) do
+ActiveRecord::Schema.define(version: 2019_08_16_161012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -403,12 +403,14 @@ ActiveRecord::Schema.define(version: 2019_07_24_142653) do
     t.integer "order_type", default: 0
     t.integer "times_dispensation"
     t.integer "times_dispensed", default: 0
+    t.bigint "provider_sector_id"
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
     t.index ["dispensed_by_id"], name: "index_prescriptions_on_dispensed_by_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
+    t.index ["provider_sector_id"], name: "index_prescriptions_on_provider_sector_id"
     t.index ["remit_code"], name: "index_prescriptions_on_remit_code", unique: true
   end
 
@@ -499,6 +501,21 @@ ActiveRecord::Schema.define(version: 2019_07_24_142653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_sup_poly"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.string "name", default: "Reporte"
+    t.datetime "since_date"
+    t.datetime "to_date"
+    t.integer "report_type", default: 0
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sector_id"], name: "index_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_reports_on_supply_id"
+    t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -657,6 +674,9 @@ ActiveRecord::Schema.define(version: 2019_07_24_142653) do
   add_foreign_key "quantity_ord_supply_lots", "laboratories"
   add_foreign_key "quantity_ord_supply_lots", "supplies"
   add_foreign_key "quantity_ord_supply_lots", "supply_lots"
+  add_foreign_key "reports", "sectors"
+  add_foreign_key "reports", "supplies"
+  add_foreign_key "reports", "users"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"

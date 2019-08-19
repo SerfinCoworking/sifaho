@@ -1,0 +1,81 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading hidden-print">
+        <h3 class="panel-title">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @report.name.downcase %>
+          <%= link_to reports_path, class: 'btn pull-right close-btn',
+            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="panel-body" id="panel-body-new">
+        <div class="row">
+          <div class='col-md-6 col-xs-4'>
+            <div class="text-center"><h5><strong>Insumo</strong></h5></div>
+            <hr>
+            <strong>Código: </strong><%= @report.supply.id %> <strong>Nombre: </strong><%= @report.supply.name %> 
+          </div>
+          <div class="col-md-6 col-xs-4">
+            <div class="text-center"><h5><strong>Fecha</strong></h5></div>
+            <hr>
+            <strong>Desde: </strong><%= @report.since_date.strftime("%d/%m/%Y") %>&nbsp;&nbsp;&nbsp;<strong>Hasta: </strong><%= @report.to_date.strftime("%d/%m/%Y") %>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="text-center"><h5><strong>Cantidades</strong></h5></div>
+            <!-- Insumos a dispensar -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Prescripciones
+                  </td>
+                  <td>
+                    <%= @pres_consumption %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Sectores  
+                  </td>
+                  <td>
+                    <%= @int_ord_consumption %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Abastecimiento
+                  </td>
+                  <td>
+                    <%= @ord_sup_consumption %>
+                  </td>
+                </tr>
+                <tr class="info">
+                  <td>
+                    <strong>Total</strong>
+                  </td>
+                  <td>
+                    <strong><%= @total_sum %></strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      

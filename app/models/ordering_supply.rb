@@ -6,6 +6,9 @@ class OrderingSupply < ApplicationRecord
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
     proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
     recibo_realizado: 7, anulado: 8 }
+
+  # Callbacks
+  before_validation :record_remit_code, on: :create
  
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
@@ -319,6 +322,18 @@ class OrderingSupply < ApplicationRecord
       @not.updated_at = DateTime.now
       @not.read_at = nil
       @not.save
+    end
+  end
+
+  private
+
+  def record_remit_code
+    if self.despacho?
+      self.remit_code = self.provider_sector.name[0..3].upcase+'des'+OrderingSupply.with_deleted.maximum(:id).to_i.next.to_s
+    elsif self.solicitud_abastecimiento?
+      self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+OrderingSupply.with_deleted.maximum(:id).to_i.next.to_s
+    elsif self.recibo?
+      self.remit_code= self.applicant_sector.name[0..3].upcase+'rec'+OrderingSupply.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
 end

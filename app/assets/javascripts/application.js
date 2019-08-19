@@ -43,7 +43,27 @@ $('[data-toggle="tooltip"]').tooltip({
   'container':'body'
 });
 
+$('#filterrific_filter').on(
+  "change",
+  ":input",
+  function (e) {
+  e.stopImmediatePropagation();
+  $(this).off("blur");
+  Filterrific.submitFilterForm;
+  }
+);
+
 $(document).on('turbolinks:load', function() {
+  $('#filterrific_filter').on(
+    "change",
+    ":input",
+    function (e) {
+    e.stopImmediatePropagation();
+    $(this).off("blur");
+    Filterrific.submitFilterForm;
+    }
+  );
+
   $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
@@ -130,3 +150,5 @@ $(document).on('page:fetch', function(e) {
 $(document).on('click', '.show-spin', function() {
   $(this).find(".spinner").css("display", "table");
 });
+  
+  

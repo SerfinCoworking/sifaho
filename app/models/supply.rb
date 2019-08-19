@@ -3,6 +3,7 @@ class Supply < ApplicationRecord
   include PgSearch
 
   # Relaciones
+  has_many :reports, dependent: :destroy
   belongs_to :supply_area  
   has_many :quantity_ord_supply_lots
   has_many :prescriptions, -> { with_deleted },

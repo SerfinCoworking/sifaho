@@ -50,6 +50,21 @@
           <% end %>
         </ul>
       </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+          Reporte
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-cust">
+          <li>
+            <%= link_to new_supply_consumption_to_date_reports_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
+              <span class="hidden-xs">Consumo de un insumo</span>
+            <% end %>
+          </li>
+        </ul>
+      </li>
       <% if policy(SectorSupplyLot).trash_index? %>
         <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
           <%= link_to trash_index_sector_supply_lots_path do %>

@@ -1,0 +1,15 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust">
+      <li role="presentation" class="<%= active_action('index') %> non-sel" id="page-title">
+        <%= link_to reports_path do %>
+          Reportes
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('new_supply_consumption_to_date') %> non-sel">
+        <%= link_to new_supply_consumption_to_date_reports_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
+          <span class="hidden-xs"> Consumo de un insumo</span>
+        <% end %>
+      </li>
+    </ul>
+<% end %>

@@ -32,6 +32,9 @@ class SectorSupplyLot < ApplicationRecord
   # Validaciones
   validates_presence_of :supply_lot, :quantity, :initial_quantity
 
+  # Delegaciones
+  delegate :unity, :format_expiry_date, :code, :lot_code, :supply_name, :expiry_date, :needs_expiration?, to: :supply_lot
+
   filterrific(
     default_filter_params: { sorted_by: 'codigo_asc' },
     available_filters: [
@@ -109,17 +112,18 @@ class SectorSupplyLot < ApplicationRecord
   }
 
   # Métodos públicos #----------------------------------------------------------
-  def format_expiry_date
-    self.supply_lot.format_expiry_date
-  end
-
   def laboratory
     self.supply_lot.laboratory_name
   end
 
+  # Método para incrementar la cantidad del lote. 
+  # Si se encuentra archivado, vuelve a vigente con 0 de cantidad.
   def increment(a_quantity)
+    if self.archivado?
+      self.quantity = 0
+      self.vigente!; 
+    end
     self.quantity += a_quantity
-    if self.archivado?; self.vigente!; end
     self.save!
   end
 
@@ -164,31 +168,6 @@ class SectorSupplyLot < ApplicationRecord
     elsif self.archivado?
       return 'default'
     end
-  end
-
-  def code
-    self.supply_lot.code
-  end
-
-  def lot_code
-    self.supply_lot.lot_code
-  end
-
-  def supply_name
-    self.supply_lot.supply_name
-  end
-
-  # Retorna el tipo de unidad
-  def unity
-    self.supply_lot.unity
-  end
-
-  def needs_expiration?
-    self.supply_lot.needs_expiration?
-  end
-
-  def expiry_date
-    self.supply_lot.expiry_date
   end
 
   # Se actualiza el estado del lote
