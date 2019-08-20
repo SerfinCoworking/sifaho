@@ -189,6 +189,10 @@ class Prescription < ApplicationRecord
     elsif self.vencida?; return 'danger'; end
   end
 
+  def sent_date
+    self.dispensed_at
+  end
+
   # Métodos de clase #----------------------------------------------------------
   scope :with_patient_id, lambda { |an_id|
     where(patient_id: [*an_id])

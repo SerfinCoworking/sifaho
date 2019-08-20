@@ -165,7 +165,7 @@
                         <th>Código</th>
                         <th>Estado</th>
                         <th>Cantidad</th>
-                        <th>Fecha</th>
+                        <th><span class="glyphicon glyphicon-calendar"></span> Entregado</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -192,7 +192,7 @@
                               </span>
                             </td>
                             <td><span class="label label-<%= @order.sum_to?(current_user.sector) ? 'success' : 'danger' %>"><%= qosl.delivered_quantity %></span></td>
-                            <td><%= @order.sent_date.strftime("%d/%m/%Y")%></td>
+                            <td><%= @order.sent_date.present? ? @order.sent_date.strftime("%d/%m/%Y") : "----" %></td>
                             <td>                        
                               <%= link_to polymorphic_path(@order), target: :_blank, class: 'btn btn-default btn-xs',
                                 title: 'Ver '+@order.order_type.humanize.underscore, data: { toggle: 'tooltip', placement: 'top' } do %>
