@@ -12,7 +12,7 @@ class Prescription < ApplicationRecord
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :dispensed_by, class_name: 'User', optional: true
-  belongs_to :provider_sector, class_name: 'Sector'
+  belongs_to :provider_sector, class_name: 'Sector', optional: true
 
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
