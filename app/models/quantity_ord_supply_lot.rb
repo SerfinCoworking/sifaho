@@ -72,7 +72,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
       self.dispensed_at = DateTime.now
       self.entregado!
     else
-      raise ArgumentError, 'El insumo '+self.supply_name+' no tiene lote asignado.' 
+      raise ArgumentError, 'El insumo '+self.supply_name+' no tiene lote asignado.'
     end
   end
 
