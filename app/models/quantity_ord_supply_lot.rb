@@ -46,6 +46,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
           supply_lot_id: self.sector_supply_lot.supply_lot_id
         ).first_or_create
         @sector_supply_lot.increment(self.delivered_quantity)
+        self.dispensed_at = DateTime.now
         self.entregado!
       else
         self.sin_stock!
@@ -68,6 +69,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
         supply_lot_id: @supply_lot.id
       ).first_or_create
       @sector_supply_lot.increment(self.delivered_quantity)
+      self.dispensed_at = DateTime.now
       self.entregado!
     else
       raise ArgumentError, 'El insumo '+self.supply_name+' no tiene lote asignado.' 
@@ -78,6 +80,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     if self.sector_supply_lot.present?
       self.sector_supply_lot.decrement(self.delivered_quantity)
     end
+    self.dispensed_at = DateTime.now
     self.entregado!
   end
 
@@ -87,6 +90,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
         new_qosl = self.dup
         new_qosl.save!
         self.cronic_dispensation = cronic_dispensation
+        self.dispensed_at = DateTime.now
         self.entregado!
       end
     else
@@ -137,10 +141,6 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   def delivered_with_sector?(a_sector)
     self.quantifiable.delivered_with_sector?(a_sector)
-  end
-  
-  def with_supply_code?(a_code)
-    return self.supply.id == a_code
   end
   
   def self.orders_to(a_sector, a_code)
