@@ -206,8 +206,11 @@ Rails.application.routes.draw do
 
   resources :reports, only: [:show, :index] do
     collection do
-      get "new_supply_consumption_to_date"
-      post "create_supply_consumption_to_date"
+      get "new_delivered_by_order"
+      post "create_delivered_by_order"
+
+      get "new_delivered_by_establishment"
+      post "create_delivered_by_establishment"
     end
   end
 end

@@ -21,6 +21,8 @@ class Sector < ApplicationRecord
   # Validaciones
   validates_presence_of :name, :complexity_level
 
+  delegate :name, to: :establishment, prefix: :establishment
+
   def self.options_for_select
     order('LOWER(name)').map { |e| [e.name, e.id] }
   end
@@ -54,5 +56,13 @@ class Sector < ApplicationRecord
         .dispensed_since(since_date)
         .dispensed_to(since_date)
         .sum(:delivered_quantity)
+  end
+
+  def delivered_ordering_supply_quantities_by_establishment_to(a_supply)
+    self.provider_ordering_quantity_supplies
+      .where(supply: a_supply)
+      .entregado
+      .group(:quantifiable_id, :quantifiable_type).order("sum_amount DESC")
+      .select(:quantifiable_id, :quantifiable_type, "SUM(delivered_quantity) as sum_amount")
   end
 end

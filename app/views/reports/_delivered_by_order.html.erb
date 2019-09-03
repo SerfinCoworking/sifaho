@@ -1,0 +1,44 @@
+<div class="text-center"><h5><strong>Cantidades por pedido</strong></h5></div>
+<!-- Insumos a dispensar -->
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Prescripciones
+      </td>
+      <td>
+        <%= @pres_consumption %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Sectores
+      </td>
+      <td>
+        <%= @int_ord_consumption %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Abastecimiento
+      </td>
+      <td>
+        <%= @ord_sup_consumption %>
+      </td>
+    </tr>
+    <tr class="info">
+      <td>
+        <strong>Total</strong>
+      </td>
+      <td>
+        <strong><%= @total_sum %></strong>
+      </td>
+    </tr>
+  </tbody>
+</table>

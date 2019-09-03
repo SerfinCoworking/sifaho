@@ -1,0 +1,31 @@
+<div class="text-center"><h5><strong>Cantidades por establecimiento</strong></h5></div>
+<!-- Insumos a dispensar -->
+<table class="table">
+  <thead>
+    <tr>
+      <th>Sector</th>
+      <th>Establecimiento</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @total_sum = 0%>
+    <% @quantities.group(:quantifiable_id).each do |quantity| %>
+      <tr>
+        <td><%= quantity.quantifiable.applicant_sector.name %></td>
+        <td><%= quantity.quantifiable.applicant_sector.establishment_name %></td>
+        <td><%= quantity.sum_amount %></td>
+        <% @total_sum += quantity.sum_amount %>
+      </tr>
+    <% end %>
+    <tr class="info">
+      <td>
+        <strong>Total</strong>
+      </td>
+      <td></td>
+      <td>
+        <strong><%= @total_sum %></strong>
+      </td>
+    </tr>
+  </tbody>
+</table>

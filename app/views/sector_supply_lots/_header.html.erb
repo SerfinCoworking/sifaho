@@ -58,15 +58,15 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-cust">
           <li>
-            <%= link_to new_supply_consumption_to_date_reports_path do %>
+            <%= link_to new_delivered_by_order_reports_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-              <span class="hidden-xs">Consumo de un insumo</span>
+              <span class="hidden-xs">Entregado por pedido</span>
             <% end %>
           </li>
         </ul>
       </li>
       <% if policy(SectorSupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
+        <li role="presentation" class="col-md-offset-4 <%= active_action('trash_index') %> non-sel">
           <%= link_to trash_index_sector_supply_lots_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
             Papelera

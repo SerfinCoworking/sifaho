@@ -1,5 +1,5 @@
 class Report < ApplicationRecord
-  enum report_type: { consumption_date: 0 }
+  enum report_type: { delivered_by_order: 0, delivered_by_establishment: 1 }
 
   belongs_to :supply
   belongs_to :sector

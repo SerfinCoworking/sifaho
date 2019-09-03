@@ -2,13 +2,20 @@
     <ul class="nav nav-tabs nav-tabs-cust">
       <li role="presentation" class="<%= active_action('index') %> non-sel" id="page-title">
         <%= link_to reports_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
           Reportes
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('new_supply_consumption_to_date') %> non-sel">
-        <%= link_to new_supply_consumption_to_date_reports_path do %>
+      <li role="presentation" class="<%= active_action('new_delivered_by_order') %> non-sel">
+        <%= link_to new_delivered_by_order_reports_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-          <span class="hidden-xs"> Consumo de un insumo</span>
+          <span class="hidden-xs"> Entregado por pedido</span>
+        <% end %>
+      </li>
+      <li role="presentation" class="<%= active_action('new_delivered_by_establishment') %> non-sel">
+        <%= link_to new_delivered_by_establishment_reports_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
+          <span class="hidden-xs"> Entregado por establecimiento</span>
         <% end %>
       </li>
     </ul>

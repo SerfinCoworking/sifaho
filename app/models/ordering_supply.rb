@@ -249,6 +249,7 @@ class OrderingSupply < ApplicationRecord
         self.quantity_ord_supply_lots.each do |qosl|
           qosl.increment_new_lot_to(a_user.sector)
         end
+        self.sent_date = DateTime.now
         self.date_received = DateTime.now
         self.received_by = a_user
         self.recibo_realizado!

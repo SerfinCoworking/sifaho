@@ -20,36 +20,67 @@ class ReportsController < ApplicationController
   def show
     authorize @report
 
-    if @report.consumption_date?
+    if @report.delivered_by_order?
       @pres_consumption = current_user.sector.sum_delivered_prescription_quantities_to(@report.supply_id, @report.since_date, @report.to_date) 
       @int_ord_consumption = current_user.sector.sum_delivered_internal_quantities_to(@report.supply_id, @report.since_date, @report.to_date)
       @ord_sup_consumption = current_user.sector.sum_delivered_ordering_supply_quantities_to(@report.supply_id, @report.since_date, @report.to_date)
       @total_sum = @pres_consumption + @int_ord_consumption + @ord_sup_consumption
+    elsif @report.delivered_by_establishment?
+      @quantities = current_user.sector.delivered_ordering_supply_quantities_by_establishment_to(@report.supply_id)
     end
   end
 
-  # GET /reports/new_supply_consumption_to_date
-  def new_supply_consumption_to_date
+  # GET /reports/new_delivered_by_order
+  def new_delivered_by_order
     authorize Report
     @report = Report.new
+    @report.report_type = 0
   end
 
-  # POST /reports/create_supply_consumption_to_date
-  def create_supply_consumption_to_date
+  # GET /reports/new_delivered_by_establishment
+  def new_delivered_by_establishment
+    authorize Report
+    @report = Report.new
+    @report.report_type = 1
+  end
+
+  # POST /reports/create_delivered_by_order
+  def create_delivered_by_order
     @report = Report.new(report_params)
     authorize @report
 
     @report.sector = current_user.sector
     @report.user = current_user
-    @report.name = "Reporte de consumo de un insumo"
+    @report.name = "Reporte de insumo entregado por pedido"
 
     respond_to do |format|
-      if @report.save!
+      if @report.save
         flash.now[:success] = @report.name+" se ha creado correctamente."
         format.html { redirect_to @report }
       else
         flash.now[:error] = "El reporte no se ha podido crear."
-        format.html { render :new_supply_consumption_to_date }
+        format.html { render :new_delivered_by_order }
+      end
+    end
+  end
+
+  # POST /reports/create_delivered_by_establisment
+  def create_delivered_by_establishment
+    @report = Report.new(report_params)
+    authorize @report
+
+    @report.sector = current_user.sector
+    @report.user = current_user
+    @report.report_type = 1
+    @report.name = "Reporte de insumo entregado por establecimiento."
+
+    respond_to do |format|
+      if @report.save
+        flash.now[:success] = @report.name+" se ha creado correctamente."
+        format.html { redirect_to @report }
+      else
+        flash.now[:error] = "El reporte no se ha podido crear."
+        format.html { render :new_delivered_by_establishment }
       end
     end
   end

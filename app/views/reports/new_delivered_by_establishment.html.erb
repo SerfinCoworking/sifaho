@@ -5,14 +5,14 @@
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Reporte consumo de un insumo entre dos fechas
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Reporte consumo de un insumo por establecimiento entre dos fechas
           <%= link_to :back, class: 'btn pull-right close-btn' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
           <% end %>
         </h3>
       </div>
       <div class="panel-body">
-        <%= simple_form_for @report, method: :post, :url => { :action => :create_supply_consumption_to_date }, html: {role: 'check-modified', id: "new_supply_consumption"} do |f| %>
+        <%= simple_form_for @report, method: :post, :url => { :action => :create_delivered_by_establishment }, html: {role: 'check-modified', id: "new_supply_consumption"} do |f| %>
           <%= f.error_notification %>
           <div class="row">
             <div class="col-md-12">
@@ -59,7 +59,7 @@
             </div>
             <div class="col-md-3">
               <%= f.input :to_date, as: :date_time_picker, label: 'Hasta',
-                :placeholder => "Ej: 30/01/2000",
+                :placeholder => "Ej: 31/01/2000",
                 input_html: {class: "form-control", required: true, autocomplete: 'off' },
                 html5: false,
                 required: true
@@ -85,7 +85,7 @@
         </h3>
       </div>
       <div class="panel-body">
-        <p>Reporte para conocer la cantidad total entregada de un determinado insumo entre dos fechas. Se tienen en cuenta las prescripciones, pedidos de sectores y pedidos de abastecimiento.</p>
+        <p>Reporte para conocer la cantidad total entregada de un determinado insumo entre dos fechas. Sólo se tienen en cuenta los pedidos de abastecimiento y están agrupados por establecimientos.</p>
       </div>
     </div>
   </div>

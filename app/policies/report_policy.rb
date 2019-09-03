@@ -7,12 +7,20 @@ class ReportPolicy < ApplicationPolicy
     index? && ( user.sector == record.sector )
   end
 
-  def create_supply_consumption_to_date?
+  def create_delivered_by_order?
     create_roles.any? { |role| user.has_role?(role) }
   end
 
-  def new_supply_consumption_to_date?
-    create_supply_consumption_to_date?
+  def new_delivered_by_order?
+    create_delivered_by_order?
+  end
+
+  def create_delivered_by_establishment?
+    create_roles.any? { |role| user.has_role?(role) }
+  end
+
+  def new_delivered_by_establishment?
+    create_delivered_by_establishment?
   end
 
   def destroy?
