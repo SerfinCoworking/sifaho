@@ -1,0 +1,19 @@
+<% content_for :page_header do %>
+  <ul class="nav nav-tabs nav-tabs-cust">
+    <li role="presentation" id="page-title" class="non-sel">
+      <a href="">Establecimientos</a>
+    </li>
+    <li role="presentation" class="<%= active_action('index') %> non-sel">
+      <%= link_to establishments_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+        Listado
+      <% end %>
+    </li>
+    <li role="presentation" class="<%= active_action('new') %> non-sel">
+      <%= link_to new_establishment_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Nuevo
+      <% end %>
+    </li>
+  </ul>
+<% end %>

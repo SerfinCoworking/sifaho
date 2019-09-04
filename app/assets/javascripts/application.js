@@ -33,9 +33,9 @@
 
 // Se oculta el flash message
 window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove();
-    });
+  $(".alert").fadeTo(500, 0).slideUp(500, function(){
+      $(this).remove();
+  });
 }, 10000);
 
 $('[data-toggle="tooltip"]').tooltip({
@@ -47,9 +47,9 @@ $('#filterrific_filter').on(
   "change",
   ":input",
   function (e) {
-  e.stopImmediatePropagation();
-  $(this).off("blur");
-  Filterrific.submitFilterForm;
+    e.stopImmediatePropagation();
+    $(this).off("blur");
+    Filterrific.submitFilterForm;
   }
 );
 

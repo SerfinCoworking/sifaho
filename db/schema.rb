@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_02_183959) do
+ActiveRecord::Schema.define(version: 2019_09_04_181142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -145,6 +145,8 @@ ActiveRecord::Schema.define(version: 2019_09_02_183959) do
     t.string "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "users_count", default: 0
+    t.integer "sectors_count", default: 0
   end
 
   create_table "internal_order_movements", force: :cascade do |t|
@@ -549,6 +551,7 @@ ActiveRecord::Schema.define(version: 2019_09_02_183959) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "establishment_id"
+    t.integer "user_sectors_count", default: 0
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 

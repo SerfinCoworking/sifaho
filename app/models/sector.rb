@@ -1,6 +1,6 @@
 class Sector < ApplicationRecord
   # Relaciones
-  belongs_to :establishment
+  belongs_to :establishment, counter_cache: true
   has_many :users
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :supply_lots, -> { with_deleted }, through: :sector_supply_lots
@@ -42,13 +42,15 @@ class Sector < ApplicationRecord
   def sum_delivered_ordering_supply_quantities_to(a_supply, since_date, to_date)
     self.provider_ordering_quantity_supplies.where(supply: a_supply).entregado
       .dispensed_since(since_date)
-      .dispensed_to(to_date).sum(:delivered_quantity)
+      .dispensed_to(to_date)
+      .sum(:delivered_quantity)
   end
 
   def sum_delivered_prescription_quantities_to(a_supply, since_date, to_date)
     self.provider_prescription_quantity_supplies.where(supply: a_supply).entregado
       .dispensed_since(since_date)
-      .dispensed_to(to_date).sum(:delivered_quantity)
+      .dispensed_to(to_date)
+      .sum(:delivered_quantity)
   end
 
   def sum_delivered_internal_quantities_to(a_supply, since_date, to_date)
