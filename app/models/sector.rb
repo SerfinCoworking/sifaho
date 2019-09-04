@@ -56,7 +56,7 @@ class Sector < ApplicationRecord
   def sum_delivered_internal_quantities_to(a_supply, since_date, to_date)
       self.provider_internal_quantity_supplies.where(supply: a_supply).entregado
         .dispensed_since(since_date)
-        .dispensed_to(since_date)
+        .dispensed_to(to_date)
         .sum(:delivered_quantity)
   end
 
