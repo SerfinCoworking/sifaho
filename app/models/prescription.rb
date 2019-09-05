@@ -111,7 +111,7 @@ class Prescription < ApplicationRecord
   # Métodos públicos #----------------------------------------------------------
   def sum_to?(a_sector)
     if self.dispensada?
-      return true unless self.dispensed_by.sector == a_sector
+      return true unless self.provider_sector == a_sector
     end
   end
 
