@@ -154,7 +154,7 @@ class OrderingSuppliesController < ApplicationController
     @ordering_supply.created_by = current_user
     @ordering_supply.audited_by = current_user
     respond_to do |format|
-      if @ordering_supply.save!
+      if @ordering_supply.save
         begin
           if @ordering_supply.despacho?
             @ordering_supply.proveedor_auditoria!
