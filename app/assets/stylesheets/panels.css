@@ -71,3 +71,6 @@
   height: 170px;
   overflow-y: auto; 
 }
+#title-chart{
+  margin-bottom: -11px;
+}

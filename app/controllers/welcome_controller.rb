@@ -2,8 +2,8 @@ class WelcomeController < ApplicationController
 
   def index
       _helper = ActiveSupport::NumberHelper
-      _prescriptions_today = Prescription.current_day
-      _prescriptions_month = Prescription.current_month
+      _prescriptions_today = Prescription.with_establishment(current_user.establishment).current_day
+      _prescriptions_month = Prescription.with_establishment(current_user.establishment).current_month
       @prescriptions = Prescription.with_establishment(current_user.establishment)
       @count_prescriptions_today = _prescriptions_today.count
       @count_prescriptions_month = _prescriptions_month.count
@@ -16,7 +16,7 @@ class WelcomeController < ApplicationController
       @percent_dispensed_prescriptions = _helper.number_to_percentage((@count_disp_pres.to_f / @count_prescriptions_today * 100), precision: 0) unless @count_disp_pres == 0
       @percent_pend_pres_month = _helper.number_to_percentage((@count_pend_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_pend_pres_month == 0
       @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
-      @last_prescriptions = Prescription.limit(5).order(date_received: :desc)
+      @last_prescriptions = @prescriptions.order(date_received: :desc).limit(5)
 
       @supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector)
       @expired_supply_lots = @supply_lots.with_status(2).limit(3)

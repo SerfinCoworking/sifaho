@@ -1,28 +1,43 @@
-  <!--  Panel Prescripciones del día -->
+<!--  Panel graficos de prescripciones -->
+<% if @prescriptions.count > 0 %>
   <div class="panel panel-default">
-    <!--  Panel prescripciones recibidas por día -->
-    <% unless @prescriptions.where('created_at >= ?', DateTime.now - 6.days).count == 0 %>
-      <div class="panel-heading">
-        <h3 class="panel-title">Pescripciones en tu establecimiento <small>Esta semana </small></h3>
-      </div>
-      <div class="panel-body">
-        <%= line_chart @prescriptions
-          .group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%a %d/%m").count, 
-          discrete: true, label: 'Cantidad', adapter: "highcharts" %>
-      </div>
-    <% end %>
     <div class="panel-heading">
-      <h3 class="panel-title">Prescripciones en tu establecimiento <small>Este año</small></h3>
+      <ul class="nav nav-tabs" id="title-chart">
+        <li class="nav-item">
+          <h4>Prescripciones&nbsp;</h4>
+        </li>
+        <li class="nav-item active">
+          <a data-toggle="tab" href="#week">Semana 
+            <span class="label label-default"><%= @prescriptions.last_week.count %></span> 
+          </a>
+        </li>
+        <li class="nav-item">
+          <a data-toggle="tab" href="#year">Año
+            <span class="label label-default"><%= @prescriptions.current_year.count %></span>
+          </a>
+        </li>
+      </ul>
     </div>
+
     <div class="panel-body">
-      <%= column_chart charts_by_month_prescriptions_path,
-        download: "Prescripciones recetadas por mes SIFAHO",
-        label: "Cantidad",
-        colors: ["rgb(130,165,239, 0.6)"],
-        messages: {empty: "No hay prescripciones en este mes"},
-        adapter: "highcharts" %>
+      <div class="tab-content">
+        <div id="week" class="tab-pane fade in active">
+          <%= line_chart @prescriptions
+            .group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%a %d/%m").count, 
+            discrete: true, label: 'Cantidad', adapter: "highcharts" %>
+        </div>
+        <div id="year" class="tab-pane fade">
+          <%= column_chart charts_by_month_prescriptions_path,
+            download: "Prescripciones recetadas por mes SIFAHO",
+            label: "Cantidad",
+            colors: ["rgb(130,165,239, 0.6)"],
+            messages: {empty: "No hay prescripciones en este año"},
+            adapter: "highcharts" %>
+        </div>
+      </div>
     </div>
   </div>
+<% end %>
 
 <!--  Panel Últimas prescripciones -->
 <% if @last_prescriptions.present? %>

@@ -202,9 +202,17 @@ class Prescription < ApplicationRecord
   scope :with_patient_id, lambda { |an_id|
     where(patient_id: [*an_id])
   }
-  
+
   def self.current_day
     where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })
+  end
+
+  def self.last_week
+    where("prescribed_date >= :last_week", { last_week: 1.weeks.ago.midnight })
+  end
+
+  def self.current_year
+    where("prescribed_date >= :year", { year: DateTime.now.beginning_of_year })
   end
 
   def self.current_month
