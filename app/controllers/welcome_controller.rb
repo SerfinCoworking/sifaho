@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
       _helper = ActiveSupport::NumberHelper
       _prescriptions_today = Prescription.current_day
       _prescriptions_month = Prescription.current_month
-      @prescriptions = Prescription.all
+      @prescriptions = Prescription.with_establishment(current_user.establishment)
       @count_prescriptions_today = _prescriptions_today.count
       @count_prescriptions_month = _prescriptions_month.count
       @count_pend_pres = _prescriptions_today.pendiente.count

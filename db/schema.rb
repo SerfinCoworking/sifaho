@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_181142) do
+ActiveRecord::Schema.define(version: 2019_09_18_161416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -406,10 +406,12 @@ ActiveRecord::Schema.define(version: 2019_09_04_181142) do
     t.integer "times_dispensation"
     t.integer "times_dispensed", default: 0
     t.bigint "provider_sector_id"
+    t.bigint "establishment_id"
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
     t.index ["dispensed_by_id"], name: "index_prescriptions_on_dispensed_by_id"
+    t.index ["establishment_id"], name: "index_prescriptions_on_establishment_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_prescriptions_on_professional_id"
     t.index ["provider_sector_id"], name: "index_prescriptions_on_provider_sector_id"
@@ -670,6 +672,7 @@ ActiveRecord::Schema.define(version: 2019_09_04_181142) do
   add_foreign_key "ordering_supply_comments", "users"
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
+  add_foreign_key "prescriptions", "establishments"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"

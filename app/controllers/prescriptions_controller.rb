@@ -7,7 +7,7 @@ class PrescriptionsController < ApplicationController
   def index
     authorize Prescription
     @filterrific = initialize_filterrific(
-      Prescription,
+      Prescription.with_establishment(current_user.establishment),
       params[:filterrific],
       select_options: {
         sorted_by: Prescription.options_for_sorted_by
@@ -64,6 +64,7 @@ class PrescriptionsController < ApplicationController
     authorize @prescription
     @prescription.created_by = current_user
     @prescription.provider_sector = current_user.sector
+    @prescription.establishment = current_user.sector.establishment
     @prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+Prescription.with_deleted.maximum(:id).to_i.next.to_s
 
     respond_to do |format|

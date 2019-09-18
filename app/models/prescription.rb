@@ -13,6 +13,7 @@ class Prescription < ApplicationRecord
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :dispensed_by, class_name: 'User', optional: true
   belongs_to :provider_sector, class_name: 'Sector', optional: true
+  belongs_to :establishment
 
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
@@ -108,6 +109,10 @@ class Prescription < ApplicationRecord
     where('prescriptions.order_type = ?', a_order_type)
   }
 
+  scope :with_establishment, lambda { |a_establishment| 
+    where('prescriptions.establishment_id = ?', a_establishment)
+  }
+
   # Métodos públicos #----------------------------------------------------------
   def sum_to?(a_sector)
     if self.dispensada?
@@ -197,7 +202,7 @@ class Prescription < ApplicationRecord
   scope :with_patient_id, lambda { |an_id|
     where(patient_id: [*an_id])
   }
-
+  
   def self.current_day
     where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })
   end

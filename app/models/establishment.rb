@@ -3,6 +3,7 @@ class Establishment < ApplicationRecord
 
   # Relaciones
   has_many :sectors
+  has_many :prescriptions
 
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,

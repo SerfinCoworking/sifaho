@@ -24,6 +24,7 @@ class User < ApplicationRecord
   # Delegaciones
   delegate :name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
+  delegate :establishment, to: :sector
 
   def create_profile
     # first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
