@@ -30,7 +30,7 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    unless record.dispensada?
+    unless record.dispensada? || record.dispensada_parcial?
       destroy_pres.any? { |role| user.has_role?(role) }
     end
   end
