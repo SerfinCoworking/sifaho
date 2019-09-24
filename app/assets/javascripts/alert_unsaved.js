@@ -1,6 +1,6 @@
 var msg, unsaved;
  
-msg = "Tienes cambios sin guardar. Deseas salir igualmente?";
+msg = "Hay cambios sin guardar. Deseas salir igualmente?";
  
 unsaved = false;
  

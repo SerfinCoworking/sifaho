@@ -68,24 +68,9 @@ $(document).on("focus",".report-supply-name", function() {
         $(".report-supply-name").val(ui.item.value);
       },
       response: function(event, ui) {
-        console.log(ui.content.length);
-        if (ui.content.length === 1) {
-          var result = [
-            {
-                label: 'No matches found', 
-                value: response.term
-            }
-        ];
-        response(result);
-          return "Sin resultados";
-        }
-      },
-      messages: {
-        noResults: function(count) {
-
-        },
-        results: function(count) {
-          console.log("There were " + count + " matches")
+        if (!ui.content.length) {
+            var noResult = { value:"",label:"No se encontró el insumo" };
+            ui.content.push(noResult);
         }
       }
     })
