@@ -104,6 +104,39 @@ $(document).on('turbolinks:load', function() {
             } // End if
           }// End success
         });// End ajax
+        $.ajax({
+          url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
+          type: 'GET',
+          data: {
+            dni: ui.item.dni,
+            periodo: "2019-09-01",
+          },
+          dataType: "json",
+          error: function(XMLHttpRequest, errorTextStatus, error){
+            alert("Failed: "+ errorTextStatus+" ;"+error);
+          },
+          success: function(data){
+            console.log(data);
+            if (!data.length) {
+              $('#non-os').toggleClass('hidden', false);
+              $('#pat-os').toggleClass('hidden', true);
+            }else{
+              $("#pat-os-body").html("");
+              for(var i in data)
+              {
+                $("#pat-os-body").append(
+                  "<tr>"+
+                    '<td>'+data[i].financiador+'</td>'+
+                    '<td class="pres-col-pro">'+data[i].codigoFinanciador+'</td>'+
+                    '<td>'+data[i].version+'</td>'+
+                  "</tr>"
+                );
+              }
+              $('#non-os').toggleClass('hidden', true);
+              $('#pat-os').toggleClass('hidden', false);
+            } // End if
+          }// End success
+        });// End ajax
       }
     })
   });

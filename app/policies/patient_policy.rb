@@ -1,6 +1,6 @@
 class PatientPolicy < ApplicationPolicy
   def index?
-    show_pat.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :abm_paciente)
   end
 
   def show?
@@ -8,7 +8,7 @@ class PatientPolicy < ApplicationPolicy
   end
 
   def create?
-    create_pat.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :abm_paciente)
   end
 
   def new?
@@ -16,7 +16,7 @@ class PatientPolicy < ApplicationPolicy
   end
 
   def update?
-    update_pat.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :abm_paciente)
   end
 
   def edit?
@@ -24,24 +24,6 @@ class PatientPolicy < ApplicationPolicy
   end
 
   def destroy?
-    destroy_pat.any? { |role| user.has_role?(role) }
-  end
-
-  private
-
-  def update_pat
-    [ :admin, :farmaceutico, :auxiliar_farmacia ]
-  end
-
-  def show_pat
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero ]
-  end
-
-  def create_pat
-    [ :admin, :farmaceutico ]
-  end
-
-  def destroy_pat
-    [ :admin ]
+    user.has_any_role?(:admin)
   end
 end
