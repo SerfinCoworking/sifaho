@@ -14,17 +14,17 @@ module Api::V1
     end
 
     def create
-      _dni = params[:_json][0][:identifier][0][:value]
-      _last_name = params[:_json][0][:name][0][:family]
-      _first_name = params[:_json][0][:name][0][:given]
+      _dni = params[:data][:identifier][0][:value]
+      _last_name = params[:data][:name][0][:family]
+      _first_name = params[:data][:name][0][:given]
       if is_birthdate_in_params?
-        _birthdate = params[:_json][0][:birthDate].to_datetime
+        _birthdate = params[:data][:birthDate].to_datetime
       end
       # Create Country, State and City.
       if is_address_in_params?
-        _country = Country.where(name: params[:_json][0][:address][0][:country]).first_or_create(name: params[:_json][0][:address][0][:country])
-        _state = State.where(name: params[:_json][0][:address][0][:state]).first_or_create(name: params[:_json][0][:address][0][:state], country_id: _country.id)
-        _city = City.where(name: params[:_json][0][:address][0][:city]).first_or_create(name: params[:_json][0][:address][0][:city], state_id: _state.id )
+        _country = Country.where(name: params[:data][:address][0][:country]).first_or_create(name: params[:data][:address][0][:country])
+        _state = State.where(name: params[:data][:address][0][:state]).first_or_create(name: params[:data][:address][0][:state], country_id: _country.id)
+        _city = City.where(name: params[:data][:address][0][:city]).first_or_create(name: params[:data][:address][0][:city], state_id: _state.id )
       end
       _marital_status = initialize_marital_status
       _gender = initialize_gender
@@ -34,15 +34,15 @@ module Api::V1
       if is_address_in_params?
         if patient.address.present?
           patient.address.update_attributes(
-            postal_code: params[:_json][0][:address][0][:postalCode],
+            postal_code: params[:data][:address][0][:postalCode],
             city_id: _city.id,
-            line: params[:_json][0][:address][0][:line][0]
+            line: params[:data][:address][0][:line][0]
           )
         else
           patient.address = Address.create(
-            postal_code: params[:_json][0][:address][0][:postalCode],
+            postal_code: params[:data][:address][0][:postalCode],
             city_id: _city.id,
-            line: params[:_json][0][:address][0][:line][0]
+            line: params[:data][:address][0][:line][0]
           )
         end
       end
@@ -67,16 +67,16 @@ module Api::V1
 
     private
     def is_address_in_params?
-      params[:_json][0][:address].present?
+      params[:data][:address].present?
     end
 
     def is_birthdate_in_params?
-      params[:_json][0][:birthDate].present?
+      params[:data][:birthDate].present?
     end
 
     def initialize_marital_status
-      if params[:_json][0][:maritalStatus].present?
-        return case params[:_json][0][:maritalStatus][:text]
+      if params[:data][:maritalStatus].present?
+        return case params[:data][:maritalStatus][:text]
         when "unmarried"
           "Soltero"
         when "married"
@@ -96,8 +96,8 @@ module Api::V1
     end
 
     def initialize_gender
-      if params[:_json][0][:gender].present?
-        return case params[:_json][0][:gender]
+      if params[:data][:gender].present?
+        return case params[:data][:gender]
         when "male"
           "Masculino"
         when "female"

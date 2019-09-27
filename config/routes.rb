@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :internal_order_templates
   get 'report/newOrderingSupply'
 
   post 'auth/login', to: 'authentication#authenticate'

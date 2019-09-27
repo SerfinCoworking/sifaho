@@ -30,6 +30,12 @@ module ApplicationHelper
     end
   end
 
+  def active_action_and_controller(action_name, a_controller_name)
+    if params[:action] == action_name && controller_name == a_controller_name
+      return 'active'
+    end
+  end
+
   def order_status_label(an_order)
     if an_order.is_a?(Prescription)
       prescription_status_label(an_order)

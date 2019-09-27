@@ -1,0 +1,35 @@
+<%= render "internal_orders/header" %>
+
+<p id="notice"><%= notice %></p>
+
+<h1>Internal Order Templates</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Owner sector</th>
+      <th>Detination sector</th>
+      <th>Order type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @internal_order_templates.each do |internal_order_template| %>
+      <tr>
+        <td><%= internal_order_template.name %></td>
+        <td><%= internal_order_template.owner_sector %></td>
+        <td><%= internal_order_template.detination_sector %></td>
+        <td><%= internal_order_template.order_type %></td>
+        <td><%= link_to 'Show', internal_order_template %></td>
+        <td><%= link_to 'Edit', edit_internal_order_template_path(internal_order_template) %></td>
+        <td><%= link_to 'Destroy', internal_order_template, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Internal Order Template', new_internal_order_template_path %>

@@ -1,0 +1,26 @@
+<%= render "internal_orders/header" %>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @internal_order_template.name %>
+</p>
+
+<p>
+  <strong>Owner sector:</strong>
+  <%= @internal_order_template.owner_sector %>
+</p>
+
+<p>
+  <strong>Detination sector:</strong>
+  <%= @internal_order_template.detination_sector %>
+</p>
+
+<p>
+  <strong>Order type:</strong>
+  <%= @internal_order_template.order_type %>
+</p>
+
+<%= link_to 'Edit', edit_internal_order_template_path(@internal_order_template) %> |
+<%= link_to 'Back', internal_order_templates_path %>

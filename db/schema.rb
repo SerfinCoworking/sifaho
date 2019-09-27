@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_161416) do
+ActiveRecord::Schema.define(version: 2019_09_25_175110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -159,6 +159,19 @@ ActiveRecord::Schema.define(version: 2019_09_18_161416) do
     t.index ["internal_order_id"], name: "index_internal_order_movements_on_internal_order_id"
     t.index ["sector_id"], name: "index_internal_order_movements_on_sector_id"
     t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
+  end
+
+  create_table "internal_order_templates", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_sector_id"
+    t.bigint "detination_sector_id"
+    t.bigint "created_by_id"
+    t.integer "order_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
+    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
+    t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
   create_table "internal_orders", force: :cascade do |t|

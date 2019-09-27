@@ -1,0 +1,14 @@
+<%= simple_form_for(@internal_order_template) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.association :owner_sector %>
+    <%= f.association :detination_sector %>
+    <%= f.input :order_type %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
