@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-md-4">
                       <h5><strong>Fecha nacimiento</strong></h5>
-                      <%= @patient.birthdate.strftime("%d/%m/%Y") %>
+                      <%= @patient.birthdate.present? ? @patient.birthdate.strftime("%d/%m/%Y") : "----" %>
                     </div>
                     <div class="col-md-4">
                       <h5><strong>Apellido</strong></h5>
