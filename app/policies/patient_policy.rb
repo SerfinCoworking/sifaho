@@ -8,7 +8,7 @@ class PatientPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:admin, :abm_paciente)
+    user.has_any_role?(:admin, :abm_paciente, :farmaceutico, :auxiliar_farmacia)
   end
 
   def new?
