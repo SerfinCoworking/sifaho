@@ -21,14 +21,6 @@
           <% end %>
         <% end %>
       </li>
-      <% if policy(OrderingSupply).new_receipt? %>
-        <li role="presentation" class="<%= active_action('new_receipt') %> non-sel">
-          <%= link_to new_receipt_ordering_supplies_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            R<span class="hidden-xs">ecibo</span>
-          <% end %>
-        </li>
-      <% end %>
       <% if policy(OrderingSupply).new_applicant? %>
         <li role="presentation" class="<%= active_action('new_applicant') %> non-sel">
           <%= link_to new_applicant_ordering_supplies_path do %>

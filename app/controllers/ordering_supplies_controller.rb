@@ -24,7 +24,7 @@ class OrderingSuppliesController < ApplicationController
   def index
     authorize OrderingSupply
     @filterrific = initialize_filterrific(
-      OrderingSupply.provider(current_user.sector).without_status(0),
+      OrderingSupply.provider(current_user.sector).without_status(0).without_order_type(2),
       params[:filterrific],
       select_options: {
         sorted_by: OrderingSupply.options_for_sorted_by,
