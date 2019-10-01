@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_25_175110) do
+ActiveRecord::Schema.define(version: 2019_10_01_133257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -44,7 +44,11 @@ ActiveRecord::Schema.define(version: 2019_09_25_175110) do
     t.bigint "city_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "country_id"
+    t.bigint "state_id"
     t.index ["city_id"], name: "index_addresses_on_city_id"
+    t.index ["country_id"], name: "index_addresses_on_country_id"
+    t.index ["state_id"], name: "index_addresses_on_state_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -359,6 +363,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_175110) do
     t.bigint "patient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["number", "patient_id"], name: "index_patient_phones_on_number_and_patient_id", unique: true
     t.index ["patient_id"], name: "index_patient_phones_on_patient_id"
   end
 
@@ -381,6 +386,8 @@ ActiveRecord::Schema.define(version: 2019_09_25_175110) do
     t.bigint "address_id"
     t.integer "marital_status", default: 1
     t.integer "status", default: 0
+    t.string "andes_id"
+    t.string "cuil"
     t.index ["address_id"], name: "index_patients_on_address_id"
   end
 
@@ -677,6 +684,8 @@ ActiveRecord::Schema.define(version: 2019_09_25_175110) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "cities"
+  add_foreign_key "addresses", "countries"
+  add_foreign_key "addresses", "states"
   add_foreign_key "bed_orders", "patients"
   add_foreign_key "bedrooms", "sectors"
   add_foreign_key "beds", "bedrooms"

@@ -14,41 +14,40 @@ module Api::V1
     end
 
     def create
-      _dni = params[:data][:identifier][0][:value]
       _last_name = params[:data][:name][0][:family]
       _first_name = params[:data][:name][0][:given]
       if is_birthdate_in_params?
         _birthdate = params[:data][:birthDate].to_datetime
       end
       # Create Country, State and City.
-      if is_address_in_params?
-        _country = Country.where(name: params[:data][:address][0][:country]).first_or_create(name: params[:data][:address][0][:country])
-        _state = State.where(name: params[:data][:address][0][:state]).first_or_create(name: params[:data][:address][0][:state], country_id: _country.id)
-        _city = City.where(name: params[:data][:address][0][:city]).first_or_create(name: params[:data][:address][0][:city], state_id: _state.id )
-      end
       _marital_status = initialize_marital_status
       _gender = initialize_gender
-          
-      patient = Patient.where(dni: _dni).first_or_initialize(dni: _dni, last_name: _last_name, first_name: _first_name)
-      patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, sex: _gender)
-      if is_address_in_params?
-        if patient.address.present?
-          patient.address.update_attributes(
-            postal_code: params[:data][:address][0][:postalCode],
-            city_id: _city.id,
-            line: params[:data][:address][0][:line][0]
-          )
-        else
-          patient.address = Address.create(
-            postal_code: params[:data][:address][0][:postalCode],
-            city_id: _city.id,
-            line: params[:data][:address][0][:line][0]
-          )
+
+      params[:data][:identifier].each do |identifier|
+        if identifier["assigner"] == "DU"
+          @dni = identifier["value"]
+        elsif identifier["assigner"] == "andes"
+          puts "entró"
+          @andes_id = identifier["value"]
+        elsif identifier["assigner"] == "CUIL"
+          @cuil = identifier["value"]
         end
       end
 
+      params[:data][:telecom].each do |telecom|
+        if telecom["system"] == "email"
+          @email = telecom["value"]
+        end
+      end
+
+      patient = Patient.where(dni: @dni).first_or_initialize(dni: @dni, last_name: _last_name, first_name: _first_name)
+      patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, 
+        cuil: @cuil, andes_id: @andes_id, sex: _gender, email: @email)
+
       # Update or create the address.
       if patient.save
+        create_address_to(patient)
+        create_phones_to(patient)
         patient.Validado!
         render json: patient, status: :created
       else
@@ -66,8 +65,37 @@ module Api::V1
     end
 
     private
-    def is_address_in_params?
-      params[:data][:address].present?
+    def create_address_to(a_patient)
+      if params[:data][:address].present?
+        _country = Country.where(name: params[:data][:address][0][:country]).first_or_create(name: params[:data][:address][0][:country])
+        _state = State.where(name: params[:data][:address][0][:state]).first_or_create(name: params[:data][:address][0][:state], country_id: _country.id)
+        _city = City.where(name: params[:data][:address][0][:city]).first_or_create(name: params[:data][:address][0][:city], state_id: _state.id )
+        if a_patient.address.present?
+          a_patient.address.update_attributes(
+            postal_code: params[:data][:address][0][:postalCode],
+            country_id: _country.id,
+            state_id: _state.id,
+            city_id: _city.id,
+            line: params[:data][:address][0][:line][0]
+          )
+        else
+          a_patient.address = Address.create(
+            postal_code: params[:data][:address][0][:postalCode],
+            country_id: _country.id,
+            state_id: _state.id,
+            city_id: _city.id,
+            line: params[:data][:address][0][:line][0]
+          )
+        end
+      end
+    end
+
+    def create_phones_to(a_patient)
+      params[:data][:telecom].each do |telecom|
+        if telecom["system"] == "phone"
+          PatientPhone.create(number: telecom["value"], patient: a_patient)
+        end
+      end
     end
 
     def is_birthdate_in_params?

@@ -1,5 +1,5 @@
 class PatientSerializer < ActiveModel::Serializer
-  attributes :id, :dni, :first_name, :last_name, :birthdate, :marital_status, :sex
+  attributes :id, :dni, :cuil, :andes_id, :last_name, :first_name,  :birthdate, :marital_status, :sex
 
   def birthdate
     if object.birthdate.present? 

@@ -15,6 +15,8 @@ class Patient < ApplicationRecord
   validates_presence_of :first_name, :last_name, :dni
   validates_uniqueness_of :dni
 
+  delegate :country_name, :state_name, :city_name, :line, to: :address, prefix: :address
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
