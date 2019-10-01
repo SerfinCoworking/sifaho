@@ -9,6 +9,7 @@ class Professional < ApplicationRecord
   has_many :prescriptions
   belongs_to :professional_type, optional: true
   has_one :user
+  has_one_attached :avatar
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :enrollment

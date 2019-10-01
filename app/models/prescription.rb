@@ -31,6 +31,9 @@ class Prescription < ApplicationRecord
     :reject_if => :all_blank,
     :allow_destroy => true
 
+  delegate :fullname, :dni, :age_string, to: :patient, prefix: :patient
+  delegate :enrollment, :fullname, to: :professional, prefix: :professional
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
