@@ -123,14 +123,34 @@
         </table>
       <% elsif @prescription.cronica? %>
         <div class="row">
+          <!-- Professional profile -->
           <div class='col-md-3 col-xs-3'>
-            <strong>Profesional:</strong>
-            <%= @prescription.professional.full_name %>
-          </div>
+            <div class="media">
+              <div class="media-left">
+                  <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Profesional</h4>
+                <p><%= @prescription.professional_fullname %></p>
+                <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
+              </div>
+            </div> 
+          </div><!-- End professional profile -->
+
+          <!-- Patient profile -->
           <div class='col-md-3 col-xs-3'>
-            <strong>Paciente:</strong>
-            <%= @prescription.patient.fullname%>
-          </div>
+            <div class="media">
+              <div class="media-left">
+                  <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Paciente</h4>
+                <p><%= @prescription.patient_fullname.titleize %></p>
+                <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
+                <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
+              </div>
+            </div>
+          </div> <!-- End Patient profile -->
           <div class='col-md-6 col-xs-6'>
             <div class='row'>
               <div class='col-md-6 col-xs-6'>    
