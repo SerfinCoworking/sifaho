@@ -89,6 +89,7 @@
                 </div>
                 <br>
                 <div class="row">
+                <% if @patient.address.present? %>
                   <div class="col-md-12">
                     <h5>DATOS DEL DOMICILIO</h5><hr>
                     <div class="col-md-3">
@@ -104,6 +105,7 @@
                       <p><h5><strong>Dirección: </strong></h5><%= @patient.address_line %></p>
                     </div>
                   </div>
+                  <% end %>
                 </div>
               </div>
               <div id='prescriptions' class='tab-pane fade'>
