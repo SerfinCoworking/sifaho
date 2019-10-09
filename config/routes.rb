@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :permission_requests do
+    member do
+      get "end"
+    end
+  end
   resources :internal_order_templates
   get 'report/newOrderingSupply'
 

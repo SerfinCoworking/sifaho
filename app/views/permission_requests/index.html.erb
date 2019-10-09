@@ -1,0 +1,26 @@
+<%= render 'header' %>
+
+<div class="panel panel-default">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Estado</th>
+        <th>Establecimiento</th>
+        <th>Sector</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @permission_requests.each do |permission_request| %>
+        <tr class="table-row <%= permission_request.nueva? ? "info" : ""%>" data-href="<%= permission_request_path(permission_request) %>">
+          <td><%= permission_request.user.full_name %></td>
+          <td><span class="label label-<%= permission_request_status_label(permission_request) %>"><%= permission_request.status.humanize %></span></td>
+          <td><%= permission_request.establishment.titleize %></td>
+          <td><%= permission_request.sector.titleize %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @permission_requests %>
+</div>

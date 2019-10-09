@@ -104,7 +104,7 @@ module Api::V1
 
     def initialize_marital_status
       if params[:data][:maritalStatus].present?
-        return case params[:data][:maritalStatus][:text]
+        return case params[:data][:maritalStatus][:text].downcase
         when "unmarried"
           "Soltero"
         when "married"

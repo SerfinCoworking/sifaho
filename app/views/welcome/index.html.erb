@@ -1,10 +1,53 @@
 <%= render 'header' %>
-<div cass="row">
-  <div class="col-md-6">
-    <%= render 'prescriptions' %>
-    <%= render 'internal_orders' %>
+<% if current_user.sector.present? %>
+  <div cass="row">
+    <div class="col-md-6">
+      <%= render 'prescriptions' %>
+      <%= render 'internal_orders' %>
+    </div>
+    <div class="col-md-6">
+      <%= render 'right_panel' %>
+    </div>
   </div>
-  <div class="col-md-6">
-    <%= render 'right_panel' %>
-  </div>
-</div>
+<% else %>
+  <% if current_user.permission_requests.any?%>
+    <div class="row">
+      <div class="col-md-5 col-md-offset-3">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-hourglass') %> Espere una respuesta
+            </h3>
+          </div>
+          <div class="panel-body">
+            <p><h5>El equipo de gestión evaluará su solicitud y tomará las medidas correspondientes.</h5></p>
+            <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-md-5 col-md-offset-3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-envelope') %> Solicitud de permisos
+            </h3>
+          </div>
+          <div class="panel-body" id="panel-body-new">
+            <p><h5>Complete el formulario para comenzar a utilizar el sistema.</h5></p>
+            <%= render "permission_requests/form", permission_request: @permission_request %>
+            <p><h5>Una vez enviado, deberá esperar a que algún gestor de usuarios responda la solicitud.</h5></p>
+            <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
+          </div>
+          <div class="panel-footer text-right">
+            <button type='submit' name='commit' class='btn btn-success' form='new_permission_request'>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> Enviar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

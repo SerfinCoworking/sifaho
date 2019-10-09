@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_one :professional, :dependent => :destroy
   has_many :ordering_supply_comments
   has_many :reports, :dependent => :destroy
+  has_many :permission_requests, :dependent => :destroy
 
   accepts_nested_attributes_for :profile, :professional
 
@@ -22,6 +23,7 @@ class User < ApplicationRecord
   after_create :create_profile
 
   # Delegaciones
+  delegate :full_name, :dni, :email, to: :profile
   delegate :name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
   delegate :establishment, to: :sector

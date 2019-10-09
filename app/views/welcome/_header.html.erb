@@ -1,5 +1,6 @@
 
 <% content_for :page_header do %>
+  <% if current_user.sector.present? %>
     <ul class="nav nav-tabs nav-tabs-cust">
       <li role="presentation" id="page-title" class="non-sel">
         <a href="">Inicio</a>
@@ -138,4 +139,7 @@
         </ul>
       </li>
     </ul>
+  <% else %>
+    Bienvenido <%= current_user.full_name.titleize %>
+  <% end %>
 <% end %>

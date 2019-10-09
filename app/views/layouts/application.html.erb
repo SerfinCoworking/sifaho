@@ -33,7 +33,7 @@
           <div class="row">
             <%= render "shared/dialog" %>
             <%= render "layouts/flash_notices" %>
-            <% if current_user.present? %>
+            <% if current_user.present? && current_user.sector.present? %>
               <button id="openbtn" class="openbtn" onmouseover="openNav()">☰</button>
             <%  end %> 
             <%= yield %>

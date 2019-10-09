@@ -60,7 +60,7 @@
 }
 #panel-body-new {
   /* height: 480px; */
-  height: calc(100vh - 220px);
+  height: calc(100vh - 226px);
   overflow-y: auto; 
 }
 #filter-panel{

@@ -82,6 +82,10 @@
 <% end %>
 <% if policy(User).index? %>
   <%= link_to main_app.users_admin_index_path, class: active_class('users'), draggable: false, id: 'efector' do %>
-    Usuarios
+    Usuarios&nbsp;
+    <% count =  PermissionRequest.nueva.count %>
+    <% if count > 0 %>
+      <div class="label label-info pull-right"><%= count %></div>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,0 +1,26 @@
+<% content_for :page_header do %>
+  <ul class="nav nav-tabs nav-tabs-cust">
+    <li role="presentation" id="page-title" class="non-sel">
+      <a href="">Usuarios</a>
+    </li>
+    <li role="presentation" class="<%= active_action_and_controller('index', 'users_admin') %> non-sel">
+      <%= link_to users_admin_index_path do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+        Listado
+      <% end %>
+    </li>
+    <% if policy(PermissionRequest).index? %>
+      <li role="presentation" class="<%= active_action_and_controller('index', 'permission_requests') %> non-sel" id="efector">
+        <%= link_to permission_requests_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-envelope') %>
+          Solicitud de permisos&nbsp;
+          <% count =  PermissionRequest.nueva.count %>
+          <% if count > 0 %>
+            <div class="label label-info pull-right"><%= count %></div>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+    <span class="<%= active_action_and_controller('show', 'permission_requests') %>" id="efector"></span>
+  </ul>
+<% end %>

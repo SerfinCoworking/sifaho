@@ -45,9 +45,9 @@ class UsersController < ApplicationController
 
   def update_permissions
     authorize @user
-    
+
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.update(user_params.except :id)
         flash[:success] = @user.full_name+" se ha modificado correctamente."
         format.html { redirect_to action: "show", id: @user.id }
       else
@@ -77,6 +77,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:sector_id, sector_ids: [], role_ids: [])
+    params.require(:user).permit(:id, :sector_id, sector_ids: [], role_ids: [])
   end
 end 

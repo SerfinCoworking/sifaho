@@ -141,7 +141,7 @@
                         <td><%= prescription.remit_code %></th>
                         <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
                         <td>
-                          <span class="label label-<%= prescription.status_label %>">
+                          <span class="label label-<%= prescription_status_label(prescription) %>">
                             <%= prescription.status.underscore.humanize %>
                           </span>
                         </td>

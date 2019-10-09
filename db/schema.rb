@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_133257) do
+ActiveRecord::Schema.define(version: 2019_10_07_155149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -391,6 +391,18 @@ ActiveRecord::Schema.define(version: 2019_10_01_133257) do
     t.index ["address_id"], name: "index_patients_on_address_id"
   end
 
+  create_table "permission_requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "status", default: 0
+    t.string "establishment"
+    t.string "sector"
+    t.string "role"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_permission_requests_on_user_id"
+  end
+
   create_table "prescription_movements", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "prescription_id"
@@ -694,6 +706,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_133257) do
   add_foreign_key "ordering_supply_comments", "users"
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
+  add_foreign_key "permission_requests", "users"
   add_foreign_key "prescriptions", "establishments"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"

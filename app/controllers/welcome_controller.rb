@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
 
   def index
+    if current_user.sector.present?
       _helper = ActiveSupport::NumberHelper
       _prescriptions_today = Prescription.with_establishment(current_user.establishment).current_day
       _prescriptions_month = Prescription.with_establishment(current_user.establishment).current_month
@@ -30,5 +31,8 @@ class WelcomeController < ApplicationController
       @percent_good_supply_lots = _helper.number_to_percentage((@count_good_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
       @percent_near_expiry_supply_lots = _helper.number_to_percentage((@count_near_expiry_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
       @percent_expired_supply_lots = _helper.number_to_percentage((@count_expired_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
+    end  
+  else
+    @permission_request = PermissionRequest.new
   end
 end
