@@ -24,11 +24,17 @@
           <div class='col-md-3 col-xs-3'>
             <div class="media">
               <div class="media-left">
+                <%= link_to professional_path(@prescription.professional), class: "link" do %>
                   <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+                <% end %>
               </div>
               <div class="media-body">
                 <h4 class="media-heading">Profesional</h4>
-                <p><%= @prescription.professional_fullname %></p>
+                <p>
+                  <%= link_to professional_path(@prescription.professional), class: "link" do %>
+                    <%= @prescription.professional_fullname %>
+                  <% end %>
+                </p>
                 <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
               </div>
             </div> 
@@ -38,11 +44,17 @@
           <div class='col-md-3 col-xs-3'>
             <div class="media">
               <div class="media-left">
+                <%= link_to patient_path(@prescription.patient), class: "link" do %>
                   <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+                <% end %>
               </div>
               <div class="media-body">
                 <h4 class="media-heading">Paciente</h4>
-                <p><%= @prescription.patient_fullname.titleize %></p>
+                <p>
+                  <%= link_to patient_path(@prescription.patient), class: "link" do %>
+                    <%= @prescription.patient_fullname.titleize %>
+                  <% end %>    
+                </p>
                 <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
                 <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
               </div>
@@ -127,11 +139,17 @@
           <div class='col-md-3 col-xs-3'>
             <div class="media">
               <div class="media-left">
+                <%= link_to professional_path(@prescription.professional), class: "link" do %>
                   <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+                <% end %>
               </div>
               <div class="media-body">
                 <h4 class="media-heading">Profesional</h4>
-                <p><%= @prescription.professional_fullname %></p>
+                <p>
+                  <%= link_to professional_path(@prescription.professional), class: "link" do %>
+                    <%= @prescription.professional_fullname %>
+                  <% end %>
+                </p>
                 <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
               </div>
             </div> 
@@ -141,11 +159,17 @@
           <div class='col-md-3 col-xs-3'>
             <div class="media">
               <div class="media-left">
+                <%= link_to patient_path(@prescription.patient), class: "link" do %>
                   <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+                <% end %>
               </div>
               <div class="media-body">
                 <h4 class="media-heading">Paciente</h4>
-                <p><%= @prescription.patient_fullname.titleize %></p>
+                <p>
+                  <%= link_to patient_path(@prescription.patient), class: "link" do %>
+                    <%= @prescription.patient_fullname.titleize %>
+                  <% end %>
+                </p>
                 <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
                 <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
               </div>

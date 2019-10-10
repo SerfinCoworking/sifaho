@@ -145,6 +145,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
   
   def self.orders_to(a_sector, a_code)
     QuantityOrdSupplyLot.where.not(quantifiable: nil)
+      .entregado
       .where(supply_id: a_code)
       .includes(:quantifiable)
       .select { |qosl| qosl.delivered_with_sector?(a_sector) }

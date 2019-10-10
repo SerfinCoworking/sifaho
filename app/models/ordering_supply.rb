@@ -190,8 +190,10 @@ class OrderingSupply < ApplicationRecord
   end
 
   def delivered_with_sector?(a_sector)
-    if self.provision_en_camino? || self.recibo_realizado? || self.provision_entregada?
+    if self.provision_en_camino? || self.provision_entregada?
       return self.applicant_sector == a_sector || self.provider_sector == a_sector
+    elsif self.recibo_realizado?
+      return self.applicant_sector == a_sector
     end
   end
 
