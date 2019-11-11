@@ -18,7 +18,7 @@
       placeholder: 'Nombre',
       required: false,
       :input_html => {
-        class: "supply-name select-change",
+        class: "supply-name-template select-change",
         data: { autocomplete_source: search_by_name_supplies_path },
         size: 36,
         value: "#{if f.object.supply.present?; f.object.supply_name; end }"
