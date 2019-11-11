@@ -31,6 +31,9 @@ class InternalOrder < ApplicationRecord
     :reject_if => :all_blank,
     :allow_destroy => true
 
+  # Callbacks
+  before_validation :record_remit_code, on: :create
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
@@ -279,6 +282,16 @@ class InternalOrder < ApplicationRecord
       @not.updated_at = DateTime.now
       @not.read_at = nil
       @not.save
+    end
+  end
+
+  private
+
+  def record_remit_code
+    if self.provision?
+      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+    elsif self.solicitud?
+      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
 end

@@ -1,10 +1,10 @@
 <%= render "internal_orders/header" %>
 
 <div class="row">
-  <div class="panel panel-warning">
+  <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando plantilla de solicitud a sector
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nueva plantilla de provisión a sector
         <%= link_to internal_order_templates_path, class: 'btn pull-right close-btn' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
         <% end %>
@@ -15,7 +15,7 @@
     </div>
     <div class="panel-footer text-right">
       <%= link_to 'Volver', internal_order_templates_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='edit_internal_order_template_<%= @internal_order_template.id %>' value='Auditar'>
+      <button type='submit' name='commit' class='btn btn-success' form='new_internal_order_template' value='Auditar'>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
       </button>
     </div>

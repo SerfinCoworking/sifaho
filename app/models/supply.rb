@@ -20,6 +20,9 @@ class Supply < ApplicationRecord
   :through => :quantity_ord_supply_lots,
   :source => :quantifiable,
   :source_type => 'BedOrder'
+
+  has_many :internal_order_template_supplies
+  has_many :internal_order_template, through: :internal_order_template_supplies
   
   # Validaciones
   validates_presence_of :name, :unity, :quantity_alarm, :period_control

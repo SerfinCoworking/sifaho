@@ -16,7 +16,7 @@ class SessionsController < Devise::SessionsController
         else
           raise ArgumentError, 'Usuario o contraseña incorrectos.'
         end
-      end 
+      end
       redirect_to root_path
     rescue Net::LDAP::LdapError
       respond_to do |format|

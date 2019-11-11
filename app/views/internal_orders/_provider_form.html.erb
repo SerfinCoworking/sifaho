@@ -2,41 +2,30 @@
   <%= f.error_notification %>
   <div class="row">
     <div class='col-md-3'>
-      <% if @internal_order.solicitud? %>
-        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
-        <%= f.input :applicant_sector_id, as: :string,
-          label: 'Sector solicitante',
-          :input_html => {
-            disabled: true,
-            value: "#{ f.object.applicant_sector.name }",
-          } 
-        %>
-        <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{ f.object.applicant_sector_id }" %>
-      <% else %>
-        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
-        <%= f.input :applicant_sector_id, label: 'Sector solicitante',
-          collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
-          :input_html => {
-            required: true,
-            id: 'applicant-sector',
-            class: 'selectpicker show-tick',
-            "data-width"=>"auto",
-            "title"=>"Seleccionar sector",
-            "data-size"=>"10",
-            "data-live-search"=>true,
-            disabled: false,
-            value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
-          } 
-        %>
-        <br>
-        <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
-      <% end %>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
+      <%= f.input :applicant_sector_id, label: 'Sector solicitante',
+        collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
+        required: true,
+        :input_html => {
+          id: 'applicant-sector',
+          class: 'selectpicker-md show-tick',
+          "data-width"=>"auto",
+          "title"=>"Seleccionar sector",
+          "data-size"=>"10",
+          "data-live-search"=>true,
+          disabled: false,
+          value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
+        } 
+      %>
+      <br>
+      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
     </div>
     <div class="col-md-3">
       <%= f.input :provider_sector_id, as: :string,
         label: 'Sector proveedor',
         :input_html => {
           disabled: true,
+          size: 30,
           value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
         } 
       %>
@@ -55,21 +44,9 @@
         html5: false 
       %>
     </div>
-    <div class='col-md-2'>
+    <div class='col-md-4'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-      :input_html => { :cols => 15  , :rows => 1 } %>
-    </div>
-    <div class="col-md-2">
-      <%= f.input :remit_code, label: 'Código', as: :string, 
-        :placeholder => "Un código",
-        input_html: {
-          size: 13,
-          id: "remit-code",
-          required: true,
-          autocomplete: 'off',
-          value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'prov'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s; else; f.object.remit_code; end }"
-        }
-      %>
+        :input_html => { :cols => 40  , :rows => 1 } %>
     </div>
   </div>
   <hr>
@@ -88,18 +65,8 @@
       </tr>
     </thead>
     <tbody class="quantity_ord_supply_lots">
-      <% if params[:action] == "edit" %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
-      <% elsif params[:action] == "create" %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
-      <% else %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @internal_order.quantity_ord_supply_lots.build } do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
       <% end %>
     </tbody>
   </table>

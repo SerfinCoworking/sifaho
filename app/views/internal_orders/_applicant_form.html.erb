@@ -7,25 +7,20 @@
         label: 'Sector solicitante',
         :input_html => {
           disabled: true,
+          size: 30,
           value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }",
         } 
       %>
       <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
-      <% if policy(current_user).change_sector? %>
-        <%= link_to main_app.change_sector_users_admin_path(current_user), class:'btn btn-warning btn-sm change-btn', remote: true,
-          :title => 'Cambiar sector', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-      <% end %>
       <br>
     </div>
     <div class="col-md-3">
       <%= f.input :provider_sector_id, label: 'Sector proveedor',
         collection: @provider_sectors.map {|s| [ s['name'], s['id'] ] },
+        required: true,
         :input_html => {
-          required: true,
           id: 'provider-sector',
-          class: 'selectpicker show-tick',
+          class: 'selectpicker-md show-tick',
           "data-width"=>"auto",
           "title"=>"Seleccionar sector",
           "data-size"=>"10",
@@ -49,21 +44,9 @@
         html5: false 
       %>
     </div>
-    <div class='col-md-2'>
+    <div class='col-md-4'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
-      :input_html => { :cols => 15  , :rows => 1 } %>
-    </div>
-    <div class="col-md-2">
-      <%= f.input :remit_code, label: 'Código', as: :string, 
-        :placeholder => "Un código",
-        input_html: {
-          size: 13,
-          id: "remit-code",
-          required: true,
-          autocomplete: 'off',
-          value: "#{ unless f.object.remit_code.present?; current_user.sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s; else; f.object.remit_code; end }"
-        }
-      %>
+      :input_html => { :cols => 40  , :rows => 1 } %>
     </div>
   </div>
   <hr>
@@ -81,18 +64,8 @@
       </tr>
     </thead>
     <tbody class="quantity_ord_supply_lots">
-      <% if params[:action] == "edit" %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
-      <% elsif params[:action] == "create" %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
-      <% else %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @internal_order.quantity_ord_supply_lots.build } do |form_quantity| %>
-          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
+      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+        <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
       <% end %>
     </tbody>
   </table>

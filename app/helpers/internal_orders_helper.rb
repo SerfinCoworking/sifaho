@@ -37,4 +37,10 @@ module InternalOrdersHelper
     elsif order.anulada?; return 100
     end
   end
+
+  def internal_order_td(order)
+    if order.solicitud_enviada?; return "info"
+    else return ""
+    end
+  end
 end

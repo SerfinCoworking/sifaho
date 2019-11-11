@@ -32,10 +32,18 @@
       </li>
     <% end %>
     <% if policy(InternalOrder).new_provider? %>
-      <li role="presentation" class="<%= active_action('new_provider') %> non-sel">
+      <li role="presentation" class="<%= active_action_and_controller('new_provider', 'internal_orders') %> non-sel">
         <%= link_to new_provider_internal_orders_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           Provisión
+        <% end %>
+      </li>
+    <% end %>
+    <% if policy(InternalOrderTemplate).index? %>
+      <li role="presentation" class="<%= active_class('internal_order_templates') %> non-sel" id="pedido">
+        <%= link_to internal_order_templates_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+          Plantillas
         <% end %>
       </li>
     <% end %>
@@ -47,15 +55,5 @@
         <% end %>
       </li>
     <% end %>
-    <!--
-    <% if policy(InternalOrderTemplate).index? %>
-      <li role="presentation" class="<%= active_action_and_controller('index', 'internal_order_templates') %> non-sel">
-        <%= link_to internal_order_templates_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
-          Plantillas
-        <% end %>
-      </li>
-    <% end %>
-    -->
   </ul>
 <% end %>

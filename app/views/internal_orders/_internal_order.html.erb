@@ -1,4 +1,4 @@
-<tr id="internal_order_<%= internal_order.id %>">
+<tr id="internal_order_<%= internal_order.id %>" class="<%= internal_order_td(internal_order) %>">
   <td><%= internal_order.remit_code %></td>
   <% if current_page?(action: 'applicant_index') %>
     <td class="sol-col-aba">

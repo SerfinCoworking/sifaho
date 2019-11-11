@@ -1,4 +1,4 @@
-<%= render 'header' %>
+<%= render 'internal_orders/header' %>
 
 <div class="row">
   <div class="panel panel-primary">
@@ -11,7 +11,7 @@
       </h3>
     </div>
     <div class="panel-body" id="panel-body-new">
-      <%= render 'applicant_form', internal_order: @internal_order %>
+      <%= render 'internal_orders/applicant_form', internal_order: @internal_order %>
     </div>
     <div class="panel-footer text-right">
       <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn' %>
