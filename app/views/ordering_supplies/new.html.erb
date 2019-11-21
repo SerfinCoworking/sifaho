@@ -1,4 +1,4 @@
-<%= render 'header' %>
+<%= render 'ordering_supplies/header' %>
 
 <div class="row">
   <div class="panel panel-primary">
@@ -11,7 +11,7 @@
       </h3>
     </div>
     <div class="panel-body" id="panel-body-new">
-      <%= render 'provider_form', ordering_supply: @ordering_supply %>
+      <%= render 'ordering_supplies/provider_form', ordering_supply: @ordering_supply %>
     </div>
     <div class="panel-footer text-right">
       <%= link_to 'Volver', ordering_supplies_path, class: 'btn' %>

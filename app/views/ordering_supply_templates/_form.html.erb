@@ -1,0 +1,106 @@
+<%= simple_form_for @ordering_supply_template, html: { role: 'check-modified'} do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :order_type, :as => :hidden, :input_html => { value: "#{@order_type.present? ? @order_type : f.object.order_type}" } %>
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.input :name, label: "Nombre" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.input :destination_establishment_id, as: :string,
+        label: 'Establecimiento',
+        placeholder: 'Buscar por nombre',
+        required: true,
+        :input_html => {
+          autocomplete: 'off',
+          id: "provider-establishment",
+          data: { autocomplete_source: search_by_name_establishments_path },
+          value: "#{ if f.object.destination_sector.present?; f.object.destination_sector.establishment.name; end }",
+          size: 41
+        } 
+      %>
+      <%= f.input :destination_establishment_id, :as => :hidden,
+        :input_html => {
+          id: 'provider-establishment-id',
+          value: "#{ if f.object.destination_sector.present?; f.object.destination_sector.establishment_id; end }"
+        } 
+      %>
+    </div>
+    <div class="col-md-3">
+      <% if f.object.destination_sector.present? %>
+        <%= f.input :destination_sector_id, label: 'Sector',
+          collection: @sectors.map {
+            |sector| [sector.name, sector.id]
+          },
+          :input_html => {
+            required: true,
+            id: 'provider-sector',
+            class: 'selectpicker-md show-tick',
+            "data-width"=>"322px",
+            "title"=>"Seleccionar sector",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+            value: "#{ if f.object.destination_sector.present?; f.object.destination_sector.id; end }"
+          } 
+        %>
+      <% else %>
+        <%= f.input :destination_sector_id, label: 'Sector',
+          collection: [],
+          :input_html => {
+            required: true,
+            id: 'provider-sector',
+            class: 'selectpicker-md show-tick',
+            "data-width"=>"322px",
+            "title"=>"Seleccione un establecimiento",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+          } 
+        %>
+      <% end %>
+      <%= f.hidden_field :destination_sector_id, id: "provider-id", value: "#{ if f.object.destination_sector.present?; f.object.destination_sector.id; end }" %>
+    </div>
+    <div class="col-md-3">
+      <%= f.input :observation, label: 'Observaciones', :input_html => { :rows => 1 } %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Insumos a dispensar -->
+      <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Insumo</th>
+            <th>Unidad</th>
+            <th>Rubro</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="ordering_supply_template_supplies">
+          <% if params[:action] == "edit" %>
+            <%= f.simple_fields_for :ordering_supply_template_supplies, @ordering_supply_template.ordering_supply_template_supplies.joins(:supply).order("name") do |form_quantity| %>
+              <%= render "ordering_supply_template_supply_fields", f: form_quantity %>
+            <% end %>
+          <% elsif params[:action] == "create" %>
+            <%= f.simple_fields_for :ordering_supply_template_supplies do |form_quantity| %>
+              <%= render "ordering_supply_template_supply_fields", f: form_quantity %>
+            <% end %>
+          <% else %>
+            <% 4.times { @ordering_supply_template.ordering_supply_template_supplies.build } %>
+            <%= f.simple_fields_for :ordering_supply_template_supplies do |form_quantity| %>
+              <%= render "ordering_supply_template_supply_fields", f: form_quantity %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="links" id="links-quant-form">
+        <div class="text-center">
+          <%= link_to_add_association f, :ordering_supply_template_supplies, class: 'btn btn-primary btn-sm',
+            data: {"association-insertion-node" => "tbody.ordering_supply_template_supplies", "association-insertion-method" => "append"} do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Agregar insumo
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

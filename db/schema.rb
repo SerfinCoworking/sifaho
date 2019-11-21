@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_11_122636) do
+ActiveRecord::Schema.define(version: 2019_11_20_112157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -366,6 +366,32 @@ ActiveRecord::Schema.define(version: 2019_11_11_122636) do
     t.index ["ordering_supply_id"], name: "index_ordering_supply_movements_on_ordering_supply_id"
     t.index ["sector_id"], name: "index_ordering_supply_movements_on_sector_id"
     t.index ["user_id"], name: "index_ordering_supply_movements_on_user_id"
+  end
+
+  create_table "ordering_supply_template_supplies", force: :cascade do |t|
+    t.bigint "ordering_supply_template_id"
+    t.bigint "supply_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "rank", default: 0
+    t.index ["ordering_supply_template_id"], name: "o_s_template"
+    t.index ["supply_id"], name: "index_ordering_supply_template_supplies_on_supply_id"
+  end
+
+  create_table "ordering_supply_templates", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_sector_id"
+    t.bigint "destination_establishment_id"
+    t.bigint "destination_sector_id"
+    t.bigint "created_by_id"
+    t.integer "order_type", default: 0
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_ordering_supply_templates_on_created_by_id"
+    t.index ["destination_establishment_id"], name: "index_ordering_supply_templates_on_destination_establishment_id"
+    t.index ["destination_sector_id"], name: "index_ordering_supply_templates_on_destination_sector_id"
+    t.index ["owner_sector_id"], name: "index_ordering_supply_templates_on_owner_sector_id"
   end
 
   create_table "patient_phones", force: :cascade do |t|

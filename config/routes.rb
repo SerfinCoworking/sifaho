@@ -17,6 +17,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ordering_supply_templates do
+    collection do
+      get "new_provider"
+    end
+    member do
+      get "delete"
+      get "use_applicant"
+      get "use_provider"
+      get "edit_provider"
+    end
+  end
+
   get 'report/newOrderingSupply'
 
   post 'auth/login', to: 'authentication#authenticate'

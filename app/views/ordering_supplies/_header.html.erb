@@ -11,7 +11,7 @@
           <span class="hidden-xs">Recibos</span>
         <% end %>
       </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
+      <li role="presentation" class="<%= active_action_and_controller('index', 'ordering_supplies') %> non-sel">
         <%= link_to ordering_supplies_path do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
@@ -30,10 +30,18 @@
         </li>
       <% end %>
       <% if policy(OrderingSupply).new_provider? %>
-        <li role="presentation" class="<%= active_action('new') %> non-sel">
+        <li role="presentation" class="<%= active_action_and_controller('new_provider', 'ordering_supplies') %> non-sel">
           <%= link_to new_ordering_supply_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             D<span class="hidden-xs">espacho</span>
+          <% end %>
+        </li>
+      <% end %>
+      <% if policy(OrderingSupplyTemplate).index? %>
+        <li role="presentation" class="<%= active_class('ordering_supply_templates') %> non-sel" id="pedido">
+          <%= link_to ordering_supply_templates_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+            Plantillas
           <% end %>
         </li>
       <% end %>
