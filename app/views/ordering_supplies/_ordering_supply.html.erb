@@ -43,7 +43,7 @@
   <td>
     <% if policy(ordering_supply).show? %>
       <%= link_to ordering_supply_path(ordering_supply),
-            class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
       <% end %>
     <% end %>
@@ -55,13 +55,13 @@
     <% end %>
     <% if policy(ordering_supply).edit_applicant? %>
       <%= link_to edit_applicant_ordering_supply_path(ordering_supply), :"data-turbolinks" => false, 
-        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>
     <% if policy(ordering_supply).edit? %>
       <%= link_to edit_ordering_supply_path(ordering_supply), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
       <% end %>
     <% end %>

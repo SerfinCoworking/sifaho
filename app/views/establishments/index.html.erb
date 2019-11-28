@@ -8,24 +8,11 @@
     <div class="panel-rightbody">
       <%= form_for_filterrific @filterrific do |f| %>
           <div class="col-md-3 col-sm-3">
-            <label>DNI</label>
+            <label>Nombre</label>
             <%= f.text_field(
-              :search_dni,
+              :search_name,
               class: 'filterrific-periodically-observed form-control input-sm'
                 ) %>
-          </div>
-          <div class="col-md-3 col-sm-3">
-            <label>Nombre o Apellido</label>
-            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-            <%= f.text_field(
-              :search_fullname,
-              class: 'filterrific-periodically-observed form-control input-sm',
-              autocomplete: 'off'
-            ) %>
-          </div>
-          <div class="col-md-3 col-sm-3">
-            <label>Ordenar por</label>
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
           </div>
           <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>

@@ -1,6 +1,7 @@
 class Sector < ApplicationRecord
   # Relaciones
   belongs_to :establishment, counter_cache: true
+  belongs_to :establishment, counter_cache: :users_count
   has_many :users
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :supply_lots, -> { with_deleted }, through: :sector_supply_lots

@@ -91,13 +91,15 @@
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).use_applicant? %>
-        <%= link_to use_applicant_internal_order_template_path(@internal_order_template), class: "btn btn-primary" do %>
+        <%= link_to use_applicant_internal_order_template_path(@internal_order_template), class: "btn btn-primary",
+          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
           <%= content_tag(:span, "", class: "glyphicon glyphicon-plus") %>
           Crear solicitud
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).use_provider? %>
-        <%= link_to use_provider_internal_order_template_path(@internal_order_template), class: "btn btn-primary" do %>
+        <%= link_to use_provider_internal_order_template_path(@internal_order_template), class: "btn btn-primary", 
+          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
           <%= content_tag(:span, "", class: "glyphicon glyphicon-plus") %>
           Crear provisión
         <% end %>

@@ -30,7 +30,7 @@
         </li>
       <% end %>
       <% if policy(OrderingSupply).new_provider? %>
-        <li role="presentation" class="<%= active_action_and_controller('new_provider', 'ordering_supplies') %> non-sel">
+        <li role="presentation" class="<%= active_action_and_controller('new', 'ordering_supplies') %> non-sel">
           <%= link_to new_ordering_supply_path do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             D<span class="hidden-xs">espacho</span>

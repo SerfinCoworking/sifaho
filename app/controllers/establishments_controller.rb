@@ -8,15 +8,14 @@ class EstablishmentsController < ApplicationController
       Establishment,
       params[:filterrific],
       select_options: {
-        sorted_by: Establishment.options_for_sorted_by,
+        with_system_status: Establishment.options_for_system_status,
+        with_status: Establishment.options_for_status,
       },
       persistence_id: false,
       default_filter_params: {sorted_by: 'created_at_desc'},
       available_filters: [
         :sorted_by,
-        :search_fullname,
-        :search_dni,
-        :with_patient_type_id,
+        :search_name,
       ],
     ) or return
     @establishments = @filterrific.find.page(params[:page]).per_page(15)

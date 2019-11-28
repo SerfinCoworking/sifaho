@@ -75,6 +75,12 @@
               Provisión
             <% end %>
           </li>
+          <li>
+            <%= link_to internal_order_templates_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+              Plantillas
+            <% end %>
+          </li>
           <% if policy(InternalOrder).new_report? %>
             <li role="presentation" class="<%= active_action('new_report') %>">
               <%= link_to new_report_internal_orders_path do %>
@@ -128,6 +134,12 @@
             <%= link_to new_ordering_supply_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
               D<span class="hidden-xs">espacho</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to ordering_supply_templates_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+              Plantillas
             <% end %>
           </li>
           <li>

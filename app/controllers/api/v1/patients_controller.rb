@@ -14,8 +14,8 @@ module Api::V1
     end
 
     def create
-      _last_name = params[:data][:name][0][:family]
-      _first_name = params[:data][:name][0][:given]
+      _last_name = params[:data][:name][0][:family].join(" ")
+      _first_name = params[:data][:name][0][:given].join(" ")
       if is_birthdate_in_params?
         _birthdate = params[:data][:birthDate].to_datetime
       end

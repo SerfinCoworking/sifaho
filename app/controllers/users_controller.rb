@@ -17,7 +17,7 @@ class UsersController < ApplicationController
         :sorted_by
       ],
     ) or return
-    @users = @filterrific.find.page(params[:page]).per_page(15)
+    @users = @filterrific.find.page(params[:page]).per_page(14)
   end
 
   def show

@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :user_sectors
   has_many :sectors, :through => :user_sectors
   belongs_to :sector, optional: true
+  has_many :establishments, :through => :sectors
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy
   has_many :ordering_supply_comments

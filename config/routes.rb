@@ -103,6 +103,9 @@ Rails.application.routes.draw do
   end
 
   resources :establishments do
+    member do
+      get "delete"
+    end
     collection do
       get "search_by_name"
     end

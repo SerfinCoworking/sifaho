@@ -1,34 +1,24 @@
-<tr id="patient_<%= patient.id %>">
+<tr id="establishment_<%= establishment.id %>">
   <div class="js-fade fade-in is-paused">
+    <td><%= establishment.code %></td>
     <td><%= establishment.name %></td>
-    <td><strong><%= patient.last_name %></strong>, <%= patient.first_name %></td>
+    <td><%= establishment.sectors_count %></td>
+    <td><%= establishment.users_count %></td>
     <td>
-      <span class="label label-<%= patient.Temporal? ? "warning" : "success"%>">
-        <%= patient.status %>
-      </span>
-    </td>
-    <td>
-      <%= patient.birthdate.present? ? patient.birthdate.strftime("%d/%m/%Y")  : '----' %>
-    </td>
-    <td><%= patient.age_string %></td>
-    <% @count_pres = patient.prescriptions.count %>
-    <td><%= patient.sex.humanize %></td>
-    <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
-    <td>
-      <% if policy(patient).show? %>
-        <%= link_to patient_path(patient), class: 'btn btn-default btn-xs',
+      <% if policy(establishment).show? %>
+        <%= link_to establishment_path(establishment), class: 'btn btn-default btn-xs',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
         <% end %>
       <% end %>
-      <% if policy(patient).edit? %>
-        <%= link_to edit_patient_path(patient), class: 'btn btn-warning btn-xs',
+      <% if policy(establishment).edit? %>
+        <%= link_to edit_establishment_path(establishment), class: 'btn btn-warning btn-xs',
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
         <% end %>
       <% end %>
-      <% if policy(patient).destroy? %>
-        <%= link_to delete_patient_path(patient), remote: true,
+      <% if policy(establishment).destroy? %>
+        <%= link_to delete_establishment_path(establishment), remote: true,
               class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
         <% end %>

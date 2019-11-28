@@ -89,3 +89,8 @@
     <% end %>
   <% end %>
 <% end %>
+<% if policy(Establishment).index? %>
+  <%= link_to main_app.establishments_path, class: active_class('establishments'), draggable: false, id: 'efector' do %>
+    Establecimientos
+  <% end %>
+<% end %>
