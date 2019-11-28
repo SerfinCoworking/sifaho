@@ -1,6 +1,6 @@
 class EstablishmentPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :farmaceutico)
+    user.has_any_role?(:admin)
   end
 
   def show?
@@ -16,7 +16,7 @@ class EstablishmentPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:admin, :farmaceutico)
+    user.has_any_role?(:admin)
   end
 
   def edit?
@@ -29,23 +29,5 @@ class EstablishmentPolicy < ApplicationPolicy
 
   def delete?
     destroy?
-  end
-
-  private
-
-  def update_lab
-    [ :admin ]
-  end
-
-  def show_lab
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :farmaceutico_central ]
-  end
-
-  def create_lab
-    [ :admin, :farmaceutico ]
-  end
-
-  def destroy_lab
-    [ :admin ]
   end
 end
