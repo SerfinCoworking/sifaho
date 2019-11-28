@@ -19,4 +19,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.plural 'Unidad', 'Unidades'
   inflect.plural 'Par', 'Pares'
   inflect.plural 'Bidon', 'Bidones'
+  inflect.plural 'Dosis', 'Dosis'
 end
