@@ -33,13 +33,13 @@ class OrderingSupplyTemplatesController < ApplicationController
   # GET /ordering_supply_templates/1/edit
   def edit
     authorize @ordering_supply_template
-    @destination_sectors = current_user.establishment.sectors
+    @destination_sectors = Sector.with_establishment_id(@ordering_supply_template.destination_sector.establishment_id)
   end
 
   # GET /ordering_supply_templates/1/edit_provider
   def edit_provider
     authorize @ordering_supply_template
-    @destination_sectors = current_user.establishment.sectors
+    @destination_sectors = Sector.with_establishment_id(@ordering_supply_template.destination_sector.establishment_id)
   end
 
   # POST /ordering_supply_templates
