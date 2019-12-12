@@ -10,10 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_20_112157) do
+ActiveRecord::Schema.define(version: 2019_12_12_181403) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -145,8 +148,8 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.string "domicile"
     t.string "phone"
     t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer "sectors_count", default: 0
   end
 
@@ -175,36 +178,37 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
-    t.bigint "detination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
-    t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "destination_sector_id"
+    t.text "observation"
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
+    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
   create_table "internal_orders", force: :cascade do |t|
+    t.datetime "date_delivered"
+    t.datetime "date_received"
+    t.text "observation"
+    t.integer "provider_status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.datetime "requested_date"
+    t.datetime "sent_date"
+    t.bigint "provider_sector_id"
+    t.bigint "applicant_sector_id"
+    t.integer "applicant_status", default: 0
     t.bigint "audited_by_id"
     t.bigint "sent_by_id"
     t.bigint "received_by_id"
     t.bigint "created_by_id"
-    t.datetime "sent_date"
-    t.datetime "requested_date"
-    t.datetime "date_received"
-    t.text "observation"
-    t.integer "provider_status", default: 0
-    t.integer "applicant_status", default: 0
-    t.integer "status", default: 0
-    t.integer "order_type", default: 0
     t.string "remit_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "provider_sector_id"
-    t.bigint "applicant_sector_id"
-    t.datetime "deleted_at"
+    t.integer "order_type", default: 0
+    t.integer "status", default: 0
     t.bigint "sent_request_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
@@ -271,24 +275,24 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
   end
 
   create_table "ordering_supplies", force: :cascade do |t|
+    t.text "observation"
+    t.datetime "date_received"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.bigint "applicant_sector_id"
     t.bigint "provider_sector_id"
+    t.datetime "requested_date"
+    t.datetime "sent_date"
+    t.integer "status", default: 0
     t.bigint "audited_by_id"
     t.bigint "accepted_by_id"
     t.bigint "sent_by_id"
     t.bigint "received_by_id"
-    t.bigint "created_by_id"
-    t.text "observation"
-    t.string "remit_code"
-    t.datetime "sent_date"
     t.datetime "accepted_date"
-    t.datetime "date_received"
-    t.datetime "requested_date"
-    t.integer "status", default: 0
     t.integer "order_type", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
+    t.bigint "created_by_id"
+    t.string "remit_code"
     t.bigint "sent_request_by_id"
     t.index ["accepted_by_id"], name: "index_ordering_supplies_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_ordering_supplies_on_applicant_sector_id"
@@ -374,8 +378,8 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.integer "sex", default: 1
     t.datetime "birthdate"
     t.string "email", limit: 50
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.bigint "address_id"
     t.integer "marital_status", default: 1
     t.integer "status", default: 0
@@ -412,13 +416,13 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.text "observation"
     t.datetime "date_received"
     t.datetime "date_dispensed"
-    t.integer "status", default: 0
-    t.datetime "prescribed_date"
-    t.datetime "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "professional_id"
     t.bigint "patient_id"
+    t.integer "status", default: 0
+    t.datetime "prescribed_date"
+    t.datetime "expiry_date"
     t.datetime "deleted_at"
     t.string "remit_code"
     t.bigint "created_by_id"
@@ -482,20 +486,20 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
 
   create_table "quantity_ord_supply_lots", force: :cascade do |t|
     t.integer "supply_lot"
-    t.string "lot_code"
     t.string "quantifiable_type"
     t.bigint "quantifiable_id"
     t.integer "requested_quantity"
     t.integer "delivered_quantity"
-    t.integer "status", default: 0
-    t.bigint "supply_id"
-    t.bigint "sector_supply_lot_id"
-    t.bigint "supply_lot_id"
-    t.bigint "laboratory_id"
-    t.text "applicant_observation"
-    t.datetime "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "sector_supply_lot_id"
+    t.bigint "supply_id"
+    t.bigint "supply_lot_id"
+    t.datetime "expiry_date"
+    t.string "lot_code"
+    t.bigint "laboratory_id"
+    t.integer "status", default: 0
+    t.text "applicant_observation"
     t.text "provider_observation"
     t.integer "treatment_duration"
     t.integer "daily_dose"
@@ -538,9 +542,9 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
   create_table "sector_supply_lots", force: :cascade do |t|
     t.integer "sector_id"
     t.integer "supply_lot_id"
+    t.integer "status", default: 0
     t.integer "quantity", default: 0
     t.integer "initial_quantity", default: 0
-    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
@@ -556,6 +560,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.datetime "updated_at", null: false
     t.bigint "establishment_id"
     t.integer "user_sectors_count", default: 0
+    t.integer "users_count"
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
@@ -577,7 +582,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.integer "quantity_alarm"
     t.integer "period_control"
     t.boolean "is_active"
-    t.datetime "created_at", null: false
+    t.datetime "created_at"
     t.datetime "updated_at", null: false
     t.bigint "supply_area_id"
     t.datetime "deleted_at"
@@ -601,7 +606,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.datetime "updated_at", null: false
     t.bigint "supply_id"
     t.datetime "deleted_at"
-    t.string "lot_code", limit: 20
+    t.string "lot_code", limit: 30
     t.bigint "laboratory_id"
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_supply_lots_on_laboratory_id"
@@ -627,6 +632,8 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
   create_table "users", force: :cascade do |t|
     t.string "username", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
@@ -636,6 +643,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sector_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["sector_id"], name: "index_users_on_sector_id"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
@@ -662,6 +670,9 @@ ActiveRecord::Schema.define(version: 2019_11_20_112157) do
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "professionals", "professional_types"
+  add_foreign_key "quantity_ord_supply_lots", "laboratories"
+  add_foreign_key "quantity_ord_supply_lots", "supplies"
+  add_foreign_key "quantity_ord_supply_lots", "supply_lots"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
