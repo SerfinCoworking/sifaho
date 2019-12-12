@@ -5,14 +5,14 @@
     <div class="panel panel-default">
       <!--  Panel prescripciones recibidas por día -->
       <% count_i_p = @internal_applicants.where('created_at >= ?', DateTime.now - 6.days).count %>
-        <div class="panel-heading">
-          <h3 class="panel-title">Recibos <small>Última semana </small><span class="label label-default"><%= count_i_p %></span></h3>
-        </div>
-        <div class="panel-body">
-          <%= line_chart @internal_applicants
-            .group_by_day(:created_at,range: 1.week.ago.midnight..Time.now, format: "%a %d/%m").count, 
-            discrete: true, label: 'Cantidad', adapter: "highcharts"%>
-        </div>
+      <div class="panel-heading">
+        <h3 class="panel-title">Recibos <small>Última semana </small><span class="label label-default"><%= count_i_p %></span></h3>
+      </div>
+      <div class="panel-body">
+        <%= line_chart @internal_applicants
+          .group_by_day(:created_at,range: 1.week.ago.midnight..Time.now, format: "%a %d/%m").count, 
+          discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+      </div>
     </div>
   </div>
   <div class="col-md-6">

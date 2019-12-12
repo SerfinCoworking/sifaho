@@ -133,7 +133,7 @@ class OrderingSupply < ApplicationRecord
   scope :with_order_type, lambda { |a_order_type|
     where('ordering_supplies.order_type = ?', a_order_type)
   }
-
+  
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
@@ -187,6 +187,13 @@ class OrderingSupply < ApplicationRecord
 
   def sum_to?(a_sector)
     return self.applicant_sector == a_sector
+  end
+
+  def self.orders_to_sector(a_sector)
+    @despachos = self.despacho.provider(a_sector).or(self.despacho.applicant(a_sector))
+    @solicitud_abastecimientos = self.solicitud_abastecimiento.provider(a_sector).or(self.solicitud_abastecimiento.applicant(a_sector))
+    @recibos = self.recibo.applicant(a_sector)
+    @orders = @despachos.or(@solicitud_abastecimientos.or(@recibos))
   end
 
   def delivered_with_sector?(a_sector)

@@ -28,6 +28,6 @@ class ChartsController < ApplicationController
   end
 
   def by_order_type_ordering_supplies
-    render json: OrderingSupply.group(:order_type).count.map {|type| [type.first.humanize, type.second] }
+    render json: OrderingSupply.orders_to_sector(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
   end
 end
