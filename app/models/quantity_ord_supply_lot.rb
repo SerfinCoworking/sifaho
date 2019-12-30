@@ -12,6 +12,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply, :requested_quantity, :delivered_quantity
+  validates_presence_of :lot_code, if: :quantifiable_is_recibo?
   validates_associated :supply
 
   accepts_nested_attributes_for :supply,
@@ -141,6 +142,12 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   def delivered_with_sector?(a_sector)
     self.quantifiable.delivered_with_sector?(a_sector)
+  end
+
+  def quantifiable_is_recibo?
+    if quantifiable.class.name == "OrderingSupply"
+      return quantifiable.recibo?
+    end 
   end
   
   def self.orders_to(a_sector, a_code)
