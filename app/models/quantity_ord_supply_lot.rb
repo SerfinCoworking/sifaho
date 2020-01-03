@@ -31,7 +31,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
   delegate :code, to: :sector_supply_lot, prefix: :supply
   delegate :laboratory, to: :sector_supply_lot, prefix: :sector_supply
 
-
+  # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
   scope :to_sector, lambda { |a_sector| joins(:sector_supply_lot).where(sector_supply_lots: { sector: a_sector }) }
 
@@ -77,6 +77,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     end
   end
 
+  # Decrement delivered quantity to sector supply lot and turn status "Entregado"
   def decrement
     if self.sector_supply_lot.present?
       self.sector_supply_lot.decrement(self.delivered_quantity)
@@ -85,12 +86,13 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.entregado!
   end
 
+  # Dispense supply of cronic prescription
   def decrement_to_cronic(cronic_dispensation)
     if self.sector_supply_lot.present?
       if self.sector_supply_lot.decrement(self.delivered_quantity)
-        new_qosl = self.dup
-        new_qosl.save!
-        self.cronic_dispensation = cronic_dispensation
+        new_qosl = self.dup  # Clone the actual QOSL
+        new_qosl.save! # Save the clone
+        self.cronic_dispensation = cronic_dispensation # Assign the current dispensation
         self.dispensed_at = DateTime.now
         self.entregado!
       end
@@ -100,6 +102,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     end
   end
 
+  # Increment delivered quantity to sector supply lot and turn status "Sin entregar"
   def increment
     if self.sector_supply_lot.present?
       self.sector_supply_lot.increment(self.delivered_quantity)
@@ -107,6 +110,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     self.sin_entregar!
   end
 
+  # Getter sector supply lot code
   def sector_supply_lot_lot_code
     if self.sector_supply_lot.present?  
       self.sector_supply_lot.lot_code
@@ -117,7 +121,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     end
   end
 
-  # Retorna fecha de expiración del lote
+  # Getter sector supply lot expiry date
   def sector_supply_lot_expiry_date
     if self.sector_supply_lot.present?
       self.sector_supply_lot.format_expiry_date
@@ -130,6 +134,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
     end
   end
 
+  # Getter sector supply lot laboratory name
   def sector_supply_lot_laboratory_name
     if self.sector_supply_lot.present?
       self.sector_supply_lot.laboratory
@@ -140,16 +145,19 @@ class QuantityOrdSupplyLot < ApplicationRecord
     end
   end
 
+  # Return true if the order was delivered by the sector
   def delivered_with_sector?(a_sector)
     self.quantifiable.delivered_with_sector?(a_sector)
   end
 
+  # Return true if the Ordering Supply is a "Recibo"
   def quantifiable_is_recibo?
     if quantifiable.class.name == "OrderingSupply"
       return quantifiable.recibo?
     end 
   end
   
+  # Return all orders related to a sector and a supply code
   def self.orders_to(a_sector, a_code)
     QuantityOrdSupplyLot.where.not(quantifiable: nil)
       .entregado

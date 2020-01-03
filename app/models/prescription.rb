@@ -178,6 +178,24 @@ class Prescription < ApplicationRecord
     end
   end
 
+  # Return the last cronic dispensation
+  def return_cronic_dispensation
+    if self.dispensada_parcial? || self.dispensada?
+      # Iterate through the supplies of the last dispensation
+      self.cronic_dispensations.newest_first.first.quantity_ord_supply_lots.each do |qosl|
+        qosl.increment # Return delivered quantity to stock
+      end
+      self.cronic_dispensations.newest_first.first.destroy # Destroy the last dispensation
+      self.times_dispensed -= 1 # Rest one dispensation to counter
+    elsif self.dispensada_parcial? && self.times_dispensed == 1
+      self.auditoria!
+    elsif self.dispensada? || self.dispensada_parcial?
+      self.dispensada_parcial!
+    else
+      raise ArgumentError, 'No es posible retornar a un estado anterior'
+    end
+  end
+
   def return_status
     if self.dispensada?
       self.quantity_ord_supply_lots.each do |qosl|
