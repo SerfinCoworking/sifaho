@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_12_181403) do
+ActiveRecord::Schema.define(version: 2020_01_06_182740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -488,8 +488,8 @@ ActiveRecord::Schema.define(version: 2019_12_12_181403) do
     t.integer "supply_lot"
     t.string "quantifiable_type"
     t.bigint "quantifiable_id"
-    t.integer "requested_quantity"
-    t.integer "delivered_quantity"
+    t.integer "requested_quantity", default: 0
+    t.integer "delivered_quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sector_supply_lot_id"

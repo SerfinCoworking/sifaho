@@ -19,6 +19,7 @@ class OrderingSupplyTemplatesController < ApplicationController
   def new
     authorize OrderingSupplyTemplate
     @ordering_supply_template = OrderingSupplyTemplate.new
+    @order_type = 'solicitud_abastecimiento'
     @destination_sectors = current_user.establishment.sectors
   end
 
