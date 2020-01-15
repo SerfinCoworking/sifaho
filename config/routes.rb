@@ -1,4 +1,18 @@
 Rails.application.routes.draw do
+  
+  # Products
+  resources :products do
+    member do
+      get "delete"
+      get "restore"; get "restore_confirm"
+    end
+    collection do
+      get "trash_index"
+      get "search_by_code"
+      get "search_by_name"
+    end
+  end
+
   resources :permission_requests do
     member do
       get "end"

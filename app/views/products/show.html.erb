@@ -1,0 +1,46 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="col-md-7 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading hidden-print">
+        <h3 class="panel-title">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo insumo
+          <%= link_to products_path, class: 'btn pull-right close-btn',
+            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="visible-print-block"><%= current_user.establishment_name %></div>
+      <div class="panel-body" id="panel-body-new">
+        
+        <div class="row">
+          <div class="col-md-12">
+            <h5><strong>Código: </strong><%= @product.code%></h5>
+            
+            <h5><strong>Insumo: </strong><%= @product.name %></h5>
+
+            <h5><strong>Unidad: </strong><%= @product.unity_name %></h5>
+
+            <h5><strong>Rubro: </strong><%= @product.area_name %></h5>
+
+            <h5><strong>Descripción: </strong>
+              <%= @product.description.present? ? @product.description : "----" %>
+            </h5>
+
+            <h5><strong>Observación: </strong>
+              <%= @product.observation.present? ? @product.observation : "----" %>
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción footer -->
+      <div class="panel-footer text-right hidden-print">
+        <%= link_to 'Volver', products_path, class: "btn" %>
+      </div>
+    </div>
+  </div>
+</div>
+

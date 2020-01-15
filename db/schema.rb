@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_06_182740) do
+ActiveRecord::Schema.define(version: 2020_01_14_130113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -50,6 +50,12 @@ ActiveRecord::Schema.define(version: 2020_01_06_182740) do
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["country_id"], name: "index_addresses_on_country_id"
     t.index ["state_id"], name: "index_addresses_on_state_id"
+  end
+
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -446,6 +452,21 @@ ActiveRecord::Schema.define(version: 2020_01_06_182740) do
     t.index ["remit_code"], name: "index_prescriptions_on_remit_code", unique: true
   end
 
+  create_table "products", force: :cascade do |t|
+    t.bigint "unity_id"
+    t.bigint "area_id"
+    t.string "code"
+    t.string "name"
+    t.text "description"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["area_id"], name: "index_products_on_area_id"
+    t.index ["deleted_at"], name: "index_products_on_deleted_at"
+    t.index ["unity_id"], name: "index_products_on_unity_id"
+  end
+
   create_table "professional_types", force: :cascade do |t|
     t.string "name", limit: 50
   end
@@ -669,6 +690,8 @@ ActiveRecord::Schema.define(version: 2020_01_06_182740) do
   add_foreign_key "prescriptions", "establishments"
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
+  add_foreign_key "products", "areas"
+  add_foreign_key "products", "unities"
   add_foreign_key "professionals", "professional_types"
   add_foreign_key "quantity_ord_supply_lots", "laboratories"
   add_foreign_key "quantity_ord_supply_lots", "supplies"

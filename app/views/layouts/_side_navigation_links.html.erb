@@ -3,6 +3,8 @@
   <%= content_tag(:span, '', class: 'glyphicon glyphicon-home') %>
   Inicio
 <% end %>
+
+<%# Menú pedidos %>
 <div id="pedidos-label" class="well well-sm text-center">
   <span class="glyphicon glyphicon-list-alt"></span>
   <strong> Pedidos</strong>
@@ -36,6 +38,7 @@
   <% end %>
 <% end %>
 
+<%# Menú insumos %>
 <div id="stock-label" class="well well-sm text-center">
   <span class="glyphicon glyphicon-barcode"></span>
   <strong> Insumos</strong>
@@ -60,7 +63,13 @@
     Vademécum
   <% end %>
 <% end %>
+<% if policy(Product).index? %>
+  <%= link_to main_app.products_path, class: active_class('products'), draggable: false, id: 'stock' do %>
+    Productos
+  <% end %>
+<% end %>
 
+<%# Menú efectores %>
 <div id="efectores-label" class="well well-sm text-center">
   <span class="glyphicon glyphicon-user"></span>
   <strong> Efectores</strong>
