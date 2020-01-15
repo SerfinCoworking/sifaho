@@ -121,11 +121,9 @@
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-info-sign') %>
       <% end %>
     <% end %>
-    <% unless @prescription.cronic_dispensations.count > 0 %>
-      <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
-        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
-      <% end %>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
     <% end %>
   </td>
 </tr>
