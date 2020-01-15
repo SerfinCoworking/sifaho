@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_130113) do
+ActiveRecord::Schema.define(version: 2020_01_15_142912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -233,6 +233,19 @@ ActiveRecord::Schema.define(version: 2020_01_14_130113) do
     t.string "name"
     t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
+  end
+
+  create_table "lots", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "laboratory_id"
+    t.string "code"
+    t.datetime "expiry_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_lots_on_deleted_at"
+    t.index ["laboratory_id"], name: "index_lots_on_laboratory_id"
+    t.index ["product_id"], name: "index_lots_on_product_id"
   end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
@@ -682,6 +695,8 @@ ActiveRecord::Schema.define(version: 2020_01_14_130113) do
   add_foreign_key "addresses", "countries"
   add_foreign_key "addresses", "states"
   add_foreign_key "cities", "states"
+  add_foreign_key "lots", "laboratories"
+  add_foreign_key "lots", "products"
   add_foreign_key "ordering_supply_comments", "ordering_supplies"
   add_foreign_key "ordering_supply_comments", "users"
   add_foreign_key "patient_phones", "patients"

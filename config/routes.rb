@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
   
+  # Lotes
+  resources :lots do
+    member do
+      get "delete"
+      get "restore"; get "restore_confirm"
+    end
+    collection do
+      get "trash_index"
+      get "search_by_code"
+    end
+  end
+
   # Products
   resources :products do
     member do

@@ -1,0 +1,14 @@
+// Add the dialog title
+$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Borrando insumo");
+
+// Render the edit form
+$('.modal-body').html('Esta seguro que desea eliminar el insumo <%= @lot.name %>?');
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<a data-remote='true' data-method='delete' href='/lots/<%= @lot.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");

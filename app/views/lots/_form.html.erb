@@ -1,0 +1,27 @@
+<%= simple_form_for @lot, html: { role: 'check-modified'} do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <div class="col-md-12">
+      <%# Code %>
+      <%= f.input :code, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
+      
+      <%# Name %>
+      <%= f.input :product_id, label: 'Nombre de producto', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
+          required: true, size: 50, autocomplete: 'off' %>
+      
+      <%# Unity %>
+      <%= f.input :laboratory_id, label: 'Unidad', include_blank: true,
+        collection: @unities,
+        :value_method => :id,
+        :input_html => {
+          required: true,
+          class: 'selectpicker-md',
+          "data-width"=>"100%",
+          "data-live-search"=>true,
+          title: "Seleccionar unidad",
+          "data-size"=>"15",
+        } 
+      %>
+    </div>
+  </div>
+<% end %>

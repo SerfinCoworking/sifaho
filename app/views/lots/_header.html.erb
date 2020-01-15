@@ -1,0 +1,29 @@
+<% content_for :page_header do %>
+    <ul class="nav nav-tabs nav-tabs-cust non-sel">
+      <li role="presentation" id="page-title">
+        <a href="">Lotes</a>
+      </li>
+      <li role="presentation" class="<%= active_action('index') %> non-sel">
+        <%= link_to lots_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+          Listado
+        <% end %>
+      </li>
+      <% if policy(Lot).new? %>
+        <li role="presentation" class="<%= active_action('new') %> non-sel">
+          <%= link_to new_lot_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Nuevo
+          <% end %>
+        </li>
+      <% end %>
+      <% if policy(Lot).trash_index? %>
+        <li role="presentation" class="<%= active_action('trash_index') %> non-sel">
+          <%= link_to trash_index_lots_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            Papelera
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+<% end %>

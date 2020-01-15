@@ -1,0 +1,26 @@
+<tr id="lot_<%= lot.id %>">
+  <td><%= lot.code %></td>
+  <td><%= lot.product_code %></td>
+  <td><%= lot.product_name %></td>
+  <td><%= lot.laboratory_name %></td>
+  <td>
+    <% if policy(lot).show? %>
+      <%= link_to lot_path(lot), class: 'btn btn-default btn-xs',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+      <% end %>
+    <% end %>
+    <% if policy(lot).edit? %>
+      <%= link_to edit_lot_path(lot), class: 'btn btn-warning btn-xs',
+            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+      <% end %>
+    <% end %>
+    <% if policy(lot).delete? %>
+      <%= link_to delete_lot_path(lot), remote: true,
+            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

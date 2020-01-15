@@ -1,0 +1,25 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="col-md-5 col-md-offset-4">
+    <div class="panel panel-warning">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando lote
+          <%= link_to :back, class: 'btn pull-right close-btn' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="panel-body" id="panel-body-new">
+        <%= render 'form', lot: @lot %>
+      </div>
+      <div class="panel-footer text-right">
+        <%= link_to 'Volver', supplies_path, class: 'btn' %>
+        <button type='submit' name='commit' class='btn btn-success' form='edit_lot_<%= @lot.id %>'>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-save') %> Guardar cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<% render 'header' %>
+
+<div class="row">
+  <%= render 'filter' %>
+
+  <%= render(
+    partial: 'lots/list',
+    locals: { lots: @lots }
+  ) %>
+</div>

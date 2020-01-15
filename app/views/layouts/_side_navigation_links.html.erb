@@ -68,6 +68,11 @@
     Productos
   <% end %>
 <% end %>
+<% if policy(Lot).index? %>
+  <%= link_to main_app.lots_path, class: active_class('lots'), draggable: false, id: 'stock' do %>
+    Lotes
+  <% end %>
+<% end %>
 
 <%# Menú efectores %>
 <div id="efectores-label" class="well well-sm text-center">
