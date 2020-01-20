@@ -1,0 +1,79 @@
+<%= render 'header' %>
+<div class="row">
+  <div class="col-md-12">
+    <!--  Panel Prescripciones del día -->
+    <div class="panel panel-default">
+      <!--  Panel prescripciones recibidas por día -->
+      <% unless @external_orders.where('created_at >= ?', DateTime.now - 6.days).count == 0 %>
+        <div class="panel-heading">
+          <h3 class="panel-title">Pedidos abastecimiento <small>Este mes </small></h3>
+        </div>
+        <div class="panel-body">
+          <%= line_chart @external_orders
+            .group_by_day(:created_at,range: 1.month.ago.midnight..Time.now, format: "%A %d/%m").count, 
+            discrete: true, label: 'Cantidad', adapter: "highcharts"%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Recibos <small>Este año</small></h3>
+      </div>
+      <div class="panel-body">
+        <%= column_chart charts_by_month_applicant_external_orders_path,
+          download: "Recibos de abastecimiento por mes SIFAHO",
+          label: "Cantidad",
+          colors: ["rgb(64,201,94, 0.6)"],
+          messages: {empty: "No hay recibos en este año."},
+          adapter: "highcharts" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Solicitudes <small>Enviadas</small></h3>
+          </div>
+          <div class="panel-body">
+            <div class="col-md-6">
+              <%= pie_chart @requests_sent, colors: @r_s_colors, label: 'Cantidad', adapter: "highcharts", title: "Enviadas #{@requests_sent.count}" %>
+            </div>
+            <div class="col-md-6">
+              <%= pie_chart @requests_received, colors: @r_r_colors, label: 'Cantidad', adapter: "highcharts", title: "Recibidas #{@requests_received.count}" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End row -->
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Despachos <small>Este año</small></h3>
+      </div>
+      <div class="panel-body">
+        <%= column_chart charts_by_month_provider_external_orders_path,
+          download: "Recibos de abastecimiento por mes SIFAHO",
+          label: "Cantidad",
+          colors: ["rgb(211,98,98, 0.6)"],
+          messages: {empty: "No hay recibos en este año."},
+          adapter: "highcharts" %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Tipo de pedido <small>Cantidades</small></h3>
+      </div>
+      <div class="panel-body">
+        <%= bar_chart charts_by_order_type_external_orders_path,
+          label: "Cantidad",
+          adapter: "highcharts" %>
+      </div>
+    </div>
+  </div>
+</div>

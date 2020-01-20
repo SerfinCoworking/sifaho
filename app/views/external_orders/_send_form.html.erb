@@ -1,0 +1,19 @@
+<p>Quién llevará el pedido?</p>
+<%= simple_form_for @external_order, remote: true, html: {class: 'form-inline'} do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :sent_by_id,
+    collection: @users.map { |user| [user.full_name, user.id] },
+    label: false,
+    :input_html => {
+      required: true,
+      class: "selectpicker show-tick",
+      id: "sent-by-select",
+      "data-width"=>"300px",
+      "title"=>"Seleccionar persona del sector",
+      "data-header"=>"Seleccionar persona del sector",
+      "data-size"=>"10",
+      include_blank: false,
+      value: "#{ current_user.id }"
+    } %>
+    <%= f.hidden_field :sent_by_id, class: "sent-by-id" %>
+<% end %>

@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :ordering_supply_templates do
+  resources :external_order_templates do
     collection do
       get "new_provider"
     end
@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'report/newOrderingSupply'
+  get 'report/newExternalOrder'
 
   post 'auth/login', to: 'authentication#authenticate'
 
@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :profiles, only: [ :edit, :update ]
-  resources :ordering_supply_comments, only: [ :create ]
+  resources :external_order_comments, only: [ :create ]
   # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
   # patch '/profile', to: 'profiles#update'
   # Rescue errors
@@ -180,7 +180,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :ordering_supplies do
+  resources :external_orders do
     member do
       get "delete"
       get "send_provider"
@@ -251,12 +251,12 @@ Rails.application.routes.draw do
   end
 
   namespace :charts do
-    get "by-month-prescriptions"  
-    get "by-laboratory-lots"
-    get "by-status-current-sector-supply-lots"
-    get "by-month-applicant-ordering-supplies"
-    get "by-month-provider-ordering-supplies"
-    get "by-order-type-ordering-supplies"
+    get "by_month_prescriptions"  
+    get "by_laboratory_lots"
+    get "by_status_current_sector_supply_lots"
+    get "by_month_applicant_external_orders"
+    get "by_month_provider_external_orders"
+    get "by_order_type_external_orders"
   end
 
   resources :office_supplies do

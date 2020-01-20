@@ -99,51 +99,51 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-cust">
           <li>
-            <%= link_to applicant_index_ordering_supplies_path do %>
+            <%= link_to applicant_index_external_orders_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
               <span class="hidden-xs">Recibos</span>
             <% end %>
           </li>
           <li>
-            <%= link_to ordering_supplies_path do %>
+            <%= link_to external_orders_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
               <span class="hidden-xs">Despachos</span>
-              <% count =  OrderingSupply.provider(current_user.sector).solicitud_enviada.count %>
+              <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
               <% if count > 0 %>
                 <div class="label label-info pull-right"><%= count %></div>
               <% end %>
             <% end %>
           </li>
-          <% if policy(OrderingSupply).new_receipt? %>
+          <% if policy(ExternalOrder).new_receipt? %>
             <li>
-              <%= link_to new_receipt_ordering_supplies_path do %>
+              <%= link_to new_receipt_external_orders_path do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
                 R<span class="hidden-xs">ecibo</span>
               <% end %>
             </li>
           <% end %>
-          <% if policy(OrderingSupply).new_applicant? %>
+          <% if policy(ExternalOrder).new_applicant? %>
             <li>
-              <%= link_to new_applicant_ordering_supplies_path do %>
+              <%= link_to new_applicant_external_orders_path do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
                 S<span class="hidden-xs">olicitud</span>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to new_ordering_supply_path do %>
+            <%= link_to new_external_order_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
               D<span class="hidden-xs">espacho</span>
             <% end %>
           </li>
           <li>
-            <%= link_to ordering_supply_templates_path do %>
+            <%= link_to external_order_templates_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
               Plantillas
             <% end %>
           </li>
           <li>
-            <%= link_to new_report_ordering_supplies_path do %>
+            <%= link_to new_report_external_orders_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
               Reporte
             <% end %>

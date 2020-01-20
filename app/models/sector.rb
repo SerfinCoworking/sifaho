@@ -10,8 +10,8 @@ class Sector < ApplicationRecord
   has_many :users, :through => :user_sectors
   has_many :reports, dependent: :destroy
  
-  has_many :provider_ordering_supplies, foreign_key: "provider_sector_id", class_name: "OrderingSupply"
-  has_many :provider_ordering_quantity_supplies, through: :provider_ordering_supplies, source: "quantity_ord_supply_lots"
+  has_many :provider_external_orders, foreign_key: "provider_sector_id", class_name: "ExternalOrder"
+  has_many :provider_ordering_quantity_supplies, through: :provider_external_orders, source: "quantity_ord_supply_lots"
  
   has_many :provider_internal_supplies, foreign_key: "provider_sector_id", class_name: "InternalOrder" 
   has_many :provider_internal_quantity_supplies, through: :provider_internal_supplies, source: "quantity_ord_supply_lots"
@@ -40,7 +40,7 @@ class Sector < ApplicationRecord
     self.name+' de '+self.establishment.name
   end
 
-  def sum_delivered_ordering_supply_quantities_to(a_supply, since_date, to_date)
+  def sum_delivered_external_order_quantities_to(a_supply, since_date, to_date)
     self.provider_ordering_quantity_supplies.where(supply: a_supply).entregado
       .dispensed_since(since_date)
       .dispensed_to(to_date)
@@ -61,7 +61,7 @@ class Sector < ApplicationRecord
         .sum(:delivered_quantity)
   end
 
-  def delivered_ordering_supply_quantities_by_establishment_to(a_supply)
+  def delivered_external_order_quantities_by_establishment_to(a_supply)
     self.provider_ordering_quantity_supplies
       .where(supply: a_supply)
       .entregado

@@ -1,0 +1,22 @@
+// Style modal
+$('.modal-content').addClass('panel-danger');
+
+// Add the dialog title
+$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Enviar el pedido a papelera");
+
+// Render the edit form
+$('.modal-body').html('Enviar a papelera el pedido de <%= @external_order.applicant_sector.sector_and_establishment %>?');
+
+// Add form button
+$('.modal-footer').html(
+  "<a class='btn' data-dismiss='modal'>Cancelar</a>"+
+  "<a data-remote='true' data-method='delete' href='/external_orders/<%= @external_order.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-content').removeClass('panel-danger');
+});

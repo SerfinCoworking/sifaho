@@ -4,10 +4,10 @@
   </div>
 </div>
 <div class="row">
-  <%= simple_form_for comment, :url => ordering_supply_comments_path, :method => :post, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+  <%= simple_form_for comment, :url => external_order_comments_path, :method => :post, html: {class: "form-inline", role: 'check-modified'} do |f| %>
     <div class="col-md-10">
       <span><%= image_tag user_avatar(current_user, 54), class:"img-rounded img-profile-chat" %></span>
-      <%= f.input :ordering_supply_id,  as: :hidden, value: "#{order.id}" %>
+      <%= f.input :external_order_id,  as: :hidden, value: "#{order.id}" %>
       <%= f.input :text, label: false, placeholder: "Escribe un comentario...", as: :text,
       :input_html => { :cols => 100  , :rows => 2 } %>
       <%= f.submit "Enviar", class: "btn btn-primary" %> 

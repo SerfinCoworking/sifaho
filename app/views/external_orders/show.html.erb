@@ -1,0 +1,321 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading hidden-print">
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @external_order.order_type.split('_').join(' ') %>
+        <%= link_to external_orders_path, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+        <%= link_to external_order_path(format: 'pdf'), class: 'btn print-btn pull-right',  
+          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="visible-print-block"><%= current_user.establishment_name %></div>
+    <div class="panel-body" id="panel-body-new">
+      <div class="row">
+        <div class='col-md-4 col-xs-4'>
+          <div class="text-center"><strong>Solicitante</strong></div>
+          <strong>Establecimiento:</strong>
+          <%= @external_order.applicant_sector.establishment_name%><br>
+          <strong>Sector:</strong>
+          <%= @external_order.applicant_sector.name%>
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div class="text-center"><strong>Proveedor</strong></div>
+          <strong>Establecimiento:</strong>
+          <%= @external_order.provider_sector.establishment_name%><br>
+          <strong>Sector:</strong>
+          <%= @external_order.provider_sector.name%>
+        </div>
+        <div class='col-md-4 col-xs-4'>
+          <div class='row'>
+            <div class='col-md-6 col-xs-6'>
+              <strong>Solicitado:</strong>
+              <%= @external_order.requested_date.strftime("%d/%m/%Y")%><br>
+            </div>
+            <div class='col-md-6 col-xs-6'>
+              <strong>Código:</strong>
+              <%= @external_order.remit_code %>
+            </div>
+          </div>
+          <hr>
+          <strong>Observaciones:</strong>
+            <%= @external_order.observation? ? @external_order.observation : 'Sin observaciones' %>
+        </div>
+      </div>
+      <hr>
+      <!-- Barra de estado -->
+      <%= render '/shared/status_bar', order: @external_order %>
+      <br><br><br><br>
+      <div class='row'>
+        <div class='col-md-12' style='margin-top: -50px;'>
+          <ul class='nav nav-tabs nav-justified'>
+            <li class='active'>
+              <a data-toggle='tab' href='#supplies'>
+                <span class="glyphicon glyphicon-barcode"></span>
+                Insumos
+                <span class="badge"><%= @external_order.quantity_ord_supply_lots.count %></span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#last_movements'>
+                <span class="glyphicon glyphicon-transfer"></span>
+                Movimientos
+                <span class="badge"><%= @external_order.movements.count %></span>
+              </a>
+            </li>
+            <!--
+            <li>
+              <a data-toggle='tab' href='#comments'>
+                <span class="glyphicon glyphicon-comment"></span>
+                Comentarios
+                <span class="badge"><%= @external_order.comments.count %></span>
+              </a>
+            </li>
+            -->
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="tab-content">
+          <div id='supplies' class='tab-pane fade in active'>
+            <% if @external_order.despacho? %>
+              <!-- Insumos a dispensar -->
+              <table class="table table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>Cód.</th>
+                    <th>Insumo</th>
+                    <th>Solicitado</th>
+                    <th>Entregado</th>
+                    <th>Lote</th>
+                    <th>Laboratorio</th>
+                    <th>Vencimiento</th>
+                    <th>Observaciones</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+                    <tr>
+                      <td>
+                        <%= qosl.supply_id %>
+                      </td>
+                      <td>
+                        <%= qosl.supply_name %>
+                      </td>
+                      <td>
+                        <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                      </td>
+                      <td>
+                        <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                      </td>
+                      <% if qosl.sector_supply_lot.present? %>
+                        <td>
+                          <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'n/a' %>
+                        </td>
+                        <td>
+                          <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'n/a' %>
+                        </td>
+                        <td>
+                          <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
+                        </td>
+                      <% else %>
+                        <td>n/a</td><td>n/a</td><td>n/a</td>
+                      <% end %>
+                      <td>
+                        <%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% elsif @external_order.recibo? %>
+              <!-- Insumos a recibir -->
+              <table class="table table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>Cód.</th>
+                    <th>Insumo</th>
+                    <th>Recibido</th>
+                    <th>Lote</th>
+                    <th>Laboratorio</th>
+                    <th>Vencimiento</th>
+                    <th>Observaciones</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+                    <tr>
+                      <td>
+                        <%= qosl.supply_id %>
+                      </td>
+                      <td>
+                        <%= qosl.supply_name %>
+                      </td>
+                      <td>
+                        <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                      </td>
+                      <td>
+                        <%= qosl.lot_code.present? ? qosl.lot_code : 'n/a' %>
+                      </td>
+                      <td>
+                        <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'n/a' %>
+                      </td>
+                      <td>
+                        <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%m/%y") : 'No vence' %>
+                      </td>
+                      <td>
+                        <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% elsif @external_order.solicitud_abastecimiento? %>
+              <!-- Insumos a recibir -->
+              <table class="table table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>Cód.</th>
+                    <th>Insumo</th>
+                    <th>Solicitado</th>
+                    <th>Entregado</th>
+                    <th>Lote</th>
+                    <th>Laboratorio</th>
+                    <th>Vencimiento</th>
+                    <th>Obs. Sol.</th>
+                    <% unless @external_order.solicitud_auditoria? || @external_order.solicitud_enviada? %>
+                      <th>Obs. Prov.</th>
+                    <% end %>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+                    <tr>
+                      <td>
+                        <%= qosl.supply_id %>
+                      </td>
+                      <td>
+                        <%= qosl.supply_name %>
+                      </td>
+                      <td>
+                        <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                      </td>
+                      <td>
+                        <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                      </td>
+                      <% if qosl.sector_supply_lot.present? %>
+                        <td>
+                          <%= qosl.sector_supply_lot.lot_code.present? ? qosl.sector_supply_lot.lot_code : 'n/a' %>
+                        </td>
+                        <td>
+                          <%= qosl.sector_supply_lot.laboratory.present? ? qosl.sector_supply_laboratory : 'n/a' %>
+                        </td>
+                        <td>
+                          <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : 'No vence' %>
+                        </td>
+                      <% else %>
+                        <td>n/a</td><td>n/a</td><td>n/a</td>
+                      <% end %>
+                      <td>
+                        <%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %>
+                      </td>
+                      <% unless @external_order.solicitud_auditoria? || @external_order.solicitud_enviada? %>
+                        <td>
+                          <%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %>
+                        </td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+          </div>
+          <div id='last_movements' class='tab-pane fade'>
+            <!-- Tabla de movimientos -->
+            <%= render '/shared/movements_table', order: @external_order %>
+          </div> <!-- End last movements tab pane -->
+          <div id='comments' class='tab-pane fade'>
+            <!-- Tabla de movimientos -->
+            <%= render '/shared/comments', order: @external_order, comment: ExternalOrderComment.new %>
+          </div> <!-- End last movements tab pane -->
+        </div> <!-- End Tab content-->
+      </div> <!-- End col-md-12 -->
+    </div>
+
+    <!-- Botones de acción footer -->
+    <div class="panel-footer text-right hidden-print">
+      <%= link_to 'Volver', if @external_order.despacho?; external_orders_path; else; applicant_index_external_orders_path; end, class: "btn" %>
+      <% if policy(@external_order).edit? %>
+        <%= link_to edit_external_order_path(@external_order), :"data-turbolinks" => false,
+          class: "btn btn-warning" do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+          Auditar
+        <% end %>
+      <% end %>
+      <% if policy(@external_order).return_status? %>
+        <a href="#return-confirm" data-id="<%= @external_order.id %>" class="return-confirm btn btn-warning">
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
+          Retornar
+        </a>
+      <% end %>
+      <% if policy(@external_order).send_provider? %>
+        <%= link_to send_provider_external_order_path(@external_order), remote: true,
+          class: 'btn btn-primary btn-md' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+          Enviar
+        <% end %>
+      <% end %>
+      <% if policy(@external_order).edit_applicant? %>
+        <%= link_to edit_applicant_external_order_path(@external_order), :"data-turbolinks" => false, 
+          class: 'btn btn-warning btn-md', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          Auditar
+        <% end %>
+      <% end %>
+      <% if policy(@external_order).edit_receipt? %>
+        <%= link_to edit_receipt_external_order_path(@external_order), :"data-turbolinks" => false,
+          class: 'btn btn-warning btn-md', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          Auditar
+        <% end %>
+      <% end %>
+      <% if policy(@external_order).receive_order? %>
+        <%= link_to receive_order_confirm_external_order_path(@external_order), remote: true,
+          class: 'btn btn-success btn-md' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
+          <%= @external_order.recibo? ? 'Realizar' : 'Recibir' %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if policy(@external_order).return_status? %>
+  <!-- Modal para retornar estado -->
+  <div class="modal" id="return-confirm">
+    <div class="modal-dialog">
+      <div class="modal-content panel-warning">
+        <div class="modal-header panel-heading">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).humanize %></h3>
+        </div>
+        <div class="modal-body">
+          <p>Seguro que desea retornar el pedido actual a <%= prev_status %>?</p>
+        </div>
+        <div class="modal-footer text-right">
+          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+          <%= link_to 'Confirmar', return_status_external_order_path, method: :get, :class => 'btn btn-warning' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

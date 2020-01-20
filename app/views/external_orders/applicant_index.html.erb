@@ -1,0 +1,17 @@
+<%= render 'header' %>
+
+<div class="row">
+  <% if @applicant_orders.present? %>
+    <%= render "filter" %>
+    
+    <%= render(
+      partial: 'external_orders/applicant_list',
+      locals: { applicant_orders: @applicant_orders }
+    ) %>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found',
+      locals: { object_name: 'pedidos recibidos' }
+    ) %>
+  <% end %>
+</div>

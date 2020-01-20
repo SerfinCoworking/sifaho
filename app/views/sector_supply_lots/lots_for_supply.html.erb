@@ -185,7 +185,7 @@
                             <td>
                               <% if @order.class ==  InternalOrder %>
                                 <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.name : @order.applicant_sector.name %>
-                              <% elsif @order.class == OrderingSupply %>
+                              <% elsif @order.class == ExternalOrder %>
                                 <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.establishment_name : @order.applicant_sector.establishment_name %>
                               <% else %>
                                 <%= @order.professional.last_name+" / "+@order.patient.last_name  %>

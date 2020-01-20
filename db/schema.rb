@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_15_142912) do
+ActiveRecord::Schema.define(version: 2020_01_20_120642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -159,6 +159,86 @@ ActiveRecord::Schema.define(version: 2020_01_15_142912) do
     t.integer "sectors_count", default: 0
   end
 
+  create_table "external_order_comments", force: :cascade do |t|
+    t.bigint "external_order_id"
+    t.bigint "user_id"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_id"], name: "index_external_order_comments_on_external_order_id"
+    t.index ["user_id"], name: "index_external_order_comments_on_user_id"
+  end
+
+  create_table "external_order_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "external_order_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_id"], name: "index_external_order_movements_on_external_order_id"
+    t.index ["sector_id"], name: "index_external_order_movements_on_sector_id"
+    t.index ["user_id"], name: "index_external_order_movements_on_user_id"
+  end
+
+  create_table "external_order_template_supplies", force: :cascade do |t|
+    t.bigint "ordering_supply_template_id"
+    t.bigint "supply_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "rank", default: 0
+    t.index ["ordering_supply_template_id"], name: "o_s_template"
+    t.index ["supply_id"], name: "index_external_order_template_supplies_on_supply_id"
+  end
+
+  create_table "external_order_templates", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_sector_id"
+    t.bigint "destination_establishment_id"
+    t.bigint "destination_sector_id"
+    t.bigint "created_by_id"
+    t.integer "order_type", default: 0
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_external_order_templates_on_created_by_id"
+    t.index ["destination_establishment_id"], name: "index_external_order_templates_on_destination_establishment_id"
+    t.index ["destination_sector_id"], name: "index_external_order_templates_on_destination_sector_id"
+    t.index ["owner_sector_id"], name: "index_external_order_templates_on_owner_sector_id"
+  end
+
+  create_table "external_orders", force: :cascade do |t|
+    t.text "observation"
+    t.datetime "date_received"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.bigint "applicant_sector_id"
+    t.bigint "provider_sector_id"
+    t.datetime "requested_date"
+    t.datetime "sent_date"
+    t.integer "status", default: 0
+    t.bigint "audited_by_id"
+    t.bigint "accepted_by_id"
+    t.bigint "sent_by_id"
+    t.bigint "received_by_id"
+    t.datetime "accepted_date"
+    t.integer "order_type", default: 0
+    t.bigint "created_by_id"
+    t.string "remit_code"
+    t.bigint "sent_request_by_id"
+    t.index ["accepted_by_id"], name: "index_external_orders_on_accepted_by_id"
+    t.index ["applicant_sector_id"], name: "index_external_orders_on_applicant_sector_id"
+    t.index ["audited_by_id"], name: "index_external_orders_on_audited_by_id"
+    t.index ["created_by_id"], name: "index_external_orders_on_created_by_id"
+    t.index ["deleted_at"], name: "index_external_orders_on_deleted_at"
+    t.index ["provider_sector_id"], name: "index_external_orders_on_provider_sector_id"
+    t.index ["received_by_id"], name: "index_external_orders_on_received_by_id"
+    t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
+    t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
+    t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
+  end
+
   create_table "internal_order_movements", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "internal_order_id"
@@ -291,86 +371,6 @@ ActiveRecord::Schema.define(version: 2020_01_15_142912) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_office_supply_categorizations_on_category_id"
     t.index ["office_supply_id"], name: "index_office_supply_categorizations_on_office_supply_id"
-  end
-
-  create_table "ordering_supplies", force: :cascade do |t|
-    t.text "observation"
-    t.datetime "date_received"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.bigint "applicant_sector_id"
-    t.bigint "provider_sector_id"
-    t.datetime "requested_date"
-    t.datetime "sent_date"
-    t.integer "status", default: 0
-    t.bigint "audited_by_id"
-    t.bigint "accepted_by_id"
-    t.bigint "sent_by_id"
-    t.bigint "received_by_id"
-    t.datetime "accepted_date"
-    t.integer "order_type", default: 0
-    t.bigint "created_by_id"
-    t.string "remit_code"
-    t.bigint "sent_request_by_id"
-    t.index ["accepted_by_id"], name: "index_ordering_supplies_on_accepted_by_id"
-    t.index ["applicant_sector_id"], name: "index_ordering_supplies_on_applicant_sector_id"
-    t.index ["audited_by_id"], name: "index_ordering_supplies_on_audited_by_id"
-    t.index ["created_by_id"], name: "index_ordering_supplies_on_created_by_id"
-    t.index ["deleted_at"], name: "index_ordering_supplies_on_deleted_at"
-    t.index ["provider_sector_id"], name: "index_ordering_supplies_on_provider_sector_id"
-    t.index ["received_by_id"], name: "index_ordering_supplies_on_received_by_id"
-    t.index ["remit_code"], name: "index_ordering_supplies_on_remit_code", unique: true
-    t.index ["sent_by_id"], name: "index_ordering_supplies_on_sent_by_id"
-    t.index ["sent_request_by_id"], name: "index_ordering_supplies_on_sent_request_by_id"
-  end
-
-  create_table "ordering_supply_comments", force: :cascade do |t|
-    t.bigint "ordering_supply_id"
-    t.bigint "user_id"
-    t.text "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ordering_supply_id"], name: "index_ordering_supply_comments_on_ordering_supply_id"
-    t.index ["user_id"], name: "index_ordering_supply_comments_on_user_id"
-  end
-
-  create_table "ordering_supply_movements", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "ordering_supply_id"
-    t.bigint "sector_id"
-    t.string "action"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["ordering_supply_id"], name: "index_ordering_supply_movements_on_ordering_supply_id"
-    t.index ["sector_id"], name: "index_ordering_supply_movements_on_sector_id"
-    t.index ["user_id"], name: "index_ordering_supply_movements_on_user_id"
-  end
-
-  create_table "ordering_supply_template_supplies", force: :cascade do |t|
-    t.bigint "ordering_supply_template_id"
-    t.bigint "supply_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "rank", default: 0
-    t.index ["ordering_supply_template_id"], name: "o_s_template"
-    t.index ["supply_id"], name: "index_ordering_supply_template_supplies_on_supply_id"
-  end
-
-  create_table "ordering_supply_templates", force: :cascade do |t|
-    t.string "name"
-    t.bigint "owner_sector_id"
-    t.bigint "destination_establishment_id"
-    t.bigint "destination_sector_id"
-    t.bigint "created_by_id"
-    t.integer "order_type", default: 0
-    t.text "observation"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_ordering_supply_templates_on_created_by_id"
-    t.index ["destination_establishment_id"], name: "index_ordering_supply_templates_on_destination_establishment_id"
-    t.index ["destination_sector_id"], name: "index_ordering_supply_templates_on_destination_sector_id"
-    t.index ["owner_sector_id"], name: "index_ordering_supply_templates_on_owner_sector_id"
   end
 
   create_table "patient_phones", force: :cascade do |t|
@@ -695,10 +695,10 @@ ActiveRecord::Schema.define(version: 2020_01_15_142912) do
   add_foreign_key "addresses", "countries"
   add_foreign_key "addresses", "states"
   add_foreign_key "cities", "states"
+  add_foreign_key "external_order_comments", "external_orders"
+  add_foreign_key "external_order_comments", "users"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
-  add_foreign_key "ordering_supply_comments", "ordering_supplies"
-  add_foreign_key "ordering_supply_comments", "users"
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"

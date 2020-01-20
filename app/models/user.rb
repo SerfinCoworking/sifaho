@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_many :establishments, :through => :sectors
   has_one :profile, :dependent => :destroy
   has_one :professional, :dependent => :destroy
-  has_many :ordering_supply_comments
+  has_many :external_order_comments
   has_many :reports, :dependent => :destroy
   has_many :permission_requests, :dependent => :destroy
 

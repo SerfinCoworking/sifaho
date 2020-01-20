@@ -2,7 +2,7 @@
   <div class="">
     <%= notification.actor.profile.first_name.titleize %>
     <%= notification.action_type %> una <span class="visible-print">solicitud de abastecimiento</span>
-    <strong><%= link_to 'solicitud de abastecimiento', main_app.ordering_supply_path(notification.target), class:'hidden-print' %></strong> 
+    <strong><%= link_to 'solicitud de abastecimiento', main_app.external_order_path(notification.target), class:'hidden-print' %></strong> 
     de
     <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
     a <%= notification.target.provider_sector.name %> de <%= notification.target.provider_sector.establishment.name %>.

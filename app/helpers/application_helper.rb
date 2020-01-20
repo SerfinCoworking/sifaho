@@ -41,7 +41,7 @@ module ApplicationHelper
       prescription_status_label(an_order)
     elsif an_order.is_a?(InternalOrder)
       internal_status_label(an_order)
-    elsif an_order.is_a?(OrderingSupply)
+    elsif an_order.is_a?(ExternalOrder)
       ordering_status_label(an_order)
     end
   end

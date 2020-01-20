@@ -152,7 +152,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Return true if the Ordering Supply is a "Recibo"
   def quantifiable_is_recibo?
-    if quantifiable.class.name == "OrderingSupply"
+    if quantifiable.class.name == "ExternalOrder"
       return quantifiable.recibo?
     end 
   end

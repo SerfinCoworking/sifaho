@@ -23,10 +23,10 @@ class ReportsController < ApplicationController
     if @report.delivered_by_order?
       @pres_consumption = current_user.sector.sum_delivered_prescription_quantities_to(@report.supply_id, @report.since_date, @report.to_date) 
       @int_ord_consumption = current_user.sector.sum_delivered_internal_quantities_to(@report.supply_id, @report.since_date, @report.to_date)
-      @ord_sup_consumption = current_user.sector.sum_delivered_ordering_supply_quantities_to(@report.supply_id, @report.since_date, @report.to_date)
+      @ord_sup_consumption = current_user.sector.sum_delivered_external_order_quantities_to(@report.supply_id, @report.since_date, @report.to_date)
       @total_sum = @pres_consumption + @int_ord_consumption + @ord_sup_consumption
     elsif @report.delivered_by_establishment?
-      @quantities = current_user.sector.delivered_ordering_supply_quantities_by_establishment_to(@report.supply_id)
+      @quantities = current_user.sector.delivered_external_order_quantities_by_establishment_to(@report.supply_id)
     end
   end
 

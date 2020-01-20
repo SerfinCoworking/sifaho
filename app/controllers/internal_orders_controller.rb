@@ -139,7 +139,7 @@ class InternalOrdersController < ApplicationController
     @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
   end
 
-  # GET /ordering_supplies/1/edit_receipt
+  # GET /external_orders/1/edit_receipt
   def edit_applicant
     authorize @internal_order
     @order_type = 'solicitud'

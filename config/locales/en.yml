@@ -32,7 +32,7 @@
 en:
   activerecord:
     models:
-      ordering_supply: "Pedido abastecimiento"
+      external_order: "Pedido abastecimiento"
     attributes:
       applicant_sector: "Sector solicitante"
   date:

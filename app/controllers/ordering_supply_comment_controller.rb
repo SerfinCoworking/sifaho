@@ -1,2 +1,2 @@
-class OrderingSupplyCommentController < ApplicationController
+class ExternalOrderCommentController < ApplicationController
 end

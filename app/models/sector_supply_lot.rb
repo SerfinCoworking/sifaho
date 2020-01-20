@@ -24,10 +24,10 @@ class SectorSupplyLot < ApplicationRecord
     :source => :quantifiable,
     :source_type => 'InternalOrder'
 
-  has_many :ordering_supplies, -> { with_deleted },
+  has_many :external_orders, -> { with_deleted },
     :through => :quantity_ord_supply_lots,
     :source => :quantifiable,
-    :source_type => 'OrderingSupply'
+    :source_type => 'ExternalOrder'
 
   # Validaciones
   validates_presence_of :supply_lot, :quantity, :initial_quantity

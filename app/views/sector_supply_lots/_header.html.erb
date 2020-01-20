@@ -24,9 +24,9 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-cust">
-          <% if policy(OrderingSupply).new_receipt? %>
+          <% if policy(ExternalOrder).new_receipt? %>
             <li>
-              <%= link_to new_receipt_ordering_supplies_path do %>
+              <%= link_to new_receipt_external_orders_path do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
                 Recibo externo
               <% end %>
@@ -40,9 +40,9 @@
               <% end %>
             </li>
           <% end %>
-          <% if policy(OrderingSupply).new_applicant? %>
+          <% if policy(ExternalOrder).new_applicant? %>
             <li>
-              <%= link_to new_applicant_ordering_supplies_path do %>
+              <%= link_to new_applicant_external_orders_path do %>
                 <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
                 Solicitud externa
               <% end %>
