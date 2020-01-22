@@ -10,6 +10,7 @@ class SectorSupplyLot < ApplicationRecord
 
   # Relaciones
   belongs_to :sector
+  belongs_to :stock
   belongs_to :supply_lot, -> { with_deleted }
   has_one :supply, :through => :supply_lot
 

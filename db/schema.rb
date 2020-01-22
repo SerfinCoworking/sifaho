@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_20_153959) do
+ActiveRecord::Schema.define(version: 2020_01_21_134543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -604,6 +604,16 @@ ActiveRecord::Schema.define(version: 2020_01_20_153959) do
     t.index ["country_id"], name: "index_states_on_country_id"
   end
 
+  create_table "stocks", force: :cascade do |t|
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sector_id"], name: "index_stocks_on_sector_id"
+    t.index ["supply_id"], name: "index_stocks_on_supply_id"
+  end
+
   create_table "supplies", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -716,6 +726,8 @@ ActiveRecord::Schema.define(version: 2020_01_20_153959) do
   add_foreign_key "reports", "users"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
+  add_foreign_key "stocks", "sectors"
+  add_foreign_key "stocks", "supplies"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"

@@ -43,6 +43,11 @@
   <span class="glyphicon glyphicon-barcode"></span>
   <strong> Insumos</strong>
 </div>
+<% if policy(Stock).index? %>
+  <%= link_to main_app.stocks_path, class: active_class('stocks'), draggable: false, id: 'stock' do %>
+    Stock
+  <% end %>
+<% end %>
 <% if policy(SectorSupplyLot).index? %>
   <%= link_to main_app.group_by_supply_sector_supply_lots_path, class: active_class('sector_supply_lots'), draggable: false, id: 'stock' do %>
     Stock

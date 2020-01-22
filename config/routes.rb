@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :stocks
   # Lotes
   resources :lots do
     member do

@@ -1,0 +1,10 @@
+<% render 'header' %>
+
+<div class="row">
+  <%= render 'filter' %>
+
+  <%= render(
+    partial: 'stocks/list',
+    locals: { stocks: @stocks }
+  ) %>
+</div>
