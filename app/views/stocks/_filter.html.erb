@@ -8,7 +8,7 @@
         <label>Código</label>
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
-          :search_supply_code,
+          :search_product_code,
           class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Un número'
         ) %>
@@ -17,19 +17,9 @@
         <label>Nombre</label>
         <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
         <%= f.text_field(
-          :search_supply_name,
+          :search_product_name,
           class: 'filterrific-periodically-observed form-control input-sm',
           placeholder: 'Un nombre'
-        ) %>
-      </div>
-      <div class="col-md-3 col-sm-3">
-        <label>Lote</label>
-        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-        <%= f.text_field(
-          :search_lot_code,
-          class: 'filterrific-periodically-observed form-control input-sm',
-          placeholder: 'Un lote',
-          autocomplete: 'off'
         ) %>
       </div>
       <% if current_page?(controller: 'supplies') %>

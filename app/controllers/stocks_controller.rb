@@ -12,10 +12,11 @@ class StocksController < ApplicationController
         sorted_by: Stock.options_for_sorted_by
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
+      default_filter_params: {sorted_by: 'codigo_asc'},
       available_filters: [
         :sorted_by,
-        :search_supply_name,
+        :search_product_name,
+        :search_product_code,
       ],
     ) or return
     @stocks = @filterrific.find.page(params[:page]).per_page(15)

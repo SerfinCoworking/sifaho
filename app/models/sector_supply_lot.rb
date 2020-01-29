@@ -5,12 +5,13 @@ class SectorSupplyLot < ApplicationRecord
   enum status: { vigente: 0, por_vencer: 1, vencido: 2, agotado: 3, archivado: 4 }
 
   # Callbacks
-  after_validation :update_status
   before_validation :assign_constants
+  before_validation :assign_stock, if: :need_stock? 
+  after_validation :update_status, :update_stock
 
   # Relaciones
   belongs_to :sector
-  belongs_to :stock, optional: true
+  belongs_to :stock
   belongs_to :supply_lot, -> { with_deleted }
   has_one :supply, :through => :supply_lot
 
@@ -31,7 +32,7 @@ class SectorSupplyLot < ApplicationRecord
     :source_type => 'ExternalOrder'
 
   # Validaciones
-  validates_presence_of :supply_lot, :quantity, :initial_quantity
+  validates_presence_of :supply_lot, :quantity, :initial_quantity, :stock
 
   # Delegaciones
   delegate :unity, :format_expiry_date, :code, :lot_code, :supply_name, :expiry_date, :needs_expiration?, to: :supply_lot
@@ -227,6 +228,22 @@ class SectorSupplyLot < ApplicationRecord
       self.initial_quantity = self.quantity # Se vuelve a asignar la cantidad inicial
     end
   end
+
+  # Se asigna el stock correspondiente
+  def assign_stock
+    self.stock = Stock.first_or_create(sector: self.sector, product: Product.find_by_code(self.code))
+  end
+
+  # Se actualiza la cantidad en stock
+  def update_stock
+    self.stock.update_stock 
+  end
+
+  # Retorna verdadero si tiene sector pero aún no tiene stock asignado
+  def need_stock?
+    return self.sector.present? && self.stock.blank?
+  end
+
 
   # Métodos de clase #----------------------------------------------------------
 

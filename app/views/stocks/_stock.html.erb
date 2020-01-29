@@ -1,0 +1,22 @@
+  <tr id="stock_<%= stock.id %>">
+    <div class="js-fade fade-in is-paused">
+      <td><%= stock.product_code %></td>
+      <td class="col-sup-name"><%= stock.product_name %></td> 
+      <td>
+        <span class="badge badge-primary">
+          <%= stock.quantity %>
+        </div>
+      </td>
+      <td><%= stock.product_unity_name %></td>
+      <td><%= stock.product_area_name %></td>
+      <td><%= stock.updated_at.strftime("%d/%m/%y") %></td>
+      <td class="text-center">
+        <% if policy(stock).show? %>
+          <%= link_to stock_path(stock), class: 'btn btn-default btn-xs',
+                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <% end %>
+        <% end %>
+      </td>
+    </div>
+  </tr>
