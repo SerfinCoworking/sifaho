@@ -128,10 +128,14 @@ class ExternalOrderPolicy < ApplicationPolicy
         if record.proveedor_aceptado? || record.provision_en_camino?
           return record.provider_sector == user.sector
         end
-      elsif record.solicitud_abastecimiento? && record.proveedor_aceptado?
-        return record.provider_sector == user.sector
-      elsif record.solicitud_abastecimiento? && record.solicitud_enviada?
-        return record.applicant_sector == user.sector
+      elsif record.solicitud_abastecimiento?
+        if record.proveedor_aceptado?
+          return record.provider_sector == user.sector
+        elsif record.solicitud_enviada?
+          return record.applicant_sector == user.sector
+        elsif record.provision_en_camino?
+          return record.provider_sector == user.sector
+        end
       elsif record.recibo?
         return false
       end
