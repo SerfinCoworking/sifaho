@@ -39,6 +39,7 @@ $(document).on('turbolinks:load', function() {
     return $('#professional').autocomplete({
       source: $('#professional').data('autocomplete-source'),
       minLength: 2,
+      autoFocus:true,
       select:
       function (event, ui) {
         $("#professional_id").val(ui.item.id);
@@ -58,6 +59,7 @@ $(document).on('turbolinks:load', function() {
 
     return $('#patient').autocomplete({
       source: $('#patient').data('autocomplete-source'),
+      autoFocus: true,
       minLength: 3,
       response: function (data) {
         if (data.length < 1) {
