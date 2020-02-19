@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "bed_map"
+      get "new_bed"
     end 
   end 
 

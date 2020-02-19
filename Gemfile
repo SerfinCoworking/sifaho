@@ -7,6 +7,8 @@ end
 
 ruby "2.6.5"
 
+# To icons
+gem 'font_awesome5_rails'
 gem 'jwt'
 # To protect API from attacks
 gem 'rack-attack'

@@ -1,4 +1,6 @@
 class Bed < ApplicationRecord
+  enum status: { disponible: 0, ocupada: 1 } 
+
   belongs_to :bedroom
   belongs_to :service, class_name: 'Sector'
   has_one :establishment, :through => :service

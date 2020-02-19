@@ -23,7 +23,8 @@
 //= require turbolinks
 //= require cocoon
 //= require moment
-//= require moment/es 
+//= require moment/es
+//= require font_awesome5 
 //= require bootstrap-switch
 //= require bootstrap-datetimepicker
 //= require bootstrap-sprockets

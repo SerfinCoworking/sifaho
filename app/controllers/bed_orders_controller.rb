@@ -36,22 +36,26 @@ class BedOrdersController < ApplicationController
   # GET /bed_orders/1
   # GET /bed_orders/1.json
   def show
+    authorize @bed_order
   end
 
   # GET /bed_orders/new
   def new
+    authorize BedOrder
     @bed_order = BedOrder.new
     @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
   end
 
   # GET /bed_orders/1/edit
   def edit
+    authorize @bed_order
   end
 
   # POST /bed_orders
   # POST /bed_orders.json
   def create
     @bed_order = BedOrder.new(bed_order_params)
+    authorize @bed_order
 
     respond_to do |format|
       if @bed_order.save
@@ -69,6 +73,7 @@ class BedOrdersController < ApplicationController
   # PATCH/PUT /bed_orders/1
   # PATCH/PUT /bed_orders/1.json
   def update
+    authorize @bed_order
     respond_to do |format|
       if @bed_order.update(bed_order_params)
         format.html { redirect_to @bed_order, notice: 'El pedido de internación se ha modificado correctamente.' }
@@ -83,11 +88,17 @@ class BedOrdersController < ApplicationController
   # DELETE /bed_orders/1
   # DELETE /bed_orders/1.json
   def destroy
+    authorize @bed_order
     @bed_order.destroy
     respond_to do |format|
       format.html { redirect_to bed_orders_url, notice: 'El pedido de internación se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
     end
+  end
+
+  def new_bed
+    authorize BedOrder
+
   end
 
   private
