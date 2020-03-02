@@ -186,7 +186,11 @@
                               <% if @order.class ==  InternalOrder %>
                                 <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.name : @order.applicant_sector.name %>
                               <% elsif @order.class == ExternalOrder %>
-                                <%= @order.sum_to?(current_user.sector) ? @order.provider_sector.establishment_name : @order.applicant_sector.establishment_name %>
+                                <% if  @order.sum_to?(current_user.sector) %>
+                                  <%= @order.provider_sector.present? ? @order.provider_sector.establishment_name : "----" %> 
+                                <% else %>
+                                  <%= @order.applicant_sector.present? ? @order.applicant_sector.establishment_name : "----" %>
+                                <% end %>
                               <% else %>
                                 <%= @order.professional.last_name+" / "+@order.patient.last_name  %>
                               <% end %>

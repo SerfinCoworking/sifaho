@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   protected
     
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_in) { |u| u.permit({ roles: [] }, :password, :password_confirmation, :username) }
-  end
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.permit(:sign_in) { |u| u.permit({ roles: [] }, :password, :password_confirmation, :username) }
+    end
 end

@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     collection do
       get "bed_map"
       get "new_bed"
+      post "create_bed"
     end 
   end 
 

@@ -98,7 +98,7 @@ class BedOrdersController < ApplicationController
 
   def new_bed
     authorize BedOrder
-
+    @bed = Bed.new
   end
 
   private

@@ -1,0 +1,26 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <%= fa_icon "plus" %> Nueva cama
+        <%= link_to bed_map_bed_orders_path, class: 'btn pull-right close-btn' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="panel-body" id="panel-body-new">
+      <%= simple_form_for @bed, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+        <%= f.error_notification %>
+
+      <% end %>
+    </div>
+    <div class="panel-footer text-right">
+      <%= link_to 'Volver', bed_map_bed_orders_path, class: 'btn' %>
+      <button type='submit' name='commit' class='btn btn-primary' form='new_bed_order' value='Enviar'>
+        <%= fa_icon "check" %> Crear
+      </button>
+    </div>
+  </div>
+</div>

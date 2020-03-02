@@ -1,17 +1,17 @@
 class BedOrderPolicy < ApplicationPolicy
   def index?
-    see_pres.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :enfermero)
   end
 
   def bed_map?
-    bed_map.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
   def show?
     index?
   end
 
   def create?
-    new_pres.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def create_applicant?
@@ -24,32 +24,32 @@ class BedOrderPolicy < ApplicationPolicy
 
   def update?
     unless ["en_camino", "entregado"].include? record.provider_status
-      update_pres.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :enfermero)
     end
   end
 
   def edit?
     if record.borrador?
-      edit.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
     elsif record.pendiente?
-      edit_provider.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico)
     end
   end
 
   def edit_applicant?
     if record.solicitud_auditoria? && record.applicant_sector == user.sector
-      edit_applicant.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :enfermero)
     end
   end
 
   def destroy?
     if record.solicitud? 
       if record.solicitud_auditoria? && record.applicant_sector == user.sector
-        destroy_pres.any? { |role| user.has_role?(role) }
+        user.has_any_role?(:admin, :enfermero)
       end
     elsif record.provision? 
       if record.proveedor_auditoria? && record.provider_sector == user.sector
-        destroy_pres.any? { |role| user.has_role?(role) }
+        user.has_any_role?(:admin, :enfermero)
       end
     end
   end
@@ -59,15 +59,15 @@ class BedOrderPolicy < ApplicationPolicy
   end
 
   def receive?
-    dispense_pres.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def new_provider?
-    new_provider.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :enfermero)
   end
 
   def new_report?
-    new_report.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :enfermero)
   end
 
   def generate_report?
@@ -75,94 +75,40 @@ class BedOrderPolicy < ApplicationPolicy
   end
 
   def new_applicant?
-    new_applicant.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :enfermero)
   end
 
   def send_provider?
     if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
-      send_order.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :enfermero)
     end
   end
 
   def send_applicant?
     if record.applicant_sector == user.sector
-      record.solicitud_auditoria? && send_order.any? { |role| user.has_role?(role) }
+      record.solicitud_auditoria? && user.has_any_role?(:admin, :enfermero)
     end
   end
 
   def receive_applicant?
     if record.applicant_sector == user.sector
-      record.provision_en_camino? && receive_applicant.any? { |role| user.has_role?(role) }
+      record.provision_en_camino? && user.has_any_role?(:admin)
     end
   end
 
   def return_provider_status?
     if record.provider_sector == user.sector && record.provision_en_camino?
-      return_status.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :enfermero)
     end
   end
 
   def return_applicant_status?
     if record.applicant_sector == user.sector && record.solicitud_enviada?
-      return_status.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :enfermero)
     end
   end
 
-  private
-  
-  def bed_map
-    [ :admin, :enfermero, :farmaceutico ]
-  end
-
-  def receive_applicant
-    [ :admin ]
-  end
-
-  def edit
-    [ :admin, :enfermero, :farmaceutico ]
-  end
-
-  def edit_provider
-    [ :admin, :farmaceutico ]
-  end
-
-  def new_provider
-    [ :admin, :enfermero ]
-  end
-
-  def new_report
-    [ :admin, :enfermero ]
-  end
-
-  def new_applicant
-    [ :admin, :enfermero ]
-  end
-
-  def send_order
-    [ :admin, :enfermero ]
-  end
-
-  def return_status
-    [ :admin, :enfermero ]
-  end
-
-  def update_pres
-    [ :admin, :enfermero ]
-  end
-
-  def see_pres
-    [ :admin, :enfermero]
-  end
-
-  def new_pres
-    [ :admin ]
-  end
-
-  def destroy_pres
-    [ :admin ]
-  end
-
-  def dispense_pres
-    [ :admin ]
+  def new_bed?
+    new?
   end
 end
