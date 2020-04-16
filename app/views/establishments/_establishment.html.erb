@@ -3,7 +3,6 @@
     <td><%= establishment.code %></td>
     <td><%= establishment.name %></td>
     <td><%= establishment.sectors_count %></td>
-    <td><%= establishment.users_count %></td>
     <td>
       <% if policy(establishment).show? %>
         <%= link_to establishment_path(establishment), class: 'btn btn-default btn-xs',
