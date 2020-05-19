@@ -1,6 +1,6 @@
-class CreateOrderingSupplyTemplates < ActiveRecord::Migration[5.2]
+class CreateExternalOrderTemplates < ActiveRecord::Migration[5.2]
   def change
-    create_table :ordering_supply_templates do |t|
+    create_table :external_order_templates do |t|
       t.string :name
       t.references :owner_sector, index: true
       t.references :destination_establishment, index: true

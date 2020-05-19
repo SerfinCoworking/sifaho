@@ -10,13 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_19_132330) do
+ActiveRecord::Schema.define(version: 2020_01_21_134543) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
-  enable_extension "pg_trgm"
   enable_extension "plpgsql"
-  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -43,10 +40,10 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.string "postal_code"
     t.text "line"
     t.bigint "city_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "country_id"
     t.bigint "state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["country_id"], name: "index_addresses_on_country_id"
     t.index ["state_id"], name: "index_addresses_on_state_id"
@@ -111,11 +108,11 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
 
   create_table "beds", force: :cascade do |t|
     t.string "name"
+    t.integer "status", default: 0
     t.bigint "bedroom_id"
+    t.bigint "service_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "service_id"
-    t.integer "status", default: 0
     t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
@@ -155,9 +152,9 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.string "domicile"
     t.string "phone"
     t.string "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.integer "sectors_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "external_order_comments", force: :cascade do |t|
@@ -209,24 +206,24 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   end
 
   create_table "external_orders", force: :cascade do |t|
-    t.text "observation"
-    t.datetime "date_received"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
     t.bigint "applicant_sector_id"
     t.bigint "provider_sector_id"
-    t.datetime "requested_date"
-    t.datetime "sent_date"
-    t.integer "status", default: 0
     t.bigint "audited_by_id"
     t.bigint "accepted_by_id"
     t.bigint "sent_by_id"
     t.bigint "received_by_id"
-    t.datetime "accepted_date"
-    t.integer "order_type", default: 0
     t.bigint "created_by_id"
+    t.text "observation"
     t.string "remit_code"
+    t.datetime "sent_date"
+    t.datetime "accepted_date"
+    t.datetime "date_received"
+    t.datetime "requested_date"
+    t.integer "status", default: 0
+    t.integer "order_type", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
     t.index ["accepted_by_id"], name: "index_external_orders_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_external_orders_on_applicant_sector_id"
@@ -265,37 +262,36 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
+    t.bigint "detination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
+    t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "destination_sector_id"
-    t.text "observation"
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
+    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
   create_table "internal_orders", force: :cascade do |t|
-    t.datetime "date_delivered"
-    t.datetime "date_received"
-    t.text "observation"
-    t.integer "provider_status", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.datetime "requested_date"
-    t.datetime "sent_date"
-    t.bigint "provider_sector_id"
-    t.bigint "applicant_sector_id"
-    t.integer "applicant_status", default: 0
     t.bigint "audited_by_id"
     t.bigint "sent_by_id"
     t.bigint "received_by_id"
     t.bigint "created_by_id"
-    t.string "remit_code"
-    t.integer "order_type", default: 0
+    t.datetime "sent_date"
+    t.datetime "requested_date"
+    t.datetime "date_received"
+    t.text "observation"
+    t.integer "provider_status", default: 0
+    t.integer "applicant_status", default: 0
     t.integer "status", default: 0
+    t.integer "order_type", default: 0
+    t.string "remit_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "provider_sector_id"
+    t.bigint "applicant_sector_id"
+    t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
@@ -340,38 +336,13 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.string "third_target_type"
     t.integer "third_target_id"
     t.datetime "read_at"
+    t.string "action_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "action_type"
-    t.bigint "actor_sector_id"
+    t.integer "actor_sector_id"
     t.index ["actor_sector_id"], name: "index_notifications_on_actor_sector_id"
     t.index ["user_id", "notify_type"], name: "index_notifications_on_user_id_and_notify_type"
     t.index ["user_id"], name: "index_notifications_on_user_id"
-  end
-
-  create_table "office_supplies", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "quantity"
-    t.integer "status", default: 0
-    t.bigint "sector_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "remit_code"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_office_supplies_on_deleted_at"
-    t.index ["remit_code"], name: "index_office_supplies_on_remit_code", unique: true
-    t.index ["sector_id"], name: "index_office_supplies_on_sector_id"
-  end
-
-  create_table "office_supply_categorizations", force: :cascade do |t|
-    t.bigint "office_supply_id"
-    t.bigint "category_id"
-    t.integer "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_office_supply_categorizations_on_category_id"
-    t.index ["office_supply_id"], name: "index_office_supply_categorizations_on_office_supply_id"
   end
 
   create_table "patient_phones", force: :cascade do |t|
@@ -392,20 +363,21 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   end
 
   create_table "patients", force: :cascade do |t|
+    t.string "andes_id"
     t.string "first_name", limit: 100
     t.string "last_name", limit: 100
+    t.integer "status", default: 0
     t.integer "dni"
     t.integer "sex", default: 1
+    t.integer "marital_status", default: 1
     t.datetime "birthdate"
     t.string "email", limit: 50
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.bigint "address_id"
-    t.integer "marital_status", default: 1
-    t.integer "status", default: 0
-    t.string "andes_id"
     t.string "cuil"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "address_id"
     t.index ["address_id"], name: "index_patients_on_address_id"
+    t.index ["andes_id"], name: "index_patients_on_andes_id"
   end
 
   create_table "permission_requests", force: :cascade do |t|
@@ -433,28 +405,28 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   end
 
   create_table "prescriptions", force: :cascade do |t|
+    t.string "remit_code"
     t.text "observation"
     t.datetime "date_received"
     t.datetime "date_dispensed"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "professional_id"
-    t.bigint "patient_id"
     t.integer "status", default: 0
+    t.integer "order_type", default: 0
     t.datetime "prescribed_date"
     t.datetime "expiry_date"
-    t.datetime "deleted_at"
-    t.string "remit_code"
+    t.integer "times_dispensation"
+    t.integer "times_dispensed", default: 0
+    t.datetime "audited_at"
+    t.datetime "dispensed_at"
+    t.bigint "provider_sector_id"
+    t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.bigint "establishment_id"
     t.bigint "created_by_id"
     t.bigint "audited_by_id"
     t.bigint "dispensed_by_id"
-    t.datetime "audited_at"
-    t.datetime "dispensed_at"
-    t.integer "order_type", default: 0
-    t.integer "times_dispensation"
-    t.integer "times_dispensed", default: 0
-    t.bigint "provider_sector_id"
-    t.bigint "establishment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["audited_by_id"], name: "index_prescriptions_on_audited_by_id"
     t.index ["created_by_id"], name: "index_prescriptions_on_created_by_id"
     t.index ["deleted_at"], name: "index_prescriptions_on_deleted_at"
@@ -468,7 +440,6 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
 
   create_table "products", force: :cascade do |t|
     t.bigint "unity_id"
-    t.bigint "area_id"
     t.string "code"
     t.string "name"
     t.text "description"
@@ -476,7 +447,6 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
@@ -521,25 +491,25 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
 
   create_table "quantity_ord_supply_lots", force: :cascade do |t|
     t.integer "supply_lot"
+    t.string "lot_code"
     t.string "quantifiable_type"
     t.bigint "quantifiable_id"
     t.integer "requested_quantity", default: 0
     t.integer "delivered_quantity", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "sector_supply_lot_id"
-    t.bigint "supply_id"
-    t.bigint "supply_lot_id"
-    t.datetime "expiry_date"
-    t.string "lot_code"
-    t.bigint "laboratory_id"
     t.integer "status", default: 0
-    t.text "applicant_observation"
-    t.text "provider_observation"
     t.integer "treatment_duration"
     t.integer "daily_dose"
-    t.datetime "dispensed_at"
+    t.bigint "supply_id"
+    t.bigint "sector_supply_lot_id"
+    t.bigint "supply_lot_id"
+    t.bigint "laboratory_id"
     t.bigint "cronic_dispensation_id"
+    t.text "applicant_observation"
+    t.text "provider_observation"
+    t.datetime "expiry_date"
+    t.datetime "dispensed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["cronic_dispensation_id"], name: "index_quantity_ord_supply_lots_on_cronic_dispensation_id"
     t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
@@ -577,13 +547,13 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   create_table "sector_supply_lots", force: :cascade do |t|
     t.integer "sector_id"
     t.integer "supply_lot_id"
-    t.integer "status", default: 0
     t.integer "quantity", default: 0
     t.integer "initial_quantity", default: 0
+    t.integer "status", default: 0
+    t.bigint "stock_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.bigint "stock_id"
     t.index ["deleted_at"], name: "index_sector_supply_lots_on_deleted_at"
     t.index ["sector_id", "supply_lot_id"], name: "sector_supply_lot"
     t.index ["stock_id"], name: "index_sector_supply_lots_on_stock_id"
@@ -593,11 +563,10 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.string "name"
     t.text "description"
     t.integer "complexity_level"
+    t.integer "user_sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "establishment_id"
-    t.integer "user_sectors_count", default: 0
-    t.integer "users_count"
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
@@ -609,10 +578,10 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
 
   create_table "stocks", force: :cascade do |t|
     t.bigint "sector_id"
+    t.bigint "product_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "product_id"
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["sector_id"], name: "index_stocks_on_sector_id"
   end
@@ -629,7 +598,7 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.integer "quantity_alarm"
     t.integer "period_control"
     t.boolean "is_active"
-    t.datetime "created_at"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "supply_area_id"
     t.datetime "deleted_at"
@@ -653,7 +622,7 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.datetime "updated_at", null: false
     t.bigint "supply_id"
     t.datetime "deleted_at"
-    t.string "lot_code", limit: 30
+    t.string "lot_code", limit: 20
     t.bigint "laboratory_id"
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_supply_lots_on_laboratory_id"
@@ -679,8 +648,6 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
   create_table "users", force: :cascade do |t|
     t.string "username", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
@@ -690,7 +657,6 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sector_id"
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["sector_id"], name: "index_users_on_sector_id"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
@@ -705,33 +671,18 @@ ActiveRecord::Schema.define(version: 2020_02_19_132330) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "cities"
-  add_foreign_key "addresses", "countries"
-  add_foreign_key "addresses", "states"
   add_foreign_key "cities", "states"
-  add_foreign_key "external_order_comments", "external_orders"
-  add_foreign_key "external_order_comments", "users"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
-  add_foreign_key "prescriptions", "establishments"
-  add_foreign_key "prescriptions", "patients"
-  add_foreign_key "prescriptions", "professionals"
-  add_foreign_key "products", "areas"
   add_foreign_key "products", "unities"
-  add_foreign_key "professionals", "professional_types"
-  add_foreign_key "quantity_ord_supply_lots", "laboratories"
-  add_foreign_key "quantity_ord_supply_lots", "supplies"
-  add_foreign_key "quantity_ord_supply_lots", "supply_lots"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
-  add_foreign_key "sector_supply_lots", "stocks"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
-  add_foreign_key "stocks", "products"
-  add_foreign_key "stocks", "sectors"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"

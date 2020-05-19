@@ -3,9 +3,10 @@ class CreateSectorSupplyLots < ActiveRecord::Migration[5.1]
     create_table :sector_supply_lots do |t|
       t.integer :sector_id
       t.integer :supply_lot_id
-      t.integer :quantity
-      t.integer :initial_quantity
+      t.integer :quantity, default: 0
+      t.integer :initial_quantity, default: 0
       t.integer :status, default: 0
+      t.references :stock, index: true
 
       t.timestamps
     end

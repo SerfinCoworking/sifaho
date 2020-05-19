@@ -7,5 +7,6 @@ class CreatePatientPhones < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+    add_index :patient_phones, [:number, :patient_id], unique: true
   end
 end

@@ -7,6 +7,7 @@ class CreateEstablishments < ActiveRecord::Migration[5.1]
       t.string :domicile
       t.string :phone
       t.string :email
+      t.integer :sectors_count, default: 0
 
       t.timestamps
     end

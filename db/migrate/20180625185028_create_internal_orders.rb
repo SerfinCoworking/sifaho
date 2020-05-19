@@ -22,5 +22,7 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
     add_reference :internal_orders, :applicant_sector, index: true
     add_column :internal_orders, :deleted_at, :datetime
     add_index :internal_orders, :deleted_at
+    add_reference :internal_orders, :sent_request_by, index: true
+    add_index :internal_orders, :remit_code, unique: true
   end
 end

@@ -8,5 +8,7 @@ class CreateLots < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+    add_column :lots, :deleted_at, :datetime
+    add_index :lots, :deleted_at
   end
 end

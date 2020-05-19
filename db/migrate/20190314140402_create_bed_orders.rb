@@ -21,6 +21,7 @@ class CreateBedOrders < ActiveRecord::Migration[5.2]
 
       t.references :bed, index: true
       t.references :establishment, index: true
+      t.references :applicant_sector, index: true
     end
   end
 end

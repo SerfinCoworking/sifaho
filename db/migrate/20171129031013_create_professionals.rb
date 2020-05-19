@@ -9,12 +9,12 @@ class CreateProfessionals < ActiveRecord::Migration[5.1]
       t.string :email
       t.string :phone
       t.column :sex, :integer, default: 1
-      t.boolean :is_active
+      t.boolean :is_active, default: true
       t.string :docket, :limit => 10
       t.references :user, index: true
 
       t.timestamps
     end
-    add_reference :professionals, :professional_type, foreign_key: true
+    add_reference :professionals, :professional_type, index: true, default: 5
   end
 end
