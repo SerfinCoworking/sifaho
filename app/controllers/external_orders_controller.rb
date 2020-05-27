@@ -394,6 +394,29 @@ class ExternalOrdersController < ApplicationController
     end
   end
 
+  # DELETE /external_orders/1
+  # DELETE /external_orders/1.json
+  def destroy
+    authorize @external_order
+    @sector_name = @external_order.applicant_sector.name
+    @order_type = @external_order.order_type
+    Notification.destroy_with_target_id(@external_order.id)
+    @external_order.destroy
+    @external_order.create_notification(current_user, "envió a la papelera")
+    respond_to do |format|
+      flash.now[:success] = @order_type.humanize+" de "+@sector_name+" se ha enviado a la papelera."
+      format.js
+    end
+  end
+
+  # GET /external_order/1/delete
+  def delete
+    authorize @external_order
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def generate_report
     authorize ExternalOrder
     respond_to do |format|
@@ -421,29 +444,6 @@ class ExternalOrdersController < ApplicationController
         flash.now[:error] = "Verifique los campos."
         format.html { render :new_report }
       end  
-    end
-  end
-
-  # DELETE /external_orders/1
-  # DELETE /external_orders/1.json
-  def destroy
-    authorize @external_order
-    @sector_name = @external_order.applicant_sector.name
-    @order_type = @external_order.order_type
-    Notification.destroy_with_target_id(@external_order.id)
-    @external_order.destroy
-    @external_order.create_notification(current_user, "envió a la papelera")
-    respond_to do |format|
-      flash.now[:success] = @order_type.humanize+" de "+@sector_name+" se ha enviado a la papelera."
-      format.js
-    end
-  end
-
-  # GET /external_order/1/delete
-  def delete
-    authorize @external_order
-    respond_to do |format|
-      format.js
     end
   end
 

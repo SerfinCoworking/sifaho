@@ -208,6 +208,61 @@ class PrescriptionsController < ApplicationController
     supply_count: pre.quantity_ord_supply_lots.count, created_at: pre.created_at.strftime("%d/%m/%Y") } }
   end
 
+  def generate_order_report(prescription)
+
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf')
+
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf'), id: :other_page
+    
+    prescription.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page layout: :other_page do |page|
+        end
+      end
+      
+      report.list do |list|
+        list.add_row do |row|
+          row.values  supply_code: qosl.supply_id,
+                      supply_name: qosl.supply.name,
+                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+                      lot: qosl.sector_supply_lot_lot_code,
+                      laboratory: qosl.sector_supply_lot_laboratory_name,
+                      expiry_date: qosl.sector_supply_lot_expiry_date, 
+                      applicant_obs: qosl.provider_observation
+        end
+
+        report.list.on_page_footer_insert do |footer|
+          footer.item(:total_supplies).value(external_order.quantity_ord_supply_lots.count)
+          footer.item(:total_requested).value(external_order.quantity_ord_supply_lots.sum(&:requested_quantity))
+          footer.item(:total_delivered).value(external_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
+          footer.item(:total_obs).value(external_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+        end
+      end
+      
+      if report.page_count == 1
+        report.page[:applicant_sector] = external_order.applicant_sector.name
+        report.page[:applicant_establishment] = external_order.applicant_establishment.name
+        report.page[:provider_sector] = external_order.provider_sector.name
+        report.page[:provider_establishment] = external_order.provider_establishment.name
+        report.page[:observations] = external_order.observation
+      end
+    end
+    
+
+    report.pages.each do |page|
+      page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+      page[:remit_code] = external_order.remit_code
+      page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
+      page[:page_count] = report.page_count
+      page[:sector] = current_user.sector_name
+      page[:establishment] = current_user.establishment_name
+    end
+
+    report.generate
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_prescription
