@@ -1,5 +1,5 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status, 
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status,
     :return_cronic_confirm, :return_cronic_dispensation ]
 
   # GET /prescriptions
@@ -81,7 +81,7 @@ class PrescriptionsController < ApplicationController
               flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado y dispensado correctamente."
           else
             @prescription.create_notification(current_user, "creó")
-            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado correctamente." 
+            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado correctamente."
           end
         rescue ArgumentError => e
           flash[:alert] = e.message
@@ -204,7 +204,7 @@ class PrescriptionsController < ApplicationController
 
   def get_by_patient_id
     @prescriptions = Prescription.with_patient_id(params[:term]).order(created_at: :desc).limit(10)
-    render json: @prescriptions.map{ |pre| { id: pre.id, order_type: pre.order_type.humanize, status: pre.status.humanize, professional: pre.professional_fullname, 
+    render json: @prescriptions.map{ |pre| { id: pre.id, order_type: pre.order_type.humanize, status: pre.status.humanize, professional: pre.professional_fullname,
     supply_count: pre.quantity_ord_supply_lots.count, created_at: pre.created_at.strftime("%d/%m/%Y") } }
   end
 
@@ -261,6 +261,13 @@ class PrescriptionsController < ApplicationController
     end
 
     report.generate
+  end
+  
+  def get_cronic_prescriptions
+    @prescriptions = Prescription.with_patient_id(params[:term]).cronica.for_statuses(['pendiente', 'dispensada_parcial'])
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

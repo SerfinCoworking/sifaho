@@ -70,13 +70,6 @@
       <% end %>
     <% end %>
   </li>
-  <li id="stock-li" class="<%= active_class('office_supplies') %> text-left">
-    <% if policy(OfficeSupply).index? %>
-      <%= link_to main_app.office_supplies_path do %>
-        Insumos Oficina
-      <% end %>
-    <% end %>
-  </li>
   <li id="stock-li" class="<%= active_class('supplies') %> text-left">
     <% if policy(Supply).index? %>
       <%= link_to main_app.supplies_path do %>

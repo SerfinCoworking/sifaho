@@ -1,0 +1,23 @@
+<%if @prescriptions.present? %>
+  $('.modal-dialog').addClass('modal-lg');
+  $('.modal-content').addClass('panel-primary');
+  // Add the dialog title
+  $('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo últimas recetas");
+
+  // Render the edit form
+  $('.modal-body').html('<%= j render("get_cronic_prescriptions") %>');
+
+  // Add form button
+  $('.modal-footer').html(
+    "<button type='button' class='btn btn-default pull-right' data-dismiss='modal'>Volver</button>"
+  );
+
+  // Show the dynamic dialog
+  $('#dialog').modal("show");
+  $('#modal-cronic-prescriptions tbody tr td').on('click', function(e){
+    e.stopPropagation();
+    const linkToPrescription = $(e.target).parent().attr("data-href");
+    window.open(linkToPrescription);
+    return;
+  })
+<% end %>
