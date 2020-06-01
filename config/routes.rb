@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+
   resources :stocks
   # Lotes
   resources :lots do
@@ -75,7 +75,7 @@ Rails.application.routes.draw do
   resources :users_admin, :controller => 'users', only: [:index, :update, :show] do
     member do
       get "change_sector"
-      get "edit_permissions" 
+      get "edit_permissions"
       put "update_permissions"
     end
   end
@@ -105,8 +105,8 @@ Rails.application.routes.draw do
       get "bed_map"
       get "new_bed"
       post "create_bed"
-    end 
-  end 
+    end
+  end
 
   resources :laboratories do
     member do
@@ -227,6 +227,7 @@ Rails.application.routes.draw do
       collection do
       get "new_cronic"
       get "get_by_patient_id"
+      get "get_cronic_prescriptions"
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
@@ -254,7 +255,7 @@ Rails.application.routes.draw do
   end
 
   namespace :charts do
-    get "by_month_prescriptions"  
+    get "by_month_prescriptions"
     get "by_laboratory_lots"
     get "by_status_current_sector_supply_lots"
     get "by_month_applicant_external_orders"

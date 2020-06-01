@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function() {
-  
+
   $(function () {
     var today = new moment();
     var expiryDate = new moment().add(30, 'days');
@@ -106,6 +106,7 @@ $(document).on('turbolinks:load', function() {
             } // End if
           }// End success
         });// End ajax
+
         $.ajax({
           url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
           type: 'GET',
@@ -139,6 +140,22 @@ $(document).on('turbolinks:load', function() {
             } // End if
           }// End success
         });// End ajax
+        $.ajax({
+          url: "/prescriptions/get_cronic_prescriptions", // Ruta del controlador
+          type: 'GET',
+          data: {
+            term: ui.item.id
+          },
+          error: function(XMLHttpRequest, errorTextStatus, error){
+            alert("Failed: "+ errorTextStatus+" ;"+error);
+          },
+          success: function(data){
+            if (!data.length) {
+              $('#non-pres').toggleClass('hidden', false);
+              $('#pat-pres').toggleClass('hidden', true);
+            }
+          }// End success
+        });// End ajax
       }
     })
   });
@@ -148,7 +165,7 @@ $(document).on('turbolinks:load', function() {
     $(this).tooltip('hide');
   });
 
-  $.ui.autocomplete.prototype._renderItem = function (ul, item) {   
+  $.ui.autocomplete.prototype._renderItem = function (ul, item) {
     if(item.length > 0 ){
       console.log("hay elementos");
     }
