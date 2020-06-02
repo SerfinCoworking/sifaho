@@ -1,0 +1,29 @@
+<%= simple_form_for @establishment, html: {class: "", role: 'check-modified'} do |f| %>
+<%= f.error_notification %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="col-md-4">
+        <%= f.input :code, required: true, label: 'Código' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :name, required: true, label: 'Nombre' %>
+      </div>
+
+      <div class="col-md-4">
+        <%= f.input :cuit, required: true, label: 'Cuit' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :domicile, required: true, label: 'Domicilio' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :phone, required: true, label: 'Teléfono' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :email, required: true, label: 'Email' %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :sectors_count, required: true, label: 'Cantidad de sectores' %>
+      </div>
+    </div>
+  </div>
+<% end %>

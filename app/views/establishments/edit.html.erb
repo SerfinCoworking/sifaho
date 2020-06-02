@@ -1,0 +1,24 @@
+<%= render 'header' %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Editar establecimiento
+          <%= link_to :back, class: 'btn pull-right close-btn' do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+          <% end %>
+        </h3>
+      </div>
+      <div class="panel-body" id="panel-body-new">
+        <%= render 'form', establishment: @establishment %>
+      </div>
+      <div class="panel-footer text-right">
+        <%= link_to 'Volver', patients_path, class: 'btn' %>
+        <button type='submit' name='commit' class='btn btn-success' form='edit_establishment_<%= @establishment.id%>'>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

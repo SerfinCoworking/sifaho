@@ -7,16 +7,18 @@
     </div>
     <div class="panel-rightbody">
       <%= form_for_filterrific @filterrific do |f| %>
-          <div class="col-md-3 col-sm-3">
-            <label>Nombre</label>
-            <%= f.text_field(
-              :search_name,
-              class: 'filterrific-periodically-observed form-control input-sm'
-                ) %>
+          <div class="row">
+            <label class="col-md-4">Nombre</label>
+            <div class="col-md-5 col-sm-3">
+              <%= f.text_field(
+                :search_name,
+                class: 'filterrific-periodically-observed form-control input-sm'
+                  ) %>
+            </div>
           </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
+          <%#= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+            <%#= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+          <%# end %>
           <!-- Spinner para la carga -->
           <%= render_filterrific_spinner %>
       <% end %>
