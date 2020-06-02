@@ -440,6 +440,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
 
   create_table "products", force: :cascade do |t|
     t.bigint "unity_id"
+    t.bigint "area_id"
     t.string "code"
     t.string "name"
     t.text "description"
@@ -447,6 +448,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
@@ -677,6 +679,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
+  add_foreign_key "products", "areas"
   add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"

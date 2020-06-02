@@ -30,7 +30,7 @@ class User < ApplicationRecord
   delegate :establishment, to: :sector
 
   def create_profile
-    # first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
+    #first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
     first_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "givenname").first.encode("Windows-1252", invalid: :replace, undef: :replace) # Comment in production
     last_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "sn").first.encode("Windows-1252", invalid: :replace, undef: :replace)
     email = Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").first
