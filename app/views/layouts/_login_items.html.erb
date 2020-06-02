@@ -1,0 +1,31 @@
+<% if user_signed_in? %>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true">
+      <span><%= image_tag user_avatar(current_user, 25), class:"rounded img-profile-nav" %></span>
+      <%= current_user.full_name %>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+      <% if current_user.has_role? :admin %>
+        <%= link_to main_app.rails_admin_path, class: "dropdown-item" do %>
+          <%= fa_icon "users-cog" %>
+          Administración
+        <% end %>
+      <% end %>
+      <%= link_to main_app.edit_profile_path(current_user.profile), class: "dropdown-item" do %>
+        <%= fa_icon "user-edit" %>
+        Editar perfil
+      <% end %>
+      <% if policy(current_user).change_sector? %>
+        <%= link_to main_app.change_sector_users_admin_path(current_user), remote: true, class: "dropdown-item" do %>
+          <%= fa_icon "refresh" %>
+          Cambiar sector
+        <% end %>
+      <% end %>
+      <div class="dropdown-divider"></div>
+      <%= link_to destroy_user_session_path, :method => :delete, class: "dropdown-item" do %>
+        <%= fa_icon "power-off" %>
+        Cerrar sesión
+      <% end %>
+    </div>
+  </li>
+<% end %>
