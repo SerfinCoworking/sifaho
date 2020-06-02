@@ -1,29 +1,24 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust non-sel">
-      <li role="presentation" id="page-title">
-        <a href="">Vademécum</a>
-      </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to supplies_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-          Listado
-        <% end %>
-      </li>
-      <% if policy(Supply).new? %>
-        <li role="presentation" class="<%= active_action('new') %> non-sel">
-          <%= link_to new_supply_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Insumo
-          <% end %>
-        </li>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to supplies_path, class: 'nav-link' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+      Listado de productos
+    <% end %>
+  </li>
+  <% if policy(Supply).new? %>
+    <li class="nav-item <%= active_action('new') %> non-sel">
+      <%= link_to new_supply_path, class: 'nav-link' do %>
+        <%= fa_icon "plus" %>
+        Agregar insumo
       <% end %>
-      <% if policy(Supply).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
-          <%= link_to trash_index_supplies_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-            Papelera
-          <% end %>
-        </li>
+    </li>
+  <% end %>
+  <% if policy(Supply).trash_index? %>
+    <li class="nav-item col-md-offset-5 <%= active_action('trash_index') %> non-sel">
+      <%= link_to trash_index_supplies_path, class: 'nav-link' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        Papelera
       <% end %>
-    </ul>
+    </li>
+  <% end %>
 <% end %>

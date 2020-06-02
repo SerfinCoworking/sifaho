@@ -1,156 +1,154 @@
 
 <% content_for :page_header do %>
   <% if current_user.sector.present? %>
-    <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title" class="non-sel">
-        <a href="">Inicio</a>
-      </li>
-      <% if policy(Prescription).index? %>
-        <li class="dropdown">
-          <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
-            Prescripciones
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-cust non-sel">
-            <% if policy(Prescription).index? %>
-              <li>
-                <%= link_to prescriptions_path do %>
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-                  Listado
-                <% end %>
-              </li>
-            <% end %>
-            <% if policy(Prescription).new? %>
-              <li>
-                <%= link_to new_prescription_path do %>
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                  Ambulatoria
-                <% end %>
-              </li>
-            <% end %>
-            <% if policy(Prescription).new_cronic? %>
-              <li>
-                <%= link_to new_cronic_prescriptions_path do %>
-                  <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                  Crónica
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-        </li>
-      <% end %>
-      <li class="dropdown">
-        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-th') %>
-          Sectores
+    <li id="page-title" class="nav-item non-sel">
+      <a href="" class="nav-link"><%= fa_icon "home" %> Inicio</a>
+    </li>
+    <% if policy(Prescription).index? %>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#">
+          <%= fa_icon "file-prescription" %>
+          Recetas
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-cust non-sel">
+          <% if policy(Prescription).index? %>
             <li>
-              <%= link_to applicant_index_internal_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-                Recibos
+              <%= link_to prescriptions_path do %>
+                <%= fa_icon "list" %>
+                Listado
               <% end %>
             </li>
-          <li>
-            <%= link_to internal_orders_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-              Entregas&nbsp;
-              <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-              <% if count > 0 %>
-                <div class="label label-info pull-right"><%= count %></div>
+          <% end %>
+          <% if policy(Prescription).new? %>
+            <li>
+              <%= link_to new_prescription_path do %>
+                <%= fa_icon "plus" %>
+                Ambulatoria
               <% end %>
-            <% end %>
-          </li>
-          <li role="presentation" class="<%= active_action('new_applicant') %>">
-            <%= link_to new_applicant_internal_orders_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              Solicitud
-            <% end %>
-          </li>
-          <li role="presentation" class="<%= active_action('new_provider') %>">
-            <%= link_to new_provider_internal_orders_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              Provisión
-            <% end %>
-          </li>
-          <li>
-            <%= link_to internal_order_templates_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
-              Plantillas
-            <% end %>
-          </li>
-          <% if policy(InternalOrder).new_report? %>
-            <li role="presentation" class="<%= active_action('new_report') %>">
-              <%= link_to new_report_internal_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-                Reporte
+            </li>
+          <% end %>
+          <% if policy(Prescription).new_cronic? %>
+            <li>
+              <%= link_to new_cronic_prescriptions_path do %>
+                <%= fa_icon "plus" %>
+                Crónica
               <% end %>
             </li>
           <% end %>
         </ul>
       </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-th-large') %>
-          Abastecimiento
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-cust">
+    <% end %>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#">
+        <%= fa_icon "bezier-curve" %>
+        Sectores
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-cust non-sel">
           <li>
-            <%= link_to applicant_index_external_orders_path do %>
+            <%= link_to applicant_index_internal_orders_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-              <span class="hidden-xs">Recibos</span>
+              Recibos
             <% end %>
           </li>
-          <li>
-            <%= link_to external_orders_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-              <span class="hidden-xs">Despachos</span>
-              <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-              <% if count > 0 %>
-                <div class="label label-info pull-right"><%= count %></div>
-              <% end %>
+        <li>
+          <%= link_to internal_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+            Entregas&nbsp;
+            <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+            <% if count > 0 %>
+              <div class="label label-info pull-right"><%= count %></div>
             <% end %>
-          </li>
-          <% if policy(ExternalOrder).new_receipt? %>
-            <li>
-              <%= link_to new_receipt_external_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                R<span class="hidden-xs">ecibo</span>
-              <% end %>
-            </li>
           <% end %>
-          <% if policy(ExternalOrder).new_applicant? %>
-            <li>
-              <%= link_to new_applicant_external_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                S<span class="hidden-xs">olicitud</span>
-              <% end %>
-            </li>
+        </li>
+        <li class="<%= active_action('new_applicant') %>">
+          <%= link_to new_applicant_internal_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Solicitud
           <% end %>
-          <li>
-            <%= link_to new_external_order_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              D<span class="hidden-xs">espacho</span>
-            <% end %>
-          </li>
-          <li>
-            <%= link_to external_order_templates_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
-              Plantillas
-            <% end %>
-          </li>
-          <li>
-            <%= link_to new_report_external_orders_path do %>
+        </li>
+        <li class="<%= active_action('new_provider') %>">
+          <%= link_to new_provider_internal_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Provisión
+          <% end %>
+        </li>
+        <li>
+          <%= link_to internal_order_templates_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+            Plantillas
+          <% end %>
+        </li>
+        <% if policy(InternalOrder).new_report? %>
+          <li class="<%= active_action('new_report') %>">
+            <%= link_to new_report_internal_orders_path do %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
               Reporte
             <% end %>
           </li>
-        </ul>
-      </li>
-    </ul>
+        <% end %>
+      </ul>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#">
+        <%= fa_icon "hospital" %>
+        Establecimientos
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-cust">
+        <li>
+          <%= link_to applicant_index_external_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+            <span class="hidden-xs">Recibos</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to external_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+            <span class="hidden-xs">Despachos</span>
+            <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+            <% if count > 0 %>
+              <div class="label label-info pull-right"><%= count %></div>
+            <% end %>
+          <% end %>
+        </li>
+        <% if policy(ExternalOrder).new_receipt? %>
+          <li>
+            <%= link_to new_receipt_external_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              R<span class="hidden-xs">ecibo</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if policy(ExternalOrder).new_applicant? %>
+          <li>
+            <%= link_to new_applicant_external_orders_path do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              S<span class="hidden-xs">olicitud</span>
+            <% end %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to new_external_order_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            D<span class="hidden-xs">espacho</span>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to external_order_templates_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+            Plantillas
+          <% end %>
+        </li>
+        <li>
+          <%= link_to new_report_external_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+            Reporte
+          <% end %>
+        </li>
+      </ul>
+    </li>
   <% else %>
     Bienvenido <%= current_user.full_name.titleize %>
   <% end %>

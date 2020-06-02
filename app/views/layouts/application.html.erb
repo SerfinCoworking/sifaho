@@ -14,7 +14,7 @@
     <% if ENV['DEMO_RIBBON'] %>
       <div class="corner-ribbon bottom-right sticky green shadow"><strong>DEMO</strong></div>
     <% end %>
-    
+
     <div class="d-flex" id="wrapper">
       <!-- Sidebar -->
       <% if user_signed_in? %>
@@ -30,7 +30,7 @@
           <%= render 'layouts/navigation' %>
         <% end %>
 
-        <div class="mt-3 container<%= yield :container %>">
+        <div class="mt-3 container-fluid">
 
           <!-- Flash message -->
           <div id="flash_messages" class="mx-auto d-block">

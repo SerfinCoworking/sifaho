@@ -1,13 +1,11 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust non-sel">
-      <li role="presentation" id="page-title">
-        <a href="">Stock</a>
-      </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to stocks_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-          Listado
-        <% end %>
-      </li>
-    </ul>
+  <li id="page-title" class="nav-item">
+    <a href="" class="nav-link">Stock</a>
+  </li>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to stocks_path, class: 'nav-link' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+      Listado
+    <% end %>
+  </li>
 <% end %>

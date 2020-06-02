@@ -1,83 +1,81 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title" class="non-sel">
-        <a href="">Stock</a>
-      </li>
-      <% if policy(SectorSupplyLot).group_by_supply? %>
-        <li role="presentation" class="<%= active_action('group_by_supply') %> non-sel">
-          <%= link_to group_by_supply_sector_supply_lots_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-            Insumos
+  <li id="page-title" class="nav-item non-sel">
+    <a href="" class="nav-link">Stock</a>
+  </li>
+  <% if policy(SectorSupplyLot).group_by_supply? %>
+    <li class="nav-item <%= active_action('group_by_supply') %> non-sel">
+      <%= link_to group_by_supply_sector_supply_lots_path, class: 'nav-link' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
+        Insumos
+      <% end %>
+    </li>
+  <% end %>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to sector_supply_lots_path, class: 'nav-link' do %>
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+      Lotes
+    <% end %>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
+      Cargar stock
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-cust">
+      <% if policy(ExternalOrder).new_receipt? %>
+        <li>
+          <%= link_to new_receipt_external_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Recibo externo
           <% end %>
         </li>
       <% end %>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to sector_supply_lots_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-          Lotes
-        <% end %>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
-          Cargar stock
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-cust">
-          <% if policy(ExternalOrder).new_receipt? %>
-            <li>
-              <%= link_to new_receipt_external_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Recibo externo
-              <% end %>
-            </li>
-          <% end %>
-          <% if policy(InternalOrder).new_applicant? %>
-            <li>
-              <%= link_to new_applicant_internal_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Solicitud interna
-              <% end %>
-            </li>
-          <% end %>
-          <% if policy(ExternalOrder).new_applicant? %>
-            <li>
-              <%= link_to new_applicant_external_orders_path do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-                Solicitud externa
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-          Reporte
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-cust">
-          <li>
-            <%= link_to new_delivered_by_order_reports_path do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-              <span class="hidden-xs">Entregado por pedido</span>
-            <% end %>
-          </li>
-        </ul>
-      </li>
-      <% if policy(SectorSupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-4 <%= active_action('trash_index') %> non-sel">
-          <%= link_to trash_index_sector_supply_lots_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-            Papelera
+      <% if policy(InternalOrder).new_applicant? %>
+        <li>
+          <%= link_to new_applicant_internal_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Solicitud interna
           <% end %>
         </li>
       <% end %>
-      <li role="presentation" class="non-sel">
-        <%= link_to group_by_supply_sector_supply_lots_path(format: 'pdf'), target: :_blank do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-          Imprimir
+      <% if policy(ExternalOrder).new_applicant? %>
+        <li>
+          <%= link_to new_applicant_external_orders_path do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Solicitud externa
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
+      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+      Reporte
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-cust">
+      <li>
+        <%= link_to new_delivered_by_order_reports_path do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
+          <span class="hidden-xs">Entregado por pedido</span>
         <% end %>
       </li>
     </ul>
+  </li>
+  <% if policy(SectorSupplyLot).trash_index? %>
+    <li class="nav-item col-md-offset-4 <%= active_action('trash_index') %> non-sel">
+      <%= link_to trash_index_sector_supply_lots_path, class: 'nav-link' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        Papelera
+      <% end %>
+    </li>
+  <% end %>
+  <li class="nav-item non-sel">
+    <%= link_to group_by_supply_sector_supply_lots_path(format: 'pdf'), target: :_blank, class: 'nav-link' do %>
+      <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+      Imprimir
+    <% end %>
+  </li>
 <% end %>

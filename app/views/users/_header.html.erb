@@ -1,17 +1,17 @@
 <% content_for :page_header do %>
     <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" id="page-title" class="non-sel">
-        <a href="">Usuarios</a>
+      <li id="page-title" class="nav-item non-sel">
+        <a href="" class="nav-link">Usuarios</a>
       </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to users_admin_index_path do %>
+      <li class="nav-item <%= active_action('index') %> non-sel">
+        <%= link_to users_admin_index_path, class: 'nav-link' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
           Listado
         <% end %>
       </li>
       <% if policy(PermissionRequest).index? %>
-        <li role="presentation" class="<%= active_action_and_controller('index', 'permission_requests') %> non-sel">
-          <%= link_to permission_requests_path do %>
+        <li class="nav-item <%= active_action_and_controller('index', 'permission_requests') %> non-sel">
+          <%= link_to permission_requests_path, class: 'nav-link' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-envelope') %>
             Solicitud de permisos&nbsp;
             <% count =  PermissionRequest.nueva.count %>

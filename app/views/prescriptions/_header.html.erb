@@ -1,25 +1,20 @@
 <% content_for :page_header do %>
-  <ul class="nav nav-tabs nav-tabs-cust">
-    <li role="presentation" id="page-title" class="non-sel">
-      <a href="">Prescripciones</a>
-    </li>
-    <li role="presentation" class="<%= active_action('index') %> non-sel">
-      <%= link_to prescriptions_path do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-        Listado
-      <% end %>
-    </li>
-    <li role="presentation" class="<%= active_action('new') %> non-sel">
-      <%= link_to new_prescription_path do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Ambulatoria
-      <% end %>
-    </li>
-    <li role="presentation" class="<%= active_action('new_cronic') %> non-sel">
-      <%= link_to new_cronic_prescriptions_path do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Crónica
-      <% end %>
-    </li>
-  </ul>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to prescriptions_path, class: 'nav-link' do %>
+      <%= fa_icon "file-prescription" %>
+      Recetas
+    <% end %>
+  </li>
+  <li class="nav-item <%= active_action('new') %> non-sel">
+    <%= link_to new_prescription_path, class: 'nav-link' do %>
+      <%= fa_icon "plus" %>
+      Ambulatoria
+    <% end %>
+  </li>
+  <li class="nav-item <%= active_action('new_cronic') %> non-sel">
+    <%= link_to new_cronic_prescriptions_path, class: 'nav-link' do %>
+      <%= fa_icon "plus" %>
+      Crónica
+    <% end %>
+  </li>
 <% end %>
