@@ -263,12 +263,6 @@ Rails.application.routes.draw do
     get "by_order_type_external_orders"
   end
 
-  resources :office_supplies do
-    member do
-      get "delete"
-    end
-  end
-
   resources :reports, only: [:show, :index] do
     collection do
       get "new_delivered_by_order"
