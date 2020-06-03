@@ -58,11 +58,6 @@
     Lotes Provincia
   <% end %>
 <% end %>
-<% if policy(OfficeSupply).index? %>
-  <%= link_to main_app.office_supplies_path, class: active_class('office_supplies'), draggable: false, id: 'stock' do %>
-    Insumos Oficina
-  <% end %>
-<% end %>
 <% if policy(Supply).index? %>
   <%= link_to main_app.supplies_path, class: active_class('supplies'), draggable: false, id: 'stock' do %>
     Vademécum

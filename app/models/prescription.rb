@@ -112,7 +112,13 @@ class Prescription < ApplicationRecord
     where('prescriptions.order_type = ?', a_order_type)
   }
 
-  scope :with_establishment, lambda { |a_establishment| 
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
+  end
+
+  scope :with_establishment, lambda { |a_establishment|
     where('prescriptions.establishment_id = ?', a_establishment)
   }
 
@@ -271,7 +277,7 @@ class Prescription < ApplicationRecord
       end
     else
       raise ArgumentError, 'No hay lotes asignados.'
-    end   
+    end
   end
 
   def validate_undelivered_quantity_lots(sector)
@@ -283,7 +289,7 @@ class Prescription < ApplicationRecord
         @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
         @sector_lot = SectorSupplyLot.find(key)
         if @sector_lot.sector != sector
-          raise ArgumentError, 'El lote '+@sector_lot.lot_code+' no pertenece a tu sector.' 
+          raise ArgumentError, 'El lote '+@sector_lot.lot_code+' no pertenece a tu sector.'
         end
         if @sector_lot.quantity < @sum_quantities
           raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
