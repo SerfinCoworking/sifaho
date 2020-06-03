@@ -1,57 +1,48 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item non-sel">
-    <a href="" class="nav-link">Stock</a>
-  </li>
   <% if policy(SectorSupplyLot).group_by_supply? %>
     <li class="nav-item <%= active_action('group_by_supply') %> non-sel">
       <%= link_to group_by_supply_sector_supply_lots_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-        Insumos
+        <%= fa_icon "cubes" %>
+        Stock
       <% end %>
     </li>
   <% end %>
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to sector_supply_lots_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
+      <%= fa_icon "barcode" %>
       Lotes
     <% end %>
   </li>
   <li class="nav-item dropdown">
-    <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-shopping-cart') %>
+    <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
+      <%= fa_icon "angle-double-up" %>
       Cargar stock
       <span class="caret"></span>
     </a>
-    <ul class="dropdown-menu dropdown-menu-cust">
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
       <% if policy(ExternalOrder).new_receipt? %>
-        <li>
-          <%= link_to new_receipt_external_orders_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Recibo externo
-          <% end %>
-        </li>
+        <%= link_to new_receipt_external_orders_path, class: "dropdown-item" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Cargar por recibo
+        <% end %>
       <% end %>
       <% if policy(InternalOrder).new_applicant? %>
-        <li>
-          <%= link_to new_applicant_internal_orders_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Solicitud interna
-          <% end %>
-        </li>
+        <%= link_to new_applicant_internal_orders_path, class: "dropdown-item" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Solicitar a sector
+        <% end %>
       <% end %>
       <% if policy(ExternalOrder).new_applicant? %>
-        <li>
-          <%= link_to new_applicant_external_orders_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Solicitud externa
-          <% end %>
-        </li>
+        <%= link_to new_applicant_external_orders_path, class: "dropdown-item" do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          Solicitar a establecimiento
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+    <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#" class="nav-link">
+      <%= fa_icon "chart-line" %>
       Reporte
       <span class="caret"></span>
     </a>
