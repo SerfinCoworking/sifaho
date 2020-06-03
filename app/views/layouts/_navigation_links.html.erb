@@ -1,7 +1,4 @@
 <% if user_signed_in? %>
-  <li id="date">
-      <%= Time.now.strftime("%d/%m/%Y") %>
-  </li>
   <li class="<%= active_class('notifications/notifications') %>">
     <%= link_to main_app.notifications_path, :title => 'Ver notificaciones', :'data-placement'=>'bottom', :'data-toggle'=>'tooltip' do %>
       <% count = Notification.unread_count(current_user) %>
