@@ -1,11 +1,14 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item non-sel">
-    <a href="" class="nav-link">Laboratorios</a>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to laboratories_path, class: 'nav-link' do %>
+      <%= fa_icon "vial" %>
+      Laboratorios
+    <% end %>
   </li>
   <li class="nav-item <%= active_action('new') %> non-sel">
     <%= link_to new_laboratory_path, class: 'nav-link', remote: 'true' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
+      <%= fa_icon "plus" %>
+      Agregar laboratorio
     <% end %>
   </li>
 <% end %>

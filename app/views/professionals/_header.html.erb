@@ -1,17 +1,14 @@
 <% content_for :page_header do %>
-    <li id="page-title" class="nav-item non-sel">
-      <a href="" class="nav-link">Profesionales</a>
-    </li>
     <li class="nav-item <%= active_action('index') %> non-sel">
         <%= link_to professionals_path, class: 'nav-link' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-          Listado
+          <%= fa_icon "user-md" %>
+          Médicos
         <% end %>
     </li>
     <li class="nav-item <%= active_action('new') %> non-sel">
       <%= link_to new_professional_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Nuevo
+        <%= fa_icon "plus" %>
+        Agregar profesional
       <% end %>
     </li>
   </ul>

@@ -1,11 +1,14 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item">
-    <a href="" class="nav-link">Lotes en provincia</a>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to supply_lots_path, class: 'nav-link' do %>
+      <%= fa_icon "barcode" %>
+      Lotes en provincia
+    <% end %>
   </li>
   <% if policy(SupplyLot).trash_index? %>
     <li class="nav-item col-md-offset-5 <%= active_action('trash_index') %> non-sel">
       <%= link_to trash_index_supply_lots_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <%= fa_icon "trash" %>
         Papelera
       <% end %>
     </li>

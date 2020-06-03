@@ -1,17 +1,14 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item">
-    <a href="" class="nav-link">Lotes</a>
-  </li>
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to lots_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-      Listado
+      <%= fa_icon "barcode" %>
+      Lotes
     <% end %>
   </li>
   <% if policy(Lot).new? %>
     <li class="nav-item <%= active_action('new') %> non-sel">
       <%= link_to new_lot_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        <%= fa_icon "plus" %>
         Nuevo
       <% end %>
     </li>
@@ -19,7 +16,7 @@
   <% if policy(Lot).trash_index? %>
     <li class="nav-item <%= active_action('trash_index') %> non-sel">
       <%= link_to trash_index_lots_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <%= fa_icon "trash" %>
         Papelera
       <% end %>
     </li>

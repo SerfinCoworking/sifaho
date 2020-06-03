@@ -1,17 +1,14 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item non-sel">
-    <a href="" class="nav-link">Pacientes</a>
-  </li>
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to patients_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-      Listado
+      <%= fa_icon "user-injured" %>
+      Médicos
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new') %> non-sel">
     <%= link_to new_patient_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-      Nuevo
+      <%= fa_icon "plus" %>
+      Agregar médico
     <% end %>
   </li>
 <% end %>
