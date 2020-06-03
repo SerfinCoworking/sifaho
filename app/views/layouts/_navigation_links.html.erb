@@ -5,9 +5,9 @@
   <li class="<%= active_class('notifications/notifications') %>">
     <%= link_to main_app.notifications_path, :title => 'Ver notificaciones', :'data-placement'=>'bottom', :'data-toggle'=>'tooltip' do %>
       <% count = Notification.unread_count(current_user) %>
-      <span class="glyphicon glyphicon-bell"></span>
+      <%= fa_icon "bell" %>
       <% if count > 0 %>
-        <div class="label label-danger badge-notify"><%= count %></div>
+        <div class="badge badge-danger badge-notify"><%= count %></div>
       <% end %>
     <% end %>
   </li>

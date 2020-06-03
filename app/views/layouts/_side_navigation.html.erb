@@ -1,0 +1,160 @@
+
+<!-- Sidebar -->
+<div class="bg-light border-right navbar-light" id="sidebar-wrapper">
+  <!--Brand-->
+  <div class="sidebar-heading d-flex justify-content-between">    
+    <%= link_to root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
+      <%= image_tag("LogoSIFAHO.png", size: "30x30", alt: "Logo SIFAHO", class: 'logo') %>
+      SIFAHO
+    <% end %>
+
+    <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
+  </div>
+
+
+  <!--Menu list-->
+  <div class="list-group list-group-flush">
+    <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
+      <span class="sb-icon">
+        <%= fa_icon "home" %> 
+      </span>
+      <span class="sb-title">Inicio</span>
+    <% end %>
+    
+    <% if policy(Prescription).index? %>
+      <%= link_to main_app.prescriptions_path,  class: "list-group-item list-group-item-action list-custom bg-light #{active_class('prescriptions')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "file-prescription" %>
+        </span>
+        <span class="sb-title">Recetas</span>
+      <% end %>
+    <% end %>
+    
+    <% if policy(BedOrder).index? %>
+      <%= link_to main_app.bed_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('bed_orders')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "procedures" %>
+        </span>
+        <span class="sb-title">Internación</span>
+      <% end %>
+    <% end %>
+    
+    <% if policy(InternalOrder).index? %>
+      <%= link_to main_app.applicant_index_internal_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "bezier-curve" %>
+        </span>
+        <span class="sb-title">Sectores</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(ExternalOrder).index? %>
+      <%= link_to main_app.applicant_index_external_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('external_orders')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "hospital"%>
+        </span>
+        <span class="sb-title">Establecimientos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Stock).index? %>
+      <%= link_to main_app.stocks_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('stocks')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "cubes" %>
+        </span>
+        <span class="sb-title">Stock a migrar</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(SectorSupplyLot).index? %>
+      <%= link_to main_app.group_by_supply_sector_supply_lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('sector_supply_lots')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "cubes" %>
+        </span>
+        <span class="sb-title">Stock</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(SupplyLot).index? %>
+      <%= link_to main_app.supply_lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('supply_lots')}"  do %>
+        <span class="sb-icon">
+          <%= fa_icon "barcode" %>
+        </span>
+        <span class="sb-title">Lotes Provincia</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Lot).index? %>
+      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('lots')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "barcode" %>
+        </span>
+        <span class="sb-title">Lotes (a migrar)</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Supply).index? %>
+      <%= link_to main_app.supplies_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('supplies')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "list" %>
+        </span>
+        <span class="sb-title">Productos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Product).index? %>
+      <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('products')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "list" %>
+        </span>
+        <span class="sb-title">Productos (a migrar)</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Professional).index? %>
+      <%= link_to main_app.professionals_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('professionals')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "user-md" %>
+        </span>
+        <span class="sb-title">Médicos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Patient).index? %>
+      <%= link_to main_app.patients_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('patients')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "user-injured" %>
+        </span>
+        <span class="sb-title">Pacientes</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Laboratory).index? %>
+      <%= link_to main_app.laboratories_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('laboratories')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "vial" %>
+        </span>
+        <span class="sb-title">Laboratorios</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(User).index? %>
+      <%= link_to main_app.users_admin_index_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('users')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "users" %>
+        </span>
+        <span class="sb-title">Usuarios</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Establishment).index? %>
+      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "hospital" %>
+        </span>
+        <span class="sb-title">Establecimientos</span>
+      <% end %>
+    <% end %>
+
+  </div>
+</div>

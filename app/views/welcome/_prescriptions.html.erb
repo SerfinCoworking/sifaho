@@ -6,7 +6,7 @@
         <li class="nav-item">
           <h4>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
-            Prescripciones&nbsp;
+            Recetas&nbsp;
           </h4>
         </li>
         <li class="nav-item active">
@@ -41,10 +41,10 @@
         </div>
         <div id="year" class="tab-pane fade">
           <%= column_chart charts_by_month_prescriptions_path,
-            download: "Prescripciones recetadas por mes SIFAHO",
+            download: "recetadas por mes SIFAHO",
             label: "Cantidad",
             colors: ["rgb(130,165,239, 0.6)"],
-            messages: {empty: "No hay prescripciones en este año"},
+            messages: {empty: "No hay recetas en este año"},
             adapter: "highcharts" %>
         </div>
         <div id="last" class="tab-pane fade">

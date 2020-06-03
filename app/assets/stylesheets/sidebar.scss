@@ -1,0 +1,96 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+ @import 'variables';
+ body {
+    overflow-x: hidden;
+  }
+
+#wrapper{
+    position: absolute;
+    width: 100%;
+    //   sidebar
+    #sidebar-wrapper {
+        min-height: 100vh;
+        transition: margin .3s ease-out .1s;
+        margin-left: 0;
+        width: $sidebar-width-visible;
+    
+        .sidebar-heading {
+        padding: 0.5rem 0 0.5rem 1.25rem;
+        font-size: 1.2rem;
+        }
+
+        .list-custom.active{
+            border-color: lightgray!important;
+            background-color: lightgray!important;
+            color: black!important;
+        }
+
+        .list-group {
+            width: 100%;
+            
+            .list-group-item{
+                position: relative;
+                padding: 12px 0;
+                left: 0;
+                transition: left .3s ease-out .1s;
+                z-index: 100;
+                .sb-icon{
+                    position: absolute;
+                    left: 1.25rem;
+                    transition: left .3s ease-out .1s;
+                }
+
+                .sb-title{
+                    margin-left: calc(1.25rem + 30px);
+                    opacity: 1;
+                    transition: opacity .15s ease-in;
+                }
+            }
+        }
+
+    }
+
+    //   content
+    #page-content-wrapper {
+        width: calc(100% - #{$sidebar-width-visible});
+        transition: width .3s ease-out .1s;
+        
+        &.full-width{
+            width: 100%;
+        }
+    }
+
+    &.toggled{
+        #sidebar-wrapper {
+            margin-left: -$sidebar-width-hidden;
+            .list-group .list-group-item .sb-icon{
+                left: calc(100% - #{$sidebar-icon-position});
+            }
+
+            .list-group .list-group-item .sb-title{
+                opacity: 0;
+            }
+
+            .list-group .list-group-item:hover{
+                left: calc(100% - 13.8%);
+            }
+
+            .list-group .list-group-item:hover .sb-icon{
+                left: 3.5%;
+            }
+
+            .list-group .list-group-item:hover .sb-title{
+                opacity: 1;
+            }
+        }
+
+        #page-content-wrapper {
+            width: calc(100% - (#{$sidebar-width-visible} - #{$sidebar-width-hidden}));
+        }
+    }
+  
+}

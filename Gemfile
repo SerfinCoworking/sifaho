@@ -56,8 +56,8 @@ gem 'chosen-rails'
 gem 'simple_form'
 # Use cocoon for nested forms
 gem "cocoon"
-# Use bootstrap-sass for views
-gem 'bootstrap-sass'
+# Use bootstrap 4.5 to layouts
+gem 'bootstrap', '~> 4.5.0'
 # Use Pundit for permissions in classes
 gem 'pundit'
 # Use for make roles
