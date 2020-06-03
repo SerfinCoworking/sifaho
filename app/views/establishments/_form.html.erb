@@ -1,29 +1,56 @@
-<%= simple_form_for @establishment, html: {class: "", role: 'check-modified'} do |f| %>
-<%= f.error_notification %>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="col-md-4">
-        <%= f.input :code, required: true, label: 'Código' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :name, required: true, label: 'Nombre' %>
-      </div>
 
-      <div class="col-md-4">
-        <%= f.input :cuit, required: true, label: 'Cuit' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :domicile, required: true, label: 'Domicilio' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :phone, required: true, label: 'Teléfono' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :email, required: true, label: 'Email' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :sectors_count, required: true, label: 'Cantidad de sectores' %>
-      </div>
+
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon (@establishment.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @establishment.new_record? ? "Crear establecimiento" : "Editar establecimiento" %>
+      </h5>
     </div>
+    <%= link_to :back, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
   </div>
-<% end %>
+  <div class="card-body">
+    <%= simple_form_for @establishment, html: {class: "", role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+
+      <div class="row">
+        <%# <div class="col-md-12"> %>
+          <div class="col-md-4">
+            <%= f.input :code, required: true, label: 'Código' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :name, required: true, label: 'Nombre' %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.input :cuit, required: true, label: 'Cuit' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :domicile, required: true, label: 'Domicilio' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :phone, required: true, label: 'Teléfono' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :email, required: true, label: 'Email' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :sectors_count, required: true, label: 'Cantidad de sectores' %>
+          </div>
+        <%# </div> %>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', patients_path, class: 'btn' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @establishment.new_record? ? 'new_establishment' : 'edit_establishment_' + @establishment.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
+
+
+
