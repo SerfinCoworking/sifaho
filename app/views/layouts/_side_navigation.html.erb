@@ -24,7 +24,7 @@
     <% if policy(Prescription).index? %>
       <%= link_to main_app.prescriptions_path,  class: "list-group-item list-group-item-action list-custom bg-light #{active_class('prescriptions')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "file-prescription" %>
+          <%= fa_icon "signature" %>
         </span>
         <span class="sb-title">Recetas</span>
       <% end %>
@@ -96,7 +96,7 @@
     <% if policy(Supply).index? %>
       <%= link_to main_app.supplies_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('supplies')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "list" %>
+          <%= fa_icon "pills" %>
         </span>
         <span class="sb-title">Productos</span>
       <% end %>
@@ -105,7 +105,7 @@
     <% if policy(Product).index? %>
       <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('products')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "list" %>
+          <%= fa_icon "pills" %>
         </span>
         <span class="sb-title">Productos (a migrar)</span>
       <% end %>

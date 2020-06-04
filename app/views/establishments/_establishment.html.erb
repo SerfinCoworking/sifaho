@@ -19,12 +19,12 @@
               <%= fa_icon "pen" %>
         <% end %>
       <% end %>
-      <% if policy(establishment).destroy? %>
-        <%= link_to delete_establishment_path(establishment), remote: true,
+      <%# if policy(establishment).destroy? %>
+        <%#= link_to delete_establishment_path(establishment), remote: true,
               class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "trash" %>
-        <% end %>
-      <% end %>
+          <%#= fa_icon "trash" %>
+        <%# end %>
+      <%# end %>
     </td>
   </div>
 </tr>

@@ -1,20 +1,20 @@
 <% content_for :page_header do %>
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to prescriptions_path, class: 'nav-link' do %>
-      <%= fa_icon "file-prescription" %>
+      <%= fa_icon "signature" %>
       Recetas
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new') %> non-sel">
     <%= link_to new_prescription_path, class: 'nav-link' do %>
       <%= fa_icon "plus" %>
-      Ambulatoria
+      Nueva ambulatoria
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new_cronic') %> non-sel">
     <%= link_to new_cronic_prescriptions_path, class: 'nav-link' do %>
       <%= fa_icon "plus" %>
-      Crónica
+      Nueva crónica
     <% end %>
   </li>
 <% end %>

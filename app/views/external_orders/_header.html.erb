@@ -1,18 +1,19 @@
 <% content_for :page_header do %>
   <li class="nav-item <%= active_action('statistics') %> non-sel" id="page-title">
     <%= link_to statistics_external_orders_path, class: 'nav-link' do %>
-      Abastecimiento
+      <%= fa_icon "hospital" %>
+      Establecimientos
     <% end %>
   </li>
   <li class="nav-item <%= active_action('applicant_index') %> non-sel">
     <%= link_to applicant_index_external_orders_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
+      <%= fa_icon "inbox" %>
       <span class="hidden-xs">Recibos</span>
     <% end %>
   </li>
   <li class="nav-item <%= active_action_and_controller('index', 'external_orders') %> non-sel">
     <%= link_to external_orders_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+      <%= fa_icon "paper-plane" %>
       <span class="hidden-xs">Despachos</span>
       <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
       <% if count > 0 %>
@@ -23,23 +24,23 @@
   <% if policy(ExternalOrder).new_applicant? %>
     <li class="nav-item <%= active_action('new_applicant') %> non-sel">
       <%= link_to new_applicant_external_orders_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        S<span class="hidden-xs">olicitud</span>
+        <%= fa_icon "plus" %>
+        Solicitar
       <% end %>
     </li>
   <% end %>
   <% if policy(ExternalOrder).new_provider? %>
     <li class="nav-item <%= active_action_and_controller('new', 'external_orders') %> non-sel">
       <%= link_to new_external_order_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        D<span class="hidden-xs">espacho</span>
+        <%= fa_icon "plus" %>
+        Despachar
       <% end %>
     </li>
   <% end %>
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item <%= active_class('external_order_templates') %> non-sel" id="pedido">
       <%= link_to external_order_templates_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
+        <%= fa_icon "skiing" %>
         Plantillas
       <% end %>
     </li>
@@ -47,7 +48,7 @@
   <% if policy(ExternalOrder).new_report? %>
     <li class="nav-item <%= active_action('new_report') %> non-sel">
       <%= link_to new_report_external_orders_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+        <%= fa_icon "chart-line" %>
         Reporte
       <% end %>
     </li>

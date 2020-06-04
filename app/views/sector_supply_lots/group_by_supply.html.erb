@@ -1,10 +1,17 @@
 <%= render 'header' %>
 
 <div class="row">
-  <%= render "supplies/filter" %>
+  <% if @stock_supplies.present? %>
+    <%= render "supplies/filter" %>
 
-  <%= render(
-    partial: 'sector_supply_lots/list_supply',
-    locals: { stock_supplies: @stock_supplies }
-  ) %>
+    <%= render(
+      partial: 'sector_supply_lots/list_supply',
+      locals: { stock_supplies: @stock_supplies }
+    ) %>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found',
+      locals: { object_name: 'productos en stock' }
+    ) %>
+  <% end %>
 </div>

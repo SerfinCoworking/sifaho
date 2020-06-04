@@ -1,40 +1,40 @@
 <!--  Panel graficos de prescripciones -->
 <% if @prescriptions.count > 0 %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <ul class="nav nav-tabs" id="title-chart">
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" id="title-chart">
         <li class="nav-item">
-          <h4>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-pencil') %>
-            Recetas&nbsp;
-          </h4>
+          <span class="navbar-brand">
+            <%= fa_icon "signature" %>
+            Recetas
+          </span>
         </li>
         <li class="nav-item active">
-          <a data-toggle="tab" href="#week">Semana 
-            <span class="label label-default"><%= @prescriptions.last_week.count %></span> 
+          <a class="nav-link" data-toggle="tab" href="#week">Semana 
+            <span class="badge badge-secondary"><%= @prescriptions.last_week.count %></span> 
           </a>
         </li>
         <li class="nav-item">
           <a data-toggle="tab" href="#year">Año
-            <span class="label label-default"><%= @prescriptions.current_year.count %></span>
+            <span class="badge badge-secondary"><%= @prescriptions.current_year.count %></span>
           </a>
         </li>
         <li class="nav-item">
           <a data-toggle="tab" href="#last">Últimas
-            <span class="label label-default"><%= @last_prescriptions.count %></span>
+            <span class="badge badge-secondary"><%= @last_prescriptions.count %></span>
           </a>
         </li>
-        <div class="pull-right">
-          <%= link_to prescriptions_path, class: 'btn btn-default btn-xs' do %>
+        <div class="ml-auto">
+          <%= link_to prescriptions_path, class: 'btn btn-secondary btn-sm' do %>
             Ver más
           <% end %>
         </div>
       </ul>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body pb-2">
       <div class="tab-content">
-        <div id="week" class="tab-pane fade in active">
+        <div id="week" class="tab-pane fade show active">
           <%= line_chart @prescriptions
             .group_by_day(:prescribed_date,range: 1.weeks.ago.midnight..Time.now, format: "%a %d/%m").count, 
             discrete: true, label: 'Cantidad', adapter: "highcharts" %>
@@ -47,38 +47,40 @@
             messages: {empty: "No hay recetas en este año"},
             adapter: "highcharts" %>
         </div>
-        <div id="last" class="tab-pane fade">
-          <table class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th>Doctor</th>
-                <th>Paciente</th>
-                <th>Estado</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @last_prescriptions.each do |pre|%>
+        <div id="last" class="tab-pane fade pb-0">
+          <div class="card">
+            <table class="table table-hover table-striped">
+              <thead>
                 <tr>
-                  <td><%= pre.professional.fullname %></td>
-                  <td><%= pre.patient.fullname %></td>
-                  <td>
-                    <span class="label label-<%= pre.status_label %>">
-                      <%= pre.status.split('_').map(&:capitalize).join(' ') %>
-                    </span>
-                  </td>
-                  <td>    
-                    <% if policy(pre).show? %>
-                      <%= link_to prescription_path(pre), class: 'btn btn-default btn-xs', 
-                        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-                      <% end %>
-                    <% end %>
-                  </td>
+                  <th>Doctor</th>
+                  <th>Paciente</th>
+                  <th>Estado</th>
+                  <th></th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <% @last_prescriptions.each do |pre|%>
+                  <tr>
+                    <td><%= pre.professional.fullname %></td>
+                    <td><%= pre.patient.fullname %></td>
+                    <td>
+                      <span class="label label-<%= pre.status_label %>">
+                        <%= pre.status.split('_').map(&:capitalize).join(' ') %>
+                      </span>
+                    </td>
+                    <td>    
+                      <% if policy(pre).show? %>
+                        <%= link_to prescription_path(pre), class: 'btn btn-default btn-xs', 
+                          title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

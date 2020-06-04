@@ -1,25 +1,22 @@
 <% content_for :page_header do %>
-  <li id="page-title" class="nav-item">
-    <a href="" class="nav-link">Productos</a>
-  </li>
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to products_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-      Listado
+      <%= fa_icon "pills" %>
+      Productos
     <% end %>
   </li>
   <% if policy(Product).new? %>
     <li class="nav-item <%= active_action('new') %> non-sel">
       <%= link_to new_product_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-        Nuevo
+        <%= fa_icon "plus" %>
+        Agregar producto
       <% end %>
     </li>
   <% end %>
   <% if policy(Product).trash_index? %>
     <li class="nav-item <%= active_action('trash_index') %> non-sel">
       <%= link_to trash_index_products_path, class: 'nav-link' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <%= fa_icon "trash" %>
         Papelera
       <% end %>
     </li>
