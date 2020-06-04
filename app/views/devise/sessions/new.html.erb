@@ -1,31 +1,42 @@
-<style>
-body {
-   background-image: url("<%= asset_path('bg-sifaho.jpg') %>");
-}
-</style>
-<div class="authform">
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
-    <%= image_tag("LogoSIFAHO.png", size: "70x70", alt: "Logo Sifaho") %>
-    <h3>Iniciar sesión</h3>
-    <%= devise_error_messages! %>
-    <div class="form-group">
-      <%- if devise_mapping.registerable? %>
-        <%= link_to 'Registrarse', new_registration_path(resource_name), class: 'right'  %>
-      <% end -%>
-      <%= f.label :username, "Usuario provincial OneLogin" %>
-      <%= f.number_field :username, :autofocus => true, class: 'form-control' %>
+<div class="row">
+  <div class="col-7 ml-auto">
+    <div class="jumbotron">
+      <h1 class="display-4">Bienvenido a SIFAHO!</h1>
+      <p class="lead">Somos una gran familia que va creciendo día a día en la provincia. Nos encargamos de facilitarte el control y la trazabilidad de los insumos.</p>
+      <hr class="my-4">
+      <p>El Sistema Farmacéutico Hospitalario lleva funcionando en la provincia más de 2 años. Y buscamos seguir creciendo!</p>
     </div>
-    <div class="form-group">
-      <%- if devise_mapping.recoverable? %>
-        <%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: 'right' %>
-      <% end -%>
-      <%= f.label :password, 'Contraseña' %>
-      <%= f.password_field :password, class: 'form-control' %>
-    </div><br>
-      <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe) do %>
-        Iniciar sesión
-      <% end %>
-  <% end %>
+  </div>
+  <div class="col-3 ml-auto">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title col-12 text-center">
+          <%= image_tag("LogoSIFAHO.png", size: "70x70", align: "center", alt: "Logo Sifaho") %>
+        </div>
+        <br>
+        <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
+          <%= devise_error_messages! %>
+          <div class="form-group">
+            <%- if devise_mapping.registerable? %>
+              <%= link_to 'Registrarse', new_registration_path(resource_name), class: 'right'  %>
+            <% end -%>
+            <%= f.label :username, "Usuario provincial OneLogin" %>
+            <%= f.number_field :username, :autofocus => true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%- if devise_mapping.recoverable? %>
+              <%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: 'right' %>
+            <% end -%>
+            <%= f.label :password, 'Contraseña' %>
+            <%= f.password_field :password, class: 'form-control' %>
+          </div>
+            <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe) do %>
+              Iniciar sesión
+            <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
 <% content_for :page_footer do %>
   <div class="col-md-5">
@@ -46,5 +57,4 @@ body {
     </div>
   </div>
 <% end %>
-	
 
