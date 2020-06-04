@@ -1,20 +1,20 @@
 <!--  Panel Lote de medicamentos -->
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <ul class="nav nav-tabs" id="title-chart">
+<div class="card mt-3">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs" id="title-chart">
       <li class="nav-item">
-        <h4>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-th-large') %>
-          Abastecimiento&nbsp;
-        </h4>
+        <span class="navbar-brand">
+          <%= fa_icon "hospital" %>
+          Establecimientos
+        </span>
       </li>
       <li class="nav-item active">
-        <a data-toggle="tab" href="#order-type">Total
-        <span class="label label-default"><%= @external_orders.count %></span>
+        <a class="nav-link" data-toggle="tab" href="#order-type">Total
+          <span class="badge badge-secondary"><%= @external_orders.count %></span>
         </a>
       </li>
-      <div class="pull-right">
-        <%= link_to external_orders_path, class: 'btn btn-default btn-xs' do %>
+      <div class="ml-auto">
+        <%= link_to external_orders_path, class: 'btn btn-secondary btn-sm' do %>
           Ver más
         <% end %>
       </div>

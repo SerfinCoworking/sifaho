@@ -1,10 +1,17 @@
 <% render 'header' %>
 
 <div class="row">
-  <%= render 'filter' %>
+  <% if @supplies.present? %>
+   <%= render 'filter' %>
 
-  <%= render(
-    partial: 'supplies/list',
-    locals: { supplies: @supplies }
-  ) %>
+    <%= render(
+      partial: 'supplies/list',
+      locals: { supplies: @supplies }
+    ) %>
+  <% else %>
+    <%= render(
+      partial: 'shared/not_found',
+      locals: { object_name: 'productos' }
+    ) %>
+  <% end %>
 </div>

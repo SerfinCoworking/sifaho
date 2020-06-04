@@ -1,92 +1,92 @@
 <%= render 'header' %>
 
-<% if @laboratories.present? %>
-  <div class="col-md-7">
-    <div class="panel panel-info" id="filter-panel">
-      <div class="panel-leftheading">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-      </div>
-      <div class="panel-rightbody">
-        <%= form_for_filterrific @filterrific do |f| %>
-          <div class="col-md-4 col-sm-4">
-            <label>Razón social</label>
-            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-            <%= f.text_field(
-              :search_name,
-              class: 'filterrific-periodically-observed form-control',
-              placeholder: 'Nombre'
-            ) %>
-          </div>
-          <div class="col-md-3 col-sm-3">
-            <label>CUIT</label>
-            <%= f.text_field(
-              :search_cuit,
-              class: 'filterrific-periodically-observed form-control',
-                placeholder: 'Número'
+<div class="row">
+  <% if @laboratories.present? %>
+    <div class="col-md-7">
+      <div class="panel panel-info" id="filter-panel">
+        <div class="panel-leftheading">
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+        </div>
+        <div class="panel-rightbody">
+          <%= form_for_filterrific @filterrific do |f| %>
+            <div class="col-md-4 col-sm-4">
+              <label>Razón social</label>
+              <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+              <%= f.text_field(
+                :search_name,
+                class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Nombre'
               ) %>
-          </div>
-          <div class="col-md-3 col-sm-3">
-            <label>GLN</label>
-            <%= f.text_field(
-              :search_gln,
-              class: 'filterrific-periodically-observed form-control',
-                placeholder: 'Número'
-              ) %>
-          </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label>CUIT</label>
+              <%= f.text_field(
+                :search_cuit,
+                class: 'filterrific-periodically-observed form-control',
+                  placeholder: 'Número'
+                ) %>
+            </div>
+            <div class="col-md-3 col-sm-3">
+              <label>GLN</label>
+              <%= f.text_field(
+                :search_gln,
+                class: 'filterrific-periodically-observed form-control',
+                  placeholder: 'Número'
+                ) %>
+            </div>
+            <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+              <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+            <% end %>
+            <%= render_filterrific_spinner %>
           <% end %>
-          <%= render_filterrific_spinner %>
-        <% end %>
+        </div>
+        <div class="clearfix"></div>
       </div>
-      <div class="clearfix"></div>
+      <%= render(
+        partial: 'laboratories/list',
+        locals: { laboratories: @laboratories }
+      ) %>
     </div>
+    <div class="col-md-5">
+      <!--  Panel Lote de medicamentos -->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Lotes por laboratorio</h3>
+        </div>
+        <div class="panel-body">
+          <%= pie_chart charts_by_laboratory_lots_path,
+            legend:  "right",
+            label: "Cantidad",
+            height: "300px",
+            library: {
+              plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true,
+                    size: 160
+                }
+              },
+              legend: {
+                align: 'center',
+                verticalAlign: 'bottom',
+                x: 0,
+                y: 0
+              }
+            },
+            messages: { empty: "No hay lotes relacionados" },
+            adapter: "highcharts" %>
+        </div>
+      </div>
+    </div>
+  <% else %>
     <%= render(
-      partial: 'laboratories/list',
-      locals: { laboratories: @laboratories }
+      partial: 'shared/not_found',
+      locals: { object_name: 'laboratorios' }
     ) %>
-  </div>
-<% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'laboratorios' }
-  ) %>
-<% end %>
-
-
-<div class="col-md-5">
-  <!--  Panel Lote de medicamentos -->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Lotes por laboratorio</h3>
-    </div>
-    <div class="panel-body">
-      <%= pie_chart charts_by_laboratory_lots_path,
-        legend:  "right",
-        label: "Cantidad",
-        height: "300px",
-        library: {
-          plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                depth: 35,
-                dataLabels: {
-                    enabled: false
-                },
-                showInLegend: true,
-                size: 160
-            }
-          },
-          legend: {
-            align: 'center',
-            verticalAlign: 'bottom',
-            x: 0,
-            y: 0
-          }
-        },
-        messages: { empty: "No hay lotes relacionados" },
-        adapter: "highcharts" %>
-    </div>
-  </div>
+  <% end %>
 </div>
