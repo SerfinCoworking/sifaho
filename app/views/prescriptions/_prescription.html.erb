@@ -9,18 +9,14 @@
     </span>
   </td>
   <td>
-    <span class="badge">
-      <% if prescription.ambulatoria? %>
-        <%= prescription.quantity_ord_supply_lots.count %>
-      <% else %>
-        <%= prescription.quantity_ord_supply_lots.sin_entregar.count %>
-      <% end %>
-    </span>
+    <% if prescription.ambulatoria? %>
+      <%= prescription.quantity_ord_supply_lots.count %>
+    <% else %>
+      <%= prescription.quantity_ord_supply_lots.sin_entregar.count %>
+    <% end %>
   </td>
   <td>
-    <span class="badge">
-      <%= prescription.movements.count %>
-    </span>
+    <%= prescription.movements.count %>
   </td>
   <td>
     <% if prescription.prescribed_date.present? %>
@@ -39,23 +35,23 @@
   </td>
   <td>
     <% if policy(prescription).show? %>
-      <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
+      <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-xs', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(prescription).edit? %>
       <% unless prescription.dispensada? %>
         <%= link_to edit_prescription_path(prescription), 
               class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          <%= fa_icon "edit" %>
         <% end %>
       <% end %>
     <% end %>
     <% if policy(prescription).delete? %>
       <%= link_to delete_prescription_path(prescription), remote: true,
             class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
   </td>

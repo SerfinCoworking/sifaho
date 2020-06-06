@@ -1,3 +1,5 @@
+@import 'variables';
+
 .panel {
   position: relative;
 }
@@ -61,7 +63,7 @@
 #panel-body-new {
   /* height: 480px; */
   height: calc(100vh - 226px);
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 #filter-panel{
   margin-bottom: 0px!important;
@@ -73,4 +75,13 @@
 }
 #title-chart{
   margin-bottom: -11px;
+}
+.fixed-panel-index {
+  height: $min-height-index;
+  overflow-y: auto;
+  padding-bottom: 0;
+  .fixed-panel-list {
+    height: $min-height-list;
+    overflow-y: auto;
+  }
 }
