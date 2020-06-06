@@ -1,51 +1,46 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading hidden-print">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo professional
-        <%= link_to professionals_path, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-        <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
-          :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-        <% end %>
-      </h3>
-    </div>
-    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
-      <div class="panel-body" id="panel-body-new">
-        <div class="row">
-          <div class="well col-md-3">
-            <div class="col-md-12">
-              <h5><strong>Nombres</strong></h5>
-              <%= @professional.first_name %>
-              <h5><strong>Apellidos</strong></h5>
-                <%= @professional.last_name %>
-              <h5><strong>DNI: </strong></h5>
-              <%= @professional.dni %>
-              <h5><strong>Activo?: </strong></h5>
-              <%= @professional.is_active? ? "Si" : "No" %>
-              <h5><strong>Matrícula: </strong></h5>
-              <%= @professional.enrollment %>
-              <h5><strong>Legajo: </strong></h5>
-              <%= @professional.docket %>
-              <h5><strong>Especialdad </strong></h5>
-              <%= @professional.professional_type.name %>
-              <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @professional.prescriptions.count %><span></h5>
-            </div>
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">
+      <%= fa_icon "eye" %> Viendo médico
+      <%= link_to professionals_path, class: 'btn float-right',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </h4>
+  </div>
+    <div class="card-body" id="panel-body-new">
+      <div class="row">
+        <div class="col-3">
+          <div class="col-md-12">
+            <%= image_tag professional_avatar(@professional, 200), class:"img-thumbnail media-object mb-2" %>
+            <h5><strong>Nombre</strong></h5>
+            <%= @professional.first_name %>
+            <h5><strong>Apellido</strong></h5>
+              <%= @professional.last_name %>
+            <h5><strong>DNI: </strong></h5>
+            <%= @professional.dni %>
+            <h5><strong>Activo?: </strong></h5>
+            <%= @professional.is_active? ? "Si" : "No" %>
+            <h5><strong>Matrícula: </strong></h5>
+            <%= @professional.enrollment %>
+            <h5><strong>Legajo: </strong></h5>
+            <%= @professional.docket %>
+            <h5><strong>Especialdad </strong></h5>
+            <%= @professional.professional_type.name %>
           </div>
-          <div class="col-md-9">
-            <h5 class="panel-title">
-              <strong>Prescripciones recetadas </strong><span class="badge"><%= @professional.prescriptions.count %></span>
-              <div class="pull-right">
-                Pendientes <span class="label label-default"><%= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
-                Dispensadas <span class="label label-success"><%= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
-              </div>
-            </h5>
-            <table class="table table-hover table-condensed">
+        </div>
+        <div class="col-md-9">
+          <h5 class="card-title">
+            <strong>Recetas </strong><span class="badge badge-secondary"><%= @professional.prescriptions.count %></span>
+            <div class="float-right">
+              Pendientes <span class="badge badge-secondary"><%= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
+              Dispensadas <span class="badge badge-success"><%= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
+            </div>
+          </h5>
+          <div class="card">
+            <table class="table table-hover table-sm">
               <thead>
                 <tr>
                   <th>Código</th>
@@ -130,16 +125,15 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="panel-footer text-right hidden-print">
-      <%= link_to 'Volver', professionals_path, class: "btn" %>
-      <% if policy(@professional).edit? %>
-        <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false,
-          class: "btn btn-warning" do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-          Auditar
-        <% end %>
+  <div class="card-footer text-right hidden-print">
+    <%= link_to 'Volver', professionals_path, class: "btn" %>
+    <% if policy(@professional).edit? %>
+      <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "edit" %>
+        Editar
       <% end %>
-    </div>
+    <% end %>
   </div>
 </div>

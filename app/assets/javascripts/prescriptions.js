@@ -85,8 +85,8 @@ $(document).on('turbolinks:load', function() {
           success: function(data){
             console.log(data);
             if (!data.length) {
-              $('#non-pres').toggleClass('hidden', false);
-              $('#pat-pres').toggleClass('hidden', true);
+              $('#non-pres').toggleClass('invisible', false);
+              $('#pat-pres').toggleClass('visible', true);
             }else{
               $("#pat-pres-body").html("");
               for(var i in data)
@@ -101,8 +101,8 @@ $(document).on('turbolinks:load', function() {
                   "</tr>"
                 );
               }
-              $('#non-pres').toggleClass('hidden', true);
-              $('#pat-pres').toggleClass('hidden', false);
+              $('#non-pres').toggleClass('visible', true);
+              $('#pat-pres').toggleClass('invisible', false);
             } // End if
           }// End success
         });// End ajax
