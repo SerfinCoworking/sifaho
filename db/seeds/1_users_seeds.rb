@@ -20,13 +20,13 @@ sectorInf = Sector.create!(
   user_sectors_count: "4",
   establishment_id: establishment.id
 )
-#sector Recepcion
-sectorRec = Sector.create!(
-  name: "Recepcion",
-  description: "Recepcion del Hospital",
-  complexity_level: "6",
+#sector Medicos
+sectorMedic = Sector.create!(
+  name: "Medicos",
+  description: "Medicos del Hospital",
+  complexity_level: "10",
   user_sectors_count: "6",
-  establishment_id: establishment.id
+  establishment: establishment
 )
 #sector farmacia 
 sectorFar = Sector.create!(
@@ -34,7 +34,7 @@ sectorFar = Sector.create!(
   description: "Gestion de entraga de medicamentos",
   complexity_level: "10",
   user_sectors_count: "5",
-  establishment_id: establishment.id
+  establishment: establishment
 )
 ##########################
 # Creacion de usuarios
@@ -42,7 +42,7 @@ eugeUser = User.new(
   :username              => "38601813",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => sectorInf.id
+  :sector             => sectorInf
 )
 eugeUser.add_role :admin
 eugeUser.save!
@@ -53,27 +53,34 @@ paul = User.new(
   :username              => "37458993",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => sectorInf.id
+  :sector             => sectorInf
 )
 paul.add_role :admin
 paul.save!
 Profile.create(user: paul, first_name: "Paul", last_name: "ibaceta", email: "paul@exmaple.com", dni: "37458993")
 
-secratarioUser = User.new(
+farmaceuticoUser = User.new(
   :username              => "40579158",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => sectorRec.id
+  :sector             => sectorFar
 )
-secratarioUser.save!
-Profile.create(user: secratarioUser, first_name: "Secraterio", last_name: "one", email: "secretario@exmaple.com", dni: "40579158")
+farmaceuticoUser.add_role :farmaceutico
+farmaceuticoUser.save!
+Profile.create(user: farmaceuticoUser, first_name: "farmaceutico", last_name: "one", email: "secretario@exmaple.com", dni: "40579158")
 
-farmaciaUser = User.new(
+medicUser = User.new(
   :username              => "40671958",
   :password              => "12345678",
   :password_confirmation => "12345678",
-  :sector_id             => sectorFar.id
+  :sector             => sectorMedic
 )
-farmaciaUser.save!
-Profile.create(user: farmaciaUser, first_name: "Secraterio", last_name: "one", email: "secretario@exmaple.com", dni: "40671958")
+medicUser.add_role :medic
+medicUser.save!
+Profile.create(user: medicUser, first_name: "medico", last_name: "one", email: "secretario@exmaple.com", dni: "40671958")
 
+#:admin 
+#:farmaceutico 
+#:auxiliar_farmacia 
+#:medic 
+#:enfermero

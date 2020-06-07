@@ -16,7 +16,8 @@ supplyOne = Supply.create!(
   :unity => "1",
   :quantity_alarm => 2,
   :period_control => 2,
-  :supply_area_id => supplyArea.id
+  :supply_area_id => supplyArea.id,
+  :is_active => true
 )
 ###########################
 supplyLotsInf = SupplyLot.create!(
@@ -57,4 +58,36 @@ inf_sector_supply_lots = SectorSupplyLot.create(
   :quantity => 5
 )
 
-
+##########################
+Supply.create!(
+  :name => "suply name 2",
+  :description => "a short description 2",
+  :observation => "a short observation 2",
+  :unity => "10",
+  :quantity_alarm => 2,
+  :period_control => 2,
+  :supply_area_id => supplyArea.id,
+  :is_active => true
+)
+##########################
+Supply.create!(
+  :name => "suply name 3",
+  :description => "a short description 3",
+  :observation => "a short observation 3",
+  :unity => "30",
+  :quantity_alarm => 3,
+  :period_control => 3,
+  :supply_area_id => supplyArea.id,
+  :is_active => true
+)
+##########################
+Supply.create!(
+  :name => "suply name 4",
+  :description => "a short description 4",
+  :observation => "a short observation 4",
+  :unity => "6",
+  :quantity_alarm => 4,
+  :period_control => 4,
+  :supply_area_id => supplyArea.id,
+  :is_active => true
+)

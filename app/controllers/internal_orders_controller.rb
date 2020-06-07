@@ -1,7 +1,7 @@
 class InternalOrdersController < ApplicationController
   before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete, 
   :edit_applicant, :send_provider, :receive_applicant_confirm, :receive_applicant, 
-  :return_provider_status, :return_applicant_status, :send_applicant ]
+  :return_provider_status, :return_applicant_status, :send_applicant, :nullify, :nullify_confirm ]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)
@@ -450,6 +450,22 @@ class InternalOrdersController < ApplicationController
     report.generate
   end
 
+  # GET /internal_orders/1/nullify
+  def nullify
+    authorize @internal_order
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # patch /internal_orders/1/nullify
+  def nullify_confirm
+    authorize @internal_order
+    @internal_order.anulada!
+    @internal_order.observation= "el usuario ' #{current_user.username} ' con el id ' #{current_user.id} ' anulo esta #{@internal_order.order_type} "
+    @internal_order.save!
+    redirect_to internal_orders_path
+  end
   private
 
   # Use callbacks to share common setup or constraints between actions.

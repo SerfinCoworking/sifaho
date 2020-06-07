@@ -173,6 +173,8 @@ Rails.application.routes.draw do
       get "return_applicant_status"
       get "receive_applicant"; get "receive_applicant_confirm"
       get "edit_applicant"
+      get "nullify"
+      patch "nullify_confirm"
     end
     collection do
       get "new_report"; get "generate_report"
