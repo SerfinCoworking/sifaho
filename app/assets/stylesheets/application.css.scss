@@ -63,6 +63,9 @@ body{
       margin-right: 0;
       margin-left: 1rem;
     }
+    button#menu-toggle:focus{
+      box-shadow: none!important;
+    }
 
   }
 }
