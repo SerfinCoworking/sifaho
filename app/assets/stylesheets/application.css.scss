@@ -55,6 +55,18 @@ body{
   cursor:pointer;
 }
 
+.navbar{
+  padding: 8px 16px 8px 0;
+  .brand-container{
+    width: $sidebar-width-visible;
+    a.navbar-brand{
+      margin-right: 0;
+      margin-left: 1rem;
+    }
+
+  }
+}
+
 // body{
 //   background-repeat: no-repeat;
 //   background-position: center;

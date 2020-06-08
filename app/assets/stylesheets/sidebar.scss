@@ -17,11 +17,6 @@
         transition: margin .3s ease-out .1s;
         margin-left: 0;
         width: $sidebar-width-visible;
-    
-        .sidebar-heading {
-        padding: 0.5rem 0 0.5rem 1.25rem;
-        font-size: 1.2rem;
-        }
 
         .list-custom.active{
             border-color: lightgray!important;
@@ -31,7 +26,7 @@
 
         .list-group {
             width: 100%;
-            
+
             .list-group-item{
                 position: relative;
                 padding: 12px 0;
@@ -58,7 +53,7 @@
     #page-content-wrapper {
         width: calc(100% - #{$sidebar-width-visible});
         transition: width .3s ease-out .1s;
-        
+
         &.full-width{
             width: 100%;
         }
@@ -92,5 +87,5 @@
             width: calc(100% - (#{$sidebar-width-visible} - #{$sidebar-width-hidden}));
         }
     }
-  
+
 }
