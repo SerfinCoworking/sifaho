@@ -461,8 +461,10 @@ class InternalOrdersController < ApplicationController
   # patch /internal_orders/1/nullify
   def nullify_confirm
     authorize @internal_order
+    @internal_order.observation= "el usuario: ' #{current_user.username} ' anulo esta #{@internal_order.order_type} "
+    @internal_order.rejected_by_id= current_user.id
     @internal_order.anulada!
-    @internal_order.observation= "el usuario ' #{current_user.username} ' con el id ' #{current_user.id} ' anulo esta #{@internal_order.order_type} "
+    @internal_order.create_notification(current_user, "Anulo")
     @internal_order.save!
     redirect_to internal_orders_path
   end
