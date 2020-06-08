@@ -465,7 +465,7 @@ class InternalOrdersController < ApplicationController
     @internal_order.rejected_by_id= current_user.id
     @internal_order.anulada!
     @internal_order.create_notification(current_user, "Anulo")
-    @internal_order.save!
+    flash[:success] = "#{@internal_order.order_type} se ha anulado correctamente."
     redirect_to internal_orders_path
   end
   private
