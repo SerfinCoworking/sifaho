@@ -504,12 +504,11 @@ class ExternalOrdersController < ApplicationController
   # patch /external_order/1/nullify
   def nullify
     authorize @external_order
-    @external_order.observation= "el usuario: ' #{current_user.username} ' anulo esta #{@external_order.order_type} "
-    @external_order.rejected_by_id= current_user.id
-    @external_order.anulado!
-    @external_order.create_notification(current_user, "Anulo")
-    flash[:success] = "#{@external_order.order_type} se ha anulado correctamente."
-    redirect_to external_orders_path
+    @external_order.nullify_by(current_user)
+    respond_to do |format|
+      flash[:success] = "#{@external_order.order_type.humanize} se ha anulado correctamente."
+      format.html { redirect_to @external_order }
+    end
   end
 
   private

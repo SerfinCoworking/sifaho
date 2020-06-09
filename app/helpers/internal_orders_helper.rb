@@ -6,7 +6,7 @@ module InternalOrdersHelper
     elsif order.proveedor_auditoria?; return 'warning'
     elsif order.provision_en_camino?; return 'primary'
     elsif order.provision_entregada?; return 'success'
-    elsif order.anulada?; return 'danger'
+    elsif order.anulado?; return 'danger'
     end
   end
 
@@ -23,7 +23,7 @@ module InternalOrdersHelper
     if order.proveedor_auditoria?; return 35
     elsif order.provision_en_camino?; return 70
     elsif order.provision_entregada?; return 100
-    elsif order.anulada?; return 100
+    elsif order.anulado?; return 100
     end
   end
 
@@ -34,7 +34,7 @@ module InternalOrdersHelper
     elsif order.proveedor_auditoria?; return 60
     elsif order.provision_en_camino?; return 80
     elsif order.provision_entregada?; return 100
-    elsif order.anulada?; return 100
+    elsif order.anulado?; return 100
     end
   end
 

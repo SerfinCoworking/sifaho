@@ -4,7 +4,8 @@ class InternalOrder < ApplicationRecord
 
   enum order_type: { provision: 0, solicitud: 1 }
 
-  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, provision_entregada: 4, anulada: 5 }
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, 
+    provision_entregada: 4, anulado: 5 }
   
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
@@ -154,7 +155,7 @@ class InternalOrder < ApplicationRecord
       ['Proveedor auditoria', 2, 'warning'],
       ['Provision en camino', 3, 'primary'],
       ['Provision entregada', 4, 'success'],
-      ['Anulada', 5, 'danger'],
+      ['Anulado', 5, 'danger'],
     ]
   end
 
@@ -180,9 +181,9 @@ class InternalOrder < ApplicationRecord
 
   # Nullify the order
   def nullify_by(a_user)
-    self.rejected_by = current_user
-    self.anulada!
-    self.create_notification(current_user, "Anuló")
+    self.rejected_by = a_user
+    self.anulado!
+    self.create_notification(a_user, "Anuló")
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos

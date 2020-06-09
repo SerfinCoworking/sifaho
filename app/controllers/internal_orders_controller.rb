@@ -455,7 +455,7 @@ class InternalOrdersController < ApplicationController
     authorize @internal_order
     @internal_order.nullify_by(current_user)
     respond_to do |format|
-      flash[:success] = "#{@internal_order.order_type}.humanize se ha anulado correctamente."
+      flash[:success] = "#{@internal_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to @internal_order }
     end
   end
