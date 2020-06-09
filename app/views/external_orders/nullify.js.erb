@@ -1,0 +1,15 @@
+// Add the dialog title
+$('#dialog h4').html("<i class=' glyphicon fas fa-ban'></i>  Anular la <%= @external_order.order_type%>");
+
+// Render the edit form
+$('.modal-body').html(
+  'Esta seguro que desea Anular la <%= @external_order.order_type %> ');
+
+// Add form button
+$('.modal-footer').html(
+    "<button type='button' class='btn pull-left' data-dismiss='modal'>Volver</button>"+
+    "<a data-remote='true' data-method='patch' href='/external_orders/<%= @external_order.id %>>/nullify_confirm' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");

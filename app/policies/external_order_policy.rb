@@ -141,7 +141,14 @@ class ExternalOrderPolicy < ApplicationPolicy
       end
     end 
   end
+  
+  def nullify?
+    edit?
+  end
 
+  def nullify_confirm?
+    nullify?
+  end
   private
   def create_receipt
     [ :admin, :farmaceutico ]
