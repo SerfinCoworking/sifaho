@@ -10,7 +10,7 @@ $('.modal-body').html(
 // Add form button
 $('.modal-footer').html(
     "<button type='button' class='btn pull-left' data-dismiss='modal'>Volver</button>"+
-    "<a data-remote='true' data-method='patch' href='/internal_orders/<%= @internal_order.id %>>/nullify_confirm' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+    "<a data-remote='true' data-method='patch' href='/internal_orders/<%= @internal_order.id %>>/nullify' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

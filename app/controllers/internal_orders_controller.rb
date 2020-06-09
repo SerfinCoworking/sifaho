@@ -450,24 +450,16 @@ class InternalOrdersController < ApplicationController
     report.generate
   end
 
-  # GET /internal_orders/1/nullify
+  # patch /internal_orders/1/nullify
   def nullify
     authorize @internal_order
+    @internal_order.nullify_by(current_user)
     respond_to do |format|
-      format.js
+      flash[:success] = "#{@internal_order.order_type}.humanize se ha anulado correctamente."
+      format.html { redirect_to @internal_order }
     end
   end
 
-  # patch /internal_orders/1/nullify
-  def nullify_confirm
-    authorize @internal_order
-    @internal_order.observation= "el usuario: ' #{current_user.username} ' anulo esta #{@internal_order.order_type} "
-    @internal_order.rejected_by_id= current_user.id
-    @internal_order.anulada!
-    @internal_order.create_notification(current_user, "Anulo")
-    flash[:success] = "#{@internal_order.order_type} se ha anulado correctamente."
-    redirect_to internal_orders_path
-  end
   private
 
   # Use callbacks to share common setup or constraints between actions.

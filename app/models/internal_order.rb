@@ -158,6 +158,8 @@ class InternalOrder < ApplicationRecord
     ]
   end
 
+  public
+
   def is_provider?(a_user)
     return self.provider_sector == a_user.sector
   end
@@ -174,6 +176,13 @@ class InternalOrder < ApplicationRecord
     if self.provision_en_camino? || self.provision_entregada?
       return self.provider_sector == a_sector || self.applicant_sector == a_sector
     end
+  end
+
+  # Nullify the order
+  def nullify_by(a_user)
+    self.rejected_by = current_user
+    self.anulada!
+    self.create_notification(current_user, "Anuló")
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos

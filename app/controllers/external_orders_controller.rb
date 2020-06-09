@@ -501,16 +501,8 @@ class ExternalOrdersController < ApplicationController
     report.generate
   end
 
-  # GET /external_order/1/nullify
-  def nullify
-    authorize @external_order
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # patch /external_order/1/nullify
-  def nullify_confirm
+  def nullify
     authorize @external_order
     @external_order.observation= "el usuario: ' #{current_user.username} ' anulo esta #{@external_order.order_type} "
     @external_order.rejected_by_id= current_user.id

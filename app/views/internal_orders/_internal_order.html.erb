@@ -62,9 +62,9 @@
       <% end %>
     <% end %>
     <% if policy(internal_order).nullify? %>
-      <%= link_to nullify_internal_order_path(internal_order), remote: true,
+      <%= link_to nullify_confirm_internal_order_path(internal_order), remote: true,
         :"data-turbolinks" => false, class: 'btn btn-danger btn-xs', 
-        title: 'anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= content_tag(:span, '', class: 'glyphicon fas fa-ban') %>
       <% end %>
     <% end %>

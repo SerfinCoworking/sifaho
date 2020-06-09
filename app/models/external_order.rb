@@ -163,6 +163,8 @@ class ExternalOrder < ApplicationRecord
     ]
   end
 
+  public
+
   def self.provided_establishments_by(a_sector)
     @sector_ids = ExternalOrder.provider(a_sector).pluck(:applicant_sector_id).to_set
     return Establishment.joins(:sectors).where(sectors: { id: @sector_ids }).pluck(:id, :name).to_set
@@ -282,6 +284,13 @@ class ExternalOrder < ApplicationRecord
     else
       raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
     end
+  end
+
+  # Nullify the order
+  def nullify_by(a_user)
+    self.rejected_by = current_user
+    self.anulada!
+    self.create_notification(current_user, "Anuló")
   end
 
   def return_status
