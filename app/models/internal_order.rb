@@ -183,7 +183,7 @@ class InternalOrder < ApplicationRecord
   def nullify_by(a_user)
     self.rejected_by = a_user
     self.anulado!
-    self.create_notification(a_user, "Anuló")
+    self.create_notification(a_user, "anuló")
   end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
@@ -201,28 +201,31 @@ class InternalOrder < ApplicationRecord
       self.sent_date = DateTime.now
       self.sent_by_id = a_user.id
       self.provision_en_camino!
+      self.create_notification(a_user, "envió")
     else
       raise ArgumentError, 'Usted no pertenece al sector proveedor.'
     end
   end
 
-  def send_request_of(a_user)
+  def send_request_by(a_user)
     if self.solicitud_auditoria?
       self.sent_request_by = a_user
       self.solicitud_enviada!
+      self.create_notification(a_user, "envió")
     else
       raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
     end
   end
 
   # Método para retornar perdido a estado anterior
-  def return_provider_status
+  def return_provider_status_by(a_user)
     if provision_en_camino?
       self.quantity_ord_supply_lots.each do |qosl|
         qosl.increment
       end
       self.sent_by = nil
       self.sent_date = nil
+      self.create_notification(a_user, "retornó a un estado anterior")
       self.proveedor_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
@@ -230,8 +233,9 @@ class InternalOrder < ApplicationRecord
   end
 
   # Método para retornar perdido a estado anterior
-  def return_applicant_status
+  def return_applicant_status_by(a_user)
     if solicitud_enviada?
+      self.create_notification(current_user, "retornó a un estado anterior")
       self.solicitud_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
@@ -239,13 +243,15 @@ class InternalOrder < ApplicationRecord
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order(a_sector)
+  def receive_order_by(a_user)
     if self.provision_en_camino?
       if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
         self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_sector)
+          qosl.increment_lot_to(a_user.sector)
         end
         self.date_received = DateTime.now
+        self.received_by = a_user
+        self.create_notification(a_user, "recibió")
         self.provision_entregada!
       else
         raise ArgumentError, 'No hay insumos para recibir en la provisión.'
