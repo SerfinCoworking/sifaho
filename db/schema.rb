@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_21_134543) do
+ActiveRecord::Schema.define(version: 2020_06_09_003427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -120,13 +120,6 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "cities", force: :cascade do |t|
     t.bigint "state_id"
     t.string "name"
@@ -228,6 +221,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
+    t.bigint "rejected_by_id"
     t.index ["accepted_by_id"], name: "index_external_orders_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_external_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_external_orders_on_audited_by_id"
@@ -235,6 +229,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.index ["deleted_at"], name: "index_external_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_external_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_external_orders_on_received_by_id"
+    t.index ["rejected_by_id"], name: "index_external_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
@@ -296,12 +291,14 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.bigint "applicant_sector_id"
     t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
+    t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
     t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
     t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
+    t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_internal_orders_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_internal_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_internal_orders_on_sent_request_by_id"
@@ -443,6 +440,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
 
   create_table "products", force: :cascade do |t|
     t.bigint "unity_id"
+    t.bigint "area_id"
     t.string "code"
     t.string "name"
     t.text "description"
@@ -450,6 +448,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
@@ -680,6 +679,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_134543) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
+  add_foreign_key "products", "areas"
   add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"

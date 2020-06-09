@@ -1,6 +1,6 @@
 class InternalOrderPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medico, :enfermero)
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
   end
 
   def applicant_index?
@@ -33,6 +33,14 @@ class InternalOrderPolicy < ApplicationPolicy
     if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
+  end
+
+  def nullify?
+    edit?
+  end
+
+  def nullify_confirm?
+    nullify?
   end
 
   def edit_applicant?

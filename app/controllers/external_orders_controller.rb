@@ -1,7 +1,7 @@
 class ExternalOrdersController < ApplicationController
   before_action :set_external_order, only: [:show, :edit, :update, :send_provider,
     :send_applicant, :destroy, :delete, :return_status, :edit_receipt, :edit_applicant,
-    :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm ]
+    :receive_applicant_confirm, :receive_applicant, :receive_order, :receive_order_confirm, :nullify, :nullify_confirm ]
 
   def statistics
     @external_orders = ExternalOrder.all
@@ -499,6 +499,25 @@ class ExternalOrdersController < ApplicationController
     end
 
     report.generate
+  end
+
+  # GET /external_order/1/nullify
+  def nullify
+    authorize @external_order
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # patch /external_order/1/nullify
+  def nullify_confirm
+    authorize @external_order
+    @external_order.observation= "el usuario: ' #{current_user.username} ' anulo esta #{@external_order.order_type} "
+    @external_order.rejected_by_id= current_user.id
+    @external_order.anulado!
+    @external_order.create_notification(current_user, "Anulo")
+    flash[:success] = "#{@external_order.order_type} se ha anulado correctamente."
+    redirect_to external_orders_path
   end
 
   private
