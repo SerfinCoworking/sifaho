@@ -13,8 +13,8 @@
  */
 
 @import 'variables';
-@import "bootstrap";
 @import "bootstrap-select";
+@import "bootstrap";
 @import "chosen";
 @import 'font_awesome5_webfont';
 @import 'bootstrap-datetimepicker';
@@ -54,6 +54,53 @@ body{
 
 .table-row{
   cursor:pointer;
+}
+
+.navbar{
+  padding: 8px 16px 8px 0;
+  .brand-container{
+    width: $sidebar-width-visible;
+    a.navbar-brand{
+      margin-right: 0;
+      margin-left: 1rem;
+    }
+    button#menu-toggle:focus{
+      box-shadow: none!important;
+    }
+
+  }
+}
+.actions-col{
+  width: 1%;
+  white-space: nowrap;
+}
+
+.modal-header-flex{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+  button{
+    margin: 0px;
+  }
+
+}
+
+.custom-select-pick{
+  border: 1px solid #ced4da!important;
+  button.dropdown-toggle{
+    padding: 0 8px;
+    &:focus{
+      outline: none !important;
+      border: none;
+    }
+    .filter-option{
+      display: flex;
+      align-items: center;
+      height: calc(1.5em + 0.75rem + 2px)!important;
+    }
+  }
 }
 
 // body{

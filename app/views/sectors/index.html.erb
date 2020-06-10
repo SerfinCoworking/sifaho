@@ -1,6 +1,6 @@
-<%= render 'header' %>
+<%= render 'internal_orders/header' %>
 
-<% if @establishments.present? %>
+<% if @sectors.present? %>
 
     <div class="card">
       <div class="card-header">
@@ -19,8 +19,8 @@
       </div>
       <div class="card-body">
         <%= render(
-          partial: 'establishments/list',
-          locals: { establishments: @establishments }
+          partial: 'list',
+          locals: { sectors: @sectors }
         ) %>
       </div>
     </div>
