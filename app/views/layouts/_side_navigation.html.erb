@@ -136,15 +136,5 @@
         <span class="sb-title">Usuarios</span>
       <% end %>
     <% end %>
-
-    <% if policy(Establishment).index? %>
-      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')}" do %>
-        <span class="sb-icon">
-          <%= fa_icon "hospital" %>
-        </span>
-        <span class="sb-title">Establecimientos</span>
-      <% end %>
-    <% end %>
-
   </div>
 </div>
