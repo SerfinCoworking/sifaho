@@ -1,0 +1,31 @@
+<%= render 'internal_orders/header' %>
+
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo sector <%= @sector.name %>
+      </h5>
+    </div>
+    <%= link_to sectors_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+
+  <div class="card-body">
+  <div>
+    <%= @sector.name %>
+  </div>
+  <div>
+    <%= @sector.establishment.name %>
+  </div>
+  <div>
+    <%= @sector.description %>
+  </div>
+
+  </div>
+  <div class="card-footer">
+    <%= link_to 'Volver', sectors_path, class: "btn" %>
+  </div>
+</div>

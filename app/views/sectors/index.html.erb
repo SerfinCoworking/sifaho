@@ -1,0 +1,33 @@
+<%= render 'internal_orders/header' %>
+
+<% if @sectors.present? %>
+
+    <div class="card">
+      <div class="card-header">
+        <%= form_for_filterrific @filterrific do |f| %>
+          <div class="d-flex align-items-center">
+            <%= fa_icon "filter" %>
+            <%= f.text_field(
+                :search_name,
+                class: 'filterrific-periodically-observed form-control input-sm ml-2 w-25',
+                placeholder: 'Nombre'
+                  ) %>
+            <%= %>
+            <%= render_filterrific_spinner %>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-body">
+        <%= render(
+          partial: 'list',
+          locals: { sectors: @sectors }
+        ) %>
+      </div>
+    </div>
+
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'establecimientos' }
+  ) %>
+<% end %>

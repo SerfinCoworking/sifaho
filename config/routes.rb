@@ -141,6 +141,10 @@ Rails.application.routes.draw do
   end
 
   resources :sectors do
+    member do
+      get "delete"
+    end
+
     collection do
       get "with_establishment_id"
     end
