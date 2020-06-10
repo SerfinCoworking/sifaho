@@ -1,13 +1,18 @@
 <%= render 'external_orders/header' %>
 
 <div class="card">
-  <div class="card-header">
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo establecimiento <%= @establishment.name %>
-    <%= link_to establishments_path, class: 'btn pull-right close-btn',
-      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+ <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo establecimiento <%= @establishment.name %>
+      </h5>
+    </div>
+    <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
     <% end %>
   </div>
+
   <div class="card-body">
     <%= @establishment.name %>
     <%# sectores de un establecimiento %>
@@ -15,7 +20,7 @@
     <li class="list-group-item"><%= sector.name %></li>
     <% end %>
   </div>
-  <div class="card-footer">
+  <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', establishments_path, class: "btn" %>
   </div>
 </div>
