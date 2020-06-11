@@ -14,11 +14,36 @@
   </div>
 
   <div class="card-body">
-    <%= @establishment.name %>
+
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center">
+        <h5 class="card-title mb-0 mr-4"><%= @establishment.name %></h5>
+        <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de sectores"><%=@establishment.sectors.count%></span>
+      </div>
+      <div class="card-body">
+
+         <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
+          <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
+        </ul>
+      </div>
+    </div>
+
+
     <%# sectores de un establecimiento %>
-    <% @establishment.sectors.each do |sector| %>
-    <li class="list-group-item"><%= sector.name %></li>
-    <% end %>
+
+    <div class="row">
+      <div class="col-4">
+
+        <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
+      </div>
+      <div class="col-4">
+        <%= render 'shared/users_table', users: @establishment.users %>
+      </div>
+    </div>
   </div>
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', establishments_path, class: "btn" %>

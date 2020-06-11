@@ -104,7 +104,6 @@ class EstablishmentsController < ApplicationController
       :name,
       :cuit,
       :email,
-      :sectors_count,
       :domicile,
       :phone
     )
