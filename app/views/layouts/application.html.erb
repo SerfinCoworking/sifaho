@@ -15,33 +15,38 @@
       <div class="corner-ribbon bottom-right sticky green shadow"><strong>DEMO</strong></div>
     <% end %>
 
-    <div class="d-flex" id="wrapper">
-      <!-- Sidebar -->
-      <% if user_signed_in? %>
-        <% if policy(:dashboard).sidebar? %>
-          <%= render 'layouts/side_navigation' %>
-        <% end %>
-      <% end %>
-
-      <!-- Page Content -->
-      <div id="page-content-wrapper">
+    <div id="wrapper">
         <% if user_signed_in? %>
           <!-- General Navbar -->
           <%= render 'layouts/navigation' %>
         <% end %>
 
-        <div class="mt-3 container-fluid">
 
-          <!-- Flash message -->
-          <div id="flash_messages" class="mx-auto d-block">
-            <%= render "layouts/flash_notices" %>
+
+      <!-- Page Content -->
+      <div class="d-flex">
+
+         <!-- Sidebar -->
+        <% if user_signed_in? %>
+          <% if policy(:dashboard).sidebar? %>
+            <%= render 'layouts/side_navigation' %>
+          <% end %>
+        <% end %>
+
+        <div id="page-content-wrapper">
+          <div class="mt-3 container-fluid">
+
+            <!-- Flash message -->
+            <div id="flash_messages" class="mx-auto d-block">
+              <%= render "layouts/flash_notices" %>
+            </div>
+
+            <!-- Modal -->
+            <%= render "shared/dialog" %>
+
+            <!-- Main yield -->
+            <%= yield %>
           </div>
-
-          <!-- Modal -->
-          <%= render "shared/dialog" %>
- 
-          <!-- Main yield -->
-          <%= yield %>
         </div>
       </div>
     </div>

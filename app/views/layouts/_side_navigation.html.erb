@@ -1,26 +1,16 @@
 
 <!-- Sidebar -->
 <div class="bg-light border-right navbar-light" id="sidebar-wrapper">
-  <!--Brand-->
-  <div class="sidebar-heading d-flex justify-content-between">    
-    <%= link_to root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
-      <%= image_tag("LogoSIFAHO.png", size: "30x30", alt: "Logo SIFAHO", class: 'logo') %>
-      SIFAHO
-    <% end %>
-
-    <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
-  </div>
-
 
   <!--Menu list-->
   <div class="list-group list-group-flush">
     <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
       <span class="sb-icon">
-        <%= fa_icon "home" %> 
+        <%= fa_icon "home" %>
       </span>
       <span class="sb-title">Inicio</span>
     <% end %>
-    
+
     <% if policy(Prescription).index? %>
       <%= link_to main_app.prescriptions_path,  class: "list-group-item list-group-item-action list-custom bg-light #{active_class('prescriptions')}" do %>
         <span class="sb-icon">
@@ -29,7 +19,7 @@
         <span class="sb-title">Recetas</span>
       <% end %>
     <% end %>
-    
+
     <% if policy(BedOrder).index? %>
       <%= link_to main_app.bed_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('bed_orders')}" do %>
         <span class="sb-icon">
@@ -38,7 +28,7 @@
         <span class="sb-title">Internación</span>
       <% end %>
     <% end %>
-    
+
     <% if policy(InternalOrder).index? %>
       <%= link_to main_app.applicant_index_internal_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
         <span class="sb-icon">

@@ -1,10 +1,22 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('statistics') %> non-sel" id="page-title">
-    <%= link_to statistics_internal_orders_path, class: 'nav-link' do %>
-      <%= fa_icon "bezier-curve" %>
-      Sectores
-    <% end %>
-  </li>
+  <% if policy(Sector).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to sectors_path, class: 'nav-link' do %>
+        <%= fa_icon "bezier-curve" %>
+        Sectores
+      <% end %>
+    </li>
+  <% end %>
+
+  <% if policy(Sector).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_sector_path, class: 'nav-link' do %>
+        <%= fa_icon "plus" %>
+        Crear sector
+      <% end %>
+    </li>
+  <% end %>
+
   <li class="nav-item <%= active_action('applicant_index') %> non-sel">
     <%= link_to applicant_index_internal_orders_path, class: 'nav-link' do %>
       <%= fa_icon "inbox" %>

@@ -1,0 +1,17 @@
+// Add the dialog title
+$('#dialog .modal-header').addClass('modal-header-flex');
+$('#dialog h4').append("Eliminar sector");
+
+// Render the edit form
+$('.modal-body').html(
+  'Esta seguro que desea eliminar el siguiente sector?'
+);
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<a data-remote='true' data-method='delete' href='/sectors/<%= @sector.id %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");

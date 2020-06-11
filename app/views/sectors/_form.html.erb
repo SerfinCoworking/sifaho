@@ -1,0 +1,56 @@
+
+
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon (@sector.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @sector.new_record? ? "Crear sector" : "Editar sector" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <%= simple_form_for @sector, html: {class: "", role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+
+      <div class="row">
+        <div class="col-md-4">
+          <%= f.input :name, required: true, label: 'Nombre' %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.input :establishment_id, label: 'Establecimiento',
+            collection: @establishments.map {|establishment|  [establishment.name, establishment.id ]},
+            :input_html => {
+              required: true,
+              include_blank: false,
+              class: 'selectpicker custom-select-pick',
+              "data-width"=>"100%",
+              "data-size"=>"10",
+              "title"=>"Seleccionar establecimiento",
+              "data-live-search"=>true,
+              "data-none-results-text" => "No se encontró el establecimiento"
+            }
+          %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.input :description, label: 'Descripción', :input_html => { "rows" => 1 } %>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', sectors_path, class: 'btn' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @sector.new_record? ? 'new_sector' : 'edit_sector_' + @sector.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
+
+
+
