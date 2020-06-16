@@ -7,7 +7,6 @@
       <h5 class="card-title mb-0 ml-2 mr-4">
         Viendo sector <%= @sector.name %>
       </h5>
-      <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de usuarios"><%=@sector.users.count %></span>
     </div>
     <%= link_to sectors_path, class: 'btn pull-right close-btn' do %>
       <%= fa_icon 'times-circle' %>
