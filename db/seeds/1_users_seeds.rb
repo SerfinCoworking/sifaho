@@ -69,8 +69,8 @@ hoteleria = Sector.create!(
 
 eugeUser = User.new(
   :username              => "38601813",
-  :password              => "1234568",
-  :password_confirmation => "1234568",
+  :password              => "12345678",
+  :password_confirmation => "12345678",
 )
 
 UserSector.create(user:eugeUser, sector: sectorInf)
@@ -82,8 +82,8 @@ Profile.create(user: eugeUser, first_name: "Eugenio", last_name: "Gomez", email:
 
 paul = User.new(
   :username              => "37458993",
-  :password              => "1234568",
-  :password_confirmation => "1234568",
+  :password              => "12345678",
+  :password_confirmation => "12345678",
 )
 
 UserSector.create(user: paul, sector: sectorInf)
