@@ -1,0 +1,18 @@
+  <div class="users-list-table">
+    <% users.each do |user| %>
+      <div class="w-users-list-item">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="text-center">
+              <%= image_tag user_avatar(current_user, 50), class:"img-circle w-100 h-100" %>
+
+            </div>
+
+          </div>
+          <div class="card-header">
+            <h5 class="card-title"><%= user.profile.first_name%></h5>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
