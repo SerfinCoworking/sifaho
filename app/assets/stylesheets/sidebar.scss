@@ -13,10 +13,11 @@
     width: 100%;
     //   sidebar
     #sidebar-wrapper {
-        min-height: 100vh;
+        height: calc(100vh - #{$navbar-heigth});
         transition: margin .3s ease-out .1s;
         margin-left: 0;
         width: $sidebar-width-visible;
+        overflow-y: auto;
 
         .list-custom.active{
             border-color: lightgray!important;
