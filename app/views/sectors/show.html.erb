@@ -1,31 +1,35 @@
 <%= render 'internal_orders/header' %>
 
-<div class="card">
+<div class="card panel-height">
   <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
-      <h5 class="card-title mb-0 ml-2">
+      <h5 class="card-title mb-0 ml-2 mr-4">
         Viendo sector <%= @sector.name %>
       </h5>
+      <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de usuarios"><%=@sector.users.count %></span>
     </div>
     <%= link_to sectors_path, class: 'btn pull-right close-btn' do %>
       <%= fa_icon 'times-circle' %>
     <% end %>
   </div>
 
-  <div class="card-body">
-  <div>
-    <%= @sector.name %>
-  </div>
-  <div>
-    <%= @sector.establishment.name %>
-  </div>
-  <div>
-    <%= @sector.description %>
+
+  <div class="card mb-4">
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @sector.establishment.name %> </li>
+        <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @sector.description %></li>
+      </ul>
+    </div>
   </div>
 
+  <div class="card-body">
+    <%= render 'shared/users_table', users: @sector.users %>
   </div>
-  <div class="card-footer">
+
+
+  <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', sectors_path, class: "btn" %>
   </div>
 </div>

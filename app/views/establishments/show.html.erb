@@ -1,46 +1,42 @@
 <%= render 'external_orders/header' %>
 
-<div class="card">
- <div class="card-header d-flex align-items-center justify-content-between">
+<div class="card panel-height">
+  <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
-      <h5 class="card-title mb-0 ml-2">
+      <h5 class="card-title mb-0 ml-2 mr-4">
         Viendo establecimiento <%= @establishment.name %>
       </h5>
+      <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de sectores"><%=@establishment.sectors.count%></span>
     </div>
     <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
       <%= fa_icon 'times-circle' %>
     <% end %>
   </div>
 
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
+        <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
+        <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
+        <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
+        <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
+      </ul>
+    </div>
+  </div>
+
+
+
   <div class="card-body">
 
-    <div class="card mb-4">
-      <div class="card-header d-flex align-items-center">
-        <h5 class="card-title mb-0 mr-4"><%= @establishment.name %></h5>
-        <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de sectores"><%=@establishment.sectors.count%></span>
-      </div>
-      <div class="card-body">
-
-         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
-          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
-          <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
-          <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
-          <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
-        </ul>
-      </div>
-    </div>
-
-
     <%# sectores de un establecimiento %>
-
-    <div class="row">
+    <div class="row h-row-custom">
       <div class="col-4">
-
         <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
       </div>
-      <div class="col-4">
+      <div class="col-8 mh-col-custom">
         <%= render 'shared/users_table', users: @establishment.users %>
       </div>
     </div>
