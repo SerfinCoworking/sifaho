@@ -45,7 +45,7 @@
     <% end %>
   </div>
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', sectors_path, class: 'btn' %>
+    <%= link_to 'Volver', sectors_path, class: 'btn btn-light mr-1' %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @sector.new_record? ? 'new_sector' : 'edit_sector_' + @sector.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>

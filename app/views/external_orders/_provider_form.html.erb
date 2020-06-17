@@ -1,7 +1,7 @@
-<%= simple_form_for @external_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+<%= simple_form_for @external_order, html: {role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
   <div class="row">
-    <div class='col-md-4'>
+    <div class='col-4'>
       <div class="text-center"><%= f.label :applicant_sector_id, "Solicitante" %></div>
       <% if f.object.solicitud_abastecimiento? %>
         <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud_abastecimiento' } %>
@@ -22,7 +22,6 @@
         %>
         <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{ f.object.applicant_sector_id }" %>
       <% else %>
-        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'despacho' } %>
         <%= f.input :applicant_sector_id, as: :string,
           label: 'Establecimiento',
           placeholder: 'Buscar por nombre',
@@ -35,6 +34,7 @@
             size: 41
           } 
         %>
+        <%= f.input :order_type, :as => :hidden, :input_html => { value: 'despacho' } %>
         <%= f.input :applicant_sector_id, :as => :hidden,
           error: "El sector es obligatorio",
           :input_html => {
@@ -42,7 +42,6 @@
             value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.establishment_id; end }"
           } 
         %>
-        <br>
         <% if f.object.applicant_sector.present? %>
           <%= f.input :applicant_sector_id, label: 'Sector',
             collection: @sectors.map {
@@ -52,7 +51,7 @@
               required: true,
               id: 'applicant-sector',
               class: 'selectpicker-md show-tick',
-              "data-width"=>"322px",
+              "data-width"=>"100%",
               "title"=>"Seleccionar sector",
               "data-size"=>"10",
               "data-live-search"=>true,
@@ -66,7 +65,7 @@
             :input_html => {
               id: 'applicant-sector',
               class: 'selectpicker-md show-tick',
-              "data-width"=>"322px",
+              "data-width"=>"100%",
               "title"=>"Seleccione un establecimiento",
               "data-size"=>"10",
               "data-live-search"=>true,
@@ -118,8 +117,8 @@
       </div>
   </div>
   <!-- Insumos a dispensar -->
-  <div class="table-responsive">
-    <table class="table table-hover table-condensed">
+  <div class="card">
+    <table class="table table-hover table-sm">
       <thead>
         <tr>
           <th>Cód Ins</th>
@@ -149,15 +148,10 @@
           <% end %>
       </tbody>
     </table>
-  
-    <div class="links" id="links-quant-form">
-      <div class="text-center">
-        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Agregar insumo solicitado
-        <% end %>
-      </div>
-    </div>
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+      data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+      <%= fa_icon "plus" %>
+      Agregar insumo solicitado
+    <% end %>
   </div>
 <% end %>

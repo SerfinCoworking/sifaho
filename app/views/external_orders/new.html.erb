@@ -1,26 +1,24 @@
 <%= render 'external_orders/header' %>
 
-<div class="row">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo despacho
-        <%= link_to external_orders_path, class: 'btn pull-right close-btn' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5>
+        <%= fa_icon "plus" %> Nuevo despacho
+        <%= link_to external_orders_path, class: 'btn float-right text-white' do %>
+          <%= fa_icon "times" %>
         <% end %>
-      </h3>
+      </h5>
     </div>
-    <div class="panel-body" id="panel-body-new">
+    <div class="card-body" id="panel-body-new">
       <%= render 'external_orders/provider_form', external_order: @external_order %>
     </div>
-    <div class="panel-footer text-right">
-      <%= link_to 'Volver', external_orders_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='new_external_order' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
+    <div class="card-footer d-flex justify-content-end">
+      <%= link_to 'Volver', external_orders_path, class: 'btn btn-light mr-1' %>
+      <button type='submit' name='commit' class='btn btn-success mr-1' form='new_external_order' value='Auditar'>
+        <%= fa_icon "save" %> Guardar
       </button>
       <button type='submit' name='commit' class='btn btn-primary' form='new_external_order' value='Auditar y aceptar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-thumbs-up') %> Guardar y aceptar
+        <%= fa_icon "thumbs-up" %> Guardar y aceptar
       </button>
     </div>
   </div>
-</div>
