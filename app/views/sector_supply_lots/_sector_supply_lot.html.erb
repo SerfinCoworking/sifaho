@@ -3,7 +3,7 @@
       <td><%= sector_supply_lot.code %></td>
       <td class="col-sup-name"><%= sector_supply_lot.supply_name %></td>
       <td>
-        <span class="label label-<%= sector_supply_lot.status_label %>">
+        <span class="badge badge-<%= sector_supply_lot.status_label %>">
           <%= sector_supply_lot.status.underscore.humanize %>
         </span>
       </td>
@@ -17,29 +17,29 @@
       <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%m/%y") : "No vence" %></td>
       <td class="text-center">
         <% if policy(sector_supply_lot).show? %>
-          <%= link_to sector_supply_lot_path(sector_supply_lot), remote:true, class: 'btn btn-default btn-xs',
+          <%= link_to sector_supply_lot_path(sector_supply_lot), remote:true, class: 'btn btn-secondary btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+            <%= fa_icon "eye" %>
           <% end %>
         <% end %>
         <% if current_page?(controller: 'sector_supply_lots', action: 'trash_index') %>
           <% if policy(sector_supply_lot).restore? %>
             <%= link_to restore_confirm_sector_supply_lot_path(sector_supply_lot), remote: true,
-                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+                  class: 'btn btn-primary btn-sm', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash-restore" %>
             <% end %>
           <% end %>
           <% if policy(sector_supply_lot).purge? %>
             <%= link_to purge_confirm_sector_supply_lot_path(sector_supply_lot), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+                  class: 'btn btn-danger btn-sm', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "times" %>
             <% end %>
           <% end %>
         <% else %>
           <% if policy(sector_supply_lot).delete? %>
             <%= link_to delete_sector_supply_lot_path(sector_supply_lot), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+                  class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash" %>
             <% end %>
           <% end %>
         <% end %>

@@ -5,21 +5,21 @@
   <td><%= lot.laboratory_name %></td>
   <td>
     <% if policy(lot).show? %>
-      <%= link_to lot_path(lot), class: 'btn btn-default btn-xs',
+      <%= link_to lot_path(lot), class: 'btn btn-default btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(lot).edit? %>
-      <%= link_to edit_lot_path(lot), class: 'btn btn-warning btn-xs',
+      <%= link_to edit_lot_path(lot), class: 'btn btn-warning btn-sm',
             title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(lot).delete? %>
       <%= link_to delete_lot_path(lot), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
   </td>

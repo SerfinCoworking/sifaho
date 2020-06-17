@@ -1,14 +1,11 @@
 <%= render 'header' %>
 
-<div class="row">
-  <% if @professionals.present? %>
-    <div class="panel panel-info" id="filter-panel">
-      <div class="panel-leftheading">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-      </div>
-      <div class="panel-rightbody">
-        <%= form_for_filterrific @filterrific do |f| %>
-          <div class="col-md-2 col-sm-2">
+<% if @professionals.present? %>
+  <div class="card">
+    <div class="card-header">
+      <%= form_for_filterrific @filterrific do |f| %>
+        <div class="row justify-content-between">
+          <div class="col-2">
             <label>Buscar</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
@@ -18,7 +15,7 @@
               autocomplete: 'off'
             ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Buscar</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
@@ -27,7 +24,7 @@
               placeholder: 'Matrícula'
             ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Buscar</label>
             <%= f.text_field(
               :search_dni,
@@ -35,12 +32,12 @@
                 placeholder: 'DNI'
                 ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Especialidad</label>
             <%= f.select( :with_professional_type_id, @filterrific.select_options[:professional_type_id],
                 { include_blank: 'Todos' }, {class: 'form-control'} ) %>
           </div>
-          <div class="col-md-2 col-sm-3">
+          <div class="col-2">
             <label>Ordenar por</label>
             <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
           </div>
@@ -48,21 +45,19 @@
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
           <% end %>
           <%= render_filterrific_spinner %>
-        <% end %>
-      </div>
-      <div class="clearfix">
-      </div>
+        </div>
+      <% end %>
     </div>
-
-    <%= render(
-      partial: 'professionals/list',
-      locals: { professionals: @professionals }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'médicos' }
-    ) %>
-  <% end %>
-</div>
-
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'professionals/list',
+        locals: { professionals: @professionals }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'médicos' }
+  ) %>
+<% end %>

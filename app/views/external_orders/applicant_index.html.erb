@@ -1,17 +1,20 @@
 <%= render 'header' %>
 
-<div class="row">
-  <% if @applicant_orders.present? %>
-    <%= render "filter" %>
-    
-    <%= render(
-      partial: 'external_orders/applicant_list',
-      locals: { applicant_orders: @applicant_orders }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'pedidos recibidos' }
-    ) %>
-  <% end %>
-</div>
+<% if @applicant_orders.present? %>
+  <div class="card" id="filter-panel">
+    <div class="card-header">
+      <%= render "filter" %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'external_orders/applicant_list',
+        locals: { applicant_orders: @applicant_orders }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'pedidos recibidos' }
+  ) %>
+<% end %>

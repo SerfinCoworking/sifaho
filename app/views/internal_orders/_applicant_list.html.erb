@@ -1,7 +1,7 @@
 <% if @applicant_orders.present? %>
   <div id="filterrific_results">
-    <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
         <thead>
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
@@ -32,8 +32,8 @@
         </tbody>
       </table>
     </div>
-    <div id="page_links">
-      <%= paginate @applicant_orders %>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @applicant_orders, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </div>
   </div>
 <% else %>

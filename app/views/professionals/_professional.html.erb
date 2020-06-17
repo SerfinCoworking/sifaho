@@ -4,9 +4,9 @@
     <td><%= professional.last_name %></td>
     <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
     <% @count_pres = professional.prescriptions.count %>
-    <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
+    <td><span class="badge badge-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
     <td>
-      <span class="label label-<%= professional.is_active? ? "success" : "danger" %>">
+      <span class="badge badge-<%= professional.is_active? ? "success" : "danger" %>">
         <%= professional.is_active? ? "Activo" : "Inactivo" %>
       </span>
     </td>
@@ -14,21 +14,21 @@
     <td><%= professional.professional_type.name %></td>
     <td>
       <% if policy(professional).show? %>
-        <%= link_to professional_path(professional), class: 'btn btn-default btn-xs',
+        <%= link_to professional_path(professional), class: 'btn btn-secondary btn-sm',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <%= fa_icon "eye" %>
         <% end %>
       <% end %>
       <% if policy(professional).edit? %>
-        <%= link_to edit_professional_path(professional), class: 'btn btn-warning btn-xs',
+        <%= link_to edit_professional_path(professional), class: 'btn btn-warning btn-sm',
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+          <%= fa_icon "edit" %>
         <% end %>
       <% end %>
       <% if policy(professional).delete? %>
         <%= link_to delete_professional_path(professional), remote: true,
-              class: 'btn btn-danger btn-xs', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "trash" %>
         <% end %>
       <% end %>
     </td>

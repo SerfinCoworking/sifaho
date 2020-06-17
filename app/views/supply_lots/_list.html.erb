@@ -1,7 +1,7 @@
 <div id="filterrific_results">
   <% if @supply_lots.present? %>
-    <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
         <thead>
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :cod_ins) %></th>
@@ -18,8 +18,8 @@
         </tbody>
       </table>
     </div>
-    <div id="page_links">
-      <%= paginate @supply_lot %>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @supply_lots, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </div>
   <% else %>
     <%= render(

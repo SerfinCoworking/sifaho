@@ -1,17 +1,20 @@
 <% render 'header' %>
 
-<div class="row">
-  <% if @stocks.present? %>
-    <%= render 'filter' %>
-
-    <%= render(
-      partial: 'stocks/list',
-      locals: { stocks: @stocks }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'productos en stock' }
-    ) %>
-  <% end %>
-</div>
+<% if @stocks.present? %>
+  <div class="card">
+    <div class="card-header">
+      <%= render 'filter' %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'stocks/list',
+        locals: { stocks: @stocks }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'productos en stock' }
+  ) %>
+<% end %>
