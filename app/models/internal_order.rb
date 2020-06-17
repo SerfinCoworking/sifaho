@@ -235,7 +235,7 @@ class InternalOrder < ApplicationRecord
   # Método para retornar perdido a estado anterior
   def return_applicant_status_by(a_user)
     if solicitud_enviada?
-      self.create_notification(current_user, "retornó a un estado anterior")
+      self.create_notification(a_user, "retornó a un estado anterior")
       self.solicitud_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
