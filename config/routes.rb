@@ -177,6 +177,8 @@ Rails.application.routes.draw do
       get "return_applicant_status"
       get "receive_applicant"; get "receive_applicant_confirm"
       get "edit_applicant"
+      get "nullify"
+      patch "nullify_confirm"
     end
     collection do
       get "new_report"; get "generate_report"
@@ -197,6 +199,8 @@ Rails.application.routes.draw do
       get "receive_order"; get "receive_order_confirm"
       get "edit_receipt"
       get "edit_applicant"
+      get "nullify"
+      patch "nullify_confirm"
     end
     collection do
       get "new_report"; get "generate_report"

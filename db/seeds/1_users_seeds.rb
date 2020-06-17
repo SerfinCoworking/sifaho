@@ -1,81 +1,18 @@
 # IMPORTANTE!!!!!:
 # Antes de ejecutar el seed se debe comentar la linea 24 y 45 del modelo User (:create_profile)
 
-establishment = Establishment.create(
-  code: '8370',
-  name: 'Dr. Ramón Carrillo',
-  cuit: '30-67261806-8',
-  domicile: 'San Martín y Cnel. Rohde',
-  phone: '2972427211',
-  email: 'dr.ramon.carrillo@example.com'
-)
-
-Establishment.create(
-  code: '8370',
-  name: 'Depósito',
-  cuit: '30-6541263-8',
-  domicile: 'San Martín y Cnel. Rohde',
-  phone: '297246532156',
-  email: 'deposito@example.com'
-)
-
-Establishment.create(
-  code: '8370',
-  name: 'Depósito Central',
-  cuit: '30-6541263-8',
-  domicile: 'San Martín y Cnel. Rohde',
-  phone: '297246532156',
-  email: 'deposito.central@example.com'
-)
-
-sectorInf = Sector.create!(
-  name: "Informática",
-  description: "Sector desarrollo y soporte informático",
-  complexity_level: "10",
-  user_sectors_count: "4",
-  establishment_id: establishment.id
-)
-
-adminsitracion = Sector.create!(
-  name: "Administración",
-  description: "Sector administración del establecimiento",
-  establishment_id: establishment.id
-)
-
-despacho = Sector.create!(
-  name: "Despacho",
-  description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-  establishment_id: establishment.id
-)
-
-estadistica = Sector.create!(
-  name: "Estadística",
-  description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-  establishment_id: establishment.id
-)
-
-finanzas = Sector.create!(
-  name: "Finanzas",
-  description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-  establishment_id: establishment.id
-)
-
-hoteleria = Sector.create!(
-  name: "Hotelería",
-  description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-  establishment_id: establishment.id
-)
-
-
+##########################
+sectorInformatico = Sector.find_by_name("Informática")
+# Creacion de usuarios
 eugeUser = User.new(
   :username              => "38601813",
   :password              => "12345678",
   :password_confirmation => "12345678",
 )
 
-UserSector.create(user:eugeUser, sector: sectorInf)
+UserSector.create(user:eugeUser, sector: sectorInformatico)
 eugeUser.add_role :admin
-eugeUser.sector = sectorInf
+eugeUser.sector = sectorInformatico
 eugeUser.save!
 
 Profile.create(user: eugeUser, first_name: "Eugenio", last_name: "Gomez", email: "euge@exmaple.com", dni: "38601813")
@@ -86,14 +23,67 @@ paul = User.new(
   :password_confirmation => "12345678",
 )
 
-UserSector.create(user: paul, sector: sectorInf)
+UserSector.create(user: paul, sector: sectorInformatico)
 paul.add_role :admin
-paul.sector = sectorInf
+paul.sector = sectorInformatico
 paul.save!
-
 Profile.create(user: paul, first_name: "Paul", last_name: "ibaceta", email: "paul@exmaple.com", dni: "37458993")
 
-sectors = [adminsitracion, despacho, estadistica, finanzas, hoteleria]
+sectorFar =  Sector.where(establishment: Establishment.find_by_name("Dr. Ramón Carrillo"), name: "Farmacia").first
+sectorFarJunin =  Sector.where(establishment: Establishment.find_by_name("Hospital junin"), name: "Farmacia").first
+sectorMedic =  Sector.where(establishment: Establishment.find_by_name("Dr. Ramón Carrillo"), name: "Medicos").first
+sectorMedicJunin =  Sector.where(establishment: Establishment.find_by_name("Hospital junin"), name: "Medicos").first
+
+farmaceuticoUser = User.new(
+  :username              => "40579158",
+  :password              => "12345678",
+  :password_confirmation => "12345678"
+)
+
+UserSector.create(user:farmaceuticoUser, sector: sectorFar)
+farmaceuticoUser.add_role :farmaceutico
+farmaceuticoUser.sector = sectorInformatico
+farmaceuticoUser.save!
+Profile.create(user: farmaceuticoUser, first_name: "farmaceutico", last_name: "one", email: "secretario@exmaple.com", dni: "40579158")
+
+medicUser = User.new(
+  :username              => "40671958",
+  :password              => "12345678",
+  :password_confirmation => "12345678"
+)
+
+UserSector.create(user:medicUser, sector: sectorMedic)
+medicUser.add_role :medic
+medicUser.sector = sectorInformatico
+medicUser.save!
+Profile.create(user: medicUser, first_name: "medico", last_name: "one", email: "secretario@exmaple.com", dni: "40671958")
+
+##########################
+# Usuarios Hospital Junin Example
+farmaceuticoUser = User.new(
+  :username              => "12345678",
+  :password              => "12345678",
+  :password_confirmation => "12345678",
+)
+UserSector.create(user:farmaceuticoUser, sector: sectorFarJunin)
+farmaceuticoUser.add_role :farmaceutico
+farmaceuticoUser.sector = sectorFarJunin
+farmaceuticoUser.save!
+Profile.create(user: farmaceuticoUser, first_name: "farmaceutico", last_name: "one", email: "secretario@exmaple.com", dni: "40579158")
+
+medicUser = User.new(
+  :username              => "12345679",
+  :password              => "12345678",
+  :password_confirmation => "12345678"
+)
+medicUser.add_role :medic
+medicUser.sector = sectorMedicJunin
+medicUser.save!
+Profile.create(user: medicUser, first_name: "medico", last_name: "one", email: "secretario@exmaple.com", dni: "40671958")
+
+
+# usuarios genericos
+sectors = Sector.all
 users_samples = [
   {:name => 'joe', :dni => "1234568"},
   {:name => 'charly', :dni => "1234569"},
@@ -156,3 +146,8 @@ users_samples.each do |user|
 end
 
 
+#:admin
+#:farmaceutico
+#:auxiliar_farmacia
+#:medic
+#:enfermero

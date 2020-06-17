@@ -20,6 +20,7 @@ class InternalOrder < ApplicationRecord
   belongs_to :sent_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
   belongs_to :sent_request_by, class_name: 'User', optional: true
+  belongs_to :rejected_by, class_name: "User", optional: true
 
   # Validaciones
   validates_presence_of :provider_sector, :applicant_sector, :requested_date, :quantity_ord_supply_lots, :remit_code 

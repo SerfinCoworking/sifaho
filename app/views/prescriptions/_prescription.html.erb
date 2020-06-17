@@ -4,7 +4,7 @@
   <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
   <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
-    <span class="label label-<%= prescription_status_label(prescription) %>">
+    <span class="badge badge-<%= prescription_status_label(prescription) %>">
       <%= prescription.status.underscore.humanize %>
     </span>
   </td>
@@ -35,7 +35,7 @@
   </td>
   <td>
     <% if policy(prescription).show? %>
-      <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-xs', 
+      <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "eye" %>
       <% end %>
@@ -43,14 +43,14 @@
     <% if policy(prescription).edit? %>
       <% unless prescription.dispensada? %>
         <%= link_to edit_prescription_path(prescription), 
-              class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "edit" %>
         <% end %>
       <% end %>
     <% end %>
     <% if policy(prescription).delete? %>
       <%= link_to delete_prescription_path(prescription), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash" %>
       <% end %>
     <% end %>

@@ -26,6 +26,7 @@ class ExternalOrder < ApplicationRecord
   has_many :comments, class_name: "ExternalOrderComment"
   has_one :provider_establishment, :through => :provider_sector, :source => :establishment
   has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
+  belongs_to :rejected_by, class_name: "User", optional: true
 
   # Validaciones
   validates_presence_of :applicant_sector, :provider_sector, :quantity_ord_supply_lots, :remit_code  

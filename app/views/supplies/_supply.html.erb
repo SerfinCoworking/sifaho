@@ -38,13 +38,13 @@
             </div>
           </td>
         <% end %>
-        <td><span class="badge"><%= @lots.count %></span></td>
+        <td><%= @lots.count %></td>
         <td><%= supply.supply_area.name %></td>
         <td>
           <% if policy(supply).lots_for_supply? %>
-            <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-default btn-xs',
-                  title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+            <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-secondary btn-sm',
+              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "eye" %>
             <% end %>
           <% end %>
         </td>
@@ -56,29 +56,29 @@
         <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
         <td>
         <% if policy(supply).show? %>
-          <%= link_to supply_path(supply), class: 'btn btn-default btn-xs',
-                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <%= link_to supply_path(supply), class: 'btn btn-secondary btn-sm',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "eye" %>
           <% end %>
         <% end %>
         <% if current_page?(controller: 'supplies', action: 'trash_index') %>
           <% if policy(supply).restore? %>
             <%= link_to restore_confirm_supply_path(supply), remote: true,
-                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+              class: 'btn btn-primary btn-sm', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash-restore" %>
             <% end %>
           <% end %>
         <% else %>
           <% if policy(supply).edit? %>
-            <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs',
-                  title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+            <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-sm',
+              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "edit" %>
             <% end %>
           <% end %>
           <% if policy(supply).delete? %>
             <%= link_to delete_supply_path(supply), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+              class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash" %>
             <% end %>
           <% end %>
         <% end %>

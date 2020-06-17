@@ -1,17 +1,20 @@
 <%= render 'header' %>
 
-<div class="row">
-  <% if @supply_lots.present? %>
-    <%= render 'filter' %>
-
-    <%= render(
-      partial: 'supply_lots/list',
-      locals: { supply_lots: @supply_lots }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'lotes en provincia' }
-    ) %>
-  <% end %>
-</div>
+<% if @supply_lots.present? %>
+  <div class="card" id="filter-panel">
+    <div class="card-header">
+      <%= render 'filter' %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'supply_lots/list',
+        locals: { supply_lots: @supply_lots }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'lotes en provincia' }
+  ) %>
+<% end %>

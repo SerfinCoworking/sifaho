@@ -1,60 +1,50 @@
-<div class="panel panel-info" id="filter-panel">
-  <div class="panel-leftheading">
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-2">
+      <label>Insumo</label>
+      <%= f.text_field(
+        :search_text,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Código o Nombre',
+        autocomplete: 'off'
+      ) %>
+    </div>
+    <div class="col-md-1 col-sm-1">
+      <label>Lote</label>
+      <%= f.text_field(
+        :search_lot_code,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Código',
+        autocomplete: 'off'
+      ) %>
+    </div>
+    <div class="col-2">
+      <label>Laboratorio</label>
+      <%= f.text_field(
+        :search_laboratory,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Razón social',
+        autocomplete: 'off'
+      ) %>
+    </div>
+    <div class="col-2">
+      <label>Estado</label>
+      <%= f.select(:with_status,
+        @filterrific.select_options[:with_status].map {
+          |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
+        },{},
+        { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
+    </div>
+    <div class="col-2">
+      <label>Ordenar por</label>
+      <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
+    </div>
+    <div class="col-2">
+        <label>Vencido desde</label>
+        <%= f.text_field(:expired_from, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
+          class: 'form-control filterrific-periodically-observed', id: 'expired-from') %>
+    </div>
+    <!-- Spinner para la carga -->
+    <%= render_filterrific_spinner %>
   </div>
-  <div class="panel-rightbody">
-    <%= form_for_filterrific @filterrific do |f| %>
-      <div class="col-md-2 col-sm-2">
-        <label>Insumo</label>
-        <%= f.text_field(
-          :search_text,
-          class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Código o Nombre',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <div class="col-md-1 col-sm-1">
-        <label>Lote</label>
-        <%= f.text_field(
-          :search_lot_code,
-          class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Código',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <div class="col-md-2 col-sm-2">
-        <label>Laboratorio</label>
-        <%= f.text_field(
-          :search_laboratory,
-          class: 'filterrific-periodically-observed form-control',
-          placeholder: 'Razón social',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <div class="col-md-2 col-sm-2">
-        <label>Estado</label>
-        <%= f.select(:with_status,
-          @filterrific.select_options[:with_status].map {
-            |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
-          },{},
-          { class: "selectpicker show-tick", "data-width"=>"135px"}) %>
-      </div>
-      <div class="col-md-2 col-sm-2">
-        <label>Ordenar por</label>
-        <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'selectpicker show-tick',  "data-width"=>"135px"}) %>
-      </div>
-      <div class="col-md-2 col-sm-2">
-          <label>Vencido desde</label>
-          <%= f.text_field(:expired_from, placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'},
-            class: 'form-control filterrific-periodically-observed', id: 'expired-from') %>
-      </div>
-      <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-      <% end %>
-      <!-- Spinner para la carga -->
-      <%= render_filterrific_spinner %>
-    <% end %>
-  </div>
-  <div class="clearfix">
-  </div>
-</div>
+<% end %>
