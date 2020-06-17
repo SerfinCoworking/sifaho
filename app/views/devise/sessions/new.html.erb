@@ -1,19 +1,14 @@
 <div class="row">
-  <div class="col-7 ml-auto">
-    <div class="jumbotron">
-      <h1 class="display-4">Bienvenido a SIFAHO!</h1>
-      <p class="lead">Somos una gran familia que va creciendo día a día en la provincia. Nos encargamos de facilitarte el control y la trazabilidad de los insumos.</p>
-      <hr class="my-4">
-      <p>El Sistema Farmacéutico Hospitalario lleva funcionando en la provincia más de 2 años. Y buscamos seguir creciendo!</p>
-    </div>
-  </div>
-  <div class="col-3 ml-auto">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-title col-12 text-center">
-          <%= image_tag("LogoSIFAHO.png", size: "70x70", align: "center", alt: "Logo Sifaho") %>
-        </div>
-        <br>
+  <div class="jumbotron col-10 ml-auto pb-4 pt-5">
+    <div class="row">
+      <div class="col-8">
+        <h1 class="display-4">Bienvenido a SIFAHO!</h1>
+        <p class="lead">Somos una gran familia que va creciendo día a día en la provincia. Nos encargamos de facilitarte el control y la trazabilidad de los insumos.</p>
+        <hr class="my-4">
+        <p>El Sistema Farmacéutico Hospitalario lleva funcionando en la provincia más de 2 años. Y buscamos seguir creciendo!</p>
+      </div>
+      <div class="col-3 ml-auto">
+        <p class="text-center pb-4"><%= image_tag("LogoSIFAHO.png", size: "70x70", align: "center", alt: "Logo Sifaho") %></p>
         <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
           <%= devise_error_messages! %>
           <div class="form-group">
@@ -37,24 +32,20 @@
       </div>
     </div>
   </div>
-</div>
-<% content_for :page_footer do %>
-  <div class="col-md-5">
-  <div class="well well-sm">
-    <div class="row">
-      <div class="col-md-3">
-        <%= image_tag("tics.svg", size: "150x150", alt: "Logo Tics") %>
+
+  <div class="col-10 ml-auto d-flex justify-content-around">
+    <%= image_tag("logo_01.svg", size: "170x50", alt: "Logo Sifaho") %>
+    <%= image_tag("logo_02.svg", size: "170x50", alt: "Logo Sifaho") %>
+    <%= image_tag("logo_03.svg", size: "100x50", alt: "Logo Sifaho") %>
+  </div>
+
+  <div class="col-10 ml-auto mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title"><%= fa_icon "bullhorn" %> Novedades</h5>
       </div>
-      <div class="col-md-3">
-        <%= image_tag("neuquen-provincia.png", size: "150x150", alt: "Logo One Login") %>
-      </div> 
-      <div class="col-md-3">
-        <%= image_tag("one-login.png", size: "80x80", alt: "Logo One Login") %>
+      <div class="card-body">
       </div>
-      <div class="col-md-3">
-        <%= image_tag("logo-andes.svg", size: "111x111", alt: "Logo Andes") %>
-      </div>  
     </div>
   </div>
-<% end %>
-
+</div>
