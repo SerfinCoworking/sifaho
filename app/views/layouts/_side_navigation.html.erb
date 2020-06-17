@@ -29,8 +29,8 @@
       <% end %>
     <% end %>
 
-    <% if policy(InternalOrder).index? %>
-      <%= link_to main_app.applicant_index_internal_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
+    <% if policy(Sector).index? %>
+      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
         <span class="sb-icon">
           <%= fa_icon "bezier-curve" %>
         </span>
@@ -38,8 +38,8 @@
       <% end %>
     <% end %>
 
-    <% if policy(ExternalOrder).index? %>
-      <%= link_to main_app.applicant_index_external_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('external_orders')}" do %>
+    <% if policy(Establishment).index? %>
+      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('external_orders')}" do %>
         <span class="sb-icon">
           <%= fa_icon "hospital"%>
         </span>
