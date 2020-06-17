@@ -1,26 +1,24 @@
 <%= render 'internal_orders/header' %>
 
-<div class="row">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nueva provisión de sector
-        <%= link_to internal_orders_path, class: 'btn pull-right close-btn' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
-    </div>
-    <div class="panel-body" id="panel-body-new">
-      <%= render 'internal_orders/provider_form', internal_order: @internal_order %>
-    </div>
-    <div class="panel-footer text-right">
-      <%= link_to 'Volver', internal_orders_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='new_internal_order' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
-      </button>
-      <button type='submit' name='commit' class='btn btn-primary' form='new_internal_order' value='Enviar proveedor'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> Guardar y enviar
-      </button>
-    </div>
+<div class="card panel-primary">
+  <div class="card-header bg-primary text-white">
+    <h4>
+      <%= fa_icon "plus" %> Nueva provisión de sector
+      <%= link_to internal_orders_path, class: 'btn float-right text-white' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </h4>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <%= render 'internal_orders/provider_form', internal_order: @internal_order %>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', internal_orders_path, class: 'btn btn-light mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success mr-2' form='new_internal_order' value='Auditar'>
+      <%= fa_icon "save" %> Guardar
+    </button>
+    <button type='submit' name='commit' class='btn btn-primary' form='new_internal_order' value='Enviar proveedor'>
+      <%= fa_icon "paper-plane" %> Guardar y enviar
+    </button>
   </div>
 </div>
