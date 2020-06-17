@@ -43,14 +43,14 @@
     <% if policy(prescription).edit? %>
       <% unless prescription.dispensada? %>
         <%= link_to edit_prescription_path(prescription), 
-              class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "edit" %>
         <% end %>
       <% end %>
     <% end %>
     <% if policy(prescription).delete? %>
       <%= link_to delete_prescription_path(prescription), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash" %>
       <% end %>
     <% end %>
