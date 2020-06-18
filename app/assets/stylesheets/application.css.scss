@@ -139,3 +139,11 @@ body{
   top: 0.75rem;
   right: 1.25rem;
 }
+
+.alert-container{
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  top: 40px;
+  transform: translateX(-50%);
+}
