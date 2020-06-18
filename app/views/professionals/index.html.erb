@@ -2,7 +2,7 @@
 
 <% if @professionals.present? %>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header position-relative">
       <%= form_for_filterrific @filterrific do |f| %>
         <div class="row justify-content-between">
           <div class="col-2">
@@ -33,19 +33,37 @@
                 ) %>
           </div>
           <div class="col-2">
+            <%# Buscar por especialidad  %>
             <label>Especialidad</label>
-            <%= f.select( :with_professional_type_id, @filterrific.select_options[:professional_type_id],
-                { include_blank: 'Todos' }, {class: 'form-control'} ) %>
+            <%= select_tag "with_professional_type_id",
+              options_for_select(@filterrific.select_options[:professional_type_id]),
+              include_blank: 'Todos',
+              class: "selectpicker custom-select-pick",
+              data:{
+                "live-search" => true
+              }
+            %>
           </div>
+
           <div class="col-2">
+            <%# Ordenador  %>
             <label>Ordenar por</label>
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
+            <%= select_tag "first_glass_id",
+              options_for_select(@filterrific.select_options[:sorted_by]),
+              class: "selectpicker custom-select-pick",
+              data:{
+                "live-search" => true
+              }
+            %>
           </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
+
           <%= render_filterrific_spinner %>
         </div>
+      <% end %>
+
+      <%= link_to reset_filterrific_url, class: "btn btn-sm reset-filterrific",
+        :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+        <%= fa_icon "redo" %>
       <% end %>
     </div>
     <div class="card-body fixed-panel-index">
