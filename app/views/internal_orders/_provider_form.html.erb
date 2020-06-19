@@ -1,8 +1,7 @@
-<%= simple_form_for @internal_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+<%= simple_form_for @internal_order, html: { role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
   <div class="row">
-    <div class='col-md-3'>
-      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
+    <div class='col-3'>
       <%= f.input :applicant_sector_id, label: 'Sector solicitante',
         collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
         required: true,
@@ -17,10 +16,10 @@
           value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
         } 
       %>
-      <br>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
       <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
     </div>
-    <div class="col-md-3">
+    <div class="col-3">
       <%= f.input :provider_sector_id, as: :string,
         label: 'Sector proveedor',
         :input_html => {
@@ -31,7 +30,7 @@
       %>
       <%= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
     </div>
-    <div class='col-md-2'>
+    <div class='col-2'>
       <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
         :placeholder => "Seleccionar fecha",
         input_html: {
@@ -44,39 +43,36 @@
         html5: false 
       %>
     </div>
-    <div class='col-md-4'>
+    <div class='col-4'>
       <%= f.input :observation, label: 'Observaciones', as: :text,
         :input_html => { :cols => 40  , :rows => 1 } %>
     </div>
   </div>
-  <hr>
   <!-- Insumos a dispensar -->
-  <table class="table table-hover table-condensed">
-    <thead>
-      <tr>
-        <th>Cód Ins</th>
-        <th>Insumo</th>
-        <th>Tu stock</th>
-        <th>Solicitado</th>
-        <th>A entregar</th>
-        <th colspan="2">Lote</th>
-        <th>Tu observación</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody class="quantity_ord_supply_lots">
-      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-        <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
-      <% end %>
-    </tbody>
-  </table>
-    <div class="links" id="links-quant-form">
-      <div class="text-center">
-        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Agregar insumo
+  <div class="card">
+    <table class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th>Cód Ins</th>
+          <th>Insumo</th>
+          <th>Tu stock</th>
+          <th>Solicitado</th>
+          <th>A entregar</th>
+          <th colspan="2">Lote</th>
+          <th>Tu observación</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="quantity_ord_supply_lots">
+        <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+          <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
         <% end %>
-      </div>
-    </div>
+      </tbody>
+    </table>
+      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
+        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+        <%= fa_icon "plus" %>
+        Agregar insumo
+      <% end %>
+  </div>
 <% end %>

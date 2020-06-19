@@ -289,9 +289,9 @@
     </td>
   <% end %>
   <td>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+        <%= fa_icon "minus" %>
     <% end %>
   </td>
 </tr>

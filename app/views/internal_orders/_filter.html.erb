@@ -55,7 +55,14 @@
         </div>
       </div>
       <div class="col-2">
-        <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
+        <div class="d-flex justify-content-between align-items-center">
+          <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
+          <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
+            :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+            <%= fa_icon "redo" %>
+          <% end %>
+          <%= render_filterrific_spinner %>
+        </div>
         <div class="row">
           <div class="col-md-6">
             <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
@@ -66,13 +73,6 @@
               placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
-      </div>
-      <div class="col-1">
-        <%= link_to reset_filterrific_url, class: "btn btn-sm btn-reset", 
-          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <%= render_filterrific_spinner %>
       </div>
   </div>
 <% end %>

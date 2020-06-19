@@ -45,26 +45,26 @@
     <% end %>
     <% if policy(internal_order).edit_applicant? %>
       <%= link_to edit_applicant_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
-        title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).edit? %>
       <%= link_to edit_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
-        title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).destroy? %>
       <%= link_to delete_internal_order_path(internal_order), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).nullify? %>
       <%= link_to nullify_internal_order_path(internal_order), remote: true,
         :"data-turbolinks" => false, class: 'btn btn-danger btn-sm', 
-        title: 'anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "ban" %>
       <% end %>
     <% end %>

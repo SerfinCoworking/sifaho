@@ -80,7 +80,7 @@ class SuppliesController < ApplicationController
     authorize @supply
 
     respond_to do |format|
-      if @supply.save
+      if @supply.save!
         flash.now[:success] = "El insumo "+@supply.name+" se ha creado correctamente."
         format.html { redirect_to @supply }
       else

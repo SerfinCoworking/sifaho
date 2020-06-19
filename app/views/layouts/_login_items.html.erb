@@ -17,7 +17,7 @@
       <% end %>
       <% if policy(current_user).change_sector? %>
         <%= link_to main_app.change_sector_users_admin_path(current_user), remote: true, class: "dropdown-item" do %>
-          <%= fa_icon "refresh" %>
+          <%= fa_icon "exchange-alt" %>
           Cambiar sector
         <% end %>
       <% end %>

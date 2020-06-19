@@ -56,9 +56,9 @@
     </div>
     <div class="col-2">
       <div class="d-flex justify-content-between align-items-center">
-      <label>
-        <%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %>
-      </label>
+        <label>
+          <%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %>
+        </label>
         <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
           :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
           <%= fa_icon "redo" %>

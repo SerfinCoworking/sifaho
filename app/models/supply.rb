@@ -25,7 +25,7 @@ class Supply < ApplicationRecord
   has_many :internal_order_template, through: :internal_order_template_supplies
   
   # Validaciones
-  validates_presence_of :name, :unity, :quantity_alarm, :period_control
+  validates_presence_of :name, :unity, :supply_area
   validates_uniqueness_of :id
 
   filterrific(

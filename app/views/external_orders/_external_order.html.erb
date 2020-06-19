@@ -55,32 +55,32 @@
     <% end %>
     <% if policy(external_order).edit_applicant? %>
       <%= link_to edit_applicant_external_order_path(external_order), :"data-turbolinks" => false, 
-        class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
         <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(external_order).edit? %>
       <%= link_to edit_external_order_path(external_order), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
         <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(external_order).edit_receipt? %>
       <%= link_to edit_receipt_external_order_path(external_order), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(external_order).delete? %>
       <%= link_to delete_external_order_path(external_order), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash" %>
       <% end %>
     <% end %>
     <% if policy(external_order).nullify? %>
       <%= link_to nullify_external_order_path(external_order), remote: true,
         :"data-turbolinks" => false, class: 'btn btn-danger btn-sm', 
-        title: 'anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "ban" %>
       <% end %>
     <% end %>
