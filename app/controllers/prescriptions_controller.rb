@@ -238,13 +238,6 @@ class PrescriptionsController < ApplicationController
                       expiry_date: qosl.sector_supply_lot_expiry_date, 
                       applicant_obs: qosl.provider_observation
         end
-
-        report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(prescription.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(prescription.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(prescription.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          footer.item(:total_obs).value(prescription.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
-        end
       end
       
       if report.page_count == 1
