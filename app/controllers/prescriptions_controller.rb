@@ -31,9 +31,16 @@ class PrescriptionsController < ApplicationController
   # GET /prescriptions/1.json
   def show
     authorize @prescription
+
     respond_to do |format|
       format.html
       format.js
+      format.pdf do
+        send_data generate_order_report(@prescription)
+        #  filename: 'Prescripcion_'+@prescription.remit_code+'.pdf',
+        #  type: 'application/pdf',
+        #  disposition: 'inline'
+      end
     end
   end
 
@@ -209,11 +216,10 @@ class PrescriptionsController < ApplicationController
   end
 
   def generate_order_report(prescription)
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'firs_page.tlf')
 
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf')
-
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'ambulatory.tlf'), id: :other_page
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf'), :default => true
+    
     
     prescription.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
       if report.page_count == 1 && report.list.overflow?
@@ -234,27 +240,35 @@ class PrescriptionsController < ApplicationController
         end
 
         report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(external_order.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(external_order.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(external_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          footer.item(:total_obs).value(external_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+          footer.item(:total_supplies).value(prescription.quantity_ord_supply_lots.count)
+          footer.item(:total_requested).value(prescription.quantity_ord_supply_lots.sum(&:requested_quantity))
+          footer.item(:total_delivered).value(prescription.quantity_ord_supply_lots.sum(&:delivered_quantity))
+          footer.item(:total_obs).value(prescription.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
         end
       end
       
       if report.page_count == 1
-        report.page[:applicant_sector] = external_order.applicant_sector.name
-        report.page[:applicant_establishment] = external_order.applicant_establishment.name
-        report.page[:provider_sector] = external_order.provider_sector.name
-        report.page[:provider_establishment] = external_order.provider_establishment.name
-        report.page[:observations] = external_order.observation
+
+        report.page[:order_type] = prescription.order_type
+        report.page[:prescribed_date] = prescription.prescribed_date.strftime("%d/%m/%Y")
+        report.page[:expiry_date] = prescription.expiry_date.strftime("%d/%m/%Y")
+         
+        report.page[:professional_name] = prescription.professional.fullname
+        report.page[:professional_dni] = prescription.professional.dni
+        report.page[:professional_enrollment] = prescription.professional.enrollment
+        report.page[:professional_phone] = prescription.professional.phone
+
+        report.page[:patien_name] = "#{prescription.patient.first_name} #{prescription.patient.last_name}"
+        report.page[:patien_dni] = prescription.patient.dni
+
       end
     end
     
 
     report.pages.each do |page|
-      page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
-      page[:remit_code] = external_order.remit_code
-      page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
+      page[:title] = 'Receta Digital'
+      page[:remit_code] = prescription.remit_code
+      page[:date_now] = DateTime.now.strftime("%d/%m/%YY")
       page[:page_count] = report.page_count
       page[:sector] = current_user.sector_name
       page[:establishment] = current_user.establishment_name
