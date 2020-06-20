@@ -75,7 +75,7 @@ class PrescriptionsController < ApplicationController
     @prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+Prescription.with_deleted.maximum(:id).to_i.next.to_s
 
     respond_to do |format|
-      if @prescription.save!
+      if @prescription.save
         # Si se entrega la prescripción
         begin
           if dispensing?
@@ -216,7 +216,7 @@ class PrescriptionsController < ApplicationController
   end
 
   def generate_order_report(prescription)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'firs_page.tlf')
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf')
 
     report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf'), :default => true
     
