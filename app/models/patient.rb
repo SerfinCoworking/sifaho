@@ -5,6 +5,7 @@ class Patient < ApplicationRecord
   enum marital_status: { Soltero: 1, Casado: 2, Separado: 3, Divorciado: 4, Viudo: 5, otro: 6 }
 
   # Relaciones
+  belongs_to :patient_type
   belongs_to :address, optional: true
   has_many :prescriptions, -> { with_deleted }, dependent: :destroy
   has_one_attached :avatar
@@ -16,6 +17,7 @@ class Patient < ApplicationRecord
   validates_uniqueness_of :dni
 
   delegate :country_name, :state_name, :city_name, :line, to: :address, prefix: :address
+  delegate :name, to: :patient_type, prefix: :patient_type
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -65,6 +67,10 @@ class Patient < ApplicationRecord
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
+  }
+
+  scope :with_patient_type_id, lambda { |a_patient_type|
+    where('patients.patient_type_id = ?', a_patient_type)
   }
 
   # Método para establecer las opciones del select input del filtro

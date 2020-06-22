@@ -23,6 +23,12 @@
               autocomplete: 'off'
             ) %>
           </div>
+          <div class="col-md-2 col-sm-2">
+            <label>Tipo</label>
+            <%= f.select(:with_patient_type_id,
+              PatientType.all.map{ |type| [type.name.humanize, type.id] },{:include_blank => 'Todos'},
+              { class: "selectpicker show-tick", "data-width"=>"100%"}) %>
+          </div>
           <div class="col-md-3 col-sm-3">
             <label>Ordenar por</label>
             <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>

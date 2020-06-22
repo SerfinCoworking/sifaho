@@ -8,7 +8,7 @@
       </span>
     </td>
     <td>
-      <%= patient.birthdate.present? ? patient.birthdate.strftime("%d/%m/%Y")  : '----' %>
+      <%= patient.patient_type_name %>
     </td>
     <td><%= patient.age_string %></td>
     <% @count_pres = patient.prescriptions.count %>

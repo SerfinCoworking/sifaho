@@ -5,7 +5,8 @@
     <div class="panel panel-default">
       <div class="panel-heading hidden-print">
         <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo paciente
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> 
+          Viendo paciente <%= @patient.patient_type_name.downcase %>
           <%= link_to patients_path, class: 'btn pull-right close-btn',
             :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>

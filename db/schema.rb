@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_09_003427) do
+ActiveRecord::Schema.define(version: 2020_06_22_180807) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -118,6 +117,13 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
     t.datetime "updated_at", null: false
     t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
     t.index ["service_id"], name: "index_beds_on_service_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cities", force: :cascade do |t|
@@ -376,8 +382,10 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "address_id"
+    t.bigint "patient_type_id", default: 1
     t.index ["address_id"], name: "index_patients_on_address_id"
     t.index ["andes_id"], name: "index_patients_on_andes_id"
+    t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
   create_table "permission_requests", force: :cascade do |t|
@@ -440,7 +448,6 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
 
   create_table "products", force: :cascade do |t|
     t.bigint "unity_id"
-    t.bigint "area_id"
     t.string "code"
     t.string "name"
     t.text "description"
@@ -448,7 +455,6 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
@@ -564,7 +570,6 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "complexity_level"
     t.integer "user_sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -679,7 +684,6 @@ ActiveRecord::Schema.define(version: 2020_06_09_003427) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
-  add_foreign_key "products", "areas"
   add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
