@@ -244,7 +244,7 @@ class PrescriptionsController < ApplicationController
 
         report.page[:order_type] = prescription.order_type
         report.page[:prescribed_date] = prescription.prescribed_date.strftime("%d/%m/%Y")
-        report.page[:expiry_date] = prescription.expiry_date.strftime("%d/%m/%Y")
+        report.page[:expiry_date] = prescription.expiry_date.present? ? prescription.expiry_date.strftime("%d/%m/%Y") : "---"
          
         report.page[:professional_name] = prescription.professional.fullname
         report.page[:professional_dni] = prescription.professional.dni
