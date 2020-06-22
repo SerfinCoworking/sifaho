@@ -36,10 +36,10 @@ class PrescriptionsController < ApplicationController
       format.html
       format.js
       format.pdf do
-        send_data generate_order_report(@prescription)
-        #  filename: 'Prescripcion_'+@prescription.remit_code+'.pdf',
-        #  type: 'application/pdf',
-        #  disposition: 'inline'
+        send_data generate_order_report(@prescription),
+        filename: 'Rec_amb_'+@prescription.patient_last_name+'.pdf',
+        type: 'application/pdf',
+        disposition: 'inline'
       end
     end
   end
