@@ -10,8 +10,8 @@
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
         <% end %>
-        <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
-          :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= link_to prescription_path(format: 'pdf'), class: 'btn print-btn pull-right',  
+          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
           <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
         <% end %>
       </h3>
