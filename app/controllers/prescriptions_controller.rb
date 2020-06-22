@@ -220,8 +220,13 @@ class PrescriptionsController < ApplicationController
 
     report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf'), :default => true
     
-    
-    prescription.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
+    if prescription.cronica?
+      supply_relations = prescription.quantity_ord_supply_lots.sin_entregar.joins(:supply).order("name")
+    else
+      supply_relations = prescription.quantity_ord_supply_lots.joins(:supply).order("name")
+    end
+  
+    supply_relations.each do |qosl|
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page layout: :other_page do |page|
         end
