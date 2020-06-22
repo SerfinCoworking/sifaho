@@ -4,7 +4,7 @@ class MigratePatientTypeDependingPrescriptions < ActiveRecord::Migration[5.2]
     Patient.find_each do |patient|
       if patient.prescriptions.where(order_type: 1).present?
         patient.patient_type = cronic_patient_type
-        patient.save!
+        patient.save(validate: false)
       end
     end
   end

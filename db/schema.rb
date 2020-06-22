@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_06_22_185425) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -475,8 +476,8 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.boolean "is_active", default: true
     t.string "docket", limit: 10
     t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.bigint "professional_type_id", default: 5
     t.index ["professional_type_id"], name: "index_professionals_on_professional_type_id"
     t.index ["user_id"], name: "index_professionals_on_user_id"
@@ -570,6 +571,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.integer "complexity_level"
     t.integer "user_sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -605,8 +607,8 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.integer "quantity_alarm"
     t.integer "period_control"
     t.boolean "is_active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.bigint "supply_area_id"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_supplies_on_deleted_at"
