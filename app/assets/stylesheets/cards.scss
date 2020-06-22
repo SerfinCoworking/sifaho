@@ -1,0 +1,17 @@
+.card{
+  .card-header{
+    @media(min-width: 1200px) and (max-width: 1480px){
+     padding: 0.1rem 1.25rem; 
+    }
+  }
+  .card-body{
+    @media(min-width: 1200px) and (max-width: 1480px){
+      padding: 0.5rem 1.25rem;
+     }
+  }
+  .card-footer{
+    @media(min-width: 1200px) and (max-width: 1480px){
+      padding: 0.5rem 1.25rem; 
+     }
+  }
+}
