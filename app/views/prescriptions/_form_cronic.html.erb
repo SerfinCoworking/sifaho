@@ -87,31 +87,58 @@
           :input_html => { :cols => 30  , :rows => 1 } %>
         </div>
       </div>
-    </div>
-    <div class="col-md-6 hidden" id="non-pres">
-      <div class="panel panel-info">
-          <div class="panel-heading">Aún no tiene prescripciones.</div>
+    </div>    
+    <div class="col-md-6">  
+      <div class="col-md-12 hidden" id="non-os">
+        <div class="panel panel-info">
+            <div class="panel-heading">No posee obra social.</div>
+        </div>
       </div>
-    </div>
-    <div class='col-md-6 hidden' id="pat-pres">
-      <div class="row panel-pres">
-        <div class="col-md-12">
-          <div class="panel panel-info">
-            <!-- Default panel contents -->
-            <div class="panel-heading">Últimas prescripciones</div>
-            <table class="table table-hover table-condensed">
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Profesional</th>
-                  <th>Ins</th>
-                  <th>Estado</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody id="pat-pres-body">
-              </tbody>
-            </table>
+      <div class='col-md-12 hidden' id="pat-os">
+        <div class="row panel-pres">
+          <div class="col-md-12">
+            <div class="panel panel-info">
+              <!-- Default panel contents -->
+              <table class="table table-condensed">
+                <thead>
+                  <tr class="info">
+                    <th>Financiador</th>
+                    <th>Código</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-os-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 hidden" id="non-pres">
+        <div class="panel panel-info">
+            <div class="panel-heading">Aún no tiene prescripciones.</div>
+        </div>
+      </div>
+      <div class='col-md-12 hidden' id="pat-pres">
+        <div class="row panel-pres">
+          <div class="col-md-12">
+            <div class="panel panel-info">
+              <!-- Default panel contents -->
+              <div class="panel-heading">Últimas prescripciones</div>
+              <table class="table table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Profesional</th>
+                    <th>Ins</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-pres-body">
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

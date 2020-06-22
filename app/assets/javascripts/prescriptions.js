@@ -112,7 +112,6 @@ $(document).on('turbolinks:load', function() {
           type: 'GET',
           data: {
             dni: ui.item.dni,
-            periodo: "2019-09-01",
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
@@ -127,11 +126,12 @@ $(document).on('turbolinks:load', function() {
               $("#pat-os-body").html("");
               for(var i in data)
               {
+                var momentDate = moment(data[i].version)
                 $("#pat-os-body").append(
                   "<tr>"+
                     '<td>'+data[i].financiador+'</td>'+
                     '<td class="pres-col-pro">'+data[i].codigoFinanciador+'</td>'+
-                    '<td>'+data[i].version+'</td>'+
+                    '<td>'+momentDate.format("DD/MM/YYYY")+'</td>'+
                   "</tr>"
                 );
               }
