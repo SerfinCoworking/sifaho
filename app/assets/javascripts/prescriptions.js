@@ -112,7 +112,6 @@ $(document).on('turbolinks:load', function() {
           type: 'GET',
           data: {
             dni: ui.item.dni,
-            periodo: "2019-09-01",
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
