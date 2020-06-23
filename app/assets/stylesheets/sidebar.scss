@@ -3,120 +3,111 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
  */
- @import 'variables';
- body {
+@import 'variables';
+body {
     overflow-x: hidden;
-  }
+}
 
 #wrapper{
-    position: absolute;
-    width: 100%;
-    //   sidebar
-    #sidebar-wrapper {
-        transition: margin .3s ease-out .1s;
-        margin-left: 0;
-        width: $sidebar-width-visible;
-
-        
-
-
-        .list-custom.active{
-            border-color: lightgray!important;
-            background-color: lightgray!important;
-            color: black!important;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    &.toggled{
+        #wrapper-2 > #sidebar-wrapper{
+            width: $sidebar-width-hidden!important;
+            .list-group-item{
+                &.profile-link > .img-container > img{
+                    height: 30px!important;
+                    width: 30px!important;
+                }
+            }
+            .list-group-item > .sb-title{
+                opacity: 0;
+            }
         }
+        #page-content-wrapper{
+            width: calc(100% - #{$sidebar-width-hidden})!important;
+        }
+    }
 
-        .list-group {
-            width: 100%;
-
+    &.toggled > #wrapper-2 > #sidebar-wrapper:hover{
+        width: $sidebar-width-visible!important;
+        .list-group-item{
+            &.profile-link > .img-container > img{
+                height: 35px!important;
+                width: 35px!important;
+            }
+        }
+        .list-group-item > .sb-title{
+            opacity: 1;
+        }
+    }
+    &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
+        width: calc(100% - #{$sidebar-width-visible})!important;
+    }
+    #wrapper-2{
+        width: 100%;
+        height: 100%;
+        #sidebar-wrapper{
+            transition: width 0.35s ease-out;
+            width: $sidebar-width-visible;
+            height: 100%;
             overflow-y: auto;
-        height: calc(100vh - #{$navbar-heigth});
-        @media(min-width: 1200px) and (max-width: 1480px){
-            height: calc(100vh - #{$navbar-heigth-bml});
-        }
-        direction: rtl; 
-        // direction: ltr;
-
-        &::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        /* Track */
-        &::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        /* Handle */
-        &::-webkit-scrollbar-thumb {
-            background: #888;
-            // display: none;
-        }
-
-        /* Handle on hover */
-        &::-webkit-scrollbar-thumb:hover {
-            background: #555;
-            display: block;
-        }
+            overflow-x: hidden;
+            direction: rtl;
+            /* width */
+            &::-webkit-scrollbar {
+                width: 3px;
+            }
+            
+            /* Track */
+            &::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                background: #888;
+            }
+            
+            /* Handle on hover */
+            &::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
 
             .list-group-item{
-                position: relative;
-                padding: 12px 0;
-                left: 0;
-                transition: left .3s ease-out .1s;
-                z-index: 100;
+                white-space: nowrap;
+                direction: ltr;
+                padding: 5px calc(((#{$sidebar-width-hidden} - 3px) - 17px) / 2);
+
+                &.profile-link{
+                    padding: 5px 3px;
+                    .img-container > img{
+                        height: 35px;
+                        width: 35px;
+                        transition: width 0.35s ease-out, height 0.35s ease-out;
+                    }
+                }
+                &.active{
+                    background-color: lightgray!important;
+                    border-color: lightgray!important;
+                    color: black!important;
+                }
                 .sb-icon{
-                    position: absolute;
-                    left: 1.25rem;
-                    transition: left .3s ease-out .1s;
+                    width: 17px;
                 }
 
                 .sb-title{
-                    margin-left: calc(1.25rem + 30px);
+                    transition: opacity 0.35s ease-out;
                     opacity: 1;
-                    transition: opacity .15s ease-in;
                 }
             }
         }
-
-    }
-
-    //   content
-    #page-content-wrapper {
-        width: calc(100% - #{$sidebar-width-visible});
-        transition: width .3s ease-out .1s;
-
-        &.full-width{
-            width: 100%;
+        #page-content-wrapper{
+            transition: width 0.35s ease-out;
+            width: calc(100% - #{$sidebar-width-visible});
         }
     }
-
-    &.toggled{
-        #sidebar-wrapper {
-            margin-left: -$sidebar-width-hidden;
-            .list-group .list-group-item .sb-icon{
-                left: calc(100% - #{$sidebar-icon-position});
-            }
-
-            .list-group .list-group-item .sb-title{
-                opacity: 0;
-            }
-
-            .list-group .list-group-item:hover{
-                left: calc(100% - 13.8%);
-            }
-
-            .list-group .list-group-item:hover .sb-icon{
-                left: 3.5%;
-            }
-
-            .list-group .list-group-item:hover .sb-title{
-                opacity: 1;
-            }
-        }
-
-        #page-content-wrapper {
-            width: calc(100% - (#{$sidebar-width-visible} - #{$sidebar-width-hidden}));
-        }
-    }
-
 }
+
+

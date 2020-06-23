@@ -1,9 +1,17 @@
 
-<!-- Sidebar -->
-<div class="bg-light border-right navbar-light" id="sidebar-wrapper">
+<div id="sidebar-wrapper">
 
-  <!--Menu list-->
-  <div class="list-group list-group-flush">
+  <div class="link-group">
+    <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light profile-link #{active_class('welcome')}" do %>
+      <span class="img-container">
+        <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
+      </span>
+      <span class="sb-title">
+        <%= current_user.full_name %>
+      </span>
+      
+    <% end %>
+    
     <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
       <span class="sb-icon">
         <%= fa_icon "home" %>
