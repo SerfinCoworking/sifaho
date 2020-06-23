@@ -31,7 +31,6 @@ html {
 
 body{
   background-color: #303030;
-  font-size: 12px;
 }
 
 @font-face {
@@ -66,7 +65,7 @@ body{
 
 // barra navegación principal
 .navbar{
-  padding: 8px 16px 8px 0;
+  padding: 8px 16px 8px 3px;
   height: $navbar-heigth;
   @media(min-width: 1200px) and (max-width: 1480px){
     height: $navbar-heigth-bml;
