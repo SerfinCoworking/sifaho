@@ -1,10 +1,18 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('statistics') %> non-sel" id="page-title">
-    <%= link_to statistics_external_orders_path, class: 'nav-link' do %>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to establishments_path, class: 'nav-link' do %>
       <%= fa_icon "hospital" %>
       Establecimientos
     <% end %>
   </li>
+
+  <li class="nav-item <%= active_action('new') %> non-sel">
+    <%= link_to new_establishment_path, class: 'nav-link' do %>
+      <%= fa_icon "plus"%>
+      Agregar
+    <% end %>
+  </li>
+
   <li class="nav-item <%= active_action('applicant_index') %> non-sel">
     <%= link_to applicant_index_external_orders_path, class: 'nav-link' do %>
       <%= fa_icon "inbox" %>

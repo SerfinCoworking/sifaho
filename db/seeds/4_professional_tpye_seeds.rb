@@ -1,0 +1,5 @@
+ProfessionalType.create(name: "Pediatría")
+ProfessionalType.create(name: "Kinesiólogo")
+ProfessionalType.create(name: "Psiquiatría")
+ProfessionalType.create(name: "Oncólogo")
+ProfessionalType.create(name: "Médico")

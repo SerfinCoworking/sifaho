@@ -1,19 +1,44 @@
-<%= simple_form_for @professional, remote: true, html: {role: 'check-modified'} do |f| %>
-  <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
-  <%= f.error_notification %>
-  <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
-  <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
-  <%= f.input :dni, placeholder: '12345678', required: false, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
-  <%= f.input :professional_type_id,
-    label: false,
-    label_method: :name,
-    value_method: :id,
-    collection: @professional_types,
-    include_blank: false,
-    input_html: { class: 'chosen-select'},
-    prompt: 'Seleccione una especialidad'
-  %>
-  <%= f.label :is_active, 'Estado' %>
-  <%= f.hidden_field :is_active, id: "is_active", label: 'Estado', value: "#{@professional.is_active unless @professional.new_record?}" %>
-  <input type="checkbox" name="my-checkbox">
-<% end %>
+<div class="card">
+  <div class="card-header <%= @professional.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon (@professional.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @professional.new_record? ? "Agregar nuevo médico" : "Editar médico" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @professional.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body" id="panel-body-new">
+
+    <%= simple_form_for @professional, remote: true, html: {role: 'check-modified'} do |f| %>
+      <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
+      <%= f.error_notification %>
+      <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
+      <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
+      <%= f.input :dni, placeholder: '12345678', required: false, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
+      <%= f.input :professional_type_id,
+        label: 'Especialidad',
+        label_method: :name,
+        value_method: :id,
+        collection: @professional_types,
+        include_blank: false,
+        input_html: { class: 'selectpicker custom-select-pick'},
+        prompt: 'Seleccione una especialidad'
+      %>
+
+      <%= f.label :is_active, 'Estado' %>
+      <%= f.hidden_field :is_active, id: "is_active", label: 'Estado', value: "#{@professional.is_active unless @professional.new_record?}" %>
+      <input type="checkbox" name="my-checkbox">
+    <% end %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', professionals_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @professional.new_record? ? 'new_professional' : 'edit_professional_' + @professional.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
