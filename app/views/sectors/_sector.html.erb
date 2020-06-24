@@ -5,21 +5,20 @@
 
     <td class="text-center actions-col">
       <% if policy(sector).show? %>
-        <%= link_to sector_path(sector), class: 'btn btn-light btn-sm',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "eye" %>
+        <%= link_to sector_path(sector), class: 'btn btn-secondary btn-sm',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "eye" %>
         <% end %>
       <% end %>
       <% if policy(sector).edit? %>
         <%= link_to edit_sector_path(sector), class: 'btn btn-warning btn-sm',
-              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "pen" %>
+            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "pen" %>
         <% end %>
       <% end %>
-
       <% if policy(sector).destroy? %>
         <%= link_to delete_sector_path(sector), remote: true,
-              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "trash" %>
         <% end %>
       <% end %>

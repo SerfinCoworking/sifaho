@@ -141,7 +141,7 @@
   </div>
   <!-- Insumos solicitados -->
   <div class="card">
-    <table class="table table-condensed table-hover table-sm">
+    <table class="table table-hover table-sm mb-0">
       <thead>
         <tr>
           <th>Cód</th>
@@ -166,14 +166,10 @@
         <% end %>
       </tbody>
     </table>
-  </div>
-  <div class="links" id="links-quant-form">
-    <div class="text-center">
-      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary',
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary',
       data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= fa_icon "plus" %>
-          Agregar insumo solicitado
-      <% end %>
-    </div>
+      <%= fa_icon "plus" %>
+      Agregar insumo solicitado
+    <% end %>
   </div>
 <% end %>

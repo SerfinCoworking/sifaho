@@ -1,7 +1,7 @@
 <% content_for :page_header do %>
   <% if policy(Sector).index? %>
     <li class="nav-item non-sel">
-      <%= link_to sectors_path, class: 'nav-link' do %>
+      <%= link_to sectors_path, class: "nav-link #{active_action_and_controller('index', 'sectors')}" do %>
         <%= fa_icon "bezier-curve" %>
         Sectores
       <% end %>
@@ -10,7 +10,7 @@
 
   <% if policy(Sector).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_sector_path, class: 'nav-link' do %>
+      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')}" do %>
         <%= fa_icon "plus" %>
         Crear sector
       <% end %>

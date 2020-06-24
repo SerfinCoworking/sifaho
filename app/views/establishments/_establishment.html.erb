@@ -6,20 +6,20 @@
     <td><%= establishment.domicile %></td>
     <td class="text-center actions-col">
       <% if policy(establishment).show? %>
-        <%= link_to establishment_path(establishment), class: 'btn btn-light btn-sm',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "eye" %>
+        <%= link_to establishment_path(establishment), class: 'btn btn-secondary btn-sm',
+          title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "eye" %>
         <% end %>
       <% end %>
       <% if policy(establishment).edit? %>
         <%= link_to edit_establishment_path(establishment), class: 'btn btn-warning btn-sm',
-              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "pen" %>
+          title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "pen" %>
         <% end %>
       <% end %>
       <% if policy(establishment).destroy? %>
         <%= link_to delete_establishment_path(establishment), remote: true,
-              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "trash" %>
         <% end %>
       <% end %>
