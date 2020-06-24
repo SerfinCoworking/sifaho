@@ -7,7 +7,7 @@
       :input_html => {
         required: true,
         include_blank: false,
-        class: 'selectpicker',
+        class: 'selectpicker-md',
         "data-width"=>"100%",
         "data-size"=>"10",
         value: "#{ f.object.phone_type }"
@@ -18,9 +18,9 @@
     <%= f.input :number, label: false, :input_html => { class: "input-sm"} %>
   </td>
   <td>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+      <%= fa_icon "minus" %>
     <% end %>
   </td>
 </tr>

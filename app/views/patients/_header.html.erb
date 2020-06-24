@@ -2,13 +2,13 @@
   <li class="nav-item <%= active_action('index') %> non-sel">
     <%= link_to patients_path, class: 'nav-link' do %>
       <%= fa_icon "user-injured" %>
-      Médicos
+      Pacientes
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new') %> non-sel">
     <%= link_to new_patient_path, class: 'nav-link' do %>
       <%= fa_icon "plus" %>
-      Agregar médico
+      Agregar temporal
     <% end %>
   </li>
 <% end %>

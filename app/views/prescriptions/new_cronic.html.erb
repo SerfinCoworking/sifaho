@@ -1,13 +1,13 @@
 <%= render 'header' %>
 
 <div class="card">
-  <div class="card-header">
-    <h4>
+  <div class="card-header bg-primary text-white">
+    <h5 class="card-title mb-0">
       <%= fa_icon "plus" %> Nueva receta <strong>crónica</strong>
-      <%= link_to prescriptions_path, class: 'btn float-right p-0' do %>
+      <%= link_to prescriptions_path, class: 'btn float-right p-0 text-white' do %>
         <%= fa_icon "times" %>
       <% end %>
-    </h4>
+    </h5>
   </div>
   <div class="card-body" id="panel-body-new">
     <%= render 'form_cronic', prescription: @prescription %>

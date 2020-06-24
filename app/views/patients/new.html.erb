@@ -1,24 +1,21 @@
 <%= render 'header' %>
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo paciente temporal
-          <%= link_to :back, class: 'btn pull-right close-btn' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
-      </div>
-      <div class="panel-body" id="panel-body-new">
-        <%= render 'form', patient: @patient %>
-      </div>
-      <div class="panel-footer text-right">
-        <%= link_to 'Volver', patients_path, class: 'btn' %>
-        <button type='submit' name='commit' class='btn btn-success' form='new_patient'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
-        </button>
-      </div>
-    </div>
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h5 class="card-title">
+      <%= fa_icon "plus" %> Nuevo paciente temporal
+      <%= link_to :back, class: 'btn float-right text-white' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </h5>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <%= render 'form', patient: @patient %>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', patients_path, class: 'btn btn-light mr-1' %>
+    <button type='submit' name='commit' class='btn btn-primary' form='new_patient'>
+      <%= fa_icon "plus" %> Crear
+    </button>
   </div>
 </div>

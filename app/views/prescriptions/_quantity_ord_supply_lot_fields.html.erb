@@ -64,9 +64,9 @@
   </td>
   <td colspan="2">
     <% if f.object.supply_id.present? && @stock > 0 %>
-      <%= button_tag type: 'button', class: 'btn btn-xs search-lots',
+      <%= button_tag type: 'button', class: 'btn btn-sm search-lots',
         title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+        <%= fa_icon "search" %>
       <% end %>
     <% end %>
     <% if f.object.sector_supply_lot_id.present? %>
