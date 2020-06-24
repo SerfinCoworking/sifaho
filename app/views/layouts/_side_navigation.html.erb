@@ -1,14 +1,22 @@
 
-<!-- Sidebar -->
-<div class="bg-light border-right navbar-light" id="sidebar-wrapper">
+<div id="sidebar-wrapper">
 
-  <!--Menu list-->
-  <div class="list-group list-group-flush">
+  <div class="link-group">
+    <%= link_to main_app.profile_path(current_user.profile), class: "list-group-item list-group-item-action list-custom bg-light profile-link #{active_class('edit_profile')}" do %>
+      <span class="img-container">
+        <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
+      </span>
+      <span class="ml-2 sb-title">
+        <%= current_user.full_name.capitalize %>
+      </span>
+
+    <% end %>
+
     <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
       <span class="sb-icon">
         <%= fa_icon "home" %>
       </span>
-      <span class="sb-title">Inicio</span>
+      <span class="ml-2 sb-title">Inicio</span>
     <% end %>
 
     <% if policy(Prescription).index? %>
@@ -16,7 +24,7 @@
         <span class="sb-icon">
           <%= fa_icon "signature" %>
         </span>
-        <span class="sb-title">Recetas</span>
+        <span class="ml-2 sb-title">Recetas</span>
       <% end %>
     <% end %>
 
@@ -25,25 +33,25 @@
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
         </span>
-        <span class="sb-title">Internación</span>
+        <span class="ml-2 sb-title">Internación</span>
       <% end %>
     <% end %>
 
-    <% if policy(InternalOrder).index? %>
-      <%= link_to main_app.applicant_index_internal_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
+    <% if policy(Sector).index? %>
+      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('internal_orders')}" do %>
         <span class="sb-icon">
           <%= fa_icon "bezier-curve" %>
         </span>
-        <span class="sb-title">Sectores</span>
+        <span class="ml-2 sb-title">Sectores</span>
       <% end %>
     <% end %>
 
-    <% if policy(ExternalOrder).index? %>
-      <%= link_to main_app.applicant_index_external_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('external_orders')}" do %>
+    <% if policy(Establishment).index? %>
+      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('external_orders')}" do %>
         <span class="sb-icon">
           <%= fa_icon "hospital"%>
         </span>
-        <span class="sb-title">Establecimientos</span>
+        <span class="ml-2 sb-title">Establecimientos</span>
       <% end %>
     <% end %>
 
@@ -52,7 +60,7 @@
         <span class="sb-icon">
           <%= fa_icon "cubes" %>
         </span>
-        <span class="sb-title">Stock a migrar</span>
+        <span class="ml-2 sb-title">Stock a migrar</span>
       <% end %>
     <% end %>
 
@@ -61,7 +69,7 @@
         <span class="sb-icon">
           <%= fa_icon "cubes" %>
         </span>
-        <span class="sb-title">Stock</span>
+        <span class="ml-2 sb-title">Stock</span>
       <% end %>
     <% end %>
 
@@ -70,7 +78,7 @@
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>
-        <span class="sb-title">Lotes Provincia</span>
+        <span class="ml-2 sb-title">Lotes Provincia</span>
       <% end %>
     <% end %>
 
@@ -79,7 +87,7 @@
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>
-        <span class="sb-title">Lotes (a migrar)</span>
+        <span class="ml-2 sb-title">Lotes (a migrar)</span>
       <% end %>
     <% end %>
 
@@ -88,7 +96,7 @@
         <span class="sb-icon">
           <%= fa_icon "pills" %>
         </span>
-        <span class="sb-title">Productos</span>
+        <span class="ml-2 sb-title">Productos</span>
       <% end %>
     <% end %>
 
@@ -97,7 +105,7 @@
         <span class="sb-icon">
           <%= fa_icon "pills" %>
         </span>
-        <span class="sb-title">Productos (a migrar)</span>
+        <span class="ml-2 sb-title">Productos (a migrar)</span>
       <% end %>
     <% end %>
 
@@ -106,7 +114,7 @@
         <span class="sb-icon">
           <%= fa_icon "user-md" %>
         </span>
-        <span class="sb-title">Médicos</span>
+        <span class="ml-2 sb-title">Médicos</span>
       <% end %>
     <% end %>
 
@@ -115,7 +123,7 @@
         <span class="sb-icon">
           <%= fa_icon "user-injured" %>
         </span>
-        <span class="sb-title">Pacientes</span>
+        <span class="ml-2 sb-title">Pacientes</span>
       <% end %>
     <% end %>
 
@@ -124,7 +132,7 @@
         <span class="sb-icon">
           <%= fa_icon "vial" %>
         </span>
-        <span class="sb-title">Laboratorios</span>
+        <span class="ml-2 sb-title">Laboratorios</span>
       <% end %>
     <% end %>
 
@@ -133,18 +141,8 @@
         <span class="sb-icon">
           <%= fa_icon "users" %>
         </span>
-        <span class="sb-title">Usuarios</span>
+        <span class="ml-2 sb-title">Usuarios</span>
       <% end %>
     <% end %>
-
-    <% if policy(Establishment).index? %>
-      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')}" do %>
-        <span class="sb-icon">
-          <%= fa_icon "hospital" %>
-        </span>
-        <span class="sb-title">Establecimientos</span>
-      <% end %>
-    <% end %>
-
   </div>
 </div>

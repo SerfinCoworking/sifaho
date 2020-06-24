@@ -71,12 +71,12 @@ class EstablishmentsController < ApplicationController
   # DELETE /establishments/1
   # DELETE /establishments/1.json
   def destroy
-    # establishment_name = @establishment.name
-    # @establishment.destroy
-    # respond_to do |format|
-    #   flash.now[:success] = "El establecimiento "+establishment_name+" se ha eliminado correctamente."
-    #   format.js
-    # end
+    establishment_name = @establishment.name
+    @establishment.destroy
+    respond_to do |format|
+      flash.now[:success] = "El establecimiento "+establishment_name+" se ha eliminado correctamente."
+      format.js
+    end
   end
 
   # GET /establishment/1/delete
@@ -104,7 +104,6 @@ class EstablishmentsController < ApplicationController
       :name,
       :cuit,
       :email,
-      :sectors_count,
       :domicile,
       :phone
     )

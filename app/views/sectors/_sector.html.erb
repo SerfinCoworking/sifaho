@@ -1,6 +1,7 @@
 <tr id="sectors_<%= sector.id %>">
   <div class="js-fade fade-in is-paused">
     <td><%= sector.name %></td>
+    <td><%= sector.establishment.name %></td>
 
     <td class="text-center actions-col">
       <% if policy(sector).show? %>

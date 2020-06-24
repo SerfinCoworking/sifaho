@@ -13,19 +13,24 @@
     <% end %>
   </div>
 
-  <div class="card-body">
-  <div>
-    <%= @sector.name %>
-  </div>
-  <div>
-    <%= @sector.establishment.name %>
-  </div>
-  <div>
-    <%= @sector.description %>
+
+  <div id="panel-body-new">
+    <div class="card mb-4">
+      <div class="card-body">
+          <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @sector.establishment.name %> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @sector.description %></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <%= render 'shared/users_table', users: @sector.users %>
+    </div>
   </div>
 
-  </div>
-  <div class="card-footer">
+
+  <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', sectors_path, class: "btn" %>
   </div>
 </div>

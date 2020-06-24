@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0 ml-2">Usuarios</h5>
+    <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de usuarios"><%= users.count %></span>
+  </div>
+  <div class="card-body pl-0 pr-0">
+    <div class="users-list-table">
+      <% users.each do |user| %>
+        <div class="w-users-list-item">
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="text-center">
+                <%= image_tag user_avatar(user, 50), class:"img-circle w-100 h-100" %>
+
+              </div>
+
+            </div>
+            <div class="card-header">
+              <h5 class="card-title"><%= user.profile.first_name%></h5>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,21 +1,48 @@
-<%= render 'header' %>
+<%= render 'external_orders/header' %>
 
 <div class="card">
-  <div class="card-header">
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo establecimiento <%= @establishment.name %>
-    <%= link_to establishments_path, class: 'btn pull-right close-btn',
-      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo establecimiento <%= @establishment.name %>
+      </h5>
+    </div>
+    <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
     <% end %>
   </div>
-  <div class="card-body">
-    <%= @establishment.name %>
-    <%# sectores de un establecimiento %>
-    <% @establishment.sectors.each do |sector| %>
-    <li class="list-group-item"><%= sector.name %></li>
-    <% end %>
+
+
+  <div id="panel-body-new">
+    <div class="card mb-4">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
+          <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
+        </ul>
+      </div>
+    </div>
+
+
+
+    <div class="card-body">
+
+      <%# sectores de un establecimiento %>
+      <div class="row h-row-custom">
+        <div class="col-4 mh-col-custom">
+          <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
+        </div>
+        <div class="col-8 mh-col-custom">
+          <%= render 'shared/users_table', users: @establishment.users %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="card-footer">
+  <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', establishments_path, class: "btn" %>
   </div>
 </div>

@@ -9,11 +9,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def change_sector?
-    record.sectors.count > 1 && self.update? 
+    record.sectors.count > 1 && self.update?
   end
 
   def edit_permissions?
-    self.update? 
+    self.update?
   end
 
   def update_permissions?
@@ -22,7 +22,7 @@ class UserPolicy < ApplicationPolicy
     elsif record.has_role? :admin
       return false
     else
-      update_permissions.any? { |role| user.has_role?(role) }     
+      update_permissions.any? { |role| user.has_role?(role) }
     end
   end
 
@@ -30,6 +30,9 @@ class UserPolicy < ApplicationPolicy
     self.update_permissions?
   end
 
+  def show_establishment?
+    record.has_role?(:admin)
+  end
 
   private
 
