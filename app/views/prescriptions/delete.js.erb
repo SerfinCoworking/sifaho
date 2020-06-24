@@ -1,8 +1,8 @@
 // Style modal
-$('.modal-content').addClass('panel-danger');
+$('.modal-header').addClass('bg-danger text-white');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Enviar a papelera");
+$('.modal-title').html("<i class='fa fa-trash'></i>  Enviar a papelera");
 
 // Render the edit form
 $('.modal-body').html('Esta seguro que desea enviar a la papelera la prescripción de <%= @prescription.professional.full_name %>?');
@@ -18,5 +18,5 @@ $('#dialog').modal("show");
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-danger');
+  $('.modal-header').removeClass('bg-danger text-white');
 });
