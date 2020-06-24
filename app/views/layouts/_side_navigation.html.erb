@@ -2,7 +2,7 @@
 <div id="sidebar-wrapper">
 
   <div class="link-group">
-    <%= link_to main_app.edit_profile_path(current_user), class: "list-group-item list-group-item-action list-custom bg-light profile-link #{active_class('edit_profile')}" do %>
+    <%= link_to main_app.profile_path(current_user.profile), class: "list-group-item list-group-item-action list-custom bg-light profile-link #{active_class('edit_profile')}" do %>
       <span class="img-container">
         <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
       </span>

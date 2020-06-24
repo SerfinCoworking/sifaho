@@ -22,7 +22,7 @@ body {
                 }
             }
             .list-group-item > .sb-title{
-                opacity: 0;
+                opacity: 0!important;
             }
         }
         #page-content-wrapper{
@@ -39,7 +39,7 @@ body {
             }
         }
         .list-group-item > .sb-title{
-            opacity: 1;
+            opacity: 1!important;
         }
     }
     &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
@@ -81,7 +81,7 @@ body {
                 .list-group-item{
                     white-space: nowrap;
                     direction: ltr;
-                    padding: 5px calc(((#{$sidebar-width-hidden} - 3px) - 17px) / 2);
+                    padding: 5px calc((#{$sidebar-width-hidden} - 17px) / 2);
 
                     &.profile-link{
                         padding: 5px 3px;
