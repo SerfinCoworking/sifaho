@@ -1,24 +1,52 @@
-<%= simple_form_for @profile, remote: true, html: {class: "", role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class='container-fluid'>
-    <div class="row">
-      <div class="col-md-6">
-        <%= image_tag user_avatar(f.object.user, 200), class:"img-thumbnail" %>
-        <%= f.input :avatar %>
-      </div>
-      <div class="col-md-6">
-        <%= f.input :first_name, label: "Nombres", readonly: true %>
-        <%= f.input :last_name, label: "Apellidos", readonly: true %>
-        <%= f.input :dni, placeholder: 'DNI', readonly: true %>
-        <%= f.input :email, placeholder: 'usuario@dominio.com', readonly: true %>
-        <%= f.input :sex, as: :radio_buttons,
-          collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
-          label: "Sexo",
-          label_method: :second,
-          value_method: :first,
-          input_html: {class: "radio"} 
-        %>
-      </div>
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "pen" %>
+      <h5 class="card-title mb-0 ml-2">
+        Editar perfil
+      </h5>
     </div>
+    <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
   </div>
-<% end %>
+  <div class="card-body">
+    
+    <%= simple_form_for @profile, remote: true, html: {class: "", role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class='container-fluid'>
+        <div class="row">
+          <div class="col-md-6">
+            <%= image_tag user_avatar(f.object.user, 200), class:"img-thumbnail" %>
+
+              <%= f.input :avatar %>
+
+          </div>
+          <div class="col-md-6">
+            <%= f.input :first_name, label: "Nombres", readonly: true %>
+            <%= f.input :last_name, label: "Apellidos", readonly: true %>
+            <%= f.input :dni, placeholder: 'DNI', readonly: true %>
+            <%= f.input :email, placeholder: 'usuario@dominio.com', readonly: true %>
+            <%= f.input :sex, as: :radio_buttons,
+              collection: [['masculino', 'Masculino'], ['femenino', 'Femenino']],
+              label: "Sexo",
+              label_method: :second,
+              value_method: :first,
+              input_html: {class: "radio"} 
+            %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', root_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @profile.new_record? ? 'new_profile' : 'edit_profile_' + @profile.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
+
+
+
+

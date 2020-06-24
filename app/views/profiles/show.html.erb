@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Perfil
+      </h5>
+    </div>
+    <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <%= image_tag user_avatar(@profile.user, 200), class:"img-thumbnail" %>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex mb-2">
+          <div class="font-weight-bold mr-2">
+            <%= @profile.first_name %>
+          </div>
+          <div class="font-weight-bold">
+            <%= @profile.last_name %>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <%= @profile.dni %>
+        </div>
+
+        <div class="mb-2">
+          <%= @profile.email %>
+        </div>
+
+        <div class="mb-2">
+          <%= @profile.sex %>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', root_path, class: 'btn mr-2' %>
+    <%= link_to main_app.edit_profile_path(current_user.profile), class: "btn btn-warning" do %>
+      <%= fa_icon 'edit'%>
+      Editar
+    <% end %>
+
+
+
+
