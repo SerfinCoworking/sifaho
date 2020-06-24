@@ -1,10 +1,10 @@
 <%= render 'external_orders/header' %>
 
-<div class="card panel-height">
+<div class="card">
   <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
-      <h5 class="card-title mb-0 ml-2 mr-4">
+      <h5 class="card-title mb-0 ml-2">
         Viendo establecimiento <%= @establishment.name %>
       </h5>
     </div>
@@ -14,29 +14,31 @@
   </div>
 
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
-        <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
-        <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
-        <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
-        <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
-      </ul>
-    </div>
-  </div>
-
-
-
-  <div class="card-body">
-
-    <%# sectores de un establecimiento %>
-    <div class="row h-row-custom">
-      <div class="col-4 mh-col-custom">
-        <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
+  <div id="panel-body-new">
+    <div class="card mb-4">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
+          <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit%> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
+        </ul>
       </div>
-      <div class="col-8 mh-col-custom">
-        <%= render 'shared/users_table', users: @establishment.users %>
+    </div>
+
+
+
+    <div class="card-body">
+
+      <%# sectores de un establecimiento %>
+      <div class="row h-row-custom">
+        <div class="col-4 mh-col-custom">
+          <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
+        </div>
+        <div class="col-8 mh-col-custom">
+          <%= render 'shared/users_table', users: @establishment.users %>
+        </div>
       </div>
     </div>
   </div>

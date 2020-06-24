@@ -1,19 +1,18 @@
-
-
 <div class="card">
-  <div class="card-header d-flex align-items-center justify-content-between">
+  <div class="card-header <%= @sector.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon (@sector.new_record? ?  "plus" : "pen")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @sector.new_record? ? "Crear sector" : "Editar sector" %>
+        <%= @sector.new_record? ? "Agregar sector" : "Editar sector" %>
       </h5>
     </div>
-    <%= link_to :back, class: 'btn pull-right close-btn' do %>
-      <%= fa_icon 'times-circle' %>
+    <%= link_to :back, class: @sector.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body">
-    <%= simple_form_for @sector, html: {class: "", role: 'check-modified'} do |f| %>
+  <div class="card-body" id="panel-body-new">
+
+   <%= simple_form_for @sector, html: {class: "", role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
 
       <div class="row">
@@ -49,14 +48,13 @@
 
       </div>
     <% end %>
+
   </div>
+
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', sectors_path, class: 'btn btn-light mr-1' %>
+    <%= link_to 'Volver', sectors_path, class: 'btn mr-2' %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @sector.new_record? ? 'new_sector' : 'edit_sector_' + @sector.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
   </div>
 </div>
-
-
-

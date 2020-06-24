@@ -1,10 +1,10 @@
 <%= render 'internal_orders/header' %>
 
-<div class="card panel-height">
+<div class="card">
   <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
-      <h5 class="card-title mb-0 ml-2 mr-4">
+      <h5 class="card-title mb-0 ml-2">
         Viendo sector <%= @sector.name %>
       </h5>
     </div>
@@ -14,17 +14,19 @@
   </div>
 
 
-  <div class="card mb-4">
-    <div class="card-body">
-        <ul class="list-group list-group-flush">
-        <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @sector.establishment.name %> </li>
-        <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @sector.description %></li>
-      </ul>
+  <div id="panel-body-new">
+    <div class="card mb-4">
+      <div class="card-body">
+          <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @sector.establishment.name %> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @sector.description %></li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <div class="card-body">
-    <%= render 'shared/users_table', users: @sector.users %>
+    <div class="card-body">
+      <%= render 'shared/users_table', users: @sector.users %>
+    </div>
   </div>
 
 
