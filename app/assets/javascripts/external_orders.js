@@ -202,10 +202,10 @@ $(document).on('change', '.select-change', function() {
           }else {
             var date = "No expira"
           }
-          select.append('<option data-subtext="<span class='+'badge'+'>'+data[i].quant+'</span> '+data[i].lab+' '+date+'" \
+          select.append('<option data-subtext="<span class='+'badge badge-secondary'+'>'+data[i].quant+'</span> '+data[i].lab+' '+date+'" \
           class="bg-'+data[i].status_label+'"  data-lab="'+data[i].lab+'" \
           data-quant="'+data[i].quant+'" data-expiry="'+data[i].expiry_date+'" \
-          value="'+id+'" title="'+data[i].lot_code+' <span class='+'badge'+'>'+data[i].quant+'</span>">'+data[i].lot_code+'</option>');
+          value="'+id+'" title="'+data[i].lot_code+' <span class='+'badge badge-secondary'+'>'+data[i].quant+'</span>">'+data[i].lot_code+'</option>');
         }
         select.prop("disabled", false).selectpicker('refresh');
       } // End if

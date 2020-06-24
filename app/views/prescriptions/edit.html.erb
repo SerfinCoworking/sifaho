@@ -1,34 +1,32 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-warning">
-    <div class="panel-heading">
-      <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> 
-        Auditando prescripción <%= @prescription.ambulatoria? ? 'ambulatoria.' : 'crónica.' %>
-        <% if @prescription.cronica? %>
-          (Dispensación <%= @prescription.cronic_dispensations.to_set.count.next %> de <%= @prescription.times_dispensation %>)
-        <% end %>
-        <%= link_to :back, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
-    </div>
-    <div class="panel-body" id="panel-body-new">
-      <% if @prescription.ambulatoria? %>
-        <%= render 'form', prescription: @prescription %>
-      <% else %>
-        <%= render 'form_cronic', prescription: @prescription %>
+<div class="card">
+  <div class="card-header bg-warning">
+    <h5 class="card-title mb-0">
+      <%= fa_icon "edit" %> Auditando prescripción <%= @prescription.ambulatoria? ? 'ambulatoria' : 'crónica' %>
+      <% if @prescription.cronica? %>
+        (Dispensación <%= @prescription.cronic_dispensations.to_set.count.next %> de <%= @prescription.times_dispensation %>)
       <% end %>
-    </div>
-    <div class="panel-footer text-right">
-        <%= link_to 'Volver', prescriptions_path, class: 'btn' %>
-        <button type='submit' name='commit' class='btn btn-success' form='edit_prescription_<%=@prescription.id%>' value='Solicitante'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
-        </button>
-        <button type='submit' name='commit' class='btn btn-primary' form='edit_prescription_<%=@prescription.id%>' value='Dispensar'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %> Dispensar
-        </button>
-    </div>
+      <%= link_to :back, class: 'btn float-right p-0',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </h5>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <% if @prescription.ambulatoria? %>
+      <%= render 'form', prescription: @prescription %>
+    <% else %>
+      <%= render 'form_cronic', prescription: @prescription %>
+    <% end %>
+  </div>
+  <div class="card-footer text-right">
+      <%= link_to 'Volver', prescriptions_path, class: 'btn' %>
+      <button type='submit' name='commit' class='btn btn-success' form='edit_prescription_<%=@prescription.id%>' value='Solicitante'>
+        <%= fa_icon "save" %> Guardar cambios
+      </button>
+      <button type='submit' name='commit' class='btn btn-primary' form='edit_prescription_<%=@prescription.id%>' value='Dispensar'>
+        <%= fa_icon "paper-plane" %> Dispensar
+      </button>
   </div>
 </div>

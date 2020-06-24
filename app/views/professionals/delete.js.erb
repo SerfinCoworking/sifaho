@@ -1,8 +1,9 @@
 // Add the dialog title
-$('.modal-title').html("<i class='fas fa-trash'></i> Borrando profesional");
+$('.modal-header').addClass("bg-danger text-white");
+$('.modal-title').html("<i class='fas fa-trash'></i> Borrando médico");
 
 // Render the edit form
-$('.modal-body').html('Esta seguro que desea eliminar al profesional <%= @professional.fullname %>?');
+$('.modal-body').html('Esta seguro que desea eliminar al médico <%= @professional.fullname %>?');
 
 // Add form button
 $('.modal-footer').html(
@@ -12,3 +13,7 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-header').removeClass('bg-danger text-white');
+});

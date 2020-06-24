@@ -4,7 +4,7 @@
     <td><%= professional.last_name %></td>
     <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
     <% @count_pres = professional.prescriptions.count %>
-    <td><span class="badge badge-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
+    <td><span class="badge badge-<%=if @count_pres > 0; 'primary'; else; 'secondary'; end%>" ><%= @count_pres %></span></td>
     <td>
       <span class="badge badge-<%= professional.is_active? ? "success" : "danger" %>">
         <%= professional.is_active? ? "Activo" : "Inactivo" %>
