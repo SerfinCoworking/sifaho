@@ -3,10 +3,10 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Perfil
+        Viendo perfil
       </h5>
     </div>
-    <%= link_to establishments_path, class: 'btn pull-right close-btn' do %>
+    <%= link_to root_path, class: 'btn pull-right close-btn' do %>
       <%= fa_icon 'times-circle' %>
     <% end %>
   </div>
@@ -18,28 +18,28 @@
       <div class="col-md-6">
         <div class="d-flex mb-2">
           <div class="font-weight-bold mr-2">
-            <%= @profile.first_name %>
-          </div>
-          <div class="font-weight-bold">
-            <%= @profile.last_name %>
+            <%= @profile.full_name.capitalize %>
           </div>
         </div>
 
         <div class="mb-2">
+          <label class="font-weight-bolder">Dni: </label>
           <%= @profile.dni %>
         </div>
 
         <div class="mb-2">
+          <label class="font-weight-bolder">Email: </label>
           <%= @profile.email %>
         </div>
 
         <div class="mb-2">
+          <label class="font-weight-bolder">Sexo: </label>
           <%= @profile.sex %>
         </div>
-        
+
       </div>
     </div>
-    
+
   </div>
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', root_path, class: 'btn mr-2' %>

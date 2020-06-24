@@ -59,17 +59,17 @@ body {
             &::-webkit-scrollbar {
                 width: 3px;
             }
-            
+
             /* Track */
             &::-webkit-scrollbar-track {
                 background: #f1f1f1;
             }
-            
+
             /* Handle */
             &::-webkit-scrollbar-thumb {
                 background: #888;
             }
-            
+
             /* Handle on hover */
             &::-webkit-scrollbar-thumb:hover {
                 background: #555;
@@ -81,7 +81,7 @@ body {
                 .list-group-item{
                     white-space: nowrap;
                     direction: ltr;
-                    padding: 5px calc((#{$sidebar-width-hidden} - 17px) / 2);
+                    padding: 10px calc((#{$sidebar-width-hidden} - 17px) / 2);
 
                     &.profile-link{
                         padding: 5px 3px;

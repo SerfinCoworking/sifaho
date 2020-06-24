@@ -6,17 +6,17 @@
       <span class="img-container">
         <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
       </span>
-      <span class="sb-title">
-        <%= current_user.full_name %>
+      <span class="ml-2 sb-title">
+        <%= current_user.full_name.capitalize %>
       </span>
-      
+
     <% end %>
-    
+
     <%= link_to root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
       <span class="sb-icon">
         <%= fa_icon "home" %>
       </span>
-      <span class="sb-title">Inicio</span>
+      <span class="ml-2 sb-title">Inicio</span>
     <% end %>
 
     <% if policy(Prescription).index? %>
@@ -24,7 +24,7 @@
         <span class="sb-icon">
           <%= fa_icon "signature" %>
         </span>
-        <span class="sb-title">Recetas</span>
+        <span class="ml-2 sb-title">Recetas</span>
       <% end %>
     <% end %>
 
@@ -33,7 +33,7 @@
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
         </span>
-        <span class="sb-title">Internación</span>
+        <span class="ml-2 sb-title">Internación</span>
       <% end %>
     <% end %>
 
@@ -42,7 +42,7 @@
         <span class="sb-icon">
           <%= fa_icon "bezier-curve" %>
         </span>
-        <span class="sb-title">Sectores</span>
+        <span class="ml-2 sb-title">Sectores</span>
       <% end %>
     <% end %>
 
@@ -51,7 +51,7 @@
         <span class="sb-icon">
           <%= fa_icon "hospital"%>
         </span>
-        <span class="sb-title">Establecimientos</span>
+        <span class="ml-2 sb-title">Establecimientos</span>
       <% end %>
     <% end %>
 
@@ -60,7 +60,7 @@
         <span class="sb-icon">
           <%= fa_icon "cubes" %>
         </span>
-        <span class="sb-title">Stock a migrar</span>
+        <span class="ml-2 sb-title">Stock a migrar</span>
       <% end %>
     <% end %>
 
@@ -69,7 +69,7 @@
         <span class="sb-icon">
           <%= fa_icon "cubes" %>
         </span>
-        <span class="sb-title">Stock</span>
+        <span class="ml-2 sb-title">Stock</span>
       <% end %>
     <% end %>
 
@@ -78,7 +78,7 @@
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>
-        <span class="sb-title">Lotes Provincia</span>
+        <span class="ml-2 sb-title">Lotes Provincia</span>
       <% end %>
     <% end %>
 
@@ -87,7 +87,7 @@
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>
-        <span class="sb-title">Lotes (a migrar)</span>
+        <span class="ml-2 sb-title">Lotes (a migrar)</span>
       <% end %>
     <% end %>
 
@@ -96,7 +96,7 @@
         <span class="sb-icon">
           <%= fa_icon "pills" %>
         </span>
-        <span class="sb-title">Productos</span>
+        <span class="ml-2 sb-title">Productos</span>
       <% end %>
     <% end %>
 
@@ -105,7 +105,7 @@
         <span class="sb-icon">
           <%= fa_icon "pills" %>
         </span>
-        <span class="sb-title">Productos (a migrar)</span>
+        <span class="ml-2 sb-title">Productos (a migrar)</span>
       <% end %>
     <% end %>
 
@@ -114,7 +114,7 @@
         <span class="sb-icon">
           <%= fa_icon "user-md" %>
         </span>
-        <span class="sb-title">Médicos</span>
+        <span class="ml-2 sb-title">Médicos</span>
       <% end %>
     <% end %>
 
@@ -123,7 +123,7 @@
         <span class="sb-icon">
           <%= fa_icon "user-injured" %>
         </span>
-        <span class="sb-title">Pacientes</span>
+        <span class="ml-2 sb-title">Pacientes</span>
       <% end %>
     <% end %>
 
@@ -132,7 +132,7 @@
         <span class="sb-icon">
           <%= fa_icon "vial" %>
         </span>
-        <span class="sb-title">Laboratorios</span>
+        <span class="ml-2 sb-title">Laboratorios</span>
       <% end %>
     <% end %>
 
@@ -141,7 +141,7 @@
         <span class="sb-icon">
           <%= fa_icon "users" %>
         </span>
-        <span class="sb-title">Usuarios</span>
+        <span class="ml-2 sb-title">Usuarios</span>
       <% end %>
     <% end %>
   </div>
