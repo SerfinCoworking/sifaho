@@ -1,4 +1,5 @@
 // Add the dialog title
+$('.modal-header').addClass("bg-danger text-white");
 $('.modal-title').html("<i class='fas fa-trash'></i>  Borrando insumo");
 
 // Render the edit form
@@ -12,3 +13,7 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-header').removeClass('bg-danger text-white');
+});

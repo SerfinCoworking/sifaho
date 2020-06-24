@@ -1,186 +1,178 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading hidden-print">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo <%= @internal_order.order_type %>
-        <%= link_to internal_orders_path, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-        <%= link_to internal_order_path(format: 'pdf'), class: 'btn print-btn pull-right',  
-          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-        <% end %>
-      </h3>
-    </div>
-    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
-    <div class="panel-body" id="panel-body-new">
-      <div class="row">
-        <div class='col-md-2 col-xs-2'>
-          <strong>Sector solicitante:</strong>
-          <%= @internal_order.applicant_sector.name%>
-        </div>
-        <div class="col-md-2 col-xs-2">
-          <strong>Sector proveedor:</strong>
-          <%= @internal_order.provider_sector.name%>
-        </div>
-        <div class='col-md-3 col-xs-3'>
-          <strong>Solicitado:</strong>
-          <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
-        </div>
-        <div class='col-md-3 col-xs-3'>
-          <strong>Observaciones:</strong>
-            <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
-        </div>
-        <div class='col-md-2 col-xs-2'>
-          <strong>Código:</strong>
-          <%= @internal_order.remit_code %>
-        </div>
-      </div>
-      <hr>
-      <!-- Barra de estado -->
-      <%= render 'status_bar', internal_order: @internal_order %>
-      <!-- Insumos a dispensar -->
-      <br><br><br><br>
-      <div class='row'>
-        <div class='col-md-12' style='margin-top: -50px;'>
-          <ul class='nav nav-tabs nav-justified'>
-            <li class='active'>
-              <a data-toggle='tab' href='#supplies'>
-                <span class="glyphicon glyphicon-barcode"></span>
-                Insumos
-                <span class="badge"><%= @internal_order.quantity_ord_supply_lots.count %></span>
-              </a>
-            </li>
-            <li>
-              <a data-toggle='tab' href='#last_movements'>
-                <span class="glyphicon glyphicon-transfer"></span>
-                Movimientos
-                <span class="badge"><%= @internal_order.movements.count %></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-md-12">
-        <div class="tab-content">
-          <div id='supplies' class='tab-pane fade in active'>
-            <!-- Insumos a dispensar -->
-            <table class="table table-hover table-condensed">
-              <thead>
-                <tr>
-                  <th>Cód Ins</th>
-                  <th>Insumo</th>
-                  <th>Solicitado</th>
-                  <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
-                  <th>Lote</th>
-                  <th>Laboratorio</th>
-                  <th>Vencimiento</th>
-                  <% if @internal_order.solicitud? %>
-                    <th>Obs. Sol.</th>
-                  <% end %>
-                  <th>Obs. Prov.</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
-                  <tr>
-                    <td>
-                      <%= qosl.supply_id %>
-                    </td>
-                    <td>
-                      <%= qosl.supply_name %>
-                    </td>
-                    <td>
-                      <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-                    </td>
-                    <td>
-                      <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
-                    </td>
-                    <% if qosl.sector_supply_lot.present? %>
-                      <td>
-                        <%= qosl.sector_supply_lot.lot_code %>
-                      </td>
-                      <td>
-                        <%= qosl.sector_supply_lot.laboratory %>
-                      </td>
-                      <td>
-                        <% if qosl.supply.needs_expiration %>
-                          <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
-                        <% else %>
-                          No vence
-                        <% end %>
-                      </td>
-                    <% else %>
-                      <td>Sin lote</td><td>----</td><td>----</td>
-                    <% end %>
-                    <% if @internal_order.solicitud? %>
-                      <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
-                    <% end %>
-                    <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-          <div id='last_movements' class='tab-pane fade'>
-            <!-- Tabla de movimientos -->
-            <%= render '/shared/movements_table', order: @internal_order %>
-          </div> <!-- End last movements tab pane -->
-        </div> <!-- End Tab content-->
-      </div> <!-- End col-md-12 -->
-    </div>
-    <div class="panel-footer text-right hidden-print">
-      <% if @internal_order.provision? %>
-        <%= link_to internal_orders_path, class: "btn" do %>Volver<% end %>
-      <% else %>
-        <%= link_to applicant_index_internal_orders_path, class: "btn" do %>Volver<% end %>
-      <% end %> 
-      <% if policy(@internal_order).edit? %>
-        <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
-          class: "btn btn-warning" do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-          Auditar
-        <% end %>
-      <% end %>   
-      <% if policy(@internal_order).edit_applicant? %>
-        <%= link_to edit_applicant_internal_order_path(@internal_order), 
-          class: 'btn btn-warning btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
-          Auditar
-        <% end %>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">
+      <%= fa_icon "eye" %> Viendo <%= @internal_order.order_type %>
+      <%= link_to internal_orders_path, class: 'btn float-right p-0',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
       <% end %>
-      <% if policy(@internal_order).send_applicant? %>
-        <%= link_to send_applicant_internal_order_path(@internal_order), 
-          class: 'btn btn-primary btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Enviar
-        <% end %>
+      <%= link_to internal_order_path(format: 'pdf'), class: 'btn print-btn float-right mr-4 p-0',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
       <% end %>
-      <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-        <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning">
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
-          Retornar
+    </h5>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <div class="row">
+      <div class='col-md-2 col-xs-2'>
+        <strong>Sector solicitante:</strong>
+        <%= @internal_order.applicant_sector.name%>
+      </div>
+      <div class="col-md-2 col-xs-2">
+        <strong>Sector proveedor:</strong>
+        <%= @internal_order.provider_sector.name%>
+      </div>
+      <div class='col-md-3 col-xs-3'>
+        <strong>Solicitado:</strong>
+        <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
+      </div>
+      <div class='col-md-3 col-xs-3'>
+        <strong>Observaciones:</strong>
+          <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
+      </div>
+      <div class='col-md-2 col-xs-2'>
+        <strong>Código:</strong>
+        <%= @internal_order.remit_code %>
+      </div>
+    </div>
+    <hr>
+    <!-- Barra de estado -->
+    <%= render 'status_bar', internal_order: @internal_order %>
+    
+    <!-- Insumos a dispensar -->
+    <ul class='nav nav-tabs nav-justified' role="tablist">
+      <li class='nav-item active'>
+        <a class="nav-link" data-toggle='tab' href='#supplies' role="tab" aria-controls="supplies" aria-selected="true">
+          <%= fa_icon "cubes" %> Insumos
+          <span class="badge badge-secondary"><%= @internal_order.quantity_ord_supply_lots.count %></span>
         </a>
+      </li>
+      <li>
+        <a class="nav-link" data-toggle='tab' href='#last_movements' role="tab" aria-controls="last_movements" aria-selected="true">
+          <%= fa_icon "exchange-alt" %> Movimientos
+          <span class="badge badge-secondary"><%= @internal_order.movements.count %></span>
+        </a>
+      </li>
+    </ul>
+    <div class="col-md-12">
+      <div class="tab-content">
+        <div id='supplies' class='tab-pane fade in active'>
+          <!-- Insumos a dispensar -->
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Solicitado</th>
+                <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
+                <th>Lote</th>
+                <th>Laboratorio</th>
+                <th>Vencimiento</th>
+                <% if @internal_order.solicitud? %>
+                  <th>Obs. Sol.</th>
+                <% end %>
+                <th>Obs. Prov.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+                <tr>
+                  <td>
+                    <%= qosl.supply_id %>
+                  </td>
+                  <td>
+                    <%= qosl.supply_name %>
+                  </td>
+                  <td>
+                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                  </td>
+                  <td>
+                    <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                  </td>
+                  <% if qosl.sector_supply_lot.present? %>
+                    <td>
+                      <%= qosl.sector_supply_lot.lot_code %>
+                    </td>
+                    <td>
+                      <%= qosl.sector_supply_lot.laboratory %>
+                    </td>
+                    <td>
+                      <% if qosl.supply.needs_expiration %>
+                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                      <% else %>
+                        No vence
+                      <% end %>
+                    </td>
+                  <% else %>
+                    <td>Sin lote</td><td>----</td><td>----</td>
+                  <% end %>
+                  <% if @internal_order.solicitud? %>
+                    <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
+                  <% end %>
+                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div id='last_movements' class='tab-pane fade'>
+          <!-- Tabla de movimientos -->
+          <%= render '/shared/movements_table', order: @internal_order %>
+        </div> <!-- End last movements tab pane -->
+      </div> <!-- End Tab content-->
+    </div> <!-- End col-md-12 -->
+  </div>
+  <div class="card-footer text-right">
+    <% if @internal_order.provision? %>
+      <%= link_to internal_orders_path, class: "btn" do %>Volver<% end %>
+    <% else %>
+      <%= link_to applicant_index_internal_orders_path, class: "btn" do %>Volver<% end %>
+    <% end %> 
+    <% if policy(@internal_order).edit? %>
+      <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "edit" %>
+        Editar
       <% end %>
-      <% if policy(@internal_order).send_provider? %>
-        <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
-          class: 'btn btn-primary btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Enviar
-        <% end %>
+    <% end %>   
+    <% if policy(@internal_order).edit_applicant? %>
+      <%= link_to edit_applicant_internal_order_path(@internal_order), 
+        class: 'btn btn-warning btn-md' do %>
+        <%= fa_icon "edit" %>
+        Editar
       <% end %>
-      <% if policy(@internal_order).receive_applicant? %>
-        <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
-          class: 'btn btn-success btn-md' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
-          Recibir
-        <% end %>
+    <% end %>
+    <% if policy(@internal_order).send_applicant? %>
+      <%= link_to send_applicant_internal_order_path(@internal_order), 
+        class: 'btn btn-primary btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        Enviar
       <% end %>
-    </div>
+    <% end %>
+    <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning">
+        <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
+        Retornar
+      </a>
+    <% end %>
+    <% if policy(@internal_order).send_provider? %>
+      <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
+        class: 'btn btn-primary btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        Enviar
+      <% end %>
+    <% end %>
+    <% if policy(@internal_order).receive_applicant? %>
+      <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
+        class: 'btn btn-success btn-md' do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
+        Recibir
+      <% end %>
+    <% end %>
   </div>
 </div>
 

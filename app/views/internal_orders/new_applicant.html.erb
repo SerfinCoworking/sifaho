@@ -2,12 +2,12 @@
 
 <div class="card">
   <div class="card-header bg-primary text-white">
-    <h4>
+    <h5 class="card-title mb-0">
       <%= fa_icon "plus" %> Nueva solicitud de sector
-      <%= link_to applicant_index_internal_orders_path, class: 'btn float-right text-white' do %>
+      <%= link_to applicant_index_internal_orders_path, class: 'btn float-right text-white p-0' do %>
         <%= fa_icon "times" %>
       <% end %>
-    </h4>
+    </h5>
   </div>
   <div class="card-body" id="panel-body-new">
     <%= render 'internal_orders/applicant_form', internal_order: @internal_order %>
