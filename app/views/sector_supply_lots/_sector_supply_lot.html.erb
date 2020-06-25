@@ -15,7 +15,7 @@
       <td><%= sector_supply_lot.lot_code %></td>
       <td><%= sector_supply_lot.laboratory %></td>
       <td><%= sector_supply_lot.supply_lot.expiry_date? ? sector_supply_lot.supply_lot.expiry_date.strftime("%m/%y") : "No vence" %></td>
-      <td class="text-center">
+      <td class="text-center actions-col">
         <% if policy(sector_supply_lot).show? %>
           <%= link_to sector_supply_lot_path(sector_supply_lot), remote:true, class: 'btn btn-secondary btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

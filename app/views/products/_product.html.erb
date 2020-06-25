@@ -3,7 +3,7 @@
   <td><%= product.name %></td>
   <td><%= product.area_name %></td>
   <td><%= product.unity_name %></td>
-  <td>
+  <td class="text-center actions-col">
     <% if policy(product).show? %>
       <%= link_to product_path(product), class: 'btn btn-default btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

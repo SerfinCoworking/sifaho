@@ -50,9 +50,11 @@
             <label>Ordenar por</label>
             <%= select_tag "first_glass_id",
               options_for_select(@filterrific.select_options[:sorted_by]),
-              class: "selectpicker custom-select-pick",
-              data:{
-                "live-search" => true
+              {
+                class: "selectpicker custom-select-pick",
+                data:{
+                  "live-search" => true,
+                },
               }
             %>
           </div>

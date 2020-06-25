@@ -10,7 +10,7 @@
       <td><%= supply_lot.lot_code %></td>
       <td><%= supply_lot.laboratory.name %></td>
       <td><%= supply_lot.expiry_date? ? supply_lot.expiry_date.strftime("%d/%m/%Y") : "No expira" %></td>
-      <td class="text-center">
+      <td class="text-center actions-col">
         <% if policy(supply_lot).show? %>
           <%= link_to supply_lot_path(supply_lot), remote:true, class: 'btn btn-secondary btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

@@ -14,7 +14,7 @@
     <% @count_pres = patient.prescriptions.count %>
     <td><%= patient.sex.humanize %></td>
     <td><span class="label label-<%=if @count_pres > 0; 'primary'; else; 'default'; end%>" ><%= @count_pres %></span></td>
-    <td>
+    <td class="text-center actions-col">
       <% if policy(patient).show? %>
         <%= link_to patient_path(patient), class: 'btn btn-secondary btn-sm',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

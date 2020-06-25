@@ -1,53 +1,51 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="panel panel-warning">
-      <div class="panel-heading">
-        <h3 class="panel-title"><%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %> Editando permisos de <%= @user.full_name%>
-          <%= link_to :back, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
-      </div>
-      <div class="panel-body" id="panel-body-new">
-        <%= render 'form', user: @user %>
-      </div>
-      <div class="panel-footer text-right">
-        <%= link_to 'Volver', users_admin_index_path, class: 'btn' %>
-        <button type='submit' name='commit' class='btn btn-success' form='edit_user_<%=@user.id%>'>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
-        </button>
-      </div>
+<div class="col-md-8">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"><%= fa_icon "lock" %> Editando permisos de <%= @user.full_name%>
+        <%= link_to :back, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+      </h3>
+    </div>
+    <div class="card-body" id="panel-body-new">
+      <%= render 'form', user: @user %>
+    </div>
+    <div class="card-footer text-right">
+      <%= link_to 'Volver', users_admin_index_path, class: 'btn' %>
+      <button type='submit' name='commit' class='btn btn-success' form='edit_user_<%=@user.id%>'>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
+      </button>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h2 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %>
-          Perfil del usuario
-        </h2>
-      </div>
-      <div class="panel-body text-center">
-        <% if @user.profile.present? %>
-        <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
-        <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
-      
-        <h5>DNI <%= @user.profile.dni %></h5>
+</div>
+<div class="col-md-4">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h2 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %>
+        Perfil del usuario
+      </h2>
+    </div>
+    <div class="panel-body text-center">
+      <% if @user.profile.present? %>
+      <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
+      <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
+    
+      <h5>DNI <%= @user.profile.dni %></h5>
 
-        <h5> <%= @user.profile.email %> </h5>
-        <% else %>
-          <h5>Sin perfil</h5>
+      <h5> <%= @user.profile.email %> </h5>
+      <% else %>
+        <h5>Sin perfil</h5>
+      <% end %>
+      <strong>Sectores habilitados:</strong>
+      <ul class="list-group text-left">
+        <% @user.sectors.each do |sector| %>
+          <li class="list-group-item"><%= sector.sector_and_establishment %></li>
         <% end %>
-        <strong>Sectores habilitados:</strong>
-        <ul class="list-group text-left">
-          <% @user.sectors.each do |sector| %>
-            <li class="list-group-item"><%= sector.sector_and_establishment %></li>
-          <% end %>
-        </ul> 
-      </div>
+      </ul> 
     </div>
   </div>
 </div>

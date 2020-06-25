@@ -40,7 +40,7 @@
       ----
     <% end %>
   </td>
-  <td>
+  <td class="text-center actions-col">
     <% if policy(external_order).show? %>
       <%= link_to external_order_path(external_order),
         class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>

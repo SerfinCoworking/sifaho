@@ -2,7 +2,7 @@
     <div class="js-fade fade-in is-paused">
       <td><%= laboratory.name %></td>
       <td><%= laboratory.cuit %></td>
-      <td>
+      <td class="text-center actions-col">
         <% if policy(laboratory).show? %>
           <%= link_to laboratory_path(laboratory), remote:true, class: 'btn btn-secondary btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

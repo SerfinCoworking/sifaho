@@ -54,7 +54,7 @@
         <td><%= supply.supply_area.name %></td>
         <td><%= supply.unity %></td>
         <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
-        <td>
+        <td class="text-center actions-col">
         <% if policy(supply).show? %>
           <%= link_to supply_path(supply), class: 'btn btn-secondary btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

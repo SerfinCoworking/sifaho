@@ -1,25 +1,20 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust">
-      <li id="page-title" class="nav-item non-sel">
-        <a href="" class="nav-link">Usuarios</a>
-      </li>
-      <li class="nav-item <%= active_action('index') %> non-sel">
-        <%= link_to users_admin_index_path, class: 'nav-link' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-          Listado
+  <li class="nav-item <%= active_action_and_controller('index', 'users') %> non-sel">
+    <%= link_to users_admin_index_path, class: 'nav-link' do %>
+      <%= fa_icon "users" %>
+      Usuarios
+    <% end %>
+  </li>
+  <% if policy(PermissionRequest).index? %>
+    <li class="nav-item <%= active_action_and_controller('index', 'permission_requests') %> non-sel">
+      <%= link_to permission_requests_path, class: 'nav-link' do %>
+        <%= fa_icon "envelope" %>
+        Solicitud de permisos&nbsp;
+        <% count =  PermissionRequest.nueva.count %>
+        <% if count > 0 %>
+          <div class="badge badge-info float-right"><%= count %></div>
         <% end %>
-      </li>
-      <% if policy(PermissionRequest).index? %>
-        <li class="nav-item <%= active_action_and_controller('index', 'permission_requests') %> non-sel">
-          <%= link_to permission_requests_path, class: 'nav-link' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-envelope') %>
-            Solicitud de permisos&nbsp;
-            <% count =  PermissionRequest.nueva.count %>
-            <% if count > 0 %>
-              <div class="label label-info pull-right"><%= count %></div>
-            <% end %>
-          <% end %>
-        </li>
       <% end %>
-    </ul>
+    </li>
+  <% end %>
 <% end %>
