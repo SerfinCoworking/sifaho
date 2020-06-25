@@ -37,7 +37,7 @@
           <%= render 'shared/sectors_table', sectors: @establishment.sectors %>
         </div>
         <div class="col-8 mh-col-custom">
-          <%= render 'shared/users_table', users: @establishment.users %>
+          <%= render 'shared/users_table', users: @establishment.users.to_set %>
         </div>
       </div>
     </div>

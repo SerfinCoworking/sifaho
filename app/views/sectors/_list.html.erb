@@ -1,23 +1,26 @@
-<div id="filterrific_results">
-  <div class="card fixed-panel-list">
-    <table class="table table-hover table-striped table-sm">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Establecimiento</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="sectors">
-        <% if @sectors.present? %>
+<% if @sectors.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Establecimiento</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="sectors">
           <%= render @sectors %>
-        <%else%>
-          No hay sectores cargados.
-        <%end%>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @sectors, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
   </div>
-  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-    <%= will_paginate @sectors, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-  </div>
-</div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'sectores' }
+  ) %>
+<% end %>

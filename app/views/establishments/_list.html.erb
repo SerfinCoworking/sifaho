@@ -1,25 +1,28 @@
-<div id="filterrific_results">
-  <div class="card fixed-panel-list">
-    <table class="table table-hover table-striped table-sm">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Teléfono</th>
-          <th>Domicilio</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="establishments">
-        <% if @establishments.present? %>
+<% if @establishments.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Domicilio</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="establishments">
           <%= render @establishments %>
-        <%else%>
-          No hay establecimientos cargados.
-        <%end%>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @establishments, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
   </div>
-  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-    <%= will_paginate @establishments, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-  </div>
-</div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'establecimientos' }
+  ) %>
+<% end %>

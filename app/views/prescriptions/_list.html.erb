@@ -1,4 +1,4 @@
-  <% if @prescriptions.present? %>
+<% if @prescriptions.present? %>
   <div id="filterrific_results">
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
@@ -37,9 +37,9 @@
       <%= will_paginate @prescription, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </div>
   </div>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found_filter',
-      locals: { object_name: 'prescripciones' }
-    ) %>
-  <% end %>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>
