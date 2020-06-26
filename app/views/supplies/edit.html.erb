@@ -1,23 +1,4 @@
 <%= render 'header' %>
 
-<div class="col-7 mx-auto">
-  <div class="card">
-    <div class="card-header bg-warning">
-      <h5 class="card-title mb-0">
-        <%= fa_icon "edit" %> Editando producto
-        <%= link_to :back, class: 'btn float-right p-0' do %>
-          <%= fa_icon "times" %>
-        <% end %>
-      </h5>
-    </div>
-    <div class="card-body" id="panel-body-new">
-      <%= render 'form', supply: @supply %>
-    </div>
-    <div class="card-footer text-right">
-      <%= link_to 'Volver', supplies_path, class: 'btn btn-light mr-1' %>
-      <button type='submit' name='commit' class='btn btn-success' form='new_supply'>
-        <%= fa_icon "save" %> Guardar cambios
-      </button>
-    </div>
-  </div>
-</div>
+<%= render 'form', supply: @supply %>
+   
