@@ -38,7 +38,7 @@
     <% end %>
 
     <% if policy(Sector).index? %>
-      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('sectors')} #{active_class('internal_orders')}" do %>
+      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('sectors')} #{active_class('internal_orders')} #{active_class('internal_order_templates')}" do %>
         <span class="sb-icon">
           <%= fa_icon "bezier-curve" %>
         </span>

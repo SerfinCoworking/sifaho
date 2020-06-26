@@ -1,8 +1,8 @@
 // Style modal
-$('.modal-content').addClass('panel-danger');
+$('.modal-header').addClass('bg-danger text-white');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Eliminar la plantilla <%= @internal_order_template.name %>");
+$('.modal-title').html("<i class=' glyphicon glyphicon-trash'></i>  Eliminar la plantilla <%= @internal_order_template.name %>");
 
 // Render the edit form
 $('.modal-body').html(
@@ -19,5 +19,5 @@ $('#dialog').modal("show");
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-danger');
+  $('.modal-header').removeClass('bg-danger text-white');
 });

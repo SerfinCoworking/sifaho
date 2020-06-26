@@ -1,8 +1,9 @@
 <div class="card">
   <div class="card-header <%= @establishment.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@establishment.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
+        <%#= fa_icon (@establishment.new_record? ?  "plus" : "edit") %>
         <%= @establishment.new_record? ? "Agregar establecimiento" : "Editar establecimiento" %>
       </h5>
     </div>
