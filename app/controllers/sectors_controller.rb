@@ -94,14 +94,14 @@ class SectorsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_sector
     @sector = params[:id].present? ? Sector.find(params[:id]) : Sector.new
-    @sectors = sector.all
+    @establishments = Establishment.all
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def sector_params
     params.require(:sector).permit(
       :name,
-      :sector_id,
+      :establisment_id,
       :description
     )
   end

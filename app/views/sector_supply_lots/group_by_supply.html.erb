@@ -1,6 +1,6 @@
 <%= render 'header' %>
 
-<% if @stock_supplies.present? %>
+<% if @supplies.present? %>
   <%= render "supplies/filter" %>
 
   <div class="card" id="filter-panel">
@@ -10,7 +10,7 @@
     <div class="card-body fixed-panel-index">
       <%= render(
         partial: 'sector_supply_lots/list_supply',
-        locals: { stock_supplies: @stock_supplies }
+        locals: { supplies: @supplies }
       ) %>
     </div>
   </div>
