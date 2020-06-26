@@ -19,6 +19,7 @@ class InternalOrderTemplatesController < ApplicationController
   def new
     authorize InternalOrderTemplate
     @internal_order_template = InternalOrderTemplate.new
+    @order_type = 'solicitud'
     @destination_sectors = current_user.establishment.sectors
   end
 
