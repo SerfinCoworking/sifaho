@@ -1,13 +1,16 @@
 <%= render 'external_orders/header' %>
 
 <div class="card">
-  <div class="card-header bg-primary text-white align-items-center">
-    <h5 class="card-title mb-0">
-      <%= fa_icon "plus" %> Nueva solicitud de abastecimiento
-      <%= link_to applicant_index_external_orders_path, class: 'btn float-right text-white p-0' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h5>
+  <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "plus" %>
+      <h5 class="card-title mb-0 ml-2">
+        Nueva solicitud de abastecimiento
+      </h5>
+    </div>
+    <%= link_to applicant_index_external_orders_path, class: 'btn text-white' do %>
+      <%= fa_icon "times" %>
+    <% end %>
   </div>
   <div class="card-body" id="panel-body-new">
     <%= render 'external_orders/applicant_form', external_order: @external_order %>
