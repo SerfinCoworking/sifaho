@@ -143,9 +143,9 @@
         <% end %>
       </tbody>
     </table>
-    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
       data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <%= fa_icon "plus" %>
       Agregar insumo recibido
     <% end %>
   </div>

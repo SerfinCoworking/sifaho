@@ -47,7 +47,7 @@
     <% end %>
 
     <% if policy(Establishment).index? %>
-      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')} #{active_class('external_orders')}" do %>
+      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')} #{active_class('external_orders')} #{active_class('external_order_templates')}" do %>
         <span class="sb-icon">
           <%= fa_icon "hospital"%>
         </span>

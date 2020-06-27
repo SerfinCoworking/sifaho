@@ -85,6 +85,11 @@ class SectorsController < ApplicationController
     end
   end
 
+  def with_establishment_id
+    @sectors = Sector.order(:name).with_establishment_id(params[:term])
+    render json: @sectors.map{ |sector| { label: sector.name, id: sector.id } }
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_sector

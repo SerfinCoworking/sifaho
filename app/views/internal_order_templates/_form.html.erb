@@ -19,12 +19,12 @@
           <%= f.input :name, label: "Nombre" %>
         </div>
         <div class="col-md-3">
-          <%= f.input :destination_sector_id, label: 'Proveedor',
+          <%= f.input :destination_sector_id, label: @order_type == 'solicitud' ? 'Proveedor' : 'Solicitante',
             collection: @destination_sectors.map {|s| [ s['name'], s['id'] ] },
             required: true,
             :input_html => {
               id: 'provider-sector',
-              class: 'selectpicker-md show-tick',
+              class: 'selectpicker-md custom-select-pick show-tick',
               "data-width"=>"100%",
               "title"=>"Seleccionar sector",
               "data-size"=>"10",
@@ -54,7 +54,7 @@
                 </tr>
               </thead>
               <tbody class="internal_order_template_supplies">
-                <% if params[:action] == "edit" %>
+                <% if ["edit", "edit_provider"].include?(params[:action]) %>
                   <%= f.simple_fields_for :internal_order_template_supplies, @internal_order_template.internal_order_template_supplies.joins(:supply).order("name") do |form_quantity| %>
                     <%= render "internal_order_template_supply_fields", f: form_quantity %>
                   <% end %>
@@ -63,7 +63,7 @@
                     <%= render "internal_order_template_supply_fields", f: form_quantity %>
                   <% end %>
                 <% else %>
-                  <% 4.times { @internal_order_template.internal_order_template_supplies.build } %>
+                  <% @internal_order_template.internal_order_template_supplies.build %>
                   <%= f.simple_fields_for :internal_order_template_supplies do |form_quantity| %>
                     <%= render "internal_order_template_supply_fields", f: form_quantity %>
                   <% end %>
@@ -72,7 +72,7 @@
             </table>
             <%= link_to_add_association f, :internal_order_template_supplies, class: 'btn btn-primary btn-sm',
               data: {"association-insertion-node" => "tbody.internal_order_template_supplies", "association-insertion-method" => "append"} do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+              <%= fa_icon "plus" %>
               Agregar insumo
             <% end %>
           </div>

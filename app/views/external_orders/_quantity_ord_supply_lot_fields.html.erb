@@ -229,13 +229,13 @@
       <% if f.object.supply_id.present?  %>
         <%= button_tag type: 'button', class: 'btn btn-xs search-lots input-sm',
           title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+          <%= fa_icon "search" %>
         <% end %>
       <% end %>
     <% if f.object.sector_supply_lot_id.present? %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
-            class: 'selectpicker show-tick input-sm',
+            class: 'selectpicker custom-select-pick show-tick input-sm',
             "data-width"=>"fit",
             "title"=>"#{f.object.sector_supply_lot.lot_code }",
             "data-size"=>"5",
@@ -247,7 +247,7 @@
     <% else %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
-            class: 'selectpicker show-tick',
+            class: 'selectpicker custom-select-pick show-tick',
             "data-width"=>"fit",
             "title"=>"Código",
             "data-size"=>"5",
@@ -291,7 +291,7 @@
   <td>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "minus" %>
+      <%= fa_icon "minus" %>
     <% end %>
   </td>
 </tr>

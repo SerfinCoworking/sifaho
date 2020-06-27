@@ -50,7 +50,7 @@
             :input_html => {
               required: true,
               id: 'applicant-sector',
-              class: 'selectpicker-md show-tick',
+              class: 'selectpicker-md custom-select-pick show-tick',
               "data-width"=>"100%",
               "title"=>"Seleccionar sector",
               "data-size"=>"10",
@@ -64,7 +64,7 @@
             collection: [],
             :input_html => {
               id: 'applicant-sector',
-              class: 'selectpicker-md show-tick',
+              class: 'selectpicker-md custom-select-pick show-tick',
               "data-width"=>"100%",
               "title"=>"Seleccione un establecimiento",
               "data-size"=>"10",
@@ -148,7 +148,7 @@
           <% end %>
       </tbody>
     </table>
-    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
       data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
       <%= fa_icon "plus" %>
       Agregar insumo solicitado
