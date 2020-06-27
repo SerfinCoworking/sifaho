@@ -120,13 +120,6 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "cities", force: :cascade do |t|
     t.bigint "state_id"
     t.string "name"
@@ -267,14 +260,14 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
-    t.bigint "detination_sector_id"
+    t.bigint "destination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
+    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
@@ -449,6 +442,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
 
   create_table "products", force: :cascade do |t|
     t.bigint "unity_id"
+    t.bigint "area_id"
     t.string "code"
     t.string "name"
     t.text "description"
@@ -456,6 +450,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
@@ -476,8 +471,8 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.boolean "is_active", default: true
     t.string "docket", limit: 10
     t.bigint "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "professional_type_id", default: 5
     t.index ["professional_type_id"], name: "index_professionals_on_professional_type_id"
     t.index ["user_id"], name: "index_professionals_on_user_id"
@@ -571,7 +566,6 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "complexity_level"
     t.integer "user_sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -599,17 +593,12 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.string "name"
     t.string "description"
     t.string "observation"
-    t.string "unity", limit: 100
+    t.string "unity"
     t.boolean "needs_expiration"
-    t.boolean "active_alarm"
-    t.integer "period_alarm"
-    t.integer "expiration_alarm"
-    t.integer "quantity_alarm"
-    t.integer "period_control"
     t.boolean "is_active"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.bigint "supply_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "supply_area_id", default: 38
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_supplies_on_deleted_at"
     t.index ["supply_area_id"], name: "index_supplies_on_supply_area_id"
@@ -686,13 +675,11 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
-  add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
-  add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"
