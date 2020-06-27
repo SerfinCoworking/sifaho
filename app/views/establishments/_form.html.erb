@@ -1,9 +1,9 @@
 <div class="card">
   <div class="card-header <%= @establishment.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon (@establishment.new_record? ?  "plus" : "edit") %>
+      <%= fa_icon (@establishment.new_record? ?  "plus" : "pen") %>
       <h5 class="card-title mb-0 ml-2">
-        <%= @establishment.new_record? ? "Agregar establecimiento" : "Editar establecimiento" %>
+        <%= @establishment.new_record? ? "Agregar establecimiento" : "Editando establecimiento" %>
       </h5>
     </div>
     <%= link_to :back, class: @establishment.new_record? ? 'btn text-white' : 'btn' do %>
@@ -20,20 +20,23 @@
           <%= f.input :code, required: true, label: 'Código' %>
         </div>
         <div class="col-md-4">
-          <%= f.input :name, required: true, label: 'Nombre' %>
+          <%= f.input :name, required: true, label: 'Nombre completo' %>
+        </div>
+        <div class="col-md-4">
+          <%= f.input :short_name, label: 'Nombre abreviado' %>
         </div>
 
         <div class="col-md-4">
-          <%= f.input :cuit, required: true, label: 'Cuit' %>
+          <%= f.input :cuit, label: 'Cuit' %>
         </div>
         <div class="col-md-4">
-          <%= f.input :domicile, required: true, label: 'Domicilio' %>
+          <%= f.input :domicile, label: 'Domicilio' %>
         </div>
         <div class="col-md-4">
-          <%= f.input :phone, required: true, label: 'Teléfono' %>
+          <%= f.input :phone, label: 'Teléfono' %>
         </div>
         <div class="col-md-4">
-          <%= f.input :email, required: true, label: 'Email' %>
+          <%= f.input :email, label: 'Email' %>
         </div>
       </div>
     <% end %>

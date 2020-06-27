@@ -1,5 +1,5 @@
 <% if user_signed_in? %>
-  <li class="nav-item <%= active_class('notifications/notifications') %>">
+  <li class="nav-item d-flex align-items-center <%= active_class('notifications/notifications') %> mr-2">
     <%= link_to main_app.notifications_path, class: "nav-link", :title => 'Ver notificaciones', :'data-placement'=>'bottom', :'data-toggle'=>'tooltip' do %>
       <% count = Notification.unread_count(current_user) %>
       <%= fa_icon "bell" %>

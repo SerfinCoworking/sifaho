@@ -24,7 +24,7 @@ class Sector < ApplicationRecord
   # Validaciones
   validates_presence_of :name
 
-  delegate :name, to: :establishment, prefix: :establishment
+  delegate :name, :short_name, to: :establishment, prefix: :establishment
 
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,

@@ -22,7 +22,7 @@
       <% if policy(professional).edit? %>
         <%= link_to edit_professional_path(professional), class: 'btn btn-warning btn-sm',
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "edit" %>
+          <%= fa_icon "pen" %>
         <% end %>
       <% end %>
       <% if policy(professional).delete? %>

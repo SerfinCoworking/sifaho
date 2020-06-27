@@ -2,14 +2,17 @@
 
 <div class="col-7 mx-auto">
   <div class="card">
-    <div class="card-header">
-      <h5 class="card-title mb-0">
-        <%= fa_icon "eye" %> Viendo insumo
-        <%= link_to supplies_path, class: 'btn float-right p-0',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= fa_icon "times" %>
-        <% end %>
-      </h5>
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center ml-2">
+        <%= fa_icon "eye" %>
+        <h5 class="card-title mb-0 ml-2">
+          Viendo producto
+        </h5>
+      </div>
+      <%= link_to supplies_path, class: 'btn',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
     </div>
     <div class="card-body" id="panel-body-new"> 
       <p class="border-bottom mt-2">

@@ -2,21 +2,24 @@
 
 <div class="col-7 mx-auto">
   <div class="card">
-    <div class="card-header bg-primary text-white">
-      <h5 class="card-title mb-0">
-        <%= fa_icon "plus" %> Nuevo producto
-        <%= link_to :back, class: 'btn float-right text-white p-0' do %>
-          <%= fa_icon "times" %>
-        <% end %>
-      </h5>
+    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center ml-2">
+        <%= fa_icon "plus" %>
+        <h5 class="card-title mb-0 ml-2">
+          Agregar producto
+        </h5>
+      </div>
+      <%= link_to :back, class: 'btn text-white' do %>
+        <%= fa_icon "times" %>
+      <% end %>
     </div>
     <div class="card-body" id="panel-body-new">
       <%= render 'form', supply: @supply %>
     </div>
     <div class="card-footer text-right">
       <%= link_to 'Volver', supplies_path, class: 'btn btn-light mr-1' %>
-      <button type='submit' name='commit' class='btn btn-primary' form='new_supply'>
-        <%= fa_icon "plus" %> Crear
+      <button type='submit' name='commit' class='btn btn-success' form='new_supply'>
+        <%= fa_icon "save" %> Guardar
       </button>
     </div>
   </div>

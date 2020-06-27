@@ -1,6 +1,6 @@
 // Add the dialog title
-$('#dialog .modal-header').addClass('modal-header-flex');
-$('#dialog h4').append("Eliminar sector");
+$('.modal-header').addClass('bg-danger text-white');
+$('.modal-title').html("<i class='fa fa-trash'></i> Eliminar sector");
 
 // Render the edit form
 $('.modal-body').html(
@@ -15,3 +15,8 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-header').removeClass('bg-danger text-white');
+});

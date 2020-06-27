@@ -2,7 +2,7 @@
   <div class="card-header <%= @external_order_template.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <h5 class="card-title mb-0 ml-2">
-        <%= fa_icon (@external_order_template.new_record? ?  "plus" : "edit") %>
+        <%= fa_icon (@external_order_template.new_record? ?  "plus" : "pen") %>
         <%= @external_order_template.new_record? ? "Agregar" : "Editar" %> plantilla de <%= @order_type.humanize.downcase %> a establecimiento
       </h5>
     </div>

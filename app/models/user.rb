@@ -25,7 +25,7 @@ class User < ApplicationRecord
 
   # Delegaciones
   delegate :full_name, :dni, :email, to: :profile
-  delegate :name, to: :sector, prefix: :sector
+  delegate :name, :establishment_short_name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
   delegate :establishment, to: :sector
 

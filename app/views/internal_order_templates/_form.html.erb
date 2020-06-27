@@ -2,8 +2,8 @@
   <div class="card-header <%= @internal_order_template.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
       <h5 class="card-title mb-0 ml-2">
-        <%= fa_icon (@internal_order_template.new_record? ?  "plus" : "edit") %>
-        <%= @internal_order_template.new_record? ? "Agregar" : "Editar" %> plantilla de <%= @order_type %> a sector
+        <%= fa_icon (@internal_order_template.new_record? ?  "plus" : "pen") %>
+        <%= @internal_order_template.new_record? ? "Agregar" : "Editando" %> plantilla de <%= @order_type %> a sector
       </h5>
     </div>
     <%= link_to internal_order_templates_path, class: "btn #{internal_order_template.new_record? ? 'text-white' : ''}" do %>

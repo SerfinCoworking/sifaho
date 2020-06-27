@@ -1,9 +1,9 @@
 <div class="card">
   <div class="card-header <%= @professional.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@professional.new_record? ?  "plus" : "pen")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @professional.new_record? ? "Agregar nuevo médico" : "Editar médico" %>
+        <%= @professional.new_record? ? "Agregar médico" : "Editar médico" %>
       </h5>
     </div>
     <%= link_to :back, class: @professional.new_record? ? 'btn text-white' : 'btn' do %>

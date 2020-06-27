@@ -137,7 +137,7 @@
     <%= link_to 'Volver', professionals_path, class: "btn" %>
     <% if policy(@professional).edit? %>
       <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false, class: "btn btn-warning" do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>

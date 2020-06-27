@@ -46,13 +46,13 @@
     <% if policy(internal_order).edit_applicant? %>
       <%= link_to edit_applicant_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
         title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).edit? %>
       <%= link_to edit_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
         title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).destroy? %>

@@ -261,7 +261,7 @@
     <% if policy(@external_order).edit? %>
       <%= link_to edit_external_order_path(@external_order), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>
@@ -281,14 +281,14 @@
     <% if policy(@external_order).edit_applicant? %>
       <%= link_to edit_applicant_external_order_path(@external_order), :"data-turbolinks" => false, 
         class: 'btn btn-warning btn-md mr-1', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>
     <% if policy(@external_order).edit_receipt? %>
       <%= link_to edit_receipt_external_order_path(@external_order), :"data-turbolinks" => false,
         class: 'btn btn-warning btn-md mr-1', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "edit" %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>
