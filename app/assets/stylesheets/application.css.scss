@@ -71,9 +71,9 @@ td .form-group{
 // barra navegación principal
 .navbar{
   padding: 8px 16px 8px 3px;
-  height: $navbar-heigth;
+  height: $navbar-height;
   @media(min-width: 1200px) and (max-width: 1480px){
-    height: $navbar-heigth-bml;
+    height: $navbar-height-bml;
   }
   .brand-container{
     width: $sidebar-width-visible;
@@ -135,9 +135,6 @@ td .form-group{
   row-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   height: auto;
-}
-.panel-height{
-  height: calc(100vh - 1rem - #{$navbar-heigth})
 }
 
 .h-row-custom{
