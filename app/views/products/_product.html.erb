@@ -3,23 +3,23 @@
   <td><%= product.name %></td>
   <td><%= product.area_name %></td>
   <td><%= product.unity_name %></td>
-  <td>
+  <td class="text-center actions-col">
     <% if policy(product).show? %>
-      <%= link_to product_path(product), class: 'btn btn-default btn-xs',
+      <%= link_to product_path(product), class: 'btn btn-default btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(product).edit? %>
-      <%= link_to edit_product_path(product), class: 'btn btn-warning btn-xs',
+      <%= link_to edit_product_path(product), class: 'btn btn-warning btn-sm',
             title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <%= fa_icon "edit" %>
       <% end %>
     <% end %>
     <% if policy(product).delete? %>
       <%= link_to delete_product_path(product), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
   </td>

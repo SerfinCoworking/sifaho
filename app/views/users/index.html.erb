@@ -1,50 +1,53 @@
 <%= render 'header' %>
 
 <% if @users.present? %>
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
+  <div class="card fixed-custom-card">
+    <div class="card-header position-relative">
       <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-4 col-sm-4">
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_username,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'DNI',
-            autocomplete: 'off',
-          ) %>
-        </div>
-        <div class="col-md-4 col-sm-4">
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_by_fullname,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre o apellido',
-            autocomplete: 'off',
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-4">
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
-          <!-- Spinner para la carga -->
+        <div class="justify-content-between">
+          <div class="row">
+            <div class="col-4">
+              <label>Dni</label>
+              <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+              <%= f.text_field(
+                :search_username,
+                class: 'filterrific-periodically-observed form-control',
+                placeholder: 'DNI',
+                autocomplete: 'off',
+              ) %>
+            </div>
+            <div class="col-4">
+              <label>Nombre</label>
+              <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+              <%= f.text_field(
+                :search_by_fullname,
+                class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Nombre o apellido',
+                autocomplete: 'off',
+              ) %>
+            </div>
+          </div>
+          
           <%= render_filterrific_spinner %>
         </div>
       <% end %>
+
+      <%= link_to reset_filterrific_url, class: "btn btn-sm reset-filterrific",
+        :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+        <%= fa_icon "redo" %>
+      <% end %>
     </div>
-    <div class="clearfix">
+    <div class="card-body">
+      <%= render(
+        partial: 'users/list',
+        locals: { users: @users }
+      ) %>
     </div>
   </div>
-  <br>
-  <%= render(
-    partial: 'users/list',
-    locals: { users: @users }
-  ) %>
 <% else %>
   <%= render(
     partial: 'shared/not_found',
     locals: { object_name: 'usuarios' }
   ) %>
 <% end %>
+

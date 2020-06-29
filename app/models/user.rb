@@ -25,7 +25,7 @@ class User < ApplicationRecord
 
   # Delegaciones
   delegate :full_name, :dni, :email, to: :profile
-  delegate :name, to: :sector, prefix: :sector
+  delegate :name, :establishment_short_name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
   delegate :establishment, to: :sector
 
@@ -39,7 +39,7 @@ class User < ApplicationRecord
   end
 
   after_save :verify_profile
-  
+
   def verify_profile
     unless self.profile.present?
       self.create_profile # Comment in development
@@ -55,7 +55,7 @@ class User < ApplicationRecord
   def valid_password?(password)
     Devise::Encryptor.compare(self.class, encrypted_password, password)
   end
-  
+
   # hack for remember_token
   def authenticatable_salt
     Digest::SHA1.hexdigest(username)[0,29]
@@ -96,7 +96,7 @@ class User < ApplicationRecord
   scope :with_sector_id, lambda { |an_id|
     where(sector_id: [*an_id])
   }
- 
+
 
   def full_name
     if self.profile.present?

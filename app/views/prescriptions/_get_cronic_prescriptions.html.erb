@@ -1,39 +1,40 @@
 
-    <p class="bg-warning" style="padding:10px 20px">
-      Verifica que la receta que estás cargando no sea una de estas:
-    </p>
-    <div class="panel panel-info">
-      <!-- Default panel contents -->
-      <table class="table table-hover table-condensed" id="modal-cronic-prescriptions">
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Profesional</th>
-            <th>Ins</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%@prescriptions.each do |prescription| %>
-            <tr data-href="<%= edit_prescription_path(prescription) %>" style="cursor: pointer;">
-              <td>
-                <%= prescription.order_type.humanize %>
-              </td>
-              <td>
-                <%= prescription.professional_fullname %>
-              </td>
-              <td>
-                <%= prescription.quantity_ord_supply_lots.count %>
-              </td>
-              <td>
-                <%= prescription.status.humanize %>
-              </td>
-              <td>
-                <%= prescription.created_at.strftime("%d/%m/%Y") %>
-              </td>
-            </tr>
-          <%end%>
-        </tbody>
-      </table>
-    </div>
+<p class="table-warning rounded-sm" style="padding:10px 20px">
+  <%= fa_icon "exclamation-triangle" %>
+  Verifica que la receta que estás cargando no sea una de estas:
+</p>
+<div class="card">
+  <!-- Default panel contents -->
+  <table class="table table-hover table-sm" id="modal-cronic-prescriptions">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Profesional</th>
+        <th>Ins</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%@prescriptions.each do |prescription| %>
+        <tr data-href="<%= edit_prescription_path(prescription) %>" style="cursor: pointer;">
+          <td>
+            <%= prescription.order_type.humanize %>
+          </td>
+          <td>
+            <%= prescription.professional_fullname %>
+          </td>
+          <td>
+            <%= prescription.quantity_ord_supply_lots.count %>
+          </td>
+          <td>
+            <%= prescription.status.humanize %>
+          </td>
+          <td>
+            <%= prescription.created_at.strftime("%d/%m/%Y") %>
+          </td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+</div>

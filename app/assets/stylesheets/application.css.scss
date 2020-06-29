@@ -10,23 +10,36 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
- *= require_self
- *= require chosen
- *= require bootstrap-select
  */
- @import 'bootstrap-sprockets';
- @import 'bootstrap';
- @import 'font_awesome5_webfont';
- @import 'bootstrap-datetimepicker';
- @import 'bootstrap3-switch';
 
- @font-face {
-   font-family: "Lato";
-   src: font-url( asset-path("Lato-Regular.ttf") );
-   font-weight: normal;
-   font-style: normal;
- }
+@import 'variables';
+@import "bootstrap-select";
+@import "bootstrap";
+@import "chosen";
+@import 'font_awesome5_webfont';
+@import 'bootstrap-datetimepicker';
+@import 'bootstrap3-switch';
+@import 'sidebar';
+@import 'panels';
+@import 'cards';
+@import 'autocomplete';
+
+html {
+  @media(min-width: 1200px) and (max-width: 1480px){
+    font-size: 12px;
+  }
+}
+
+body{
+  background-color: #303030;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: font-url( asset-path("Lato-Regular.ttf") );
+  font-weight: normal;
+  font-style: normal;
+}
 
 @font-face {
   font-family: "Comfortaa-regular";
@@ -49,4 +62,106 @@
 
 .table-row{
   cursor:pointer;
+}
+
+td .form-group{
+  margin-bottom: 0px !important;
+}
+
+// barra navegación principal
+.navbar{
+  padding: 8px 16px 8px 3px;
+  height: $navbar-height;
+  @media(min-width: 1200px) and (max-width: 1480px){
+    height: $navbar-height-bml;
+  }
+  .brand-container{
+    width: $sidebar-width-visible;
+    a.navbar-brand{
+      margin-right: 0;
+      margin-left: 1rem;
+    }
+    button#menu-toggle:focus{
+      box-shadow: none!important;
+    }
+
+  }
+}
+
+// columna de acciones de los listados (tables)
+.actions-col{
+  width: 1%;
+  white-space: nowrap;
+}
+
+// titulo del modal
+.modal-header-flex{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+  button{
+    margin: 0px;
+  }
+
+}
+
+.custom-select-pick{
+  button.dropdown-toggle{
+    display: block;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    &:focus{
+      outline: none !important;
+      border: none;
+    }
+  }
+}
+
+// grilla de usuarios
+.users-list-table{
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  height: auto;
+}
+
+.h-row-custom{
+  height: 100%;
+  .mh-col-custom{
+    height: 100%;
+    .card{
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+}
+
+.reset-filterrific{
+  position: absolute;
+  top: 0.75rem;
+  right: 1.25rem;
+}
+
+.alert-container{
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  top: 40px;
+  transform: translateX(-50%);
+}
+
+.form-group.radio_buttons > label.control-label{
+  margin-right: 1rem;
 }

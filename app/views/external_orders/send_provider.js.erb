@@ -1,8 +1,8 @@
 // Add styles
-$('.modal-content').addClass('panel-primary');
+$('.modal-header').addClass('bg-primary text-white');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-send'></i>  Enviar el pedido");
+$('.modal-title').html("<i class='fa fa-paper-plane'></i>  Enviar el pedido");
 
 // Render the send form
 $('.modal-body').html('<%= j render("send_form") %>');
@@ -25,5 +25,5 @@ $(document).on('change', '#sent-by-select', function() {
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-primary');
+  $('.modal-header').removeClass('bg-primary text-white');
 });

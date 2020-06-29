@@ -1,0 +1,10 @@
+$sidebar-width-visible: 210px;
+$sidebar-width-hidden: 40px;
+$sidebar-icon-position: 10%;
+
+$min-height-list: calc(100vh - 274px);
+$min-height-index: calc(100vh - (109px + 63px + 2rem));
+
+// A tener en cuenta: tamaños del navbar
+$navbar-height: 60px; // default (1920 * 1080)
+$navbar-height-bml: 38px; // resolucion (1200 * 1480)

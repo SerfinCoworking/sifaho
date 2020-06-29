@@ -19,7 +19,7 @@ class ExternalOrderTemplatesController < ApplicationController
   def new
     authorize ExternalOrderTemplate
     @external_order_template = ExternalOrderTemplate.new
-    @order_type = 'solicitud_abastecimiento'
+    @order_type = 'solicitud'
     @destination_sectors = current_user.establishment.sectors
   end
 
@@ -34,12 +34,14 @@ class ExternalOrderTemplatesController < ApplicationController
   # GET /external_order_templates/1/edit
   def edit
     authorize @external_order_template
+    @order_type = 'solicitud'
     @destination_sectors = Sector.with_establishment_id(@external_order_template.destination_sector.establishment_id)
   end
 
   # GET /external_order_templates/1/edit_provider
   def edit_provider
     authorize @external_order_template
+    @order_type = 'despacho'
     @destination_sectors = Sector.with_establishment_id(@external_order_template.destination_sector.establishment_id)
   end
 
@@ -52,7 +54,7 @@ class ExternalOrderTemplatesController < ApplicationController
     @external_order_template.created_by = current_user
 
     respond_to do |format|
-      if @external_order_template.save!
+      if @external_order_template.save
         format.html { redirect_to @external_order_template, notice: 'La plantilla se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @external_order_template }
       else

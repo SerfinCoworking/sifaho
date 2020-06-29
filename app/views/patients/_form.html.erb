@@ -1,75 +1,89 @@
-<%= simple_form_for @patient, html: {class: "", role: 'check-modified'} do |f| %>
-<%= f.error_notification %>
-  <div class="row">
-    <div class="col-md-12">
-      <h5>DATOS BÁSICOS</h5><hr>
-      <div class="col-md-4">
-        <%= f.input :dni, required: true, readonly: f.object.Validado?, label: 'Número de DNI ARGENTINO', input_html: { min: '10000', max:'999999999' } %>
-      </div>
-      <div class="col-md-4"> 
-        <%= f.input :sex, label: 'Sexo', include_blank: false,
-          collection: Patient.sexes,
-          :value_method => :first,
-          :input_html => {
-            disabled: f.object.Validado?,
-            required: true,
-            include_blank: false,
-            class: 'selectpicker-md supply',
-            "data-width"=>"100%",
-            "data-size"=>"10",
-            value: "#{ f.object.sex }"
-          } 
-        %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :birthdate, as: :date_time_picker, label: 'Fecha de nacimiento',
-          readonly: f.object.Validado?,
-          :placeholder => "Ej: 01/01/1990",
-          input_html: {class: "form-control", required: true, autocomplete: 'off',
-          value: "#{if @patient.birthdate.present?; @patient.birthdate.strftime("%d/%m/%Y"); end }"},
-          html5: false,
-          required: false
-        %> 
-      </div>
-      <div class="col-md-4">
-        <%= f.input :last_name, readonly: f.object.Validado?, required: true, label: 'Apellido' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :first_name, readonly: f.object.Validado?, required: true, label: 'Nombre' %>
-      </div>
-      <div class="col-md-4">
-        <%= f.input :marital_status, label: 'Estado Civil', include_blank: false,
-          collection: Patient.marital_statuses,
-          :value_method => :first,
-          disabled: f.object.Validado?,
-          :input_html => {
-            required: true,
-            include_blank: false,
-            id: 'supply-select',
-            class: 'selectpicker-md supply',
-            "data-width"=>"100%",
-            "data-size"=>"10",
-            value: "#{ f.object.marital_status }"
-          } 
-        %>
-      </div>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @patient.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@patient.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @patient.new_record? ? "Agregar nuevo paciente" : "Editando paciente" %>
+      </h5>
     </div>
+    <%= link_to :back, class: @patient.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <h5>DATOS DE CONTACTO</h5><hr>
+  <div class="card-body">
+
+    <%= simple_form_for @patient, html: {role: 'check-modified'} do |f| %>
+    <%= f.error_notification %>
       <div class="row">
-        <div class="col-md-5">
+        <div class="col-12">
+          <h5>Datos básicos</h5><hr>
+        </div>
+        <div class="col-4">
+          <%= f.input :dni, required: true, readonly: f.object.Validado?, label: 'Número de DNI ARGENTINO', input_html: { min: '10000', max:'999999999' } %>
+        </div>
+        <div class="col-4">
+          <%= f.input :sex, label: 'Sexo', include_blank: false,
+            collection: Patient.sexes,
+            :value_method => :first,
+            :input_html => {
+              disabled: f.object.Validado?,
+              required: true,
+              include_blank: false,
+              class: 'selectpicker supply custom-select-pick',
+              "data-width"=>"100%",
+              "data-size"=>"10",
+              value: "#{ f.object.sex }"
+            }
+          %>
+        </div>
+        <div class="col-4">
+          <%= f.input :birthdate, as: :date_time_picker, label: 'Fecha de nacimiento',
+            readonly: f.object.Validado?,
+            :placeholder => "Ej: 01/01/1990",
+            input_html: {class: "form-control", required: true, autocomplete: 'off',
+            value: "#{if @patient.birthdate.present?; @patient.birthdate.strftime("%d/%m/%Y"); end }"},
+            html5: false,
+            required: false
+          %>
+        </div>
+        <div class="col-4">
+          <%= f.input :last_name, readonly: f.object.Validado?, required: true, label: 'Apellido' %>
+        </div>
+        <div class="col-4">
+          <%= f.input :first_name, readonly: f.object.Validado?, required: true, label: 'Nombre' %>
+        </div>
+        <div class="col-4">
+          <%= f.input :marital_status, label: 'Estado Civil', include_blank: false,
+            collection: Patient.marital_statuses,
+            :value_method => :first,
+            disabled: f.object.Validado?,
+            :input_html => {
+              required: true,
+              include_blank: false,
+              id: 'supply-select',
+              class: 'selectpicker supply custom-select-pick',
+              "data-width"=>"100%",
+              "data-size"=>"10",
+              value: "#{ f.object.marital_status }"
+            }
+          %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <h5>Datos de contacto</h5><hr>
+        </div>
+        <div class="col-5">
           <%= f.label :patient_phone do %>
             Teléfonos
 
-              <%= link_to_add_association f, :patient_phones, class: 'btn btn-primary btn-xs',
+              <%= link_to_add_association f, :patient_phones, class: 'btn btn-primary btn-sm',
                 data: {"association-insertion-node" => "tbody.patient_phones", "association-insertion-method" => "append"} do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+                <%= fa_icon "plus" %>
               <% end %>
 
           <% end %>
-          <table class="table table-condensed">
+          <table class="table table-sm">
             <thead>
               <tr>
                 <th>Tipo</th>
@@ -85,19 +99,26 @@
           </table>
 
 
-  
+
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
           <%= f.input :email, placeholder: 'ejemplo@dominio.com', label: 'Email' %>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <h5>DATOS DEL DOMICILIO</h5><hr>
-      <div class="col-md-4">
+      <div class="row">
+        <div class="col-12">
+          <h5>Datos del domicilio</h5><hr>
+          <div class="col-4">
+          </div>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
-<% end %>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', patients_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @patient.new_record? ? 'new_patient' : 'edit_patient_' + @patient.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>

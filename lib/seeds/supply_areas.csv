@@ -1,0 +1,604 @@
+﻿Id,Name
+1,Varios
+5,Biomédicos Especiales
+6,Cirugia gral
+7,Urología
+8,Cirugía Toraco-Abdominal
+9,Endoscopia Bronquial
+10,Neurocirugía
+11,Diagnostico por Imagenes
+12,Oxigenoterapia
+13,Resucitador Manual
+14,Oftalmología
+15,Varios Especiales
+16,Accesorios
+17,Instrumento de Mano
+18,Accesorios Resucitador Manual
+19,Accesorio Resucitador Manual
+20,Neurocirugía
+21,Neurocirugía
+22,Cirugía Reparadora
+26,Endoscopia Digestiva
+27,Cardiología
+30,Sistema CPAP
+31,Accesorio
+32,Accesorio Circuito ARM
+33,Accesorio Broncoscopio
+34,Accesorio Videolaparoscopio
+35,Ginecología
+37,Toraco-Gineco-Abdominal
+39,Accesorio
+41,Endoscopia
+42,Sistema de Monitoreo
+43,Accesorio
+44,Oftalmología
+47,Videolaparoscópica
+49,Vascular
+50,Cuidado Dermico
+51,Biomédicos Generales
+52,Uso x Imagenes
+53,Angiografía
+54,Catéteres
+55,Intravenoso central
+56,Otros Cateters_sets
+57,Punción -Biopsia
+58,Introductores
+59,Diálisis
+60,Diálisis peritoneal
+61,Aspiración
+62,Sistema cerrado de aspiración
+63,Introductor
+66,Insumos varios
+67,Accesorios
+68,Papeles de registro
+69,ECG
+70,Sondas
+71,Hematúrica
+72,Heladera
+73,Monitoreo Fetal
+74,Alimentación
+76,Acceso implantable
+77,Foley
+78,Hilados
+79,Malla Tubular
+80,Aspiración de mucus
+81,Alimentación nasogástrica
+82,Drenaje torácico
+83,Tubuladuras
+84,Poliuretano
+85,Oxigenoterapia
+86,Máscaras
+87,Goma látex
+88,Orinales
+89,Hemodiálisis
+90,Nebulizador
+92,Descartables
+93,Máquina de rasurar
+94,Algodón - Gasa
+95,Refractometro
+96,Espirometría
+97,Impedanciómetro
+98,Arco en C
+99,Uso Quirúrgico
+100,Descartables
+101,PVC
+102,Bolsas
+103,Accesorios
+104,Pañales
+105,Cardiodesfribilador
+106,EEG
+107,Tubo endotraqueal
+108,Anestesia
+109,Doble Luz
+110,ARM
+111,Espiral alambre
+112,Venda
+113,Enyesada
+118,Cambric
+119,Elástica
+120,Tubo
+121,Kehr
+122,Ovatina
+123,Smarch
+124,Conectores
+125,Rectales
+126,Pezzer
+127,Intubación gástrica
+128,Nelaton
+129,Nutrición enteral
+130,Trocar
+131,Torácico
+132,Telas adhesivas
+133,Hipoalergénicas
+134,Uretrales
+135,Comunes
+136,Cánulas
+137,Nasofaríngeas
+141,Traqueotomía C/Balón
+142,Indumentaria descartable
+143,Barbijo
+144,Anestesia
+145,Ostomía
+149,Recolectoras de fluidos
+150,Equipos p/Administración
+151,Alimentación
+153,Guantes Vinilo/Nitrilo
+160,Traqueotomía Metálica
+161,Traqueotomía  S/Balón
+165,Biopsia Punción Aspiración
+167,Intramuscular
+168,Diálisis
+169,Intradérmica
+170,Hipodermica
+171,Anestesia Raquídea
+172,Accesorio para inhalación
+173,Anestesia Epidural
+174,Anestesia con neuroestimulador
+175,Uso por imágenes
+176,Apósitos
+177,Poliuretano transparente
+178,Algodón y gasa
+179,Alginato de Calcio
+180,Hidrocoloide
+181,Intravenosa
+182,Uso x imágenes
+185,Descartables Alimentación Enteral
+186,Envases y biberones descartables
+187,Punción Lumbar/Raquídea
+189,Agujas Descartables
+190,Hemodialisis
+191,Osteosintesis
+192,Guantes
+193,Guantes polietileno
+194,Guía introductora
+195,Guías
+196,Frascos
+197,De Aspiración
+198,Guantes esteriles no quirurgicos
+199,Hojas de corte
+200,Enfermería
+201,Uso quirúrgico
+202,Guantes examinación_Servicios
+203,Bitubulado
+204,Brocal
+205,Dosis unitaria
+206,Vertedor
+207,Boca Ancha
+208,Guantes de cirugia
+209,Hemodinamia
+210,Vías y conectores
+211,Jeringas descartables
+212,Uso general
+213,Uso oncología
+214,Jeringa de vidrio
+215,Uso Terapia intensiva
+216,Algodón-gasa
+217,Antiparras
+220,Llave de tres vías
+221,Anatomía Patológica
+222,Introductores
+223,Descartador
+224,Electrodos
+225,Colectores
+226,Colectores Ureteral
+227,Conector
+228,Muestra de Mucosidad
+229,Uretrales
+230,Cepillo
+233,Hemoterapia
+234,Filtros
+235,Adhesivos
+236,Cofia
+237,Sangre y plasma
+238,Soluciones parenterales
+239,Sangre y plasma
+240,Férulas
+242,Intravenoso periférico
+243,Instrumental
+244,Cirugia gral
+245,Varios espec.
+246,Vs. Especiales
+248,Sistema de Monitoreo
+249,Cirugia gral
+250,Laboratorio
+251,Insumos de Equipos
+252,Avl 993
+253,Avl 9140
+254,Autoanalizador Metrolab 2300 Plus
+255,Coagulación
+257,Carga Viral
+258,Coagulación Stago St 4
+259,Autoanalizador Advia 1200
+260,Avl Compact 3
+264,Contador Hematologico Nihon Kohden
+267,Electroforesis Sebia
+271,Contador Hematologico Sysmex  Ins Comunes
+279,Anatomia Patologica
+280,Inmunohistoquimica
+281,Espectofotometro 1600 Plus
+282,Coagulometro Sta Compac
+286,Instrumental
+287,Bromatologia
+294,Histopatologia
+295,Advia Centauro-Quimio
+296,Aglutinación En Placas
+297,Hemoterapia-Hematología
+298,Hemoclasificadores
+303,Coagulación
+304,Accesorios
+309,Tiras / Otros Reactivos
+318,Polarización P/Fluorescencia
+320,Inmulite - Quimio
+321,Metodo Colorimetrico Punto Final
+322,Inmunodifusión Radial
+324,Autoanalizador  Hitachi 911
+325,Inmunoelectroforesis
+326,Inmunoflorescencia
+327,Ion Selectivo Avl 9120
+328,Ion Selectivo Avl 9180
+329,Ion Selectivo Tecnolab
+335,Autoanalizador  Hitachi 902
+336,Ion Selectivo Avl 9140
+339,Metodo Elisa
+340,Metodo Meia/Axsym
+341,Metodo Manual UV
+354,Laboratorio De Referencia
+355,Biología Molecular
+356,Accesorios Lab. Referenc
+362,Medicamentos
+364,Antiinflamatorios especificos y antigotosos
+365,Cardiovasculares
+366,"Antihipertensivos, vasodilatadores"
+367,Neurologia y psicofarmacos
+368,Antidepresivos - antimaniacos
+369,Antiarritmicos
+370,Soluciones parenterales
+371,Nutricion parenteral
+372,Infectologia
+373,Antibacteriano internacion
+374,Antibacterianos ambulatorio
+375,Antirretrovirales
+376,Metabolismo y nutricion
+377,Metabolismo oseo
+378,Oftalmologia
+379,Antibioticos uso topico
+380,Hematologia
+381,Factores coagulacion y otros hemoderivados
+382,Antimicoticos
+383,Antiinflamatorios no esteroides (aine)
+384,Hipolipemiantes
+385,Anestesia
+386,Bloqueantes neuromusculares
+387,Antiparasitarios
+388,"Anticoagulantes, fibrinoliticos y agentes relac."
+389,Oncologicos e inmunomoduladores
+390,Hormonas y agentes relacionados
+391,Mioticos y antiglaucomatosos
+392,Antivirales
+393,Otras vitaminas y minerales
+394,Anticonvulsivantes
+395,Dermatologia
+396,"Queratoliticos, queratoplasticos y antiverrucosos"
+397,Endocrinologia: hormonas y ag. Relacionados
+398,Corticoides y agentes relacionados
+399,Antianginosos
+400,Agentes complementarios de uso en anestesia
+401,Suplementos hidratacion-alim. Parenteral
+402,Hidratacion
+403,"Protectores, emolientes y astringentes"
+404,Citostaticos
+405,Respiratorio
+406,Otros respiratorios
+407,Inmunomoduladores
+408,Induccion anestesica y narcoticos
+409,Tuberculostaticos
+410,Inotropicos y cardiotonicos
+411,Digestivo
+412,Otros digestivos
+413,Adyuvantes de la quimioterapia
+414,Antidiabeticos
+415,Gineco-obstétricos
+416,Antiinfecciosos y antisepticos
+417,Tiroides
+418,Antiemeticos - gastrocineticos
+419,Ansioliticos e hipnoticos no barbituricos
+420,Ginecologicos
+421,Toxicologia
+422,Antagonistas y antidotos especificos
+423,Antibacterianos ambulatorio
+424,Ocitosicos y uteroinhibidores
+425,Otros endocrinologicos
+426,Complementarios quimioterapia oncologica
+427,Otros oftalmologicos
+428,Radiologia
+429,Otros complementarios de uso radiologicos
+430,Antiparkinsonianos
+431,Antiulcerosos
+432,Antipsicoticos - neurolepticos
+433,Laxantes
+434,Antibioticos de uso topico
+435,Anestesia local
+436,Contrastes yodados
+437,Contrastes baritados
+438,Diureticos
+439,Antiespasmodicos
+440,"Antihistaminicos, descongestivos nasales"
+441,Otros agentes antineoplasicos
+442,Broncodilatadores y antiinflamatorios bronquiales
+443,Otros endocrinologicos
+444,Otros neurologicos
+445,Midriaticos
+446,Medicamentos esp. Para quemaduras y/o heridas
+447,Antiparasitarios externos
+448,Zoonosis
+449,Antiparasitarios
+450,"Expansores, otros"
+451,Oncologicos e inmunosupresores
+452,Anestesia inhalatoria
+453,Antibacteriano de uso restringido
+454,Antitusivo
+455,Corticoides y agentes relacionados
+456,Farmacos de uso inespecifico en intoxic. Agudas
+457,"Vacunas, sueros y globulinas"
+458,Gammaglobulinas
+460,Factores estimulantes medula osea
+461,Nutroterápicos y Leches
+462,Odontologia
+463,Protesis y fisurados
+464,Rotatorios alta velocidad
+465,Radiologia
+466,Prevencion
+467,Protectores cavidades
+468,Rotatorios quirurgicos
+469,Varios
+470,Cirugia
+471,Rotatorios baja velocidad
+472,Rotatorios protesis
+473,Endodoncia
+474,Aislacion
+475,Operatoria
+476,Periodoncia
+477,Rayos
+478,Fijador_Revelador
+479,Placas base verde
+480,Vacunas
+481,Viral recombinante
+482,Viral
+483,Bacteriana
+484,Combinada
+485,Insumos en desuso
+490,Poliglactina - Ácido Poliglicólico
+491,Nylon
+492,Polipropileno
+493,Seda Negra
+495,Catgut Cromado
+496,Catgut Simple
+497,Lino
+498,Hemoclips
+499,Esterilizacion
+500,Antisepticos
+501,Vasodilatadores
+502,Génito-Urinario
+503,Bota
+504,Camisolín
+505,Tratamiento dolor e inflamación
+506,Antiinflamatorios no esteroides (AINE)
+507,Antiinflamatorios específicos y antigotosos
+508,Analgésicos opiáceos
+509,Prótesis y Ortesis traumatológica
+511,Anestesia
+514,Multiparamétrico Mindray PM 9000 – Mod Masimo Set
+515,Multiparamétrico Mindray PM 9000 – Modelo Super
+516,Monitor de gases Dräger Modelo Vamos
+517,Monitor carro anestesia Dräger Fabius GS
+518,Sensores de Oxigeno Dräger
+519,Monitor carro anestesia Dräger PM 8050
+520,Controles Biológicos
+523,Lubricantes y Líquidos
+524,Material de Empaque
+525,Registro
+526,Indicadores Clase I
+527,Indicadores Clase II
+528,"Indicadores Clase IV, V y VI"
+529,Reconstrucción Maxilofacial
+530,Silicona
+531,Güedel-Mayo
+532,Nasal
+533,Anestesia Epidural
+534,Canalización Umbilical
+535,Diálisis
+536,Embolectomía
+537,Epicutáneo
+538,Intravenoso Central Uso Oncológico
+539,Diagnóstico por Imágenes
+540,Diálisis Peritoneal Ambulatoria
+541,Hemodiálisis
+542,Traqueostomia S/Balón Biesalski
+543,Sengstaken Blackenmore
+544,Ileostomía
+545,Equipos completos descartables
+546,Telas y Confecciones
+547,Telas - Colchones y almohadas
+548,Confecciones
+551,Diluyentes
+552,Antivenenos y Sueros
+553,Gammaglobulinas
+554,Papeles/Cartones
+555,Descartables
+556,Cadena de Frío
+558,Drogas
+562,Materiales de Laboratorio
+568,Genética
+570,Otras Drogas
+573,Otorrinolaringologia
+574,Miniinvasiva y endoscopia
+575,Canastilla-Cesta
+576,Ansas-Asas
+577,Dispositivo de Corte
+578,Balones
+579,Catéteres
+581,Dilatadores
+582,"Sets, equipos o kits"
+583,Botones
+584,Stents
+585,Guías y Camisas
+586,Prótesis Vascular
+587,Varios
+588,Programa Antitabaquismo
+589,Listos para usar
+590,Polvos
+591,Nutroterápicos
+593,Fórmulas inicio-Leches Enteras y Descremadas
+594,Metabólicas congénitas
+595,Hilados
+597,Salud Sexual y Reproductiva
+598,Sistema CPAP
+599,Insumos respiratorios y críticos
+600,Prog. Remediar
+603,Microbiología
+604,Ágares
+605,Caldos
+606,Colorantes
+607,Discos Antibióticos
+608,Enriquecedores y Aditivos
+610,Bactec
+611,Materiales de Vidrio
+612,Termómetros
+613,Cobas B221
+614,Otros Materiales
+619,Reactivos
+622,Autoanalizador Mindray BS300
+623,Optti (Gases)
+624,Rapidlab 348
+625,"Pipetas, Propipetas y Accesorios"
+626,Policubetas y Accesorios
+627,Portaobjetos y Cubreobjetos
+628,"Tubos, Capilares y Accesorios"
+629,"Probetas de Vidrio, Plásticas y Tapones"
+630,Varios de Vidrio 
+631,Prendas de Presoterapia
+632,Adultos
+633,Pediátricas
+637,Equipamientos Médicos Mediana y Alta Complejidad
+638,Equipamiento Laboratorio
+640,Programa Diabetes - Eq. y descartables
+641,Autoanalizador Cobas C311
+642,Contador Hematológico Counter 19
+643,Prótesis Traumatológicas
+647,Sensores varios oximetría
+648,Indumentaria de Trabajo y Seguridad
+649,Monitor multiparam Mindray
+650,Monitor multiparam Mennen
+651,Monitor multiparam Nihon Kohden BSM3101
+652,Monitor multiparam Nihon Kohden 2351K
+653,Monitor multiparam Nihon Kohden LifeScope 6301
+654,Monitor Multiparam DIXTAL DX2020
+655,Accesorios Dura-cuff
+656,Fisher&Paykel
+657,Gases Medicinales
+658,Equipos Médicos
+659,RIA
+660,SEROLOGÍA
+661,DIESTRO 103
+662,Mobiliario Hospitalario
+663,Servicios Intermedios
+664,Incubadora Alison UTI 3
+665,Ambu
+666,Camino
+667,Carro Anestesia ADOX
+668,Carro Anestesia Dräger
+669,Carro Anestesia Taka Oka
+670,Circuitos anestesia
+671,Conectores Intersurgical
+672,Desfibrilador Cardioserv o Esaote
+673,ECG Dongjang EC 32A
+674,ECG Cardiofax
+675,ECG Fukuda
+676,Hudson
+677,Incubadoras Medix
+678,Neumonología
+679,Oxímetro Infunix
+680,Respirador Leistung
+681,Manguitos P no invasiva
+682,Neurología
+683,Oxímetro Novametrix Oxypleth 520-A
+684,Otros
+685,Respirador Bear Cub 750
+686,Respirador Dräger
+687,Respirador Neumovent Graphnet
+688,Respirador Puritan Benett 840
+689,Respirador Siemens S300A
+690,Respirador SLE
+691,Incubadora Rosch ITR25
+692,ECG Sayko
+693,Respirador Taema Clarys
+694,Monitor Twinview
+696,Dash
+697,Equipamiento Odontológico
+698,Instrumental Odontológico
+704,Prótesis
+705,LIO Rígido
+706,LIO Plegable
+707,LIO Rígido - Cámara Anterior
+708,LIO Rígido - Cámara Posterior
+709,Varios
+710,Rayos - Varios
+711,Mantenimiento
+712,Contador Hematológico GEO-MC
+713,Climatización
+714,Contador Hematológico Mindray
+715,Autoanalizador Miura 500
+716,Traumatología
+717,Mobiliario Hospitalario
+718,Respirador Newport HT 70
+719,Baja complejidad
+720,Insumos Politraumatizados
+721,Equipamiento Médico Baja Complejidad
+722,Vehículos
+723,Insulinas PRODIANEU
+724,Zoonosis
+725,pruebas
+727,Salud Sexual y Reproductiva
+728,Monitor Cardiocap 5
+729,Varios rubro Vacunas
+730,Repuestos y accesorios de equipos de Laboratorio
+731,Repuestos y accesorios Eq. Laboratorio
+732,Campaña SR-Polio
+733,Placas Digitales
+734,Mamográficas Digitales
+735,Equipamiento e Insumos varios
+737,Biberones y Envases Descart
+738,Limpieza
+739,Suturas y Agujas de Suturas
+740,Bolsas de residuos / Toallas
+742,Agujas de Sutura
+743,Grapadoras y recargas
+744,Mallas
+745,Microcirugía
+746,Suturas
+747,Ameu
+749,Herramientas y accesorios
+750,Instrumental y accesorios
+751,Microlab 300
+752,Disp. portátil Cobas H232 
+753,Dir. Nac. Mat e Infancia
+754,INCUCAI
+756,Prog. Epidemiología
+757,Prog. Chagas
+758,Prog. Lepra
+759,Prog. SIDA
+760,Prog. Salud Ocular
+761,Proy. Fort. Redes
+762,Programa TBC
+763,Repuestos Autoclave HOGNER
+764,Poliéster
+765,Equipamiento informático
+766,Polidioxanona (PDS)
+767,Poliglecaprona
+768,Repuestos Equipo Metrolab 2300 Plus
+769,Ortodoncia
+770,Autoanalizador Química Mindray BS-200E
+771,Monitor Multiparam Nihon Kohden 3562
+772,Monitor multiparam Nihon Kohden LifeScope 8
+773,Hidropolímero
+774,Elementos de oficina y electrodomésticos

@@ -1,16 +1,13 @@
-<% content_for :page_header do %>
-  Lotes en provincia
-  <small>
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-    papelera
-  </small>
-<% end %>
+<%= render 'header' %>
 
-<div class="row">
-  <%= render "filter" %>
-
-  <%= render(
-    partial: 'supply_lots/list',
-    locals: { supply_lots: @supply_lots }
-  ) %>
+<div class="card" id="filter-panel">
+  <div class="card-header">
+    <%= render 'filter' %>
+  </div>
+  <div class="card-body fixed-panel-index">
+    <%= render(
+      partial: 'supply_lots/list',
+      locals: { supply_lots: @supply_lots }
+    ) %>
+  </div>
 </div>

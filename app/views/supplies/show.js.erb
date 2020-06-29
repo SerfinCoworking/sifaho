@@ -1,12 +1,12 @@
 // Add the dialog title
-$('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo insumo");
+$('.modal-title').html("<i class='fas fa-eye'></i>  Viendo insumo");
 
 // Render the edit form
 $('.modal-body').html('<%= j render("show") %>');
 
 // Add form button
 $('.modal-footer').html(
-  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
 );
 
 // Show the dynamic dialog

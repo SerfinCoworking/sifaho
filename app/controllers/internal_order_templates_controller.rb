@@ -19,6 +19,7 @@ class InternalOrderTemplatesController < ApplicationController
   def new
     authorize InternalOrderTemplate
     @internal_order_template = InternalOrderTemplate.new
+    @order_type = 'solicitud'
     @destination_sectors = current_user.establishment.sectors
   end
 
@@ -33,12 +34,14 @@ class InternalOrderTemplatesController < ApplicationController
   # GET /internal_order_templates/1/edit
   def edit
     authorize @internal_order_template
+    @order_type = 'solicitud'
     @destination_sectors = current_user.establishment.sectors
   end
 
   # GET /internal_order_templates/1/edit_provider
   def edit_provider
     authorize @internal_order_template
+    @order_type = 'provision'
     @destination_sectors = current_user.establishment.sectors
   end
 

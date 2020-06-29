@@ -1,59 +1,70 @@
 <% content_for :page_header do %>
-  <ul class="nav nav-tabs nav-tabs-cust">
-    <li role="presentation" class="<%= active_action('statistics') %> non-sel" id="page-title">
-      <%= link_to statistics_internal_orders_path do %>
+  <% if policy(Sector).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to sectors_path, class: "nav-link #{active_action_and_controller('index', 'sectors')}" do %>
+        <%= fa_icon "bezier-curve" %>
         Sectores
       <% end %>
     </li>
-    <li role="presentation" class="<%= active_action('applicant_index') %> non-sel">
-      <%= link_to applicant_index_internal_orders_path do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-        Recibos
+  <% end %>
+
+  <% if policy(Sector).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')}" do %>
+        <%= fa_icon "plus" %>
+        Crear sector
       <% end %>
     </li>
-    <% if policy(InternalOrder).new_provider? %>
-      <li role="presentation" class="<%= active_action_and_controller('index', 'internal_orders') %> non-sel">
-        <%= link_to internal_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
-          Entregas&nbsp;
-          <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-          <% if count > 0 %>
-            <div class="label label-info pull-right"><%= count %></div>
-          <% end %>
-        <% end %>
-      </li>
+  <% end %>
+
+  <li class="nav-item <%= active_action('applicant_index') %> non-sel">
+    <%= link_to applicant_index_internal_orders_path, class: 'nav-link' do %>
+      <%= fa_icon "inbox" %>
+      Recibos
     <% end %>
-    <% if policy(InternalOrder).new_applicant? %>
-      <li role="presentation" class="<%= active_action('new_applicant') %> non-sel">
-        <%= link_to new_applicant_internal_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Solicitud
+  </li>
+  <% if policy(InternalOrder).new_provider? %>
+    <li class="nav-item <%= active_action_and_controller('index', 'internal_orders') %> non-sel">
+      <%= link_to internal_orders_path, class: 'nav-link' do %>
+        <%= fa_icon "paper-plane" %>
+        Entregas&nbsp;
+        <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+        <% if count > 0 %>
+          <div class="label label-info pull-right"><%= count %></div>
         <% end %>
-      </li>
-    <% end %>
-    <% if policy(InternalOrder).new_provider? %>
-      <li role="presentation" class="<%= active_action_and_controller('new_provider', 'internal_orders') %> non-sel">
-        <%= link_to new_provider_internal_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Provisión
-        <% end %>
-      </li>
-    <% end %>
-    <% if policy(InternalOrderTemplate).index? %>
-      <li role="presentation" class="<%= active_class('internal_order_templates') %> non-sel" id="pedido">
-        <%= link_to internal_order_templates_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
-          Plantillas
-        <% end %>
-      </li>
-    <% end %>
-    <% if policy(InternalOrder).new_report? %>
-      <li role="presentation" class="<%= active_action('new_report') %> non-sel">
-        <%= link_to new_report_internal_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
-          Reporte
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(InternalOrder).new_applicant? %>
+    <li class="nav-item <%= active_action('new_applicant') %> non-sel">
+      <%= link_to new_applicant_internal_orders_path, class: 'nav-link' do %>
+        <%= fa_icon "plus" %>
+        Solicitar
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(InternalOrder).new_provider? %>
+    <li class="nav-item <%= active_action_and_controller('new_provider', 'internal_orders') %> non-sel">
+      <%= link_to new_provider_internal_orders_path, class: 'nav-link' do %>
+        <%= fa_icon "plus" %>
+        Entregar
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(InternalOrderTemplate).index? %>
+    <li class="nav-item <%= active_class('internal_order_templates') %> non-sel" id="pedido">
+      <%= link_to internal_order_templates_path, class: 'nav-link' do %>
+        <%= fa_icon "skiing" %>
+        Plantillas
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(InternalOrder).new_report? %>
+    <li class="nav-item <%= active_action('new_report') %> non-sel">
+      <%= link_to new_report_internal_orders_path, class: 'nav-link' do %>
+        <%= fa_icon "chart-line" %>
+        Reporte
+      <% end %>
+    </li>
+  <% end %>
 <% end %>

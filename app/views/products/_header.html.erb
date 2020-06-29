@@ -1,29 +1,24 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust non-sel">
-      <li role="presentation" id="page-title">
-        <a href="">Productos</a>
-      </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to products_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-list') %>
-          Listado
-        <% end %>
-      </li>
-      <% if policy(Product).new? %>
-        <li role="presentation" class="<%= active_action('new') %> non-sel">
-          <%= link_to new_product_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Nuevo
-          <% end %>
-        </li>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to products_path, class: 'nav-link' do %>
+      <%= fa_icon "pills" %>
+      Productos
+    <% end %>
+  </li>
+  <% if policy(Product).new? %>
+    <li class="nav-item <%= active_action('new') %> non-sel">
+      <%= link_to new_product_path, class: 'nav-link' do %>
+        <%= fa_icon "plus" %>
+        Agregar producto
       <% end %>
-      <% if policy(Product).trash_index? %>
-        <li role="presentation" class="<%= active_action('trash_index') %> non-sel">
-          <%= link_to trash_index_products_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-            Papelera
-          <% end %>
-        </li>
+    </li>
+  <% end %>
+  <% if policy(Product).trash_index? %>
+    <li class="nav-item <%= active_action('trash_index') %> non-sel">
+      <%= link_to trash_index_products_path, class: 'nav-link' do %>
+        <%= fa_icon "trash" %>
+        Papelera
       <% end %>
-    </ul>
+    </li>
+  <% end %>
 <% end %>

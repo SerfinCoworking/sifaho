@@ -1,5 +1,11 @@
 // Add the dialog title
+<<<<<<< HEAD:app/views/external_orders/nullify_confirm.js.erb
 $('#dialog h4').html("<i class=' glyphicon fas fa-ban'></i>  Anular la <%= @external_order.order_type.humanize.downcase %>");
+=======
+$('.modal-header').addClass('bg-danger text-white');
+
+$('.modal-title').html("<i class='fa fa-ban'></i>  Anular la <%= @external_order.order_type %>");
+>>>>>>> bootstrap4:app/views/external_orders/nullify.js.erb
 
 // Render the edit form
 $('.modal-body').html(
@@ -13,3 +19,8 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-header').removeClass('bg-danger text-white');
+});

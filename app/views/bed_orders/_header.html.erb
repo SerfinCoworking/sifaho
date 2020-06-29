@@ -1,27 +1,26 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust">
-      <li role="presentation" class="<%= active_action('statistics') %> non-sel" id="page-title">
-        <%= link_to bed_orders_path do %>
-          Internación
-        <% end %>
-      </li>
-      <li role="presentation" class="<%= active_action('index') %> non-sel">
-        <%= link_to bed_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
-          Provisiones
-        <% end %>
-      </li>
-      <li role="presentation" class="<%= active_action('new') %> non-sel">
-        <%= link_to new_bed_order_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Provisión
-        <% end %>
-      </li>
-      <li role="presentation" class="<%= active_action('bed_map') %> non-sel">
-        <%= link_to bed_map_bed_orders_path do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-map-marker') %>
-          Mapa de camas
-        <% end %>
-      </li>
-    </ul>
+  <li class="nav-item <%= active_action('statistics') %> non-sel" id="page-title">
+    <%= link_to bed_orders_path, class: "nav-link" do %>
+      <%= fa_icon "procedures" %>
+      Internación
+    <% end %>
+  </li>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to bed_orders_path, class: "nav-link" do %>
+      <%= fa_icon "paper-plane" %>
+      Entregas
+    <% end %>
+  </li>
+  <li class="nav-item <%= active_action('new') %> non-sel">
+    <%= link_to new_bed_order_path, class: "nav-link" do %>
+      <%= fa_icon "plus" %>
+      Nueva entrega
+    <% end %>
+  </li>
+  <li class="nav-item <%= active_action('bed_map') %> non-sel">
+    <%= link_to bed_map_bed_orders_path, class: "nav-link" do %>
+      <%= fa_icon "map" %>
+      Mapa de camas
+    <% end %>
+  </li>
 <% end %>

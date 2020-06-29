@@ -1,4 +1,4 @@
-<%= render 'header' %>
+<%= render 'users/header' %>
 
 <div class="panel panel-default">
   <table class="table table-hover">
@@ -22,5 +22,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= paginate @permission_requests %>
+  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+    <%= will_paginate @permission_requests, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  </div>
 </div>

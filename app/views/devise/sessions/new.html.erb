@@ -1,50 +1,53 @@
-<style>
-body {
-   background-image: url("<%= asset_path('bg-sifaho.jpg') %>");
-}
-</style>
-<div class="authform">
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
-    <%= image_tag("LogoSIFAHO.png", size: "70x70", alt: "Logo Sifaho") %>
-    <h3>Iniciar sesión</h3>
-    <%= devise_error_messages! %>
-    <div class="form-group">
-      <%- if devise_mapping.registerable? %>
-        <%= link_to 'Registrarse', new_registration_path(resource_name), class: 'right'  %>
-      <% end -%>
-      <%= f.label :username, "Usuario provincial OneLogin" %>
-      <%= f.number_field :username, :autofocus => true, class: 'form-control' %>
-    </div>
-    <div class="form-group">
-      <%- if devise_mapping.recoverable? %>
-        <%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: 'right' %>
-      <% end -%>
-      <%= f.label :password, 'Contraseña' %>
-      <%= f.password_field :password, class: 'form-control' %>
-    </div><br>
-      <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe) do %>
-        Iniciar sesión
-      <% end %>
-  <% end %>
-</div>
-<% content_for :page_footer do %>
-  <div class="col-md-5">
-  <div class="well well-sm">
+<div class="row">
+  <div class="jumbotron col-10 ml-auto pb-4 pt-5">
     <div class="row">
-      <div class="col-md-3">
-        <%= image_tag("tics.svg", size: "150x150", alt: "Logo Tics") %>
+      <div class="col-8">
+        <h3>Hola, te damos la bienvenida al Sistema Farmacéutico Hospitalario (SIFAHO)!</h3>
+        <p class="lead">Somos un grupo de personas que crece día a día. Nos especializamos en facilitar el control y seguimiento de los insumos que llegan todos los días a cada uno de los efectores de salud. Llevamos más de 2 años de funcionamiento en Neuquén y queremos seguir creciendo para brindar cada vez más y mejores respuestas a nuestros usuarios.</p>
+        <hr class="my-4">
+        <p>Ante cualquier duda, no dudes en comunicarte con la mesa de ayuda <i class="fab fa-whatsapp"></i> +54 9 2944 12-7915</p>
       </div>
-      <div class="col-md-3">
-        <%= image_tag("neuquen-provincia.png", size: "150x150", alt: "Logo One Login") %>
-      </div> 
-      <div class="col-md-3">
-        <%= image_tag("one-login.png", size: "80x80", alt: "Logo One Login") %>
+      <div class="col-3 ml-auto">
+        <p class="text-center pb-4"><%= image_tag("LogoSIFAHO.png", size: "70x70", align: "center", alt: "Logo Sifaho") %></p>
+        <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
+          <%= devise_error_messages! %>
+          <div class="form-group">
+            <%- if devise_mapping.registerable? %>
+              <%= link_to 'Registrarse', new_registration_path(resource_name), class: 'right'  %>
+            <% end -%>
+            <%= f.label :username, "Usuario provincial OneLogin" %>
+            <%= f.number_field :username, :autofocus => true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%- if devise_mapping.recoverable? %>
+              <%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: 'right' %>
+            <% end -%>
+            <%= f.label :password, 'Contraseña' %>
+            <%= f.password_field :password, class: 'form-control' %>
+          </div>
+            <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe) do %>
+              Iniciar sesión
+            <% end %>
+        <% end %>
       </div>
-      <div class="col-md-3">
-        <%= image_tag("logo-andes.svg", size: "111x111", alt: "Logo Andes") %>
-      </div>  
     </div>
   </div>
-<% end %>
-	
 
+  <div class="col-10 ml-auto d-flex justify-content-around">
+    <%= image_tag("logo_01.svg", size: "170x50", alt: "Logo Sifaho") %>
+    <%= image_tag("logo_02.svg", size: "170x50", alt: "Logo Sifaho") %>
+    <%= image_tag("logo_03.svg", size: "100x50", alt: "Logo Sifaho") %>
+  </div>
+
+  <div class="col-10 ml-auto mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title"><%= fa_icon "bullhorn" %> Novedades</h5>
+      </div>
+      <div class="card-body">
+        <p class="border-bottom">Actualización 30/06/2020</p>
+        <p>Implementamos una nueva interfaz de usuario que se adapta mejor a tus necesidades.</p>
+      </div>
+    </div>
+  </div>
+</div>

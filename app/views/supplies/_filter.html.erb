@@ -1,46 +1,39 @@
-<div class="panel panel-info" id="filter-panel">
-  <div class="panel-leftheading">
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-  </div>
-  <div class="panel-rightbody">
-    <%= form_for_filterrific @filterrific do |f| %>
-      <div class="col-md-3 col-sm-3">
-        <label>Código</label>
-        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-        <%= f.text_field(
-          :with_code,
-          class: 'filterrific-periodically-observed form-control input-sm',
-          placeholder: 'Un número'
-        ) %>
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-3">
+      <label>Código</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :with_code,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un número'
+      ) %>
+    </div>
+    <div class="col-3">
+      <label>Nombre</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_supply,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off'
+      ) %>
+    </div>
+    <% if current_page?(controller: 'supplies') %>
+      <div class="col-3">
+        <label>Ordenar por</label>
+        <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
       </div>
-      <div class="col-md-3 col-sm-3">
-        <label>Nombre</label>
-        <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-        <%= f.text_field(
-          :search_supply,
-          class: 'filterrific-periodically-observed form-control input-sm',
-          placeholder: 'Un nombre',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <% if current_page?(controller: 'supplies') %>
-        <div class="col-md-3 col-sm-3">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
-        </div>
-      <% else %>
-      <div class="col-md-3 col-sm-3">
-      </div>
-      <% end %>
-      <div class="col-md-3 col-sm-3">
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-      </div>
-      <%# add an automated spinner to your form when the list is refreshed %>
-      <%= render_filterrific_spinner %>
+    <% else %>
+    <div class="col-3">
+    </div>
     <% end %>
+    <div class="col-3">
+      <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+        <%= fa_icon "redo-alt" %>
+      <% end %>
+    </div>
+    <%# add an automated spinner to your form when the list is refreshed %>
+    <%= render_filterrific_spinner %>
   </div>
-  <div class="clearfix">
-  </div>
-</div>
+<% end %>

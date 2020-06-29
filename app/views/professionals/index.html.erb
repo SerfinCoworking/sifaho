@@ -1,68 +1,83 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
+<% if @professionals.present? %>
+  <div class="card fixed-custom-card">
+    <div class="card-header position-relative">
       <%= form_for_filterrific @filterrific do |f| %>
-        <div class="col-md-2 col-sm-2">
-          <label>Buscar</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_professional,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Nombre o apellido',
-            autocomplete: 'off'
-          ) %>
+        <div class="row justify-content-between">
+          <div class="col-2">
+            <label>Buscar</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_professional,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre o apellido',
+              autocomplete: 'off'
+            ) %>
+          </div>
+          <div class="col-2">
+            <label>Buscar</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_professional_enrollment,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Matrícula'
+            ) %>
+          </div>
+          <div class="col-2">
+            <label>Buscar</label>
+            <%= f.text_field(
+              :search_dni,
+              class: 'filterrific-periodically-observed form-control',
+                placeholder: 'DNI'
+                ) %>
+          </div>
+          <div class="col-2">
+            <%# Buscar por especialidad  %>
+            <label>Especialidad</label>
+            <%= select_tag "with_professional_type_id",
+              options_for_select(@filterrific.select_options[:professional_type_id]),
+              include_blank: 'Todos',
+              class: "selectpicker custom-select-pick",
+              data:{
+                "live-search" => true
+              }
+            %>
+          </div>
+
+          <div class="col-2">
+            <%# Ordenador  %>
+            <label>Ordenar por</label>
+            <%= select_tag "first_glass_id",
+              options_for_select(@filterrific.select_options[:sorted_by]),
+              {
+                class: "selectpicker custom-select-pick",
+                data:{
+                  "live-search" => true,
+                },
+              }
+            %>
+          </div>
+
+          <%= render_filterrific_spinner %>
         </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Buscar</label>
-          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-          <%= f.text_field(
-            :search_professional_enrollment,
-            class: 'filterrific-periodically-observed form-control',
-            placeholder: 'Matrícula'
-          ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Buscar</label>
-          <%= f.text_field(
-            :search_dni,
-            class: 'filterrific-periodically-observed form-control',
-              placeholder: 'DNI'
-              ) %>
-        </div>
-        <div class="col-md-2 col-sm-2">
-          <label>Especialidad</label>
-          <%= f.select( :with_professional_type_id, @filterrific.select_options[:professional_type_id],
-              { include_blank: 'Todos' }, {class: 'form-control'} ) %>
-        </div>
-        <div class="col-md-2 col-sm-3">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control'}) %>
-        </div>
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-        <%= render_filterrific_spinner %>
+      <% end %>
+
+      <%= link_to reset_filterrific_url, class: "btn btn-sm reset-filterrific",
+        :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+        <%= fa_icon "redo" %>
       <% end %>
     </div>
-    <div class="clearfix">
+    <div class="card-body">
+      <%= render(
+        partial: 'professionals/list',
+        locals: { professionals: @professionals }
+      ) %>
     </div>
   </div>
-
-  <% if @professionals.present? %>
-    <%= render(
-      partial: 'professionals/list',
-      locals: { professionals: @professionals }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'profesionales' }
-    ) %>
-  <% end %>
-</div>
-
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'médicos' }
+  ) %>
+<% end %>

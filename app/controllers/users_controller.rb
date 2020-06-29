@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        flash[:success] = "Ahora estás en "+@user.sector.name
+        flash[:success] = "Ahora estás en "+@user.sector_name+" "+@user.sector_establishment_short_name
         format.js {render inline: "location.reload();" }
       else
         flash[:error] = "No se ha podido modificar el sector."

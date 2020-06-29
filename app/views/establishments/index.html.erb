@@ -1,34 +1,29 @@
-<%= render 'header' %>
+<%= render 'external_orders/header' %>
 
 <% if @establishments.present? %>
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
-      <%= form_for_filterrific @filterrific do |f| %>
-          <div class="col-md-3 col-sm-3">
-            <label>Nombre</label>
-            <%= f.text_field(
-              :search_name,
-              class: 'filterrific-periodically-observed form-control input-sm'
-                ) %>
-          </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
-          <!-- Spinner para la carga -->
-          <%= render_filterrific_spinner %>
-      <% end %>
-    </div>
-    <div class="clearfix">
-    </div>
-  </div>
 
-  <%= render(
-    partial: 'establishments/list',
-    locals: { establishments: @establishments }
-  ) %>
+    <div class="card fixed-custom-card">
+      <div class="card-header">
+        <%= form_for_filterrific @filterrific do |f| %>
+          <div class="d-flex align-items-center">
+            <%= fa_icon "filter" %>
+            <%= f.text_field(
+                :search_name,
+                class: 'filterrific-periodically-observed form-control input-sm ml-2 w-25',
+                placeholder: 'Nombre'
+                  ) %>
+            <%= render_filterrific_spinner %>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-body fixed-panel-index">
+        <%= render(
+          partial: 'establishments/list',
+          locals: { establishments: @establishments }
+        ) %>
+      </div>
+    </div>
+
 <% else %>
   <%= render(
     partial: 'shared/not_found',

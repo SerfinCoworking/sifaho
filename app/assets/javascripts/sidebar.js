@@ -1,31 +1,31 @@
-function openNav() {
-  document.getElementById("mySidebar").style.width = "220px";
-  document.getElementById("main").style.marginLeft = "220px";
-  document.getElementById("body-col").classList.add('col-md-10');
-  document.getElementById("body-col").classList.remove('col-md-12');
-  jQuery(function() {
-    $("#openbtn").hide(500);
-  })
-  if ( Highcharts.charts.length > 0 ){
-    Highcharts.charts.forEach(function(chart) {
-      chart.reflow();
-    });
-  }
-}
+// on turbolinks load 
+$(document).on('turbolinks:load', function() {
+  initMenu();
 
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-  document.getElementById("main").style.marginLeft= "0";
-  document.getElementById("body-col").classList.remove('col-md-10');
-  document.getElementById("body-col").classList.add('col-md-12');
-  setTimeout(function() {
-    jQuery(function() {
-      $("#openbtn").fadeToggle(500);
-    })
-  }, 300);
-  if ( Highcharts.charts.length > 0 ){
-    Highcharts.charts.forEach(function(chart) {
-      chart.reflow();
-    });
+  // init sessionStorage
+  function initMenu(){
+    if(sessionStorage.getItem('menu_display') === null){
+        sessionStorage.setItem('menu_display', true);
+    }else if(sessionStorage.getItem('menu_display') === 'false' || sessionStorage.getItem('menu_display') == 'false'){
+      if(!$("#wrapper").hasClass("toggled")){
+        $("#wrapper").addClass("toggled");
+      }
+    }
   }
-}
+
+  // manejamos el valor sessionStorage y pliegue/desiplegue del menu
+  $("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    
+    $("#wrapper").toggleClass("toggled");
+
+    if(sessionStorage.getItem('menu_display') !== null){
+      // sessionStorage es null y no tiene la clase 'toggled'
+      const newValue = !(sessionStorage.getItem('menu_display') === 'true' || sessionStorage.getItem('menu_display') == 'true');
+      sessionStorage.setItem('menu_display', newValue);
+    }else if(sessionStorage.getItem('menu_display') === null){
+      // sessionStorage es null y tiene la clase 'toggled'
+      sessionStorage.setItem('menu_display', $("#wrapper").hasClass('toggled'));
+    }
+  });
+});

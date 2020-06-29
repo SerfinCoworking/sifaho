@@ -2,49 +2,16 @@
   <div class="js-fade fade-in is-paused">
       <% if params[:controller] == 'sector_supply_lots' %>
         <td><%= supply.id %></td>
-        <td class="col-sup-name"><%= supply.name %></td>
+        <td><%= supply.name %></td>
         <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).without_status(4).with_supply(supply) %>
-        <td><%@sum_lots = @lots.sum(:quantity)%>
-          <span class="label label-default">
-            <%= @sum_lots %>
-          </span>
-        <% if @sum_lots > 0 %>
-          <% 
-            @lots_vigentes = @lots.with_status(0).sum(:quantity) 
-            @lots_por_vencer = @lots.with_status(1).sum(:quantity)
-            @lots_vencidos = @lots.with_status(2).sum(:quantity)
-
-            _num_helper = ActiveSupport::NumberHelper
-
-            @lots_vig_perc = @lots_vigentes.to_f / @sum_lots  * 100 unless @sum_lots == 0
-            @lots_por_perc = @lots_por_vencer.to_f / @sum_lots  * 100 unless @sum_lots == 0
-            @lots_ven_perc = @lots_vencidos.to_f / @sum_lots  * 100 unless @sum_lots == 0
-          %>
-          <td class="col-md-2">
-              <div class="progress-bar progress-bar-success" id="quantity-bar" style="width:<%= '%.0f' % @lots_vig_perc.to_s%>%">
-                <%= if @lots_vigentes > 0; @lots_vigentes; end %>
-              </div>
-              <div class="progress-bar progress-bar-warning" id="quantity-bar" style="width:<%= '%.0f' % @lots_por_perc.to_s%>%">
-                <%= if @lots_por_vencer > 0; @lots_por_vencer; end %>
-              </div>
-              <div class="progress-bar progress-bar-danger" id="quantity-bar" style="width:<%= '%.0f' % @lots_ven_perc.to_s%>%">
-                <%= if @lots_vencidos > 0; @lots_vencidos; end %>
-              </div>
-          </td>
-        <% else %>
-          <td>
-            <div class="progress-bar progress-bar-info" id="quantity-bar" style="width: 100%">
-              Agotado
-            </div>
-          </td>
-        <% end %>
-        <td><span class="badge"><%= @lots.count %></span></td>
+        <td><%= @lots.sum(:quantity) %></td>
+        <td><%= @lots.count %></td>
         <td><%= supply.supply_area.name %></td>
-        <td>
+        <td class="text-center actions-col">
           <% if policy(supply).lots_for_supply? %>
-            <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-default btn-xs',
-                  title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+            <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-secondary btn-sm',
+              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "eye" %>
             <% end %>
           <% end %>
         </td>
@@ -54,31 +21,31 @@
         <td><%= supply.supply_area.name %></td>
         <td><%= supply.unity %></td>
         <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
-        <td>
+        <td class="text-center actions-col">
         <% if policy(supply).show? %>
-          <%= link_to supply_path(supply), class: 'btn btn-default btn-xs',
-                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+          <%= link_to supply_path(supply), class: 'btn btn-secondary btn-sm',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "eye" %>
           <% end %>
         <% end %>
         <% if current_page?(controller: 'supplies', action: 'trash_index') %>
           <% if policy(supply).restore? %>
             <%= link_to restore_confirm_supply_path(supply), remote: true,
-                  class: 'btn btn-primary btn-xs', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-repeat') %>
+              class: 'btn btn-primary btn-sm', title: 'Restaurar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash-restore" %>
             <% end %>
           <% end %>
         <% else %>
           <% if policy(supply).edit? %>
-            <%= link_to edit_supply_path(supply), remote: true, class: 'btn btn-warning btn-xs',
-                  title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+            <%= link_to edit_supply_path(supply), class: 'btn btn-warning btn-sm',
+              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "pen" %>
             <% end %>
           <% end %>
           <% if policy(supply).delete? %>
             <%= link_to delete_supply_path(supply), remote: true,
-                  class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "trash" %>
             <% end %>
           <% end %>
         <% end %>

@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
 
-  resources :profiles, only: [ :edit, :update ]
+  resources :profiles, only: [ :edit, :update, :show ]
   resources :external_order_comments, only: [ :create ]
   # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
   # patch '/profile', to: 'profiles#update'
@@ -141,6 +141,10 @@ Rails.application.routes.draw do
   end
 
   resources :sectors do
+    member do
+      get "delete"
+    end
+
     collection do
       get "with_establishment_id"
     end

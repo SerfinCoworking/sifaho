@@ -1,50 +1,52 @@
 <%= render "external_orders/header" %>
 
-<div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading hidden-print">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> 
+<div class="card panel-default">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
         Viendo plantilla de <%= @external_order_template.order_type %>
-        <%= link_to external_order_templates_path, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
+      </h5>
     </div>
-    <div class="panel-body" id="panel-body-new">
-      <div class="row">
-        <div class="col-md-3">
-          <h5>Nombre</h5>
-          <%= @external_order_template.name %>
-        </div>
-        <div class="col-md-3">
-          <% if @external_order_template.solicitud? %>
-            <h5>Sector proveedor</h5>
-          <% else %>
-            <h5>Sector solicitante</h5>
-          <% end %>
-          <%= @external_order_template.destination_sector.name %>
-        </div>
-        <% if @external_order_template.observation.present? %>
-          <div class="col-md-3">
-            <h5>Observaciones</h5>
-            <%= @external_order_template.observation %>
-          </div>
-        <% end %>
-        <div class="col-md-3">
-          <h5>Creada por</h5>
-          <% if @external_order_template.created_by.profile.present? %>
-            <span><%= image_tag user_avatar(@external_order_template.created_by, 25), class:"img-circle img-profile-nav" %></span>
-          <% end %>
-          <%= @external_order_template.created_by.full_name %>
-        </div>
+    <%= link_to external_order_templates_path, class: 'btn btn-light',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <div class="row">
+      <div class="col-md-3">
+        <h5>Nombre</h5>
+        <%= @external_order_template.name %>
       </div>
-      <br>
-      <div class="row">
-        <div class="col-md-12">
-          <!-- Insumos a dispensar -->
-          <table class="table table-hover table-condensed">
+      <div class="col-md-3">
+        <% if @external_order_template.solicitud? %>
+          <h5>Sector proveedor</h5>
+        <% else %>
+          <h5>Sector solicitante</h5>
+        <% end %>
+        <%= @external_order_template.destination_sector.name %>
+      </div>
+      <% if @external_order_template.observation.present? %>
+        <div class="col-md-3">
+          <h5>Observaciones</h5>
+          <%= @external_order_template.observation %>
+        </div>
+      <% end %>
+      <div class="col-md-3">
+        <h5>Creada por</h5>
+        <% if @external_order_template.created_by.profile.present? %>
+          <span><%= image_tag user_avatar(@external_order_template.created_by, 25), class:"img-circle img-profile-nav" %></span>
+        <% end %>
+        <%= @external_order_template.created_by.full_name %>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm mb-0">
             <thead>
               <tr>
                 <th>Cód Ins</th>
@@ -68,39 +70,43 @@
         </div>
       </div>
     </div>
-    <div class="panel-footer text-right hidden-print">
+  </div>
+  <div class="card-footer d-flex align-item-center justify-content-between">
+    <div>
       <% if policy(@external_order_template).destroy? %>
         <%= link_to delete_external_order_template_path(@external_order_template), remote: true,
               class: 'btn btn-danger btn-md pull-left', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+          <%= fa_icon "trash" %>
         <% end %>
       <% end %>
-      <%= link_to 'Volver', external_order_templates_path, class: "btn" %>
+    </div>
+    <div>
+      <%= link_to 'Volver', external_order_templates_path, class: "btn btn-light mr-2" %>
       <% if policy(@external_order_template).edit? %>
         <%= link_to edit_external_order_template_path(@external_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning" do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+          class: "btn btn-warning mr-2" do %>
+          <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>
       <% if policy(@external_order_template).edit_provider? %>
         <%= link_to edit_provider_external_order_template_path(@external_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning" do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+          class: "btn btn-warning mr-2" do %>
+          <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>
       <% if policy(@external_order_template).use_applicant? %>
         <%= link_to use_applicant_external_order_template_path(@external_order_template), class: "btn btn-primary",
-          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-plus") %>
+          'data-disable-with' => "<i class='fa fa-spinner'></i> Creando".html_safe do %>
+          <%= fa_icon "plus" %>
           Crear solicitud
         <% end %>
       <% end %>
       <% if policy(@external_order_template).use_provider? %>
         <%= link_to use_provider_external_order_template_path(@external_order_template), class: "btn btn-primary",
-          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-plus") %>
+          'data-disable-with' => "<i class='fa fa-spinner'></i> Creando".html_safe do %>
+          <%= fa_icon "plus" %>
           Crear despacho
         <% end %>
       <% end %>

@@ -1,10 +1,20 @@
 <%= render 'header' %>
 
-<div class="row">
-  <%= render "supplies/filter" %>
-
+<% if @supplies.present? %>
+  <div class="card" id="filter-panel">
+    <div class="card-header">
+      <%= render 'supplies/filter' %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'sector_supply_lots/list_supply',
+        locals: { supplies: @supplies }
+      ) %>
+    </div>
+  </div>
+<% else %>
   <%= render(
-    partial: 'sector_supply_lots/list_supply',
-    locals: { stock_supplies: @stock_supplies }
+    partial: 'shared/not_found',
+    locals: { object_name: 'productos en stock' }
   ) %>
-</div>
+<% end %>

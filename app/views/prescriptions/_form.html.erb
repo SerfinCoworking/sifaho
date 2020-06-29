@@ -1,179 +1,197 @@
-<%= simple_form_for @prescription, html: {class: "form-inline", role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class='row'>
-    <div class='col-md-6'>
-      <div class='row'>
-        <div class="col-md-6">
-          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
-          <%= f.label :professional_id do %>
-            Profesional
-            <% if f.object.cronic_dispensations.count == 0 %>
-              <%= link_to new_professional_path, class: "btn btn-info btn-xs", remote: 'true',
-                title: 'Nuevo profesional', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              <% end %>
-            <% end %>
-          <% end %>
-          <%= f.input :professional_id, as: :string,
-            label: false,
-            placeholder: 'Matrícula | Apellido | Nombre',
-            required: true,
-            readonly: f.object.cronic_dispensations.count > 0,
-            :input_html => {
-              id: "professional",
-              data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-              value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
-              size: 30
-            } 
-          %>
-          <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %><br><br>
-        </div>
-        <div class="col-md-6">
-          <%= f.label :patient_id do %>
-            Paciente
-            <% if policy(Patient).new? %>
-            <% if f.object.cronic_dispensations.count == 0 %>
-              <%= link_to new_patient_path, class: "btn btn-info btn-xs", remote: 'true',
-                title: 'Nuevo paciente', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-              <% end %>
-            <% end %>
-            <% end %>
-          <% end %>
-          <%= f.input :patient_id, as: :string, class: 'form-control',
-            label: false,
-            placeholder: 'DNI | Apellido | Nombre',
-            required: true,
-            readonly: f.object.cronic_dispensations.count > 0,
-            :input_html => {
-              id: 'patient',
-              data: { autocomplete_source: get_by_dni_and_fullname_patients_path },
-              value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-              size: 30
-            } 
-          %>
-          <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %><br>
-        </div>
-      </div>
-      <div class='row'>
-        <div class='col-md-3'>
-          <%= f.input :prescribed_date, label: 'Fecha recetada',
-            as: :string,
-            :placeholder => "Seleccionar fecha",
-            input_html: {
-              tabindex: "-1",
-              class: "form-control pull-right",
-              required: true,
-              autocomplete: 'off',
-              :style => 'width: 110px',
-              value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
-            },
-            html5: false %>
-        </div>
-        <div class='col-md-3'>
-          <%= f.input :expiry_date, label: 'Fecha expiración',
-            as: :string,
-            :placeholder => "Seleccionar fecha",
-            input_html: {
-              tabindex: "-1",
-              class: "form-control",
-              required: true,
-              autocomplete: 'off',
-              :style => 'width: 110px',
-              value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
-            },
-            html5: false %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :observation, label: 'Observaciones', as: :text,
-            :input_html => { :cols => 30  , :rows => 1 } %>
-        </div>
-      </div>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @prescription.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@prescription.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @prescription.new_record? ? "Agregar receta ambulatoria" : "Editando receta ambulatoria" %>
+      </h5>
     </div>
-    <div class="col-md-6">
-      <div class="col-md-12 hidden" id="non-os">
-        <div class="panel panel-info">
-            <div class="panel-heading">No posee obra social.</div>
+    <%= link_to :back, class: @prescription.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+    <%= simple_form_for @prescription, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class='row'>
+        <div class='col-6'>
+          <div class='row'>
+            <div class="col-12">
+              <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
+              <%= f.label :professional_id do %>
+                Médico
+                <% if f.object.cronic_dispensations.count == 0 %>
+                  <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                    <%= fa_icon "plus" %>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <%= f.input :professional_id, as: :string,
+                label: false,
+                placeholder: 'Matrícula | Apellido | Nombre',
+                required: true,
+                readonly: f.object.cronic_dispensations.count > 0,
+                :input_html => {
+                  id: "professional",
+                  data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                  value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
+                }
+              %>
+              <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
+              <%= f.label :patient_id, class: "text-left" do %>
+                Paciente
+                <% if policy(Patient).new? %>
+                  <% if f.object.cronic_dispensations.count == 0 %>
+                    <%= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
+                      title: 'Nuevo paciente temporal', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon "plus" %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <%= f.input :patient_id, as: :string, class: 'form-control',
+                label: false,
+                placeholder: 'DNI | Apellido | Nombre',
+                required: true,
+                readonly: f.object.cronic_dispensations.count > 0,
+                :input_html => {
+                  id: 'patient',
+                  data: { autocomplete_source: get_by_dni_and_fullname_patients_path },
+                  value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                }
+              %>
+              <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-6'>
+              <%= f.input :prescribed_date, label: 'Fecha recetada',
+                as: :string,
+                :placeholder => "Seleccionar fecha",
+                input_html: {
+                  tabindex: "-1",
+                  class: "form-control pull-right",
+                  required: true,
+                  autocomplete: 'off',
+                  value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
+                },
+                html5: false %>
+            </div>
+            <div class='col-6'>
+              <%= f.input :expiry_date, label: 'Fecha vencimiento',
+                as: :string,
+                :placeholder => "Seleccionar fecha",
+                input_html: {
+                  tabindex: "-1",
+                  class: "form-control",
+                  required: true,
+                  autocomplete: 'off',
+                  value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
+                },
+                html5: false %>
+            </div>
+            <div class="col-12">
+              <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class='col-md-12 hidden' id="pat-os">
-        <div class="row panel-pres">
-          <div class="col-md-12">
+        <div class="col-6">
+          <div class="col-12 invisible" id="non-os">
             <div class="panel panel-info">
-              <!-- Default panel contents -->
-              <table class="table table-condensed">
-                <thead>
-                  <tr class="info">
-                    <th>Financiador</th>
-                    <th>Código</th>
-                    <th>Fecha</th>
-                  </tr>
-                </thead>
-                <tbody id="pat-os-body">
-                </tbody>
-              </table>
+                <div class="panel-heading">No posee obra social.</div>
+            </div>
+          </div>
+          <div class='col-12 invisible' id="pat-os">
+            <div class="row panel-pres">
+              <div class="col-12">
+                <div class="panel panel-info">
+                  <!-- Default panel contents -->
+                  <table class="table table-sm">
+                    <thead>
+                      <tr class="info">
+                        <th>Financiador</th>
+                        <th>Código</th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pat-os-body">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 invisible" id="non-pres">
+            <div class="card">
+                <div class="card-header">Aún no tiene recetas.</div>
+            </div>
+          </div>
+          <div class="row panel-pres invisible" id="pat-pres">
+            <div class="col-12">
+              <div class="card">
+                <!-- Default panel contents -->
+                <div class="card-header">Últimas recetas</div>
+                <div class="card">
+                  <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th>Tipo</th>
+                        <th>Profesional</th>
+                        <th>Ins</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pat-pres-body">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-12 hidden" id="non-pres">
-        <div class="panel panel-info">
-            <div class="panel-heading">Aún no tiene prescripciones.</div>
-        </div>
+      <!-- Insumos solicitados -->
+      <div class="card">
+        <table class="table table-hover table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Cód</th>
+              <th>Insumo</th>
+              <th>Tu stock</th>
+              <th>Solicitado</th>
+              <th>Dispensado</th>
+              <th colspan="2">Lote</th>
+              <th>Observación</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="quantity_ord_supply_lots">
+            <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+              <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+            <% end %>
+          </tbody>
+        </table>
+        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
+        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+            <%= fa_icon "plus" %>
+            Agregar producto
+        <% end %>
       </div>
-      <div class='col-md-12 hidden' id="pat-pres">
-        <div class="row panel-pres">
-          <div class="col-md-12">
-            <div class="panel panel-info">
-              <!-- Default panel contents -->
-              <div class="panel-heading">Últimas prescripciones</div>
-              <table class="table table-hover table-condensed">
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Profesional</th>
-                    <th>Ins</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                  </tr>
-                </thead>
-                <tbody id="pat-pres-body">
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <% end %>
+
   </div>
-  <hr>
-  <!-- Insumos solicitados -->
-  <table class="table table-condensed table-hover">
-    <thead>
-      <tr>
-        <th>Cód</th>
-        <th>Insumo</th>
-        <th>Tu stock</th>
-        <th>Solicitado</th>
-        <th>Dispensado</th>
-        <th colspan="2">Lote</th>
-        <th>Observación</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody class="quantity_ord_supply_lots">
-      <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-        <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="links" id="links-quant-form">
-    <div class="text-center">
-      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
-      data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          Agregar insumo solicitado
-      <% end %>
-    </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', prescriptions_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success mr-2' form="<%= @prescription.new_record? ? 'new_prescription' : 'edit_prescription_' + @prescription.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+    <button type='submit' name='commit' class='btn btn-primary' form='new_prescription' value='Dispensar'>
+      <%= fa_icon "paper-plane" %> Guardar y dispensar
+    </button>
   </div>
-<% end %>
+</div>
