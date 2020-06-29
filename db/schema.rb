@@ -261,14 +261,14 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
-    t.bigint "destination_sector_id"
+    t.bigint "detination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
+    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
@@ -377,10 +377,8 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "address_id"
-    t.bigint "patient_type_id", default: 1
     t.index ["address_id"], name: "index_patients_on_address_id"
     t.index ["andes_id"], name: "index_patients_on_andes_id"
-    t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
   create_table "permission_requests", force: :cascade do |t|
@@ -594,12 +592,17 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
     t.string "name"
     t.string "description"
     t.string "observation"
-    t.string "unity"
+    t.string "unity", limit: 100
     t.boolean "needs_expiration"
+    t.boolean "active_alarm"
+    t.integer "period_alarm"
+    t.integer "expiration_alarm"
+    t.integer "quantity_alarm"
+    t.integer "period_control"
     t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "supply_area_id", default: 38
+    t.bigint "supply_area_id"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_supplies_on_deleted_at"
     t.index ["supply_area_id"], name: "index_supplies_on_supply_area_id"
@@ -676,11 +679,14 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
+  add_foreign_key "products", "areas"
+  add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
+  add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"

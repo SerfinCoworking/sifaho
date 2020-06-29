@@ -1,26 +1,4 @@
 <%= render 'header' %>
 
-<div class="col-7 mx-auto">
-  <div class="card">
-    <div class="card-header bg-warning d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center ml-2">
-        <%= fa_icon "pen" %>
-        <h5 class="card-title mb-0 ml-2">
-          Editando producto
-        </h5>
-      </div>
-      <%= link_to :back, class: 'btn' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </div>
-    <div class="card-body" id="panel-body-new">
-      <%= render 'form', supply: @supply %>
-    </div>
-    <div class="card-footer text-right">
-      <%= link_to 'Volver', supplies_path, class: 'btn btn-light mr-1' %>
-      <button type='submit' name='commit' class='btn btn-success' form='new_supply'>
-        <%= fa_icon "save" %> Guardar cambios
-      </button>
-    </div>
-  </div>
-</div>
+<%= render 'form', supply: @supply %>
+

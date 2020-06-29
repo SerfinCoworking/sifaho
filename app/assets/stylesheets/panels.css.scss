@@ -60,10 +60,15 @@
   margin-left: 45px;
   padding: 15px;
 }
+
+
 #panel-body-new {
   /* height: 480px; */
-  height: calc(100vh - 226px);
-  overflow-y: auto;
+  // height: calc(100vh - #{$navbar-height-bml});
+  // overflow-y: auto;
+  // @media(min-width: 1200px) and (max-width: 1480px){
+  //   height: calc(100vh - ( 12px 2 ) - #{$navbar-height-bml});
+  // }
 }
 #filter-panel{
   margin-bottom: 0px!important;
@@ -71,7 +76,7 @@
 .panel-pres {
   /* height: 480px; */
   height: 170px;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 #title-chart{
   margin-bottom: -11px;

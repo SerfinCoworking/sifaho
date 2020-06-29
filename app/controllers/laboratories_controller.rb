@@ -1,6 +1,6 @@
 class LaboratoriesController < ApplicationController
   before_action :set_laboratory, only: [:show, :edit, :update, :destroy, :delete]
-  
+
   # GET /laboratories
   # GET /laboratories.json
   def index
@@ -24,7 +24,7 @@ class LaboratoriesController < ApplicationController
   def show
     authorize @laboratory
     respond_to do |format|
-      format.js
+      format.html { render :show }
     end
   end
 
@@ -48,10 +48,12 @@ class LaboratoriesController < ApplicationController
     respond_to do |format|
       if @laboratory.save!
         flash.now[:success] = @laboratory.name+" se ha creado correctamente."
+        format.html { redirect_to @laboratory }
         format.js
       else
         flash.now[:error] = "El laboratorio no se ha podido crear."
-        format.js
+        format.html { render :new }
+        format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
   end
@@ -63,9 +65,11 @@ class LaboratoriesController < ApplicationController
     respond_to do |format|
       if @laboratory.update(laboratory_params)
         flash.now[:success] = @laboratory.name+" se ha modificado correctamente."
+        format.html { redirect_to @laboratory }
         format.js
       else
         flash.now[:error] = @laboratory.name+" no se ha podido modificar."
+        format.html { render :edit }
         format.js
       end
     end

@@ -1,4 +1,9 @@
 <%= render 'header' %>
+<% if @prescription.ambulatoria? %>
+  <%= render 'form', prescription: @prescription %>
+<% else %>
+  <%= render 'form_cronic', prescription: @prescription %>
+<% end %>
 
 <div class="card">
   <div class="card-header bg-warning">
@@ -14,11 +19,7 @@
     </h5>
   </div>
   <div class="card-body" id="panel-body-new">
-    <% if @prescription.ambulatoria? %>
-      <%= render 'form', prescription: @prescription %>
-    <% else %>
-      <%= render 'form_cronic', prescription: @prescription %>
-    <% end %>
+    
   </div>
   <div class="card-footer text-right">
       <%= link_to 'Volver', prescriptions_path, class: 'btn' %>

@@ -1,7 +1,7 @@
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header <%= @sector.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
-      <%= fa_icon (@sector.new_record? ?  "plus" : "pen")%>
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@sector.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
         <%= @sector.new_record? ? "Agregar sector" : "Editando sector" %>
       </h5>

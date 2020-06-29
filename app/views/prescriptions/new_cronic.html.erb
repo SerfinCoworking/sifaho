@@ -1,24 +1,4 @@
 <%= render 'header' %>
 
-<div class="card">
-  <div class="card-header bg-primary text-white">
-    <h5 class="card-title mb-0">
-      <%= fa_icon "plus" %> Nueva receta <strong>crónica</strong>
-      <%= link_to prescriptions_path, class: 'btn float-right p-0 text-white' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h5>
-  </div>
-  <div class="card-body" id="panel-body-new">
-    <%= render 'form_cronic', prescription: @prescription %>
-  </div>
-  <div class="card-footer text-right">
-    <%= link_to 'Volver', prescriptions_path, class: 'btn' %>
-    <button type='submit' name='commit' class='btn btn-success' form='new_prescription' value='Cargar prescripción'>
-      <%= fa_icon "save" %> Guardar
-    </button>
-    <button type='submit' name='commit' class='btn btn-primary' form='new_prescription' value='Dispensar'>
-      <%= fa_icon "paper-plane" %> Guardar y dispensar
-    </button>
-  </div>
-</div>
+<%= render 'form_cronic', prescription: @prescription %>
+ 

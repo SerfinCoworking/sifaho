@@ -1,20 +1,24 @@
 <%= render 'header' %>
 
-<div class="card">
-  <div class="card-header">
-    <h5 class="card-title">
-      <%= fa_icon "eye" %> Viendo paciente
-      <%= link_to patients_path, class: 'btn float-right',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h5>
+<div class="card fixed-custom-card">
+
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo paciente
+      </h5>
+    </div>
+    <%= link_to patients_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+
+  <div class="card-body">
     <div class="col-3">
       <%= image_tag patient_avatar(@patient, 200), class:"img-thumbnail" %>
       <h5><strong><%= @patient.last_name %></strong> <%= @patient.first_name %></h5>
-    
+
       <h5><strong>DNI </strong> <%= @patient.dni %></h5>
 
       <h5> <%= @patient.email %> </h5>
@@ -37,7 +41,7 @@
         </span>
       </h5>
     </div>
-    
+
     <div class="row">
       <ul class='nav nav-tabs nav-justified'>
         <li class='active'>
@@ -67,7 +71,7 @@
                   <h5><strong>DNI</strong></h5>
                   <%= @patient.dni %>
                 </div>
-                <div class="col-md-4"> 
+                <div class="col-md-4">
                   <h5><strong>Sexo</strong></h5>
                   <%= @patient.sex %>
                 </div>
@@ -187,7 +191,7 @@
                     </td>
                     <td>
                       <% if policy(prescription).show? %>
-                        <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
+                        <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs',
                           title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
                           <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
                         <% end %>
@@ -203,12 +207,11 @@
     </div>
   </div>
 
-  <div class="card-footer text-right hidden-print">
-    <%= link_to 'Volver', patients_path, class: "btn" %>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', patients_path, class: "btn mr-2" %>
     <% if policy(@patient).edit? %>
-      <%= link_to edit_patient_path(@patient), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
-        <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+      <%= link_to edit_patient_path(@patient), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>

@@ -1,20 +1,20 @@
 <%= render 'header' %>
 
-<div class="col-7 mx-auto">
-  <div class="card">
-    <div class="card-header d-flex align-items-center justify-content-between">
-      <div class="d-flex align-items-center ml-2">
-        <%= fa_icon "eye" %>
-        <h5 class="card-title mb-0 ml-2">
-          Viendo producto
-        </h5>
-      </div>
-      <%= link_to supplies_path, class: 'btn',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo producto
+      </h5>
     </div>
-    <div class="card-body" id="panel-body-new"> 
+    <%= link_to supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+
+
+     <div class="card-body">
       <p class="border-bottom mt-2">
         <strong>Código: </strong><%= @supply.id%>
       </p>
@@ -53,9 +53,13 @@
       </p>
     </div>
 
-    <!-- Botones de acción footer -->
-    <div class="card-footer text-right">
-      <%= link_to 'Volver', supplies_path, class: "btn btn-light" %>
-    </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', supplies_path, class: "btn" %>
+    <% if policy(@supply).edit? %>
+      <%= link_to edit_supply_path(@supply), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
   </div>
 </div>

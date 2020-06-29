@@ -1,16 +1,16 @@
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header <%= @professional.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon (@professional.new_record? ?  "plus" : "pen")%>
+      <%= fa_icon (@professional.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @professional.new_record? ? "Agregar médico" : "Editar médico" %>
+        <%= @professional.new_record? ? "Agregar médico" : "Editando médico" %>
       </h5>
     </div>
     <%= link_to :back, class: @professional.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
 
     <%= simple_form_for @professional, remote: true, html: {role: 'check-modified'} do |f| %>
       <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>

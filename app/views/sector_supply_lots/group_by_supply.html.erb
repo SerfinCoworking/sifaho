@@ -1,6 +1,8 @@
 <%= render 'header' %>
 
 <% if @supplies.present? %>
+  <%= render "supplies/filter" %>
+
   <div class="card" id="filter-panel">
     <div class="card-header">
       <%= render 'supplies/filter' %>

@@ -1,7 +1,7 @@
 <%= render 'header' %>
 
 <% if @professionals.present? %>
-  <div class="card">
+  <div class="card fixed-custom-card">
     <div class="card-header position-relative">
       <%= form_for_filterrific @filterrific do |f| %>
         <div class="row justify-content-between">
@@ -68,7 +68,7 @@
         <%= fa_icon "redo" %>
       <% end %>
     </div>
-    <div class="card-body fixed-panel-index">
+    <div class="card-body">
       <%= render(
         partial: 'professionals/list',
         locals: { professionals: @professionals }

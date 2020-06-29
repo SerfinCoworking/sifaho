@@ -1,8 +1,8 @@
 class SectorsController < ApplicationController
   before_action :set_sector, only: [:show, :new, :edit, :create, :update, :destroy, :delete]
 
-  # GET /establishments
-  # GET /establishments.json
+  # GET /sectors
+  # GET /sectors.json
   def index
     @filterrific = initialize_filterrific(
       Sector,
@@ -15,8 +15,8 @@ class SectorsController < ApplicationController
     @sectors = @filterrific.find.page(params[:page]).per_page(15)
   end
 
-  # GET /establishments/1
-  # GET /establishments/1.json
+  # GET /sectors/1
+  # GET /sectors/1.json
   def show
     respond_to do |format|
       format.html
@@ -24,17 +24,17 @@ class SectorsController < ApplicationController
     end
   end
 
-  # GET /establishments/new
+  # GET /sectors/new
   def new
     # @sector = Sector.new
   end
 
-  # GET /establishments/1/edit
+  # GET /sectors/1/edit
   def edit
   end
 
-  # POST /establishments
-  # POST /establishments.json
+  # POST /sectors
+  # POST /sectors.json
   def create
     @sector = Sector.new(sector_params)
 
@@ -51,8 +51,8 @@ class SectorsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /establishments/1
-  # PATCH/PUT /establishments/1.json
+  # PATCH/PUT /sectors/1
+  # PATCH/PUT /sectors/1.json
   def update
     respond_to do |format|
       if @sector.update(sector_params)
@@ -67,8 +67,8 @@ class SectorsController < ApplicationController
     end
   end
 
-  # DELETE /establishments/1
-  # DELETE /establishments/1.json
+  # DELETE /sectors/1
+  # DELETE /sectors/1.json
   def destroy
     sector = @sector.name
     @sector.destroy
@@ -78,11 +78,15 @@ class SectorsController < ApplicationController
     end
   end
 
-  # GET /establishment/1/delete
+  # GET /sector/1/delete
   def delete
     respond_to do |format|
       format.js
     end
+  end
+
+  def with_sector_id
+    @sectors = Sector.order(:name).with_sector_id(params[:term])
   end
 
   def with_establishment_id

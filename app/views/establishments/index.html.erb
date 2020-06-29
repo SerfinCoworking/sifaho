@@ -2,7 +2,7 @@
 
 <% if @establishments.present? %>
 
-    <div class="card">
+    <div class="card fixed-custom-card">
       <div class="card-header">
         <%= form_for_filterrific @filterrific do |f| %>
           <div class="d-flex align-items-center">
@@ -12,7 +12,6 @@
                 class: 'filterrific-periodically-observed form-control input-sm ml-2 w-25',
                 placeholder: 'Nombre'
                   ) %>
-            <%= %>
             <%= render_filterrific_spinner %>
           </div>
         <% end %>

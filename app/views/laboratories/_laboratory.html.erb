@@ -4,13 +4,13 @@
       <td><%= laboratory.cuit %></td>
       <td class="text-center actions-col">
         <% if policy(laboratory).show? %>
-          <%= link_to laboratory_path(laboratory), remote:true, class: 'btn btn-secondary btn-sm',
+          <%= link_to laboratory_path(laboratory), class: 'btn btn-secondary btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
             <%= fa_icon "eye" %>
           <% end %>
         <% end %>
         <% if policy(laboratory).edit? %>
-          <%= link_to edit_laboratory_path(laboratory), remote: true, class: 'btn btn-warning btn-sm',
+          <%= link_to edit_laboratory_path(laboratory), class: 'btn btn-warning btn-sm',
                 title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
             <%= fa_icon "edit" %>
           <% end %>
