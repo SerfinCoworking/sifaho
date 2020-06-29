@@ -2,7 +2,7 @@
  <!--Brand-->
   <div class="brand-container d-flex">
     <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
-    <%= link_to root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
+    <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
       <%= image_tag("LogoSIFAHO.png", size: "30x30", alt: "Logo SIFAHO", class: 'logo') %>
       SIFAHO
     <% end %>

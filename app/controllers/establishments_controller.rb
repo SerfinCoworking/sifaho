@@ -102,6 +102,7 @@ class EstablishmentsController < ApplicationController
     params.require(:establishment).permit(
       :code,
       :name,
+      :short_name,
       :cuit,
       :email,
       :domicile,

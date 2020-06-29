@@ -1,5 +1,7 @@
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon fas fa-ban'></i>  Anular la <%= @external_order.order_type%>");
+$('.modal-header').addClass('bg-danger text-white');
+
+$('.modal-title').html("<i class='fa fa-ban'></i>  Anular la <%= @external_order.order_type %>");
 
 // Render the edit form
 $('.modal-body').html(
@@ -13,3 +15,8 @@ $('.modal-footer').html(
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('.modal-header').removeClass('bg-danger text-white');
+});

@@ -1,12 +1,12 @@
 // Add styles
-$('.modal-content').addClass('panel-success');
+$('.modal-header').addClass('bg-success text-white');
 <% if @external_order.despacho? %>
   // Add the dialog title
-  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el despacho");
+  $('.modal-title').html("<i class='fa fa-check'></i>  Recibir el despacho");
 <% elsif @external_order.recibo? %>
-  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Realizar el recibo");
+  $('.modal-title').html("<i class='fa fa-check'></i>  Realizar el recibo");
 <% elsif @external_order.solicitud_abastecimiento? %>
-  $('#dialog h4').html("<i class=' glyphicon glyphicon-check'></i>  Recibir el pedido solicitado");
+  $('.modal-title').html("<i class='fa fa-check'></i>  Recibir el pedido solicitado");
 <% end %>
 
 // Render the send form
@@ -24,5 +24,5 @@ $('#dialog').modal("show");
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-success');
+  $('.modal-header').removeClass('bg-success text-white');
 });

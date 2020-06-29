@@ -128,48 +128,48 @@
   </div>
   <div class="card-footer text-right">
     <% if @internal_order.provision? %>
-      <%= link_to internal_orders_path, class: "btn" do %>Volver<% end %>
+      <%= link_to internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
     <% else %>
-      <%= link_to applicant_index_internal_orders_path, class: "btn" do %>Volver<% end %>
+      <%= link_to applicant_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
     <% end %> 
     <% if policy(@internal_order).edit? %>
       <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
-        <%= fa_icon "edit" %>
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>   
     <% if policy(@internal_order).edit_applicant? %>
       <%= link_to edit_applicant_internal_order_path(@internal_order), 
-        class: 'btn btn-warning btn-md' do %>
-        <%= fa_icon "edit" %>
+        class: 'btn btn-warning btn-md mr-1' do %>
+        <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>
     <% if policy(@internal_order).send_applicant? %>
       <%= link_to send_applicant_internal_order_path(@internal_order), 
-        class: 'btn btn-primary btn-md' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        class: 'btn btn-primary btn-md mr-1' do %>
+        <%= fa_icon "paper-plane" %>
         Enviar
       <% end %>
     <% end %>
     <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning">
-        <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
+      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning mr-1">
+        <%= fa_icon "redo" %>
         Retornar
       </a>
     <% end %>
     <% if policy(@internal_order).send_provider? %>
       <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
         class: 'btn btn-primary btn-md' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        <%= fa_icon "paper-plane" %>
         Enviar
       <% end %>
     <% end %>
     <% if policy(@internal_order).receive_applicant? %>
       <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
         class: 'btn btn-success btn-md' do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
+        <%= fa_icon "check" %>
         Recibir
       <% end %>
     <% end %>
@@ -182,7 +182,7 @@
       <div class="modal-content panel-warning">
         <div class="modal-header panel-heading">
           <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h3>
+          <h3><%= fa_icon "redo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h3>
         </div>
         <div class="modal-body">
           <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>

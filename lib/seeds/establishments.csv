@@ -1,0 +1,285 @@
+﻿Id,Code,Name,Cuit,Domicile,Phone,Email,Sectors count
+2,1,HOSPITAL DE AREA CENTENARIO - DR. NATALIO BURD, - , - , - , - ,1
+3,2,HOSPITAL DE AREA PLOTTIER, - , - , - , - ,1
+4,3,HOSPITAL DE AREA SENILLOSA, - , - , - , - ,1
+5,4,HOSPITAL DE AREA RINCON DE LOS SAUCES, - , - , - , - ,1
+6,5,HOSPITAL DE AREA SAN PATRICIO DEL CHAÑAR, - , - , - , - ,1
+7,6,C.S. AÑELO, - , - , - , - ,1
+8,7,HOSPITAL DE AREA EL CHOCON, - , - , - , - ,1
+9,8,J.Z. ZONA SANITARIA I, - , - , - , - ,1
+10,9,C.S. Bº SARMIENTO 2, - , - , - , - ,1
+11,10,C.S. VISTA ALEGRE NORTE, - , - , - , - ,1
+12,11,C.S. VISTA ALEGRE SUR, - , - , - , - ,1
+13,12,C.S. EL CHACAY, - , - , - , - ,1
+14,14,C.S. LA ESPERANZA, - , - , - , - ,1
+15,15,C.S. LOS AROMOS, - , - , - , - ,1
+16,16,C.S. LOS HORNOS, - , - , - , - ,1
+17,17,C.S. SOLDADO J.AGUILA, - , - , - , - ,1
+18,18,C.S. LOS ALAMOS, - , - , - , - ,1
+19,19,C.S. COLONIA SAN FRANCISCO, - , - , - , - ,1
+20,20,C.S. Bº UNION (Plottier ZI), - , - , - , - ,1
+21,21,C.S. VISTA HERMOSA, - , - , - , - ,1
+22,23,C.S. LA FALDA, - , - , - , - ,1
+23,24,C.S. ZONA COSTA, - , - , - , - ,1
+24,26,C.S. VILLA OBRERA, - , - , - , - ,1
+25,27,C.S. COSTA DE REYES, - , - , - , - ,1
+26,28,C.S. Bº SARMIENTO 1, - , - , - , - ,1
+27,29,C.S. NUEVA ESPAÑA, - , - , - , - ,1
+28,30,C.S. ARROYITO, - , - , - , - ,1
+29,32,H.CENTENARIO (VIEJO), - , - , - , - ,1
+30,33,HOSPITAL INTERZONAL ZAPALA, - , - , - , - ,20
+31,34,HOSPITAL DE AREA MARIANO MORENO - DR. CARLOS BURDES, - , - , - , - ,1
+32,35,HOSPITAL DE AREA LAS LAJAS DR. JOSE VENIER, - , - , - , - ,1
+33,36,HOSPITAL DE AREA BAJADA DEL AGRIO, - , - , - , - ,1
+34,37,HOSPITAL DE AREA LONCOPUE DR. JOSE CUEVAS, - , - , - , - ,1
+35,38,C.S. CAVIAHUE, - , - , - , - ,1
+36,39,HOSPITAL DE AREA EL HUECU, - , - , - , - ,1
+37,40,HOSPITAL DE AREA ALUMINE, - , - , - , - ,1
+38,41,C.S. VILLA PEHUENIA, - , - , - , - ,1
+39,42,J.Z. ZONA SANITARIA II, - , - , - , - ,1
+40,43,C.S. LAS LATAS, - , - , - , - ,1
+41,44,C.S. AMPLIACION, - , - , - , - ,1
+42,45,C.S. Bº ALBORADA, - , - , - , - ,1
+43,46,C.S. Bº DON BOSCO (ZAPALA - ZII), - , - , - , - ,1
+44,47,C.S. Bº 582 VIVIENDAS, - , - , - , - ,1
+45,48,C.S. NUEVA ESPERANZA (Z II), - , - , - , - ,1
+46,49,C.S. LAS LAJITAS, - , - , - , - ,1
+47,50,C.S. C.G.T., - , - , - , - ,1
+48,51,HOSPITAL ZONAL CHOS MALAL - DR GREGORIO ALVAREZ, - , - , - , - ,2
+49,52,HOSPITAL DE AREA TRICAO MALAL, - , - , - , - ,1
+50,53,HOSPITAL DE AREA BUTA RANQUIL - ENF GABINO SAGREDO, - , - , - , - ,1
+51,54,C.S. BARRANCAS, - , - , - , - ,1
+52,55,HOSPITAL DE AREA ANDACOLLO - DR. ANTONIO GORGNI, - , - , - , - ,2
+53,56,C.S. HUINGANCO, - , - , - , - ,1
+54,57,HOSPITAL DE AREA LAS OVEJAS, - , - , - , - ,1
+55,58,C.S. VARVARCO, - , - , - , - ,1
+56,59,HOSPITAL DE AREA EL CHOLAR, - , - , - , - ,1
+57,60,J.Z. ZONA SANITARIA III, - , - , - , - ,1
+58,61,C.S. TIRO FEDERAL (Z. III), - , - , - , - ,1
+59,62,C.S. Bº A. de FRONTERA, - , - , - , - ,1
+60,63,C.S. ENF G. MOYA (IV DIV.), - , - , - , - ,1
+61,64,C.S. ENF. M. ROCA (CHACRAS), - , - , - , - ,1
+62,65,C.S. Bº URIBURU, - , - , - , - ,1
+63,66,C.S. Bº ALTA BARDA, - , - , - , - ,1
+64,67,C.S. MANZANO AMARGO, - , - , - , - ,1
+65,70,HOSPITAL ZONAL SAN MARTIN DE LOS ANDES - DR. RAMON CARRILLO, - , - , - , - ,49
+66,71,HOSPITAL DE AREA JUNIN DE LOS ANDES, - , - , - , - ,37
+67,73,HOSPITAL DE AREA VILLA LA ANGOSTURA - DR. OSCAR ARRAIZ, - , - , - , - ,12
+68,74,C.S. VILLA TRAFUL (O. VIVARES), - , - , - , - ,2
+69,75,HOSPITAL DE AREA LAS COLORADAS Dr. Carlos Potente, - , - , - , - ,7
+70,76,J.Z. ZONA SANITARIA IV, - , - , - , - ,1
+71,77,C.S. LAS ROSAS, - , - , - , - ,2
+72,78,C.S. QUIRNO COSTA (VAMEP), - , - , - , - ,2
+73,79,C.S. EL ARENAL, - , - , - , - ,3
+74,80,C.S. LOS   RADALES, - , - , - , - ,2
+75,81,C.S. LAS PIEDRITAS, - , - , - , - ,1
+76,82,C.S. TIRO FEDERAL (Z. IV), - , - , - , - ,2
+77,83,C.S. BARRIO LANIN, - , - , - , - ,1
+78,85,C.S. PRIMEROS POBLADORES, - , - , - , - ,1
+79,86,C.S. LAS MARGARITAS, - , - , - , - ,1
+80,87,C.S. CHACRA 30, - , - , - , - ,2
+81,88,H. JUNIN (VIEJO), - , - , - , - ,1
+82,183,GUARDIA H. PLAZA HUINCUL, - , - , - , - ,1
+83,185,HOSPITAL DE AREA PIEDRA DEL AGUILA, - , - , - , - ,1
+84,187,HOSPITAL DE AREA  PICUN LEUFU - DRA. NANCY FERRARI DE DIBY, - , - , - , - ,2
+85,188,HOSPITAL ZONAL CUTRAL CO-PLAZA HUINCUL, - , - , - , - ,3
+86,189,J.Z. ZONA SANITARIA V, - , - , - , - ,1
+87,190,C.S. AEROPARQUE, - , - , - , - ,1
+88,193,C.S. BRENTANA, - , - , - , - ,1
+89,194,C.S. PAMPA, - , - , - , - ,1
+90,195,C.S. BELGRANO, - , - , - , - ,1
+91,196,C.S. PEÑI TRAPUN, - , - , - , - ,1
+92,197,C.S. Bº UNION (CUTRAL CÓ Z.V), - , - , - , - ,1
+93,198,C.S. Bº CAMPAMENTO CENTRAL, - , - , - , - ,1
+94,199,C.S. PARQUE OESTE, - , - , - , - ,1
+95,200,C.S. SAN MARTIN (500 VIV.), - , - , - , - ,1
+96,201,C.S. Bº CENTENARIO, - , - , - , - ,1
+97,202,C.S. OTAÑO, - , - , - , - ,1
+98,203,C.S. RUCA QUIMEY, - , - , - , - ,1
+99,204,C.S. SECCION CHACRAS, - , - , - , - ,1
+100,205,HOSPITAL PROVINCIAL NEUQUEN - DR. EDUARDO CASTRO RENDON, - , - , - , - ,2
+101,206,C.S. SAPERE, - , - , - , - ,2
+102,207,C.S. VILLA FARREL, - , - , - , - ,1
+103,208,C.S. MARIANO MORENO, - , - , - , - ,1
+104,209,C.S. CONFLUENCIA, - , - , - , - ,1
+105,210,C.S. VILLA MARIA, - , - , - , - ,1
+106,211,C.S. PARQUE INDUSTRIAL, - , - , - , - ,1
+107,212,C.S. VALENTINA NORTE, - , - , - , - ,1
+108,213,C.S. VALENTINA SUR, - , - , - , - ,1
+109,214,C.S. VILLA FLORENCIA, - , - , - , - ,1
+110,215,C.S. DON BOSCO (NEUQUEN - ZM), - , - , - , - ,1
+111,216,HOSPITAL BOUQUET ROLDAN, - , - , - , - ,1
+112,217,C.S. EL PROGRESO, - , - , - , - ,1
+113,218,C.S. SAN LORENZO NORTE, - , - , - , - ,1
+114,219,C.S. SAN LORENZO SUR, - , - , - , - ,1
+115,220,C.S. NUEVA ESPERANZA (Z.M.), - , - , - , - ,1
+116,221,HOSPITAL DR. HORACIO HELLER, - , - , - , - ,1
+117,222,J.Z. ZONA SANITARIA METROPOLITANA, - , - , - , - ,1
+118,223,C.S. BOUQUET ROLDAN, - , - , - , - ,1
+119,224,C.S. ALMAFUERTE, - , - , - , - ,1
+120,227,SUBSECRETARIA DE SALUD, - , - , - , - ,1
+121,228,LABORATORIO CENTRAL, - , - , - , - ,1
+122,317,J.Z. SANITARIA METROPOLITANA DE PRUEBA, - , - , - , - ,1
+123,318,C.S. CAPACITACION DE PRUEBA , - , - , - , - ,1
+124,319,C.S. CAPACITACION DE PRUEBA 2, - , - , - , - ,1
+125,320,C.S. CAPACITACION DE PRUEBA 3, - , - , - , - ,1
+126,321,C.S. CAPACITACION DE PRUEBA 4, - , - , - , - ,1
+127,322,C.S. CAPACITACION DE PRUEBA 5, - , - , - , - ,1
+128,323,C.S. CAPACITACION DE PRUEBA 6, - , - , - , - ,1
+129,324,P.S. HUILQUI MENUCO, - , - , - , - ,1
+130,325,P.S. NAHUEL MAPI ARRIBA, - , - , - , - ,1
+131,326,P.S. PAIMUN, - , - , - , - ,1
+132,327,P.S. PILO LIL, - , - , - , - ,1
+133,328,P.S. SAN IGNACIO, - , - , - , - ,1
+134,329,P.S. STA. ROSA, - , - , - , - ,1
+135,334,P.S. COSTA DEL MALLEO, - , - , - , - ,1
+136,335,P.S. COSTA CONFLUENCIA, - , - , - , - ,1
+137,336,P.S. NAHUEL MAPI ABAJO, - , - , - , - ,1
+138,338,P.S. AUCAPAN CENTRO, - , - , - , - ,1
+139,339,P.S. BARRIO CAFUQUEO, - , - , - , - ,1
+140,340,P.S. CHIQUILIHUN, - , - , - , - ,1
+141,341,P.S. PAMPA DEL MALLEO, - , - , - , - ,1
+142,342,P.S. ATREUCO ABAJO, - , - , - , - ,1
+143,343,P.S. ATREUCO ARRIBA, - , - , - , - ,1
+144,344,C.S. LOS HORNOS (EXTENSIÓN ALMAFUERTE), - , - , - , - ,1
+145,345,S.I.E.N. Emergencias, - , - , - , - ,1
+146,346,C.S. COLONIA NUEVA ESPERANZA (MESETA- ZM), - , - , - , - ,1
+147,347,L.U.N.C.E.C. Neuquén, - , - , - , - ,1
+148,348,C.S. BARRIO NORTE, - , - , - , - ,1
+149,349,CLINICA MOGUILLANSKY, - , - , - , - ,1
+150,350,IMAGENES S.A., - , - , - , - ,1
+151,351,POLICLINICO NEUQUÉN, - , - , - , - ,1
+152,355,SANATORIO PLAZA HUINCUL S.A., - , - , - , - ,1
+153,357,CENTRO MEDICO DEL SUR S.R.L, - , - , - , - ,1
+154,358,CENTRO MEDICO ROCA, - , - , - , - ,1
+155,359,CEMEDIT S.R.L, - , - , - , - ,1
+156,360,L.A.L.C.E.C, - , - , - , - ,1
+157,362,CONSULTORIOS MEDICOS DRA. MONICA GODOY, - , - , - , - ,1
+158,363,CEC, - , - , - , - ,1
+159,364,CENTRO MEDICO AVENIDA, - , - , - , - ,1
+160,366,CENTRO INTEGRAL DE LA MUJER, - , - , - , - ,1
+161,367,SAN AGUSTIN, - , - , - , - ,1
+162,368,IMAGENES DEL SUR S.R.L, - , - , - , - ,1
+163,369,CMIC S.A., - , - , - , - ,1
+164,370,HOSPITAL CIPOLLETTI, - , - , - , - ,1
+165,371,HOSPITAL EL BOLSON, - , - , - , - ,1
+166,372,HOSPITAL ALLEN, - , - , - , - ,1
+167,373,HOSPITAL CINCO SALTOS, - , - , - , - ,1
+168,374,HOSPITAL CHOELE CHOEL, - , - , - , - ,1
+169,375,HOSPITAL BARILOCHE, - , - , - , - ,1
+170,376,HOSPITAL GENERAL ROCA, - , - , - , - ,1
+171,377,HOSPITAL VILLA REGINA, - , - , - , - ,1
+172,378,MINISTERIO DE SALUD DE RIO NEGRO, - , - , - , - ,1
+173,379,HOSPITAL GENERAL ROCA, - , - , - , - ,1
+174,380,HOSPITAL VILLA REGINA, - , - , - , - ,1
+175,381,CIC CALEUCHE, - , - , - , - ,1
+176,383,P.S. HUNCAL, - , - , - , - ,1
+177,384,P.S. CHIHUIDOS, - , - , - , - ,1
+178,385,CENTRO DE DIA AREA OESTE, - , - , - , - ,1
+179,386,CENTRO DE DIA AREA CENTRO, - , - , - , - ,1
+180,387,CENTRO MEDICO SAN CAMILO, - , - , - , - ,1
+181,388,P.S. RUCA CHOROY , - , - , - , - ,1
+182,389,P.S. CARRI LIL, - , - , - , - ,1
+183,390,P.S. QUILLEN CURRUMIL, - , - , - , - ,1
+184,391,P.S. LONCOLUAN, - , - , - , - ,1
+185,392,P.S. ÑORQUINCO , - , - , - , - ,1
+186,393,P.S. QUILCA , - , - , - , - ,1
+187,394,P.S. MOQUEHUE , - , - , - , - ,1
+188,395,P.S. PICADA 19, - , - , - , - ,1
+189,396,P.S. LOS CHIHUIDOS , - , - , - , - ,1
+190,397,P.S. AGUADA SAN ROQUE, - , - , - , - ,1
+191,398,P.S. CHACAYCO SUR , - , - , - , - ,1
+192,399,P.S. AGUADA DEL OVERO , - , - , - , - ,1
+193,400,P.S. LOS MOLLES, - , - , - , - ,1
+194,401,P.S. HUARENCHENQUE, - , - , - , - ,1
+195,402,P.S. CAJON DEL MANZANO , - , - , - , - ,1
+196,403,P.S. TRAUNCURA, - , - , - , - ,1
+197,404,P.S. QUINTUCO , - , - , - , - ,1
+198,405,P.S. CAJON DE ALMAZA, - , - , - , - ,1
+199,406,P.S. PORTEZUELO, - , - , - , - ,1
+200,407,P.S. COLIPILLI , - , - , - , - ,1
+201,408,P.S. AUQUINCO , - , - , - , - ,1
+202,409,P.S. BELLA VISTA , - , - , - , - ,1
+203,410,P.S. BUTACO, - , - , - , - ,1
+204,411,P.S. CAEPE MALAL, - , - , - , - ,1
+205,412,P.S. CANCHA HUINGANCO , - , - , - , - ,1
+206,413,P.S. CHAPUA, - , - , - , - ,1
+207,414,P.S. CHORRIACA , - , - , - , - ,1
+208,415,P.S. COCHICO , - , - , - , - ,1
+209,416,C.S. CHACRA 26, - , - , - , - ,2
+210,417,P.S. 14  DE OCTUBRE, - , - , - , - ,1
+211,419,C.S. 11  DE OCTUBRE, - , - , - , - ,1
+212,420,CLINICA CUTRAL CO SRL, - , - , - , - ,1
+213,424,CLINICA NEUQUEN SRL, - , - , - , - ,1
+214,425,COOPERATIVA DE TRABAJO DE SALUD ADOS LTDA, - , - , - , - ,1
+215,426,CLINICA ZAPALA , - , - , - , - ,1
+216,427,CLINICA SAN LUCAS, - , - , - , - ,1
+217,428,CLINICA SAN LUCAS - MATERNIDAD, - , - , - , - ,1
+218,429,CLINICA Y MATERNIDAD RINCON, - , - , - , - ,1
+219,430,CENTRO DE SALUD MENTAL DEL COMAHUE - AGUDOS, - , - , - , - ,1
+220,431,CIPEC - CLINICA DE INTERNACIONES PSICOPATOLOGICAS, - , - , - , - ,1
+221,432,CENTRO DE SALUD MENTAL DEL COMAHUE - CRONICOS, - , - , - , - ,1
+222,433,DIRECCION DE BROMATOLOGIA, - , - , - , - ,1
+223,434,SALUD OCUPACIONAL - SUBSECRETARIA DE SALUD, - , - , - , - ,1
+224,5000,Cienlab S.R.L., - , - , - , - ,1
+225,5001,G.T. Laboratorio, - , - , - , - ,1
+226,5002,Lab. Abbott S.A., - , - , - , - ,1
+227,5003,Lab. Aplic. Electrónicas, - , - , - , - ,1
+228,5003,Lab. Austral, - , - , - , - ,1
+229,5004,Lab. Bacon, - , - , - , - ,1
+230,5005,Lab. Bago. S.A., - , - , - , - ,1
+231,5006,Lab. Bernabó, - , - , - , - ,1
+232,5007,Lab. Britania, - , - , - , - ,1
+233,5008,Lab. Drawer S.A., - , - , - , - ,1
+234,5009,Lab. Fabra, - , - , - , - ,1
+235,5010,Lab. Farmaceutico y CIA SRL, - , - , - , - ,1
+236,5011,Lab. MSD, - , - , - , - ,1
+237,5012,Lab. Northia, - , - , - , - ,1
+238,5013,Lab. Raffo, - , - , - , - ,1
+239,5014,Lab. Richet s.a., - , - , - , - ,1
+240,5015,Lab. Richmond, - , - , - , - ,1
+241,5016,Lab. Sant Gall Friburg Q.C.I.  S.R.L., - , - , - , - ,1
+242,5017,Lab. Solkotal S.A, - , - , - , - ,1
+243,5018,Lab. Vannier S.A., - , - , - , - ,1
+244,5019,Laboratorio Deposito, - , - , - , - ,1
+245,5020,Laboratorio Dominguez S.A., - , - , - , - ,1
+246,5021,Laboratorio LKM S.A., - , - , - , - ,1
+247,5022,Tecnolab S.A., - , - , - , - ,1
+248,5023,Wiener Lab., - , - , - , - ,1
+249,5024,Drog. Bellavista S.A., - , - , - , - ,1
+250,5025,Drog. De Primera, - , - , - , - ,1
+251,5026,Drog. Disval, - , - , - , - ,1
+252,5027,Drog. Malbo, - , - , - , - ,1
+253,5028,Drog. Martorani, - , - , - , - ,1
+254,5029,Drog. Mediterranea CBA, - , - , - , - ,1
+255,5030,Drog. Oncolife SRL, - , - , - , - ,1
+256,5031,Droguería CMI Neuquén, - , - , - , - ,1
+257,5032,Drogueria del Plata, - , - , - , - ,1
+258,5033,Drogueria Express SRL, - , - , - , - ,1
+259,5034,Droguería General S.A., - , - , - , - ,1
+260,5035,Drogueria Saporiti S.A., - , - , - , - ,1
+261,5036,Drogueria Vallebona, - , - , - , - ,1
+262,5037,Ibsa Droguería, - , - , - , - ,1
+263,5038,Lafken Droguería, - , - , - , - ,1
+264,5039,Farmacia del Pueblo, - , - , - , - ,1
+265,5040,Farmacia Galénica, - , - , - , - ,1
+266,5041,Farmacia Santa Teresita, - , - , - , - ,1
+267,5042,Farmaline, - , - , - , - ,1
+268,5042,Farmaquen, - , - , - , - ,1
+269,6000,OBRA SOCIAL, - , - , - , - ,1
+270,6001,ISSN, - , - , - , - ,1
+271,7000,PERSONA PARTICULAR, - , - , - , - ,1
+272,999,NACION, - , - , - , - ,1
+273,8000,OTRO, - , - , - , - ,6
+274,274,CLINICA CHAPELCO, - , - , - , - ,3
+275,275,DEPOSITO CENTRAL CONFLUENCIA, - , - , - , - ,1
+276, - ,P.S. MELIQUINA, - , - , - , - ,1
+277, - ,P.S. PUENTE BLANCO, - , - , - , - ,1
+278, - ,P.S. HUA HUM, - , - , - , - ,1
+279,5043,ZOONOSIS ZONA IV, - , - , - , - ,1
+280, - ,BIOMEDSUR,27139314541, - , - , - ,1
+281, - ,CENTRO DE DÍA SMA, - , - , - , - ,1
+282, - ,Farmacentro, - , - , - , - ,1
+283, - ,Compra por administración, - , - , - , - ,4
+284, - ,Área Programa, - , - , - , - ,15
+285, - ,Centro de salud CGT, - , - , - , - ,0

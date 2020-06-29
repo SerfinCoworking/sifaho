@@ -113,7 +113,7 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    4.times { @internal_order.quantity_ord_supply_lots.build }
+    @internal_order.quantity_ord_supply_lots.build
   end
 
   # GET /internal_orders/new_applicant

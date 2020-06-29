@@ -72,7 +72,7 @@
     <% if f.object.sector_supply_lot_id.present? %>
       <%= f.select(:sector_supply_lot_id, [],{},
         {
-          class: 'selectpicker show-tick',
+          class: 'selectpicker custom-select-pick show-tick',
           "data-width"=>"fit",
           "title"=>"#{f.object.sector_supply_lot.lot_code+" <span class='badge'>"+f.object.sector_supply_lot.quantity.to_s+"</span>" }",
           "data-size"=>"5",
@@ -83,7 +83,7 @@
     <% else %>
       <%= f.select(:sector_supply_lot_id, [],{},
         {
-          class: 'selectpicker show-tick',
+          class: 'selectpicker custom-select-pick show-tick',
           "data-width"=>"fit",
           "title"=>"#{if @stock == 0; "No hay stock"; else; "Código"; end}",
           "data-size"=>"5",

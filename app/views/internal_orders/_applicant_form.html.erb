@@ -19,10 +19,10 @@
         required: true,
         :input_html => {
           id: 'provider-sector',
-          class: 'selectpicker-md show-tick',
+          class: 'selectpicker-md custom-select-pick show-tick',
           "data-width"=>"auto",
           "title"=>"Seleccionar sector",
-          "data-size"=>"10",
+          "data-width"=> "100%",
           "data-live-search"=>true,
           disabled: false,
           value: "#{ f.object.provider_sector.id unless f.object.new_record? }"
@@ -72,15 +72,15 @@
             <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
           <% end %>
         <% else %>
-          <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @internal_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+          <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.build do |form_quantity| %>
             <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
           <% end %>
         <% end %>
       </tbody>
     </table>
-    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
       data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+      <%= fa_icon "plus" %>
       Agregar insumo
     <% end %>
   </div>

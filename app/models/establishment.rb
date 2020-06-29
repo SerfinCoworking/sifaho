@@ -6,6 +6,9 @@ class Establishment < ApplicationRecord
   has_many :users, :through => :sectors
   has_many :prescriptions
 
+  # Validations
+  validates_presence_of :name, :code
+  
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,
   against: :name,
@@ -42,4 +45,7 @@ class Establishment < ApplicationRecord
     end
   }
 
+  def short_name
+    super.presence || self.name
+  end
 end

@@ -3,7 +3,7 @@
 <div class="card">
   <div class="card-header bg-warning">
     <h5 class="card-title">
-      <%= fa_icon "edit" %> Editando <%= @external_order.order_type.underscore.humanize.downcase %>
+      <%= fa_icon "pen" %> Editando <%= @external_order.order_type.underscore.humanize.downcase %>
       <%= link_to external_orders_path, class: 'btn float-right',
         :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>

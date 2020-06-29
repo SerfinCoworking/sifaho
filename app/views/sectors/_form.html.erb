@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@sector.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @sector.new_record? ? "Agregar sector" : "Editar sector" %>
+        <%= @sector.new_record? ? "Agregar sector" : "Editando sector" %>
       </h5>
     </div>
     <%= link_to :back, class: @sector.new_record? ? 'btn text-white' : 'btn' do %>

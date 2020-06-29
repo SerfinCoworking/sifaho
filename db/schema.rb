@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_17_121454) do
+ActiveRecord::Schema.define(version: 2020_06_27_192416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2020_06_17_121454) do
     t.integer "sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "short_name"
   end
 
   create_table "external_order_comments", force: :cascade do |t|
@@ -260,14 +261,14 @@ ActiveRecord::Schema.define(version: 2020_06_17_121454) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
-    t.bigint "destination_sector_id"
+    t.bigint "detination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
+    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 

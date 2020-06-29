@@ -85,14 +85,14 @@
       <% if policy(@internal_order_template).edit? %>
         <%= link_to edit_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
           class: "btn btn-warning mr-2" do %>
-          <%= fa_icon "edit" %>
+          <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).edit_provider? %>
         <%= link_to edit_provider_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
           class: "btn btn-warning mr-2" do %>
-          <%= fa_icon "edit" %>
+          <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>

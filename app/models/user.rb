@@ -21,11 +21,11 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: true
 
-  after_create :create_profile # Comment in development
+  # after_create :create_profile # Comment in development
 
   # Delegaciones
   delegate :full_name, :dni, :email, to: :profile
-  delegate :name, to: :sector, prefix: :sector
+  delegate :name, :establishment_short_name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
   delegate :establishment, to: :sector
 
@@ -42,7 +42,7 @@ class User < ApplicationRecord
 
   def verify_profile
     unless self.profile.present?
-      self.create_profile # Comment in development
+      # self.create_profile # Comment in development
     end
     unless self.sector.present?
       if self.sectors.present?

@@ -72,7 +72,7 @@
           <% if policy(supply).edit? %>
             <%= link_to edit_supply_path(supply), class: 'btn btn-warning btn-sm',
               title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "edit" %>
+              <%= fa_icon "pen" %>
             <% end %>
           <% end %>
           <% if policy(supply).delete? %>

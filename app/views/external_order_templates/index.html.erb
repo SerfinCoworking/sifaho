@@ -1,58 +1,53 @@
 <%= render "external_orders/header" %>
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-5">
-        <h4>Plantillas de pedidos de abastecimiento</h4>
-      </div>
-      <div class="col-md-7 text-right">
-        <p class="text-info">
-          <span class="glyphicon glyphicon-info-sign"></span>
-          Optimiza la carga de insumos en tus pedidos.
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5> <%= fa_icon "skiing" %> Plantillas de pedidos de abastecimientos</h5>
+        <p class="text-info mb-0">
+          <%= fa_icon "info" %> Optimiza la carga de insumos en tus pedidos.
         </p>
-      </div>
     </div>
   </div>
 </div>
 
-<div class="row">
+<div class="row mt-3">
   <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-md-3">
-            <h4>Solicitudes</h4>
+    <div class="card">
+      <div class="card-header">
+        <div class="row d-flex align-items-center justify-content-between">
+          <div class="f-flex align-items-center">
+            <h5 class="card-title mb-0 ml-2">Solicitudes</h5>
           </div>
-          <div class="col-md-9 text-right">
-            <%= link_to new_external_order_template_path, class: "btn btn-md btn-primary" do %>
-              <span class="glyphicon glyphicon-plus"></span>Nueva
-            <% end %>
-          </div>
+          <%= link_to new_external_order_template_path, class: "btn btn-primary" do %>
+            <%= fa_icon "plus" %> Nueva
+          <% end %>
         </div>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <% if @applicant_templates.present? %>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Establecimiento</th>
-              <th>Sector</th>
-              <th>Insumos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @applicant_templates.each do |app_template| %>
-              <tr class="table-row" data-href="<%= external_order_template_path(app_template) %>">
-                <td><%= app_template.name %></td>
-                <td><%= app_template.destination_establishment.name %></td>
-                <td><%= app_template.destination_sector.name %></td>
-                <td><span class="badge"><%= app_template.supplies.count %></span></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+          <div class="card">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Establecimiento</th>
+                  <th>Sector</th>
+                  <th>Insumos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @applicant_templates.each do |app_template| %>
+                  <tr class="table-row" data-href="<%= external_order_template_path(app_template) %>">
+                    <td><%= app_template.name %></td>
+                    <td><%= app_template.destination_establishment.name %></td>
+                    <td><%= app_template.destination_sector.name %></td>
+                    <td><span class="badge badge-secondary"><%= app_template.supplies.count %></span></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         <% else %>
           Aún no tienes plantillas de solicitud! Empieza <%= link_to 'aquí', new_external_order_template_path, class: "link" %>
         <% end %>
@@ -60,41 +55,41 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-md-3">
-            <h4>Despachos</h4>
+    <div class="card">
+      <div class="card-header">
+        <div class="row d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <h5 class="card-title mb-0 ml-2">Despachos</h5>
           </div>
-          <div class="col-md-9 text-right">
-            <%= link_to new_provider_external_order_templates_path, class: "btn btn-md btn-primary" do %>
-              <span class="glyphicon glyphicon-plus"></span>Nueva
-            <% end %>
-          </div>
+          <%= link_to new_provider_external_order_templates_path, class: "btn btn-primary" do %>
+            <%= fa_icon "plus" %> Nueva
+          <% end %>
         </div>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <% if @provider_templates.present? %>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Establecimiento</th>
-                <th>Sector</th>
-                <th>Insumos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @provider_templates.each do |prv_template| %>
-                <tr class="table-row" data-href="<%= external_order_template_path(prv_template) %>">
-                  <td><%= prv_template.name %></td>
-                  <td><%= prv_template.destination_establishment.name %></td>
-                  <td><%= prv_template.destination_sector.name %></td>
-                  <td><span class="badge"><%= prv_template.supplies.count %></span></td>
+          <div class="card">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Establecimiento</th>
+                  <th>Sector</th>
+                  <th>Insumos</th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <% @provider_templates.each do |prv_template| %>
+                  <tr class="table-row" data-href="<%= external_order_template_path(prv_template) %>">
+                    <td><%= prv_template.name %></td>
+                    <td><%= prv_template.destination_establishment.name %></td>
+                    <td><%= prv_template.destination_sector.name %></td>
+                    <td><span class="badge"><%= prv_template.supplies.count %></span></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         <% else %>
           Aún no tienes plantillas de despachos! Empieza <%= link_to 'aquí', new_provider_external_order_templates_path, class: "link" %>
         <% end %>

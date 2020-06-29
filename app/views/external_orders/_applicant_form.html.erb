@@ -56,8 +56,8 @@
           :input_html => {
             required: true,
             id: 'provider-sector',
-            class: 'selectpicker-md show-tick',
-            "data-width"=>"322px",
+            class: 'selectpicker-md custom-select-pick show-tick',
+            "data-width"=>"100%",
             "title"=>"Seleccionar sector",
             "data-size"=>"10",
             "data-live-search"=>true,
@@ -70,7 +70,7 @@
           :input_html => {
             required: true,
             id: 'provider-sector',
-            class: 'selectpicker-md show-tick',
+            class: 'selectpicker-md custom-select-pick show-tick',
             "data-width"=>"100%",
             "title"=>"Seleccione un establecimiento",
             "data-size"=>"10",
@@ -124,13 +124,13 @@
           <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
         <% end %>
       <% else %>
-        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @external_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, @external_order.quantity_ord_supply_lots.build do |form_quantity| %>
           <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
         <% end %>
       <% end %>
     </tbody>
   </table>
-  <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+  <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
     data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
     <%= fa_icon "plus" %>
     Agregar insumo a solicitar

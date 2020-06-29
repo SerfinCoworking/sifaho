@@ -27,7 +27,7 @@
           <%= f.input :name, label: 'Nombre de insumo', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
               required: true, size: 50, autocomplete: 'off' %>
           <%= f.input :unity, label: 'Unidad',
-            collection: 
+            collection:
               @unities.map { |unity| [unity.name, unity.name] },
             :input_html => {
               required: true,
@@ -41,7 +41,7 @@
             }
           %>
           <%= f.input :supply_area_id, label: 'Rubro',
-            collection: 
+            collection:
               @supply_areas,
             :input_html => {
               required: true,
