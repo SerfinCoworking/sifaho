@@ -8,8 +8,8 @@
         Viendo laboratorio
       </h5>
     </div>
-    <%= link_to laboratories_path, class: 'btn pull-right close-btn' do %>
-      <%= fa_icon 'times-circle' %>
+    <%= link_to laboratories_path, class: 'btn' do %>
+      <%= fa_icon 'times' %>
     <% end %>
   </div>
 
@@ -29,7 +29,7 @@
     </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', supplies_path, class: "btn" %>
+    <%= link_to 'Volver', laboratories_path, class: "btn" %>
     <% if policy(@laboratory).edit? %>
       <%= link_to edit_laboratory_path(@laboratory), :"data-turbolinks" => false, class: "btn btn-warning" do %>
         <%= fa_icon "pen" %>

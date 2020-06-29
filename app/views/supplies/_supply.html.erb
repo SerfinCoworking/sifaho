@@ -2,45 +2,12 @@
   <div class="js-fade fade-in is-paused">
       <% if params[:controller] == 'sector_supply_lots' %>
         <td><%= supply.id %></td>
-        <td class="col-sup-name"><%= supply.name %></td>
+        <td><%= supply.name %></td>
         <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).without_status(4).with_supply(supply) %>
-        <td><%@sum_lots = @lots.sum(:quantity)%>
-          <span class="label label-default">
-            <%= @sum_lots %>
-          </span>
-        <% if @sum_lots > 0 %>
-          <% 
-            @lots_vigentes = @lots.with_status(0).sum(:quantity) 
-            @lots_por_vencer = @lots.with_status(1).sum(:quantity)
-            @lots_vencidos = @lots.with_status(2).sum(:quantity)
-
-            _num_helper = ActiveSupport::NumberHelper
-
-            @lots_vig_perc = @lots_vigentes.to_f / @sum_lots  * 100 unless @sum_lots == 0
-            @lots_por_perc = @lots_por_vencer.to_f / @sum_lots  * 100 unless @sum_lots == 0
-            @lots_ven_perc = @lots_vencidos.to_f / @sum_lots  * 100 unless @sum_lots == 0
-          %>
-          <td class="col-md-2">
-              <div class="progress-bar progress-bar-success" id="quantity-bar" style="width:<%= '%.0f' % @lots_vig_perc.to_s%>%">
-                <%= if @lots_vigentes > 0; @lots_vigentes; end %>
-              </div>
-              <div class="progress-bar progress-bar-warning" id="quantity-bar" style="width:<%= '%.0f' % @lots_por_perc.to_s%>%">
-                <%= if @lots_por_vencer > 0; @lots_por_vencer; end %>
-              </div>
-              <div class="progress-bar progress-bar-danger" id="quantity-bar" style="width:<%= '%.0f' % @lots_ven_perc.to_s%>%">
-                <%= if @lots_vencidos > 0; @lots_vencidos; end %>
-              </div>
-          </td>
-        <% else %>
-          <td>
-            <div class="progress-bar progress-bar-info" id="quantity-bar" style="width: 100%">
-              Agotado
-            </div>
-          </td>
-        <% end %>
+        <td><%= @lots.sum(:quantity) %></td>
         <td><%= @lots.count %></td>
         <td><%= supply.supply_area.name %></td>
-        <td>
+        <td class="text-center actions-col">
           <% if policy(supply).lots_for_supply? %>
             <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-secondary btn-sm',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

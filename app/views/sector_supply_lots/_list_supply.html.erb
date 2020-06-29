@@ -1,19 +1,18 @@
 <div id="filterrific_results">
   <% if @supplies.present? %>
-    <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
+    <div class="card">
+      <table class="table table-hover table-striped table-sm">
         <thead>
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :nombre) %></th>
             <th>Cantidad</th>
-            <th>Estados</th>
             <th>Lotes</th>
             <th>Rubro</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody id=supplies>
+        <tbody id="supplies">
           <%= render @supplies %>
         </tbody>
       </table>

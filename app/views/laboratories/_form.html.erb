@@ -1,7 +1,7 @@
 <div class="card fixed-custom-card">
   <div class="card-header <%= @laboratory.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon (@laboratory.new_record? ?  "plus" : "edit")%>
+      <%= fa_icon (@laboratory.new_record? ?  "plus" : "pen")%>
       <h5 class="card-title mb-0 ml-2">
         <%= @laboratory.new_record? ? "Agregar nuevo laboratorio" : "Editando laboratorio" %>
       </h5>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', patients_path, class: 'btn mr-2' %>
+    <%= link_to 'Volver', laboratories_path, class: 'btn mr-2' %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @laboratory.new_record? ? 'new_patient' : 'edit_patient_' + @laboratory.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
