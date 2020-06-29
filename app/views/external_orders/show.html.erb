@@ -54,20 +54,24 @@
     </div>
     <hr>
     <!-- Barra de estado -->
-    <%= render '/shared/status_bar', order: @external_order %>
-    <br><br><br><br>
-    <div class='row'>
-      <div class='col-md-12' style='margin-top: -50px;'>
+    <div class="row">
+      <div class="col-12">
+        <%= render '/shared/status_bar', order: @external_order %>
+      </div>
+    </div>
+
+    <div class='row mt-3'>
+      <div class='col-12'>
         <ul class='nav nav-tabs nav-justified'>
-          <li class='active'>
-            <a data-toggle='tab' href='#supplies'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies'>
               <%= fa_icon "cubes" %>
-              Insumos
+              Productos
               <span class="badge badge-secondary"><%= @external_order.quantity_ord_supply_lots.count %></span>
             </a>
           </li>
-          <li>
-            <a data-toggle='tab' href='#last_movements'>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements'>
               <%= fa_icon "exchange-alt"%>
               Movimientos
               <span class="badge badge-secondary"><%= @external_order.movements.count %></span>
@@ -87,7 +91,7 @@
     </div>
     <div class="col-md-12">
       <div class="tab-content">
-        <div id='supplies' class='tab-pane fade in active'>
+        <div id='supplies' class='tab-pane fade show active'>
           <% if @external_order.despacho? %>
             <!-- Insumos a dispensar -->
             <div class="card">
@@ -249,7 +253,7 @@
             </div>
           <% end %>
         </div>
-        <div id='last_movements' class='tab-pane fade'>
+        <div id='last-movements' class='tab-pane fade'>
           <!-- Tabla de movimientos -->
           <%= render '/shared/movements_table', order: @external_order %>
         </div> <!-- End last movements tab pane -->

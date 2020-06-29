@@ -15,57 +15,66 @@
       <% end %>
     </h5>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
     <div class="row">
-      <div class='col-md-2 col-xs-2'>
+      <div class='col-2'>
         <strong>Sector solicitante:</strong>
         <%= @internal_order.applicant_sector.name%>
       </div>
-      <div class="col-md-2 col-xs-2">
+      <div class="col-2">
         <strong>Sector proveedor:</strong>
         <%= @internal_order.provider_sector.name%>
       </div>
-      <div class='col-md-3 col-xs-3'>
+      <div class='col-3'>
         <strong>Solicitado:</strong>
         <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
       </div>
-      <div class='col-md-3 col-xs-3'>
+      <div class='col-3'>
         <strong>Observaciones:</strong>
           <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
       </div>
-      <div class='col-md-2 col-xs-2'>
+      <div class='col-2'>
         <strong>Código:</strong>
         <%= @internal_order.remit_code %>
       </div>
     </div>
-    <hr>
-    <!-- Barra de estado -->
-    <%= render 'status_bar', internal_order: @internal_order %>
     
-    <!-- Insumos a dispensar -->
-    <ul class='nav nav-tabs nav-justified' role="tablist">
-      <li class='nav-item active'>
-        <a class="nav-link" data-toggle='tab' href='#supplies' role="tab" aria-controls="supplies" aria-selected="true">
-          <%= fa_icon "cubes" %> Insumos
-          <span class="badge badge-secondary"><%= @internal_order.quantity_ord_supply_lots.count %></span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-link" data-toggle='tab' href='#last_movements' role="tab" aria-controls="last_movements" aria-selected="true">
-          <%= fa_icon "exchange-alt" %> Movimientos
-          <span class="badge badge-secondary"><%= @internal_order.movements.count %></span>
-        </a>
-      </li>
-    </ul>
-    <div class="col-md-12">
-      <div class="tab-content">
-        <div id='supplies' class='tab-pane fade in active'>
-          <!-- Insumos a dispensar -->
-          <table class="table table-hover table-condensed">
+    <!-- Status bar -->
+    <hr>
+    <div class="row">
+      <div class="col-12">
+        <%= render 'status_bar', internal_order: @internal_order %>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos
+              <span class="badge badge-secondary"><%= @internal_order.quantity_ord_supply_lots.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @internal_order.movements.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="tab-content">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm">
             <thead>
               <tr>
-                <th>Cód Ins</th>
-                <th>Insumo</th>
+                <th>Código</th>
+                <th>Producto</th>
                 <th>Solicitado</th>
                 <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
                 <th>Lote</th>
@@ -119,12 +128,12 @@
             </tbody>
           </table>
         </div>
-        <div id='last_movements' class='tab-pane fade'>
-          <!-- Tabla de movimientos -->
-          <%= render '/shared/movements_table', order: @internal_order %>
-        </div> <!-- End last movements tab pane -->
-      </div> <!-- End Tab content-->
-    </div> <!-- End col-md-12 -->
+      </div>
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @internal_order %>
+      </div> <!-- End last movements tab pane -->
+    </div> <!-- End Tab content-->
   </div>
   <div class="card-footer text-right">
     <% if @internal_order.provision? %>
