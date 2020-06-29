@@ -1,19 +1,25 @@
 <%= render 'header' %>
 
-<div class="card">
-  <div class="card-header">
-    <h5 class="card-title mb-0 ml-2">
-      <%= fa_icon "eye" %> Viendo <%= @external_order.order_type.split('_').join(' ') %>
-      <%= link_to external_orders_path, class: 'btn float-right',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-      <%= link_to external_order_path(format: 'pdf'), class: 'btn float-right',  
-        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo <%= @external_order.order_type.split('_').join(' ') %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to external_order_path(format: 'pdf'), class: 'btn',  
+          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>
-    </h5>
+      <%= link_to external_orders_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
   </div>
+
   <div class="card-body" id="panel-body-new">
     <div class="row">
       <div class='col-md-4 col-xs-4'>
