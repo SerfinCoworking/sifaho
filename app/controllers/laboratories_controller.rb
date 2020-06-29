@@ -24,7 +24,7 @@ class LaboratoriesController < ApplicationController
   def show
     authorize @laboratory
     respond_to do |format|
-      format.js
+      format.html { render :show }
     end
   end
 

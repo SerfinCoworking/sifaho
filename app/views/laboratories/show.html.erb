@@ -1,0 +1,40 @@
+<%= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo laboratorio
+      </h5>
+    </div>
+    <%= link_to laboratories_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+
+
+     <div class="card-body">
+      <p class="border-bottom mt-2">
+        <strong>Razón social: </strong><%= @laboratory.name%>
+      </p>
+      <p class="border-bottom mt-2">
+        <strong>CUIT: </strong><%= @laboratory.cuit %>
+      </p>
+
+
+      <p class="border-bottom mt-2">
+        <strong>GLN: </strong><%= @laboratory.gln %>
+      </p>
+    </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', supplies_path, class: "btn" %>
+    <% if policy(@laboratory).edit? %>
+      <%= link_to edit_laboratory_path(@laboratory), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
+</div>

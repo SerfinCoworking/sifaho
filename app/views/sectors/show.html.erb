@@ -18,19 +18,23 @@
     <div class="card mb-4">
       <div class="card-body">
           <ul class="list-group list-group-flush">
-          <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @sector.establishment.name %> </li>
-          <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @sector.description %></li>
+          <li class="list-group-item"><span class="font-weight-bold">Establecimiento:</span> <%= @sector.establishment.name %> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Descripción:</span> <%= @sector.description %></li>
         </ul>
       </div>
     </div>
 
-    <div class="card-body">
-      <%= render 'shared/users_table', users: @sector.users %>
-    </div>
+    <%= render 'shared/users_table', users: @sector.users %>
   </div>
 
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', sectors_path, class: "btn" %>
+    <%= link_to 'Volver', sectors_path, class: "btn mr-2" %>
+    <% if policy(@sector).edit? %>
+      <%= link_to edit_sector_path(@sector), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
   </div>
 </div>

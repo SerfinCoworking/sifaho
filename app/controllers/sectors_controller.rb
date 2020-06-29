@@ -105,7 +105,7 @@ class SectorsController < ApplicationController
   def sector_params
     params.require(:sector).permit(
       :name,
-      :establisment_id,
+      :establishment_id,
       :description
     )
   end

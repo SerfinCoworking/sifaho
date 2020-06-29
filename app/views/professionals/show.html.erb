@@ -1,22 +1,19 @@
 <%= render 'header' %>
 
-<div class="card">
-  <div class="card-header">
-    <h4 class="card-title mb-0">
-      <%= fa_icon "eye" %> Viendo médico
-      <%= link_to professionals_path, class: 'btn float-right p-0',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h4>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo médico
+      </h5>
+    </div>
+    <%= link_to professionals_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
   </div>
 
-
-
-
-
-
-    <div class="card-body" id="panel-body-new">
+    <div class="card-body">
       <div class="row">
         <div class="col-3">
           <div class="col-md-12">
@@ -65,76 +62,77 @@
                 </tr>
               </thead>
               <tbody id=professionals>
-              <% @professional.prescriptions.each do |prescription| %>
-                <tr id="prescription_<%= prescription.id %>">
-                  <td><%= prescription.remit_code %></th>
-                  <td class="pres-col-pro"><%= prescription.patient.fullname %></td>
-                  <td>
-                    <span class="label label-<%= prescription.status_label %>">
-                      <%= prescription.status.underscore.humanize %>
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge">
-                      <%= prescription.quantity_ord_supply_lots.count %>
-                    </span>
-                  </td>
-                  <td>
-                    <% if prescription.prescribed_date.present? %>
-                      <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
-                    <% else %>
-                      ------
-                    <% end %>
-                  </td>
-                    <% if prescription.dispensada? %>
-                      <td>
-                      <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
-                    <% else %>
-                      <% if policy(prescription).dispense? %>
-                        <td class="text-center">
-                        <%= link_to dispense_prescription_path(prescription), remote: true,
-                              class: 'btn btn-success btn-sm', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                          <%= fa_icon "paper-plane" %>
-                        <% end %>
+                <% @professional.prescriptions.each do |prescription| %>
+                  <tr id="prescription_<%= prescription.id %>">
+                    <td><%= prescription.remit_code %></th>
+                    <td class="pres-col-pro"><%= prescription.patient.fullname %></td>
+                    <td>
+                      <span class="label label-<%= prescription.status_label %>">
+                        <%= prescription.status.underscore.humanize %>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge">
+                        <%= prescription.quantity_ord_supply_lots.count %>
+                      </span>
+                    </td>
+                    <td>
+                      <% if prescription.prescribed_date.present? %>
+                        <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
                       <% else %>
-                        <td>
-                        Sin dispensar
-                      <% end  %>
-                    <% end %>
-                  </td>
-                  <td>
-                    <% if policy(prescription).show? %>
-                      <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm', 
-                        title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= fa_icon "eye" %>
+                        ------
                       <% end %>
-                    <% end %>
-                    <% if policy(prescription).edit? %>
-                      <% unless prescription.dispensada? %>
-                        <%= link_to edit_prescription_path(prescription), 
-                              class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                          <%= fa_icon "edit" %>
+                    </td>
+                      <% if prescription.dispensada? %>
+                        <td>
+                        <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
+                      <% else %>
+                        <% if policy(prescription).dispense? %>
+                          <td class="text-center">
+                          <%= link_to dispense_prescription_path(prescription), remote: true,
+                                class: 'btn btn-success btn-sm', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                            <%= fa_icon "paper-plane" %>
+                          <% end %>
+                        <% else %>
+                          <td>
+                          Sin dispensar
+                        <% end  %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if policy(prescription).show? %>
+                        <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm',
+                          title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= fa_icon "eye" %>
                         <% end %>
                       <% end %>
-                    <% end %>
-                    <% if policy(prescription).delete? %>
-                      <%= link_to delete_prescription_path(prescription), remote: true,
-                            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= fa_icon "trash" %>
+                      <% if policy(prescription).edit? %>
+                        <% unless prescription.dispensada? %>
+                          <%= link_to edit_prescription_path(prescription),
+                                class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
+                            <%= fa_icon "edit" %>
+                          <% end %>
+                        <% end %>
                       <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+                      <% if policy(prescription).delete? %>
+                        <%= link_to delete_prescription_path(prescription), remote: true,
+                              class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= fa_icon "trash" %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card-footer text-right hidden-print">
-    <%= link_to 'Volver', professionals_path, class: "btn" %>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', professionals_path, class: "btn mr-2" %>
     <% if policy(@professional).edit? %>
       <%= link_to edit_professional_path(@professional), :"data-turbolinks" => false, class: "btn btn-warning" do %>
         <%= fa_icon "pen" %>
