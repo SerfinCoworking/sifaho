@@ -10,7 +10,7 @@
           <% end %>
         <% end %>
         <% if policy(laboratory).edit? %>
-          <%= link_to edit_laboratory_path(laboratory), remote: true, class: 'btn btn-warning btn-sm',
+          <%= link_to edit_laboratory_path(laboratory), class: 'btn btn-warning btn-sm',
                 title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
             <%= fa_icon "edit" %>
           <% end %>

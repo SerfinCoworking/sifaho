@@ -10,7 +10,7 @@
       <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
 
     <%= simple_form_for @professional, remote: true, html: {role: 'check-modified'} do |f| %>
       <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>

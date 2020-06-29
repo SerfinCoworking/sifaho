@@ -1,17 +1,17 @@
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header <%= @prescription.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@prescription.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @prescription.new_record? ? "Agregar receta crónica" : "Editar receta crónica" %>
+        <%= @prescription.new_record? ? "Agregar receta crónica" : "Editando receta crónica" %>
       </h5>
     </div>
     <%= link_to :back, class: @prescription.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
-      
+  <div class="card-body">
+
     <%= simple_form_for @prescription, html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class='row'>
@@ -38,7 +38,7 @@
                   data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
                   value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
                   size: 30
-                } 
+                }
               %>
               <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
 
@@ -76,8 +76,8 @@
                   :placeholder=>"Cant",
                   "data-placement"=>"right",
                   value: f.object.times_dispensation.present? ? f.object.times_dispensation : 6,
-                  min: '0', step:'any', :style => 'width: 70px'  
-                } 
+                  min: '0', step:'any', :style => 'width: 70px'
+                }
               %>
             </div>
             <div class="col-6">
@@ -192,7 +192,7 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', prescriptions_path, class: 'btn mr-2' %>
-    <button type='submit' name='commit' class='btn btn-success' form="<%= @prescription.new_record? ? 'new_prescription' : 'edit_prescription_' + @prescription.id.to_s %>">
+    <button type='submit' name='commit' class='btn btn-success mr-2' form="<%= @prescription.new_record? ? 'new_prescription' : 'edit_prescription_' + @prescription.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
     <button type='submit' name='commit' class='btn btn-primary' form='new_prescription' value='Dispensar'>

@@ -1,17 +1,17 @@
 
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header <%= @supply.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@supply.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @supply.new_record? ? "Agregar producto" : "Editar producto" %>
+        <%= @supply.new_record? ? "Agregar producto" : "Editando producto" %>
       </h5>
     </div>
     <%= link_to :back, class: @supply.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
 
     <%= simple_form_for @supply, html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>

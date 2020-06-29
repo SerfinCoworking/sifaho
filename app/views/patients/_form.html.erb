@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header <%= @patient.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@patient.new_record? ?  "plus" : "edit")%>
@@ -10,7 +10,7 @@
       <%= fa_icon "times" %>
     <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
 
     <%= simple_form_for @patient, html: {role: 'check-modified'} do |f| %>
     <%= f.error_notification %>
@@ -21,7 +21,7 @@
         <div class="col-4">
           <%= f.input :dni, required: true, readonly: f.object.Validado?, label: 'Número de DNI ARGENTINO', input_html: { min: '10000', max:'999999999' } %>
         </div>
-        <div class="col-4"> 
+        <div class="col-4">
           <%= f.input :sex, label: 'Sexo', include_blank: false,
             collection: Patient.sexes,
             :value_method => :first,
@@ -33,7 +33,7 @@
               "data-width"=>"100%",
               "data-size"=>"10",
               value: "#{ f.object.sex }"
-            } 
+            }
           %>
         </div>
         <div class="col-4">
@@ -44,7 +44,7 @@
             value: "#{if @patient.birthdate.present?; @patient.birthdate.strftime("%d/%m/%Y"); end }"},
             html5: false,
             required: false
-          %> 
+          %>
         </div>
         <div class="col-4">
           <%= f.input :last_name, readonly: f.object.Validado?, required: true, label: 'Apellido' %>
@@ -65,7 +65,7 @@
               "data-width"=>"100%",
               "data-size"=>"10",
               value: "#{ f.object.marital_status }"
-            } 
+            }
           %>
         </div>
       </div>

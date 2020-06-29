@@ -1,6 +1,29 @@
-<%= simple_form_for @laboratory, remote: true, html: { role: 'check-modified'} do |f| %>
-<%= f.error_notification %>
-  <%= f.input :name, placeholder: 'Nombre', required: true, label: 'Razón social', input_html: { autocomplete: 'off' } %>
-  <%= f.input :cuit, placeholder: '12345678', required: true, label: 'CUIT', input_html: { min: '10000' } %>
-  <%= f.input :gln, placeholder: '12345678', required: true, label: 'GLN', input_html: { min: '10000' } %>
-<% end %>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @laboratory.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@laboratory.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @laboratory.new_record? ? "Agregar nuevo laboratorio" : "Editando laboratorio" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @laboratory.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+    <%= simple_form_for @laboratory, remote: true, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <%= f.input :name, placeholder: 'Nombre', required: true, label: 'Razón social', input_html: { autocomplete: 'off' } %>
+      <%= f.input :cuit, placeholder: '12345678', required: true, label: 'CUIT', input_html: { min: '10000' } %>
+      <%= f.input :gln, placeholder: '12345678', required: true, label: 'GLN', input_html: { min: '10000' } %>
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', patients_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @laboratory.new_record? ? 'new_patient' : 'edit_patient_' + @laboratory.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
