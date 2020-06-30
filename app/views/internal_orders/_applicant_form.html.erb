@@ -1,87 +1,114 @@
-<%= simple_form_for @internal_order, html: { role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class="row">
-    <div class='col-3'>
-      <%= f.input :applicant_sector_id, as: :string,
-        label: 'Sector solicitante',
-        :input_html => {
-          disabled: true,
-          size: 30,
-          value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }",
-        } 
-      %>
-      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
-      <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @internal_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @internal_order.new_record? ? "Nueva solicitud de sector" : "Editando solicitud interna" %>
+      </h5>
     </div>
-    <div class="col-3">
-      <%= f.input :provider_sector_id, label: 'Sector proveedor',
-        collection: @provider_sectors.map {|s| [ s['name'], s['id'] ] },
-        required: true,
-        :input_html => {
-          id: 'provider-sector',
-          class: 'selectpicker-md custom-select-pick show-tick',
-          "data-width"=>"auto",
-          "title"=>"Seleccionar sector",
-          "data-width"=> "100%",
-          "data-live-search"=>true,
-          disabled: false,
-          value: "#{ f.object.provider_sector.id unless f.object.new_record? }"
-        }
-      %>
-      <%= f.hidden_field :provider_sector_id, id: "provider-id", value: "#{if f.object.provider_sector.present?; f.object.provider_sector_id; end}" %>
-    </div>
-    <div class='col-2'>
-      <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
-        :placeholder => "Seleccionar fecha",
-        input_html: {
-          id: "requested-date",
-          required: true,
-          autocomplete: 'off',
-          :style => 'width: 110px',
-          value: "#{f.object.requested_date unless f.object.new_record?}"
-        },
-        html5: false 
-      %>
-    </div>
-    <div class='col-4'>
-      <%= f.input :observation, label: 'Observaciones', as: :text,
-      :input_html => { :cols => 40  , :rows => 1 } %>
-    </div>
-  </div>
-  <!-- Insumos a dispensar -->
-  <div class="card mx-auto">
-    <table class="table table-hover table-sm mb-0">
-      <thead>
-        <tr>
-          <th>Cód Ins</th>
-          <th>Insumo</th>
-          <th>Tu stock</th>
-          <th>Solicitar</th>
-          <th>Unidad</th>
-          <th>Tu observación</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="quantity_ord_supply_lots">
-        <% if params[:action] == "edit" || params[:action] == "edit_applicant" %>
-          <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
-            <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
-          <% end %>
-        <% elsif params[:action] == "create" %>
-          <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-            <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
-          <% end %>
-        <% else %>
-          <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.build do |form_quantity| %>
-            <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
-      data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-      <%= fa_icon "plus" %>
-      Agregar insumo
+    <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
     <% end %>
   </div>
-<% end %>
+  <div class="card-body">
+    <%= simple_form_for @internal_order, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class="row">
+        <div class='col-3'>
+          <%= f.input :applicant_sector_id, as: :string,
+            label: 'Sector solicitante',
+            :input_html => {
+              disabled: true,
+              size: 30,
+              value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }",
+            } 
+          %>
+          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
+          <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
+        </div>
+        <div class="col-3">
+          <%= f.input :provider_sector_id, label: 'Sector proveedor',
+            collection: @provider_sectors.map {|s| [ s['name'], s['id'] ] },
+            required: true,
+            :input_html => {
+              id: 'provider-sector',
+              class: 'selectpicker-md custom-select-pick show-tick',
+              "data-width"=>"auto",
+              "title"=>"Seleccionar sector",
+              "data-width"=> "100%",
+              "data-live-search"=>true,
+              disabled: false,
+              value: "#{ f.object.provider_sector.id unless f.object.new_record? }"
+            }
+          %>
+          <%= f.hidden_field :provider_sector_id, id: "provider-id", value: "#{if f.object.provider_sector.present?; f.object.provider_sector_id; end}" %>
+        </div>
+        <div class='col-2'>
+          <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
+            :placeholder => "Seleccionar fecha",
+            input_html: {
+              id: "requested-date",
+              required: true,
+              autocomplete: 'off',
+              :style => 'width: 110px',
+              value: "#{f.object.requested_date unless f.object.new_record?}"
+            },
+            html5: false 
+          %>
+        </div>
+        <div class='col-4'>
+          <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 40  , :rows => 1 } %>
+        </div>
+      </div>
+      <!-- Insumos a dispensar -->
+      <div class="card mx-auto">
+        <table class="table table-hover table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Cód Ins</th>
+              <th>Insumo</th>
+              <th>Tu stock</th>
+              <th>Solicitar</th>
+              <th>Unidad</th>
+              <th>Tu observación</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="quantity_ord_supply_lots">
+            <% if params[:action] == "edit" || params[:action] == "edit_applicant" %>
+              <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
+                <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
+              <% end %>
+            <% elsif params[:action] == "create" %>
+              <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+                <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
+              <% end %>
+            <% else %>
+              <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.build do |form_quantity| %>
+                <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
+          data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+          <%= fa_icon "plus" %>
+          Agregar insumo
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn mr-2' %>
+    
+    <button type='submit' name='commit' class='btn btn-success mr-2' form=<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s%> value='Auditar'>
+      <%= fa_icon "save" %> Guardar
+    </button>
+    
+    <button type='submit' name='commit' class='btn btn-primary' form=<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s%> value='Enviar'>
+      <%= fa_icon "paper-plane" %> Guardar y enviar
+    </button>
+  </div>
+</div>

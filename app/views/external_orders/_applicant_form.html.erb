@@ -155,7 +155,7 @@
     <% end %>
   </div>
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn btn-light mr-1' %>
+    <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn mr-2' %>
     <button type='submit' name='commit' class='btn btn-success mr-1' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" value='Auditar'>
       <%= fa_icon "save" %> Guardar
     </button>
