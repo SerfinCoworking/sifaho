@@ -13,9 +13,11 @@
                 <%= image_tag user_avatar(user, 150), class:"img-circle w-100 h-100" %>
               </div>
 
-            </div>
-            <div class="card-header">
-              <h5 class="card-title"><%= user.profile.first_name%></h5>
+              <h6 class="card-title text-center mb-0">
+                <div class="p-2">
+                  <%= user.profile.full_name.titleize%>
+                </div>
+              </h6>
             </div>
           </div>
         </div>
