@@ -13,7 +13,7 @@
                 <% if user.profile.present? %>
                   <%= image_tag user_avatar(user, 150), class:"img-circle w-100 h-100" %>
                 <% else %>
-                  <%= image_tag asset_path('profile-placeholder.png'), class:"" %>
+                  <%= image_tag asset_path('profile-placeholder.png', size: "150x150"), class:"img-circle w-100 h-100" %>
                 <% end %>
               </div>
 
