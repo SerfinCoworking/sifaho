@@ -38,7 +38,7 @@
             <%= select_tag "with_professional_type_id",
               options_for_select(@filterrific.select_options[:professional_type_id]),
               include_blank: 'Todos',
-              class: "selectpicker custom-select-pick",
+              class: "selectpicker custom-select-pick filterrific-periodically-observed",
               data:{
                 "live-search" => true
               }
