@@ -1,25 +1,3 @@
 <%= render 'header' %>
 
-<div class="card fixed-custom-card">
-  <div class="card-header bg-warning">
-    <h5>
-      <%= fa_icon "pen" %> Editando solicitud interna
-      <%= link_to :back, class: 'btn float-right',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h5>
-  </div>
-  <div class="card-body">
-    <%= render 'applicant_form', internal_order: @internal_order %>
-  </div>
-  <div class="card-footer text-right">
-    <%= link_to 'Volver', :back, class: 'btn btn-light' %>
-    <button type='submit' name='commit' class='btn btn-success' form='edit_internal_order_<%=@internal_order.id%>' value='Solicitante'>
-      <%= fa_icon "save" %> Guardar cambios
-    </button>
-    <button type='submit' name='commit' class='btn btn-primary' form='edit_internal_order_<%=@internal_order.id%>' value='Enviar'>
-      <%= fa_icon "paper-plane" %> Guardar y enviar
-    </button>
-  </div>
-</div>
+<%= render 'applicant_form', internal_order: @internal_order %>
