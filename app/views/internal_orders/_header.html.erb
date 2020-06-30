@@ -27,11 +27,7 @@
     <li class="nav-item <%= active_action_and_controller('index', 'internal_orders') %> non-sel">
       <%= link_to internal_orders_path, class: 'nav-link' do %>
         <%= fa_icon "paper-plane" %>
-        Entregas&nbsp;
-        <% count =  InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-        <% if count > 0 %>
-          <div class="label label-info pull-right"><%= count %></div>
-        <% end %>
+        Entregas
       <% end %>
     </li>
   <% end %>

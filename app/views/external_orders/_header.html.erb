@@ -16,17 +16,13 @@
   <li class="nav-item <%= active_action('applicant_index') %> non-sel">
     <%= link_to applicant_index_external_orders_path, class: 'nav-link' do %>
       <%= fa_icon "inbox" %>
-      <span class="hidden-xs">Recibos</span>
+      Recibos
     <% end %>
   </li>
   <li class="nav-item <%= active_action_and_controller('index', 'external_orders') %> non-sel">
     <%= link_to external_orders_path, class: 'nav-link' do %>
       <%= fa_icon "paper-plane" %>
-      <span class="hidden-xs">Despachos</span>
-      <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-      <% if count > 0 %>
-        <div class="label label-info pull-right"><%= count %></div>
-      <% end %>
+      Despachos
     <% end %>
   </li>
   <% if policy(ExternalOrder).new_applicant? %>
