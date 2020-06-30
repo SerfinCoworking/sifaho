@@ -1,20 +1,25 @@
 <%= render 'header' %>
 
-
 <div class="card fixed-custom-card">
-  <div class="card-header">
-    <h5 class="card-title mb-0">
-      <%= fa_icon "eye" %> Viendo <%= @internal_order.order_type %>
-      <%= link_to internal_orders_path, class: 'btn float-right p-0',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-      <%= link_to internal_order_path(format: 'pdf'), class: 'btn print-btn float-right mr-4 p-0',  
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo <%= @internal_order.order_type %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to internal_order_path(format: 'pdf'), class: 'btn',  
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>
-    </h5>
+      <%= link_to internal_orders_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
   </div>
+
   <div class="card-body">
     <div class="row">
       <div class='col-2'>
