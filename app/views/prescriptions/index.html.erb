@@ -1,14 +1,10 @@
 <%= render 'header' %>
-
-<div class="row">
-  <% if @prescriptions.present? %>
-    <div class="panel panel-info" id="filter-panel">
-      <div class="panel-leftheading">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-      </div>
-      <div class="panel-rightbody">
-        <%= form_for_filterrific @filterrific do |f| %>
-          <div class="col-md-2 col-sm-2">
+<% if @prescriptions.present? %>
+  <div class="card">
+    <div class="card-header">
+      <%= form_for_filterrific @filterrific do |f| %>
+        <div class="row justify-content-between">
+          <div class="col-2">
             <label>Profesional</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
@@ -18,7 +14,7 @@
               autocomplete: 'off',
             ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Paciente</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
@@ -28,7 +24,7 @@
               autocomplete: 'off',
             ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Insumo</label>
             <%= f.text_field(
               :search_by_supply,
@@ -36,19 +32,19 @@
               placeholder: 'Código o nombre'
             ) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
             <label>Tipo</label>
             <%= f.select(:with_order_type,
               Prescription.order_types.map{ |type| [type.first.humanize, type.second] },{:include_blank => 'Todos'},
-              { class: "selectpicker show-tick", "data-width"=>"100%"}) %>
+              { class: "selectpicker-md custom-select-pick show-tick", "data-width"=>"100%"}) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
               <label>Recetado desde</label>
               <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
                 class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
                 placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
           </div>
-          <div class="col-md-2 col-sm-2">
+          <div class="col-2">
               <label>Dispensado desde</label>
               <%= f.text_field(:date_dispensed_since, autocomplete: 'off',
                 class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
@@ -60,19 +56,19 @@
           <% end %>
           <!-- Spinner para la carga -->
           <%= render_filterrific_spinner %>
-        <% end %>
-      </div>
-      <div class="clearfix">
-      </div>
+        </div>
+      <% end %>
     </div>
-    <%= render(
-      partial: 'prescriptions/list',
-      locals: { prescriptions: @prescriptions }
-    ) %>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'prescripciones' }
-    ) %>
-  <% end %>
-</div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'prescriptions/list',
+        locals: { prescriptions: @prescriptions }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>

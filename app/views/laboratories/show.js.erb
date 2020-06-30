@@ -1,5 +1,5 @@
 // Add the dialog title
-$('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo laboratorio");
+$('.modal-title').html("<i class='fa fa-eye'></i> Viendo laboratorio");
 
 // Render the edit form
 $('.modal-body').html('<%= j render("show") %>');
@@ -9,7 +9,7 @@ $('.modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
   "<% if policy(@laboratory).edit? %>"+
   '<%= link_to edit_laboratory_path(@laboratory), remote: true, class: "btn btn-warning btn-md" do %>'+
-    '<%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>'+
+    '<i class="fa fa-edit"></i>'+
     ' Editar laboratorio'+
   '<% end %>'+
   "<% end %>"

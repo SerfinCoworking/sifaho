@@ -80,7 +80,7 @@ class SuppliesController < ApplicationController
     authorize @supply
 
     respond_to do |format|
-      if @supply.save
+      if @supply.save!
         flash.now[:success] = "El insumo "+@supply.name+" se ha creado correctamente."
         format.html { redirect_to @supply }
       else
@@ -97,10 +97,10 @@ class SuppliesController < ApplicationController
     respond_to do |format|
       if @supply.update(supply_params)
         flash.now[:success] = "El insumo "+@supply.name+" se ha modificado correctamente."
-        format.js
+        format.html { redirect_to @supply }
       else
         flash.now[:error] = "El insumo "+@supply.name+" no se ha podido modificar."
-        format.js
+        format.html { render :edit }
       end
     end
   end

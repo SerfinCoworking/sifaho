@@ -1,23 +1,3 @@
 <%= render "internal_orders/header" %>
 
-<div class="row">
-  <div class="panel panel-warning">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %> Editando plantilla de provision a sector
-        <%= link_to internal_order_templates_path, class: 'btn pull-right close-btn' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
-    </div>
-    <div class="panel-body" id="panel-body-new">
-      <%= render 'form', internal_order_template: @internal_order_template %>
-    </div>
-    <div class="panel-footer text-right">
-      <%= link_to 'Volver', internal_order_templates_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='edit_internal_order_template_<%= @internal_order_template.id %>' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
-      </button>
-    </div>
-  </div>
-</div>
+<%= render "form", internal_order_template: @internal_order_template %>

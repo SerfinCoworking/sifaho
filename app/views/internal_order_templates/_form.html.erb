@@ -1,70 +1,89 @@
-<%= simple_form_for @internal_order_template, html: { role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <%= f.input :order_type, :as => :hidden, :input_html => { value: "#{@order_type.present? ? @order_type : f.object.order_type}" } %>
-  <div class="row">
-    <div class="col-md-3">
-      <%= f.input :name, label: "Nombre" %>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @internal_order_template.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <h5 class="card-title mb-0 ml-2">
+        <%= fa_icon (@internal_order_template.new_record? ?  "plus" : "pen") %>
+        <%= @internal_order_template.new_record? ? "Agregar" : "Editando" %> plantilla de <%= @order_type %> a sector
+      </h5>
     </div>
-    <div class="col-md-3">
-      <%= f.input :destination_sector_id, label: 'Proveedor',
-        collection: @destination_sectors.map {|s| [ s['name'], s['id'] ] },
-        required: true,
-        :input_html => {
-          id: 'provider-sector',
-          class: 'selectpicker-md show-tick',
-          "data-width"=>"100%",
-          "title"=>"Seleccionar sector",
-          "data-size"=>"10",
-          "data-live-search"=>true,
-          disabled: false,
-          value: "#{ f.object.destination_sector.id unless f.object.new_record? }"
-        }
-      %>
-      <%= f.hidden_field :destination_sector_id, id: "provider-id", value: "#{if f.object.destination_sector.present?; f.object.destination_sector_id; end}" %>
-    </div>
-    <div class="col-md-6">
-      <%= f.input :observation, label: 'Observaciones', :input_html => { :rows => 1 } %>
-    </div>
+    <%= link_to internal_order_templates_path, class: "btn #{internal_order_template.new_record? ? 'text-white' : ''}" do %>
+      <%= fa_icon "times" %>
+    <% end %>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <!-- Insumos a dispensar -->
-      <table class="table table-hover table-condensed">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Insumo</th>
-            <th>Unidad</th>
-            <th>Rubro</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody class="internal_order_template_supplies">
-          <% if params[:action] == "edit" %>
-            <%= f.simple_fields_for :internal_order_template_supplies, @internal_order_template.internal_order_template_supplies.joins(:supply).order("name") do |form_quantity| %>
-              <%= render "internal_order_template_supply_fields", f: form_quantity %>
-            <% end %>
-          <% elsif params[:action] == "create" %>
-            <%= f.simple_fields_for :internal_order_template_supplies do |form_quantity| %>
-              <%= render "internal_order_template_supply_fields", f: form_quantity %>
-            <% end %>
-          <% else %>
-            <% 4.times { @internal_order_template.internal_order_template_supplies.build } %>
-            <%= f.simple_fields_for :internal_order_template_supplies do |form_quantity| %>
-              <%= render "internal_order_template_supply_fields", f: form_quantity %>
-            <% end %>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="links" id="links-quant-form">
-        <div class="text-center">
-          <%= link_to_add_association f, :internal_order_template_supplies, class: 'btn btn-primary btn-sm',
-            data: {"association-insertion-node" => "tbody.internal_order_template_supplies", "association-insertion-method" => "append"} do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            Agregar insumo
-          <% end %>
+  <div class="card-body">
+    <%= simple_form_for @internal_order_template, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <%= f.input :order_type, :as => :hidden, :input_html => { value: "#{@order_type.present? ? @order_type : f.object.order_type}" } %>
+      <div class="row">
+        <div class="col-md-3">
+          <%= f.input :name, label: "Nombre" %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :destination_sector_id, label: @order_type == 'solicitud' ? 'Proveedor' : 'Solicitante',
+            collection: @destination_sectors.map {|s| [ s['name'], s['id'] ] },
+            required: true,
+            :input_html => {
+              id: 'provider-sector',
+              class: 'selectpicker-md custom-select-pick show-tick',
+              "data-width"=>"100%",
+              "title"=>"Seleccionar sector",
+              "data-size"=>"10",
+              "data-live-search"=>true,
+              disabled: false,
+              value: "#{ f.object.destination_sector.id unless f.object.new_record? }"
+            }
+          %>
+          <%= f.hidden_field :destination_sector_id, id: "provider-id", value: "#{if f.object.destination_sector.present?; f.object.destination_sector_id; end}" %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :observation, label: 'Observaciones', :input_html => { :rows => 1 } %>
         </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col-12">
+          <!-- Insumos a dispensar -->
+          <div class="card">
+            <table class="table table-hover table-sm mb-0">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Insumo</th>
+                  <th>Unidad</th>
+                  <th>Rubro</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="internal_order_template_supplies">
+                <% if ["edit", "edit_provider"].include?(params[:action]) %>
+                  <%= f.simple_fields_for :internal_order_template_supplies, @internal_order_template.internal_order_template_supplies.joins(:supply).order("name") do |form_quantity| %>
+                    <%= render "internal_order_template_supply_fields", f: form_quantity %>
+                  <% end %>
+                <% elsif params[:action] == "create" %>
+                  <%= f.simple_fields_for :internal_order_template_supplies do |form_quantity| %>
+                    <%= render "internal_order_template_supply_fields", f: form_quantity %>
+                  <% end %>
+                <% else %>
+                  <% @internal_order_template.internal_order_template_supplies.build %>
+                  <%= f.simple_fields_for :internal_order_template_supplies do |form_quantity| %>
+                    <%= render "internal_order_template_supply_fields", f: form_quantity %>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+            <%= link_to_add_association f, :internal_order_template_supplies, class: 'btn btn-primary btn-sm',
+              data: {"association-insertion-node" => "tbody.internal_order_template_supplies", "association-insertion-method" => "append"} do %>
+              <%= fa_icon "plus" %>
+              Agregar insumo
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', internal_order_templates_path, class: 'btn btn-light mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form='<%= @internal_order_template.new_record? ? 'new_internal_order_template' : 'edit_internal_order_template_' + @internal_order_template.id.to_s %>'>
+      <%= fa_icon "save" %> Guardar
+    </button>
+  </div>
+</div>

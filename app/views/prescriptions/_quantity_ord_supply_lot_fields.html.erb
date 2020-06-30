@@ -64,15 +64,15 @@
   </td>
   <td colspan="2">
     <% if f.object.supply_id.present? && @stock > 0 %>
-      <%= button_tag type: 'button', class: 'btn btn-xs search-lots',
+      <%= button_tag type: 'button', class: 'btn btn-sm search-lots',
         title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+        <%= fa_icon "search" %>
       <% end %>
     <% end %>
     <% if f.object.sector_supply_lot_id.present? %>
       <%= f.select(:sector_supply_lot_id, [],{},
         {
-          class: 'selectpicker show-tick',
+          class: 'selectpicker custom-select-pick show-tick',
           "data-width"=>"fit",
           "title"=>"#{f.object.sector_supply_lot.lot_code+" <span class='badge'>"+f.object.sector_supply_lot.quantity.to_s+"</span>" }",
           "data-size"=>"5",
@@ -83,7 +83,7 @@
     <% else %>
       <%= f.select(:sector_supply_lot_id, [],{},
         {
-          class: 'selectpicker show-tick',
+          class: 'selectpicker custom-select-pick show-tick',
           "data-width"=>"fit",
           "title"=>"#{if @stock == 0; "No hay stock"; else; "Código"; end}",
           "data-size"=>"5",
@@ -123,7 +123,7 @@
     <% end %>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-minus') %>
+        <%= fa_icon "minus" %>
     <% end %>
   </td>
 </tr>

@@ -1,7 +1,11 @@
 class ProfilesController < ApplicationController
-  before_action :set_profile, only: [ :edit, :update ] 
+  before_action :set_profile, only: [ :edit, :update, :show ] 
   after_action :verify_authorized
 
+  def show
+    authorize @profile
+  end
+  
   def edit
     authorize @profile
   end

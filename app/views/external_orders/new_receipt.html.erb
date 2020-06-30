@@ -1,26 +1,28 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %> Nuevo recibo
-        <%= link_to applicant_index_external_orders_path, class: 'btn pull-right close-btn' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "plus" %>
+      <h5 class="card-title mb-0 ml-2">
+        Nuevo recibo
+      </h5>
     </div>
-    <div class="panel-body" id="panel-body-new">
-      <%= render 'receipt_form', external_order: @external_order %>
-    </div>
-    <div class="panel-footer text-right">
-      <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn' %>
-      <button type='submit' name='commit' class='btn btn-success' form='new_external_order' value='Auditar'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar
-      </button>
-      <button type='submit' name='commit' class='btn btn-primary' form='new_external_order' data-disable-with="<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Guardando y recibiendo" value='Auditar y recibir'>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %> Guardar y recibir
-      </button>
-    </div>
+    <%= link_to applicant_index_external_orders_path, class: 'btn text-white' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <%= render 'receipt_form', external_order: @external_order %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn btn-light mr-1' %>
+    <button type='submit' name='commit' class='btn btn-success mr-1' form='new_external_order' value='Auditar'>
+      <%= fa_icon "save" %> Guardar
+    </button>
+    <button type='submit' name='commit' class='btn btn-primary' form='new_external_order' data-disable-with="<i class='fa fa-spinner fa-spin'></i> Guardando y recibiendo" value='Auditar y recibir'>
+      <%= fa_icon "check" %> Guardar y recibir
+    </button>
   </div>
 </div>

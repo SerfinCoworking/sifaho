@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "SIFAHO" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "SIFAHO App farmacia HSMA" %>">
+    <%= favicon_link_tag 'sifaho-favicon.png' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
+    <%= yield(:head) %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <% if ENV['DEMO_RIBBON'] %>
+      <div class="corner-ribbon bottom-right sticky green shadow"><strong>DEMO</strong></div>
+    <% end %>
+    <header>
+      <%= render 'layouts/navigation' %>
+    </header>
+
+    <% if current_user.present? %>
+      <div id="mySidebar" class="sidebar non-sel">
+        <%= render 'layouts/side_navigation_links' %>
+      </div>
+    <% end %>
+
+    <main role="main" id="main">
+      <div class="col-md-12 cols-sm-12" id="body-col">
+        <% if user_signed_in? %>
+          <div class="panel-heading" id="page-header"><h3 class="panel-heading custom-header"><%= yield :page_header %></h3></div>
+        <% end %>
+        <div class="container-fluid">
+          <div class="row">
+            <%= render "shared/dialog" %>
+            <%= render "layouts/flash_notices" %>
+            <% if current_user.present? && current_user.sector.present? %>
+              <button id="openbtn" class="openbtn" onmouseover="openNav()">☰</button>
+            <%  end %> 
+            <%= yield %>
+            <div class="footer">
+              <%= yield :page_footer %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

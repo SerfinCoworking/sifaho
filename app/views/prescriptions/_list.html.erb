@@ -1,7 +1,7 @@
-<div id="filterrific_results">
-  <% if @prescriptions.present? %>
-    <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
+<% if @prescriptions.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
         <thead>
           <tr>
             <th>Código</th>
@@ -25,7 +25,7 @@
               <%= filterrific_sorting_link(@filterrific, :dispensada) %>
               <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
             </th>
-            <th colspan="3">Acciones</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody id=prescriptions>
@@ -33,13 +33,13 @@
         </tbody>
       </table>
     </div>
-    <div id="page_links">
-      <%= paginate @prescription %>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @prescription, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </div>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found_filter',
-      locals: { object_name: 'prescripciones' }
-    ) %>
-  <% end %>
-</div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>

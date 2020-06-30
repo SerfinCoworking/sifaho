@@ -1,0 +1,148 @@
+
+<div id="sidebar-wrapper">
+
+  <div class="link-group">
+    <%= link_to main_app.profile_path(current_user.profile), class: "list-group-item list-group-item-action list-custom bg-light profile-link #{active_class('edit_profile')}" do %>
+      <span class="img-container">
+        <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
+      </span>
+      <span class="ml-2 sb-title">
+        <%= current_user.full_name.capitalize %>
+      </span>
+
+    <% end %>
+
+    <%= link_to main_app.root_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('welcome')}" do %>
+      <span class="sb-icon">
+        <%= fa_icon "home" %>
+      </span>
+      <span class="ml-2 sb-title">Inicio</span>
+    <% end %>
+
+    <% if policy(Prescription).index? %>
+      <%= link_to main_app.prescriptions_path,  class: "list-group-item list-group-item-action list-custom bg-light #{active_class('prescriptions')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "signature" %>
+        </span>
+        <span class="ml-2 sb-title">Recetas</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(BedOrder).index? %>
+      <%= link_to main_app.bed_orders_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('bed_orders')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "procedures" %>
+        </span>
+        <span class="ml-2 sb-title">Internación</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Sector).index? %>
+      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('sectors')} #{active_class('internal_orders')} #{active_class('internal_order_templates')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "bezier-curve" %>
+        </span>
+        <span class="ml-2 sb-title">Sectores</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Establishment).index? %>
+      <%= link_to main_app.establishments_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('establishments')} #{active_class('external_orders')} #{active_class('external_order_templates')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "hospital"%>
+        </span>
+        <span class="ml-2 sb-title">Establecimientos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Stock).index? %>
+      <%= link_to main_app.stocks_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('stocks')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "cubes" %>
+        </span>
+        <span class="ml-2 sb-title">Stock a migrar</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(SectorSupplyLot).index? %>
+      <%= link_to main_app.group_by_supply_sector_supply_lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('sector_supply_lots')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "cubes" %>
+        </span>
+        <span class="ml-2 sb-title">Stock</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(SupplyLot).index? %>
+      <%= link_to main_app.supply_lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('supply_lots')}"  do %>
+        <span class="sb-icon">
+          <%= fa_icon "barcode" %>
+        </span>
+        <span class="ml-2 sb-title">Lotes Provincia</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Lot).index? %>
+      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('lots')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "barcode" %>
+        </span>
+        <span class="ml-2 sb-title">Lotes (a migrar)</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Supply).index? %>
+      <%= link_to main_app.supplies_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('supplies')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "pills" %>
+        </span>
+        <span class="ml-2 sb-title">Productos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Product).index? %>
+      <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('products')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "pills" %>
+        </span>
+        <span class="ml-2 sb-title">Productos (a migrar)</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Professional).index? %>
+      <%= link_to main_app.professionals_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('professionals')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "user-md" %>
+        </span>
+        <span class="ml-2 sb-title">Médicos</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Patient).index? %>
+      <%= link_to main_app.patients_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('patients')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "user-injured" %>
+        </span>
+        <span class="ml-2 sb-title">Pacientes</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Laboratory).index? %>
+      <%= link_to main_app.laboratories_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('laboratories')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "vial" %>
+        </span>
+        <span class="ml-2 sb-title">Laboratorios</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(User).index? %>
+      <%= link_to main_app.users_admin_index_path, class: "list-group-item list-group-item-action list-custom bg-light #{active_class('users')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "users" %>
+        </span>
+        <span class="ml-2 sb-title">Usuarios</span>
+      <% end %>
+    <% end %>
+  </div>
+</div>

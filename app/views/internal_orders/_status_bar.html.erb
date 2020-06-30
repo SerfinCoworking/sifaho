@@ -2,8 +2,8 @@
   <div class="col-md-2"></div>
   <div class="col-md-8 text-center">
     <label>
-      Estado actual:
-      <span class="label label-<%= internal_status_label(internal_order) %>">
+      Estado:
+      <span class="badge badge-<%= internal_status_label(internal_order) %>">
         <%= internal_order.status.split('_').map(&:capitalize).join(' ') %>
       </span>
     </label><br>

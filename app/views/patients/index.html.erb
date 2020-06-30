@@ -1,12 +1,10 @@
 <%= render 'header' %>
 
 <% if @patients.present? %>
-  <div class="panel panel-info" id="filter-panel">
-    <div class="panel-leftheading">
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-    </div>
-    <div class="panel-rightbody">
+  <div class="card">
+    <div class="card-header">
       <%= form_for_filterrific @filterrific do |f| %>
+        <div class="row d-felx justify-content-between">
           <div class="col-md-3 col-sm-3">
             <label>DNI</label>
             <%= f.text_field(
@@ -34,23 +32,23 @@
             <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
           </div>
           <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+            <%= fa_icon "redo" %>
           <% end %>
           <!-- Spinner para la carga -->
           <%= render_filterrific_spinner %>
+        </div>
       <% end %>
     </div>
-    <div class="clearfix">
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'patients/list',
+        locals: { patients: @patients }
+      ) %>
     </div>
   </div>
-
-  <%= render(
-    partial: 'patients/list',
-    locals: { patients: @patients }
-  ) %>
 <% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'pacientes' }
-  ) %>
+<%= render(
+  partial: 'shared/not_found',
+  locals: { object_name: 'pacientes' }
+) %>
 <% end %>

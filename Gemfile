@@ -46,7 +46,7 @@ gem 'highcharts-rails'
 gem 'filterrific'
 # Use will_paginate for limit the post per page
 gem 'will_paginate', '~> 3.1.0'
-gem 'will_paginate-bootstrap'
+gem 'will_paginate-bootstrap4'
 # Use momentjs and bootstrap3-datettimepicker for datetimepicker
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'
@@ -56,8 +56,8 @@ gem 'chosen-rails'
 gem 'simple_form'
 # Use cocoon for nested forms
 gem "cocoon"
-# Use bootstrap-sass for views
-gem 'bootstrap-sass'
+# Use bootstrap 4.5 to layouts
+gem 'bootstrap', '~> 4.5.0'
 # Use Pundit for permissions in classes
 gem 'pundit'
 # Use for make roles

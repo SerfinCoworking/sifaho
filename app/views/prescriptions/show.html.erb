@@ -1,90 +1,88 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading hidden-print">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> 
-        Viendo prescripción <%= @prescription.ambulatoria? ? "ambulatoria" : "crónica" %>
-        <%= link_to prescriptions_path, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-        <%= link_to prescription_path(format: 'pdf'), class: 'btn print-btn pull-right',  
-          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-        <% end %>
-      </h3>
-    </div>
-    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
-    <div class="panel-body" id="panel-body-new">
-      <% if @prescription.ambulatoria? %>
-        <div class="row">
-          <!-- Professional profile -->
-          <div class='col-md-3 col-xs-3'>
-            <div class="media">
-              <div class="media-left">
+<div class="card fixed-custom-card">
+  <div class="card-header">
+    <h5 class="card-title mb-0">
+      <%= fa_icon "eye" %> 
+      Viendo prescripción <%= @prescription.ambulatoria? ? "ambulatoria" : "crónica" %>
+      <%= link_to prescriptions_path, class: 'btn float-right p-0',
+        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+      <%= link_to '',class:'btn float-right p-0 mr-4', :onclick => 'window.print();return false;',
+        :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "print" %>
+      <% end %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <% if @prescription.ambulatoria? %>
+      <div class="row">
+        <!-- Professional profile -->
+        <div class='col-md-3 col-xs-3'>
+          <div class="media">
+            <div class="mr-3">
+              <%= link_to professional_path(@prescription.professional), class: "link" do %>
+                <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+              <% end %>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">Profesional</h4>
+              <p>
                 <%= link_to professional_path(@prescription.professional), class: "link" do %>
-                  <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+                  <%= @prescription.professional_fullname %>
                 <% end %>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading">Profesional</h4>
-                <p>
-                  <%= link_to professional_path(@prescription.professional), class: "link" do %>
-                    <%= @prescription.professional_fullname %>
-                  <% end %>
-                </p>
-                <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
-              </div>
-            </div> 
-          </div><!-- End professional profile -->
+              </p>
+              <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
+            </div>
+          </div> 
+        </div><!-- End professional profile -->
 
-          <!-- Patient profile -->
-          <div class='col-md-3 col-xs-3'>
-            <div class="media">
-              <div class="media-left">
+        <!-- Patient profile -->
+        <div class='col-md-3 col-xs-3'>
+          <div class="media">
+            <div class="mr-3">
+              <%= link_to patient_path(@prescription.patient), class: "link" do %>
+                <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+              <% end %>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">Paciente</h4>
+              <p>
                 <%= link_to patient_path(@prescription.patient), class: "link" do %>
-                  <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
-                <% end %>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading">Paciente</h4>
-                <p>
-                  <%= link_to patient_path(@prescription.patient), class: "link" do %>
-                    <%= @prescription.patient_fullname.titleize %>
-                  <% end %>    
-                </p>
-                <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
-                <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
-              </div>
+                  <%= @prescription.patient_fullname.titleize %>
+                <% end %>    
+              </p>
+              <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
+              <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
             </div>
-          </div> <!-- End Patient profile -->
+          </div>
+        </div> <!-- End Patient profile -->
 
-          <!-- Extra info -->
-          <div class='col-md-6 col-xs-6'>
-            <div class='row'>
-              <div class='col-md-3 col-xs-3'>    
-                <strong>Recetada:</strong><br>
-                <%= @prescription.prescribed_date.strftime("%d/%m/%Y")%>
-              </div>
-              <div class='col-md-3 col-xs-3'>
-                <strong>Vencimiento:</strong><br>
-                <%= @prescription.expiry_date.strftime("%d/%m/%Y")%>
-              </div>
-              <div class='col-md-3 col-xs-3'>
-                <strong>Código:</strong>
-                <%= @prescription.remit_code %>
-              </div>
+        <!-- Extra info -->
+        <div class='col-md-6 col-xs-6'>
+          <div class='row'>
+            <div class='col-md-3 col-xs-3'>    
+              <strong>Recetada:</strong><br>
+              <%= @prescription.prescribed_date.strftime("%d/%m/%Y") %>
             </div>
-            <hr>
-            <strong>Observaciones:</strong>
-            <%= @prescription.observation.present? ? @prescription.observation : 'Sin observaciones' %>
-          </div><!-- End extra info -->
-        </div>
-        <hr>
-        <!-- Insumos a dispensar -->
-        <table class="table table-hover table-condensed">
+            <div class='col-md-3 col-xs-3'>
+              <strong>Vencimiento:</strong><br>
+              <%= @prescription.expiry_date.strftime("%d/%m/%Y") %>
+            </div>
+            <div class='col-md-3 col-xs-3'>
+              <strong>Código:</strong>
+              <%= @prescription.remit_code %>
+            </div>
+          </div>
+          <hr>
+          <strong>Observaciones:</strong>
+          <%= @prescription.observation.present? ? @prescription.observation : 'Sin observaciones' %>
+        </div><!-- End extra info -->
+      </div>
+      <!-- Insumos a dispensar -->
+      <div class="card">
+        <table class="table table-hover table-sm">
           <thead>
             <tr>
               <th>Cód Ins</th>
@@ -134,225 +132,223 @@
             <% end %>
           </tbody>
         </table>
-      <% elsif @prescription.cronica? %>
-        <div class="row">
-          <!-- Professional profile -->
-          <div class='col-md-3 col-xs-3'>
-            <div class="media">
-              <div class="media-left">
+      </div>
+    <% elsif @prescription.cronica? %>
+      <div class="row">
+        <!-- Professional profile -->
+        <div class='col-md-3 col-xs-3'>
+          <div class="media">
+            <div class="media-left">
+              <%= link_to professional_path(@prescription.professional), class: "link" do %>
+                <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+              <% end %>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">Profesional</h4>
+              <p>
                 <%= link_to professional_path(@prescription.professional), class: "link" do %>
-                  <%= image_tag professional_avatar(@prescription.professional, 83), class:"img-thumbnail media-object" %>
+                  <%= @prescription.professional_fullname %>
                 <% end %>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading">Profesional</h4>
-                <p>
-                  <%= link_to professional_path(@prescription.professional), class: "link" do %>
-                    <%= @prescription.professional_fullname %>
-                  <% end %>
-                </p>
-                <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
-              </div>
-            </div> 
-          </div><!-- End professional profile -->
+              </p>
+              <p><strong>Matrícula: </strong><%= @prescription.professional_enrollment %></p>
+            </div>
+          </div> 
+        </div><!-- End professional profile -->
 
-          <!-- Patient profile -->
-          <div class='col-md-3 col-xs-3'>
-            <div class="media">
-              <div class="media-left">
+        <!-- Patient profile -->
+        <div class='col-md-3 col-xs-3'>
+          <div class="media">
+            <div class="media-left">
+              <%= link_to patient_path(@prescription.patient), class: "link" do %>
+                <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+              <% end %>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">Paciente</h4>
+              <p>
                 <%= link_to patient_path(@prescription.patient), class: "link" do %>
-                  <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+                  <%= @prescription.patient_fullname.titleize %>
+                <% end %>
+              </p>
+              <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
+              <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
+            </div>
+          </div>
+        </div> <!-- End Patient profile -->
+        
+        <!-- Extra info -->
+        <div class='col-md-6 col-xs-6'>
+          <div class='row'>
+            <div class='col-md-6 col-xs-6'>    
+              <strong>Recetada:</strong><br>
+              <%= @prescription.prescribed_date.strftime("%d/%m/%Y")%>
+            </div>
+            <div class='col-md-6 col-xs-6'>
+              <strong>Código:</strong>
+              <%= @prescription.remit_code %>
+            </div>
+          </div>
+          <hr>
+          <strong>Observaciones:</strong>
+          <%= @prescription.observation.present? ? @prescription.observation : 'Sin observaciones' %>
+        </div><!-- End extra info -->
+      </div>
+      <!-- Tabs -->
+      <div class='row'>
+        <div class='col-md-12'>
+          <ul class='nav nav-tabs nav-justified'>
+            <li class='nav-item'>
+              <a class='nav-link active' data-toggle='tab' href='#supplies'>
+                <%= fa_icon "cubes" %>
+                Insumos recetados
+                <span class="badge badge-secondary"><%= @prescription.quantity_ord_supply_lots.sin_entregar.count %></span>
+              </a>
+            </li>
+            <li class='nav-item'>
+              <a class='nav-link <%= @prescription.cronic_dispensations.to_set.count > 0 ? '' : 'disabled' %>' data-toggle='tab' href='#dispensations'>
+                <%= fa_icon "paper-plane" %>
+                Dispensaciones
+                <span class="badge badge-secondary"><%= @prescription.cronic_dispensations.to_set.count %>/<%= @prescription.times_dispensation %></span>
+              </a>
+            </li>
+            <li class='nav-item'>
+              <a class='nav-link' data-toggle='tab' href='#last_movements'>
+                <%= fa_icon "exchange-alt" %>
+                Movimientos
+                <span class="badge badge-secondary"><%= @prescription.movements.count %></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div><!-- End tabs -->
+      <div class="tab-content">
+        <!-- Insumos recetados -->
+        <div id='supplies' class='tab-pane container active'>
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Consumo/mes</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @prescription.quantity_ord_supply_lots.sin_entregar.each do |qosl| %>
+                <tr>
+                  <td>
+                    <%= qosl.supply_id %>
+                  </td>
+                  <td>
+                    <%= qosl.supply_name %>
+                  </td>
+                  <td>
+                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                  </td>
+                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Insumos dispensados -->
+        <% cronic_dispensations = @prescription.cronic_dispensations.order(created_at: :desc).to_set %>
+        <div id='dispensations' class='tab-pane fade'>
+          <div role="tabpanel">
+            <div class="col-sm-2">
+              <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
+                <% i = 0 %>
+                <% cronic_dispensations.each do |cd| %>
+                  <li role="presentation" class="brand-nav <%= i == 0 ? "active" : ""%>">
+                    <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" class="text-right" role="tab" data-toggle="tab">
+                      <span class="badge badge-secondary"><%= cronic_dispensations.count - i %>°</span> &nbsp;
+                      <%= cd.created_at.strftime("%d/%m/%Y") %>
+                      <%= cd.created_at.strftime("%H:%M")%>
+                    </a>
+                  </li>
+                  <% i += 1 %>
+                <% end %>
+              </ul>
+            </div>
+            <div class="col-sm-10">
+              <div class="tab-content">
+                <% i = 0 %>
+                <% cronic_dispensations.each.each do |cd| %>
+                  <div role="tabpanel" class="tab-pane <%= i == 0 ? "active" : ""%>" id="tab<%= cd.id %>">
+                    <table class="table table-hover table-condensed">
+                      <thead>
+                        <tr>
+                          <th>Cód Ins</th>
+                          <th>Insumo</th>
+                          <th>Consumo/mes</th>
+                          <th>Entregado</th>
+                          <th>Lote</th>
+                          <th>Observaciones</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% cd.quantity_ord_supply_lots.each do |qosl| %>
+                          <tr>
+                            <td>
+                              <%= qosl.supply_id %>
+                            </td>
+                            <td>
+                              <%= qosl.supply_name %>
+                            </td>
+                            <td>
+                              <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                            </td>
+                            <td>
+                              <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                            </td>
+                            <td>
+                              <%= qosl.sector_supply_lot.lot_code %>
+                            </td>
+                            <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>  
+                  </div>
+                  <% i += 1 %>
                 <% end %>
               </div>
-              <div class="media-body">
-                <h4 class="media-heading">Paciente</h4>
-                <p>
-                  <%= link_to patient_path(@prescription.patient), class: "link" do %>
-                    <%= @prescription.patient_fullname.titleize %>
-                  <% end %>
-                </p>
-                <p><strong>DNI: </strong><%= @prescription.patient_dni %></p>
-                <p><strong>Edad: </strong><%= @prescription.patient_age_string %></p>
-              </div>
             </div>
-          </div> <!-- End Patient profile -->
-          
-          <!-- Extra info -->
-          <div class='col-md-6 col-xs-6'>
-            <div class='row'>
-              <div class='col-md-6 col-xs-6'>    
-                <strong>Recetada:</strong><br>
-                <%= @prescription.prescribed_date.strftime("%d/%m/%Y")%>
-              </div>
-              <div class='col-md-6 col-xs-6'>
-                <strong>Código:</strong>
-                <%= @prescription.remit_code %>
-              </div>
-            </div>
-            <hr>
-            <strong>Observaciones:</strong>
-            <%= @prescription.observation.present? ? @prescription.observation : 'Sin observaciones' %>
-          </div><!-- End extra info -->
-        </div>
-        <br><br><br><br>
-        <!-- Tabs -->
-        <div class='row'>
-          <div class='col-md-12' style='margin-top: -50px;'>
-            <ul class='nav nav-tabs nav-justified'>
-              <li class='active'>
-                <a data-toggle='tab' href='#supplies'>
-                  <span class="glyphicon glyphicon-pencil"></span>
-                  Insumos recetados
-                  <span class="badge"><%= @prescription.quantity_ord_supply_lots.sin_entregar.count %></span>
-                </a>
-              </li>
-              <li>
-                <a data-toggle='<%= @prescription.cronic_dispensations.to_set.count > 0 ? 'tab' : '' %>' href='#dispensations'>
-                  <span class="glyphicon glyphicon-send"></span>
-                  Dispensaciones
-                  <span class="badge"><%= @prescription.cronic_dispensations.to_set.count %>/<%= @prescription.times_dispensation %></span>
-                </a>
-              </li>
-              <li>
-                <a data-toggle='tab' href='#last_movements'>
-                  <span class="glyphicon glyphicon-transfer"></span>
-                  Movimientos
-                  <span class="badge"><%= @prescription.movements.count %></span>
-                </a>
-              </li>
-            </ul>
           </div>
-        </div><!-- End tabs -->
-        <div class="col-md-12">
-          <div class="tab-content">
-            <!-- Insumos a dispensar -->
-            <div id='supplies' class='tab-pane fade in active'>
-              <table class="table table-hover table-condensed">
-                <thead>
-                  <tr>
-                    <th>Cód Ins</th>
-                    <th>Insumo</th>
-                    <th>Consumo/mes</th>
-                    <th>Observaciones</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @prescription.quantity_ord_supply_lots.sin_entregar.each do |qosl| %>
-                    <tr>
-                      <td>
-                        <%= qosl.supply_id %>
-                      </td>
-                      <td>
-                        <%= qosl.supply_name %>
-                      </td>
-                      <td>
-                        <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-                      </td>
-                      <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            </div>
-            <!-- Insumos a dispensar -->
-            <% cronic_dispensations = @prescription.cronic_dispensations.order(created_at: :desc).to_set %>
-            <div id='dispensations' class='tab-pane fade'>
-              <div role="tabpanel">
-                <div class="col-sm-2">
-                  <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
-                    <% i = 0 %>
-                    <% cronic_dispensations.each do |cd| %>
-                      <li role="presentation" class="brand-nav <%= i == 0 ? "active" : ""%>">
-                        <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" class="text-right" role="tab" data-toggle="tab">
-                          <span class="badge"><%= cronic_dispensations.count - i %>°</span> &nbsp;
-                          <%= cd.created_at.strftime("%d/%m/%Y") %>
-                          <%= cd.created_at.strftime("%H:%M")%>
-                        </a>
-                      </li>
-                      <% i += 1 %>
-                    <% end %>
-                  </ul>
-                </div>
-                <div class="col-sm-10">
-                  <div class="tab-content">
-                    <% i = 0 %>
-                    <% cronic_dispensations.each.each do |cd| %>
-                      <div role="tabpanel" class="tab-pane <%= i == 0 ? "active" : ""%>" id="tab<%= cd.id %>">
-                        <table class="table table-hover table-condensed">
-                          <thead>
-                            <tr>
-                              <th>Cód Ins</th>
-                              <th>Insumo</th>
-                              <th>Consumo/mes</th>
-                              <th>Entregado</th>
-                              <th>Lote</th>
-                              <th>Observaciones</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <% cd.quantity_ord_supply_lots.each do |qosl| %>
-                              <tr>
-                                <td>
-                                  <%= qosl.supply_id %>
-                                </td>
-                                <td>
-                                  <%= qosl.supply_name %>
-                                </td>
-                                <td>
-                                  <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-                                </td>
-                                <td>
-                                  <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
-                                </td>
-                                <td>
-                                  <%= qosl.sector_supply_lot.lot_code %>
-                                </td>
-                                <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
-                              </tr>
-                            <% end %>
-                          </tbody>
-                        </table>  
-                      </div>
-                      <% i += 1 %>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id='last_movements' class='tab-pane fade'>
-              <!-- Tabla de movimientos -->
-              <%= render '/shared/movements_table', order: @prescription %>
-            </div> <!-- End last movements tab pane -->
-          </div>
-        </div>
+        </div> <!-- End tab content-->
+        <div id='last_movements' class='tab-pane fade'>
+          <!-- Tabla de movimientos -->
+          <%= render '/shared/movements_table', order: @prescription %>
+        </div> <!-- End last movements tab pane -->
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', prescriptions_path, class: "btn mr-2" %>
+    <% if policy(@prescription).return_status? %>
+      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning">
+        <%= fa_icon "redo" %>
+        Retornar
+      </a>
+    <% end %>
+    <% if policy(@prescription).return_cronic_dispensation? %>
+      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-danger mr-2">
+        <%= fa_icon "redo" %>
+        Retornar dispensación
+      </a>
+    <% end %>
+    <% if policy(@prescription).edit? %>
+      <%= link_to edit_prescription_path(@prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "edit" %>
+        Editar
       <% end %>
-    </div>
-    <div class="panel-footer text-right hidden-print">
-      <%= link_to 'Volver', prescriptions_path, class: "btn" %>
-      <% if policy(@prescription).return_status? %>
-        <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning">
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
-          Retornar
-        </a>
-      <% end %>
-      <% if policy(@prescription).return_cronic_dispensation? %>
-        <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-danger">
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %>
-          Retornar dispensación
-        </a>
-      <% end %>
-      <% if policy(@prescription).edit? %>
-        <%= link_to edit_prescription_path(@prescription), :"data-turbolinks" => false,
-          class: "btn btn-warning" do %>
-          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-          Auditar
-        <% end %>
-      <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
+
 
 <% if policy(@prescription).return_status? %>
   <!-- Modal para retornar estado -->
@@ -384,7 +380,7 @@
       <div class="modal-content panel-danger">
         <div class="modal-header panel-heading">
           <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a stock la última dispensación.</h3>
+          <h3><%= fa_icon "redo" %> Retornar a stock la última dispensación.</h3>
         </div>
         <div class="modal-body">
           <p>

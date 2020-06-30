@@ -276,7 +276,7 @@ class PrescriptionsController < ApplicationController
   end
   
   def get_cronic_prescriptions
-    @prescriptions = Prescription.with_patient_id(params[:term]).cronica.for_statuses(['pendiente', 'dispensada_parcial'])
+    @prescriptions = Prescription.with_patient_id(params[:term]).for_statuses(['pendiente', 'dispensada_parcial'])
     respond_to do |format|
       format.js
     end

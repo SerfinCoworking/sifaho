@@ -1,57 +1,75 @@
-<%= simple_form_for @supply, html: { role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class="row">
-    <div class="col-md-8">
-      <%= f.hidden_field :is_active, id: "is_active", value: @supply.new_record? ? true : @supply.is_active %>
-      <input type="checkbox" name="is-active-check">
-      &emsp;&emsp;&emsp;
-      <%= f.hidden_field :needs_expiration, id: "needs_expiration", value: @supply.new_record? ? true : @supply.needs_expiration %>
-      <input type="checkbox" name="expiration-check">
-      <br><br>
-      <%= f.input :id, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
-      <%= f.input :name, label: 'Nombre de insumo', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
-          required: true, size: 50, autocomplete: 'off' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @supply.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@supply.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @supply.new_record? ? "Agregar producto" : "Editando producto" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @supply.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+    <%= simple_form_for @supply, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
       <div class="row">
-        <div class="col-md-6">
-          <%= f.label 'Unidad' %>
-          <%= f.input_field :unity,
-            id: "new-supply-unity",
-            label_method: :name,
-            value_method: :name,
-            collection: @unities,
-            include_blank: true,
-            prompt: 'Seleccione unidad' 
+        <div class="col-12">
+          <%= f.hidden_field :is_active, id: "is_active", value: @supply.new_record? ? true : @supply.is_active %>
+          <input type="checkbox" name="is-active-check">
+          &emsp;&emsp;&emsp;
+          <%= f.hidden_field :needs_expiration, id: "needs_expiration", value: @supply.new_record? ? true : @supply.needs_expiration %>
+          <input type="checkbox" name="expiration-check">
+          <br><br>
+          <%= f.input :id, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
+          <%= f.input :name, label: 'Nombre de insumo', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
+              required: true, size: 50, autocomplete: 'off' %>
+          <%= f.input :unity, label: 'Unidad',
+            collection:
+              @unities.map { |unity| [unity.name, unity.name] },
+            :input_html => {
+              required: true,
+              include_blank: false,
+              class: 'selectpicker custom-select-pick',
+              "data-width"=>"100%",
+              "data-size"=>"15",
+              "title"=>"Seleccionar unidad",
+              "data-live-search"=>true,
+              "data-none-results-text" => "No se encontró la unidad"
+            }
           %>
-        </div>
-        <div class="col-md-6">
-          <%= f.label 'Área'%>
-          <%= f.input_field :supply_area_id,
-            id: "new-supply-area",
-            label_method: :name,
-            value_method: :id,
-            collection: @supply_areas,
-            include_blank: true,
-            prompt: 'Seleccione un área'
+          <%= f.input :supply_area_id, label: 'Rubro',
+            collection:
+              @supply_areas,
+            :input_html => {
+              required: true,
+              include_blank: false,
+              class: 'selectpicker custom-select-pick',
+              "data-width"=>"100%",
+              "data-size"=>"15",
+              "title"=>"Seleccionar rubro",
+              "data-live-search"=>true,
+              "data-none-results-text" => "No se encontró el rubro"
+            }
           %>
+          <%= f.input :description, label: 'Descripción', as: :text,
+            :input_html => { :cols => 50, :rows => 2 } %>
+          <%= f.input :observation, label: 'Observación', as: :text,
+            :input_html => { :cols => 50, :rows => 2 } %>
         </div>
       </div>
-      <%= f.input :description, label: 'Descripción', as: :text,
-        :input_html => { :cols => 50, :rows => 2 } %>
-      <%= f.input :observation, label: 'Observación', as: :text,
-        :input_html => { :cols => 50, :rows => 2 } %>
-    </div>
+    <% end %>
 
-    <div class="col-md-4">
-      <%= f.hidden_field :active_alarm, id: "active_alarm", value: @supply.new_record? ? true : @supply.active_alarm %>
-      <input type="checkbox" name="alarm-check">
-      <%= f.input :quantity_alarm, placeholder: 'Cantidad', required: true,
-        label: 'Alarma de cantidad', input_html: { min: '0', max:'9999', value: 1 } %>
-      <%= f.input :period_alarm, placeholder: 'Días', required: true,
-        label: 'Período de alarma', input_html: { min: '0', max:'9999', value: 52 } %>
-      <%= f.input :period_control, placeholder: 'Días', required: true,
-        label: 'Período de control', input_html: { min: '0', max:'9999', value: 52 } %>
-      <%= f.input :expiration_alarm, placeholder: 'Días', required: true,
-        label: 'Alarma de expiración', input_html: { min: '0', max:'9999', value: 30 } %>
-    </div>
   </div>
-<% end %>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', supplies_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @supply.new_record? ? 'new_supply' : 'edit_supply_' + @supply.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>
+
+

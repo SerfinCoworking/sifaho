@@ -1,10 +1,20 @@
 <% render 'header' %>
 
-<div class="row">
-  <%= render 'filter' %>
-
+<% if @products.present? %>
+  <div class="card">
+    <div class="card-header">
+      <%= render 'filter' %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'products/list',
+        locals: { products: @products }
+      ) %>
+    </div>
+  </div>
+<% else %>
   <%= render(
-    partial: 'products/list',
-    locals: { products: @products }
+    partial: 'shared/not_found',
+    locals: { object_name: 'productos' }
   ) %>
-</div>
+<% end %>

@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require jquery3
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
@@ -27,9 +28,8 @@
 //= require font_awesome5 
 //= require bootstrap-switch
 //= require bootstrap-datetimepicker
-//= require bootstrap-sprockets
+//= require popper
 //= require bootstrap
-//= require bootstrap.min
 //= require_tree .
 
 // Se oculta el flash message
@@ -148,14 +148,3 @@ $(document).on('turbolinks:load', function() {
     nested_form.find('.search-lots').hide();
   });
 });
-
-
-$(document).on('page:fetch', function(e) {
-  $('.spinner').css('display', 'none');  //<--- hide again
-});
-
-$(document).on('click', '.show-spin', function() {
-  $(this).find(".spinner").css("display", "table");
-});
-  
-  

@@ -2,7 +2,7 @@
   $('.modal-dialog').addClass('modal-lg');
   $('.modal-content').addClass('panel-primary');
   // Add the dialog title
-  $('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo últimas recetas");
+  $('.modal-title').html("<i class='fa fa-eye'></i>  Viendo últimas recetas de <%= @prescriptions.first.patient_fullname %>");
 
   // Render the edit form
   $('.modal-body').html('<%= j render("get_cronic_prescriptions") %>');

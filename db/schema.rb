@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_22_185425) do
+ActiveRecord::Schema.define(version: 2020_06_27_192416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_185425) do
     t.integer "sectors_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "short_name"
   end
 
   create_table "external_order_comments", force: :cascade do |t|

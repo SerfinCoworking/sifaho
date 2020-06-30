@@ -1,15 +1,16 @@
 <% content_for :page_header do %>
-    <ul class="nav nav-tabs nav-tabs-cust non-sel">
-      <li role="presentation" id="page-title">
-        <a href="">Lotes en provincia</a>
-      </li>
-      <% if policy(SupplyLot).trash_index? %>
-        <li role="presentation" class="col-md-offset-5 <%= active_action('trash_index') %> non-sel">
-          <%= link_to trash_index_supply_lots_path do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
-            Papelera
-          <% end %>
-        </li>
+  <li class="nav-item <%= active_action('index') %> non-sel">
+    <%= link_to supply_lots_path, class: 'nav-link' do %>
+      <%= fa_icon "barcode" %>
+      Lotes en provincia
+    <% end %>
+  </li>
+  <% if policy(SupplyLot).trash_index? %>
+    <li class="nav-item col-md-offset-5 <%= active_action('trash_index') %> non-sel">
+      <%= link_to trash_index_supply_lots_path, class: 'nav-link' do %>
+        <%= fa_icon "trash" %>
+        Papelera
       <% end %>
-    </ul>
+    </li>
+  <% end %>
 <% end %>

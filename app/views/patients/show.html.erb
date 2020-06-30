@@ -1,237 +1,219 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-9">
-    <div class="panel panel-default">
-      <div class="panel-heading hidden-print">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> 
-          Viendo paciente <%= @patient.patient_type_name.downcase %>
-          <%= link_to patients_path, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-          <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;',
-            :title => 'Imprimir', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-          <% end %>
-        </h3>
-      </div>
-      <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
-      <div class="panel-body" id="panel-body-new">
-        <div class="row">
-          <ul class='nav nav-tabs nav-justified'>
-            <li class='active'>
-              <a data-toggle='tab' href='#profile'>
-                  <span class="glyphicon glyphicon-user"></span>
-                  Información
-              </a>
-            </li>
-            <li>
-              <a data-toggle='<%= @patient.prescriptions.count > 0 ? 'tab' : '' %>' href='#prescriptions'>
-                  <span class="glyphicon glyphicon-send"></span>
-                  Prescripciones
-                  <span class="badge"><%= @patient.prescriptions.count %></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="tab-content">
-              <!-- Perfil -->
-              <div id='profile' class='tab-pane fade in active'>
-                <div class="row">
-                  <div class="col-md-12">
-                    <h5>DATOS BÁSICOS</h5><hr>
-                    <div class="col-md-4">
-                      <h5><strong>DNI</strong></h5>
-                      <%= @patient.dni %>
-                    </div>
-                    <div class="col-md-4"> 
-                      <h5><strong>Sexo</strong></h5>
-                      <%= @patient.sex %>
-                    </div>
-                    <div class="col-md-4">
-                      <h5><strong>Fecha nacimiento</strong></h5>
-                      <%= @patient.birthdate.present? ? @patient.birthdate.strftime("%d/%m/%Y") : "----" %>
-                    </div>
-                    <div class="col-md-4">
-                      <h5><strong>Apellido</strong></h5>
-                      <%= @patient.last_name %>
-                    </div>
-                    <div class="col-md-4">
-                      <h5><strong>Nombre</strong></h5>
-                      <%= @patient.first_name %>
-                    </div>
-                    <div class="col-md-4">
-                      <h5><strong>Estado civil</strong></h5>
-                      <%= @patient.marital_status %>
-                    </div>
-                  </div>
+<div class="card fixed-custom-card">
+
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo paciente
+      </h5>
+    </div>
+    <%= link_to patients_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+
+  <div class="card-body">
+    <div class="col-3">
+      <%= image_tag patient_avatar(@patient, 200), class:"img-thumbnail" %>
+      <h5><strong><%= @patient.last_name %></strong> <%= @patient.first_name %></h5>
+
+      <h5><strong>DNI </strong> <%= @patient.dni %></h5>
+
+      <h5> <%= @patient.email %> </h5>
+
+      <% if @patient.birthdate.present? %>
+        <h5><strong>Edad </strong><%= @patient.age_string %></h5>
+      <% end %>
+
+      <h5><strong>Sexo </strong><%= @patient.sex %></h5>
+
+      <% if @patient.cuil.present? %><h5><strong>CUIL </strong><%= @patient.cuil %></h5><% end %>
+
+      <% @patient.patient_phones.each do |phone| %>
+        <h5><span class="glyphicon glyphicon-earphone"></span> <%= phone.number %></h5>
+      <% end %>
+
+      <h5><strong>Estado </strong>
+        <span class="label label-<%= @patient.Temporal? ? "warning" : "success"%>">
+          <%= @patient.status %>
+        </span>
+      </h5>
+    </div>
+
+    <div class="row">
+      <ul class='nav nav-tabs nav-justified'>
+        <li class='active'>
+          <a data-toggle='tab' href='#profile'>
+              <span class="glyphicon glyphicon-user"></span>
+              Información
+          </a>
+        </li>
+        <li>
+          <a data-toggle='<%= @patient.prescriptions.count > 0 ? 'tab' : '' %>' href='#prescriptions'>
+              <span class="glyphicon glyphicon-send"></span>
+              Prescripciones
+              <span class="badge"><%= @patient.prescriptions.count %></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-content">
+          <!-- Perfil -->
+          <div id='profile' class='tab-pane fade in active'>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>DATOS BÁSICOS</h5><hr>
+                <div class="col-md-4">
+                  <h5><strong>DNI</strong></h5>
+                  <%= @patient.dni %>
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-md-12">
-                    <h5>DATOS DE CONTACTO</h5><hr>
-                    <div class="row">
-                      <div class="col-md-5">
-                        <h5><strong><span class="glyphicon glyphicon-earphone"></span> Teléfonos</strong></h5>
-                        <% @patient.patient_phones.each do |phone| %>
-                          <p><strong><%= phone.phone_type %>:</strong> <%= phone.number %></p>
-                        <% end %>
-                      </div>
-                      <div class="col-md-4">
-                        <h5><strong><span class="glyphicon glyphicon-envelope"></span> Email</strong></h5>
-                        <%= @patient.email.present? ? @patient.email : "----" %>
-                      </div>
-                    </div>
-                  </div>
+                <div class="col-md-4">
+                  <h5><strong>Sexo</strong></h5>
+                  <%= @patient.sex %>
                 </div>
-                <br>
-                <div class="row">
-                <% if @patient.address.present? %>
-                  <div class="col-md-12">
-                    <h5>DATOS DEL DOMICILIO</h5><hr>
-                    <div class="col-md-3">
-                      <p><h5><strong>País: </strong></h5><%= @patient.address_country_name %></p>
-                    </div>
-                    <div class="col-md-3">
-                      <p><h5><strong>Provincia: </strong></h5><%= @patient.address_state_name %></p>
-                    </div>
-                    <div class="col-md-3">
-                      <p><h5><strong>Ciudad: </strong></h5><%= @patient.address_city_name %></p>
-                    </div>
-                    <div class="col-md-3">
-                      <p><h5><strong>Dirección: </strong></h5><%= @patient.address_line %></p>
-                    </div>
-                  </div>
-                  <% end %>
+                <div class="col-md-4">
+                  <h5><strong>Fecha nacimiento</strong></h5>
+                  <%= @patient.birthdate.present? ? @patient.birthdate.strftime("%d/%m/%Y") : "----" %>
                 </div>
-              </div>
-              <div id='prescriptions' class='tab-pane fade'>
-                <br>
-                <h5 class="panel-title">
-                  <strong>Prescripciones </strong><span class="badge"><%= @patient.prescriptions.count %></span>
-                  <div class="pull-right">
-                    Pendientes <span class="label label-default"><%= @patient.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
-                    Dispensadas <span class="label label-success"><%= @patient.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
-                  </div>
-                </h5>
-                <br>
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Código</th>
-                      <th>Médico</th>
-                      <th>Estado</th>
-                      <th>Insumos</th>
-                      <th>
-                        Recetada
-                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                      </th>
-                      <th>
-                        Dispensada
-                        <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody id=patients>
-                    <% @patient.prescriptions.each do |prescription| %>
-                      <tr id="prescription_<%= prescription.id %>">
-                        <td><%= prescription.remit_code %></th>
-                        <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
-                        <td>
-                          <span class="label label-<%= prescription_status_label(prescription) %>">
-                            <%= prescription.status.underscore.humanize %>
-                          </span>
-                        </td>
-                        <td>
-                          <span class="badge">
-                            <%= prescription.quantity_ord_supply_lots.count %>
-                          </span>
-                        </td>
-                        <td>
-                          <% if prescription.prescribed_date.present? %>
-                            <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
-                          <% else %>
-                            ------
-                          <% end %>
-                        </td>
-                          <% if prescription.dispensada? %>
-                            <td>
-                            <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
-                          <% else %>
-                            <td>
-                            ----
-                          <% end %>
-                        </td>
-                        <td>
-                          <% if policy(prescription).show? %>
-                            <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs', 
-                              title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
-                              <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
-                            <% end %>
-                          <% end %>
-                        </td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
+                <div class="col-md-4">
+                  <h5><strong>Apellido</strong></h5>
+                  <%= @patient.last_name %>
+                </div>
+                <div class="col-md-4">
+                  <h5><strong>Nombre</strong></h5>
+                  <%= @patient.first_name %>
+                </div>
+                <div class="col-md-4">
+                  <h5><strong>Estado civil</strong></h5>
+                  <%= @patient.marital_status %>
+                </div>
               </div>
             </div>
+            <br>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>DATOS DE CONTACTO</h5><hr>
+                <div class="row">
+                  <div class="col-md-5">
+                    <h5><strong><span class="glyphicon glyphicon-earphone"></span> Teléfonos</strong></h5>
+                    <% @patient.patient_phones.each do |phone| %>
+                      <p><strong><%= phone.phone_type %>:</strong> <%= phone.number %></p>
+                    <% end %>
+                  </div>
+                  <div class="col-md-4">
+                    <h5><strong><span class="glyphicon glyphicon-envelope"></span> Email</strong></h5>
+                    <%= @patient.email.present? ? @patient.email : "----" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+            <% if @patient.address.present? %>
+              <div class="col-md-12">
+                <h5>DATOS DEL DOMICILIO</h5><hr>
+                <div class="col-md-3">
+                  <p><h5><strong>País: </strong></h5><%= @patient.address_country_name %></p>
+                </div>
+                <div class="col-md-3">
+                  <p><h5><strong>Provincia: </strong></h5><%= @patient.address_state_name %></p>
+                </div>
+                <div class="col-md-3">
+                  <p><h5><strong>Ciudad: </strong></h5><%= @patient.address_city_name %></p>
+                </div>
+                <div class="col-md-3">
+                  <p><h5><strong>Dirección: </strong></h5><%= @patient.address_line %></p>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          </div>
+          <div id='prescriptions' class='tab-pane fade'>
+            <br>
+            <h5 class="panel-title">
+              <strong>Prescripciones </strong><span class="badge"><%= @patient.prescriptions.count %></span>
+              <div class="pull-right">
+                Pendientes <span class="label label-default"><%= @patient.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
+                Dispensadas <span class="label label-success"><%= @patient.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
+              </div>
+            </h5>
+            <br>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Médico</th>
+                  <th>Estado</th>
+                  <th>Insumos</th>
+                  <th>
+                    Recetada
+                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+                  </th>
+                  <th>
+                    Dispensada
+                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id=patients>
+                <% @patient.prescriptions.each do |prescription| %>
+                  <tr id="prescription_<%= prescription.id %>">
+                    <td><%= prescription.remit_code %></th>
+                    <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
+                    <td>
+                      <span class="label label-<%= prescription_status_label(prescription) %>">
+                        <%= prescription.status.underscore.humanize %>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge">
+                        <%= prescription.quantity_ord_supply_lots.count %>
+                      </span>
+                    </td>
+                    <td>
+                      <% if prescription.prescribed_date.present? %>
+                        <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
+                      <% else %>
+                        ------
+                      <% end %>
+                    </td>
+                      <% if prescription.dispensada? %>
+                        <td>
+                        <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
+                      <% else %>
+                        <td>
+                        ----
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if policy(prescription).show? %>
+                        <%= link_to prescription_path(prescription), class: 'btn btn-default btn-xs',
+                          title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
+                          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      
-      <div class="panel-footer text-right hidden-print">
-        <%= link_to 'Volver', patients_path, class: "btn" %>
-        <% if policy(@patient).edit? %>
-          <%= link_to edit_patient_path(@patient), :"data-turbolinks" => false,
-            class: "btn btn-warning" do %>
-            <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
-            Editar
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  
-  <div class="col-md-3">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h2 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %>
-          Perfil paciente
-        </h2>
-      </div>
-      <div class="panel-body text-center">
-        <%= image_tag patient_avatar(@patient, 200), class:"img-thumbnail" %>
-        <h5><strong><%= @patient.last_name %></strong> <%= @patient.first_name %></h5>
-      
-        <h5><strong>DNI </strong> <%= @patient.dni %></h5>
-
-        <h5> <%= @patient.email %> </h5>
-
-        <% if @patient.birthdate.present? %>
-         <h5><strong>Edad </strong><%= @patient.age_string %></h5>
-        <% end %>
-
-        <h5><strong>Sexo </strong><%= @patient.sex %></h5>
-    
-        <% if @patient.cuil.present? %><h5><strong>CUIL </strong><%= @patient.cuil %></h5><% end %>
-
-        <% @patient.patient_phones.each do |phone| %>
-          <h5><span class="glyphicon glyphicon-earphone"></span> <%= phone.number %></h5>
-        <% end %>
-
-        <h5><strong>Estado </strong>
-          <span class="label label-<%= @patient.Temporal? ? "warning" : "success"%>">
-            <%= @patient.status %>
-          </span>
-        </h5>
-      </div>
     </div>
   </div>
 
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', patients_path, class: "btn mr-2" %>
+    <% if policy(@patient).edit? %>
+      <%= link_to edit_patient_path(@patient), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
 </div>

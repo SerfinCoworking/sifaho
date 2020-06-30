@@ -12,23 +12,23 @@
     </td>
   <% end %>
   <td>
-    <span class="label label-default">
+    <span class="badge badge-secondary">
       <%= external_order.order_type.underscore.humanize %>
     </span>
   </td>
   <td>
-    <span class="label label-<%= ordering_status_label(external_order) %>">
+    <span class="badge badge-<%= ordering_status_label(external_order) %>">
       <%= external_order.status.underscore.humanize %>
     </span>
   </td>
   <td>
-    <span class="badge"><%= external_order.quantity_ord_supply_lots.count %></span>
+    <%= external_order.quantity_ord_supply_lots.count %>
   </td>
   <td>
-    <span class="badge"><%= external_order.movements.count %></span>
+    <%= external_order.movements.count %>
   </td>
   <td>
-    <span class="badge"><%= external_order.comments.count %></span>
+    <%= external_order.comments.count %>
   </td>
   <td>
     <%= external_order.requested_date.strftime("%d/%m/%Y") %>
@@ -40,48 +40,48 @@
       ----
     <% end %>
   </td>
-  <td>
+  <td class="text-center actions-col">
     <% if policy(external_order).show? %>
       <%= link_to external_order_path(external_order),
-        class: 'btn btn-default btn-xs', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(external_order).send_provider? %>
       <%= link_to send_provider_external_order_path(external_order), remote: true,
-        class: 'btn btn-primary btn-xs', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+        class: 'btn btn-primary btn-sm', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "paper-plane" %>
       <% end %>
     <% end %>
     <% if policy(external_order).edit_applicant? %>
       <%= link_to edit_applicant_external_order_path(external_order), :"data-turbolinks" => false, 
-        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(external_order).edit? %>
       <%= link_to edit_external_order_path(external_order), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(external_order).edit_receipt? %>
       <%= link_to edit_receipt_external_order_path(external_order), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-xs', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(external_order).delete? %>
       <%= link_to delete_external_order_path(external_order), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
     <% if policy(external_order).nullify? %>
-      <%= link_to nullify_confirm_external_order_path(external_order), remote: true,
-        :"data-turbolinks" => false, class: 'btn btn-danger btn-xs', 
+      <%= link_to nullify_external_order_path(external_order), remote: true,
+        :"data-turbolinks" => false, class: 'btn btn-danger btn-sm', 
         title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon fas fa-ban') %>
+        <%= fa_icon "ban" %>
       <% end %>
     <% end %>
   </td>

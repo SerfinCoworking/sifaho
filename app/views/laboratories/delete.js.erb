@@ -1,8 +1,9 @@
 // Style modal
-$('.modal-content').addClass('panel-danger');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Borrando laboratorio");
+$('.modal-title').html("<i class='fa fa-trash'></i>  Borrando laboratorio");
+$('.modal-header').addClass('bg-danger');
+$('.modal-header').addClass('text-white');
 
 // Render the edit form
 $('.modal-body').html('Esta seguro que desea eliminar el laboratorio <%= @laboratory.name %>?');
@@ -18,5 +19,6 @@ $('#dialog').modal("show");
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-danger');
+  $('.modal-header').removeClass('bg-danger');
+  $('.modal-header').removeClass('text-white');
 });

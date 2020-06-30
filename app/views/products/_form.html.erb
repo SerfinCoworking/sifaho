@@ -4,11 +4,11 @@
     <div class="col-md-12">
       <%# Code %>
       <%= f.input :code, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
-      
+
       <%# Name %>
       <%= f.input :name, label: 'Nombre de insumo', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
           required: true, size: 50, autocomplete: 'off' %>
-      
+
       <%# Unity %>
       <%= f.input :unity_id, label: 'Unidad', include_blank: true,
         collection: @unities,
@@ -20,7 +20,7 @@
           "data-live-search"=>true,
           title: "Seleccionar unidad",
           "data-size"=>"15",
-        } 
+        }
       %>
 
       <%# Area %>
@@ -35,7 +35,7 @@
           "data-live-search"=>true,
           title: "Seleccionar rubro",
           "data-size"=>"15",
-        } 
+        }
       %>
       <%= f.input :description, label: 'Descripción', as: :text,
         :input_html => { :cols => 50, :rows => 2 } %>

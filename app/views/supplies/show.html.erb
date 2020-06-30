@@ -1,77 +1,65 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-7 col-md-offset-2">
-    <div class="panel panel-default">
-      <div class="panel-heading hidden-print">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo insumo
-          <%= link_to supplies_path, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
-      </div>
-      <div class="visible-print-block"><%= current_user.establishment_name %></div>
-      <div class="panel-body" id="panel-body-new">
-        
-        <div class="row">
-          <div class="col-md-7">
-            <h5><strong>Código: </strong><%= @supply.id%></h5>
-            <h5><strong>Insumo: </strong><%= @supply.name %></h5>
-
-            <h5><strong>Estado: </strong>
-              <span class='label label-<%= @supply.is_active? ? "success" : "danger" %>'>
-                <%= @supply.is_active? ? "Activo" : "Inactivo" %>
-              </span>
-            </h5>
-
-            <h5><strong>Unidad: </strong><%= @supply.unity %></h5>
-
-            <h5><strong>Área: </strong><%= @supply.supply_area.name %></h5>
-
-            <h5><strong>Descripción: </strong>
-              <%= @supply.description.present? ? @supply.description : "----" %>
-            </h5>
-
-            <h5><strong>Observación: </strong>
-              <%= @supply.observation.present? ? @supply.observation : "----" %>
-            </h5>
-          </div>
-          <div class="col-md-5">
-            <h5><strong>Expira?: </strong>
-              <%= @supply.needs_expiration? ? "Si" : "No" %>
-            </h5>
-
-            <h5><strong>Alarma: </strong>
-              <span class='label label-<%= @supply.is_active? ? "success" : "default" %>'>
-              <%= @supply.active_alarm? ? "Activa" : "Inactiva" %>
-            </h5>
-
-            <h5><strong>Alarma de cantidad: </strong>
-              <span class="label label-default"><%= @supply.quantity_alarm %></span>
-            </h5>
-
-            <h5><strong>Período de alarma: </strong>
-              <span class="label label-default"><%= @supply.period_alarm %> días</span>
-            </h5>
-
-            <h5><strong>Período de control: </strong>
-              <span class="label label-default"><%= @supply.period_control %> días</span>
-            </h5>
-
-            <h5><strong>Alarma de expiración: </strong>
-              <span class="label label-default"><%= @supply.expiration_alarm %> días</span>
-            </h5>
-          </div>
-        </div>
-      </div>
-
-      <!-- Botones de acción footer -->
-      <div class="panel-footer text-right hidden-print">
-        <%= link_to 'Volver', supplies_path, class: "btn" %>
-      </div>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo producto
+      </h5>
     </div>
+    <%= link_to supplies_path, class: 'btn pull-right close-btn' do %>
+      <%= fa_icon 'times-circle' %>
+    <% end %>
+  </div>
+
+
+     <div class="card-body">
+      <p class="border-bottom mt-2">
+        <strong>Código: </strong><%= @supply.id%>
+      </p>
+      <p class="border-bottom mt-2">
+        <strong>Insumo: </strong><%= @supply.name %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Estado: </strong>
+        <span class='label label-<%= @supply.is_active? ? "success" : "danger" %>'>
+          <%= @supply.is_active? ? "Activo" : "Inactivo" %>
+        </span>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Unidad: </strong><%= @supply.unity %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Rubro: </strong><%= @supply.supply_area.name %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Descripción: </strong>
+        <%= @supply.description.present? ? @supply.description : "----" %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Observación: </strong>
+        <%= @supply.observation.present? ? @supply.observation : "----" %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Expira?: </strong>
+        <%= @supply.needs_expiration? ? "Si" : "No" %>
+      </p>
+    </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', supplies_path, class: "btn" %>
+    <% if policy(@supply).edit? %>
+      <%= link_to edit_supply_path(@supply), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
   </div>
 </div>
-

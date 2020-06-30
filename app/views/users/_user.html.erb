@@ -16,17 +16,17 @@
   <% end %>
   <td><span class="badge"><%= user.sectors.count %></span></td>
   <td><%= user.updated_at.strftime("%d/%m/%Y")%> </td>
-  <td>
+  <td class="text-center actions-col">
     <% if policy(user).show? %>
-      <%= link_to users_admin_path(user), class: 'btn btn-default btn-xs', 
+      <%= link_to users_admin_path(user), class: 'btn btn-secondary btn-sm', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(user).edit_permissions? %>
-      <%= link_to edit_permissions_users_admin_path(user), class: 'btn btn-warning btn-xs', 
+      <%= link_to edit_permissions_users_admin_path(user), class: 'btn btn-warning btn-sm', 
         title: 'Editar permisos', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %>
+        <%= fa_icon "lock" %>
       <% end %>
     <% end %>
   </td>
