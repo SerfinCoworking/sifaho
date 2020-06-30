@@ -1,6 +1,6 @@
 <%= render 'header' %>
 
-<div class="card">
+<div class="card fixed-custom-card">
   <div class="card-header bg-warning">
     <h5>
       <%= fa_icon "pen" %> Editando solicitud interna
@@ -10,7 +10,7 @@
       <% end %>
     </h5>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
     <%= render 'applicant_form', internal_order: @internal_order %>
   </div>
   <div class="card-footer text-right">
