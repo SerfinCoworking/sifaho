@@ -7,7 +7,7 @@
         <%= image_tag user_avatar(current_user, 35), class:"rounded-circle img-profile-nav" %>
       </span>
       <span class="ml-2 sb-title">
-        <%= current_user.full_name.capitalize %>
+        <%= current_user.full_name.titleize %>
       </span>
 
     <% end %>
