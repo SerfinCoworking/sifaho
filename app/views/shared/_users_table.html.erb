@@ -10,14 +10,16 @@
           <div class="card">
             <div class="card-body p-0">
               <div class="text-center">
-                <%= image_tag user_avatar(user, 150), class:"img-circle w-100 h-100" %>
+                <% if user.profile.present? %>
+                  <%= image_tag user_avatar(user, 150), class:"img-circle w-100 h-100" %>
+                <% else %>
+                  <%= image_tag asset_path('profile-placeholder.png', size: "150x150"), class:"img-circle w-100 h-100" %>
+                <% end %>
               </div>
 
-              <h6 class="card-title text-center mb-0">
-                <div class="p-2">
-                  <%= user.profile.full_name.titleize%>
-                </div>
-              </h6>
+            </div>
+            <div class="card-header">
+              <h5 class="card-title"><%= user.full_name %></h5>
             </div>
           </div>
         </div>

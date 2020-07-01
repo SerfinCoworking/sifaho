@@ -1,16 +1,19 @@
 <%= render 'header' %>
 
-<div class="card">
-  <div class="card-header bg-warning">
-    <h5>
-      <%= fa_icon "pen" %> Editando <%= @internal_order.order_type %>
-      <%= link_to internal_orders_path, class: 'btn float-right',
-        :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-        <%= fa_icon "times" %>
-      <% end %>
-    </h5>
+<div class="card fixed-custom-card">
+  <div class="card-header bg-warning d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pen" %>
+      <h5 class="card-title mb-0 ml-2">
+        Editando <%= @internal_order.order_type %>
+      </h5>
+    </div>
+    <%= link_to internal_orders_path, class: 'btn',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%= fa_icon "times" %>
+    <% end %>
   </div>
-  <div class="card-body" id="panel-body-new">
+  <div class="card-body">
     <%= render 'provider_form', internal_order: @internal_order %>
   </div>
   <div class="card-footer text-right">

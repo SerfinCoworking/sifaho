@@ -97,17 +97,17 @@
     </td>
     <td colspan="2">
       <% if f.object.supply_id.present? && @stock > 0 %>
-        <%= button_tag type: 'button', class: 'btn btn-xs search-lots input-sm',
+        <%= button_tag type: 'button', class: 'btn btn-light search-lots',
           title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-zoom-in') %>
+          <%= fa_icon "search" %>
         <% end %>
       <% end %>
       <% if f.object.sector_supply_lot_id.present? %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
-            class: 'selectpicker show-tick',
+            class: 'selectpicker custom-select-pick show-tick',
             "data-width"=>"fit",
-            "title"=>"#{f.object.sector_supply_lot.lot_code+" <span class='badge'>"+f.object.sector_supply_lot.quantity.to_s+"</span>" }",
+            "title"=>"#{f.object.sector_supply_lot.lot_code+" Stock: "+f.object.sector_supply_lot.quantity.to_s+"" }",
             "data-size"=>"5",
             disabled: true,
             value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.id end }"
@@ -116,7 +116,7 @@
       <% else %>
         <%= f.select(:sector_supply_lot_id, [],{},
           {
-            class: 'selectpicker show-tick',
+            class: 'selectpicker custom-select-pick show-tick',
             "data-width"=>"fit",
             "title"=>"#{if @stock == 0; "No hay stock"; else; "Código"; end}",
             "data-size"=>"5",
@@ -132,7 +132,7 @@
   <% end %>
   <td>
     <% if f.object.sector_supply_lot_id.present? %>
-      <%= button_tag type: 'button', class: 'btn btn-xs input-sm',
+      <%= button_tag type: 'button', class: 'btn btn-sm',
         title: '
         <table>
           <thead>
@@ -151,11 +151,11 @@
               <td>'+if f.object.sector_supply_lot.expiry_date.present?; f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y"); else; 'No vence'; end+'</td>
             </tr>
           </tbody>
-        </table>', data: { html: true, toggle: 'tooltip', placement: 'left' } do %>
+        </table>', data: { html: true, title: "asd",toggle: 'tooltip', placement: 'left' } do %>
         <%= fa_icon "info" %>
       <% end %>
     <% end %>
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "minus" %>
     <% end %>
