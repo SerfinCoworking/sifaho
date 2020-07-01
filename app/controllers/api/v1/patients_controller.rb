@@ -45,7 +45,7 @@ module Api::V1
         cuil: @cuil, andes_id: @andes_id, sex: _gender, email: @email)
 
       # Update or create the address.
-      if patient.save
+      if patient.save!
         create_address_to(patient)
         create_phones_to(patient)
         patient.Validado!
