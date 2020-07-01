@@ -54,7 +54,7 @@
     </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', supplies_path, class: "btn" %>
+    <%= link_to 'Volver', supplies_path, class: "btn mr-2" %>
     <% if policy(@supply).edit? %>
       <%= link_to edit_supply_path(@supply), :"data-turbolinks" => false, class: "btn btn-warning" do %>
         <%= fa_icon "pen" %>
