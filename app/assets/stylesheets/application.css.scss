@@ -137,6 +137,15 @@ td .form-group{
   height: auto;
 }
 
+// grilla de home
+.dashboard-grid{
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  grid-template-columns: 50% 50%;//en dos columnas
+  height: auto;
+}
+
 .h-row-custom{
   height: 100%;
   .mh-col-custom{

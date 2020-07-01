@@ -1,24 +1,24 @@
-<!--  Panel Lote de medicamentos -->
-<div class="card mb-3">
-  <div class="card-header">
+<!--  Panel Esttablecimiento -->
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <div>
+      <span class="navbar-brand">
+        <%= fa_icon "hospital" %>
+        Establecimientos
+      </span>
+    </div>
     <ul class="nav nav-tabs card-header-tabs" id="title-chart">
-      <li class="nav-item">
-        <span class="navbar-brand">
-          <%= fa_icon "hospital" %>
-          Establecimientos
-        </span>
-      </li>
       <li class="nav-item active">
         <a class="nav-link" data-toggle="tab" href="#order-type">Total
           <span class="badge badge-secondary"><%= @external_orders.count %></span>
         </a>
       </li>
-      <div class="ml-auto">
-        <%= link_to external_orders_path, class: 'btn btn-secondary btn-sm' do %>
-          Ver más
-        <% end %>
-      </div>
     </ul>
+    <div class="d-flex align-items-center">
+      <%= link_to external_orders_path, class: 'btn btn-secondary btn-sm' do %>
+        Ver más
+      <% end %>
+    </div>
   </div>
   <div class="panel-body">
     <div class="tab-content">

@@ -1,13 +1,13 @@
 <!--  Panel Lote de medicamentos -->
-<div class="card mb-3">
-  <div class="card-header">
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <div>
+      <span class="navbar-brand">
+        <%= fa_icon "barcode" %>
+        Lotes
+      </span>
+    </div>
     <ul class="nav nav-tabs card-header-tabs">
-      <li class="nav-item">
-        <span class="navbar-brand">
-          <%= fa_icon "barcode" %>
-          Lotes
-        </span>
-      </li>
       <li class="nav-item active">
         <a class="nav-link" data-toggle="tab" href="#status">Stock
           <span class="badge badge-secondary"><%= @count_total_supply_lots %></span>
@@ -27,12 +27,12 @@
           <span class="badge badge-danger"><%= @count_expired_supply_lots %></span>
         </a>
       </li>
-      <div class="ml-auto">
-        <%= link_to prescriptions_path, class: 'btn btn-secondary btn-sm' do %>
-          Ver más
-        <% end %>
-      </div>
     </ul>
+    <div class="d-flex align-items-center">
+      <%= link_to prescriptions_path, class: 'btn btn-secondary btn-sm' do %>
+        Ver más
+      <% end %>
+    </div>
   </div>
   
   <div class="card-body">
