@@ -1,51 +1,65 @@
 <%= render 'header' %>
 
-<div class="col-md-8">
-  <div class="card">
-    <div class="card-header">
-      <h3 class="card-title"><%= fa_icon "lock" %> Editando permisos de <%= @user.full_name%>
-        <%= link_to :back, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
+  <div class="card fixed-custom-card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "lock" %>
+      <h5 class="card-title mb-0 ml-2">
+        Editando permisos de <%= @user.full_name%>
+      </h5>
     </div>
-    <div class="card-body" id="panel-body-new">
-      <%= render 'form', user: @user %>
-    </div>
+    <%= link_to users_admin_index_path, class: 'btn btn-light' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+
+    
+    <div class="card-body">
+      <div class="row">
+        
+        <div class="col-6">
+          <%= render 'form', user: @user %>
+        </div>
+
+        <div class="col-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %>
+                Perfil del usuario
+              </h2>
+            </div>
+            <div class="panel-body text-center">
+              <% if @user.profile.present? %>
+              <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
+              <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
+            
+              <h5>DNI <%= @user.profile.dni %></h5>
+
+              <h5> <%= @user.profile.email %> </h5>
+              <% else %>
+                <h5>Sin perfil</h5>
+              <% end %>
+              <strong>Sectores habilitados:</strong>
+              <ul class="list-group text-left">
+                <% @user.sectors.each do |sector| %>
+                  <li class="list-group-item"><%= sector.sector_and_establishment %></li>
+                <% end %>
+              </ul> 
+            </div>
+        </div>
+        
+        </div>
+      </div>
+      </div>
+    
     <div class="card-footer text-right">
       <%= link_to 'Volver', users_admin_index_path, class: 'btn' %>
       <button type='submit' name='commit' class='btn btn-success' form='edit_user_<%=@user.id%>'>
         <%= content_tag(:span, '', class: 'glyphicon glyphicon-floppy-saved') %> Guardar cambios
       </button>
     </div>
+  
+  
+ 
   </div>
-</div>
-<div class="col-md-4">
-  <div class="panel panel-info">
-    <div class="panel-heading">
-      <h2 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %>
-        Perfil del usuario
-      </h2>
-    </div>
-    <div class="panel-body text-center">
-      <% if @user.profile.present? %>
-      <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
-      <h5><strong><%= @user.profile.last_name %></strong> <%= @user.profile.first_name %></h5>
-    
-      <h5>DNI <%= @user.profile.dni %></h5>
-
-      <h5> <%= @user.profile.email %> </h5>
-      <% else %>
-        <h5>Sin perfil</h5>
-      <% end %>
-      <strong>Sectores habilitados:</strong>
-      <ul class="list-group text-left">
-        <% @user.sectors.each do |sector| %>
-          <li class="list-group-item"><%= sector.sector_and_establishment %></li>
-        <% end %>
-      </ul> 
-    </div>
-  </div>
-</div>
