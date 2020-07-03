@@ -14,7 +14,9 @@ body {
     overflow: hidden;
     &.toggled{
         #wrapper-2 > #sidebar-wrapper{
-            width: $sidebar-width-hidden!important;
+            @media(min-width: 1200px) and (max-width: 1480px){
+                width: $sidebar-width-hidden!important;
+            }
             .list-group-item{
                 &.profile-link > .img-container > img{
                     height: 30px!important;
@@ -32,6 +34,9 @@ body {
 
     &.toggled > #wrapper-2 > #sidebar-wrapper:hover{
         width: $sidebar-width-visible!important;
+        @media(min-width: 1200px) and (max-width: 1480px){
+            width: $sidebar-width-visible-bml!important;
+        }
         .list-group-item{
             &.profile-link > .img-container > img{
                 height: 35px!important;
@@ -44,6 +49,9 @@ body {
     }
     &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
         width: calc(100% - #{$sidebar-width-visible})!important;
+        @media(min-width: 1200px) and (max-width: 1480px){
+            width: calc(100% - #{$sidebar-width-visible-bml})!important;
+        }
     }
     #wrapper-2{
         width: 100%;
@@ -59,6 +67,9 @@ body {
             overflow-y: auto;
             overflow-x: hidden;
             direction: rtl;
+            @media(min-width: 1200px) and (max-width: 1480px){
+                width: $sidebar-width-visible-bml;
+            }
             /* width */
             &::-webkit-scrollbar {
                 width: 3px;
@@ -114,6 +125,9 @@ body {
         #page-content-wrapper{
             transition: width 0.35s ease-out;
             width: calc(100% - #{$sidebar-width-visible});
+            @media(min-width: 1200px) and (max-width: 1480px){
+                width: calc(100% - #{$sidebar-width-visible-bml});
+            }
         }
     }
 }
