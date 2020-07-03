@@ -16,9 +16,9 @@
     <div class="card-body">
       
       <div class="row">
-        <div class="col-6">
+        <div class="col-6 text-center">
           <% if @user.profile.present? %>
-            <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
+            <%= image_tag user_avatar(@user, 200), class:"img-thumbnail mb-2" %>
             <h5>
               <%= @user.full_name.titleize %>
             </h5>
@@ -33,7 +33,7 @@
           <strong>Roles activados:</strong> <%= @user.roles.map(&:name).join(", ").humanize %>.
         </div>
         <div class="col-6">
-          <%= render 'shared/sectors_table', sectors: @user.sectors %>
+          <%= render 'shared/sectors_table', sectors: @user.sectors, title: "Sectores activos" %>
         </div>
       </div>
               
