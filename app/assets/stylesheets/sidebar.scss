@@ -126,7 +126,7 @@ body {
             transition: width 0.35s ease-out;
             width: calc(100% - #{$sidebar-width-visible});
             @media(min-width: 1200px) and (max-width: 1480px){
-                width: calc(100% - #{$sidebar-width-visible-bml})!important;
+                width: calc(100% - #{$sidebar-width-visible-bml});
             }
         }
     }
