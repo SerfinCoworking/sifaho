@@ -14,9 +14,7 @@ body {
     overflow: hidden;
     &.toggled{
         #wrapper-2 > #sidebar-wrapper{
-            @media(min-width: 1200px) and (max-width: 1480px){
-                width: $sidebar-width-hidden!important;
-            }
+            width: $sidebar-width-hidden!important;
             .list-group-item{
                 &.profile-link > .img-container > img{
                     height: 30px!important;
