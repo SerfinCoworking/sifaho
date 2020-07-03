@@ -27,7 +27,6 @@ module Api::V1
         if identifier["assigner"] == "DU"
           @dni = identifier["value"]
         elsif identifier["assigner"] == "andes"
-          puts "entró"
           @andes_id = identifier["value"]
         elsif identifier["assigner"] == "CUIL"
           @cuil = identifier["value"]

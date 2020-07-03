@@ -202,7 +202,7 @@ $(document).on('change', '.select-change', function() {
           }else {
             var date = "No expira"
           }
-          select.append('<option data-content="<span class='+'badge badge-secondary'+'>'+data[i].quant+'</span> '+data[i].lab+' '+date+'" \
+          select.append('<option data-content="Lote: '+data[i].lot_code+' Stock: '+data[i].quant+' '+data[i].lab+' '+date+'" \
           class="table-'+data[i].status_label+'"  data-lab="'+data[i].lab+'" \
           data-quant="'+data[i].quant+'" data-expiry="'+data[i].expiry_date+'" \
           value="'+id+'" title="'+data[i].lot_code+' Stock: '+data[i].quant+'">'+data[i].lot_code+'</option>');
