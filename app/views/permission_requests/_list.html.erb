@@ -1,0 +1,23 @@
+  <div id="filterrific_results">
+    <div class="card">
+      <table class="table table-hover table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th>Establecimiento</th>
+            <th>Sector</th>
+            <%# <th class="text-center">Acciones</th> %>
+          </tr>
+        </thead>
+        
+    <tbody id="permission_requests">
+      <%= render @permission_requests %>
+    </tbody>
+      </table>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @permission_requests, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+  </div>
+

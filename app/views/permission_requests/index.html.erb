@@ -1,28 +1,32 @@
 <%= render 'users/header' %>
 
-<div class="panel panel-default">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Estado</th>
-        <th>Establecimiento</th>
-        <th>Sector</th>
-      </tr>
-    </thead>
+<% if @permission_requests.present? %>
 
-    <tbody>
-      <% @permission_requests.each do |permission_request| %>
-        <tr class="table-row <%= permission_request.nueva? ? "info" : ""%>" data-href="<%= permission_request_path(permission_request) %>">
-          <td><%= permission_request.user.full_name %></td>
-          <td><span class="label label-<%= permission_request_status_label(permission_request) %>"><%= permission_request.status.humanize %></span></td>
-          <td><%= permission_request.establishment.titleize %></td>
-          <td><%= permission_request.sector.titleize %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-    <%= will_paginate @permission_requests, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-  </div>
-</div>
+    <div class="card fixed-custom-card">
+      <div class="card-header">
+        <%= form_for_filterrific @filterrific do |f| %>
+          <div class="d-flex align-items-center">
+            <%= fa_icon "filter" %>
+            <%= f.text_field(
+                :search_name,
+                class: 'filterrific-periodically-observed form-control input-sm ml-2 w-25',
+                placeholder: 'Nombre'
+                  ) %>
+            <%= render_filterrific_spinner %>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-body">
+        <%= render(
+          partial: 'permission_requests/list',
+          locals: { permission_requests: @permission_requests }
+        ) %>
+      </div>
+    </div>
+
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'solicitudes de permiso' }
+  ) %>
+<% end %>
