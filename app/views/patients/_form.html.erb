@@ -22,13 +22,13 @@
           <%= f.input :dni, required: true, readonly: f.object.Validado?, label: 'Número de DNI ARGENTINO', input_html: { min: '10000', max:'999999999' } %>
         </div>
         <div class="col-4">
-          <%= f.input :sex, label: 'Sexo', include_blank: false,
+          <%= f.input :sex, label: 'Sexo',
             collection: Patient.sexes,
             :value_method => :first,
+            required: true,
             :input_html => {
               disabled: f.object.Validado?,
               required: true,
-              include_blank: false,
               class: 'selectpicker supply custom-select-pick',
               "data-width"=>"100%",
               "data-size"=>"10",
@@ -40,7 +40,7 @@
           <%= f.input :birthdate, as: :date_time_picker, label: 'Fecha de nacimiento',
             readonly: f.object.Validado?,
             :placeholder => "Ej: 01/01/1990",
-            input_html: {class: "form-control", required: true, autocomplete: 'off',
+            input_html: {class: "form-control", autocomplete: 'off',
             value: "#{if @patient.birthdate.present?; @patient.birthdate.strftime("%d/%m/%Y"); end }"},
             html5: false,
             required: false

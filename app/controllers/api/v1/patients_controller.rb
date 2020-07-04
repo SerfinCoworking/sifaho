@@ -42,7 +42,12 @@ module Api::V1
       patient = Patient.where(dni: @dni).first_or_initialize(dni: @dni, last_name: _last_name, first_name: _first_name)
       patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, 
         cuil: @cuil, andes_id: @andes_id, sex: _gender, email: @email)
-      
+
+      puts "Photo: =>>>> "+params[:data][:photo].first["patient"].to_s
+      if params[:data][:photo].present?
+        patient.avatar.attach(data: params[:data][:photo].first["patient"])
+      end
+
       # Update or create the address.
       if patient.save!
         create_address_to(patient)

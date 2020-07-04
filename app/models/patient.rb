@@ -1,5 +1,6 @@
 class Patient < ApplicationRecord
   include PgSearch
+
   enum status: { Temporal: 0, Validado: 1 }
   enum sex: { Otro: 1, Femenino: 2, Masculino: 3 }
   enum marital_status: { Soltero: 1, Casado: 2, Separado: 3, Divorciado: 4, Viudo: 5, otro: 6 }
@@ -8,7 +9,7 @@ class Patient < ApplicationRecord
   belongs_to :patient_type
   belongs_to :address, optional: true
   has_many :prescriptions, -> { with_deleted }, dependent: :destroy
-  has_one_attached :avatar
+  has_one_base64_attached :avatar
   has_many :patient_phones, :dependent => :destroy
     accepts_nested_attributes_for :patient_phones, :allow_destroy => true
 

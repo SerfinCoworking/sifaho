@@ -7,6 +7,8 @@ end
 
 ruby "2.6.5"
 
+# To accept base 64
+gem 'active_storage_base64'
 # To icons
 gem 'font_awesome5_rails'
 gem 'jwt'
