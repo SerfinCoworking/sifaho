@@ -24,11 +24,11 @@ module Api::V1
       _gender = initialize_gender
 
       params[:data][:identifier].each do |identifier|
-        if identifier["assigner"] == "DU"
+        if identifier["system"] == "http://www.renaper.gob.ar/dni"
           @dni = identifier["value"]
-        elsif identifier["assigner"] == "andes"
+        elsif identifier["system"] == "http://app.andes.gob.ar"
           @andes_id = identifier["value"]
-        elsif identifier["assigner"] == "CUIL"
+        elsif identifier["system"] == "http://www.renaper.gob.ar/cuil"
           @cuil = identifier["value"]
         end
       end
@@ -42,7 +42,7 @@ module Api::V1
       patient = Patient.where(dni: @dni).first_or_initialize(dni: @dni, last_name: _last_name, first_name: _first_name)
       patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, 
         cuil: @cuil, andes_id: @andes_id, sex: _gender, email: @email)
-
+      
       # Update or create the address.
       if patient.save!
         create_address_to(patient)
