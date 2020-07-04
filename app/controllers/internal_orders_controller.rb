@@ -1,5 +1,5 @@
 class InternalOrdersController < ApplicationController
-  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete, 
+  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete,
   :edit_applicant, :send_provider, :receive_applicant_confirm, :receive_applicant, 
   :return_provider_status, :return_applicant_status, :send_applicant, :nullify, :nullify_confirm ]
 
