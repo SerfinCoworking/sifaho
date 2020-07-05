@@ -10,7 +10,7 @@
 
   <% if policy(Sector).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')}" do %>
+      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')} text-primary" do %>
         <%= fa_icon "plus" %>
         Crear sector
       <% end %>
@@ -33,7 +33,7 @@
   <% end %>
   <% if policy(InternalOrder).new_applicant? %>
     <li class="nav-item <%= active_action('new_applicant') %> non-sel">
-      <%= link_to new_applicant_internal_orders_path, class: 'nav-link' do %>
+      <%= link_to new_applicant_internal_orders_path, class: 'nav-link text-primary' do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
@@ -41,7 +41,7 @@
   <% end %>
   <% if policy(InternalOrder).new_provider? %>
     <li class="nav-item <%= active_action_and_controller('new_provider', 'internal_orders') %> non-sel">
-      <%= link_to new_provider_internal_orders_path, class: 'nav-link' do %>
+      <%= link_to new_provider_internal_orders_path, class: 'nav-link text-primary' do %>
         <%= fa_icon "plus" %>
         Entregar
       <% end %>

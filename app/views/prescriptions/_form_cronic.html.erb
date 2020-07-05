@@ -20,10 +20,10 @@
             <div class="col-12">
               <%= f.input :order_type, :as => :hidden, :input_html => { value: 'cronica' } %>
               <%= f.label :professional_id do %>
-                Profesional
+                Médico
                 <% if f.object.cronic_dispensations.count == 0 %>
                   <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
-                    title: 'Nuevo profesional', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
                     <%= fa_icon "plus" %>
                   <% end %>
                 <% end %>
