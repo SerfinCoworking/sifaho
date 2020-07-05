@@ -1,18 +1,17 @@
 <%= render 'header' %>
-<% if @external_orders.present? %>
 
+<% if @external_orders.present? %>
     <div class="card fixed-custom-card">
       <div class="card-header">
         <%= render 'filter' %>
       </div>
-      <div class="card-body">
+      <div class="card-body fixed-panel-index">
         <%= render(
           partial: 'external_orders/list',
           locals: { external_orders: @external_orders }
         ) %>
       </div>
     </div>
-
 <% else %>
   <%= render(
     partial: 'shared/not_found',
