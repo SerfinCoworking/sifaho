@@ -8,8 +8,8 @@
       </span>
     </div>
     <ul class="nav nav-tabs card-header-tabs" id="title-chart">
-      <li class="nav-item active">
-        <a class="nav-link" data-toggle="tab" href="#order-type">Total
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#order-type">Total
           <span class="badge badge-secondary"><%= @external_orders.count %></span>
         </a>
       </li>
@@ -22,7 +22,7 @@
   </div>
   <div class="panel-body">
     <div class="tab-content">
-      <div id="order-type" class="tab-pane fade in active">
+      <div id="order-type" class="tab-pane fade show active">
         <%= bar_chart charts_by_order_type_external_orders_path,
           label: "Cantidad",
           adapter: "highcharts" %>
