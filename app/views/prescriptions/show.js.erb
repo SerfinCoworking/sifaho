@@ -1,5 +1,6 @@
 // Add the dialog title
-$('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo prescripción");
+$('.modal-dialog').addClass('modal-lg');
+$('.modal-title').html("<i class='fa fa-eye'></i>  Viendo receta <%= @prescription.order_type.humanize.downcase %>");
 
 // Render the edit form
 $('.modal-body').html('<%= j render("show") %>');
@@ -8,9 +9,9 @@ $('.modal-body').html('<%= j render("show") %>');
 $('.modal-footer').html(
   "<button type='button' class='btn btn-default' data-dismiss='modal'>Volver</button>"+
   "<% if policy(@prescription).edit? %>"+
-    '<%= link_to edit_prescription_path(@prescription), remote: true, class: "btn btn-warning btn-md" do %>'+
-      '<%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>'+
-      ' Editar prescripción'+
+    '<%= link_to edit_prescription_path(@prescription), target: "_blank", class: "btn btn-warning btn-md" do %>'+
+      '<%= fa_icon "pen" %>'+
+      ' Editar'+
     '<% end %>'+
   "<% end %>"
 );

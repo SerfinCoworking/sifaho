@@ -7,7 +7,7 @@
   </li>
 
   <li class="nav-item <%= active_action_and_controller('new', 'establishments') %> non-sel">
-    <%= link_to new_establishment_path, class: 'nav-link' do %>
+    <%= link_to new_establishment_path, class: 'nav-link text-primary' do %>
       <%= fa_icon "plus"%>
       Agregar
     <% end %>
@@ -19,28 +19,40 @@
       Recibos
     <% end %>
   </li>
-  <li class="nav-item <%= active_action_and_controller('index', 'external_orders') %> non-sel">
-    <%= link_to external_orders_path, class: 'nav-link' do %>
+
+  <li class="nav-item <%= active_action_and_controller('index', 'external_orders') %> non-sel d-flex align-items-center">
+    <%= link_to external_orders_path, class: 'nav-link pr-1' do %>
       <%= fa_icon "paper-plane" %>
       Despachos
     <% end %>
+    <!-- Badge notification -->
+    <% request_count = ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+    <% if request_count > 0%>
+      <%= link_to external_orders_path(filterrific: {:with_status => 1}), class: 'badge badge-pill badge-info',
+      title: "Solicitud", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+        <%= request_count %>
+      <% end %>
+    <% end %>
   </li>
+
   <% if policy(ExternalOrder).new_applicant? %>
     <li class="nav-item <%= active_action('new_applicant') %> non-sel">
-      <%= link_to new_applicant_external_orders_path, class: 'nav-link' do %>
+      <%= link_to new_applicant_external_orders_path, class: 'nav-link text-primary' do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
     </li>
   <% end %>
+
   <% if policy(ExternalOrder).new_provider? %>
     <li class="nav-item <%= active_action_and_controller('new', 'external_orders') %> non-sel">
-      <%= link_to new_external_order_path, class: 'nav-link' do %>
+      <%= link_to new_external_order_path, class: 'nav-link text-primary' do %>
         <%= fa_icon "plus" %>
         Despachar
       <% end %>
     </li>
   <% end %>
+
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item <%= active_class('external_order_templates') %> non-sel" id="pedido">
       <%= link_to external_order_templates_path, class: 'nav-link' do %>
@@ -49,6 +61,7 @@
       <% end %>
     </li>
   <% end %>
+
   <% if policy(ExternalOrder).new_report? %>
     <li class="nav-item <%= active_action('new_report') %> non-sel">
       <%= link_to new_report_external_orders_path, class: 'nav-link' do %>

@@ -6,13 +6,13 @@
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new') %> non-sel">
-    <%= link_to new_prescription_path, class: 'nav-link' do %>
+    <%= link_to new_prescription_path, class: 'nav-link text-primary' do %>
       <%= fa_icon "plus" %>
       Nueva ambulatoria
     <% end %>
   </li>
   <li class="nav-item <%= active_action('new_cronic') %> non-sel">
-    <%= link_to new_cronic_prescriptions_path, class: 'nav-link' do %>
+    <%= link_to new_cronic_prescriptions_path, class: 'nav-link text-primary' do %>
       <%= fa_icon "plus" %>
       Nueva crónica
     <% end %>

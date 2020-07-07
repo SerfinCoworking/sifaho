@@ -9,10 +9,6 @@
       </h5>
     </div>
     <div>
-      <%= link_to '', class: 'btn', :onclick => 'window.print();return false;', 
-          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
-        <%= fa_icon "print" %>
-      <% end %>
       <%= link_to prescriptions_path, class: 'btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>
@@ -165,7 +161,7 @@
           <div class="media">
             <div class="media-left">
               <%= link_to patient_path(@prescription.patient), class: "link" do %>
-                <%= image_tag patient_avatar(@prescription.patient, 83), class:"img-thumbnail media-object" %>
+                <%= image_tag patient_avatar(@prescription.patient, 83, 102), class:"img-thumbnail media-object" %>
               <% end %>
             </div>
             <div class="media-body">
@@ -331,15 +327,19 @@
     <% end %>
   </div>
   <div class="card-footer text-right">
-    <%= link_to 'Volver', prescriptions_path, class: "btn mr-2" %>
+    <%= link_to 'Volver', prescriptions_path, class: "btn btn-light mr-1" %>
+    <%= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+      <%= fa_icon "print" %>
+      Imprimir
+    <% end %>
     <% if policy(@prescription).return_status? %>
-      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning">
+      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning mr-1">
         <%= fa_icon "redo" %>
         Retornar
       </a>
     <% end %>
     <% if policy(@prescription).return_cronic_dispensation? %>
-      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-danger mr-2">
+      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-danger mr-1">
         <%= fa_icon "redo" %>
         Retornar dispensación
       </a>
