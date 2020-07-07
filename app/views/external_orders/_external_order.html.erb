@@ -78,7 +78,7 @@
       <% end %>
     <% end %>
     <% if policy(external_order).nullify? %>
-      <%= link_to nullify_external_order_path(external_order), remote: true,
+      <%= link_to nullify_confirm_external_order_path(external_order), remote: true,
         :"data-turbolinks" => false, class: 'btn btn-danger btn-sm', 
         title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "ban" %>

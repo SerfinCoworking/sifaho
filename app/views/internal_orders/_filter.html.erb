@@ -31,7 +31,7 @@
         <label>Origen</label>
         <%= f.select(:with_order_type,
           InternalOrder.order_types.map{ |type| [type.first.humanize, type.second] },{:include_blank => 'Todos'},
-          { class: "selectpicker show-tick", "data-width"=>"100%"}) %>
+          { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%"}) %>
       </div>
       <div class="col-2">
         <label>Estado</label>
@@ -39,7 +39,7 @@
           @filterrific.select_options[:with_status].map {
             |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
           },{},
-          { class: "selectpicker show-tick", "data-width"=>"100%"}) %>
+          { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%"}) %>
       </div>
       <div class="col-2">
         <label>Solicitado</label>

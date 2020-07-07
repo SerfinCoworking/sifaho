@@ -143,12 +143,15 @@ class ExternalOrderPolicy < ApplicationPolicy
   end
   
   def nullify?
-    edit?
+    if (["solicitud_enviada"].include? record.status) && record.provider_sector == user.sector
+      edit_provider.any? { |role| user.has_role?(role) }
+    end
   end
 
   def nullify_confirm?
     nullify?
   end
+
   private
   def create_receipt
     [ :admin, :farmaceutico ]
