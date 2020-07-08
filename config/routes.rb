@@ -66,12 +66,12 @@ Rails.application.routes.draw do
   mount Notifications::Engine => "/notifications"
 
   # Con esta ruta marcamos una notificacion como leida
-  post '/notifications/:id/set-as-read', 
+  post '/notifications/:id/set-as-read',
     to: 'notifications/notifications#set_as_read',
     as: 'notifications_set_as_read'
 
   # devise_for :users, :controllers => { registrations: 'registrations' }
-  devise_for :users, :skip => [:registrations, :sessions], :controllers => {:sessions => :sessions}
+  devise_for :users, :skip => [:registrations], :controllers => {:sessions => :sessions}
 
   as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
