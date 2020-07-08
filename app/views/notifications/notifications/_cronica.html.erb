@@ -1,11 +1,41 @@
 <% unless notification.target.nil? %>
-  <div class="">
-    <%= notification.actor.profile.first_name.titleize %> 
-    <%= notification.action_type %> 
-    una
-    <span class="visible-print">prescripción crónica</span>
-    <strong><%= link_to 'prescripción crónica', main_app.prescription_path(notification.target), class:'hidden-print' %></strong> de 
-    <%= osCount = notification.target.professional.full_name %>
-    para <%= notification.target.patient.fullname %>.
-  </div>
+<%if short_message %>
+    <div class="d-flex align-items-center justify-content-between">
+      <%= link_to main_app.prescription_path(notification.target, notification_id: notification.id), class:'notification-link d-flex align-items-center' do %>
+        <%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object",
+          :'data-toggle'=>"tooltip",
+          :'data-placement'=>"left",
+          :'title'=>notification.actor.profile.first_name.titleize %>
+        <div class="d-flex flex-column ml-2">
+          <div class="text-nowrap">
+            <%= notification.action_type %> una receta crónica
+          </div>
+          <small class="text-nowrap"><%= time_ago_in_words(notification.created_at) %></small>
+        </div>
+      <%end%>
+      
+      <%if !notification.read_at.present? %>
+        <%= link_to main_app.notifications_set_as_read_path(notification), 
+        class: "ml-2 read-notification",
+        method: :post,
+        remote: true,
+        :'data-toggle'=>"tooltip",
+        :'data-placement'=>"top",
+        :'title'=>"Marcar como leída" do %>
+          <%= fa_icon 'check', class: "text-primary"%>  
+        <% end %>
+      <% end %>
+
+    </div>
+  <%else %>
+    <div class="">
+      <%= notification.actor.profile.first_name.titleize %> 
+      <%= notification.action_type %> 
+      una
+      <span class="visible-print">receta crónica</span>
+      <strong><%= link_to 'receta crónica', main_app.prescription_path(notification.target), class:'hidden-print' %></strong> de 
+      <%= osCount = notification.target.professional.full_name %>
+      para <%= notification.target.patient.fullname %>.
+    </div>
+  <% end%>
 <% end%>

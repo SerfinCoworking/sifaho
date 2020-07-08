@@ -1,0 +1,26 @@
+.notification-container{
+  .notification-btn:focus{
+    box-shadow: none;
+  }
+  .notification-dropdown {
+    border: none;
+    ul.list-group{
+      li.unread{
+        background-color: #dae0e5 !important
+      }
+      li{      
+        .notification-link{
+          color: #495057;
+          &:hover{
+            text-decoration: none;
+          }
+          img.img-circle{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+}
+}

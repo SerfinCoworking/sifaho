@@ -1,0 +1,5 @@
+/*Actualizamos UI*/
+$('#notification-<%= @notification_id.to_s %>').removeClass('unread');
+$('#notification-<%= @notification_id.to_s %> .read-notification').tooltip('hide');
+$('#notification-<%= @notification_id.to_s %> .read-notification').remove();
+

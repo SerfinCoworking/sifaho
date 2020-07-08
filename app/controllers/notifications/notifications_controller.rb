@@ -9,6 +9,14 @@ module Notifications
       @notification_groups = @notifications.group_by { |note| note.created_at.strftime("%d/%m/%Y") }
     end
 
+    def set_as_read()
+      @notification_id = params[:id]
+      Notification.read!(@notification_id)
+      respond_to do |format|
+        format.js 
+      end
+    end
+
     def clean
       notifications.delete_all
       redirect_to notifications_path

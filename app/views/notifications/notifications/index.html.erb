@@ -5,40 +5,43 @@
   <% end %>
 <% end %>
 
-<div class="row">
-  <% if @notifications.blank? %>
-    <%= render(
-      partial: 'shared/not_found',
-      locals: { object_name: 'notificaciones' }
-    ) %>
-  <% else %>
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">
-          Lista de notificationes
+
+<% if @notifications.present? %>
+
+    <div class="card fixed-custom-card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "eye" %>
+          <h5 class="card-title mb-0 ml-2">
+            Lista de notificationes
+          </h5>
           <%= link_to notifications.clean_notifications_path, class: 'btn btn-xs btn-warning', method: 'delete' do %>
             <%= t('notifications.clean_all') %>
           <% end %>
-          <%= link_to main_app.root_path, class: 'btn pull-right close-btn' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-          <%= link_to '',class:'btn pull-right print-btn', :onclick => 'window.print();return false;' do %>
-            <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
-          <% end %>
-        </h3>
+        </div>
+        <%= link_to notifications_path, class: 'btn btn-light' do %>
+          <%= fa_icon 'times' %>
+        <% end %>
       </div>
-      <div class="panel-body">
+      <div class="card-body fixed-panel-index">
         <% @notification_groups.each do |group, notifications| %>
           <div class="notification-group">
             <div class="group-title"><%= group %></div>
             <%= render notifications %>
           </div>
-          <hr>
         <% end %>
+        
         <div class="d-flex align-items-center justify-content-center" style="height: 50px">
           <%= will_paginate @notifications, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
         </div>
       </div>
     </div>
-  <% end %>
-</div>
+
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'notificaciones' }
+  ) %>
+<% end %>
+
+
