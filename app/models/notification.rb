@@ -10,4 +10,8 @@ class Notification < ActiveRecord::Base
       notification.destroy
     end
   end
+
+  def self.last_notifications(user_id)
+    where(user_id: user_id).includes(:actor).order('id desc').limit(5)
+  end
 end

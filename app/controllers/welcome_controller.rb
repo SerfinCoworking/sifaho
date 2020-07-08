@@ -33,6 +33,8 @@ class WelcomeController < ApplicationController
       @percent_expired_supply_lots = _helper.number_to_percentage((@count_expired_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
     
       @external_orders = ExternalOrder.orders_to_sector(current_user.sector)
+
+      
     else
       @permission_request = PermissionRequest.new
     end
