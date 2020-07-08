@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     as: 'notifications_set_as_read'
 
   # devise_for :users, :controllers => { registrations: 'registrations' }
-  devise_for :users, :skip => [:registrations], :controllers => {:sessions => :sessions}
+  devise_for :users, :skip => [:registrations, :sessions], :controllers => {:sessions => :sessions}
 
   as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
