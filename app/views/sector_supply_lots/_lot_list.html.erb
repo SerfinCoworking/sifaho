@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+<div class="card">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Vencimiento</th>
+        <th>Laboratorio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sector_supply_lots.each do |lot| %>
+        <tr>
+          <td><%= lot.lot_code %></td>
+          <td><%= lot.quantity %></td>
+          <td>
+            <span class="badge badge-<%= lot.status_label %>">
+              <%= lot.status.underscore.humanize %>
+            </span>
+          </td>
+          <td><%= lot.expiry_date.present? ? lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
+          <td><%= lot.laboratory %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

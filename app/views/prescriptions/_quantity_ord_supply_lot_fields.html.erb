@@ -62,7 +62,15 @@
       } 
     %>
   </td>
-  <td colspan="2">
+  <td>
+    <%= link_to select_lot_sector_supply_lots_path(supply_id: f.object.supply_id, input_id: "asd"), remote: true, class: "btn btn-light" do %>
+      <% if f.object.sector_supply_lot_id.present? %>
+        Lote: <%= f.object.sector_supply_lot.lot_code %> | stock: <%= f.object.sector_supply_lot.quantity %>
+      <% else %>
+        <%= fa_icon "barcode" %> Seleccionar lote
+      <% end %>
+    <% end %>
+    <!--
     <% if f.object.supply_id.present? && @stock > 0 %>
       <%= button_tag type: 'button', class: 'btn btn-sm search-lots',
         title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
@@ -90,7 +98,8 @@
           disabled: true
         })
       %>
-    <% end %>
+    <% end %> -->
+    <%= f.input :sector_supply_lot_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
   <td>
     <%= f.input :provider_observation, label: false, as: :text,

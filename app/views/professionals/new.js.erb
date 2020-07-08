@@ -1,8 +1,8 @@
 // Style modal
-$('.modal-content').addClass('panel-primary');
+$('.modal-header').addClass('bg-primary text-white');
 
 // Add the dialog title
-$('#dialog h4').html("<i class='glyphicon glyphicon-plus'></i>  Nuevo profesional");
+$('.modal-title').html("<i class='fa fa-plus'></i>  Nuevo médico");
 
 // Render the new form
 $('.modal-body').html('<%= j render("form_remote") %>');
@@ -10,7 +10,7 @@ $('.modal-body').html('<%= j render("form_remote") %>');
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<button type='submit' name='commit' class='btn btn-success pull-right' form='new_professional'>Cargar profesional</button>"
+  "<button type='submit' name='commit' class='btn btn-success pull-right' form='new_professional'><i class='fa fa-plus'></i> Cargar médico</button>"
 );
 
 // Show the dynamic dialog
@@ -18,11 +18,11 @@ $('#dialog').modal("show");
 
 // Set focus to the first element
 $('#dialog').on('shown.bs.modal', function () {
-  $('#professional_first_name').focus();
+  $('#professional_last_name').focus();
 });
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-content').removeClass('panel-primary');
+  $('.modal-header').removeClass('bg-primary text-white');
 });
 
