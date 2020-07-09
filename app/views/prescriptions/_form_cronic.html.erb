@@ -158,8 +158,8 @@
         <table class="table table-hover table-sm mb-0">
           <thead>
             <tr>
-              <th>Cód</th>
-              <th>Insumo</th>
+              <th>Código</th>
+              <th>Producto</th>
               <th>Tu stock</th>
               <th>Consumo/Mes</th>
               <th>Entregar</th>
@@ -168,7 +168,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody class="quantity_ord_supply_lots">
+          <tbody class="quantity_ord_supply_lots" id="cocoon-container">
             <% if ["edit", "update"].include?(params[:action]) %>
               <%= f.simple_fields_for :quantity_ord_supply_lots, @prescription.quantity_ord_supply_lots.sin_entregar do |form_quantity| %>
                 <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
