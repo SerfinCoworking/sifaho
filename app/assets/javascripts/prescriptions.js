@@ -81,7 +81,6 @@ $(document).on('turbolinks:load', function() {
             alert("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
-            console.log(data);
             if (!data.length) {
               $('#non-pres').toggleClass('invisible', false);
               $('#pat-pres').toggleClass('visible', true);
@@ -116,7 +115,6 @@ $(document).on('turbolinks:load', function() {
             alert("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
-            console.log(data);
             if (!data.length) {
               $('#non-os').toggleClass('hidden', false);
               $('#pat-os').toggleClass('hidden', true);
@@ -164,9 +162,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   $.ui.autocomplete.prototype._renderItem = function (ul, item) {
-    if(item.length > 0 ){
-      console.log("hay elementos");
-    }
     var t = String(item.value).replace(
             new RegExp(this.term, "gi"),
             "<strong>$&</strong>");

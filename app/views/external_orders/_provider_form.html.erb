@@ -121,18 +121,16 @@
     <table class="table table-hover table-sm mb-0">
       <thead>
         <tr>
-          <th>Cód Ins</th>
-          <th>Insumo</th>
+          <th>Código</th>
+          <th>Producto</th>
           <th>Solicitado</th>
           <th>Entregado</th>
           <th>Lote</th>
-          <th>Laboratorio</th>
-          <th>Venc.</th>
-          <th>Tu observación</th>
+          <th>Observaciones</th>
           <th></th>
         </tr>
       </thead>
-      <tbody class="quantity_ord_supply_lots">
+      <tbody class="quantity_ord_supply_lots" id="cocoon-container">
           <% if params[:action] == "edit" %>
             <%= f.simple_fields_for :quantity_ord_supply_lots, @external_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
