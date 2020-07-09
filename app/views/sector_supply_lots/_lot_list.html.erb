@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
+<p>Seleccione un lote para el insumo <%= @sector_supply_lots.first.supply_name %></p>
 <div class="card">
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>Código</th>
@@ -12,7 +13,7 @@
     </thead>
     <tbody>
       <% @sector_supply_lots.each do |lot| %>
-        <tr>
+        <tr class="<%= lot.id.to_s == @selected_lot_id ? "table-info" : "clickable-lot" %>">
           <td><%= lot.lot_code %></td>
           <td><%= lot.quantity %></td>
           <td>
