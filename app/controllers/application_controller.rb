@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  before_action :notifiction_set_as_read, only: [:show]
+
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
   end
@@ -19,4 +21,13 @@ class ApplicationController < ActionController::Base
     def configure_permitted_parameters
       devise_parameter_sanitizer.permit(:sign_in) { |u| u.permit({ roles: [] }, :password, :password_confirmation, :username) }
     end
+    
+  private
+    # Marcamos la notificacion comoo leida
+    def notifiction_set_as_read
+      if params[:notification_id].present?
+        Notification.read!(params[:notification_id])
+      end
+    end
+  
 end
