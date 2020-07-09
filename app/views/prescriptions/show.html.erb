@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo prescripción <%= @prescription.ambulatoria? ? "ambulatoria" : "crónica" %>
+        Viendo receta <%= @prescription.ambulatoria? ? "ambulatoria" : "crónica" %>
       </h5>
     </div>
     <div>
@@ -28,7 +28,7 @@
               <% end %>
             </div>
             <div class="media-body">
-              <h4 class="media-heading">Profesional</h4>
+              <h4 class="media-heading">Médico</h4>
               <p>
                 <%= link_to professional_path(@prescription.professional), class: "link" do %>
                   <%= @prescription.professional_fullname %>
@@ -88,6 +88,7 @@
             <tr>
               <th>Cód Ins</th>
               <th>Insumo</th>
+              <th>Solicitado</th>
               <th><%= @prescription.dispensada? ? 'Entregado' : 'A entregar' %></th>
               <th>Lote</th>
               <th>Laboratorio</th>
@@ -145,7 +146,7 @@
               <% end %>
             </div>
             <div class="media-body">
-              <h4 class="media-heading">Profesional</h4>
+              <h4 class="media-heading">Médico</h4>
               <p>
                 <%= link_to professional_path(@prescription.professional), class: "link" do %>
                   <%= @prescription.professional_fullname %>

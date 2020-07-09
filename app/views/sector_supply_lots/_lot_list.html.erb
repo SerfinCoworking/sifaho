@@ -1,5 +1,5 @@
 <p id="notice"><%= notice %></p>
-<p>Seleccione un lote para el insumo <%= @sector_supply_lots.first.supply_name %></p>
+<p>Seleccione un lote para el insumo <strong><%= @sector_supply_lots.first.supply_name %></strong></p>
 <div class="card">
   <table class="table table-hover">
     <thead>
@@ -11,9 +11,14 @@
         <th>Laboratorio</th>
       </tr>
     </thead>
-    <tbody>
+    <!-- Atributo para luego en la función de selección, autocomplete el hidden input con el id del sector supply lot-->
+    <tbody data-hidden-input-id="<%= @input_id %>">
       <% @sector_supply_lots.each do |lot| %>
-        <tr class="<%= lot.id.to_s == @selected_lot_id ? "table-info" : "clickable-lot" %>">
+        <!-- La clase modal-clickable-lot activa la función para cerrar el modal y rellenar el hidden input id -->
+        <tr class="<%= lot.id.to_s == @selected_lot_id ? "table-info" : "modal-clickable-lot" %>"
+          data-lot-id="<%= lot.id %>"
+          data-lot-code="<%= lot.lot_code%>"
+          data-lot-quantity="<%= lot.quantity %>">
           <td><%= lot.lot_code %></td>
           <td><%= lot.quantity %></td>
           <td>

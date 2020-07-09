@@ -2,8 +2,8 @@
   <% if @sector_supply_lots.present? %>
   // Add the dialog title
   $('.modal-dialog').addClass('modal-lg');
-  $('.modal-header').addClass('bg-secondary text-white');
-  $('.modal-title').html("<i class='fa fa-barcode'></i>  Seleccionar lote");
+  $('.modal-header').addClass('bg-primary text-white');
+  $('.modal-title').html("<i class='fa fa-barcode'></i>  Seleccionar lote en stock");
 
   // Render the edit form
   $('.modal-body').html('<%= j render("lot_list") %>');

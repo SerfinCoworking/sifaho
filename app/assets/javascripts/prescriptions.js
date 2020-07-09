@@ -55,8 +55,6 @@ $(document).on('turbolinks:load', function() {
 
   // Función para autocompletar Nombre de paciente
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#patient').autocomplete({
       source: $('#patient').data('autocomplete-source'),
       autoFocus: true,

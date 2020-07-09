@@ -1,4 +1,5 @@
 <tr class="nested-fields">
+  <!-- Código de producto -->
   <td>
     <%= f.input :supply_id, as: :string,
       placeholder: 'Código',
@@ -12,6 +13,8 @@
       } 
     %>
   </td>
+
+  <!-- Nombre de producto  -->
   <td>
     <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
       label: false,
@@ -26,6 +29,8 @@
     %>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
+
+  <!-- Cantidad en stock -->
   <td>
     <% @stock = 1 %>
     <%= f.input :stock, as: :fake, label: false, disabled: true, 
@@ -40,6 +45,8 @@
         }"
       } %>
   </td>
+
+  <!-- Cantidad solicitada -->
   <td>
     <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: true,
       input_html: {
@@ -51,6 +58,8 @@
       } 
     %>
   </td>
+
+  <!-- Cantidad a dispensar -->
   <td>
     <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: true,
       input_html: {
@@ -62,74 +71,27 @@
       } 
     %>
   </td>
+
+  <!-- Lote -->
   <td>
-    <%= button_tag type: "button", class: "btn btn-light select-lot-btn" do %>
+    <%= button_tag type: "button", class: "btn btn-#{select_btn_status(f.object)} select-lot-btn" do %>
       <% if f.object.sector_supply_lot_id.present? %>
         <%= fa_icon "barcode" %> <%= f.object.sector_supply_lot.lot_code %> <%= fa_icon "cubes" %> <%= f.object.sector_supply_lot.quantity %>
       <% else %>
         <%= fa_icon "barcode" %> Seleccionar lote
       <% end %>
     <% end %>
-    <!--
-    <% if f.object.supply_id.present? && @stock > 0 %>
-      <%= button_tag type: 'button', class: 'btn btn-sm search-lots',
-        title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "search" %>
-      <% end %>
-    <% end %>
-    <% if f.object.sector_supply_lot_id.present? %>
-      <%= f.select(:sector_supply_lot_id, [],{},
-        {
-          class: 'selectpicker custom-select-pick show-tick',
-          "data-width"=>"fit",
-          "title"=>"#{f.object.sector_supply_lot.lot_code+" <span class='badge'>"+f.object.sector_supply_lot.quantity.to_s+"</span>" }",
-          "data-size"=>"5",
-          disabled: true,
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.id end }"
-        })
-      %>
-    <% else %>
-      <%= f.select(:sector_supply_lot_id, [],{},
-        {
-          class: 'selectpicker custom-select-pick show-tick',
-          "data-width"=>"fit",
-          "title"=>"#{if @stock == 0; "No hay stock"; else; "Código"; end}",
-          "data-size"=>"5",
-          disabled: true
-        })
-      %>
-    <% end %> -->
     <%= f.input :sector_supply_lot_id, :as => :hidden, :input_html => { class: 'sector-supply-lot-id'} %>
   </td>
+
+  <!-- Observaciones -->
   <td>
     <%= f.input :provider_observation, label: false, as: :text,
       :input_html => { class: 'input-sm', :cols => 25  , :rows => 1 } %>
   </td>
+
+  <!-- Botón quitar -->
   <td>
-    <% if f.object.sector_supply_lot_id.present? %>
-      <%= button_tag type: 'button', class: 'btn btn-xs',
-        title: '
-        <table>
-          <thead>
-            <tr>
-              <th>Lote</th> 
-              <th>Stock</th>
-              <th class="text-center">Laboratorio</th>
-              <th>Vencimiento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>'+f.object.sector_supply_lot.lot_code+'</td>
-              <td>'+f.object.sector_supply_lot.quantity.to_s+'</td>
-              <td class="lab-col">'+f.object.sector_supply_lot.laboratory+'</td>
-              <td>'+if f.object.sector_supply_lot.expiry_date.present?; f.object.sector_supply_lot.expiry_date.strftime("%d/%m/%Y"); else; 'No vence'; end+'</td>
-            </tr>
-          </tbody>
-        </table>', data: { html: true, toggle: 'tooltip', placement: 'left' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-info-sign') %>
-      <% end %>
-    <% end %>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning btn-xs',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "minus" %>

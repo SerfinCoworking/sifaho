@@ -76,7 +76,7 @@ class PrescriptionsController < ApplicationController
 
     respond_to do |format|
       if @prescription.save
-        # Si se entrega la prescripción
+        # Si se entrega la receta
         begin
           if dispensing?
             if @prescription.ambulatoria?
@@ -85,17 +85,17 @@ class PrescriptionsController < ApplicationController
               @prescription.dispense_cronic_by(current_user)
             end
               @prescription.create_notification(current_user, "creó y dispensó")
-              flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado y dispensado correctamente."
+              flash[:success] = "La receta "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado y dispensado correctamente."
           else
             @prescription.create_notification(current_user, "creó")
-            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado correctamente."
+            flash[:success] = "La receta "+@prescription.order_type+" de "+@prescription.patient.fullname+" se ha creado correctamente."
           end
         rescue ArgumentError => e
           flash[:alert] = e.message
         end
         format.html { redirect_to @prescription }
       else
-        flash[:error] = "La prescripción no se ha podido crear."
+        flash[:error] = "La receta no se ha podido crear."
         if prescription_params[:order_type] == 'ambulatoria'
           format.html { render :new }
         elsif prescription_params[:order_type] == 'cronica'
@@ -120,10 +120,10 @@ class PrescriptionsController < ApplicationController
               @prescription.dispense_cronic_by(current_user)
             end
             @prescription.create_notification(current_user, "auditó y dispensó")
-            flash[:success] = "La prescripción "+@prescription.order_type+" de "+@prescription.professional.fullname+" se ha modificado y dispensado correctamente."
+            flash[:success] = "La receta "+@prescription.order_type+" de "+@prescription.professional.fullname+" se ha modificado y dispensado correctamente."
           else
             @prescription.create_notification(current_user, "auditó")
-            flash[:success] = "La prescripción de "+@prescription.professional.fullname+" se ha modificado correctamente."
+            flash[:success] = "La receta de "+@prescription.professional.fullname+" se ha modificado correctamente."
           end
         rescue ArgumentError => e
           flash[:notice] = e.message
@@ -132,7 +132,7 @@ class PrescriptionsController < ApplicationController
           format.html { redirect_to @prescription }
         end
       else
-        flash[:error] = "La prescripción de "+@prescription.professional.fullname+" no se ha podido modificar."
+        flash[:error] = "La receta de "+@prescription.professional.fullname+" no se ha podido modificar."
         format.html { render :edit }
       end
     end
@@ -145,7 +145,7 @@ class PrescriptionsController < ApplicationController
     @professional_fullname = @prescription.professional.fullname
     @prescription.destroy
     respond_to do |format|
-      flash.now[:success] = "La prescripción de "+@professional_fullname+" se ha eliminado correctamente."
+      flash.now[:success] = "La receta de "+@professional_fullname+" se ha eliminado correctamente."
       format.js
     end
   end
@@ -162,10 +162,10 @@ class PrescriptionsController < ApplicationController
         format.js
       else
         if @prescription.save!
-          flash.now[:success] = "La prescripción de "+@prescription.professional.fullname+" se ha dispensado correctamente."
+          flash.now[:success] = "La receta de "+@prescription.professional.fullname+" se ha dispensado correctamente."
           format.js
         else
-          flash.now[:error] = "La prescripción no se ha podido dispensar."
+          flash.now[:error] = "La receta no se ha podido dispensar."
           format.js
         end
       end
@@ -181,7 +181,7 @@ class PrescriptionsController < ApplicationController
       rescue ArgumentError => e
         flash[:alert] = e.message
       else
-        flash[:notice] = 'Se ha retornado una dispensación de la prescripción crónica.'
+        flash[:notice] = 'Se ha retornado una dispensación de la receta crónica.'
       end
       format.html { redirect_to @prescription }
     end
@@ -195,7 +195,7 @@ class PrescriptionsController < ApplicationController
       rescue ArgumentError => e
         flash[:alert] = e.message
       else
-        flash[:notice] = 'La prescripción se ha retornado a '+@prescription.status+'.'
+        flash[:notice] = 'La receta se ha retornado a '+@prescription.status+'.'
       end
       format.html { redirect_to @prescription }
     end

@@ -170,8 +170,7 @@ class SectorSupplyLotsController < ApplicationController
     @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:supply_id]).without_status(3).without_status(4)
     @selected_lot_id = params[:selected_lot_id]
     @supply_id = params[:supply_id]
-    puts "Insumoooooo=>>>>>: "
-    puts @supply_id
+    @input_id = params[:input_id]
     respond_to do |format|
       format.js
     end
