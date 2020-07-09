@@ -53,17 +53,17 @@
     <table class="table table-hover table-sm mb-0">
       <thead>
         <tr>
-          <th>Cód Ins</th>
-          <th>Insumo</th>
+          <th>Código</th>
+          <th>Producto</th>
           <th>Tu stock</th>
           <th>Solicitado</th>
           <th>A entregar</th>
-          <th colspan="2">Lote</th>
+          <th>Lote</th>
           <th>Tu observación</th>
           <th></th>
         </tr>
       </thead>
-      <tbody class="quantity_ord_supply_lots">
+      <tbody class="quantity_ord_supply_lots" id="cocoon-container">
         <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
           <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
         <% end %>

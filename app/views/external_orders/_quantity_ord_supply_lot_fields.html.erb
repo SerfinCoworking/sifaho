@@ -1,5 +1,7 @@
 <tr class="nested-fields">
   <% if @order_type == 'recibo' %>
+
+    <!-- Código del producto -->
     <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
@@ -12,6 +14,8 @@
         } 
       %>
     </td>
+
+    <!-- Nombre del producto -->
     <td>
       <%= f.input :supply_id, as: :string, id: "nom_ins",
         label: false,
@@ -26,6 +30,8 @@
       %>
       <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
     </td>
+
+    <!-- Unidad del producto -->
     <td>
       <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
         input_html: {
@@ -40,12 +46,16 @@
         } 
       %>
     </td>
+
+    <!-- Cantidad a cargar -->
     <td>
       <%= f.input :delivered_quantity, placeholder: 'Cant', required: false,
         label: false, :input_html => { class: 'new-deliver-quantity input-sm', min: '0', :style => 'width: 80px' } 
       %>
       <%= f.hidden_field :requested_quantity, :value => 0 %>
     </td>
+
+    <!-- Lote -->
     <td>
       <%= f.input :lot_code, as: :string,
         placeholder: 'Código',
@@ -62,6 +72,8 @@
         }
       %>
     </td>
+
+    <!-- Laboratorio -->
     <td>
       <%= f.input :laboratory_id, as: :string,
         placeholder: 'Razón social',
@@ -78,6 +90,8 @@
       <%= f.input :laboratory_id, :as => :hidden, :input_html =>  { class: "new-laboratory-id" },
         value: "#{ if f.object.laboratory_id.present?; f.object.laboratory_id; end }" %>
     </td>
+
+    <!-- Vencimiento -->
     <td>
       <%= f.input :expiry_date, as: :string, label: false, 
         :placeholder => "M/A",
@@ -98,7 +112,9 @@
       %>
     </td>
     <%= f.hidden_field :expiry_date, as: :string, class: "new-expiry-date-hidden" %>
+  
   <% elsif @order_type == 'solicitud_abastecimiento' %> <!-- End Form recibo -->
+    <!-- Código del producto -->
     <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
@@ -112,6 +128,8 @@
         } 
       %>
     </td>
+
+    <!-- Nombre del producto -->
     <td>
       <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
         label: false,
@@ -126,6 +144,8 @@
       %>
       <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
     </td>
+
+    <!-- Stock -->
     <td>
       <% @stock = 1 %>
       <%= f.input :stock, as: :fake, label: false, disabled: true,
@@ -141,6 +161,8 @@
         }
       %>
     </td>
+
+    <!-- Cantidad solicitada -->
     <td>
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
@@ -153,6 +175,8 @@
       %>
       <%= f.input :delivered_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
     </td>
+    
+    <!-- Unidad -->
     <td>
       <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
         input_html: {
@@ -166,17 +190,21 @@
         }"
       } %>
     </td>
+
+    <!-- Observaciones solicitante -->
     <td>
       <%= f.input :applicant_observation, label: false, as: :text,
         :input_html => { :cols => 35  , :rows => 1, class: 'input-sm', placeholder: "Una observación" } %>
     </td>
-  <% else %>
+  <% else %> <!-- Comienza despacho -->
     <%
       if f.object.supply.present? 
         @stock = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(f.object.supply).sum(:quantity)
       end
     %>
-    <td><!-- Start form despacho -->
+
+    <!-- Código del producto -->
+    <td>
       <%= f.input :supply_id, as: :string,
         placeholder: 'Código',
         label: false,
@@ -188,6 +216,8 @@
         } 
       %>
     </td>
+
+    <!-- Nombre del producto-->
     <td>
       <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
         label: false,
@@ -203,6 +233,8 @@
       <%= f.input :supply_id, :as => :hidden, :input_html => 
         { class: "supply-id" } %>
     </td>
+
+    <!-- Cantidad solicitada -->
     <td>
       <%= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
@@ -214,6 +246,8 @@
         } 
       %>
     </td>
+    
+    <!-- Cantidad entregada -->
     <td>
       <%= f.input :delivered_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
@@ -225,69 +259,27 @@
         } 
       %>
     </td>
+
+    <!-- Lote -->
     <td>
-      <% if f.object.supply_id.present?  %>
-        <%= button_tag type: 'button', class: 'btn btn-xs search-lots input-sm',
-          title: 'Buscar lotes', data: { html: true, toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "search" %>
+      <%= button_tag type: "button", class: "btn btn-#{select_btn_status(f.object)} select-lot-btn" do %>
+        <% if f.object.sector_supply_lot_id.present? %>
+          <%= fa_icon "barcode" %> <%= f.object.sector_supply_lot.lot_code %> <%= fa_icon "cubes" %> <%= f.object.sector_supply_lot.quantity %>
+        <% else %>
+          <%= fa_icon "barcode" %> Seleccionar lote
         <% end %>
       <% end %>
-    <% if f.object.sector_supply_lot_id.present? %>
-        <%= f.select(:sector_supply_lot_id, [],{},
-          {
-            class: 'selectpicker custom-select-pick show-tick input-sm',
-            "data-width"=>"fit",
-            "title"=>"#{f.object.sector_supply_lot.lot_code }",
-            "data-size"=>"5",
-            disabled: true,
-            value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.id end }"
-          })
-        %>
-      </td>
-    <% else %>
-        <%= f.select(:sector_supply_lot_id, [],{},
-          {
-            class: 'selectpicker custom-select-pick show-tick',
-            "data-width"=>"fit",
-            "title"=>"Código",
-            "data-size"=>"5",
-            disabled: true
-          })
-        %>
-      </td>
-    <% end %>
-    <td>
-      <%= f.input :sector_supply_lot_id, as: :string,
-        label: false,
-        placeholder: "Razón social",
-        disabled: true,
-        input_html: {
-          size: 16,
-          class: "supply-lot-laboratory input-sm",
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.laboratory; end }"
-        },
-        html5: false 
-      %>
+      <%= f.input :sector_supply_lot_id, :as => :hidden, :input_html => { class: 'sector-supply-lot-id'} %>
     </td>
-    <td>
-      <%= f.input :sector_supply_lot_id, as: :string,
-        label: false,
-        placeholder: "Fecha",
-        disabled: true,
-        input_html: {
-          :style => 'width: 65px',
-          class: "supply-lot-expiry input-sm",
-          value: "#{if f.object.sector_supply_lot.present?; f.object.sector_supply_lot.supply_lot.expiry_date.present? ? f.object.sector_supply_lot.expiry_date.strftime("%m/%Y") : 'n/a'; end}"
-        },
-        html5: false 
-      %>
-    </td>
-    <%= f.hidden_field :sector_supply_lot_id, class: "supply-lot-id" %>
+
+    <!-- Observaciones proveedor -->
     <td>
       <%= f.input :provider_observation, label: false, as: :text,
         :input_html => { :cols => 23  , :rows => 1, class: 'input-sm', placeholder: "Una observación" } %>
     </td>
   <% end %>
+  
+  <!-- Botón quitar -->
   <td>
     <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>

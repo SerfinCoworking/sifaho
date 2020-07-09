@@ -7,23 +7,20 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   // Función para autocompletar nombre de establecimiento
-  jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-  
+  jQuery(function() {  
     return $('#establishment').autocomplete({
       source: $('#establishment').data('autocomplete-source'),
       minLength: 2,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el establecimiento");
+        }
+      },
       select:
       function (event, ui) {
         $("#establishment-id").val(ui.item.id);
         $('#establishment').trigger('change');
         $("#applicant-sector").prop('required',true);
-      },
-      response: function(event, ui) {
-        if (!ui.content.length) {
-          var noResult = { value:"", label:"No se encontró el establecimiento" };
-          ui.content.push(noResult);
-        }
       }
     })
   });
@@ -56,27 +53,20 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   // Función para autocompletar nombre de establecimiento
-  jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
- 
+  jQuery(function() { 
     return $('#provider-establishment').autocomplete({
       source: $('#provider-establishment').data('autocomplete-source'),
       minLength: 2,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el establecimiento");
+        }
+      },
       select:
       function (event, ui) {
         $("#provider-establishment-id").val(ui.item.id);
         $('#provider-establishment').trigger('change');
         $("#provider-sector").prop('required',true);
-      },
-      response: function(event, ui) {
-        console.log(ui.content);
-  
-        if (JSON.stringify(ui.content) == '[{}]') {
-          console.log("Entró");
-          ui.content[0] = { label:"No se encontró el establecimiento", value:"" };
-          ui.content[1] = { label:"No se encontró el establecimiento", value:"" };
-          console.log(ui.content);
-        }
       }
     })
    });
@@ -126,12 +116,15 @@ document.addEventListener("turbolinks:load", function() {
   $(document).on("focus",".new-supply-code", function() {
     var _this = $(this);
     jQuery(function() {
-      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
       return $('.new-supply-code').autocomplete({
         source: $('.new-supply-code').data('autocomplete-source'),
         autoFocus: true,
         minLength: 1,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("No se encontró");
+          }
+        },
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.value);
@@ -150,12 +143,6 @@ document.addEventListener("turbolinks:load", function() {
           if (event.keyCode == 9) {
             nested_form.find(".new-supply-name").focus();
           }
-        },
-        response: function(event, ui) {
-          if (!ui.content.length) {
-              var noResult = { value:"",label:"No se encontró el insumo" };
-              ui.content.push(noResult);
-          }
         }
       })
     });
@@ -163,16 +150,17 @@ document.addEventListener("turbolinks:load", function() {
 
   // Función para autocompletar y buscar el insumo
   $(document).on("focus",".new-supply-name", function() {
-
     var _this = $(this);
-  
-    jQuery(function() {
-      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-  
+    jQuery(function() {  
       return _this.autocomplete({
         source: _this.data('autocomplete-source'),
         autoFocus: true,
         minLength: 3,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("No se encontró el producto");
+          }
+        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -180,27 +168,23 @@ document.addEventListener("turbolinks:load", function() {
           nested_form.find(".new-supply-code").val(ui.item.id);
           nested_form.find(".unity").val(ui.item.unity);
           nested_form.find('.new-deliver-quantity').focus();
-        },
-        response: function(event, ui) {
-          if (!ui.content.length) {
-              var noResult = { value:"",label:"No se encontró el insumo" };
-              ui.content.push(noResult);
-          }
         }
       })
     });
   });
 
+  // Función para autocompletar código de lote
   $(document).on("focus",".new-supply-lot-code", function() {
     var _this = $(this);
-    // Función para autocompletar código de lote
     jQuery(function() {
-      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
       return $('.new-supply-lot-code').autocomplete({
-        // $('.new-supply-lot-code').data('autocomplete-source')
-        // '/supply_lots/search_by_code?supply_code=5782'
         source: '/supply_lots/search_by_lot_code?supply_code='+_this.parents(".nested-fields").find(".new-supply-code").val(),
         minLength: 1,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("Nuevo lote");
+          }
+        },
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
@@ -219,14 +203,6 @@ document.addEventListener("turbolinks:load", function() {
             nested_form.find(".new-expiry-date-hidden").val(date);
           }
           nested_form.find(".new-laboratory").focus();
-        },
-        response: function(event, ui) {
-          if (!ui.content.length) {
-            var nested_form = _this.parents(".nested-fields");
-            nested_form.find(".new-supply-lot-code").val($(this).val());
-            nested_form.find(".new-supply-lot-code").tooltip({
-            placement: 'bottom',trigger: 'manual', title: 'Nuevo lote'}).tooltip('show');
-          }
         }
       })
     });
@@ -240,12 +216,15 @@ document.addEventListener("turbolinks:load", function() {
   $(document).on("focus",".new-laboratory", function() {
     var _this = $(this);
     jQuery(function() {
-      var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
       return $('.new-laboratory').autocomplete({
         source: $('.new-laboratory').data('autocomplete-source'),
         autoFocus: true,
         minLength: 2,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("No se encontró el laboratorio");
+          }
+        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -256,13 +235,11 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   $('.table-responsive').on('show.bs.select', function () { 
-    console.log("triggered show bs select");
     $('.table-responsive').css( "overflow", "inherit" );
     $('.bootstrap-table').css( "overflow", "inherit" ); 
     $('.fixed-table-body').css( "overflow", "inherit" );  
   }); 
   $('.table-responsive').on('hide.bs.select', function () { 
-    console.log("triggered hide bs select");
     $('.table-responsive').css( "overflow", "auto" ); 
   })
 });

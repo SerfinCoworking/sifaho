@@ -5,7 +5,6 @@ $(document).on('turbolinks:load', function() {
   
   $(document).on('click', '#pat-pres tr', function() {
     var link = $(this).data('href');
-    console.log("entro")
      $.ajax({
          type: 'GET',
          url: link

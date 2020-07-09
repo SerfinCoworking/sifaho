@@ -166,6 +166,16 @@ class SectorSupplyLotsController < ApplicationController
       quant: sup_lot.quantity, expiry_date: sup_lot.expiry_date, value: sup_lot.supply_name, lot_code: sup_lot.lot_code } }
   end
 
+  def select_lot
+    @sector_supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector).with_code(params[:supply_id]).without_status(3).without_status(4)
+    @selected_lot_id = params[:selected_lot_id]
+    @supply_id = params[:supply_id]
+    @input_id = params[:input_id]
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_sector_supply_lot

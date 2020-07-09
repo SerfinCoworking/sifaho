@@ -165,6 +165,7 @@ Rails.application.routes.draw do
       get "lots_for_supply"
     end
     collection do
+      get "select_lot"
       get "trash_index"
       get "group_by_supply"
       get "get_stock_quantity"
