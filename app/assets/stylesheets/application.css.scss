@@ -179,3 +179,8 @@ td .form-group{
 .form-group.radio_buttons > label.control-label{
   margin-right: 1rem;
 }
+
+.news-panel{
+  height: calc(30vh);
+  overflow-y: auto;
+}
