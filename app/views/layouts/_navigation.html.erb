@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
  <!--Brand-->
   <div class="brand-container d-flex">
-    <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
+    <% if policy(:dashboard).sidebar? %>
+      <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
+    <% end %>
     <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
       <%= image_tag("LogoSIFAHO.png", size: "30x30", alt: "Logo SIFAHO", class: 'logo') %>
       SIFAHO

@@ -1,7 +1,7 @@
 <%= render 'header' %>
-<div class="card fixed-custom-card">
-  <div class="card-body">
-    <% if current_user.sector.present? %>
+<% if current_user.sector.present? %>
+  <div class="card fixed-custom-card">
+    <div class="card-body">
       <div class="dashboard-grid">
         
         <%# Prescripciones %>
@@ -13,40 +13,49 @@
         <%# Ordenes externas %>
         <%= render 'external_orders' %>
       </div>
-    <% else %>
-      <% if current_user.permission_requests.any?%>
-        <div class="col-5 mx-auto">
-          <div class="card">
-            <div class="card-header bg-info text-white">
-              <h3><%= fa_icon "hourglass-half" %> Espere una respuesta</h3>
-            </div>
-            <div class="card-body">
-              <p><h5>El equipo de gestión evaluará su solicitud y tomará las medidas correspondientes.</h5></p>
-              <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
-            </div>
-          </div>
-        </div>
-
-      <% else %>
-        <div class="col-5 mx-auto">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h3><%= fa_icon "envelope" %> Solicitud de permisos</h3>
-            </div>
-            <div class="card-body">
-              <p><h5>Complete el formulario para comenzar a utilizar el sistema.</h5></p>
-              <%= render "permission_requests/form", permission_request: @permission_request %>
-              <p><h5>Una vez enviado, deberá esperar a que algún gestor de usuarios responda la solicitud.</h5></p>
-              <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
-            </div>
-            <div class="card-footer text-right">
-              <button type='submit' name='commit' class='btn btn-success' form='new_permission_request'>
-                <%= fa_icon "paper-plane" %> Enviar
-              </button>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% else %>
+  <% if current_user.permission_requests.any?%>
+    <div class="col-5 mx-auto">
+      <div class="card">
+        <div class="card-header bg-info text-white d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <%= fa_icon "hourglass-half" %>
+            <h5 class="card-title mb-0 ml-2">
+              Espere una respuesta
+            </h5>
+          </div>
+        </div>
+        <div class="card-body">
+          <p><h5>El equipo de gestión evaluará su solicitud y tomará las medidas correspondientes.</h5></p>
+          <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="col-5 mx-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <%= fa_icon "envelope" %>
+            <h5 class="card-title ml-2 mb-0">
+              Solicitud de permisos
+            </h5>
+          </div>
+        </div>
+        <div class="card-body">
+          <p><h5>Complete el formulario para comenzar a utilizar el sistema.</h5></p>
+          <%= render "permission_requests/form", permission_request: @permission_request %>
+          <p><h5>Una vez enviado, deberá esperar a que algún gestor de usuarios responda la solicitud.</h5></p>
+          <p class="text-right"><h5>Gracias por su paciencia.</h5></p>
+        </div>
+        <div class="card-footer text-right">
+          <button type='submit' name='commit' class='btn btn-success' form='new_permission_request'>
+            <%= fa_icon "paper-plane" %> Enviar
+          </button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
