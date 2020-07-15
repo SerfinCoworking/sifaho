@@ -1,0 +1,35 @@
+<% unless notification.target.nil? %>
+  <li class="list-group-item <%= notification.read_at.present? ? '' : 'unread'%>" id="notification-<%= notification.id %>">
+    <%= link_to main_app.polymorphic_path(notification.target, 
+      notification_id: notification.id), 
+      class:'notification-link d-flex align-items-center' do %>
+    
+    
+      <div class="d-flex align-items-center w-100 h-100">
+        <%= image_tag user_avatar(notification.actor, 25), 
+              class:"img-circle media-object",
+              :'data-toggle'=>"tooltip",
+              :'data-placement'=>"left",
+              :'title'=>notification.actor.profile.first_name.titleize %>
+        <div class="ml-2">
+          <%= render partial: "/notifications/notifications/#{notification.notify_type}", 
+          locals: { notification: notification, short_message: short_message } %>
+          <small class="text-nowrap"><%= time_ago_in_words(notification.created_at) %></small>
+        </div>
+      </div>
+
+    <% end %>
+
+    <% if !notification.read_at.present? %>
+      <%= link_to main_app.notifications_set_as_read_path(notification), 
+      class: "ml-2 read-notification",
+      method: :post,
+      remote: true,
+      :'data-toggle'=>"tooltip",
+      :'data-placement'=>"top",
+      :'title'=>"Marcar como leída" do %>
+        <%= fa_icon 'check', class: "text-primary"%>  
+      <% end %>
+    <% end %>
+  </li>
+<% end%>

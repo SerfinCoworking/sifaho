@@ -11,9 +11,10 @@
       <div class="dropdown-menu dropdown-menu-right notification-dropdown p-0 m-0">
         <ul class="list-group">
           <% Notification.last_notifications(current_user.id).each do |notification| %>
-            <li class="list-group-item <%= notification.read_at.present? ? '' : 'unread'%>" id="notification-<%= notification.id %>">
-              <%= render partial: "/notifications/notifications/#{notification.notify_type}", locals: { notification: notification, short_message: true } %>
-            </li>
+            
+            <%= render partial: "/notifications/notifications/notification_link", 
+            locals: { notification: notification, short_message: true } %>
+            
           <% end %>
           <li class="list-group-item">
             <%= link_to main_app.notifications_path, class: "nav-link" do %>

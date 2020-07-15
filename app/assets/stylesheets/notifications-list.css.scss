@@ -5,23 +5,26 @@
   .notification-dropdown {
     border: none;
     width: 282px;
-    ul.list-group{
-      li.unread{
-        background-color: #dae0e5 !important
+    
+  }
+}
+
+ul.list-group{
+  li.unread{
+    background-color: #dae0e5 !important
+  }
+  li{      
+    padding: 0;
+    .notification-link{
+      color: #495057;
+      &:hover{
+        text-decoration: none;
       }
-      li{      
-        .notification-link{
-          color: #495057;
-          &:hover{
-            text-decoration: none;
-          }
-          img.img-circle{
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-          }
-        }
+      img.img-circle{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
       }
     }
-}
+  }
 }
