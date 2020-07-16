@@ -28,10 +28,9 @@
             </li>
           <% end %>
         </ul>
-        
-        <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-          <%= will_paginate @notifications, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-center">
+        <%= will_paginate @notifications, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
       </div>
     </div>
 
