@@ -34,6 +34,7 @@
                 required: true,
                 readonly: f.object.cronic_dispensations.count > 0,
                 :input_html => {
+                  readonly: f.object.new_record? ? "" : true,
                   id: "professional",
                   data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
                   value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
@@ -51,19 +52,35 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <%= f.input :patient_id, as: :string, class: 'form-control',
-                label: false,
-                placeholder: 'DNI | Apellido | Nombre',
-                required: true,
-                readonly: f.object.cronic_dispensations.count > 0,
-                :input_html => {
-                  id: 'patient',
-                  data: { autocomplete_source: get_by_dni_and_fullname_patients_path },
-                  value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-                  size: 30
-                }
-              %>
-              <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+              <div class="row">
+                <div class="col-4">
+                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                    label: false,
+                    placeholder: 'DNI',
+                    required: true,
+                    readonly: f.object.new_record? ? "" : true,
+                    :input_html => {
+                      id: 'patient-dni',
+                      data: { autocomplete_source: get_by_dni_patients_path },
+                      value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                    }
+                  %>
+                </div>
+                <div class="col-8">
+                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                    label: false,
+                    placeholder: 'Apellido y nombre',
+                    required: true,
+                    readonly: f.object.new_record? ? "" : true,
+                    :input_html => {
+                      id: 'patient-fullname',
+                      data: { autocomplete_source: get_by_fullname_patients_path },
+                      value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
+                    }
+                  %>
+                  <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+                </div>
+              </div><!-- End row -->
             </div>
           </div>
           <div class='row'>
@@ -101,14 +118,14 @@
         </div>
         <div class="col-6">
           <div class="col-12 invisible" id="non-os">
-            <div class="panel panel-info">
-                <div class="panel-heading">No posee obra social.</div>
+            <div class="card">
+              <div class="card-header">No posee obra social.</div>
             </div>
           </div>
           <div class='col-12 invisible' id="pat-os">
             <div class="row panel-pres">
               <div class="col-12">
-                <div class="panel panel-info">
+                <div class="card">
                   <!-- Default panel contents -->
                   <table class="table table-sm">
                     <thead>
