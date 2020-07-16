@@ -1,13 +1,17 @@
-<%= render "header" %>
+<%= render "users/header" %>
+
 <div class="row">
-  <div class="col-md-5">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-envelope') %> Viendo solicitud de permisos
-        </h3>
+  <div class="col-5">
+    <div class="card card-secondary">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "envelope" %>
+          <h5 class="card-title mb-0 ml-2">
+            Viendo solicitud de permisos
+          </h5>
+        </div>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <%= @permission_request.user.full_name %> solicita permisos para
         <p><h5><strong>Establecimiento:</strong> <%= @permission_request.establishment %></h5></p>
         <p><h5><strong>Sector: </strong><%= @permission_request.sector %></h5></p>
@@ -15,26 +19,29 @@
         <h5><strong>Observaciones:</strong></h5>
         <p><h5><%= @permission_request.observation %></h5></p>
       </div>
-      <div class="panel-footer text-right">
-        <%= link_to 'Volver', permission_requests_path, class: "btn" %>
+      <div class="card-footer text-right">
+        <%= link_to 'Volver', permission_requests_path, class: "btn btn-light" %>
         <% if policy(@permission_request).end? %>
           <%= link_to end_permission_request_path(@permission_request),
             class: 'btn btn-success btn-md' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-check') %>
+            <%= fa_icon "check" %>
             Terminada
           <% end %>
         <% end %>
       </div>
     </div>
   </div>
-  <div class="col-md-7">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-user') %> Perfil de usuario
-        </h3>
+  <div class="col-7">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "user" %>
+          <h5 class="card-title mb-0 ml-2">
+            Perfil de usuario
+          </h5>
+        </div>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         <div class="media">
           <div class="media-left">
               <%= image_tag user_avatar(@permission_request.user, 150), class:"img-thumbnail media-object" %>
@@ -55,10 +62,10 @@
           </div>
         </div>
       </div>
-      <div class="panel-footer text-right">
+      <div class="card-footer text-right">
         <% if policy(@permission_request.user).edit_permissions? %>
-          <%= link_to edit_permissions_users_admin_path(@permission_request.user), class: 'btn btn-warning btn-md' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-lock') %>
+          <%= link_to edit_permissions_users_admin_path(@permission_request.user), class: 'btn btn-warning' do %>
+            <%= fa_icon "lock" %>
             Editar permisos
           <% end %>
         <% end %>
