@@ -51,18 +51,35 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <%= f.input :patient_id, as: :string, class: 'form-control',
-                label: false,
-                placeholder: 'DNI | Apellido | Nombre',
-                required: true,
-                readonly: f.object.cronic_dispensations.count > 0,
-                :input_html => {
-                  id: 'patient',
-                  data: { autocomplete_source: get_by_dni_and_fullname_patients_path },
-                  value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-                }
-              %>
-              <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+              <div class="row">
+                <div class="col-4">
+                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                    label: false,
+                    placeholder: 'DNI',
+                    required: true,
+                    readonly: f.object.cronic_dispensations.count > 0,
+                    :input_html => {
+                      id: 'patient-dni',
+                      data: { autocomplete_source: get_by_dni_patients_path },
+                      value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                    }
+                  %>
+                </div>
+                <div class="col-8">
+                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                    label: false,
+                    placeholder: 'Apellido y nombre',
+                    required: true,
+                    readonly: f.object.cronic_dispensations.count > 0,
+                    :input_html => {
+                      id: 'patient-fullname',
+                      data: { autocomplete_source: get_by_fullname_patients_path },
+                      value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                    }
+                  %>
+                  <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+                </div>
+              </div>
             </div>
           </div>
           <div class='row'>

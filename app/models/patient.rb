@@ -86,11 +86,11 @@ class Patient < ApplicationRecord
 
   #Métodos públicos
   def full_info
-    self.first_name+" "+self.last_name+" "+self.dni.to_s
+    self.last_name+", "+self.first_name+" "+self.dni.to_s
   end
 
   def fullname
-    self.first_name+" "+self.last_name
+    self.last_name+", "+self.first_name
   end
 
   def age_string

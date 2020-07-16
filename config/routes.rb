@@ -255,6 +255,8 @@ Rails.application.routes.draw do
     collection do
       get "search"
       get "get_by_dni_and_fullname"
+      get "get_by_dni"
+      get "get_by_fullname"
     end
   end
 

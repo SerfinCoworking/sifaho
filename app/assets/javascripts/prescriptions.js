@@ -55,10 +55,10 @@ $(document).on('turbolinks:load', function() {
 
   // Función para autocompletar Nombre de paciente
   jQuery(function() {
-    return $('#patient').autocomplete({
-      source: $('#patient').data('autocomplete-source'),
+    return $('#patient-dni').autocomplete({
+      source: $('#patient-dni').data('autocomplete-source'),
       autoFocus: true,
-      minLength: 3,
+      minLength: 7,
       response: function (data) {
         if (data.length < 1) {
           $("#patient").tooltip({
@@ -67,9 +67,11 @@ $(document).on('turbolinks:load', function() {
       },
       select:
       function (event, ui) {
+        event.preventDefault();
         $("#patient").tooltip('hide');
         $("#patient_id").val(ui.item.id);
-        $("#patient_dni").val(ui.item.dni);
+        $("#patient-dni").val(ui.item.dni);
+        $("#patient-fullname").val(ui.item.fullname);
         $.ajax({
           url: "/prescriptions/get_by_patient_id", // Ruta del controlador
           type: 'GET',
@@ -115,6 +117,7 @@ $(document).on('turbolinks:load', function() {
             alert("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
+            console.log("asd")
             if (!data.length) {
               $('#non-os').toggleClass('hidden', false);
               $('#pat-os').toggleClass('hidden', true);
