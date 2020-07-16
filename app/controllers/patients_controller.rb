@@ -105,7 +105,7 @@ class PatientsController < ApplicationController
   end
 
   def get_by_dni
-    @patients = Patient.search_dni(params[:term]).limit(10).order(:last_name)
+    @patients = Patient.search_dni(params[:term])
     render json: @patients.map{ |pat| { id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, fullname: pat.fullname }  }
   end
 

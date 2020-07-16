@@ -32,11 +32,11 @@
                 label: false,
                 placeholder: 'Matrícula | Apellido | Nombre',
                 required: true,
-                readonly: f.object.cronic_dispensations.count > 0,
+                readonly: f.object.new_record? ? "" : true,
                 :input_html => {
                   id: "professional",
                   data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                  value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
+                  value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
                 }
               %>
               <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
@@ -57,7 +57,7 @@
                     label: false,
                     placeholder: 'DNI',
                     required: true,
-                    readonly: f.object.cronic_dispensations.count > 0,
+                    readonly: f.object.new_record? ? "" : true,
                     :input_html => {
                       id: 'patient-dni',
                       data: { autocomplete_source: get_by_dni_patients_path },
@@ -70,11 +70,11 @@
                     label: false,
                     placeholder: 'Apellido y nombre',
                     required: true,
-                    readonly: f.object.cronic_dispensations.count > 0,
+                    readonly: f.object.new_record? ? "" : true,
                     :input_html => {
                       id: 'patient-fullname',
                       data: { autocomplete_source: get_by_fullname_patients_path },
-                      value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                      value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
                     }
                   %>
                   <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
@@ -90,6 +90,7 @@
                 input_html: {
                   tabindex: "-1",
                   class: "form-control pull-right",
+                  readOnly: f.object.new_record? ? "" : true,
                   required: true,
                   autocomplete: 'off',
                   value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
@@ -103,6 +104,7 @@
                 input_html: {
                   tabindex: "-1",
                   class: "form-control",
+                  readOnly: f.object.new_record? ? "" : true,
                   required: true,
                   autocomplete: 'off',
                   value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"

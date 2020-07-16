@@ -40,10 +40,10 @@ class Patient < ApplicationRecord
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
     
-  pg_search_scope :search_dni,
-    against: [ :dni ],
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes. 
+  scope :search_dni, lambda { |query|
+    string = query.to_s
+    where('professionals.dni::text LIKE ?', "%#{string}%")
+  }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

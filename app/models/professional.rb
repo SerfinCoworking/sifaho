@@ -76,6 +76,10 @@ class Professional < ApplicationRecord
     self.fullname
   end
 
+  def full_info
+    self.fullname+" MP "+self.enrollment
+  end
+
   # filters on 'sector_id' foreign key
   scope :with_professional_type_id, lambda { |type_id|
     where(professional_type_id: [*type_id])
