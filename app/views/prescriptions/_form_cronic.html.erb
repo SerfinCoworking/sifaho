@@ -32,12 +32,10 @@
                 label: false,
                 placeholder: 'Matrícula | Apellido | Nombre',
                 required: true,
-                readonly: f.object.cronic_dispensations.count > 0,
                 :input_html => {
-                  readonly: f.object.new_record? ? "" : true,
                   id: "professional",
                   data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                  value: "#{ if f.object.professional.present?; f.object.professional.enrollment; end }",
+                  value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
                   size: 30
                 }
               %>
