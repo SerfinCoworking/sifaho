@@ -157,6 +157,110 @@ $(document).on('turbolinks:load', function() {
     })
   });
 
+  // Función para autocompletar por nombre o apellido de paciente
+  jQuery(function () {
+    return $('#patient-fullname').autocomplete({
+      source: $('#patient-fullname').data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 3,
+      response: function (data) {
+        if (data.length < 1) {
+          $("#patient").tooltip({
+            placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
+          }).tooltip('show');
+        }
+      },
+      select:
+        function (event, ui) {
+          event.preventDefault();
+          $("#patient").tooltip('hide');
+          $("#patient_id").val(ui.item.id);
+          $("#patient-dni").val(ui.item.dni);
+          $("#patient-fullname").val(ui.item.fullname);
+          $.ajax({
+            url: "/prescriptions/get_by_patient_id", // Ruta del controlador
+            type: 'GET',
+            data: {
+              term: ui.item.id
+            },
+            dataType: "json",
+            error: function (XMLHttpRequest, errorTextStatus, error) {
+              alert("Failed: " + errorTextStatus + " ;" + error);
+            },
+            success: function (data) {
+              if (!data.length) {
+                $('#non-pres').toggleClass('invisible', false);
+                $('#pat-pres').toggleClass('visible', true);
+              } else {
+                $("#pat-pres-body").html("");
+                for (var i in data) {
+                  $("#pat-pres-body").append(
+                    "<tr>" +
+                    '<td>' + data[i].order_type + '</td>' +
+                    '<td class="pres-col-pro">' + data[i].professional + '</td>' +
+                    '<td>' + data[i].supply_count + '</td>' +
+                    '<td>' + data[i].status + '</td>' +
+                    '<td>' + data[i].created_at + '</td>' +
+                    "</tr>"
+                  );
+                }
+                $('#non-pres').toggleClass('visible', true);
+                $('#pat-pres').toggleClass('invisible', false);
+              } // End if
+            }// End success
+          });// End ajax
+
+          $.ajax({
+            url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
+            type: 'GET',
+            data: {
+              dni: ui.item.dni,
+            },
+            dataType: "json",
+            error: function (XMLHttpRequest, errorTextStatus, error) {
+              alert("Failed: " + errorTextStatus + " ;" + error);
+            },
+            success: function (data) {
+              if (!data.length) {
+                $('#non-os').toggleClass('invisible', false);
+                $('#pat-os').toggleClass('invisible', true);
+              } else {
+                $("#pat-os-body").html("");
+                for (var i in data) {
+                  var momentDate = moment(data[i].version)
+                  $("#pat-os-body").append(
+                    "<tr>" +
+                    '<td>' + data[i].financiador + '</td>' +
+                    '<td class="pres-col-pro">' + data[i].codigoFinanciador + '</td>' +
+                    '<td>' + momentDate.format("DD/MM/YYYY") + '</td>' +
+                    "</tr>"
+                  );
+                }
+                $('#non-os').toggleClass('invisible', true);
+                $('#pat-os').toggleClass('invisible', false);
+              } // End if
+            }// End success
+          });// End ajax
+          $.ajax({
+            url: "/prescriptions/get_cronic_prescriptions", // Ruta del controlador
+            type: 'GET',
+            data: {
+              term: ui.item.id
+            },
+            error: function (XMLHttpRequest, errorTextStatus, error) {
+              alert("Failed: " + errorTextStatus + " ;" + error);
+            },
+            success: function (data) {
+              if (!data.length) {
+                $('#non-pres').toggleClass('invisible', false);
+                $('#pat-pres').toggleClass('invisible', true);
+              }
+            }// End success
+          });// End ajax
+        }
+    })
+  });
+
   // Ocultar tooltip
   $(document).on('focusout', '#patient', function() {
     $(this).tooltip('hide');
@@ -192,109 +296,4 @@ $(document).on('turbolinks:load', function() {
       request_quantity.val( treat_durat.val() * _this.val());
     });
   });
-});
-
-
-// Función para autocompletar por nombre o apellido de paciente
-jQuery(function () {
-  return $('#patient-fullname').autocomplete({
-    source: $('#patient-fullname').data('autocomplete-source'),
-    autoFocus: true,
-    minLength: 3,
-    response: function (data) {
-      if (data.length < 1) {
-        $("#patient").tooltip({
-          placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
-        }).tooltip('show');
-      }
-    },
-    select:
-      function (event, ui) {
-        event.preventDefault();
-        $("#patient").tooltip('hide');
-        $("#patient_id").val(ui.item.id);
-        $("#patient-dni").val(ui.item.dni);
-        $("#patient-fullname").val(ui.item.fullname);
-        $.ajax({
-          url: "/prescriptions/get_by_patient_id", // Ruta del controlador
-          type: 'GET',
-          data: {
-            term: ui.item.id
-          },
-          dataType: "json",
-          error: function (XMLHttpRequest, errorTextStatus, error) {
-            alert("Failed: " + errorTextStatus + " ;" + error);
-          },
-          success: function (data) {
-            if (!data.length) {
-              $('#non-pres').toggleClass('invisible', false);
-              $('#pat-pres').toggleClass('visible', true);
-            } else {
-              $("#pat-pres-body").html("");
-              for (var i in data) {
-                $("#pat-pres-body").append(
-                  "<tr>" +
-                  '<td>' + data[i].order_type + '</td>' +
-                  '<td class="pres-col-pro">' + data[i].professional + '</td>' +
-                  '<td>' + data[i].supply_count + '</td>' +
-                  '<td>' + data[i].status + '</td>' +
-                  '<td>' + data[i].created_at + '</td>' +
-                  "</tr>"
-                );
-              }
-              $('#non-pres').toggleClass('visible', true);
-              $('#pat-pres').toggleClass('invisible', false);
-            } // End if
-          }// End success
-        });// End ajax
-
-        $.ajax({
-          url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
-          type: 'GET',
-          data: {
-            dni: ui.item.dni,
-          },
-          dataType: "json",
-          error: function (XMLHttpRequest, errorTextStatus, error) {
-            alert("Failed: " + errorTextStatus + " ;" + error);
-          },
-          success: function (data) {
-            if (!data.length) {
-              $('#non-os').toggleClass('invisible', false);
-              $('#pat-os').toggleClass('invisible', true);
-            } else {
-              $("#pat-os-body").html("");
-              for (var i in data) {
-                var momentDate = moment(data[i].version)
-                $("#pat-os-body").append(
-                  "<tr>" +
-                  '<td>' + data[i].financiador + '</td>' +
-                  '<td class="pres-col-pro">' + data[i].codigoFinanciador + '</td>' +
-                  '<td>' + momentDate.format("DD/MM/YYYY") + '</td>' +
-                  "</tr>"
-                );
-              }
-              $('#non-os').toggleClass('invisible', true);
-              $('#pat-os').toggleClass('invisible', false);
-            } // End if
-          }// End success
-        });// End ajax
-        $.ajax({
-          url: "/prescriptions/get_cronic_prescriptions", // Ruta del controlador
-          type: 'GET',
-          data: {
-            term: ui.item.id
-          },
-          error: function (XMLHttpRequest, errorTextStatus, error) {
-            alert("Failed: " + errorTextStatus + " ;" + error);
-          },
-          success: function (data) {
-            if (!data.length) {
-              $('#non-pres').toggleClass('invisible', false);
-              $('#pat-pres').toggleClass('invisible', true);
-            }
-          }// End success
-        });// End ajax
-      }
-  })
 });

@@ -90,7 +90,6 @@
                 input_html: {
                   tabindex: "-1",
                   class: "form-control pull-right",
-                  readOnly: f.object.new_record? ? "" : true,
                   required: true,
                   autocomplete: 'off',
                   value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
@@ -104,7 +103,6 @@
                 input_html: {
                   tabindex: "-1",
                   class: "form-control",
-                  readOnly: f.object.new_record? ? "" : true,
                   required: true,
                   autocomplete: 'off',
                   value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
