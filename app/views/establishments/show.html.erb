@@ -14,8 +14,16 @@
   </div>
 
 
-    <div class="card mb-4">
+    <%# <div class="card mb-4">
       <div class="card-body">
+        
+      </div>
+    </div> %>
+
+
+
+    <div class="card-body">
+      <div class="mb-4">
         <ul class="list-group list-group-flush">
           <li class="list-group-item"><span class="font-weight-bold">Email:</span> <%= @establishment.email%> </li>
           <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone%></li>
@@ -24,12 +32,6 @@
           <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code%> </li>
         </ul>
       </div>
-    </div>
-
-
-
-    <div class="card-body">
-
       <%# sectores de un establecimiento %>
       <div class="row h-row-custom">
         <div class="col-4 mh-col-custom">
