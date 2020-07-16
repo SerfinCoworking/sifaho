@@ -4,8 +4,10 @@
   }
   .notification-dropdown {
     border: none;
-    width: 282px;
-    
+    width: 375px;    
+    @media(min-width: 1200px) and (max-width: 1480px){
+      width: 282px;
+    }
   }
 }
 

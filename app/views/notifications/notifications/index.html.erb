@@ -21,7 +21,7 @@
           <% @notification_groups.each do |group, notifications| %>
 
             <li class="list-group-item group-container">
-              <%= group %>
+              <div class="ml-2 mt-2 mb-2"><%= group %></div>
               <ul class="list-group">
                 <%= render notifications %>
               </ul>
