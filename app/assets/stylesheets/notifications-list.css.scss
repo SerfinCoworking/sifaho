@@ -15,6 +15,7 @@ ul.list-group{
   }
   li{      
     padding: 0;
+    position: relative;
     .notification-link{
       color: #495057;
       &:hover{
@@ -25,6 +26,12 @@ ul.list-group{
         height: 30px;
         border-radius: 50%;
       }
+    }
+    .read-notification{
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform: translateY(-50%);
     }
   }
 }
