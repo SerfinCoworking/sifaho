@@ -42,7 +42,7 @@ class Patient < ApplicationRecord
     
   scope :search_dni, lambda { |query|
     string = query.to_s
-    where('professionals.dni::text LIKE ?', "%#{string}%")
+    where('dni::text LIKE ?', "%#{string}%")
   }
 
   scope :sorted_by, lambda { |sort_option|
