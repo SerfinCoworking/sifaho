@@ -1,39 +1,14 @@
-<% unless notification.target.nil? %>
-  <%if short_message %>
-    <div class="d-flex align-items-center justify-content-between">
-      <%= link_to main_app.internal_order_path(notification.target, notification_id: notification.id), class:"notification-link d-flex align-items-center" do %>
-        <%= image_tag user_avatar(notification.actor, 25), class:"img-circle media-object",
-        :'data-toggle'=>"tooltip",
-        :'data-placement'=>"left",
-        :'title'=>notification.actor.profile.first_name.titleize %>
-        <div class="d-flex flex-column ml-2">
-          <div class="text-nowrap">
-            <%= notification.action_type %> una solicitud
-          </div>
-          <small class="text-nowrap"><%= time_ago_in_words(notification.created_at) %></small>
-        </div>
-      <% end %>
-
-      <%if !notification.read_at.present? %>
-        <%= link_to main_app.notifications_set_as_read_path(notification), 
-          class: "ml-2 read-notification", 
-          method: :post, 
-          remote: true,
-          :'data-toggle'=>"tooltip",
-          :'data-placement'=>"top",
-          :'title'=>"Marcar como leída" do %>
-          <%= fa_icon 'check', class: "text-primary"%>  
-        <% end %>
-      <% end %>
-
-    </div>
-  <% else %>
-    <div class="">
-      <%= notification.actor.profile.first_name.titleize %>
-      <%= notification.action_type %> una <span class="visible-print">solicitud</span>
-      <strong><%= link_to 'solicitud', main_app.internal_order_path(notification.target), class:"hidden-print" %></strong> de 
-      <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
-      para <%= notification.target.applicant_sector.name %>.
-    </div>
-  <% end %>
+<%if short_message %>
+  <div class="text-nowrap">
+    <%= notification.action_type %> una solicitud
+  </div>
+        
+<% else %>
+  <div class="">
+    <%= notification.actor.profile.first_name.titleize %>
+    <%= notification.action_type %> una <span class="visible-print">solicitud</span>
+    de 
+    <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
+    para <%= notification.target.applicant_sector.name %>.
+  </div>
 <% end %>

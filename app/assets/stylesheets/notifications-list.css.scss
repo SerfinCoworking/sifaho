@@ -4,24 +4,36 @@
   }
   .notification-dropdown {
     border: none;
-    width: 282px;
-    ul.list-group{
-      li.unread{
-        background-color: #dae0e5 !important
+    width: 375px;    
+    @media(min-width: 1200px) and (max-width: 1480px){
+      width: 282px;
+    }
+  }
+}
+
+ul.list-group{
+  li.unread{
+    background-color: #dae0e5 !important
+  }
+  li{      
+    padding: 0;
+    position: relative;
+    .notification-link{
+      color: #495057;
+      &:hover{
+        text-decoration: none;
       }
-      li{      
-        .notification-link{
-          color: #495057;
-          &:hover{
-            text-decoration: none;
-          }
-          img.img-circle{
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-          }
-        }
+      img.img-circle{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
       }
     }
-}
+    .read-notification{
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform: translateY(-50%);
+    }
+  }
 }
