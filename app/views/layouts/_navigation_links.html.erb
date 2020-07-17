@@ -5,7 +5,7 @@
           <% count = Notification.unread_count(current_user) %>
           <%= fa_icon "bell" %>
           <% if count > 0 %>
-            <div class="badge badge-danger badge-notify"><%= count %></div>
+            <div class="badge badge-danger badge-notify c-badge"><%= count %></div>
           <% end %>
         </button>
         <div class="dropdown-menu dropdown-menu-right notification-dropdown p-0 m-0">
