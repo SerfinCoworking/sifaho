@@ -1,11 +1,11 @@
 <% if policy(Notification).index? %>
     <li class="nav-item d-flex align-items-center <%= active_class('notifications/notifications') %> mr-2 notification-container">
       <div class="btn-group">
-        <button role="button" class="nav-link btn notification-btn" title="Ver notificaciones" data-placement="bottom" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button role="button" class="nav-link btn d-flex align-items-center notification-btn" title="Ver notificaciones" data-placement="bottom" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <% count = Notification.unread_count(current_user) %>
           <%= fa_icon "bell" %>
           <% if count > 0 %>
-            <div class="badge badge-danger badge-notify"><%= count %></div>
+            <div class="badge badge-danger badge-notify c-badge"><%= count %></div>
           <% end %>
         </button>
         <div class="dropdown-menu dropdown-menu-right notification-dropdown p-0 m-0">

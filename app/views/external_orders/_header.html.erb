@@ -1,27 +1,27 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel">
-    <%= link_to establishments_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to establishments_path, class: "nav-link #{ active_action_and_controller('index', 'establishments') }" do %>
       <%= fa_icon "hospital" %>
       Establecimientos
     <% end %>
   </li>
 
-  <li class="nav-item <%= active_action_and_controller('new', 'establishments') %> non-sel">
-    <%= link_to new_establishment_path, class: 'nav-link text-primary' do %>
+  <li class="nav-item non-sel">
+    <%= link_to new_establishment_path, class: "nav-link #{ active_action_and_controller('new', 'establishments') }" do %>
       <%= fa_icon "plus"%>
       Agregar
     <% end %>
   </li>
 
-  <li class="nav-item <%= active_action('applicant_index') %> non-sel">
-    <%= link_to applicant_index_external_orders_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to applicant_index_external_orders_path, class: "nav-link #{ active_action('applicant_index') }" do %>
       <%= fa_icon "inbox" %>
       Recibos
     <% end %>
   </li>
 
-  <li class="nav-item <%= active_action_and_controller('index', 'external_orders') %> non-sel d-flex align-items-center">
-    <%= link_to external_orders_path, class: 'nav-link pr-1' do %>
+  <li class="nav-item non-sel d-flex align-items-center">
+    <%= link_to external_orders_path, class: "nav-link #{ active_action_and_controller('index', 'external_orders') }" do %>
       <%= fa_icon "paper-plane" %>
       Despachos
     <% end %>
@@ -36,8 +36,8 @@
   </li>
 
   <% if policy(ExternalOrder).new_applicant? %>
-    <li class="nav-item <%= active_action('new_applicant') %> non-sel">
-      <%= link_to new_applicant_external_orders_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_applicant_external_orders_path, class: "nav-link #{ active_action('new_applicant') }" do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
@@ -45,8 +45,8 @@
   <% end %>
 
   <% if policy(ExternalOrder).new_provider? %>
-    <li class="nav-item <%= active_action_and_controller('new', 'external_orders') %> non-sel">
-      <%= link_to new_external_order_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_external_order_path, class: "nav-link #{ active_action_and_controller('new', 'external_orders') }" do %>
         <%= fa_icon "plus" %>
         Despachar
       <% end %>
@@ -54,8 +54,8 @@
   <% end %>
 
   <% if policy(ExternalOrderTemplate).index? %>
-    <li class="nav-item <%= active_class('external_order_templates') %> non-sel" id="pedido">
-      <%= link_to external_order_templates_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel" id="pedido">
+      <%= link_to external_order_templates_path, class: "nav-link #{ active_class('external_order_templates') }" do %>
         <%= fa_icon "skiing" %>
         Plantillas
       <% end %>
@@ -63,8 +63,8 @@
   <% end %>
 
   <% if policy(ExternalOrder).new_report? %>
-    <li class="nav-item <%= active_action('new_report') %> non-sel">
-      <%= link_to new_report_external_orders_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_report_external_orders_path, class: "nav-link #{ active_action('new_report') }" do %>
         <%= fa_icon "chart-line" %>
         Reporte
       <% end %>

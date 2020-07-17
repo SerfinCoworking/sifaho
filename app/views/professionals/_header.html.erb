@@ -1,12 +1,12 @@
 <% content_for :page_header do %>
-    <li class="nav-item <%= active_action('index') %> non-sel">
-        <%= link_to professionals_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel">
+        <%= link_to professionals_path, class: "nav-link #{ active_action('index') }" do %>
           <%= fa_icon "user-md" %>
           Médicos
         <% end %>
     </li>
-    <li class="nav-item <%= active_action('new') %> non-sel">
-      <%= link_to new_professional_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_professional_path, class: "nav-link #{ active_action('new') }" do %>
         <%= fa_icon "plus" %>
         Agregar médico
       <% end %>

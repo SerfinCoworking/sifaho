@@ -1,5 +1,5 @@
 <% unless notification.target.nil? %>
-  <li class="list-group-item <%= notification.read_at.present? ? '' : 'unread'%>" id="notification-<%= notification.id %>">
+  <li class="list-group-item <%= notification.read_at.present? ? '' : 'unread'%> notification-<%= notification.id %>">
     <%= link_to main_app.polymorphic_path(notification.target, 
       notification_id: notification.id), 
       class:'notification-link d-flex align-items-center p-2' do %>    
@@ -19,16 +19,25 @@
 
     <% end %>
 
-    <% if !notification.read_at.present? %>
-      <%= link_to main_app.notifications_set_as_read_path(notification), 
-      class: "read-notification",
-      method: :post,
-      remote: true,
-      :'data-toggle'=>"tooltip",
-      :'data-placement'=>"top",
-      :'title'=>"Marcar como leída" do %>
-        <%= fa_icon 'check', class: "text-primary"%>  
+    <div class="notifications-action">
+      <% if !notification.read_at.present? %>
+        <%= link_to main_app.notifications_set_as_read_path(notification), 
+        class: "read-notification",
+        method: :post,
+        remote: true,
+        :'data-toggle'=>"tooltip",
+        :'data-placement'=>"top",
+        :'title'=>"Marcar como leída" do %>
+          <%= fa_icon 'check', class: "text-primary"%>  
+        <% end %>
       <% end %>
-    <% end %>
+      
+      <% if !short_message %>
+        <%= link_to notification, remote: true, method: :delete,
+        class: 'text-danger ml-2', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "trash" %>
+        <% end %>
+      <% end %>
+    </div>
   </li>
 <% end%>

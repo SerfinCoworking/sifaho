@@ -24,6 +24,7 @@
 @import 'cards';
 @import 'autocomplete';
 @import 'quantity_ord_supply_lot';
+@import 'module-header-navigation';
 @import 'notifications';
 @import 'notifications-list';
 
@@ -184,4 +185,10 @@ td .form-group{
 .news-panel{
   height: calc(30vh);
   overflow-y: auto;
+}
+
+.c-badge{
+  position: relative;
+  top: -8px!important;
+  left: -6px!important;
 }

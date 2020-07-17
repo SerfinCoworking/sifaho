@@ -10,54 +10,54 @@
 
   <% if policy(Sector).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')} text-primary" do %>
+      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')}" do %>
         <%= fa_icon "plus" %>
         Crear sector
       <% end %>
     </li>
   <% end %>
 
-  <li class="nav-item <%= active_action('applicant_index') %> non-sel">
-    <%= link_to applicant_index_internal_orders_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to applicant_index_internal_orders_path, class: "nav-link #{ active_action('applicant_index') }" do %>
       <%= fa_icon "inbox" %>
       Recibos
     <% end %>
   </li>
   <% if policy(InternalOrder).new_provider? %>
-    <li class="nav-item <%= active_action_and_controller('index', 'internal_orders') %> non-sel">
-      <%= link_to internal_orders_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel">
+      <%= link_to internal_orders_path, class: "nav-link #{ active_action_and_controller('index', 'internal_orders') }" do %>
         <%= fa_icon "paper-plane" %>
         Entregas
       <% end %>
     </li>
   <% end %>
   <% if policy(InternalOrder).new_applicant? %>
-    <li class="nav-item <%= active_action('new_applicant') %> non-sel">
-      <%= link_to new_applicant_internal_orders_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_applicant_internal_orders_path, class: "nav-link #{ active_action('new_applicant') }" do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
     </li>
   <% end %>
   <% if policy(InternalOrder).new_provider? %>
-    <li class="nav-item <%= active_action_and_controller('new_provider', 'internal_orders') %> non-sel">
-      <%= link_to new_provider_internal_orders_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_provider_internal_orders_path, class: "nav-link #{ active_action_and_controller('new_provider', 'internal_orders') }" do %>
         <%= fa_icon "plus" %>
         Entregar
       <% end %>
     </li>
   <% end %>
   <% if policy(InternalOrderTemplate).index? %>
-    <li class="nav-item <%= active_class('internal_order_templates') %> non-sel" id="pedido">
-      <%= link_to internal_order_templates_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel" id="pedido">
+      <%= link_to internal_order_templates_path, class: "nav-link #{ active_class('internal_order_templates') }" do %>
         <%= fa_icon "skiing" %>
         Plantillas
       <% end %>
     </li>
   <% end %>
   <% if policy(InternalOrder).new_report? %>
-    <li class="nav-item <%= active_action('new_report') %> non-sel">
-      <%= link_to new_report_internal_orders_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_report_internal_orders_path, class: "nav-link #{ active_action('new_report') }" do %>
         <%= fa_icon "chart-line" %>
         Reporte
       <% end %>
