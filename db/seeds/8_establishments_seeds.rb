@@ -12,6 +12,6 @@ csv.each do |row|
   t.phone = row['Phone']
   t.email = row['Email']
   t.sectors_count = row['Sectors count']
-  t.save
+  t.save!
 end
 puts "End establishments import"

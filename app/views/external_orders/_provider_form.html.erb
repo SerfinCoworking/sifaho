@@ -131,7 +131,7 @@
         </tr>
       </thead>
       <tbody class="quantity_ord_supply_lots" id="cocoon-container">
-          <% if params[:action] == "edit" %>
+          <% if ["edit", "update"].include?(params[:action]) %>
             <%= f.simple_fields_for :quantity_ord_supply_lots, @external_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>
@@ -140,7 +140,7 @@
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>
           <% else %>
-            <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @external_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+            <%= f.simple_fields_for :quantity_ord_supply_lots, @external_order.quantity_ord_supply_lots.build do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>
           <% end %>

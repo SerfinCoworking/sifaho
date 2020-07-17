@@ -7,7 +7,7 @@ class Establishment < ApplicationRecord
   has_many :prescriptions
 
   # Validations
-  validates_presence_of :name, :code
+  validates_presence_of :name
   
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,

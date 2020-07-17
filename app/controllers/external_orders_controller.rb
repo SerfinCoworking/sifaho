@@ -294,6 +294,9 @@ class ExternalOrdersController < ApplicationController
             @order_type = 'recibo'
             @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
             format.html { render :edit_receipt }
+          elsif @external_order.solicitud_abastecimiento? && @external_order.provider_sector == current_user.sector
+            @order_type = 'despacho'
+            format.html { render :edit }
           elsif @external_order.solicitud_abastecimiento?
             @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
             @order_type = 'solicitud_abastecimiento'
