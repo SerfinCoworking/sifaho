@@ -1,20 +1,20 @@
 <% content_for :page_header do %>
   <% if policy(SectorSupplyLot).group_by_supply? %>
-    <li class="nav-item <%= active_action('group_by_supply') %> non-sel">
-      <%= link_to group_by_supply_sector_supply_lots_path, class: 'nav-link' do %>
+    <li class="nav-item non-sel">
+      <%= link_to group_by_supply_sector_supply_lots_path, class: "nav-link #{ active_action('group_by_supply') }" do %>
         <%= fa_icon "cubes" %>
         Stock
       <% end %>
     </li>
   <% end %>
-  <li class="nav-item <%= active_action('index') %> non-sel">
-    <%= link_to sector_supply_lots_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to sector_supply_lots_path, class: "nav-link #{ active_action_and_controller('index', 'sector_supply_lots') }" do %>
       <%= fa_icon "barcode" %>
       Lotes
     <% end %>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle non-sel text-primary" data-toggle="dropdown" href="#">
+    <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#">
       <%= fa_icon "angle-double-up" %>
       Cargar stock
       <span class="caret"></span>
@@ -41,7 +41,7 @@
     </div>
   </li>
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle non-sel text-primary" data-toggle="dropdown" href="#">
+    <a class="nav-link dropdown-toggle non-sel" data-toggle="dropdown" href="#">
       <%= fa_icon "chart-line" %>
       Reporte
       <span class="caret"></span>
@@ -54,8 +54,8 @@
     </div>
   </li>
   <% if policy(SectorSupplyLot).trash_index? %>
-    <li class="nav-item col-md-offset-4 <%= active_action('trash_index') %> non-sel">
-      <%= link_to trash_index_sector_supply_lots_path, class: 'nav-link' do %>
+    <li class="nav-item col-md-offset-4 non-sel">
+      <%= link_to trash_index_sector_supply_lots_path, class: "nav-link #{ active_action('trash_index') }" do %>
         <%= fa_icon "trash" %>
         Papelera
       <% end %>
