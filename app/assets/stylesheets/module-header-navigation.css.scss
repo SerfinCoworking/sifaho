@@ -1,0 +1,10 @@
+#navbarSupportedContent > ul.module-links-navbar > li > a.nav-link{
+  color: black;
+  margin: 0 2.5px;
+  border-radius: 3px;
+
+  &:hover, &.active{
+    background-color: #d3d3d3;
+    background-color: #d3d3d3;
+  }
+}
