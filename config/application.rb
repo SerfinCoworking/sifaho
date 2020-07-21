@@ -30,5 +30,9 @@ module Sifaho
     config.middleware.use Rack::Attack
 
     config.generators.system_tests = nil
+
+
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}')]
+    config.i18n.default_locale = :es
   end
 end
