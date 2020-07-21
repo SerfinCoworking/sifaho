@@ -44,18 +44,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :external_order_templates do
-    collection do
-      get "new_provider"
-    end
-    member do
-      get "delete"
-      get "use_applicant"
-      get "use_provider"
-      get "edit_provider"
-    end
-  end
-
   get 'report/newExternalOrder'
 
   post 'auth/login', to: 'authentication#authenticate'
@@ -215,6 +203,20 @@ Rails.application.routes.draw do
       get "new_applicant"
       get "applicant_index"
       get "statistics"
+    end
+  end
+
+  resources :external_order_comments, only: [ :show, :create]
+
+  resources :external_order_templates do
+    collection do
+      get "new_provider"
+    end
+    member do
+      get "delete"
+      get "use_applicant"
+      get "use_provider"
+      get "edit_provider"
     end
   end
 

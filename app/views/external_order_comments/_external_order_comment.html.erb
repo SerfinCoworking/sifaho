@@ -1,0 +1,9 @@
+<div class="media mt-3" id="external_order_comment_<%= external_order_comment.id %>">
+  <%= image_tag user_avatar(external_order_comment.user, 54), class:"img-rounded img-profile-chat mr-3" %>
+  <div class="media-body">
+    <strong class="mt-0"><%= external_order_comment.user.full_name %></strong>
+    <small><%= time_ago_in_words(external_order_comment.created_at) %></small>
+    <br>
+    <%= external_order_comment.text %>
+  </div>
+</div>
