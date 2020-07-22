@@ -13,19 +13,19 @@
     <% end %>
   </div>
 
-  <div class="col-8 mx-auto">
-    <%= simple_form_for new_comment, :url => external_order_comments_path, :method => :post, remote: true do |f| %>
-      <div class="d-flex justify-content-between align-items-center p-2">  
-        <div class="mr-3">
+  <div class="col-8 mx-auto justify-content-between align-items-center">
+    <%= simple_form_for new_comment, :method => :post, remote: true do |f| %>
+      <div class=" d-flex justify-content-between align-items-center">
+        <div class="mr-2">
           <span><%= image_tag user_avatar(current_user, 54), class:"img-rounded img-profile-chat" %></span>
         </div>
-          <%= f.hidden_field :external_order_id, value: "#{ order.id }" %>
-        <div class="mr-2">
+          <%= f.hidden_field :order_id, value: "#{ order.id }" %>
+        <div class="mr-2 pt-3">
           <%= f.input :text, label: false, placeholder: "Escribe un comentario...", as: :text,
           :input_html => { :cols => 100  , :rows => 2 } %>
         </div>
         <div>
-          <%= button_tag(type: 'submit', class: "btn btn-primary", 'data-disable-with' => "Enviando <i class='fa fa-spinner fa-spin'></i>".html_safe) do %>
+          <%= button_tag(type: 'submit', class: "btn btn-primary", 'data-disable-with' => "Enviando".html_safe) do %>
             Enviar
           <% end %>
         </div>

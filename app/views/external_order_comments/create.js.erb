@@ -1,7 +1,8 @@
 <%= render 'shared/flash_message' %>
 
 $("#comments-card").append('<%= j render (@external_order_comment) %>');
+
 $("#external_order_comment_text").val('').focus();
 
-// Efecto de ingreso
+$("#comments-count").html('<%= @count %>');
 

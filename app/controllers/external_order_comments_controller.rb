@@ -12,6 +12,7 @@ class ExternalOrderCommentsController < ApplicationController
 
     respond_to do |format|
       if @external_order_comment.save!
+        @count = @external_order_comment.order.comments.count
         flash.now[:success] = "El comentario se ha enviado correctamente."
         format.js
       else
@@ -29,7 +30,7 @@ class ExternalOrderCommentsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def external_order_comment_params
-    params.require(:external_order_comment).permit(:external_order_id, :text)
+    params.require(:external_order_comment).permit(:order_id, :text)
   end
 
 end

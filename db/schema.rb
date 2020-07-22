@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_27_192416) do
+ActiveRecord::Schema.define(version: 2020_07_22_113257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -155,12 +155,12 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
   end
 
   create_table "external_order_comments", force: :cascade do |t|
-    t.bigint "external_order_id"
+    t.bigint "order_id"
     t.bigint "user_id"
     t.text "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["external_order_id"], name: "index_external_order_comments_on_external_order_id"
+    t.index ["order_id"], name: "index_external_order_comments_on_order_id"
     t.index ["user_id"], name: "index_external_order_comments_on_user_id"
   end
 
@@ -234,6 +234,16 @@ ActiveRecord::Schema.define(version: 2020_06_27_192416) do
     t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
+  end
+
+  create_table "internal_order_comments", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "user_id"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_internal_order_comments_on_order_id"
+    t.index ["user_id"], name: "index_internal_order_comments_on_user_id"
   end
 
   create_table "internal_order_movements", force: :cascade do |t|

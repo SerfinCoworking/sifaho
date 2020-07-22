@@ -68,6 +68,12 @@
               <span class="badge badge-secondary"><%= @internal_order.movements.count %></span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
+              <%= fa_icon "exchange-alt" %> Comentarios
+              <span class="badge badge-secondary" id="comments-count"><%= @internal_order.comments.count %></span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -138,6 +144,10 @@
         <!-- Tabla de movimientos -->
         <%= render '/shared/movements_table', order: @internal_order %>
       </div> <!-- End last movements tab pane -->
+      <div id='comments' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/comments', order: @internal_order, new_comment: InternalOrderComment.new %>
+      </div> <!-- End comments tab pane -->
     </div> <!-- End Tab content-->
   </div>
   <div class="card-footer text-right">

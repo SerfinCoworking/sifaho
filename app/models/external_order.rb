@@ -23,7 +23,7 @@ class ExternalOrder < ApplicationRecord
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "ExternalOrderMovement"
-  has_many :comments, class_name: "ExternalOrderComment"
+  has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
   has_one :provider_establishment, :through => :provider_sector, :source => :establishment
   has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
   belongs_to :rejected_by, class_name: "User", optional: true
