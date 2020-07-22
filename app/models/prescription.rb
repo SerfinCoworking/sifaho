@@ -23,7 +23,8 @@ class Prescription < ApplicationRecord
   has_many :cronic_dispensations, :through => :quantity_ord_supply_lots
 
   # Validaciones
-  validates_presence_of :patient, :professional, :prescribed_date, :remit_code, :quantity_ord_supply_lots
+  validates_presence_of :patient, :professional, :prescribed_date, :remit_code
+  validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :quantity_ord_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
   # Atributos anidados
