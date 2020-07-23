@@ -199,7 +199,7 @@
         <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
         <% if !f.object.quantity_ord_supply_lots.any? && f.object.errors[:quantity_ord_supply_lots].any? %>
           <div class="invalid-feedback d-block">
-          <%= f.object.errors[:quantity_ord_supply_lots].first %>
+            <%= f.object.errors[:quantity_ord_supply_lots].first %>
           </div>
         <% end %>
       </div>

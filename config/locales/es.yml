@@ -42,6 +42,9 @@ es:
         supply: "Insumo"
         requested_quantity: "Solicitado"
         delivered_quantity: "Dispensado"
+      sector:
+        name: "Nombre"
+        establishment_id: "Establecimiento"
   date:
     abbr_day_names:
     - dom
