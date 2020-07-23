@@ -42,9 +42,13 @@ es:
         supply: "Insumo"
         requested_quantity: "Solicitado"
         delivered_quantity: "Dispensado"
+        supply_id: "Insumo"
       sector:
         name: "Nombre"
         establishment_id: "Establecimiento"
+      internal_order:
+        applicant_sector: "Sector solicitante"
+        provider_sector: "Sector proveedor"
   date:
     abbr_day_names:
     - dom
