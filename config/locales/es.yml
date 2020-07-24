@@ -49,6 +49,9 @@ es:
       internal_order:
         applicant_sector: "Sector solicitante"
         provider_sector: "Sector proveedor"
+      internal_order_template:
+        name: "Nombre"
+        destination_sector_id: "Solicitante"
   date:
     abbr_day_names:
     - dom
