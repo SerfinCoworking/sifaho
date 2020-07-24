@@ -51,7 +51,7 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap4'
 # Use momentjs and bootstrap3-datettimepicker for datetimepicker
 gem 'momentjs-rails', '>= 2.9.0'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'
+gem 'bootstrap4-datetime-picker-rails'
 # Use chosen-rails for autocomplete on select
 gem 'chosen-rails'
 # Use simple_form for do forms more easily
