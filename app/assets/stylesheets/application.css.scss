@@ -17,7 +17,6 @@
 @import "bootstrap";
 @import "chosen";
 @import 'font_awesome5_webfont';
-@import 'bootstrap-datetimepicker';
 @import 'bootstrap3-switch';
 @import 'sidebar';
 @import 'panels';
@@ -27,6 +26,7 @@
 @import 'module-header-navigation';
 @import 'notifications';
 @import 'notifications-list';
+@import "tempusdominus-bootstrap-4";
 
 html {
   @media(min-width: 1200px) and (max-width: 1480px){
