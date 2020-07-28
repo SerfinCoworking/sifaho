@@ -53,7 +53,11 @@ es:
         name: "Nombre"
         destination_sector_id: "Solicitante"
       establishment:
-        name: "Nombre"
+        name: "Nombre"      
+      professional:
+        first_name: "Nombre"
+        last_name: "Apellido"
+        enrollment: "Matrícula"
   date:
     abbr_day_names:
     - dom

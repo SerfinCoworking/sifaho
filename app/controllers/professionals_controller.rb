@@ -1,5 +1,5 @@
 class ProfessionalsController < ApplicationController
-  before_action :set_professional, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_professional, only: [:show, :edit, :create, :update, :destroy, :delete]
 
   # GET /professionals
   # GET /professionals.json
@@ -51,16 +51,17 @@ class ProfessionalsController < ApplicationController
   # POST /professionals
   # POST /professionals.json
   def create
-    @professional = Professional.new(professional_params)
     authorize @professional
-
+    @professional = Professional.new(professional_params)
     respond_to do |format|
-      if @professional.save!
+      if @professional.save
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
         if remote?; format.js; else; format.html { redirect_to @professional }; end
       else
-        flash.now[:error] = "El profesional no se ha podido crear."
-        format.js
+        @professional_types = ProfessionalType.all
+        flash[:error] = "El profesional no se ha podido crear."
+        format.html { render :new }
+        format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
   end
@@ -74,6 +75,7 @@ class ProfessionalsController < ApplicationController
         flash[:success] = @professional.fullname+" se ha modificado correctamente."
         format.html { redirect_to @professional }
       else
+        @professional_types = ProfessionalType.all
         flash[:error] = @professional.fullname+" no se ha podido modificar."
         format.html { redirect_to @professional }
       end
@@ -113,7 +115,7 @@ class ProfessionalsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_professional
-      @professional = Professional.find(params[:id])
+      @professional = params[:id].present? ? Professional.find(params[:id]) : Professional.new
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
