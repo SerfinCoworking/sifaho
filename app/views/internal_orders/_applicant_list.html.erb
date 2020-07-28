@@ -9,12 +9,13 @@
             <th><%= filterrific_sorting_link(@filterrific, :origen) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
             <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-              <%= filterrific_sorting_link(@filterrific, :ins) %></th>
+              <%= fa_icon "cubes" %>
             </th>
             <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
-              <%= filterrific_sorting_link(@filterrific, :mov) %>
+              <%= fa_icon "exchange-alt"%>
+            </th>
+            <th>
+              <%= fa_icon "comment" %>
             </th>
             <th>
               <%= filterrific_sorting_link(@filterrific, :solicitado) %>

@@ -25,7 +25,7 @@
             <%= f.label :password, 'Contraseña' %>
             <%= f.password_field :password, class: 'form-control' %>
           </div>
-            <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <span class='glyphicon glyphicon-refresh glyphicon-spin'></span>".html_safe) do %>
+            <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <i class='fa fa-spinner fa-spin'></i>".html_safe) do %>
               Iniciar sesión
             <% end %>
         <% end %>
@@ -45,6 +45,8 @@
         <h5 class="card-title mb-0"><%= fa_icon "bullhorn" %> Novedades</h5>
       </div>
       <div class="card-body news-panel">
+        <p class="border-bottom">Actualización 22/07/2020</p>
+        <p>Se agregan comentarios en los detalles de las ordenes sector/establecimiento</p>
         <p class="border-bottom">Migración 13/07/2020</p>
         <p>Migramos la aplicación al servidor de Andes. Nuevo dominio <%= link_to "sifaho.andes.gob.ar", "https://sifaho.andes.gob.ar/"%></p>
         <p class="border-bottom">Actualización 09/07/2020</p>

@@ -32,30 +32,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :internal_order_templates do
-    collection do
-      get "new_provider"
-    end
-    member do
-      get "delete"
-      get "use_applicant"
-      get "use_provider"
-      get "edit_provider"
-    end
-  end
-
-  resources :external_order_templates do
-    collection do
-      get "new_provider"
-    end
-    member do
-      get "delete"
-      get "use_applicant"
-      get "use_provider"
-      get "edit_provider"
-    end
-  end
-
   get 'report/newExternalOrder'
 
   post 'auth/login', to: 'authentication#authenticate'
@@ -96,7 +72,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :profiles, only: [ :edit, :update, :show ]
-  resources :external_order_comments, only: [ :create ]
+
   # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
   # patch '/profile', to: 'profiles#update'
   # Rescue errors
@@ -196,6 +172,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :internal_order_comments, only: [ :show, :create]
+
+  resources :internal_order_templates do
+    collection do
+      get "new_provider"
+    end
+    member do
+      get "delete"
+      get "use_applicant"
+      get "use_provider"
+      get "edit_provider"
+    end
+  end
+
   resources :external_orders do
     member do
       get "delete"
@@ -215,6 +205,20 @@ Rails.application.routes.draw do
       get "new_applicant"
       get "applicant_index"
       get "statistics"
+    end
+  end
+
+  resources :external_order_comments, only: [ :show, :create]
+
+  resources :external_order_templates do
+    collection do
+      get "new_provider"
+    end
+    member do
+      get "delete"
+      get "use_applicant"
+      get "use_provider"
+      get "edit_provider"
     end
   end
 

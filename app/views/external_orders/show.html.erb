@@ -77,15 +77,13 @@
               <span class="badge badge-secondary"><%= @external_order.movements.count %></span>
             </a>
           </li>
-          <!--
-          <li>
-            <a data-toggle='tab' href='#comments'>
-              <span class="glyphicon glyphicon-comment"></span>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments'>
+              <%= fa_icon "comment" %>
               Comentarios
-              <span class="badge"><%= @external_order.comments.count %></span>
+              <span class="badge badge-secondary" id="comments-count"><%= @external_order.comments.count %></span>
             </a>
           </li>
-          -->
         </ul>
       </div>
     </div>
@@ -259,8 +257,8 @@
         </div> <!-- End last movements tab pane -->
         <div id='comments' class='tab-pane fade'>
           <!-- Tabla de movimientos -->
-          <%= render '/shared/comments', order: @external_order, comment: ExternalOrderComment.new %>
-        </div> <!-- End last movements tab pane -->
+          <%= render '/shared/comments', order: @external_order, new_comment: ExternalOrderComment.new %>
+        </div> <!-- End comments tab pane -->
       </div> <!-- End Tab content-->
     </div> <!-- End col-md-12 -->
   </div>

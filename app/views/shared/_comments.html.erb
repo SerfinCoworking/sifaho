@@ -1,16 +1,35 @@
-<div class="row hidden-print">
-  <div class="col-md-12">
-  
-  </div>
-</div>
 <div class="row">
-  <%= simple_form_for comment, :url => external_order_comments_path, :method => :post, html: {class: "form-inline", role: 'check-modified'} do |f| %>
-    <div class="col-md-10">
-      <span><%= image_tag user_avatar(current_user, 54), class:"img-rounded img-profile-chat" %></span>
-      <%= f.input :external_order_id,  as: :hidden, value: "#{order.id}" %>
-      <%= f.input :text, label: false, placeholder: "Escribe un comentario...", as: :text,
-      :input_html => { :cols => 100  , :rows => 2 } %>
-      <%= f.submit "Enviar", class: "btn btn-primary" %> 
+  <div class="col-8 mx-auto" id="comments-card">
+    <% order.comments.each do |comment| %>
+    <div class="media mt-3">
+      <%= image_tag user_avatar(comment.user, 54), class:"img-rounded img-profile-chat mr-3" %>
+      <div class="media-body">
+        <strong class="mt-0"><%= comment.user.full_name %></strong> 
+        <small><%= time_ago_in_words(comment.created_at) %></small>
+        <br>
+        <%= comment.text %>
+      </div>
     </div>
-  <% end %>
+    <% end %>
+  </div>
+
+  <div class="col-8 mx-auto justify-content-between align-items-center">
+    <%= simple_form_for new_comment, :method => :post, remote: true do |f| %>
+      <div class=" d-flex justify-content-between align-items-center">
+        <div class="mr-2">
+          <span><%= image_tag user_avatar(current_user, 54), class:"img-rounded img-profile-chat" %></span>
+        </div>
+          <%= f.hidden_field :order_id, value: "#{ order.id }" %>
+        <div class="mr-2 pt-3">
+          <%= f.input :text, label: false, placeholder: "Escribe un comentario...", as: :text,
+          :input_html => { :cols => 100  , :rows => 2 } %>
+        </div>
+        <div>
+          <%= button_tag(type: 'submit', class: "btn btn-primary", 'data-disable-with' => "Enviando".html_safe) do %>
+            Enviar
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

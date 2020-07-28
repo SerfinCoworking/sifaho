@@ -15,6 +15,7 @@ class InternalOrder < ApplicationRecord
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :movements, class_name: "InternalOrderMovement"
+  has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true

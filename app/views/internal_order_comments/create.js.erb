@@ -1,0 +1,7 @@
+<%= render 'shared/flash_message' %>
+
+$("#comments-card").append('<%= j render (@internal_order_comment) %>');
+
+$("#internal_order_comment_text").val('').focus();
+
+$("#comments-count").html('<%= @count %>');
