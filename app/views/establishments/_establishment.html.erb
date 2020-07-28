@@ -4,7 +4,7 @@
     <td><%= establishment.email %></td>
     <td><%= establishment.phone %></td>
     <td><%= establishment.domicile %></td>
-    <td class="text-center actions-col">
+    <td class="text-left actions-col">
       <% if policy(establishment).show? %>
         <%= link_to establishment_path(establishment), class: 'btn btn-secondary btn-sm',
           title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

@@ -39,7 +39,7 @@ class SectorsController < ApplicationController
     @sector = Sector.new(sector_params)
 
     respond_to do |format|
-      if @sector.save!
+      if @sector.save
         flash.now[:success] = @sector.name + " se ha creado correctamente."
         format.html { redirect_to @sector }
         format.js

@@ -3,7 +3,7 @@
     <td><%= sector.name %></td>
     <td><%= sector.establishment.name %></td>
 
-    <td class="text-center actions-col">
+    <td class="text-left actions-col">
       <% if policy(sector).show? %>
         <%= link_to sector_path(sector), class: 'btn btn-secondary btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

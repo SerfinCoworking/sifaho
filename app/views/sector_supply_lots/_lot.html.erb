@@ -12,7 +12,7 @@
       <%= lot.quantity %>/<%= lot.initial_quantity %>
     </div>
   </td>
-  <td class="text-center actions-col">
+  <td class="text-left actions-col">
     <% if policy(lot).show? %>
       <%= link_to sector_supply_lot_path(lot), remote:true, class: 'btn btn-default btn-xs',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

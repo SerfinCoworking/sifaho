@@ -1,7 +1,7 @@
 <tr class="nested-fields">
   <!-- Código de producto -->
   <td>
-    <%= f.input :supply_id, as: :string,
+    <%= f.input :supply, as: :string,
       placeholder: 'Código',
       label: false,
       required: true,
@@ -9,14 +9,15 @@
         class: "supply-code select-change input-sm",
         data: { autocomplete_source: search_by_id_supplies_path },
         size: 4,
-        autocomplete: 'off'
+        autocomplete: 'off',
+        value: "#{if f.object.supply.present?; f.object.supply.id; end }"
       } 
     %>
   </td>
 
   <!-- Nombre de producto  -->
   <td>
-    <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+    <%= f.input :supply, as: :string, id: "nom_ins", class: "form-control",
       label: false,
       placeholder: 'Nombre',
       required: true,

@@ -10,7 +10,7 @@
       <td><%= stock.product_unity_name %></td>
       <td><%= stock.product_area_name %></td>
       <td><%= stock.updated_at.strftime("%d/%m/%y") %></td>
-      <td class="text-center actions-col">
+      <td class="text-left actions-col">
         <% if policy(stock).show? %>
           <%= link_to stock_path(stock), class: 'btn btn-default btn-xs',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

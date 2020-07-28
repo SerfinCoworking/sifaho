@@ -17,18 +17,19 @@
 //= require jquery-ui
 //= require chosen-jquery
 //= require bootstrap-select
+//= require font_awesome5 
+//= require popper
+//= require moment
+//= require moment/es.js
+//= require moment-timezone-with-data
+//= require tempusdominus-bootstrap-4.js
 //= require filterrific/filterrific-jquery
 //= require highcharts
 //= require chartkick
 //= require Chart.bundle
 //= require turbolinks
 //= require cocoon
-//= require moment
-//= require moment/es
-//= require font_awesome5 
 //= require bootstrap-switch
-//= require bootstrap-datetimepicker
-//= require popper
 //= require bootstrap
 //= require_tree .
 
@@ -147,5 +148,15 @@ $(document).on('turbolinks:load', function() {
     var nested_form = $(this).parents(".nested-fields");
     nested_form.find(".select-change").trigger('change');
     nested_form.find('.search-lots').hide();
+  });
+});
+$(document).on('turbolinks:load', function() {
+
+  $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
+    format: 'DD/MM/YYYY',
+    locale: 'es',
+    icons: {
+      time: "far fa-clock",
+    }
   });
 });

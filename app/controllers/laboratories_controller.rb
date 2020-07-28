@@ -46,7 +46,7 @@ class LaboratoriesController < ApplicationController
     authorize @laboratory
 
     respond_to do |format|
-      if @laboratory.save!
+      if @laboratory.save
         flash.now[:success] = @laboratory.name+" se ha creado correctamente."
         format.html { redirect_to @laboratory }
         format.js

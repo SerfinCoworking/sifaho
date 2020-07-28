@@ -7,7 +7,7 @@
         <td><%= @lots.sum(:quantity) %></td>
         <td><%= @lots.count %></td>
         <td><%= supply.supply_area.name %></td>
-        <td class="text-center actions-col">
+        <td class="text-left actions-col">
           <% if policy(supply).lots_for_supply? %>
             <%= link_to lots_for_supply_sector_supply_lot_path(supply), class: 'btn btn-secondary btn-sm',
               title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
@@ -21,7 +21,7 @@
         <td><%= supply.supply_area.name %></td>
         <td><%= supply.unity %></td>
         <td><%= supply.needs_expiration? ? "Si" : "No" %></td>
-        <td class="text-center actions-col">
+        <td class="text-left actions-col">
         <% if policy(supply).show? %>
           <%= link_to supply_path(supply), class: 'btn btn-secondary btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

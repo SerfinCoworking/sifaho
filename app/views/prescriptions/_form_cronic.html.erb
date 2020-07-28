@@ -28,7 +28,7 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <%= f.input :professional_id, as: :string,
+              <%= f.input :professional, as: :string,
                 label: false,
                 placeholder: 'Matrícula | Apellido | Nombre',
                 required: true,
@@ -52,7 +52,7 @@
               <% end %>
               <div class="row">
                 <div class="col-4">
-                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                  <%= f.input :patient, as: :string, class: 'form-control',
                     label: false,
                     placeholder: 'DNI',
                     required: true,
@@ -65,7 +65,7 @@
                   %>
                 </div>
                 <div class="col-8">
-                  <%= f.input :patient_id, as: :string, class: 'form-control',
+                  <%= f.input :patient, as: :string, class: 'form-control',
                     label: false,
                     placeholder: 'Apellido y nombre',
                     required: true,
@@ -199,6 +199,13 @@
           data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
           <%= fa_icon "plus" %>
           Agregar producto
+        <% end %>
+
+        <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
+        <% if !f.object.quantity_ord_supply_lots.any? && f.object.errors[:quantity_ord_supply_lots].any? %>
+          <div class="invalid-feedback d-block">
+          <%= f.object.errors[:quantity_ord_supply_lots].first %>
+          </div>
         <% end %>
       </div>
     <% end %>

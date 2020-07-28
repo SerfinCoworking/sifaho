@@ -54,7 +54,7 @@ class InternalOrderTemplatesController < ApplicationController
     @internal_order_template.created_by = current_user
 
     respond_to do |format|
-      if @internal_order_template.save!
+      if @internal_order_template.save
         format.html { redirect_to @internal_order_template, notice: 'La plantilla se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @internal_order_template }
       else
