@@ -62,6 +62,10 @@ es:
         dni: "Dni"
         first_name: "Nombre"
         last_name: "Apellido"
+      laboratory:
+        name: "Razón social"
+        cuil: "Cuil"
+        gln: "GLN"
 
   date:
     abbr_day_names:
