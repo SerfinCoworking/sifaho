@@ -58,6 +58,11 @@ es:
         first_name: "Nombre"
         last_name: "Apellido"
         enrollment: "Matrícula"
+      patient:
+        dni: "Dni"
+        first_name: "Nombre"
+        last_name: "Apellido"
+
   date:
     abbr_day_names:
     - dom
