@@ -1,17 +1,24 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="panel panel-default">
-    <div class="panel-heading hidden-print">
-      <h3 class="panel-title">
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo reporte
-        <%= link_to internal_orders_path, class: 'btn pull-right close-btn',
-          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-        <% end %>
-      </h3>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo reporte
+      </h5>
     </div>
-    <div class="panel-body" id="panel-body-new">
+    <div>
+      <%= link_to internal_orders_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+    <div class="card-body">
+
       <div class="row">
         <div class='col-md-2 col-xs-2'>
           <strong>Desde:</strong>
@@ -30,33 +37,34 @@
           <%= DateTime.now.strftime('%d/%m/%Y') %>
         </div>
       </div>
-      <hr>
-      <div class="col-md-12">
-        <% if @filtered_orders.present? %>
-        <table class="table table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>Sector</th>
-              <th>Cantidad pedidos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @filtered_orders.each do |order| %>
+      <%# <hr> %>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <% if @filtered_orders.present? %>
+          <table class="table table-hover table-condensed">
+            <thead>
               <tr>
-                <td><%= order.first %></td>
-                <td><%= order.second %></td>
+                <th>Sector</th>
+                <th>Cantidad pedidos</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <% else %>
-          No hay elementos para este período de tiempo.
-        <% end %>
-        <% @filtered_orders %>
-      </div> <!-- End col-md-12 -->
+            </thead>
+            <tbody>
+              <% @filtered_orders.each do |order| %>
+                <tr>
+                  <td><%= order.first %></td>
+                  <td><%= order.second %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <% else %>
+            No hay elementos para este período de tiempo.
+          <% end %>
+          <% @filtered_orders %>
+        </div> <!-- End col-md-12 -->
+      </div>
     </div>
-    <div class="panel-footer text-right hidden-print">
+    <div class="card-footer text-right">
       <%= link_to new_report_internal_orders_path, class: "btn" do %>Volver<% end %>
     </div>
   </div>
-</div>
