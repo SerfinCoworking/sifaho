@@ -152,7 +152,7 @@ $(document).on('turbolinks:load', function() {
 });
 $(document).on('turbolinks:load', function() {
 
-  $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date").datetimepicker({
+  $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
     format: 'DD/MM/YYYY',
     locale: 'es',
     icons: {
