@@ -12,20 +12,34 @@
   </div>
   <div class="card-body">
 
-    <%= simple_form_for @professional, remote: true, html: {role: 'check-modified'} do |f| %>
-      <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
+    <%= simple_form_for @professional, html: {class: "", role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
+      <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
       <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
       <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
       <%= f.input :dni, placeholder: '12345678', required: false, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
-      <%= f.input :professional_type_id,
+      <%= f.input :professional_type_id, label: 'Especialidad',
+        collection: @professional_types.map {|professional_type|  [professional_type.name, professional_type.id ]},
+        :input_html => {
+          required: true,
+          include_blank: false,
+          class: 'selectpicker custom-select-pick',
+          "data-width"=>"100%",
+          "data-size"=>"10",
+          "title"=>"Seleccionar especialidad",
+          # "data-live-search"=>true,
+          # "data-none-results-text" => "No se encontró el establecimiento"
+        }
+      %>
+      <%# <%= f.input :professional_type_id,
         label: 'Especialidad',
         label_method: :name,
         value_method: :id,
         collection: @professional_types,
         include_blank: false,
         input_html: { class: 'selectpicker custom-select-pick'},
-        prompt: 'Seleccione una especialidad'
+        prompt: 'Seleccione una especialidad',
+        value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
       %>
 
       <%= f.label :is_active, 'Estado' %>

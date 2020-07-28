@@ -22,7 +22,7 @@ class Sector < ApplicationRecord
   has_many :provider_prescription_quantity_supplies, through: :provider_prescriptions, source: "quantity_ord_supply_lots"
 
   # Validaciones
-  validates_presence_of :name
+  validates_presence_of :name, :establishment_id
 
   delegate :name, :short_name, to: :establishment, prefix: :establishment
 

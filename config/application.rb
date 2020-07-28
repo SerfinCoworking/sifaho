@@ -30,5 +30,12 @@ module Sifaho
     config.middleware.use Rack::Attack
 
     config.generators.system_tests = nil
+
+
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}')]
+    config.i18n.enforce_available_locales = true
+    # Permitted locales available for the application
+    I18n.available_locales = [:en, :es]
+    config.i18n.default_locale = :es
   end
 end

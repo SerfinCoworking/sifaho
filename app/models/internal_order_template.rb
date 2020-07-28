@@ -8,7 +8,7 @@ class InternalOrderTemplate < ApplicationRecord
   has_many :internal_order_template_supplies, -> { order(rank: :asc) }, dependent: :destroy, inverse_of: :internal_order_template
   has_many :supplies, through: :internal_order_template_supplies
 
-  validates_presence_of :name
+  validates_presence_of :name, :destination_sector_id
   validates_associated :internal_order_template_supplies
 
   accepts_nested_attributes_for :internal_order_template_supplies,

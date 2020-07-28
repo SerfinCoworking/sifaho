@@ -3,7 +3,7 @@
   <td><%= lot.product_code %></td>
   <td><%= lot.product_name %></td>
   <td><%= lot.laboratory_name %></td>
-  <td class="text-center actions-col">
+  <td class="text-left actions-col">
     <% if policy(lot).show? %>
       <%= link_to lot_path(lot), class: 'btn btn-default btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>

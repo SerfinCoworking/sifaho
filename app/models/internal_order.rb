@@ -25,7 +25,8 @@ class InternalOrder < ApplicationRecord
   belongs_to :rejected_by, class_name: "User", optional: true
 
   # Validaciones
-  validates_presence_of :provider_sector, :applicant_sector, :requested_date, :quantity_ord_supply_lots, :remit_code 
+  validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
+  validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :quantity_ord_supply_lots, :sector_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 

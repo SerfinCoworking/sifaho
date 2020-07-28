@@ -34,6 +34,7 @@
                     |est| [est.second, est.first]
                   },
                 :input_html => {
+
                   required: true,
                   include_blank: false,
                   class: 'selectpicker-md custom-select-pick establishment',
@@ -49,28 +50,26 @@
         <br>
         <div class="row">
           <div class='col-md-3'>
-            <%= f.input :since_date, as: :fake, label: 'Desde', as: :string,
-              :placeholder => "Una fecha",
+            <%= f.input :since_date, as: :tempus_dominus,
+              label: "Desde",
               required: true,
               input_html: {
-                required: true,
-                class: 'datetimepicker',
-                autocomplete: 'off',
-                :style => 'width: 110px',
+                placeholder: "Elegir una fecha desde",
+                class: 'input-sm',
                 value: "#{f.object.requested_date unless f.object.new_record?}"
               },
-              html5: false
+              html5: false 
             %>
+       
           </div>
           <div class='col-md-3'>
-            <%= f.input :to_date, as: :fake, label: 'Hasta', as: :string,
-              :placeholder => "Una fecha",
+            <%= f.input :to_date, as: :tempus_dominus,
+              label: 'Hasta',
               required: true,
               input_html: {
-                required: true,
-                class: 'datetimepicker',
+                placeholder: "Elegir una fecha hasta",
+                class: 'input-sm',
                 autocomplete: 'off',
-                :style => 'width: 110px',
                 value: "#{f.object.requested_date unless f.object.new_record?}"
               },
               html5: false 
