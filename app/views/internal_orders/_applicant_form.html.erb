@@ -76,7 +76,11 @@
             </tr>
           </thead>
           <tbody class="quantity_ord_supply_lots" id="cocoon-container">
-            <% if params[:action] == "edit" || params[:action] == "edit_applicant" %>
+          <%= @internal_order.quantity_ord_supply_lots asd%>
+            <% if ["edit", "edit_applicant", "use_applicant"].include?(params[:action]) %>
+              <%= "entró" %>
+              <%= params[:action]%>
+              <%= %>
               <%= f.simple_fields_for :quantity_ord_supply_lots, @internal_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
                 <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
               <% end %>

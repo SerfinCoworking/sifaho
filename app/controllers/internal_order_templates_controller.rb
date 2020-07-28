@@ -88,6 +88,7 @@ class InternalOrderTemplatesController < ApplicationController
     @internal_order_template.internal_order_template_supplies.joins(:supply).order("name").each do |iots|
       @internal_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
     end
+    @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
     @order_type = 'solicitud'
     @provider_sectors = Sector
       .select(:id, :name)
@@ -107,6 +108,7 @@ class InternalOrderTemplatesController < ApplicationController
     @internal_order_template.internal_order_template_supplies.joins(:supply).order("name").each do |iots|
       @internal_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
     end
+    @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
     @order_type = 'provision'
     @applicant_sectors = Sector
       .select(:id, :name)
