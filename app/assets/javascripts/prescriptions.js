@@ -40,11 +40,20 @@ $(document).on('turbolinks:load', function() {
       source: $('#professional').data('autocomplete-source'),
       minLength: 2,
       autoFocus:true,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el médico");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
       select:
       function (event, ui) {
         $("#professional_id").val(ui.item.id);
       },
       response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         if (!ui.content.length) {
           var noResult = { value:"",label:"No se encontró al doctor" };
           ui.content.push(noResult);
@@ -59,8 +68,17 @@ $(document).on('turbolinks:load', function() {
       source: $('#patient-dni').data('autocomplete-source'),
       autoFocus: true,
       minLength: 7,
-      response: function (data) {
-        if (data.length < 1) {
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      response: function (event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+        if (!ui.content.length) {
           $("#patient").tooltip({
             placement: 'bottom',trigger: 'manual', title: 'No se encontró el paciente'}).tooltip('show');
         }
@@ -163,8 +181,17 @@ $(document).on('turbolinks:load', function() {
       source: $('#patient-fullname').data('autocomplete-source'),
       autoFocus: true,
       minLength: 3,
-      response: function (data) {
-        if (data.length < 1) {
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      response: function (event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+        if (!ui.content.length) {
           $("#patient").tooltip({
             placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
           }).tooltip('show');

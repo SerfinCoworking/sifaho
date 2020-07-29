@@ -192,3 +192,17 @@ td .form-group{
   top: -8px!important;
   left: -6px!important;
 }
+
+.custom-input-group{
+  position: relative;
+  .with-loading{
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    &.visible{
+      display: block;
+    }
+  }
+}
