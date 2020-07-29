@@ -9,20 +9,7 @@ class PrescriptionsController < ApplicationController
     @filterrific = initialize_filterrific(
       Prescription.with_establishment(current_user.establishment),
       params[:filterrific],
-      select_options: {
-        sorted_by: Prescription.options_for_sorted_by
-      },
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :search_by_professional,
-        :search_by_patient,
-        :search_by_supply,
-        :sorted_by,
-        :with_order_type,
-        :date_prescribed_since,
-        :date_dispensed_since
-      ],
+      persistence_id: false
     ) or return
     @prescriptions = @filterrific.find.page(params[:page]).per_page(15)
   end

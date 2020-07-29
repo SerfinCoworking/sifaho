@@ -19,18 +19,6 @@ class InternalOrdersController < ApplicationController
         with_status: InternalOrder.options_for_status
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :search_code,
-        :search_applicant,
-        :with_order_type,
-        :with_status,
-        :requested_date_since,
-        :requested_date_to,
-        :date_received_since,
-        :date_received_to,
-        :sorted_by
-      ],
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -46,19 +34,6 @@ class InternalOrdersController < ApplicationController
         with_status: InternalOrder.options_for_status
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :search_code,
-        :search_applicant,
-        :search_provider,
-        :with_order_type,
-        :with_status,
-        :requested_date_since,
-        :requested_date_to,
-        :date_received_since,
-        :date_received_to,
-        :sorted_by
-      ],
     ) or return
     @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
 

@@ -56,7 +56,7 @@
           :class=>"has-tip apply-request-quant request-quantity focus-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
-          min: '1', step:'any', :style => 'width: 75px'
+          min: '1', step:'any', :style => 'width: 100px'
         }  
       %>
       <%= f.input :delivered_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
@@ -70,7 +70,7 @@
           size: 10,
           placeholder: "Unidad",
           value: "#{
-            if f.object.supply.present? 
+            if f.object.supply.present?
               f.object.supply.unity
             end
           }"
@@ -94,7 +94,7 @@
           :class=>"has-tip request-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
-          min: '0', step:'any', :style => 'width: 70px'  
+          min: '0', step:'any', :style => 'width: 100px'  
         } 
       %>
     </td>
@@ -107,7 +107,7 @@
           :class=>"has-tip deliver-quantity input-sm",
           :title=>"Cantidad entregada",
           "data-placement"=>"right",
-          min: '0', step:'any', :style => 'width: 70px'
+          min: '0', step:'any', :style => 'width: 100px'
         } 
       %>
     </td>

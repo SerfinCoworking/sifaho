@@ -5,6 +5,7 @@
       <%= f.input :applicant_sector, label: 'Sector solicitante',
         collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
         required: true,
+        selected: "#{ f.object.applicant_sector.present? ? f.object.applicant_sector.id : "" }",
         :input_html => {
           id: 'applicant-sector',
           class: 'selectpicker-md custom-select-pick show-tick',
@@ -13,7 +14,6 @@
           "data-size"=>"10",
           "data-live-search"=>true,
           disabled: false,
-          value: "#{ f.object.applicant_sector.id unless f.object.new_record? }"
         } 
       %>
       <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
