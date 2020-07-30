@@ -12,7 +12,7 @@ class QuantityOrdSupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply
-  validates :requested_quantity, :numericality => { :only_integer => true, :greater_than => 0 }
+  validates :requested_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :delivered_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }  
   validates_presence_of :lot_code, if: :quantifiable_is_recibo?
   validates_associated :supply

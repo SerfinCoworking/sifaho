@@ -125,6 +125,9 @@ document.addEventListener("turbolinks:load", function() {
             $(".ui-menu-item-wrapper").html("No se encontró");
           }
         },
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-id").val(ui.item.value);
@@ -143,8 +146,11 @@ document.addEventListener("turbolinks:load", function() {
           if (event.keyCode == 9) {
             nested_form.find(".new-supply-name").focus();
           }
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      })
+      });
     });
   });
 
@@ -161,6 +167,9 @@ document.addEventListener("turbolinks:load", function() {
             $(".ui-menu-item-wrapper").html("No se encontró el producto");
           }
         },
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
@@ -168,8 +177,11 @@ document.addEventListener("turbolinks:load", function() {
           nested_form.find(".new-supply-code").val(ui.item.id);
           nested_form.find(".unity").val(ui.item.unity);
           nested_form.find('.new-deliver-quantity').focus();
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      })
+      });
     });
   });
 
@@ -190,8 +202,10 @@ document.addEventListener("turbolinks:load", function() {
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
           return false;
         },
-        select:
-        function (event, ui){
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
+        select: function (event, ui){
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-lot-code").val(ui.item.value);
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
@@ -203,8 +217,11 @@ document.addEventListener("turbolinks:load", function() {
             nested_form.find(".new-expiry-date-hidden").val(date);
           }
           nested_form.find(".new-laboratory").focus();
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      })
+      });
     });
   });
 
@@ -225,12 +242,18 @@ document.addEventListener("turbolinks:load", function() {
             $(".ui-menu-item-wrapper").html("No se encontró el laboratorio");
           }
         },
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
         select:
         function (event, ui) {
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-laboratory-id").val(ui.item.id);
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      })
+      });
     });
   });
 
@@ -239,7 +262,8 @@ document.addEventListener("turbolinks:load", function() {
     $('.bootstrap-table').css( "overflow", "inherit" ); 
     $('.fixed-table-body').css( "overflow", "inherit" );  
   }); 
+
   $('.table-responsive').on('hide.bs.select', function () { 
     $('.table-responsive').css( "overflow", "auto" ); 
-  })
+  });
 });

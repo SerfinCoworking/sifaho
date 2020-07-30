@@ -34,23 +34,26 @@ $(document).on('turbolinks:load', function() {
 
   // Función para autocompletar nombre y apellido del doctor
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#professional').autocomplete({
       source: $('#professional').data('autocomplete-source'),
       minLength: 2,
       autoFocus:true,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró al médico");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
       select:
       function (event, ui) {
         $("#professional_id").val(ui.item.id);
       },
       response: function(event, ui) {
-        if (!ui.content.length) {
-          var noResult = { value:"",label:"No se encontró al doctor" };
-          ui.content.push(noResult);
-        }
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
-    })
+    });
   });
 
   // Función para autocompletar DNI de paciente
@@ -59,11 +62,16 @@ $(document).on('turbolinks:load', function() {
       source: $('#patient-dni').data('autocomplete-source'),
       autoFocus: true,
       minLength: 7,
-      response: function (data) {
-        if (data.length < 1) {
-          $("#patient").tooltip({
-            placement: 'bottom',trigger: 'manual', title: 'No se encontró el paciente'}).tooltip('show');
+      messages: {
+        noResults: function() {
+          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
         }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      response: function (event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       },
       select:
       function (event, ui) {
@@ -80,7 +88,7 @@ $(document).on('turbolinks:load', function() {
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
-            alert("Failed: "+ errorTextStatus+" ;"+error);
+            console.log("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
             if (!data.length) {
@@ -113,7 +121,7 @@ $(document).on('turbolinks:load', function() {
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
-            alert("Failed: "+ errorTextStatus+" ;"+error);
+            console.log("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
             if (!data.length) {
@@ -163,8 +171,17 @@ $(document).on('turbolinks:load', function() {
       source: $('#patient-fullname').data('autocomplete-source'),
       autoFocus: true,
       minLength: 3,
-      response: function (data) {
-        if (data.length < 1) {
+      messages: {
+        noResults: function() {
+          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      response: function (event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+        if (!ui.content.length) {
           $("#patient").tooltip({
             placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
           }).tooltip('show');
@@ -185,7 +202,7 @@ $(document).on('turbolinks:load', function() {
             },
             dataType: "json",
             error: function (XMLHttpRequest, errorTextStatus, error) {
-              alert("Failed: " + errorTextStatus + " ;" + error);
+              console.log("Failed: "+ errorTextStatus+" ;"+error);
             },
             success: function (data) {
               if (!data.length) {
@@ -218,7 +235,7 @@ $(document).on('turbolinks:load', function() {
             },
             dataType: "json",
             error: function (XMLHttpRequest, errorTextStatus, error) {
-              alert("Failed: " + errorTextStatus + " ;" + error);
+              console.log("Failed: "+ errorTextStatus+" ;"+error);
             },
             success: function (data) {
               if (!data.length) {

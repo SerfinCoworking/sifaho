@@ -1,33 +1,43 @@
 <tr class="nested-fields">
   <!-- Código de producto -->
   <td>
-    <%= f.input :supply, as: :string,
-      placeholder: 'Código',
-      label: false,
-      required: true,
-      :input_html => {
-        class: "supply-code select-change input-sm",
-        data: { autocomplete_source: search_by_id_supplies_path },
-        size: 4,
-        autocomplete: 'off',
-        value: "#{if f.object.supply.present?; f.object.supply.id; end }"
-      } 
-    %>
+    <div class="custom-input-group">
+      <%= f.input :supply, as: :string,
+        placeholder: 'Código',
+        label: false,
+        required: true,
+        :input_html => {
+          class: "supply-code select-change input-sm",
+          data: { autocomplete_source: search_by_id_supplies_path },
+          size: 4,
+          autocomplete: 'off',
+          value: "#{if f.object.supply.present?; f.object.supply.id; end }"
+        } 
+      %>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
   </td>
 
   <!-- Nombre de producto  -->
   <td>
-    <%= f.input :supply, as: :string, id: "nom_ins", class: "form-control",
-      label: false,
-      placeholder: 'Nombre',
-      required: true,
-      :input_html => {
-        class: "supply-name select-change input-sm",
-        data: { autocomplete_source: search_by_name_supplies_path },
-        size: 35,
-        value: "#{if f.object.supply.present?; f.object.supply_name; end }"
-      } 
-    %>
+    <div class="custom-input-group">
+      <%= f.input :supply, as: :string, id: "nom_ins", class: "form-control",
+        label: false,
+        placeholder: 'Nombre',
+        required: true,
+        :input_html => {
+          class: "supply-name select-change input-sm",
+          data: { autocomplete_source: search_by_name_supplies_path },
+          size: 35,
+          value: "#{if f.object.supply.present?; f.object.supply_name; end }"
+        } 
+      %>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
     <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
   </td>
 

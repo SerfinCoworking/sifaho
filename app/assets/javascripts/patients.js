@@ -11,6 +11,7 @@ $(document).on('turbolinks:load', function() {
      });
   });
 });
+
 $(document).on('turbolinks:load', function() { 
   const $pickerInput = $('.date_time_picker input.date_time_picker');
   const initialValue = $pickerInput.val();
