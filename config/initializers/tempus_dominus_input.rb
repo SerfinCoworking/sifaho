@@ -1,6 +1,11 @@
 class TempusDominusInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
-    template.content_tag(:div, class: 'input-group date', data: { target_input: 'nearest' }, id: "#{object_name}_#{attribute_name}") do
+    # FIX Cocoon:
+    # utiliza el nombre del input como id del elemento wrapper
+    # el problema es que el elemento "div" no soporta los siguientes caracteres "[" "]"
+    # por lo tanto los reemplzamos con "_"
+    target = "#{object_name}_#{attribute_name}".gsub("[", "_").gsub("]", "_")
+    template.content_tag(:div, class: 'input-group date', data: { target_input: 'nearest' }, id: target) do
       template.concat @builder.text_field(attribute_name, input_html_options)
       template.concat div_button
     end
@@ -11,7 +16,12 @@ class TempusDominusInput < SimpleForm::Inputs::Base
   end
 
   def div_button
-    template.content_tag(:div, class: 'input-group-append', data: {target: "##{object_name}_#{attribute_name}", toggle: 'datetimepicker'} ) do
+    # FIX Cocoon:
+    # utiliza el nombre del input como id del elemento wrapper
+    # el problema es que el elemento "div" no soporta los siguientes caracteres "[" "]"
+    # por lo tanto los reemplzamos con "_"
+    target = "##{object_name}_#{attribute_name}".gsub("[", "_").gsub("]", "_")
+    template.content_tag(:div, class: 'input-group-append', data: {target: target, toggle: 'datetimepicker'} ) do
       template.concat span_button
     end
   end

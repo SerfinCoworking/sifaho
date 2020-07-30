@@ -17,7 +17,7 @@
 //= require jquery-ui
 //= require chosen-jquery
 //= require bootstrap-select
-//= require font_awesome5 
+//= require font_awesome5
 //= require popper
 //= require moment
 //= require moment/es.js
@@ -62,7 +62,7 @@ $(document).on('turbolinks:load', function() {
         window.document.location = $(this).data("href");
     });
   });
-  
+
   $('#filterrific_filter').on(
     "change",
     ":input",
@@ -108,7 +108,7 @@ $(document).on('turbolinks:load', function() {
     href = $submit.attr('href');
     $submit.attr('href', href.replace('pony', $(this).data('id')));
   });
-  
+
   $('.return-confirm').click(function(e) {
     e.preventDefault();
     $('#return-confirm').data('id', $(this).data('id')).modal('show');
@@ -126,24 +126,17 @@ $(document).on('turbolinks:load', function() {
     width: '200px'
   });
 
-  $('.new-expiry-date')
-  .datetimepicker({ 
+  // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
+  // recordar que hace que llevar la inicializacion en el after insert de cocoon
+  $('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
+  .datetimepicker({
     format: 'MM/YY',
     viewMode: 'months',
     locale: 'es',
-    useCurrent: false
-  })
-  .on('dp.change',function(e)
-  {                               
-    var nested_form = $(this).parents(".nested-fields");
-    if ( !$(this).val()){
-      nested_form.find(".new-expiry-date-hidden").val('');
-    }else{
-      var end_of_month = new Date(e.date.endOf('month'));
-      $(this).data("DateTimePicker").date(end_of_month);
-      nested_form.find(".new-expiry-date-hidden").val(end_of_month);
-    }
+    useCurrent: false,
   });
+
+
   $('.search-lots').click(function (event) {
     var nested_form = $(this).parents(".nested-fields");
     nested_form.find(".select-change").trigger('change');
