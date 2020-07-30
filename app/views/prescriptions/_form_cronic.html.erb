@@ -28,17 +28,22 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <%= f.input :professional, as: :string,
-                label: false,
-                placeholder: 'Matrícula | Apellido | Nombre',
-                required: true,
-                :input_html => {
-                  id: "professional",
-                  data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                  value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
-                  size: 30
-                }
-              %>
+              <div class="custom-input-group">
+                <%= f.input :professional, as: :string,
+                  label: false,
+                  placeholder: 'Matrícula | Apellido | Nombre',
+                  required: true,
+                  :input_html => {
+                    id: "professional",
+                    data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                    value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
+                    size: 30
+                  }
+                %>
+                <div class="with-loading">
+                  <%= fa_icon 'spinner', class: "fa-spin"%>
+                </div>  
+              </div>
               <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
 
               <%= f.label :patient_id do %>
@@ -52,30 +57,40 @@
               <% end %>
               <div class="row">
                 <div class="col-4">
-                  <%= f.input :patient, as: :string, class: 'form-control',
-                    label: false,
-                    placeholder: 'DNI',
-                    required: true,
-                    readonly: f.object.new_record? ? "" : true,
-                    :input_html => {
-                      id: 'patient-dni',
-                      data: { autocomplete_source: get_by_dni_patients_path },
-                      value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-                    }
-                  %>
+                  <div class="custom-input-group">
+                    <%= f.input :patient, as: :string, class: 'form-control',
+                      label: false,
+                      placeholder: 'DNI',
+                      required: true,
+                      readonly: f.object.new_record? ? "" : true,
+                      :input_html => {
+                        id: 'patient-dni',
+                        data: { autocomplete_source: get_by_dni_patients_path },
+                        value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                      }
+                    %>
+                    <div class="with-loading">
+                      <%= fa_icon 'spinner', class: "fa-spin"%>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-8">
-                  <%= f.input :patient, as: :string, class: 'form-control',
-                    label: false,
-                    placeholder: 'Apellido y nombre',
-                    required: true,
-                    readonly: f.object.new_record? ? "" : true,
-                    :input_html => {
-                      id: 'patient-fullname',
-                      data: { autocomplete_source: get_by_fullname_patients_path },
-                      value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
-                    }
-                  %>
+                  <div class="custom-input-group">
+                    <%= f.input :patient, as: :string, class: 'form-control',
+                      label: false,
+                      placeholder: 'Apellido y nombre',
+                      required: true,
+                      readonly: f.object.new_record? ? "" : true,
+                      :input_html => {
+                        id: 'patient-fullname',
+                        data: { autocomplete_source: get_by_fullname_patients_path },
+                        value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
+                      }
+                    %>
+                    <div class="with-loading">
+                      <%= fa_icon 'spinner', class: "fa-spin"%>
+                    </div>
+                  </div>
                   <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
                 </div>
               </div><!-- End row -->

@@ -42,7 +42,7 @@ $(document).on('turbolinks:load', function() {
       autoFocus:true,
       messages: {
         noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró el médico");
+          $(".ui-menu-item-wrapper").html("No se encontró al profesional");
         }
       },
       search: function( event, ui ) {
@@ -55,7 +55,7 @@ $(document).on('turbolinks:load', function() {
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         if (!ui.content.length) {
-          var noResult = { value:"",label:"No se encontró al doctor" };
+          var noResult = { value:"",label:"No se encontró al profesional" };
           ui.content.push(noResult);
         }
       }
