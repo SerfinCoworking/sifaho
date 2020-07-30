@@ -9,34 +9,39 @@ $(document).on("focus",".supply-code", function() {
       minLength: 1,
       messages: {
         noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró");
+          $(".ui-menu-item-wrapper").html("No se encontró ese producto");
         }
       },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
       focus: function( event, ui ) {
-      var nested_form = _this.parents(".nested-fields");
-      nested_form.find(".supply-id").val(ui.item.value);
-      nested_form.find(".supply-name").val(ui.item.name);
-      nested_form.find(".unity").val(ui.item.unity);
-      nested_form.find('.sector-supply-lot-id').val('');
-      reset_select_lot_btn(nested_form.find(".select-lot-btn"));
-      nested_form.find(".request-quantity").prop('disabled', false);
-      nested_form.find(".select-change").trigger('change');
-      return false;
-    },
-      select:
-      function (event, ui) {
-      var nested_form = _this.parents(".nested-fields");
-      nested_form.find(".supply-id").val(ui.item.value);
-      nested_form.find(".supply-name").val(ui.item.name);
-      nested_form.find(".unity").val(ui.item.unity);
-      nested_form.find('.sector-supply-lot-id').val('');
-      reset_select_lot_btn(nested_form.find(".select-lot-btn"));
-      nested_form.find(".request-quantity").prop('disabled', false);
-      nested_form.find(".select-change").trigger('change');
-      nested_form.find('.focus-quantity').focus();
-      if (event.keyCode == 9) {
-        nested_form.find(".supply-name").focus();
-      }
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-id").val(ui.item.value);
+        nested_form.find(".supply-name").val(ui.item.name);
+        nested_form.find(".unity").val(ui.item.unity);
+        nested_form.find('.sector-supply-lot-id').val('');
+        reset_select_lot_btn(nested_form.find(".select-lot-btn"));
+        nested_form.find(".request-quantity").prop('disabled', false);
+        nested_form.find(".select-change").trigger('change');
+        return false;
+      },
+      select: function (event, ui) {
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".supply-id").val(ui.item.value);
+        nested_form.find(".supply-name").val(ui.item.name);
+        nested_form.find(".unity").val(ui.item.unity);
+        nested_form.find('.sector-supply-lot-id').val('');
+        reset_select_lot_btn(nested_form.find(".select-lot-btn"));
+        nested_form.find(".request-quantity").prop('disabled', false);
+        nested_form.find(".select-change").trigger('change');
+        nested_form.find('.focus-quantity').focus();
+        if (event.keyCode == 9) {
+          nested_form.find(".supply-name").focus();
+        }
+      },
+      response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     })
   });
@@ -68,6 +73,12 @@ $(document).on("focus",".supply-name", function() {
         nested_form.find(".request-quantity").prop('disabled', false);
         nested_form.find(".select-change").trigger('change');
         nested_form.find('.focus-quantity').focus();
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     })
   });
