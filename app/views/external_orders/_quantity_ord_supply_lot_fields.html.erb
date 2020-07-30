@@ -3,31 +3,41 @@
 
     <!-- Código del producto -->
     <td>
-      <%= f.input :supply_id, as: :string,
-        placeholder: 'Código',
-        label: false,
-        :input_html => {
-          class: "new-supply-code select-change input-sm",
-          data: { autocomplete_source: search_by_id_supplies_path },
-          size: 5,
-          autocomplete: 'off'
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string,
+          placeholder: 'Código',
+          label: false,
+          :input_html => {
+            class: "new-supply-code select-change input-sm",
+            data: { autocomplete_source: search_by_id_supplies_path },
+            size: 5,
+            autocomplete: 'off'
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
     </td>
 
     <!-- Nombre del producto -->
     <td>
-      <%= f.input :supply_id, as: :string, id: "nom_ins",
-        label: false,
-        placeholder: 'Nombre',
-        :input_html => {
-          class: "new-supply-name select-change input-sm",
-          data: { autocomplete_source: search_by_name_supplies_path },
-          size: 45,
-          value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
-          autocomplete: false
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string, id: "nom_ins",
+          label: false,
+          placeholder: 'Nombre',
+          :input_html => {
+            class: "new-supply-name select-change input-sm",
+            data: { autocomplete_source: search_by_name_supplies_path },
+            size: 45,
+            value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
+            autocomplete: false
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
       <%= f.input :supply_id, :as => :hidden, :input_html =>  { class: "new-supply-id" } %>
     </td>
 
@@ -57,36 +67,46 @@
 
     <!-- Lote -->
     <td>
-      <%= f.input :lot_code, as: :string,
-        placeholder: 'Código',
-        label: false,
-        required: false,
-        :input_html => {
-          "data-tooltip" => true,
-          :title => "",
-          class: "new-supply-lot-code has-tip input-sm",
-          data: { autocomplete_source: search_by_lot_code_supply_lots_path },
-          size: 11,
-          autocomplete: 'off',
-          value: "#{if f.object.lot_code.present?; f.object.lot_code; end }"
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :lot_code, as: :string,
+          placeholder: 'Código',
+          label: false,
+          required: false,
+          :input_html => {
+            "data-tooltip" => true,
+            :title => "",
+            class: "new-supply-lot-code has-tip input-sm",
+            data: { autocomplete_source: search_by_lot_code_supply_lots_path },
+            size: 11,
+            autocomplete: 'off',
+            value: "#{if f.object.lot_code.present?; f.object.lot_code; end }"
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
     </td>
 
     <!-- Laboratorio -->
     <td>
-      <%= f.input :laboratory_id, as: :string,
-        placeholder: 'Razón social',
-        label: false,
-        required: false,
-        :input_html => {
-          class: "new-laboratory input-sm",
-          data: { autocomplete_source: search_by_name_laboratories_path },
-          size: 35,
-          value: "#{ if f.object.laboratory_id.present?; Laboratory.find_by_id(f.object.laboratory_id).name; end }",
-          autocomplete: 'off'
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :laboratory_id, as: :string,
+          placeholder: 'Razón social',
+          label: false,
+          required: false,
+          :input_html => {
+            class: "new-laboratory input-sm",
+            data: { autocomplete_source: search_by_name_laboratories_path },
+            size: 35,
+            value: "#{ if f.object.laboratory_id.present?; Laboratory.find_by_id(f.object.laboratory_id).name; end }",
+            autocomplete: 'off'
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
       <%= f.input :laboratory_id, :as => :hidden, :input_html =>  { class: "new-laboratory-id" },
         value: "#{ if f.object.laboratory_id.present?; f.object.laboratory_id; end }" %>
     </td>
@@ -117,32 +137,42 @@
   <% elsif @order_type == 'solicitud_abastecimiento' %> <!-- End Form recibo -->
     <!-- Código del producto -->
     <td>
-      <%= f.input :supply_id, as: :string,
-        placeholder: 'Código',
-        label: false,
-        required: false,
-        :input_html => {
-          class: "supply-code select-change input-sm",
-          data: { autocomplete_source: search_by_id_supplies_path },
-          size: 4,
-          autocomplete: 'off'
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string,
+          placeholder: 'Código',
+          label: false,
+          required: false,
+          :input_html => {
+            class: "supply-code select-change input-sm",
+            data: { autocomplete_source: search_by_id_supplies_path },
+            size: 4,
+            autocomplete: 'off'
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
     </td>
 
     <!-- Nombre del producto -->
     <td>
-      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
-        label: false,
-        placeholder: 'Nombre',
-        required: false,
-        :input_html => {
-          class: "supply-name select-change input-sm",
-          data: { autocomplete_source: search_by_name_supplies_path },
-          size: 36,
-          value: "#{if f.object.supply.present?; f.object.supply_name; end }"
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+          label: false,
+          placeholder: 'Nombre',
+          required: false,
+          :input_html => {
+            class: "supply-name select-change input-sm",
+            data: { autocomplete_source: search_by_name_supplies_path },
+            size: 36,
+            value: "#{if f.object.supply.present?; f.object.supply_name; end }"
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
       <%= f.input :supply_id, :as => :hidden, :input_html => { class: 'supply-id'} %>
     </td>
 
@@ -206,31 +236,41 @@
 
     <!-- Código del producto -->
     <td>
-      <%= f.input :supply_id, as: :string,
-        placeholder: 'Código',
-        label: false,
-        :input_html => {
-          class: "supply-code select-change input-sm",
-          data: { autocomplete_source: search_by_id_supplies_path },
-          size: 4,
-          autocomplete: 'off'
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string,
+          placeholder: 'Código',
+          label: false,
+          :input_html => {
+            class: "supply-code select-change input-sm",
+            data: { autocomplete_source: search_by_id_supplies_path },
+            size: 4,
+            autocomplete: 'off'
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
     </td>
 
     <!-- Nombre del producto-->
     <td>
-      <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
-        label: false,
-        placeholder: 'Nombre',
-        :input_html => {
-          class: "supply-name select-change input-sm",
-          data: { autocomplete_source: search_by_name_supplies_path },
-          size: 35,
-          value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
-          autocomplete: 'off'
-        }
-      %>
+      <div class="custom-input-group">
+        <%= f.input :supply_id, as: :string, id: "nom_ins", class: "form-control",
+          label: false,
+          placeholder: 'Nombre',
+          :input_html => {
+            class: "supply-name select-change input-sm",
+            data: { autocomplete_source: search_by_name_supplies_path },
+            size: 35,
+            value: "#{ if f.object.supply.present?; f.object.supply_name; end }",
+            autocomplete: 'off'
+          }
+        %>
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
       <%= f.input :supply_id, :as => :hidden, :input_html =>
         { class: "supply-id" } %>
     </td>

@@ -43,7 +43,7 @@ $(document).on("focus",".supply-code", function() {
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
-    })
+    });
   });
 });
 
@@ -52,8 +52,6 @@ $(document).on("focus",".supply-name", function() {
   var _this = $(this);
 
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return _this.autocomplete({
       source: _this.data('autocomplete-source'),
       autoFocus: true,
@@ -80,7 +78,7 @@ $(document).on("focus",".supply-name", function() {
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
-    })
+    });
   });
 });
 
@@ -99,7 +97,7 @@ $(document).on('turbolinks:load', function() {
       task_to_be_added.fadeIn('fast');
     })
     .on("cocoon:before-remove", function() {
-    })
+    });
 });
 
 function reset_select_lot_btn(btn) {

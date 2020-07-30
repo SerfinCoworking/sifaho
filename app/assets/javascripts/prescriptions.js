@@ -34,15 +34,13 @@ $(document).on('turbolinks:load', function() {
 
   // Función para autocompletar nombre y apellido del doctor
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#professional').autocomplete({
       source: $('#professional').data('autocomplete-source'),
       minLength: 2,
       autoFocus:true,
       messages: {
         noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró al profesional");
+          $(".ui-menu-item-wrapper").html("No se encontró al médico");
         }
       },
       search: function( event, ui ) {
@@ -54,12 +52,8 @@ $(document).on('turbolinks:load', function() {
       },
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-        if (!ui.content.length) {
-          var noResult = { value:"",label:"No se encontró al profesional" };
-          ui.content.push(noResult);
-        }
       }
-    })
+    });
   });
 
   // Función para autocompletar DNI de paciente
@@ -69,7 +63,7 @@ $(document).on('turbolinks:load', function() {
       autoFocus: true,
       minLength: 7,
       messages: {
-        noResults: function(count) {
+        noResults: function() {
           $(".ui-menu-item-wrapper").html("No se encontró el paciente");
         }
       },
@@ -78,10 +72,6 @@ $(document).on('turbolinks:load', function() {
       },
       response: function (event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-        if (!ui.content.length) {
-          $("#patient").tooltip({
-            placement: 'bottom',trigger: 'manual', title: 'No se encontró el paciente'}).tooltip('show');
-        }
       },
       select:
       function (event, ui) {
@@ -98,7 +88,7 @@ $(document).on('turbolinks:load', function() {
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
-            alert("Failed: "+ errorTextStatus+" ;"+error);
+            console.log("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
             if (!data.length) {
@@ -131,7 +121,7 @@ $(document).on('turbolinks:load', function() {
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
-            alert("Failed: "+ errorTextStatus+" ;"+error);
+            console.log("Failed: "+ errorTextStatus+" ;"+error);
           },
           success: function(data){
             if (!data.length) {
@@ -182,7 +172,7 @@ $(document).on('turbolinks:load', function() {
       autoFocus: true,
       minLength: 3,
       messages: {
-        noResults: function(count) {
+        noResults: function() {
           $(".ui-menu-item-wrapper").html("No se encontró el paciente");
         }
       },
@@ -212,7 +202,7 @@ $(document).on('turbolinks:load', function() {
             },
             dataType: "json",
             error: function (XMLHttpRequest, errorTextStatus, error) {
-              alert("Failed: " + errorTextStatus + " ;" + error);
+              console.log("Failed: "+ errorTextStatus+" ;"+error);
             },
             success: function (data) {
               if (!data.length) {
@@ -245,7 +235,7 @@ $(document).on('turbolinks:load', function() {
             },
             dataType: "json",
             error: function (XMLHttpRequest, errorTextStatus, error) {
-              alert("Failed: " + errorTextStatus + " ;" + error);
+              console.log("Failed: "+ errorTextStatus+" ;"+error);
             },
             success: function (data) {
               if (!data.length) {
