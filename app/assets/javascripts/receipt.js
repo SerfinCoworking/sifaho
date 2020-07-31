@@ -1,4 +1,4 @@
-document.addEventListener("turbolinks:load", function() {
+$(document).on('turbolinks:load', function () {
   var today = new moment();
   $('#requested-date').datetimepicker({
     format: 'DD/MM/YYYY',
@@ -27,24 +27,13 @@ document.addEventListener("turbolinks:load", function() {
 
 
   $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
-    $('.new-expiry-date')
-    .datetimepicker({ 
-      format: 'MM/YY',
-      viewMode: 'months',
-      locale: 'es',
-      useCurrent: false
-    })
-    .on('dp.change',function(e)
-    {                               
-      var nested_form = $(this).parents(".nested-fields");
-      if ( !$(this).val()){
-        nested_form.find(".new-expiry-date-hidden").val('');
-      }else{
-        var end_of_month = new Date(e.date.endOf('month'));
-        $(this).data("DateTimePicker").date(end_of_month);
-        nested_form.find(".new-expiry-date-hidden").val(end_of_month);
-      }
-    });
+    added_task.find('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
+      .datetimepicker({
+        format: 'MM/YY',
+        viewMode: 'months',
+        locale: 'es',
+        useCurrent: false,
+      });
     $('[data-toggle="tooltip"]').tooltip({ 'selector': '', 'container':'body' });
   });
 

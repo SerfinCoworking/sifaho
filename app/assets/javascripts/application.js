@@ -127,7 +127,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
-  // recordar que hace que llevar la inicializacion en el after insert de cocoon
   $('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
   .datetimepicker({
     format: 'MM/YY',
