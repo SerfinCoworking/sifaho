@@ -60,7 +60,7 @@
     <!-- Cantidad a cargar -->
     <td>
       <%= f.input :delivered_quantity, placeholder: 'Cant', required: false,
-        label: false, :input_html => { class: 'new-deliver-quantity input-sm', min: '0', :style => 'width: 80px' }
+        label: false, :input_html => { class: 'new-deliver-quantity input-sm', min: '0', :style => 'width: 100px' }
       %>
       <%= f.hidden_field :requested_quantity, :value => 0 %>
     </td>
@@ -116,7 +116,6 @@
       <%= f.input :expiry_date, as: :tempus_dominus, label: false,
         :placeholder => "M/A",
         input_html: {
-          :style => 'width: 70px',
           class: "new-expiry-date input-sm",
           required: false,
           autocomplete: 'off',
