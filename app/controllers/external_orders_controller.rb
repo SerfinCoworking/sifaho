@@ -186,12 +186,12 @@ class ExternalOrdersController < ApplicationController
       else
         if external_order_params[:order_type] == 'despacho'
           @order_type = 'despacho'
-          @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id)
+          @external_order.applicant.present? ? @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id) : ""
           flash[:error] = "El despacho no se ha podido crear."
           format.html { render :new }
         elsif external_order_params[:order_type] == 'recibo'
           @order_type = 'recibo'
-          @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
+          @external_order.provider_sector.present? ? @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id) : ""
           flash[:error] = "El recibo no se ha podido crear."
           format.html { render :new_receipt }
         elsif external_order_params[:order_type] == 'solicitud_abastecimiento'
