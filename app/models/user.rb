@@ -33,8 +33,8 @@ class User < ApplicationRecord
     #first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test
     first_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "givenname").first.encode("Windows-1252", invalid: :replace, undef: :replace) # Comment in production
     last_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "sn").first.encode("Windows-1252", invalid: :replace, undef: :replace)
-    email = Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").first ||= "Sin email"
-    dni = Devise::LDAP::Adapter.get_ldap_param(self.username, "uid").first ||= "Sin DNI"
+    email = ( Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").first ||= "Sin email" )
+    dni = ( Devise::LDAP::Adapter.get_ldap_param(self.username, "uid").first ||= "Sin DNI" )
     Profile.create(user: self, first_name: first_name, last_name: last_name, email: email, dni: dni)
   end
 
