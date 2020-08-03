@@ -4,7 +4,7 @@
   }
   .notification-dropdown {
     border: none;
-    width: 375px;    
+    width: 455px;
     @media(min-width: 1200px) and (max-width: 1480px){
       width: 282px;
     }
@@ -15,7 +15,7 @@ ul.list-group{
   li.unread{
     background-color: #dae0e5 !important
   }
-  li{      
+  li{
     padding: 0;
     position: relative;
     .notification-link{
