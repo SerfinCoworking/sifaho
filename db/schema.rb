@@ -356,6 +356,47 @@ ActiveRecord::Schema.define(version: 2020_08_03_151404) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "out_pres_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "outpatient_prescription_product_id"
+    t.bigint "product_id"
+    t.decimal "quantity", precision: 9, scale: 2
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_product_id"], name: "out_pres_prod_on_out_pres_lot_stock"
+    t.index ["product_id"], name: "index_out_pres_prod_lot_stocks_on_product_id"
+  end
+
+  create_table "outpatient_prescription_products", force: :cascade do |t|
+    t.bigint "outpatient_prescription_id"
+    t.bigint "product_id"
+    t.decimal "request_quantity", precision: 2, scale: 2
+    t.integer "status", default: 0
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_id"], name: "out_pres_on_pres_prod"
+    t.index ["product_id"], name: "index_outpatient_prescription_products_on_product_id"
+  end
+
+  create_table "outpatient_prescriptions", force: :cascade do |t|
+    t.string "code"
+    t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.bigint "establishment_id"
+    t.text "observation"
+    t.integer "status", default: 0
+    t.datetime "date_received"
+    t.datetime "date_dispensed"
+    t.datetime "prescribed_date"
+    t.datetime "expiry_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_outpatient_prescriptions_on_establishment_id"
+    t.index ["patient_id"], name: "index_outpatient_prescriptions_on_patient_id"
+    t.index ["professional_id"], name: "index_outpatient_prescriptions_on_professional_id"
+  end
+
   create_table "patient_phones", force: :cascade do |t|
     t.integer "phone_type", default: 1
     t.string "number"

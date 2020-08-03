@@ -16,11 +16,14 @@ class Supply < ApplicationRecord
   :source => :quantifiable,
   :source_type => 'InternalOrder'
 
-  has_many :internal_orders, -> { with_deleted },
+  has_many :bed_orders, -> { with_deleted },
   :through => :quantity_ord_supply_lots,
   :source => :quantifiable,
   :source_type => 'BedOrder'
 
+  has_many :receipt_products
+  has_many :receipts, -> { with_deleted }, :through => :receipt_products
+  
   has_many :internal_order_template_supplies
   has_many :internal_order_template, through: :internal_order_template_supplies
   
