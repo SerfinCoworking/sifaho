@@ -1,0 +1,19 @@
+
+<%= simple_form_for(@receipt) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :supply %>
+    <%= f.association :supply_lot %>
+    <%= f.input :lot_code %>
+    <%= f.input :laboratory_name %>
+    <%= f.input :expiry_date %>
+    <%= f.input :quantity %>
+    <%= f.input :code %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Supply:</strong>
+  <%= @receipt.supply %>
+</p>
+
+<p>
+  <strong>Supply lot:</strong>
+  <%= @receipt.supply_lot %>
+</p>
+
+<p>
+  <strong>Lot code:</strong>
+  <%= @receipt.lot_code %>
+</p>
+
+<p>
+  <strong>Laboratory name:</strong>
+  <%= @receipt.laboratory_name %>
+</p>
+
+<p>
+  <strong>Expiry date:</strong>
+  <%= @receipt.expiry_date %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @receipt.quantity %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @receipt.code %>
+</p>
+
+<%= link_to 'Edit', edit_receipt_path(@receipt) %> |
+<%= link_to 'Back', receipts_path %>

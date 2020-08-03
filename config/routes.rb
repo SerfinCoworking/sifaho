@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :receipts
   resources :stocks
   # Lotes
   resources :lots do
