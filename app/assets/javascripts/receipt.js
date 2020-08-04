@@ -29,7 +29,7 @@ $(document).on('turbolinks:load', function () {
   $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
     added_task.find('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
       .datetimepicker({
-        format: 'MM/YY',
+        format: 'MM/YYYY',
         viewMode: 'months',
         locale: 'es',
         useCurrent: false,

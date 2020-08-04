@@ -129,7 +129,7 @@ $(document).on('turbolinks:load', function() {
   // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
   $('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
   .datetimepicker({
-    format: 'MM/YY',
+    format: 'MM/YYYY',
     viewMode: 'months',
     locale: 'es',
     useCurrent: false,

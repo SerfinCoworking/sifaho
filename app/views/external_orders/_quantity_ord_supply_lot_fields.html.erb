@@ -121,7 +121,7 @@
           autocomplete: 'off',
           value: "#{
             if f.object.expiry_date.present?
-              f.object.expiry_date.strftime("%m/%Y")
+              f.object.expiry_date.strftime("%m/%y")
             else
               'n/a'
             end
