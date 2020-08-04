@@ -67,4 +67,11 @@
       Imprimir
     <% end %>
   </li>
+
+  <li class="nav-item non-sel">
+    <%= link_to receipts_path, class: 'nav-link' do %>
+      <%= fa_icon "receipt" %>
+      Cargar por recibo
+    <% end %>
+  </li>
 <% end %>
