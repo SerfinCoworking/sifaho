@@ -1,19 +1,75 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @receipt.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@receipt.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @receipt.new_record? ? "Agregar recibo" : "Editando recibo" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @receipt.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
 
-<%= simple_form_for(@receipt) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+    <%= simple_form_for @receipt, html: {class: "", role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.association :supply %>
-    <%= f.association :supply_lot %>
-    <%= f.input :lot_code %>
-    <%= f.input :laboratory_name %>
-    <%= f.input :expiry_date %>
-    <%= f.input :quantity %>
-    <%= f.input :code %>
+      <div class="row">
+        <%# Solicitante %>
+        <div class="col-md-4">
+          <%= f.label :establishment_id, "Establecimiento" %>
+          <div class="custom-input-group">
+            <%= f.input :establishment_id, as: :fake,
+              label: false,
+              placeholder: 'Buscar por nombre',
+              :input_html => {
+                autocomplete: 'off',
+                id: "receipt-provider-id",
+                data: { autocomplete_source: search_by_name_establishments_path },
+                value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.establishment.name; end }",
+                size: 41
+              } 
+            %>
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+      
+        <%# Proveedor %>
+          <%= f.input :provider_sector, label: 'Sector',
+          collection: [],
+          disabled: true,
+          :input_html => {
+            required: true,
+            id: 'provider-sector',
+            class: 'custom-select-pick',
+            "data-width"=>"100%",
+            "title"=>"Seleccione un establecimiento",
+            "data-size"=>"10",
+            "data-live-search"=>true,
+          }  %>
+
+
+          <%= f.input :provider_sector, required: true, label: 'Nombre completo' %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
+        </div>
+        
+      </div>
+    <% end %>
+
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', receipts_path, class: 'btn mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @receipt.new_record? ? 'new_establishment' : 'edit_establishment_' + @receipt.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
   </div>
-<% end %>
+</div>
+ 
+
+ 

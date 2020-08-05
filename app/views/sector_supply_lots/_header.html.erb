@@ -69,7 +69,14 @@
   </li>
 
   <li class="nav-item non-sel">
-    <%= link_to receipts_path, class: 'nav-link' do %>
+    <%= link_to receipts_path, class: "nav-link #{ active_action_and_controller('index', 'receipts') }" do %>
+      <%= fa_icon "receipt" %>
+      Recibos
+    <% end %>
+  </li>
+  
+  <li class="nav-item non-sel">
+    <%= link_to new_receipt_path, class: "nav-link #{ active_action_and_controller('new', 'receipts') }" do %>
       <%= fa_icon "receipt" %>
       Cargar por recibo
     <% end %>
