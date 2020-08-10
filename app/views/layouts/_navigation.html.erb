@@ -4,8 +4,8 @@
     <% if policy(:dashboard).sidebar? %>
       <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
     <% end %>
-    <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')}" do %>
-      <%= image_tag("sifaho-brand.png", size: "150x47", alt: "Logo SIFAHO", class: 'logo') %>
+    <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')} d-flex justify-content-start align-items-center" do %>
+      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo') %>
     <% end %>
   </div>
 
