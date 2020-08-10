@@ -16,7 +16,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require chosen-jquery
-//= require bootstrap-select
 //= require font_awesome5
 //= require popper
 //= require moment
@@ -31,6 +30,7 @@
 //= require cocoon
 //= require bootstrap-switch
 //= require bootstrap
+//= require bootstrap-select
 //= require_tree .
 
 // Se oculta el flash message
@@ -126,14 +126,7 @@ $(document).on('turbolinks:load', function() {
     width: '200px'
   });
 
-  // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
-  $('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
-  .datetimepicker({
-    format: 'MM/YYYY',
-    viewMode: 'months',
-    locale: 'es',
-    useCurrent: false,
-  });
+  
 
 
   $('.search-lots').click(function (event) {
