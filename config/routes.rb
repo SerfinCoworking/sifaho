@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :receipts
+  resources :receipts do
+    member do
+      get "delete"
+    end
+  end
+  
   resources :stocks
   # Lotes
   resources :lots do
