@@ -6,6 +6,7 @@ class Receipt < ApplicationRecord
   belongs_to :provider_sector, class_name: 'Sector'
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :received_by, class_name: 'User', optional: true
   has_many :receipt_products
   has_many :supplies, through: :receipt_products
   has_many :movements, class_name: "ReceiptMovement"
