@@ -66,6 +66,13 @@ es:
         name: "Razón social"
         cuil: "Cuil"
         gln: "GLN"
+      receipt:
+        provider_sector: "Sector proveedor"
+      receipt_product:
+        lot_code: "Lote"
+        supply_id: "Insumo"
+        expiry_date: "Fecha vencimiento"
+      
 
   date:
     abbr_day_names:

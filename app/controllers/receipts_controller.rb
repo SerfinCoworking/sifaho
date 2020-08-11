@@ -38,13 +38,13 @@ class ReceiptsController < ApplicationController
     @receipt = Receipt.new(receipt_params)
     authorize @receipt
     respond_to do |format|
-      @receipt.applicant_sector = current_user.sector
-      @receipt.created_by = current_user
-      @receipt.code = @receipt.applicant_sector.name[0..3].upcase+'rec'+Receipt.maximum(:id).to_i.next.to_s
-      @receipt.auditoria! #default status
-      @receipt.save!
-      
       begin
+        @receipt.applicant_sector = current_user.sector
+        @receipt.created_by = current_user
+        @receipt.code = @receipt.applicant_sector.name[0..3].upcase+'rec'+Receipt.maximum(:id).to_i.next.to_s
+        @receipt.auditoria! #default status
+        @receipt.save!
+      
         if receiving?
           @receipt.receive_remit(current_user)
           @receipt.create_notification(current_user, "creó y realizó")
