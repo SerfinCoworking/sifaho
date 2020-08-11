@@ -130,12 +130,12 @@
             <th></th>
           </tr>
         </thead>
-        <tbody class="quantity_ord_supply_lots" id="cocoon-container">
+        <tbody class="quantity_ord_supply_lots" id="cocoon-container">       
           <% if ["edit", "edit_applicant"].include?(params[:action]) %>
             <%= f.simple_fields_for :quantity_ord_supply_lots, @external_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>
-          <% elsif params[:action] == "create" %>
+          <% elsif ['use_applicant', 'create'].include?(params[:action]) %>
             <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
               <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
             <% end %>

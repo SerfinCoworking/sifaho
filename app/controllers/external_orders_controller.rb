@@ -40,7 +40,7 @@ class ExternalOrdersController < ApplicationController
   def applicant_index
     authorize ExternalOrder
     @filterrific = initialize_filterrific(
-      ExternalOrder.applicant(current_user.sector).without_status(2),
+      ExternalOrder.applicant(current_user.sector),
       params[:filterrific],
       select_options: {
         sorted_by: ExternalOrder.options_for_sorted_by,

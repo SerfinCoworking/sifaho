@@ -8,6 +8,14 @@ body {
     overflow-x: hidden;
 }
 
+.logo{
+  height: 25%;
+  width: auto;
+  @media(min-width: 1200px) and (max-width: 1480px){
+    height: 17%;
+  }
+}
+
 #wrapper{
     width: 100vw;
     height: 100vh;
