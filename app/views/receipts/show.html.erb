@@ -1,39 +1,139 @@
-<p id="notice"><%= notice %></p>
+<%= render 'sector_supply_lots/header' %>
 
-<p>
-  <strong>Supply:</strong>
-  <%= @receipt.supply %>
-</p>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo recibo
+      </h5>
+    </div>
+    <div>
+      <%= link_to receipts_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
 
-<p>
-  <strong>Supply lot:</strong>
-  <%= @receipt.supply_lot %>
-</p>
+  <div class="card-body">
+    <div class="row">
+      <div class='col-md-4 col-xs-4'>
+        <div class="text-center"><strong>Solicitante</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @receipt.applicant_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @receipt.applicant_sector.name%>
+      </div>
+      <div class="col-md-4 col-xs-4">
+        <div class="text-center"><strong>Proveedor</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @receipt.provider_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @receipt.provider_sector.name%>
+      </div>
+      <div class='col-md-4 col-xs-4'>
+        <div class='row'>
+          <div class='col-md-6 col-xs-6'>
+            <strong>Solicitado:</strong>
+            <%= @receipt.received_date.present? ? @receipt.received_date.strftime("%d/%m/%Y") : ' ---- '%><br>
+          </div>
+          <div class='col-md-6 col-xs-6'>
+            <strong>Código:</strong>
+            <%= @receipt.code %>
+          </div>
+        </div>
+        <hr>
+        <strong>Observaciones:</strong>
+          <%= @receipt.observation? ? @receipt.observation : 'Sin observaciones' %>
+      </div>
+    </div>
+    <hr>
+    <!-- Barra de estado -->
+    <div class='row mt-3'>
+      <div class='col-12'>
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies'>
+              <%= fa_icon "cubes" %>
+              Productos
+              <span class="badge badge-secondary"><%= @receipt.receipt_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements'>
+              <%= fa_icon "exchange-alt"%>
+              Movimientos
+              <span class="badge badge-secondary"><%= @receipt.movements.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="tab-content">
+        <div id='supplies' class='tab-pane fade show active'>
+          
+            <!-- Productos a recibir -->
+            <div class="card">
+              <table class="table table-hover table-sm mb-0">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Recibido</th>
+                    <th>Lote</th>
+                    <th>Laboratorio</th>
+                    <th>Vencimiento</th>
+                    <th>Observaciones</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @receipt.receipt_products.joins(:supply).order("name").each do |qosl| %>
+                    <tr>
+                      <td>
+                        <%= qosl.supply_id %>
+                      </td>
+                      <td>
+                        <%= qosl.supply.name %>
+                      </td>
+                      <td>
+                        <%= qosl.quantity %>
+                      </td>
+                      <td>
+                        <%= qosl.lot_code.present? ? qosl.lot_code : 'n/a' %>
+                      </td>
+                      <td>
+                        <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'n/a' %>
+                      </td>
+                      <td>
+                        <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%m/%y") : 'No vence' %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          
+        </div>
+        <div id='last-movements' class='tab-pane fade'>
+          <!-- Tabla de movimientos -->
+          <%= render '/shared/movements_table', order: @receipt %>
+        </div> <!-- End last movements tab pane -->
+      </div> <!-- End Tab content-->
+    </div> <!-- End col-md-12 -->
+  </div>
 
-<p>
-  <strong>Lot code:</strong>
-  <%= @receipt.lot_code %>
-</p>
-
-<p>
-  <strong>Laboratory name:</strong>
-  <%= @receipt.laboratory_name %>
-</p>
-
-<p>
-  <strong>Expiry date:</strong>
-  <%= @receipt.expiry_date %>
-</p>
-
-<p>
-  <strong>Quantity:</strong>
-  <%= @receipt.quantity %>
-</p>
-
-<p>
-  <strong>Code:</strong>
-  <%= @receipt.code %>
-</p>
-
-<%= link_to 'Edit', edit_receipt_path(@receipt) %> |
-<%= link_to 'Back', receipts_path %>
+  <!-- Botones de acción footer -->
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', receipts_path, class: "btn btn-light mr-1" %>
+    <% if policy(@receipt).edit? %>
+      <%= link_to edit_receipt_path(@receipt), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
+</div>

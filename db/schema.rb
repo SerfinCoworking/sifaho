@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_06_183848) do
+ActiveRecord::Schema.define(version: 2020_08_13_143617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -552,7 +552,7 @@ ActiveRecord::Schema.define(version: 2020_08_06_183848) do
     t.bigint "laboratory_id"
     t.integer "quantity"
     t.string "lot_code"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
@@ -667,7 +667,7 @@ ActiveRecord::Schema.define(version: 2020_08_06_183848) do
   create_table "supply_lots", force: :cascade do |t|
     t.string "code"
     t.string "supply_name"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "date_received"
     t.integer "quantity"
     t.integer "initial_quantity"
