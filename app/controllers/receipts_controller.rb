@@ -4,14 +4,11 @@ class ReceiptsController < ApplicationController
   # GET /receipts
   # GET /receipts.json
   def index
-    authorize Receipt
+    authorize ExternalOrder
     @filterrific = initialize_filterrific(
-      Receipt,
+      Receipt.order(created_at: :desc),
       params[:filterrific],
-      select_options: {
-        sorted_by: Receipt.options_for_sorted_by,
-        with_status: Receipt.options_for_status
-      },
+      select_options: { },
       persistence_id: false
     ) or return
     @receipts = @filterrific.find.page(params[:page]).per_page(15)

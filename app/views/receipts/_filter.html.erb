@@ -1,0 +1,44 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row">
+    <div class="col-2">
+      <label>Código</label>
+      <%= f.text_field(
+        :search_code,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Cód'
+      ) %>
+    </div>
+    
+    <div class="col-2">
+      <label>Proveedor</label>
+      <%= f.text_field(
+        :search_provider,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Proveedor'
+      ) %>
+    </div>
+
+    <div class="col-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <label>
+          <%= current_page?(action: 'index') ? 'Recibido' : 'Entregado' %>
+        </label>
+        <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
+          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+          <%= fa_icon "redo" %>
+        <% end %>
+      </div>
+      <div class="row text-right">
+        <div class="col-6">
+          <%= f.text_field(:received_date_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
+            placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+        </div>
+        <div class="col-6">
+          <%= f.text_field(:received_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
+            placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+<% end %>

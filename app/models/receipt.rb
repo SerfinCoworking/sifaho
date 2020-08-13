@@ -7,6 +7,8 @@ class Receipt < ApplicationRecord
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
+  has_one :provider_establishment, :through => :provider_sector, :source => :establishment
+  has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
   has_many :receipt_products
   has_many :supplies, through: :receipt_products
   has_many :movements, class_name: "ReceiptMovement"
@@ -25,8 +27,9 @@ class Receipt < ApplicationRecord
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :search_code,
-      :search_applicant,
       :search_provider,
+      :received_date_since,
+      :received_date_to,
       :with_status,
       :sorted_by
     ]
@@ -37,11 +40,6 @@ class Receipt < ApplicationRecord
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
   
-  pg_search_scope :search_applicant,
-    :associated_against => { :applicant_sector => :name, :applicant_establishment => :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
   pg_search_scope :search_provider,
     :associated_against => { :provider_sector => :name, :provider_establishment => :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
@@ -83,6 +81,14 @@ class Receipt < ApplicationRecord
 
   scope :with_status, lambda { |a_status|
     where('receipts.status = ?', a_status)
+  }
+
+  scope :received_date_since, lambda { |a_date|
+    where('received_date >= ?', a_date)
+  }
+
+  scope :received_date_to, lambda { |a_date|
+    where('received_date <= ?', a_date)
   }
 
   # Método para establecer las opciones del select input del filtro
