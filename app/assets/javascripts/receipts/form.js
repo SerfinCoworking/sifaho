@@ -50,7 +50,6 @@ $(document).on('turbolinks:load', function(e){
   // ajax, brings sector according with the establishment ID
   function getSectors(establishmentId){
     if(typeof establishmentId !== 'undefined'){ 
-      console.log(establishmentId, "in ajax");
       $.ajax({
         url: "/sectors/with_establishment_id", // Ruta del controlador
         method: "GET",
@@ -65,8 +64,6 @@ $(document).on('turbolinks:load', function(e){
             $('#provider-sector').append('<option value="'+element.id+'">'+ element.label +'</option>');
           });
           $('#provider-sector').selectpicker('refresh', {style: 'btn-sm btn-default'});
-        }else{
-          console.log("no se encontraron sectores");
         }
       });
     }else{
@@ -76,7 +73,7 @@ $(document).on('turbolinks:load', function(e){
   }
 
   // cocoon init
-  $('#cocoon-container').on('cocoon:after-insert', function(e) {
+  $('#receipt-cocoon-container').on('cocoon:after-insert', function(e) {
     initExpiryDateCalendar();
   });
   
@@ -98,11 +95,133 @@ $(document).on('turbolinks:load', function(e){
       const target = $(e.target).find('input.datetimepicker-input').first();
       setExpiryDate(target);
     });
+
+    // autocomplete establishment input
+    $('.receipt-supply-code').autocomplete({
+      source: $('.receipt-supply-code').attr('data-autocomplete-source'),
+      minLength: 1,
+      autoFocus: true,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el código de insumo");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      select: function (event, ui) { 
+        onChangeOnSelectAutoCSupplyCode(event.target, ui.item);
+      },
+      change: function (event, ui) {      
+        onChangeOnSelectAutoCSupplyCode(event.target, ui.item);
+        const tr = $(event.target).closest(".nested-fields");
+        tr.find("input.receipt-quantity").focus(); // changes focus to quantity input
+      },
+      response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+      }
+    });
+
+    // Función para autocompletar y buscar el insumo
+    $('.receipt-supply-name').autocomplete({
+      source: $('.receipt-supply-name').attr('data-autocomplete-source'),
+      minLength: 1,
+      autoFocus: true,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el noombre del insumo");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      select: function (event, ui) { 
+        onSelectAutoCSupplyName(event.target, ui.item);
+        const tr = $(event.target).closest(".nested-fields");
+        tr.find("input.receipt-quantity").focus(); // changes focus to quantity input
+      },
+      response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+      }
+    });
+
+    // Función para autocompletar código de lote
+    $(".receipt-supply-lot-code").on("focus", function(e) {
+      const _this = $(e.target);
+      jQuery(function() {
+        return $('.receipt-supply-lot-code').autocomplete({
+          source: '/supply_lots/search_by_lot_code?supply_code='+_this.closest(".nested-fields").find(".receipt-supply-code").val(),
+          minLength: 1,
+          messages: {
+            noResults: function(count) {
+              $(".ui-menu-item-wrapper").html("Nuevo lote");
+            }
+          },
+          search: function( event, ui ) {
+            $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+          },
+          select: function (event, ui){
+
+            const tr = $(event.target).closest(".nested-fields");
+            tr.find("input.receipt-laboratory-name").val(ui.item.lab_name).trigger('change'); // update supply name input
+            tr.find("input.receipt-laboratory-id").val(ui.item.lab_id).trigger('change'); // update supply name input
+            if(ui.item.expiry_date){
+              const expiry_date = moment(ui.item.expiry_date);
+              tr.find("input.datetimepicker-input").val(expiry_date.format('MM/YY')); // update supply name input
+              tr.find("input.receipt-expiry-date").val(expiry_date.endOf('month').format("YYYY-MM-DD")); // update supply name input
+            }
+          },
+          response: function(event, ui) {
+            $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+          }
+        });
+      });
+    });
+
+    $('.receipt-laboratory-name').autocomplete({
+      source: $('.receipt-laboratory-name').data('autocomplete-source'),
+      autoFocus: true,
+      minLength: 2,
+      messages: {
+        noResults: function(count) {
+          $(".ui-menu-item-wrapper").html("No se encontró el laboratorio");
+        }
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      select:
+      function (event, ui) {
+        const tr = $(event.target).closest(".nested-fields");
+        tr.find("input.receipt-laboratory-id").val(ui.item.id).trigger('change'); // update supply name input
+      },
+      response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+      }
+    });
+
   }
 
   function setExpiryDate(target){
     const expireDate = moment($(target).val(), "MM/YY");
     const inputHidden = $(target).closest("td").find('.hidden.receipt_receipt_products_expiry_date input[type="hidden"]');
-    $(inputHidden).val(expireDate.startOf('month').format("YYYY-MM-DD")); 
+    $(inputHidden).val(expireDate.endOf('month').format("YYYY-MM-DD")); 
+  }  
+
+  function onChangeOnSelectAutoCSupplyCode(target, item){
+    if(item){
+      const tr = $(target).closest(".nested-fields");
+      tr.find("input.receipt-supply-name").val(item.name); // update supply name input
+      tr.find("input.receipt-unity").val(item.unity); // update supply unity input      
+    }
   }
+
+  function onSelectAutoCSupplyName(target, item){
+    if(item){
+      const tr = $(target).closest(".nested-fields");
+      tr.find("input.receipt-supply-code").val(item.id); // update supply name input
+      tr.find("input.receipt-unity").val(item.unity); // update supply unity input
+    }
+  }
+
 });

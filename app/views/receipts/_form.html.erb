@@ -75,14 +75,14 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody id="cocoon-container">
+            <tbody id="receipt-cocoon-container">
                 <%= f.simple_fields_for :receipt_products do |form_quantity| %>
                   <%= render "receipt_product_fields", f: form_quantity %>
                 <% end %>
             </tbody>
           </table>
           <%= link_to_add_association f, :receipt_products, class: 'btn btn-primary btn-sm w-100',
-            data: {"association-insertion-node" => "tbody#cocoon-container", "association-insertion-method" => "append"} do %>
+            data: {"association-insertion-node" => "tbody#receipt-cocoon-container", "association-insertion-method" => "append"} do %>
             <%= fa_icon "plus" %>
             Agregar insumo recibido
           <% end %>
