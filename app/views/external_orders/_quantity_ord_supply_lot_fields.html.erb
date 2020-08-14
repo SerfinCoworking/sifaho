@@ -113,7 +113,7 @@
 
     <!-- Vencimiento -->
     <td>
-      <%= f.input :expiry_date, as: :tempus_dominus, label: false,
+      <%= f.input :expiry_date_fake, as: :tempus_dominus, label: false,
         :placeholder => "M/A",
         input_html: {
           class: "new-expiry-date input-sm",
@@ -130,7 +130,7 @@
         html5: false
       %>
       <%# checkear si hace falta el hidden, ya que con el wrapper de tempus dominus alcanzaria %>
-      <%#= f.hidden_field :expiry_date, as: :string, class: "new-expiry-date-hidden" %>
+      <%= f.hidden_field :expiry_date, class: "new-expiry-date-hidden" %>
     </td>
 
   <% elsif @order_type == 'solicitud_abastecimiento' %> <!-- End Form recibo -->
