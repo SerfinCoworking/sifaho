@@ -12,6 +12,11 @@
  *
  */
 
+$cblue: #00407A;
+$cblue2: #28ABE1;
+$cblue3: #27CEE0;
+$primary: $cblue2;
+
 @import 'variables';
 @import "bootstrap-select";
 @import "bootstrap";
@@ -107,8 +112,18 @@ td .form-group{
       margin-right: 0;
       margin-left: 1rem;
     }
+    button#menu-toggle{
+      width: 37px;
+    }
+    button#menu-toggle:hover{
+      background-color: $cblue2;
+      color: #fff;
+    }
     button#menu-toggle:focus{
       box-shadow: none!important;
+      background-color: $cblue2;
+      color: #fff;
+      // background-color: transparent;
     }
 
   }

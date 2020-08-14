@@ -9,11 +9,7 @@ body {
 }
 
 .logo{
-  height: 25%;
-  width: auto;
-  @media(min-width: 1200px) and (max-width: 1480px){
-    height: 17%;
-  }
+    height: 2.45rem;
 }
 
 #wrapper{
@@ -98,8 +94,10 @@ body {
 
             .link-group{
                 height: 100%;
-                background-color: #f8f9fa;
+                background-color: $cblue;
                 .list-group-item{
+                    background-color: $sidebar-bg-color;
+                    color: #fff;
                     white-space: nowrap;
                     direction: ltr;
                     padding: 10px calc((#{$sidebar-width-hidden} - 17px) / 2);
@@ -113,9 +111,12 @@ body {
                         }
                     }
                     &.active{
-                        background-color: lightgray!important;
-                        border-color: lightgray!important;
-                        color: black!important;
+                        background-color: $sidebar-bg-active-color;
+                        border-color: $sidebar-bg-active-color;
+                    }
+                    &:hover{
+                        background-color: $sidebar-bg-hover-color;
+                        border-color: $sidebar-bg-hover-color;
                     }
                     .sb-icon{
                         width: 17px;
