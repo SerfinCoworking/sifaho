@@ -12,10 +12,6 @@
  *
  */
 
-$cblue: #00407A;
-$cblue2: #28ABE1;
-$cblue3: #27CEE0;
-$primary: $cblue2;
 
 @import 'variables';
 @import "bootstrap-select";
@@ -32,6 +28,7 @@ $primary: $cblue2;
 @import 'notifications';
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
+
 
 html {
   @media(min-width: 1200px) and (max-width: 1480px){
