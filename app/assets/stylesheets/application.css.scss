@@ -12,6 +12,7 @@
  *
  */
 
+
 @import 'variables';
 @import "bootstrap-select";
 @import "bootstrap";
@@ -27,6 +28,7 @@
 @import 'notifications';
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
+
 
 html {
   @media(min-width: 1200px) and (max-width: 1480px){
@@ -107,8 +109,18 @@ td .form-group{
       margin-right: 0;
       margin-left: 1rem;
     }
+    button#menu-toggle{
+      width: 37px;
+    }
+    button#menu-toggle:hover{
+      background-color: $cblue2;
+      color: #fff;
+    }
     button#menu-toggle:focus{
       box-shadow: none!important;
+      background-color: $cblue2;
+      color: #fff;
+      // background-color: transparent;
     }
 
   }

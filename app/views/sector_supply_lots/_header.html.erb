@@ -19,7 +19,7 @@
       Cargar stock
       <span class="caret"></span>
     </a>
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
       <% if policy(ExternalOrder).new_receipt? %>
         <%= link_to new_receipt_external_orders_path, class: "dropdown-item" do %>
           <%= fa_icon "plus" %>
@@ -46,7 +46,7 @@
       Reporte
       <span class="caret"></span>
     </a>
-    <div class="dropdown-menu dropdown-menu-right">
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
       <%= link_to new_delivered_by_order_reports_path, class: "dropdown-item" do %>
         <%= fa_icon "tint" %>
         <span class="hidden-xs">Entregado por pedido</span>

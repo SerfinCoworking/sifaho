@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_13_143617) do
+ActiveRecord::Schema.define(version: 2020_08_03_151404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -271,14 +271,14 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   create_table "internal_order_templates", force: :cascade do |t|
     t.string "name"
     t.bigint "owner_sector_id"
-    t.bigint "destination_sector_id"
+    t.bigint "detination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_internal_order_templates_on_created_by_id"
-    t.index ["destination_sector_id"], name: "index_internal_order_templates_on_destination_sector_id"
+    t.index ["detination_sector_id"], name: "index_internal_order_templates_on_detination_sector_id"
     t.index ["owner_sector_id"], name: "index_internal_order_templates_on_owner_sector_id"
   end
 
@@ -525,6 +525,7 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.datetime "dispensed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "quantity_received"
     t.index ["cronic_dispensation_id"], name: "index_quantity_ord_supply_lots_on_cronic_dispensation_id"
     t.index ["laboratory_id"], name: "index_quantity_ord_supply_lots_on_laboratory_id"
     t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_poly"
@@ -533,30 +534,15 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.index ["supply_lot_id"], name: "index_quantity_ord_supply_lots_on_supply_lot_id"
   end
 
-  create_table "receipt_movements", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "receipt_id"
-    t.bigint "sector_id"
-    t.string "action"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["receipt_id"], name: "index_receipt_movements_on_receipt_id"
-    t.index ["sector_id"], name: "index_receipt_movements_on_sector_id"
-    t.index ["user_id"], name: "index_receipt_movements_on_user_id"
-  end
-
   create_table "receipt_products", force: :cascade do |t|
     t.bigint "supply_id"
     t.bigint "supply_lot_id"
-    t.bigint "receipt_id"
-    t.bigint "laboratory_id"
     t.integer "quantity"
     t.string "lot_code"
-    t.date "expiry_date"
+    t.string "lobarotory_name"
+    t.datetime "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
-    t.index ["receipt_id"], name: "index_receipt_products_on_receipt_id"
     t.index ["supply_id"], name: "index_receipt_products_on_supply_id"
     t.index ["supply_lot_id"], name: "index_receipt_products_on_supply_lot_id"
   end
@@ -566,16 +552,13 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
     t.bigint "created_by_id"
-    t.bigint "received_by_id"
     t.integer "status", default: 0
     t.text "observation"
-    t.datetime "received_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["applicant_sector_id"], name: "index_receipts_on_applicant_sector_id"
     t.index ["created_by_id"], name: "index_receipts_on_created_by_id"
     t.index ["provider_sector_id"], name: "index_receipts_on_provider_sector_id"
-    t.index ["received_by_id"], name: "index_receipts_on_received_by_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -649,12 +632,17 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.string "name"
     t.string "description"
     t.string "observation"
-    t.string "unity"
+    t.string "unity", limit: 100
     t.boolean "needs_expiration"
+    t.boolean "active_alarm"
+    t.integer "period_alarm"
+    t.integer "expiration_alarm"
+    t.integer "quantity_alarm"
+    t.integer "period_control"
     t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "supply_area_id", default: 38
+    t.bigint "supply_area_id"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_supplies_on_deleted_at"
     t.index ["supply_area_id"], name: "index_supplies_on_supply_area_id"
@@ -667,7 +655,7 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   create_table "supply_lots", force: :cascade do |t|
     t.string "code"
     t.string "supply_name"
-    t.date "expiry_date"
+    t.datetime "expiry_date"
     t.datetime "date_received"
     t.integer "quantity"
     t.integer "initial_quantity"
@@ -731,11 +719,14 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   add_foreign_key "patient_phones", "patients"
   add_foreign_key "patients", "addresses"
   add_foreign_key "permission_requests", "users"
+  add_foreign_key "products", "areas"
+  add_foreign_key "products", "unities"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
+  add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
   add_foreign_key "users", "sectors"

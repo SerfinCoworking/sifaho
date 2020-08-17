@@ -1,0 +1,42 @@
+@import 'variables';
+
+#dropdown-menu-header > ul.module-links-navbar > li{
+
+  a.nav-link{
+    color: black;
+    margin: 0 2.5px;
+    border-radius: 3px;
+
+    &:hover, &.active, &[aria-expanded="true"]{
+      background-color: $cblue2;
+      color: #fff;
+    }
+  }
+  div.dropdown-menu[aria-labelledby="dropdown-submenu-link"]{
+    a.dropdown-item:hover{
+      background-color: $cblue2;
+      color: #ffffff;
+    }
+  }
+}
+#dropdown-menu-header > ul > li > button.nav-link{
+  border: none;
+  color: black;
+  background-color: #f8f9fa;
+  &:hover, &:focus, &[aria-expanded="true"]{
+    background-color: $cblue2;
+    color: #fff;
+    outline: none!important;
+  }
+
+  .dropdown-text-btn{
+    display: inline-block;
+    line-height: 1;
+  }
+}
+div.dropdown-menu[aria-labelledby="dropdown-btn-header"]{
+  a.dropdown-item:hover{
+    background-color: $cblue2;
+    color: #fff;
+  }
+}
