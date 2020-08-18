@@ -14,7 +14,7 @@
           Recetas
           <span class="caret"></span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
           <% if policy(Prescription).index? %>
             <%= link_to prescriptions_path, class: "dropdown-item" do %>
               <%= fa_icon "list" %>
@@ -42,7 +42,7 @@
         Sectores
         <span class="caret"></span>
       </a>
-      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
         <%= link_to applicant_index_internal_orders_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           Recibos
@@ -81,7 +81,7 @@
         Establecimientos
         <span class="caret"></span>
       </a>
-      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
         <%= link_to applicant_index_external_orders_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>

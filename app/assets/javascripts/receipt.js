@@ -27,12 +27,24 @@ $(document).on('turbolinks:load', function () {
 
 
   $(document).on('cocoon:after-insert', '.quantity_ord_supply_lots', function(e, added_task) {
-    added_task.find('.external_order_quantity_ord_supply_lots_expiry_date .input-group.date')
+    added_task.find('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date')
       .datetimepicker({
-        format: 'MM/YYYY',
+        format: 'MM/YY',
         viewMode: 'months',
         locale: 'es',
         useCurrent: false,
+      });
+      $('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
+        const inputDate = $(e.target).find('input.datetimepicker-input').first().val();
+        if(typeof inputDate !== 'undefined'){
+          const td = $(e.target).closest('td');
+          const expiryDateFormated = moment(inputDate, "MM/YY");
+          $(td).find('input.new-expiry-date-hidden').first().val(expiryDateFormated.endOf("month").format("YYYY-MM-DD"));
+        }
+      });
+      
+      $('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date input.datetimepicker-input').on('change', function(e){
+        $(e.target).parent().trigger('change.datetimepicker');
       });
     $('[data-toggle="tooltip"]').tooltip({ 'selector': '', 'container':'body' });
   });
@@ -201,9 +213,9 @@ $(document).on('turbolinks:load', function () {
           nested_form.find(".new-laboratory-id").val(ui.item.lab_id);
           nested_form.find(".new-supply-lot-id").val(ui.item.id);
           if(ui.item.expiry_date){
-            var date = new Date(ui.item.expiry_date);
-            nested_form.find(".new-expiry-date").val( (date.getMonth() + 1) + '/' +  date.getFullYear().toString().substr(-2));
-            nested_form.find(".new-expiry-date-hidden").val(date);
+            const expiryDate = moment(ui.item.expiry_date);
+            nested_form.find(".new-expiry-date").val( expiryDate.endOf('month').format("YYYY-MM-DD"));
+            nested_form.find(".new-expiry-date-hidden").val(expiryDate.endOf('month').format("YYYY-MM-DD"));
           }
           nested_form.find(".new-laboratory").focus();
         },
