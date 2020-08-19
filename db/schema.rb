@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_13_143617) do
+ActiveRecord::Schema.define(version: 2020_08_19_131046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -56,6 +56,10 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_area_id"
+    t.bigint "first_area_id"
+    t.index ["first_area_id"], name: "index_areas_on_first_area_id"
+    t.index ["parent_area_id"], name: "index_areas_on_parent_area_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -236,6 +240,16 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
   end
 
+  create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "internal_order_products_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_products_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_products_id"
+    t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
+  end
+
   create_table "internal_order_comments", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "user_id"
@@ -256,6 +270,18 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.index ["internal_order_id"], name: "index_internal_order_movements_on_internal_order_id"
     t.index ["sector_id"], name: "index_internal_order_movements_on_sector_id"
     t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
+  end
+
+  create_table "internal_order_products", force: :cascade do |t|
+    t.bigint "internal_order_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"
+    t.index ["product_id"], name: "index_internal_order_products_on_product_id"
   end
 
   create_table "internal_order_template_supplies", force: :cascade do |t|
@@ -321,6 +347,16 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.string "name"
     t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
+  end
+
+  create_table "lot_stocks", force: :cascade do |t|
+    t.bigint "lot_id"
+    t.bigint "stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
+    t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
   end
 
   create_table "lots", force: :cascade do |t|
@@ -452,7 +488,7 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.bigint "unity_id"
+    t.string "unity"
     t.bigint "area_id"
     t.string "code"
     t.string "name"
@@ -463,7 +499,7 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
     t.datetime "deleted_at"
     t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["deleted_at"], name: "index_products_on_deleted_at"
-    t.index ["unity_id"], name: "index_products_on_unity_id"
+    t.index ["unity"], name: "index_products_on_unity"
   end
 
   create_table "professional_types", force: :cascade do |t|
@@ -505,7 +541,6 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   end
 
   create_table "quantity_ord_supply_lots", force: :cascade do |t|
-    t.integer "supply_lot"
     t.string "lot_code"
     t.string "quantifiable_type"
     t.bigint "quantifiable_id"
@@ -667,7 +702,7 @@ ActiveRecord::Schema.define(version: 2020_08_13_143617) do
   create_table "supply_lots", force: :cascade do |t|
     t.string "code"
     t.string "supply_name"
-    t.date "expiry_date"
+    t.datetime "expiry_date"
     t.datetime "date_received"
     t.integer "quantity"
     t.integer "initial_quantity"
