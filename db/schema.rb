@@ -277,7 +277,8 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
     t.bigint "product_id"
     t.integer "request_quantity"
     t.integer "delivery_quantity"
-    t.text "observation"
+    t.text "provider_observation"
+    t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"

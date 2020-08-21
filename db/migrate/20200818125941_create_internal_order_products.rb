@@ -5,7 +5,8 @@ class CreateInternalOrderProducts < ActiveRecord::Migration[5.2]
       t.references :product, index: true
       t.integer :request_quantity
       t.integer :delivery_quantity
-      t.text :observation
+      t.text :provider_observation
+      t.text :applicant_observation
 
       t.timestamps
     end
