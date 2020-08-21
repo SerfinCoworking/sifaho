@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     collection do
       get "trash_index"
       get "search_by_code"
-      get "search_by_name"
+      get "search_by_name"      
     end
   end
 
@@ -175,6 +175,7 @@ Rails.application.routes.draw do
       get "new_provider"
       get "applicant_index"
       get "statistics"
+      post "create_applicant"
     end
   end
 
