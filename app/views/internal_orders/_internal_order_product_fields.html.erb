@@ -1,0 +1,145 @@
+<tr class="nested-fields">
+  <!-- Código del producto -->
+  <td>
+    <div class="custom-input-group">
+      <%= f.input :product_id, as: :string,
+        placeholder: 'Código',
+        label: false,
+        :input_html => {
+          class: "product-code select-change input-sm",
+          data: { autocomplete_source: search_by_code_products_path },
+          size: 5,
+          autocomplete: 'off'
+        } 
+      %>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+  </td>
+
+  <!-- Nombre de Producto -->
+  <td>
+    <div class="custom-input-group">
+      <%= f.input :product_id, as: :fake, id: "nom_ins",
+        label: false,
+        placeholder: 'Nombre',
+        :input_html => {
+          class: "product-name select-change input-sm",
+          data: { autocomplete_source: search_by_name_products_path },
+          size: 45,
+          value: "#{if f.object.product.present?; f.object.product_name; end }",
+          autocomplete: "off"
+        } 
+      %>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+  </td>
+
+  <!-- Unidad -->
+  <td>
+    <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
+      input_html: {
+        class: 'product-unity input-sm',
+        size: 10,
+        placeholder: "Unidad",
+        value: "#{
+          if f.object.product.present?
+            f.object.product.unity
+          end
+        }"
+      } 
+    %> 
+  </td>
+
+  <!-- Stock -->
+  <td>
+    <%= f.input :stock, as: :fake, label: false, disabled: true, 
+      input_html: {
+        class: 'stock-quantity input-sm',
+        size: 6, 
+        placeholder: "Cant",
+        value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
+      } %>
+  </td>
+  
+  <% if order_type == 'solicitud' %>
+    <!-- Cantidad solicitada -->
+    <td style="width: 100px">
+      <%= f.input :request_quantity, 
+        label: false, 
+        placeholder: 'Cant', 
+        required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"request-quantity input-sm",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '1', 
+          step:'any',
+          :style => 'width: 100px'
+        }
+      %>
+      <%#= f.input :delivery_quantity, :as => :hidden, :input_html => { class: 'apply-deliver-quant'} %>
+    </td>
+
+    <!-- Observaciones proveedor -->
+    <td>
+      <%= f.input :applicant_observation, label: false, as: :text,
+        :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+    </td>
+
+  <% else %>
+
+    <!-- Cantidad solicitada -->
+    <td>
+      <%#= f.input :requested_quantity, label: false, placeholder: 'Cant', required: false,
+        disabled: f.object.quantifiable.solicitud?,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip request-quantity input-sm",
+          :title=>"Cantidad solicitada",
+          "data-placement"=>"right",
+          min: '0', step:'any', :style => 'width: 100px'  
+        } 
+      %>
+    </td>
+
+    <!-- Cantidad entregada -->
+    <td>
+      <%= f.input :delivery_quantity, label: false, placeholder: 'Cant', required: false,
+        input_html: {
+          "data-tooltip"=>true,
+          :class=>"has-tip deliver-quantity input-sm",
+          :title=>"Cantidad entregada",
+          "data-placement"=>"right",
+          min: '0', step:'any', :style => 'width: 100px'
+        } 
+      %>
+    </td>
+    
+    <!-- Lote -->
+    <td>
+      <%#= button_tag type: "button", class: "btn btn-#{select_btn_status(f.object)} select-lot-btn" do %>
+        <%# if f.object.lot_stock_id.present? %>
+          <%#= fa_icon "barcode" %> <%#= f.object.sector_supply_lot.lot_code %> <%#= fa_icon "cubes" %> <%#= f.object.sector_supply_lot.quantity %>
+        <%# else %>
+          <%#= fa_icon "barcode" %> Seleccionar lote
+        <%# end %>
+      <%# end %>
+      <%#= f.input :lot_stock, :as => :hidden, :input_html => { class: 'sector-supply-lot-id'} %>
+    </td>
+
+  <% end %>
+  
+
+  <td>
+    <!-- Botón quitar -->
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "minus" %>
+    <% end %>
+  </td>
+</tr>

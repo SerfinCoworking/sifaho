@@ -66,12 +66,6 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  # GET /internal_orders/new
-  def new
-    authorize InternalOrder
-    @internal_order = InternalOrder.new
-    @providers = User.where.not(sector: current_user.sector_id )
-  end
 
   # GET /internal_orders/new
   def new_report
@@ -88,19 +82,19 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    @internal_order.quantity_ord_supply_lots.build
+    @internal_order.internal_order_products.build
   end
 
   # GET /internal_orders/new_applicant
   def new_applicant
     authorize InternalOrder
     @internal_order = InternalOrder.new
-    @order_type = 'solicitud'
+    # @order_type = 'solicitud'
     @provider_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    4.times { @internal_order.quantity_ord_supply_lots.build }
+    @internal_order.internal_order_products.build
   end
 
   # GET /internal_orders/1/edit
@@ -127,6 +121,42 @@ class InternalOrdersController < ApplicationController
 
   # POST /internal_orders
   # POST /internal_orders.json
+  def create_applicant
+    @internal_order = InternalOrder.new(internal_order_params)
+    authorize @internal_order
+    @internal_order.created_by = current_user
+    @internal_order.audited_by = current_user
+    @internal_order.requested_date = DateTime.now
+
+    respond_to do |format|
+      @internal_order.save!
+      begin
+
+        if sending?
+          @internal_order.solicitud_enviada!
+          @internal_order.create_notification(current_user, "creó y envió")
+          message = "La solicitud se ha auditado y enviado correctamente."
+        else
+          @internal_order.solicitud_auditoria!
+          @internal_order.create_notification(current_user, "creó y auditó")
+          message = "La solicitud se ha creado y se encuentra en auditoria."
+        end
+
+        format.html { redirect_to @internal_order }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @provider_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+        format.html { render :new_applicant }
+      end
+    end
+  end
+
   def create
     @internal_order = InternalOrder.new(internal_order_params)
     authorize @internal_order
@@ -437,12 +467,24 @@ class InternalOrdersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def internal_order_params
-    params.require(:internal_order).permit(:applicant_sector_id, :sent_by_id, :order_type,
-      :provider_sector_id, :requested_date, :date_received, :observation, :remit_code,
-      quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
-        :provider_observation, :_destroy]
-      )
+    params.require(:internal_order).permit(:applicant_sector_id, 
+      :sent_by_id, 
+      :order_type,
+      :provider_sector_id, 
+      :requested_date, 
+      :date_received, 
+      :observation, 
+      :remit_code,
+      internal_order_products_attributes: [:id, 
+        :product_id, 
+        :lot_stock_id,
+        :request_quantity,
+        :delivery_quantity,
+        :applicant_observation,
+        :provider_observation, 
+        :_destroy
+      ]
+    )
   end
 
   # Se verifica si el value del submit del form es para enviar

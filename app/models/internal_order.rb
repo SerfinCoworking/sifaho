@@ -10,10 +10,10 @@ class InternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
-  has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
-  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :internal_order_products
+  has_many :lot_stocks, -> { with_deleted }, :through => :internal_order_products, dependent: :destroy
+  has_many :lots, -> { with_deleted }, :through => :lot_stocks
+  has_many :products, -> { with_deleted }, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
@@ -26,13 +26,13 @@ class InternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
-  validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
-  validates_associated :quantity_ord_supply_lots, :sector_supply_lots
+  validates :internal_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates_associated :internal_order_products
+  # , :sector_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   # Atributos anidados
-  accepts_nested_attributes_for :quantity_ord_supply_lots,
-    :reject_if => :all_blank,
+  accepts_nested_attributes_for :internal_order_products,
     :allow_destroy => true
 
   # Callbacks

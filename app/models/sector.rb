@@ -7,6 +7,11 @@ class Sector < ApplicationRecord
   belongs_to :establishment, counter_cache: :sectors_count
   has_many :sector_supply_lots, -> { with_deleted }
   has_many :supply_lots, -> { with_deleted }, through: :sector_supply_lots
+  
+  has_many :lot_stocks
+  has_many :lots, -> { with_deleted }, through: :lot_stocks
+  has_many :stocks
+  
   has_many :supplies, -> { with_deleted.distinct }, through: :supply_lots
   has_many :user_sectors
   has_many :users, :through => :user_sectors
@@ -101,5 +106,14 @@ class Sector < ApplicationRecord
       .entregado
       .group(:quantifiable_id, :quantifiable_type).order("sum_amount DESC")
       .select(:quantifiable_id, :quantifiable_type, "SUM(delivered_quantity) as sum_amount")
+  end
+
+  def stock_to(product_id)
+    stock = self.stocks
+    .where(product_id: product_id)
+    .select(:quantity)
+    .first
+
+    return stock.present? ? stock.quantity : 0    
   end
 end
