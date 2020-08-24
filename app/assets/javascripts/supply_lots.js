@@ -7,8 +7,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#supply_lot_supply_id').autocomplete({
       source: $('#supply_lot_supply_id').data('autocomplete-source'),
       autoFocus: true,
@@ -42,8 +40,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#nom_ins').autocomplete({
       source: $('#nom_ins').data('autocomplete-source'),
       autoFocus: true,
@@ -77,8 +73,6 @@ $(document).on('turbolinks:load', function() {
   });
 
   jQuery(function() {
-    var termTemplate = "<span class='ui-autocomplete-term'>%s</span>";
-
     return $('#laboratory').autocomplete({
       source: $('#laboratory').data('autocomplete-source'),
       autoFocus: true,

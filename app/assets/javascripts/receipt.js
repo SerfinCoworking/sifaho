@@ -200,6 +200,7 @@ $(document).on('turbolinks:load', function () {
         },
         focus: function( event, ui ) {
           var nested_form = _this.parents(".nested-fields");
+          
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
           return false;
         },
@@ -207,17 +208,20 @@ $(document).on('turbolinks:load', function () {
           $(event.target).parent().siblings('.with-loading').first().addClass('visible');
         },
         select: function (event, ui){
+          console.log(ui.item);
           var nested_form = _this.parents(".nested-fields");
           nested_form.find(".new-supply-lot-code").val(ui.item.value);
           nested_form.find(".new-laboratory").val(ui.item.lab_name);
           nested_form.find(".new-laboratory-id").val(ui.item.lab_id);
           nested_form.find(".new-supply-lot-id").val(ui.item.id);
+          console.log(ui.item.expiry_date);
           if(ui.item.expiry_date){
             const expiryDate = moment(ui.item.expiry_date);
-            nested_form.find(".new-expiry-date").val( expiryDate.endOf('month').format("YYYY-MM-DD"));
+            console.log(expiryDate.endOf('month').format("MM/YY"));
+            nested_form.find(".new-expiry-date").datetimepicker('date', moment('11/2018', 'MM/YY'));
+            nested_form.find("input.datetimepicker-input").val( expiryDate.endOf('month').format("MM/YY"));
             nested_form.find(".new-expiry-date-hidden").val(expiryDate.endOf('month').format("YYYY-MM-DD"));
           }
-          nested_form.find(".new-laboratory").focus();
         },
         response: function(event, ui) {
           $(event.target).parent().siblings('.with-loading').first().removeClass('visible');

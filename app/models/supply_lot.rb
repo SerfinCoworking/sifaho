@@ -23,7 +23,14 @@ class SupplyLot < ApplicationRecord
 
   # Validaciones
   validates_presence_of :supply, :code, :supply_name, :lot_code, :laboratory
-  validates :supply, :uniqueness => { :scope => [:laboratory_id, :lot_code], conditions: -> { with_deleted } }
+  validates :supply, 
+    :uniqueness => { :scope => [:laboratory_id, :lot_code], 
+    conditions: -> { with_deleted } }, # Paranoia
+    unless: :expire?
+  validates :supply,
+    :uniqueness => { :scope => [:laboratory_id, :lot_code, :expiry_date],
+    conditions: -> { with_deleted } }, # Paranoia 
+    if: :expire?
 
   filterrific(
     default_filter_params: { sorted_by: 'insumo_asc' },
@@ -183,6 +190,10 @@ class SupplyLot < ApplicationRecord
   # Métodos privados #----------------------------------------------------------
 
   private
+
+  def expire?
+    expiry_date.present?
+  end
   
   # Se actualiza el estado de expiración sin guardar
   def update_status
