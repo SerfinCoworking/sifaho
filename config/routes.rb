@@ -168,6 +168,7 @@ Rails.application.routes.draw do
       get "edit_applicant"
       get "nullify_confirm"
       patch "nullify"
+      patch "update_applicant"
     end
     collection do
       get "new_report"; get "generate_report"

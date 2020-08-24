@@ -59,7 +59,7 @@
           <li class='nav-item'>
             <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
               <%= fa_icon "cubes" %> Productos
-              <span class="badge badge-secondary"><%= @internal_order.quantity_ord_supply_lots.count %></span>
+              <span class="badge badge-secondary"><%= @internal_order.internal_order_products.count %></span>
             </a>
           </li>
           <li class="nav-item">
@@ -99,41 +99,66 @@
               </tr>
             </thead>
             <tbody>
-              <% @internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+              <% @internal_order.internal_order_products.joins(:product).order("name").each do |intOrdProd| %>
                 <tr>
                   <td>
-                    <%= qosl.supply_id %>
+                    <%= intOrdProd.product_id %>
                   </td>
                   <td>
-                    <%= qosl.supply_name %>
+                    <%= intOrdProd.product_name %>
                   </td>
                   <td>
-                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                    <%= intOrdProd.request_quantity %> <%= intOrdProd.unity.pluralize(intOrdProd.request_quantity) %>
                   </td>
                   <td>
-                    <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                    <%= intOrdProd.delivery_quantity %> <%= intOrdProd.unity.pluralize(intOrdProd.delivery_quantity) %>
                   </td>
-                  <% if qosl.sector_supply_lot.present? %>
+                  <% if intOrdProd.int_ord_prod_lot_stocks.present? %>
                     <td>
-                      <%= qosl.sector_supply_lot.lot_code %>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th> Lote </th>
+                            <th> Laboratorio </th>
+                            <th> Vencimiento </th>
+                          </tr>
+                          <% intOrdProd.int_ord_prod_lot_stocks.joins(:product).order("name").each do |iopls| %>
+                          <tr>
+
+                            <td>
+                              <%= iopls.lot_stocks.lot_code %>
+                            </td>
+                            
+                            <td>
+                              <%= iopls.lot_stocks.laboratory %>
+                            </td>
+                            
+                            <td>
+                              <%= iopls.lot_stocks.expiry_date.present? ? iopls.lot_stocks.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                            </td>
+                          </tr>
+
+                          <% end %>
+                        </thead>
+                      </table>
                     </td>
-                    <td>
-                      <%= qosl.sector_supply_lot.laboratory %>
-                    </td>
-                    <td>
-                      <% if qosl.supply.needs_expiration %>
-                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
-                      <% else %>
-                        No vence
-                      <% end %>
-                    </td>
+                    <%# <td> %>
+                      <%#= qosl.lot_stocks.laboratory %>
+                    <%# </td> %>
+                    <%# <td> %>
+                      <%# if qosl.supply.needs_expiration %>
+                        <%#= qosl.lot_stocks.expiry_date.present? ? qosl.lot_stocks.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                      <%# else %>
+                        <%# No vence %>
+                      <%# end %>
+                    <%# </td> %>
                   <% else %>
                     <td>Sin lote</td><td>----</td><td>----</td>
                   <% end %>
                   <% if @internal_order.solicitud? %>
-                    <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
+                    <td><%= intOrdProd.applicant_observation.present? ? intOrdProd.applicant_observation : '----' %></td>
                   <% end %>
-                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                  <td><%= intOrdProd.provider_observation.present? ? intOrdProd.provider_observation : '----' %></td>
                 </tr>
               <% end %>
             </tbody>

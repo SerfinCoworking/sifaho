@@ -1,24 +1,25 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel">
-    <%= link_to products_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to products_path, class: "nav-link #{ active_action('index') }" do %>
       <%= fa_icon "pills" %>
       Productos
     <% end %>
   </li>
   <% if policy(Product).new? %>
-    <li class="nav-item <%= active_action('new') %> non-sel">
-      <%= link_to new_product_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item non-sel">
+      <%= link_to new_product_path, class: "nav-link #{ active_action('new') }" do %>
         <%= fa_icon "plus" %>
         Agregar producto
       <% end %>
     </li>
   <% end %>
-  <% if policy(Product).trash_index? %>
-    <li class="nav-item <%= active_action('trash_index') %> non-sel">
-      <%= link_to trash_index_products_path, class: 'nav-link' do %>
-        <%= fa_icon "trash" %>
-        Papelera
-      <% end %>
-    </li>
-  <% end %>
+  
+  <%# if policy(Areas).new? %>
+    <%# <li class="nav-item non-sel"> %>
+      <%#= link_to areas_path, class: "nav-link #{ active_action_and_controller('index', "areas") }" do %>
+        <%#= fa_icon "project-diagram" %>
+        <%# Rubros %>
+      <%# end %>
+    <%# </li> %>
+  <%# end %>
 <% end %>

@@ -18,6 +18,10 @@ class InternalOrderPolicy < ApplicationPolicy
   def create_applicant?
     new_applicant?
   end
+  
+  def update_applicant?
+    edit_applicant?
+  end
 
   def new?
     create?

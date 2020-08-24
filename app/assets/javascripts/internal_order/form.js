@@ -1,5 +1,4 @@
 $(document).on('turbolinks:load', function(e){
-  
   if( _PAGE.controller !== 'internal_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant') ) return false;
   initEvents();
   
@@ -15,13 +14,12 @@ $(document).on('turbolinks:load', function(e){
   });
 
   // cocoon init
-  $('#receipt-cocoon-container').on('cocoon:after-insert', function(e) {
+  $('#internal-order-product-cocoon-container').on('cocoon:after-insert', function(e) {
     initEvents();
   });
   
   // set expiry date calendar format
   function initEvents(){
-    console.log("DEBUG");
     // autocomplete establishment input
     $('.product-code').autocomplete({
       source: $('.product-code').attr('data-autocomplete-source'),
@@ -70,30 +68,6 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
-
-
-
-    // $('.receipt-laboratory-name').autocomplete({
-    //   source: $('.receipt-laboratory-name').data('autocomplete-source'),
-    //   autoFocus: true,
-    //   minLength: 2,
-    //   messages: {
-    //     noResults: function(count) {
-    //       $(".ui-menu-item-wrapper").html("No se encontró el laboratorio");
-    //     }
-    //   },
-    //   search: function( event, ui ) {
-    //     $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-    //   },
-    //   select:
-    //   function (event, ui) {
-    //     const tr = $(event.target).closest(".nested-fields");
-    //     tr.find("input.receipt-laboratory-id").val(ui.item.id).trigger('change'); // update supply name input
-    //   },
-    //   response: function(event, ui) {
-    //     $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-    //   }
-    // });
 
   }// iniitEvents function
 

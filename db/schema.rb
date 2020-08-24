@@ -241,12 +241,12 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
   end
 
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "internal_order_products_id"
+    t.bigint "internal_order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["internal_order_products_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_products_id"
+    t.index ["internal_order_product_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_product_id"
     t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
   end
 
