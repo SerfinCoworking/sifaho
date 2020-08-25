@@ -306,7 +306,7 @@
                               <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
                             </td>
                             <td>
-                              <%= qosl.sector_supply_lot.lot_code %>
+                              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : '----' %>
                             </td>
                             <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
                           </tr>
