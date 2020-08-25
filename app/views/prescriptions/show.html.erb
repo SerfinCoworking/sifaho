@@ -226,96 +226,100 @@
       <div class="tab-content">
         <!-- Insumos recetados -->
         <div id='supplies' class='tab-pane container active'>
-          <table class="table table-hover table-sm">
-            <thead>
-              <tr>
-                <th>Cód Ins</th>
-                <th>Insumo</th>
-                <th>Consumo/mes</th>
-                <th>Observaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @prescription.quantity_ord_supply_lots.sin_entregar.each do |qosl| %>
+          <div class="card">
+            <table class="table table-hover table-sm">
+              <thead>
                 <tr>
-                  <td>
-                    <%= qosl.supply_id %>
-                  </td>
-                  <td>
-                    <%= qosl.supply_name %>
-                  </td>
-                  <td>
-                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-                  </td>
-                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                  <th>Cód Ins</th>
+                  <th>Insumo</th>
+                  <th>Consumo/mes</th>
+                  <th>Observaciones</th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <% @prescription.quantity_ord_supply_lots.sin_entregar.each do |qosl| %>
+                  <tr>
+                    <td>
+                      <%= qosl.supply_id %>
+                    </td>
+                    <td>
+                      <%= qosl.supply_name %>
+                    </td>
+                    <td>
+                      <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                    </td>
+                    <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Insumos dispensados -->
         <% cronic_dispensations = @prescription.cronic_dispensations.order(created_at: :desc).to_set %>
         <div id='dispensations' class='tab-pane fade'>
           <div role="tabpanel">
-            <div class="col-sm-2">
-              <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
-                <% i = 0 %>
-                <% cronic_dispensations.each do |cd| %>
-                  <li role="presentation" class="brand-nav <%= i == 0 ? "active" : ""%>">
-                    <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" class="text-right" role="tab" data-toggle="tab">
+            <div class="row">
+              <div class="col-2 card p-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                  <% i = 0 %>
+                  <% cronic_dispensations.each do |cd| %>
+                    <a href="#tab<%= cd.id %>" aria-controls="tab<%= cd.id %>" class="nav-link <%= i == 0 ? "active" : "" %>" role="tab" data-toggle="tab">
                       <span class="badge badge-secondary"><%= cronic_dispensations.count - i %>°</span> &nbsp;
                       <%= cd.created_at.strftime("%d/%m/%Y") %>
                       <%= cd.created_at.strftime("%H:%M")%>
                     </a>
-                  </li>
-                  <% i += 1 %>
-                <% end %>
-              </ul>
-            </div>
-            <div class="col-sm-10">
-              <div class="tab-content">
-                <% i = 0 %>
-                <% cronic_dispensations.each.each do |cd| %>
-                  <div role="tabpanel" class="tab-pane <%= i == 0 ? "active" : ""%>" id="tab<%= cd.id %>">
-                    <table class="table table-hover table-condensed">
-                      <thead>
-                        <tr>
-                          <th>Cód Ins</th>
-                          <th>Insumo</th>
-                          <th>Consumo/mes</th>
-                          <th>Entregado</th>
-                          <th>Lote</th>
-                          <th>Observaciones</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% cd.quantity_ord_supply_lots.each do |qosl| %>
-                          <tr>
-                            <td>
-                              <%= qosl.supply_id %>
-                            </td>
-                            <td>
-                              <%= qosl.supply_name %>
-                            </td>
-                            <td>
-                              <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
-                            </td>
-                            <td>
-                              <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
-                            </td>
-                            <td>
-                              <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : '----' %>
-                            </td>
-                            <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>  
-                  </div>
-                  <% i += 1 %>
-                <% end %>
+                    <% i += 1 %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-10">
+                <div class="tab-content">
+                  <% i = 0 %>
+                  <% cronic_dispensations.each.each do |cd| %>
+                    <div role="tabpanel" class="tab-pane fade <%= i == 0 ? "active show" : ""%>" id="tab<%= cd.id %>">
+                      <div class="card">
+                        <table class="table table-hover table-sm">
+                          <thead>
+                            <tr>
+                              <th>Cód Ins</th>
+                              <th>Insumo</th>
+                              <th>Consumo/mes</th>
+                              <th>Entregado</th>
+                              <th>Lote</th>
+                              <th>Observaciones</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% cd.quantity_ord_supply_lots.each do |qosl| %>
+                              <tr>
+                                <td>
+                                  <%= qosl.supply_id %>
+                                </td>
+                                <td>
+                                  <%= qosl.supply_name %>
+                                </td>
+                                <td>
+                                  <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                                </td>
+                                <td>
+                                  <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                                </td>
+                                <td>
+                                  <%= qosl.sector_supply_lot.present? ? qosl.sector_supply_lot.lot_code : '----' %>
+                                </td>
+                                <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <% i += 1 %>
+                  <% end %>
+                </div>
               </div>
             </div>
           </div>
