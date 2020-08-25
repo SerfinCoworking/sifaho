@@ -11,7 +11,7 @@
       </span>
     </td>
     <td><%= professional.dni %></td>
-    <td><%= professional.professional_type.name %></td>
+    <td><%= professional.professional_type.present? ? professional.professional_type.name : "----" %></td>
     <td class="actions-col">
       <% if policy(professional).show? %>
         <%= link_to professional_path(professional), class: 'btn btn-secondary btn-sm',

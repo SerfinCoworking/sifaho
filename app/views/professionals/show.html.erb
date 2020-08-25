@@ -31,7 +31,11 @@
             <h5><strong>Legajo: </strong></h5>
             <%= @professional.docket %>
             <h5><strong>Especialdad </strong></h5>
-            <%= @professional.professional_type.name %>
+            <% if @professional_type.present? %>
+              <%= @professional.professional_type.name %>
+            <% else %>
+              ----
+            <% end %>
           </div>
         </div>
         <div class="col-md-9">
