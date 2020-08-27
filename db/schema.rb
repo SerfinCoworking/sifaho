@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_19_131046) do
+ActiveRecord::Schema.define(version: 2020_08_27_131851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -353,7 +353,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
   create_table "lot_stocks", force: :cascade do |t|
     t.bigint "lot_id"
     t.bigint "stock_id"
-    t.integer "quantity"
+    t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
@@ -364,7 +364,7 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
     t.bigint "product_id"
     t.bigint "laboratory_id"
     t.string "code"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
@@ -582,9 +582,9 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
   end
 
   create_table "receipt_products", force: :cascade do |t|
-    t.bigint "supply_id"
-    t.bigint "supply_lot_id"
     t.bigint "receipt_id"
+    t.bigint "lot_stock_id"
+    t.bigint "product_id"
     t.bigint "laboratory_id"
     t.integer "quantity"
     t.string "lot_code"
@@ -592,9 +592,9 @@ ActiveRecord::Schema.define(version: 2020_08_19_131046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
+    t.index ["lot_stock_id"], name: "index_receipt_products_on_lot_stock_id"
+    t.index ["product_id"], name: "index_receipt_products_on_product_id"
     t.index ["receipt_id"], name: "index_receipt_products_on_receipt_id"
-    t.index ["supply_id"], name: "index_receipt_products_on_supply_id"
-    t.index ["supply_lot_id"], name: "index_receipt_products_on_supply_lot_id"
   end
 
   create_table "receipts", force: :cascade do |t|

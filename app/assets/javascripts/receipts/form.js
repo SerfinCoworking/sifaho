@@ -96,9 +96,9 @@ $(document).on('turbolinks:load', function(e){
       setExpiryDate(target);
     });
 
-    // autocomplete establishment input
-    $('.receipt-supply-code').autocomplete({
-      source: $('.receipt-supply-code').attr('data-autocomplete-source'),
+    // autocomplete product code input
+    $('.receipt-product-code').autocomplete({
+      source: $('.receipt-product-code').attr('data-autocomplete-source'),
       minLength: 1,
       autoFocus: true,
       messages: {
@@ -110,10 +110,10 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().addClass('visible');
       },
       select: function (event, ui) { 
-        onChangeOnSelectAutoCSupplyCode(event.target, ui.item);
+        onChangeOnSelectAutoCProductCode(event.target, ui.item);
       },
       change: function (event, ui) {      
-        onChangeOnSelectAutoCSupplyCode(event.target, ui.item);
+        onChangeOnSelectAutoCProductCode(event.target, ui.item);
         const tr = $(event.target).closest(".nested-fields");
         tr.find("input.receipt-quantity").focus(); // changes focus to quantity input
       },
@@ -123,8 +123,8 @@ $(document).on('turbolinks:load', function(e){
     });
 
     // Función para autocompletar y buscar el insumo
-    $('.receipt-supply-name').autocomplete({
-      source: $('.receipt-supply-name').attr('data-autocomplete-source'),
+    $('.receipt-product-name').autocomplete({
+      source: $('.receipt-product-name').attr('data-autocomplete-source'),
       minLength: 1,
       autoFocus: true,
       messages: {
@@ -136,7 +136,7 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().addClass('visible');
       },
       select: function (event, ui) { 
-        onSelectAutoCSupplyName(event.target, ui.item);
+        onSelectAutoCProductName(event.target, ui.item);
         const tr = $(event.target).closest(".nested-fields");
         tr.find("input.receipt-quantity").focus(); // changes focus to quantity input
       },
@@ -146,11 +146,11 @@ $(document).on('turbolinks:load', function(e){
     });
 
     // Función para autocompletar código de lote
-    $(".receipt-supply-lot-code").on("focus", function(e) {
+    $(".receipt-product-lot-code").on("focus", function(e) {
       const _this = $(e.target);
       jQuery(function() {
-        return $('.receipt-supply-lot-code').autocomplete({
-          source: '/supply_lots/search_by_lot_code?supply_code='+_this.closest(".nested-fields").find(".receipt-supply-code").val(),
+        return $('.receipt-product-lot-code').autocomplete({
+          source: '/lots/search_by_code?product_id='+_this.closest(".nested-fields").find(".receipt-product-code").val(),
           minLength: 1,
           messages: {
             noResults: function(count) {
@@ -163,12 +163,12 @@ $(document).on('turbolinks:load', function(e){
           select: function (event, ui){
 
             const tr = $(event.target).closest(".nested-fields");
-            tr.find("input.receipt-laboratory-name").val(ui.item.lab_name).trigger('change'); // update supply name input
-            tr.find("input.receipt-laboratory-id").val(ui.item.lab_id).trigger('change'); // update supply name input
+            tr.find("input.receipt-laboratory-name").val(ui.item.lab_name).trigger('change'); // update product name input
+            tr.find("input.receipt-laboratory-id").val(ui.item.lab_id).trigger('change'); // update product name input
             if(ui.item.expiry_date){
               const expiry_date = moment(ui.item.expiry_date);
-              tr.find("input.datetimepicker-input").val(expiry_date.format('MM/YY')); // update supply name input
-              tr.find("input.receipt-expiry-date").val(expiry_date.endOf('month').format("YYYY-MM-DD")); // update supply name input
+              tr.find("input.datetimepicker-input").val(expiry_date.format('MM/YY')); // update product name input
+              tr.find("input.receipt-expiry-date").val(expiry_date.endOf('month').format("YYYY-MM-DD")); // update product name input
             }
           },
           response: function(event, ui) {
@@ -193,7 +193,7 @@ $(document).on('turbolinks:load', function(e){
       select:
       function (event, ui) {
         const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.receipt-laboratory-id").val(ui.item.id).trigger('change'); // update supply name input
+        tr.find("input.receipt-laboratory-id").val(ui.item.id).trigger('change'); // update product name input
       },
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
@@ -208,19 +208,21 @@ $(document).on('turbolinks:load', function(e){
     $(inputHidden).val(expireDate.endOf('month').format("YYYY-MM-DD")); 
   }  
 
-  function onChangeOnSelectAutoCSupplyCode(target, item){
+  function onChangeOnSelectAutoCProductCode(target, item){
     if(item){
       const tr = $(target).closest(".nested-fields");
-      tr.find("input.receipt-supply-name").val(item.name); // update supply name input
-      tr.find("input.receipt-unity").val(item.unity); // update supply unity input      
+      tr.find("input.receipt-product-name").val(item.name); // update product name input
+      tr.find("input.receipt-unity").val(item.unity); // update product unity input      
+      tr.find("input.receipt-product-id[type='hidden']").val(item.id); // update product id input      
     }
   }
-
-  function onSelectAutoCSupplyName(target, item){
+  
+  function onSelectAutoCProductName(target, item){
     if(item){
       const tr = $(target).closest(".nested-fields");
-      tr.find("input.receipt-supply-code").val(item.id); // update supply name input
-      tr.find("input.receipt-unity").val(item.unity); // update supply unity input
+      tr.find("input.receipt-product-code").val(item.code); // update product code input
+      tr.find("input.receipt-unity").val(item.unity); // update product unity input
+      tr.find("input.receipt-product-id[type='hidden']").val(item.id); // update product id input      
     }
   }
 

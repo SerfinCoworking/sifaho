@@ -75,6 +75,24 @@ class LotsController < ApplicationController
     end
   end
 
+  def search_by_code
+    if params[:product_code].present?
+      @lots = Lot.order(:code).with_product_id(params[:product_id]).search_lot_code(params[:term]).limit(10)
+    else
+      @lots = Lot.order(:code).search_lot_code(params[:term]).limit(10)
+    end
+
+    render json: @lots.map{ |lot| 
+      { 
+        label: lot.code+" | "+lot.laboratory.name,
+        value: lot.code,
+        expiry_date: lot.expiry_date,
+        lab_name: lot.laboratory.name,
+        lab_id: lot.laboratory_id 
+      } 
+    }  
+
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_lot

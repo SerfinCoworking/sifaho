@@ -3,7 +3,7 @@ class CreateLotStocks < ActiveRecord::Migration[5.2]
     create_table :lot_stocks do |t|
       t.references :lot, index: true
       t.references :stock, index: true
-      t.integer :quantity
+      t.integer :quantity, default: 0
 
       t.timestamps
     end

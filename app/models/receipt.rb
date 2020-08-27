@@ -115,14 +115,14 @@ class Receipt < ApplicationRecord
   def receive_remit(a_user)
     if self.auditoria?
       if self.receipt_products.where.not(lot_code: nil).exists?
-        self.receipt_products.each do |qosl|
-          qosl.increment_new_lot_to(a_user.sector)
+        self.receipt_products.each do |r_products|
+          r_products.increment_new_lot_to(a_user.sector)
         end
         self.received_date = DateTime.now
         self.received_by = a_user
         self.recibido!
       else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
+        raise ArgumentError, 'No hay productos para recibir en el pedido'
       end # End check if sector supply exists
     else 
       raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')

@@ -35,12 +35,13 @@ class ReceiptsController < ApplicationController
     @receipt = Receipt.new(receipt_params)
     authorize @receipt
     respond_to do |format|
+      @receipt.applicant_sector = current_user.sector
+      @receipt.created_by = current_user
+      @receipt.code = @receipt.applicant_sector.name[0..3].upcase+'rec'+Receipt.maximum(:id).to_i.next.to_s
+      
       begin
-        @receipt.applicant_sector = current_user.sector
-        @receipt.created_by = current_user
-        @receipt.code = @receipt.applicant_sector.name[0..3].upcase+'rec'+Receipt.maximum(:id).to_i.next.to_s
+
         @receipt.auditoria! #default status
-        @receipt.save!
       
         if receiving?
           @receipt.receive_remit(current_user)
@@ -83,7 +84,6 @@ class ReceiptsController < ApplicationController
           @receipt.create_notification(current_user, "auditó")
           message = 'El recibo se ha auditado correctamente'
         end
-
         format.html { redirect_to @receipt, notice: message }
         format.json { render :show, status: :ok, location: @receipt }
       rescue ArgumentError => e
@@ -135,13 +135,14 @@ class ReceiptsController < ApplicationController
         receipt_products_attributes: 
         [
           :id,
-          :supply_id,
-          :supply_lot_id,
+          :product_id,
           :receipt_id,
           :expiry_date, 
           :quantity,
           :lot_code,
           :laboratory_id,
+          :lot_id,
+          :lot_stock_id,
           :_destroy
         ]
       )

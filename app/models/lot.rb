@@ -7,7 +7,17 @@ class Lot < ApplicationRecord
   belongs_to :laboratory
 
   # Validations
-  validates_presence_of :product, :laboratory, :code
+  # validates_presence_of :product, :laboratory, :code
+
+  validates :product, 
+    :uniqueness => { :scope => [:laboratory_id, :code],
+    unless: :expire?
+  }
+
+  validates :product,
+    :uniqueness => { :scope => [:laboratory_id, :code, :expiry_date], 
+    if: :expire?
+  }
 
   # Delegations
   delegate :name, :code, to: :product, prefix: true
@@ -83,4 +93,12 @@ class Lot < ApplicationRecord
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
+
+  scope :with_product_id, lambda { |a_product_id| 
+    where('product_id = ?', a_product_id)
+  }
+
+  def expire?
+    expiry_date.present?
+  end
 end

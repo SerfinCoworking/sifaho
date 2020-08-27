@@ -4,7 +4,7 @@ class Stock < ApplicationRecord
   # Relations
   belongs_to :product
   belongs_to :sector
-  has_many :sector_supply_lots
+  has_many :lot_stocks
   has_one :area, through: :product
   has_one :unity, through: :product
 
@@ -15,10 +15,10 @@ class Stock < ApplicationRecord
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
   # Update the stock quantity 
-  def update_stock
-    self.quantity = self.sector_supply_lots.without_status(4).sum(:quantity)
-    self.save
-  end
+  # def update_stock
+  #   self.quantity = self.sector_supply_lots.without_status(4).sum(:quantity)
+  #   self.save
+  # end
 
   pg_search_scope :search_product_code,
     :associated_against => { :product => :code },
@@ -78,5 +78,10 @@ class Stock < ApplicationRecord
       ['Nombre (a-z)', 'nombre_asc'],
       ['Unidad (a-z)', 'unidad_asc']
     ]
+  end
+
+  def refresh_quantity
+    self.quantity = self.lot_stocks.sum(:quantity)
+    self.save!
   end
 end

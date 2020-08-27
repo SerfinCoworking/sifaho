@@ -67,7 +67,7 @@ es:
         cuil: "Cuil"
         gln: "GLN"
       receipt:
-        provider_sector: "Sector proveedor"
+        provider_sector_id: "Sector proveedor"
       receipt_product:
         lot_code: "Lote"
         supply_id: "Insumo"
