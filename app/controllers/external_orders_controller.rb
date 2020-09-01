@@ -186,7 +186,7 @@ class ExternalOrdersController < ApplicationController
       else
         if external_order_params[:order_type] == 'despacho'
           @order_type = 'despacho'
-          @external_order.applicant.present? ? @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id) : ""
+          @external_order.applicant_sector.present? ? @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id) : ""
           flash[:error] = "El despacho no se ha podido crear."
           format.html { render :new }
         elsif external_order_params[:order_type] == 'recibo'
