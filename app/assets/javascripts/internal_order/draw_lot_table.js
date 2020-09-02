@@ -4,8 +4,8 @@
 // draw lot table selection
 function drawLotTable(value, selectedLots, toDelivery){
   const container = $('<div></div>');
-  const bodyHeader = $('<div> Cantidad a entregar seleccionada: '+toDelivery+'</div>');
-  const table = $('<table></table>');
+  const headerDiv = $('<div class="d-flex"></div>');
+  const table = $('<table id="table-lot-selection"></table>');
   const thead = $('<thead></thead>');
   let tbody = $('<tbody></tbody>');
   const trHead = $('<tr></tr>');
@@ -32,11 +32,16 @@ function drawLotTable(value, selectedLots, toDelivery){
     // 
     inputCheck.on('change', (e) => {
       e.stopPropagation();
+      const tr = $(e.target).closest('tr');
+
       if(!$(e.target).prop("checked")){
+        $(tr).removeClass('selected-row');
         $(e.target).closest('tr').removeClass('selected-row');
       }else{
         $(e.target).closest('tr').addClass('selected-row');
       }
+      
+      getCurrentSelectedQuantity();
     });
      
     tdCheck.append(inputCheck);
@@ -52,6 +57,12 @@ function drawLotTable(value, selectedLots, toDelivery){
         checkBoxe.trigger('change');
       }
     });
+    
+    inputQuantity.on('focusout', (e) => {
+      e.stopPropagation();
+      getCurrentSelectedQuantity();
+    });
+
     thQuantity.append(inputQuantity);
 
 
@@ -70,8 +81,10 @@ function drawLotTable(value, selectedLots, toDelivery){
     tbody.append(tr);
   });
 
-
   tbody = initSelected(tbody, selectedLots);
+
+  const bodyHeader = $('<h5> Cantidad seleccionada:<span id="qv-ref" data-qv-ref="0"></span> de <span class="badge badge-primary">'+toDelivery+'</span></h5>');
+
   table.append(tbody);
   container.append(bodyHeader, table);
   return container;
@@ -112,6 +125,17 @@ function initSelected(tbody, selectedLots){
     $(checkbox).prop("checked", true).trigger("change");
     $(quantityInput).val(qValue).trigger("change");
   });
-    
   return tbody;
+}
+
+function getCurrentSelectedQuantity(){
+  const selectedLots = $('#table-lot-selection').find('tr.selected-row');
+  let totalQuantity = 0;
+  selectedLots.map((index, tr) => {
+    const inputQuantity = $(tr).find('input[type="number"]').val() * 1;
+    totalQuantity += inputQuantity;
+  });
+
+  $("#qv-ref").attr('data-qv-ref', totalQuantity);
+  $("#qv-ref").html(" " + totalQuantity);
 }

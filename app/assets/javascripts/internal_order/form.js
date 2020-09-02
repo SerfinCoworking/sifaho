@@ -126,12 +126,12 @@ $(document).on('turbolinks:load', function(e){
           product_code: productCode
       }}).done(function(response){
         const table_body = drawLotTable(response, selectedLots, toDelivery);
-        $('.modal-dialog').addClass('modal-lg');
+        $('.modal-dialog').addClass('modal-xl');
         $('.modal-header').addClass('bg-primary text-white');
         $('.modal-title').html("<i class='fa fa-barcode'></i>  Seleccionar lote en stock");
         
         $('.modal-body').html(table_body);
-
+        getCurrentSelectedQuantity();
         // Add form button
         $('.modal-footer').html(
           "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
