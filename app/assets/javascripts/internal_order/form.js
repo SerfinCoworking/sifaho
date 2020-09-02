@@ -69,6 +69,8 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.request-quantity").val(quantity);
     });
 
+    deliveryQuantityEventBinding();
+
     lotsQuantitySelection();
 
   }// initEvents function
@@ -145,10 +147,14 @@ $(document).on('turbolinks:load', function(e){
           $(hiddenTarget).html(''); //clean every input stored
           // handle selected options
           const selectedOptions = $(e.target).find('tr.selected-row');
+          let totalQuantitySelected = 0;
           selectedOptions.map((index, option) => {
             // option
             addLot(hiddenTarget, templateHidden, option);
+            totalQuantitySelected += ($(option).find('input[type="number"]').first().val() * 1);
           });
+
+          setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
 
           $('.modal-header').removeClass('bg-secondary text-white');
           $('.modal-dialog').removeClass('modal-lg');
@@ -158,4 +164,29 @@ $(document).on('turbolinks:load', function(e){
     });// End lot selection button click action
   }
 
+  // toggle lot button disabled attribute 
+  function deliveryQuantityEventBinding(){
+    $('input.deliver-quantity').on('change', function(e){
+      const tr = $(e.target).closest('tr');
+      // $(tr).find('button.select-lot-btn').attr('disabled', !($(e.target).val() > 0));
+      $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
+    });
+    // setProgress(totalQuantitySelected, toDelivery, selectedOptionsCount)
+  }
+
+  function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
+    
+
+    const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
+    $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': (quantityPercent + '%')});
+    $(targetRow).find('button.select-lot-btn').first().html("Seleccionados " + selectedOptionsCount);
+    
+    if(quantityPercent === 100){
+      $(targetRow).find('button.select-lot-btn').siblings().first().addClass('complete-progress');
+      $(targetRow).find('button.select-lot-btn').first().addClass('complete-progress');
+    }else{
+      $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('complete-progress');
+      $(targetRow).find('button.select-lot-btn').first().removeClass('complete-progress');
+    }
+  }
 });

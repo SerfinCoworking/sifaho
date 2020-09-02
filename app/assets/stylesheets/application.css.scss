@@ -238,3 +238,34 @@ td .form-group{
     }
   }
 }
+
+.btn-progress{
+  width: 10rem;
+  position:relative;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  border: 1px solid #ced4da;
+  .bg-progress{
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    width: 100%;
+    z-index: 1;
+    transition: width .5s ease-out, background-color .5s ease-out;
+    &.complete-progress{
+      background-color: #28a745!important;
+    }
+  }
+  .btn{
+    border: none!important;
+    background-color: transparent!important; 
+    z-index: 10;
+    position: relative;
+    color: #000;
+    transition: color .5s ease-out; // color .5s .5s ease-out;
+    &.complete-progress{      
+      color: #e9ecef
+    }
+  }
+}
