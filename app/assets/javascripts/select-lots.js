@@ -6,25 +6,25 @@ $(document).on("keyup change",".apply-request-quant", function() {
   });
 });
 
-// Select del lote
-$(document).on('click', '.select-lot-btn', function () {
-  var nested_form = $(this).parents(".nested-fields");
-  var input_id = nested_form.find('.sector-supply-lot-id').attr("id");
-  var supply_id = nested_form.find('.supply-id').val();
-  var sector_supply_lot_id = nested_form.find('.sector-supply-lot-id').val();
+// // Select del lote
+// $(document).on('click', '.select-lot-btn', function () {
+//   var nested_form = $(this).parents(".nested-fields");
+//   var input_id = nested_form.find('.sector-supply-lot-id').attr("id");
+//   var supply_id = nested_form.find('.supply-id').val();
+//   var sector_supply_lot_id = nested_form.find('.sector-supply-lot-id').val();
 
-  $.ajax({
-    url: "/sector_supply_lots/select_lot?input_id="+input_id+"&supply_id="+supply_id+"&selected_lot_id="+sector_supply_lot_id,
-    type: 'GET',
-    data: {
-      term: nested_form.find('.supply-code').val()
-    },
-    dataType: "script",
-    error: function (XMLHttpRequest, errorTextStatus, error) {
-      alert("Failed: " + errorTextStatus + " ;" + error);
-    }
-  });// End ajax
-});// End jquery function
+//   $.ajax({
+//     url: "/sector_supply_lots/select_lot?input_id="+input_id+"&supply_id="+supply_id+"&selected_lot_id="+sector_supply_lot_id,
+//     type: 'GET',
+//     data: {
+//       term: nested_form.find('.supply-code').val()
+//     },
+//     dataType: "script",
+//     error: function (XMLHttpRequest, errorTextStatus, error) {
+//       alert("Failed: " + errorTextStatus + " ;" + error);
+//     }
+//   });// End ajax
+// });// End jquery function
 
 // Función para rellenar el hidden input del lote y modificar el contenido del botón
 $(document).on('click', '.modal-clickable-lot', function () {

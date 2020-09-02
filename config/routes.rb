@@ -6,7 +6,13 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :stocks
+  resources :stocks do
+    collection do
+      get "find_lots/(:id)",
+        to: 'stocks#find_lots',
+        as: 'find_lots'
+    end
+  end
   # Lotes
   resources :lots do
     member do
@@ -169,6 +175,7 @@ Rails.application.routes.draw do
       get "nullify_confirm"
       patch "nullify"
       patch "update_applicant"
+      patch "update_provider"
     end
     collection do
       get "new_report"; get "generate_report"
@@ -177,6 +184,7 @@ Rails.application.routes.draw do
       get "applicant_index"
       get "statistics"
       post "create_applicant"
+      post "create_provider"
     end
   end
 

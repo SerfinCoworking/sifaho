@@ -1,78 +1,125 @@
-<%= simple_form_for @internal_order, html: { role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class="row">
-    <div class='col-3'>
-      <%= f.input :applicant_sector, label: 'Sector solicitante',
-        collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
-        required: true,
-        selected: "#{ f.object.applicant_sector.present? ? f.object.applicant_sector.id : "" }",
-        :input_html => {
-          id: 'applicant-sector',
-          class: 'selectpicker-md custom-select-pick show-tick',
-          "data-width"=>"100%",
-          "title"=>"Seleccionar sector",
-          "data-size"=>"10",
-          "data-live-search"=>true,
-          disabled: false,
-        } 
-      %>
-      <%= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
-      <%= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @internal_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @internal_order.new_record? ? "Nueva provisión de sector" : "Editando provisión de sector" %>
+      </h5>
     </div>
-    <div class="col-3">
-      <%= f.input :provider_sector_id, as: :string,
-        label: 'Sector proveedor',
-        :input_html => {
-          disabled: true,
-          size: 30,
-          value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
-        } 
-      %>
-      <%= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
-    </div>
-    <div class='col-2'>
-      <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
-        :placeholder => "Seleccionar fecha",
-        input_html: {
-          id: "requested-date",
-          required: true,
-          autocomplete: 'off',
-          :style => 'width: 110px',
-          value: "#{f.object.requested_date unless f.object.new_record?}"
-        },
-        html5: false 
-      %>
-    </div>
-    <div class='col-4'>
-      <%= f.input :observation, label: 'Observaciones', as: :text,
-        :input_html => { :cols => 40  , :rows => 1 } %>
-    </div>
-  </div>
-  <!-- Insumos a dispensar -->
-  <div class="card">
-    <table class="table table-hover table-sm mb-0">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Producto</th>
-          <th>Tu stock</th>
-          <th>Solicitado</th>
-          <th>A entregar</th>
-          <th>Lote</th>
-          <th>Tu observación</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody class="quantity_ord_supply_lots" id="cocoon-container">
-        <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-          <%= render "internal_orders/quantity_ord_supply_lot_fields", f: form_quantity %>
-        <% end %>
-      </tbody>
-    </table>
-    <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
-      data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-      <%= fa_icon "plus" %>
-      Agregar insumo
+    <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
     <% end %>
   </div>
-<% end %>
+  <div class="card-body">
+    
+    <%= simple_form_for @internal_order, :url => (@internal_order.new_record? ? create_provider_internal_orders_path : update_provider_internal_order_path(@internal_order)),
+     html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class="row">
+        <div class='col-3'>
+          <%= f.input :applicant_sector_id, label: 'Sector solicitante',
+            collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
+            selected: "#{ f.object.applicant_sector.present? ? f.object.applicant_sector.id : "" }",
+            :input_html => {
+              id: 'applicant-sector',
+              class: 'selectpicker-md custom-select-pick show-tick',
+              "data-width"=>"100%",
+              "title"=>"Seleccionar sector",
+              "data-size"=>"10",
+              "data-live-search"=>true,
+              disabled: false,
+            } 
+          %>
+          <%#= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
+          <%#= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
+        </div>
+        <div class="col-3">
+          <%= f.input :provider_sector_id, as: :string,
+            label: 'Sector proveedor',
+            :input_html => {
+              disabled: true,
+              size: 30,
+              value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
+            } 
+          %>
+          <%#= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
+        </div>
+        <%# <div class='col-2'> %>
+          <%#= f.input :requested_date, label: 'Fecha solicitado', as: :string,
+            :placeholder => "Seleccionar fecha",
+            input_html: {
+              id: "requested-date",
+              required: true,
+              autocomplete: 'off',
+              :style => 'width: 110px',
+              value: "#{f.object.requested_date unless f.object.new_record?}"
+            },
+            html5: false 
+          %>
+        <%# </div> %>
+        <div class='col-4'>
+          <%= f.input :observation, label: 'Observaciones', as: :text,
+            :input_html => { :cols => 40  , :rows => 1 } %>
+        </div>
+      </div>
+      <!-- Insumos a dispensar -->
+      <div class="card">
+        <table class="table table-hover table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Unidad</th>
+              <th>Tu stock</th>
+              <th>Solicitado</th>
+              <th>A entregar</th>
+              <th>Lote</th>
+              <th>Tu observación</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="internal-order-product-cocoon-container">
+            <%= f.simple_fields_for :internal_order_products do |form_quantity| %>
+              <%= render "internal_order_product_fields", f: form_quantity, order_type: order_type %>
+            <% end %>
+          </tbody>
+        </table>
+        <%= link_to_add_association f, :internal_order_products, class: 'btn btn-primary btn-sm',
+          data: {"association-insertion-node" => "tbody#internal-order-product-cocoon-container", 
+          "association-insertion-method" => "append"},
+          render_options: {locals: { order_type: 'solicitud' }} do %>
+          <%= fa_icon "plus" %>
+          Agregar insumo
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn mr-1' %>
+  
+    <button type='submit' class='btn btn-success mr-2' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+
+    </button>
+
+    <button type='submit' class='btn btn-primary' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='receive'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Guardar y recibir
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+  </div>
+</div>

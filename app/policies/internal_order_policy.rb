@@ -11,33 +11,65 @@ class InternalOrderPolicy < ApplicationPolicy
     index?
   end
 
-  def create?
+  # def create?
+  #   user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  # end
+
+  def new_provider?
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
+  def new_applicant?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
+  def new_report?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
   end
 
   def create_applicant?
     new_applicant?
   end
   
+  def create_provider?
+    new_provider?
+  end
+  
+  def edit_applicant?
+    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+  
+  def edit_provider?
+    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
   def update_applicant?
     edit_applicant?
   end
-
-  def new?
-    create?
+  
+  def update_provider?
+    edit_provider?
   end
 
-  def update?
-    unless ["en_camino", "entregado"].include? record.provider_status
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
-  end
+  # def new?
+  #   create?
+  # end
 
-  def edit?
-    if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
-  end
+  # def update?
+  #   unless ["en_camino", "entregado"].include? record.provider_status
+  #     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  #   end
+  # end
+
+  # def edit?
+  #   if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
+  #     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  #   end
+  # end
 
   def nullify?
     edit?
@@ -47,11 +79,7 @@ class InternalOrderPolicy < ApplicationPolicy
     nullify?
   end
 
-  def edit_applicant?
-    if record.solicitud_auditoria? && record.applicant_sector == user.sector
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
-  end
+ 
 
   def destroy?
     if record.solicitud? 
@@ -69,20 +97,8 @@ class InternalOrderPolicy < ApplicationPolicy
     destroy?
   end
 
-  def new_provider?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-  end
-
-  def new_report?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
-  end
-
   def generate_report?
     new_report?
-  end
-
-  def new_applicant?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
   end
 
   def send_provider?

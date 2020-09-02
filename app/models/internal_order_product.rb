@@ -7,6 +7,7 @@ class InternalOrderProduct < ApplicationRecord
   belongs_to :product
 
   has_many :int_ord_prod_lot_stocks
+  has_many :lot_stocks, :through => :int_ord_prod_lot_stocks
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }

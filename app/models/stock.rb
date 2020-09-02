@@ -72,6 +72,14 @@ class Stock < ApplicationRecord
     where('stocks.sector_id = ?', sector.id)
   }
   
+  scope :by_product_code, lambda { |product_code|
+    joins(:product).where('products.code': product_code)
+  }
+  
+  scope :with_available_quantity, lambda {
+    joins(:lot_stocks).where("lot_stocks.quantity > ?", 0) 
+  }
+  
   def self.options_for_sorted_by
     [
       ['Código (asc)', 'codigo_asc'],

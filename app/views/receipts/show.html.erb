@@ -54,7 +54,7 @@
       <div class='col-12'>
         <ul class='nav nav-tabs nav-justified'>
           <li class='nav-item'>
-            <a class="nav-link active" data-toggle='tab' href='#supplies'>
+            <a class="nav-link active" data-toggle='tab' href='#products'>
               <%= fa_icon "cubes" %>
               Productos
               <span class="badge badge-secondary"><%= @receipt.receipt_products.count %></span>
@@ -72,7 +72,7 @@
     </div>
     <div class="col-md-12">
       <div class="tab-content">
-        <div id='supplies' class='tab-pane fade show active'>
+        <div id='products' class='tab-pane fade show active'>
           
             <!-- Productos a recibir -->
             <div class="card">
@@ -85,30 +85,28 @@
                     <th>Lote</th>
                     <th>Laboratorio</th>
                     <th>Vencimiento</th>
-                    <th>Observaciones</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% @receipt.receipt_products.joins(:supply).order("name").each do |qosl| %>
+                  <% @receipt.receipt_products.joins(:product).order("name").each do |r_products| %>
                     <tr>
                       <td>
-                        <%= qosl.supply_id %>
+                        <%= r_products.product_code %>
                       </td>
                       <td>
-                        <%= qosl.supply.name %>
+                        <%= r_products.product_name %>
                       </td>
                       <td>
-                        <%= qosl.quantity %>
+                        <%= r_products.quantity %>
                       </td>
                       <td>
-                        <%= qosl.lot_code.present? ? qosl.lot_code : 'n/a' %>
+                        <%= r_products.lot_code.present? ? r_products.lot_code : 'n/a' %>
                       </td>
                       <td>
-                        <%= qosl.laboratory_id.present? ? Laboratory.find_by_id(qosl.laboratory_id).name : 'n/a' %>
+                        <%= r_products.laboratory_id.present? ? Laboratory.find_by_id(r_products.laboratory_id).name : 'n/a' %>
                       </td>
                       <td>
-                        <%= qosl.expiry_date.present? ? qosl.expiry_date.strftime("%m/%y") : 'No vence' %>
+                        <%= r_products.expiry_date.present? ? r_products.expiry_date.strftime("%m/%y") : 'No vence' %>
                       </td>
                     </tr>
                   <% end %>

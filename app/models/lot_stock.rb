@@ -13,6 +13,7 @@ class LotStock < ApplicationRecord
   validates_presence_of :stock_id
   
   delegate :refresh_quantity, to: :stock, prefix: true
+  delegate :name, to: :product, prefix: true
 
   scope :with_product, lambda { |a_product| 
     where('lot_stocks.product_id = ?', a_product.id).joins(:lot)
@@ -28,7 +29,7 @@ class LotStock < ApplicationRecord
   # Disminuye la cantidad
   def decrement(a_quantity)
     if self.quantity < a_quantity
-      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" insumo "+self.supply_name
+      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" insumo "+self.product_name
     else
       self.quantity -= a_quantity
       self.save!
