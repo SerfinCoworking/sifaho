@@ -87,7 +87,7 @@
         <%= link_to_add_association f, :internal_order_products, class: 'btn btn-primary btn-sm',
           data: {"association-insertion-node" => "tbody#internal-order-product-cocoon-container", 
           "association-insertion-method" => "append"},
-          render_options: {locals: { order_type: 'solicitud' }} do %>
+          render_options: {locals: { order_type: order_type }} do %>
           <%= fa_icon "plus" %>
           Agregar insumo
         <% end %>
@@ -123,3 +123,6 @@
     </button>
   </div>
 </div>
+
+
+<%= render "lot_selection_dialog" %>

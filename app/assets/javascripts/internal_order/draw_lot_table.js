@@ -3,25 +3,9 @@
 
 // draw lot table selection
 function drawLotTable(value, selectedLots, toDelivery){
-  const container = $('<div></div>');
-  const headerDiv = $('<div class="d-flex"></div>');
-  const table = $('<table id="table-lot-selection"></table>');
-  const thead = $('<thead></thead>');
-  let tbody = $('<tbody></tbody>');
-  const trHead = $('<tr></tr>');
-  const thCheck = $('<th width="5%"></th>');
-  const thQuantity = $('<th>Cantidad</th>');
-  const thCode = $('<th>Código</th>');
-  const thStock = $('<th>Stock</th>');
-  const thStatus = $('<th>Estado</th>');
-  const thExpiryDate = $('<th>Vencimiento</th>');
-  const thLaboratory = $('<th width="35%">Laboratorio</th>');
-
-  table.addClass('table table-hover table-sticky-header');
   
-  trHead.append(thCheck, thQuantity, thCode, thStock, thStatus, thExpiryDate, thLaboratory);
-  thead.append(trHead);
-  table.append(thead);
+  let tbody = $('<tbody></tbody>'); //$('#lot-selection').find('#tbody-lot-selection');
+  $('#tdelivery-ref').html(toDelivery);
 
   // add every lot stock row
   value.map((item, index) => {
@@ -83,11 +67,7 @@ function drawLotTable(value, selectedLots, toDelivery){
 
   tbody = initSelected(tbody, selectedLots);
 
-  const bodyHeader = $('<h5> Cantidad seleccionada:<span id="qv-ref" data-qv-ref="0"></span> de <span class="badge badge-primary">'+toDelivery+'</span></h5>');
-
-  table.append(tbody);
-  container.append(bodyHeader, table);
-  return container;
+  return tbody;
 }
 
 function onClickRow(e){

@@ -256,6 +256,9 @@ td .form-group{
     &.complete-progress{
       background-color: #28a745!important;
     }
+    &.fail-progress{
+      background-color: #dc3545!important;
+    }
   }
   .btn{
     border: none!important;
@@ -264,7 +267,7 @@ td .form-group{
     position: relative;
     color: #000;
     transition: color .5s ease-out; // color .5s .5s ease-out;
-    &.complete-progress{      
+    &.complete-progress, &.fail-progress{      
       color: #e9ecef
     }
   }

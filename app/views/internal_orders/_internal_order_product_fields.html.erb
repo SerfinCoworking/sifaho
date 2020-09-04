@@ -129,7 +129,7 @@
     
     <!-- Lotes -->
     <td>
-      <div id="int-ord-prod-lot-stocks">
+      <div class="lot-stocks-hidden">
       
         <%
           new_iopls = f.object.int_ord_prod_lot_stocks.build
@@ -143,20 +143,12 @@
         %>
       </div>
 
-      <%#= f.simple_fields_for :int_ord_prod_lot_stocks, f.object.int_ord_prod_lot_stocks.build do |iopls| %>
-        <%#= iopls.hidden_field :lot_stock_id %>
-        <%#= iopls.hidden_field :quantity %>
-      <%# end %>
-
-<%# btn-#{select_btn_status(f.object)} %>
       <div class="btn-progress">
         <div class="bg-progress bg-info"></div>
         <%= button_tag type: "button", 
-          # disabled: "#{!(f.object.delivery_quantity.present? && f.object.delivery_quantity > 0)}",
-          class: "btn  select-lot-btn text-nowrap",
+          class: "btn  select-lot-btn text-nowrap w-100",
           "data-select-lot-url" => find_lots_stocks_path(@internal_order),
-          "data-template-fill-hidden" => fields, 
-          "data-hidden-target" => "#int-ord-prod-lot-stocks"  do %>
+          "data-template-fill-hidden" => fields do %>
           <% if f.object.lot_stocks.present? %>
             <%= fa_icon "barcode" %> <%#= f.object.sector_supply_lot.lot_code %> <%#= fa_icon "cubes" %> <%#= f.object.sector_supply_lot.quantity %>
           <% else %>
