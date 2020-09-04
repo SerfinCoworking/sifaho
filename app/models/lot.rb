@@ -99,8 +99,8 @@ class Lot < ApplicationRecord
     end
   }
 
-  scope :with_product_id, lambda { |a_product_id| 
-    where('product_id = ?', a_product_id)
+  scope :with_product_code, lambda { |a_product_code| 
+    joins(:product).where('products.code = ?', a_product_code)
   }
 
   def expire?

@@ -77,7 +77,7 @@ class LotsController < ApplicationController
 
   def search_by_code
     if params[:product_code].present?
-      @lots = Lot.order(:code).with_product_id(params[:product_id]).search_lot_code(params[:term]).limit(10)
+      @lots = Lot.order(:code).with_product_code(params[:product_code]).search_lot_code(params[:term]).limit(10)
     else
       @lots = Lot.order(:code).search_lot_code(params[:term]).limit(10)
     end
