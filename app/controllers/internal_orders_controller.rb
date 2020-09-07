@@ -154,6 +154,41 @@ class InternalOrdersController < ApplicationController
       end
     end
   end
+
+  def create_provider 
+    @internal_order = InternalOrder.new(internal_order_params)
+    authorize @internal_order
+    @internal_order.created_by = current_user
+    @internal_order.audited_by = current_user
+    @internal_order.requested_date = DateTime.now
+    @internal_order.provider_sector = current_user.sector
+
+    respond_to do |format|
+      @internal_order.save!
+      begin
+        # Si se carga y provision el pedido
+        if sending_by_provider?
+          @internal_order.send_order_by(current_user)
+          message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente."
+        else
+          @internal_order.proveedor_auditoria!
+          @internal_order.create_notification(current_user, "creó y auditó")
+          message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
+        end
+        format.html { redirect_to @internal_order, notice: message }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure  
+        @applicant_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+        @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+        format.html { render :new_provider }
+      end
+    end
+  end
   
   # PATCH /internal_orders
   # PATCH /internal_orders.json
@@ -191,76 +226,9 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  def create
-    @internal_order = InternalOrder.new(internal_order_params)
-    authorize @internal_order
-    @internal_order.created_by = current_user
-    @internal_order.audited_by = current_user
-
-    respond_to do |format|
-      if @internal_order.save
-        begin
-          if @internal_order.provision?
-            # Si se carga y provision el pedido
-            if sending_by_provider?
-              @internal_order.send_order_by(current_user)
-              flash[:success] = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente."
-            else
-              @internal_order.proveedor_auditoria!
-              @internal_order.create_notification(current_user, "creó y auditó")
-              flash[:success] = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
-            end
-          elsif @internal_order.solicitud?
-            if sending?
-              @internal_order.solicitud_enviada!
-              @internal_order.create_notification(current_user, "creó y envió")
-              flash[:success] = "La solicitud se ha auditado y enviado correctamente."
-            else
-              @internal_order.solicitud_auditoria!
-              @internal_order.create_notification(current_user, "creó y auditó")
-              flash[:success] = "La solicitud se ha creado y se encuentra en auditoria."
-            end
-          end
-        rescue ArgumentError => e
-          flash[:alert] = e.message
-          if @internal_order.provision?
-            @order_type = 'provision'
-            @applicant_sectors = Sector
-              .select(:id, :name)
-              .with_establishment_id(current_user.sector.establishment_id)
-              .where.not(id: current_user.sector_id).as_json
-            format.html { render :new_provider }
-          elsif @internal_order.solicitud?
-            @order_type = 'solicitud'
-            @provider_sectors = Sector
-              .select(:id, :name)
-              .with_establishment_id(current_user.sector.establishment_id)
-              .where.not(id: current_user.sector_id).as_json
-            format.html { render :new_applicant }
-          end
-        else
-          format.html { redirect_to @internal_order }
-        end
-      else
-        flash[:error] = "La "+@internal_order.order_type+" no se ha podido crear."
-        if @internal_order.provision?
-          @order_type = 'provision'
-          @applicant_sectors = Sector
-            .select(:id, :name)
-            .with_establishment_id(current_user.sector.establishment_id)
-            .where.not(id: current_user.sector_id).as_json
-          format.html { render :new_provider }
-        elsif @internal_order.solicitud?
-          @order_type = 'solicitud'
-          @provider_sectors = Sector
-            .select(:id, :name)
-            .with_establishment_id(current_user.sector.establishment_id)
-            .where.not(id: current_user.sector_id).as_json
-          format.html { render :new_applicant }
-        end
-      end
-    end
-  end
+  # def create
+    
+  # end
 
   # PATCH/PUT /internal_orders/1
   # PATCH/PUT /internal_orders/1.json
@@ -509,14 +477,21 @@ class InternalOrdersController < ApplicationController
       :date_received, 
       :observation, 
       :remit_code,
-      internal_order_products_attributes: [:id, 
+      internal_order_products_attributes: [
+        :id, 
         :product_id, 
         :lot_stock_id,
         :request_quantity,
         :delivery_quantity,
         :applicant_observation,
         :provider_observation, 
-        :_destroy
+        :_destroy,
+        int_ord_prod_lot_stocks_attributes: [
+          :id,
+          :quantity,
+          :lot_stock_id,
+          :_destroy
+        ]
       ]
     )
   end

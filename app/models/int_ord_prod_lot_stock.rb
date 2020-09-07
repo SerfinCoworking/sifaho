@@ -1,5 +1,5 @@
 class IntOrdProdLotStock < ApplicationRecord
-  belongs_to :internal_order_products
+  belongs_to :internal_order_products, optional: true
   belongs_to :lot_stock
 
 

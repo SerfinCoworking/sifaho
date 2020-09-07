@@ -97,7 +97,8 @@
 
     <!-- Cantidad solicitada -->
     <td style="width: 100px">
-      <%= f.input :request_quantity, 
+      <%= f.input :request_quantity,
+        as: :fake, 
         disabled: true,
         label: false, 
         placeholder: 'Cant', 
@@ -107,11 +108,13 @@
           :class=>"request-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
-          min: '1', 
+          min: '1',
           step:'any',
           :style => 'width: 100px'
         }
       %>
+      <%#= f.hidden_field %>
+      <%= f.hidden_field :request_quantity, :class => "request-quantity" %>
     </td>
 
     <!-- Cantidad entregada -->
@@ -132,6 +135,7 @@
       <div class="lot-stocks-hidden">
       
         <%
+          # template input hidden lot selection
           new_iopls = f.object.int_ord_prod_lot_stocks.build
           fields = f.fields_for(:int_ord_prod_lot_stocks, 
           new_iopls, 

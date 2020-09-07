@@ -63,6 +63,7 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
+    
     $("input.deliver-quantity").on('change', function(e){
       const quantity = $(e.target).val();
       const tr = $(e.target).closest(".nested-fields");
@@ -151,7 +152,7 @@ $(document).on('turbolinks:load', function(e){
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
-      const selecteedQuantity = $(tr).find('#int-ord-prod-lot-stocks .lot_stock_quantity_ref');
+      const selecteedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
       selecteedQuantity.map((index, option) => {
         // option
         totalQuantitySelected += ($(option).val() * 1);
