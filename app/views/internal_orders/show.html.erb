@@ -86,81 +86,107 @@
               <tr>
                 <th>Código</th>
                 <th>Producto</th>
+                <th>Unidad</th>
                 <th>Solicitado</th>
                 <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
-                <th>Lote</th>
-                <th>Laboratorio</th>
-                <th>Vencimiento</th>
-                <% if @internal_order.solicitud? %>
-                  <th>Obs. Sol.</th>
-                <% end %>
-                <th>Obs. Prov.</th>
+                <th>Lotes</th>
+                <th>Observaciones</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <% @internal_order.internal_order_products.joins(:product).order("name").each do |intOrdProd| %>
+              <% @internal_order.internal_order_products.joins(:product).order("name").each do |int_ord_prod| %>
                 <tr>
                   <td>
-                    <%= intOrdProd.product_id %>
+                    <%= int_ord_prod.product_id %>
                   </td>
                   <td>
-                    <%= intOrdProd.product_name %>
+                    <%= int_ord_prod.product_name %>
                   </td>
                   <td>
-                    <%= intOrdProd.request_quantity %> <%= intOrdProd.unity.pluralize(intOrdProd.request_quantity) %>
+                    <%= int_ord_prod.unity %>
                   </td>
                   <td>
-                    <%= intOrdProd.delivery_quantity %> <%= intOrdProd.unity.pluralize(intOrdProd.delivery_quantity) %>
+                    <%= int_ord_prod.request_quantity %> 
                   </td>
-                  <% if intOrdProd.int_ord_prod_lot_stocks.present? %>
-                    <td>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th> Lote </th>
-                            <th> Laboratorio </th>
-                            <th> Vencimiento </th>
-                          </tr>
-                          <% intOrdProd.int_ord_prod_lot_stocks.joins(:product).order("name").each do |iopls| %>
-                          <tr>
-
-                            <td>
-                              <%= iopls.lot_stocks.lot_code %>
-                            </td>
-                            
-                            <td>
-                              <%= iopls.lot_stocks.laboratory %>
-                            </td>
-                            
-                            <td>
-                              <%= iopls.lot_stocks.expiry_date.present? ? iopls.lot_stocks.expiry_date.strftime("%m/%y") : "Sin asignar" %>
-                            </td>
-                          </tr>
-
-                          <% end %>
-                        </thead>
-                      </table>
-                    </td>
-                    <%# <td> %>
-                      <%#= qosl.lot_stocks.laboratory %>
-                    <%# </td> %>
-                    <%# <td> %>
-                      <%# if qosl.supply.needs_expiration %>
-                        <%#= qosl.lot_stocks.expiry_date.present? ? qosl.lot_stocks.expiry_date.strftime("%m/%y") : "Sin asignar" %>
-                      <%# else %>
-                        <%# No vence %>
-                      <%# end %>
-                    <%# </td> %>
-                  <% else %>
-                    <td>Sin lote</td><td>----</td><td>----</td>
-                  <% end %>
-                  <% if @internal_order.solicitud? %>
-                    <td><%= intOrdProd.applicant_observation.present? ? intOrdProd.applicant_observation : '----' %></td>
-                  <% end %>
-                  <td><%= intOrdProd.provider_observation.present? ? intOrdProd.provider_observation : '----' %></td>
+                  <td>
+                    <%= int_ord_prod.delivery_quantity %>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= int_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= int_ord_prod.id %>">
+                      <%= int_ord_prod.int_ord_prod_lot_stocks.count %>
+                    </button>
+                  </td>
+                  <td>
+                    <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                      <%= fa_icon "asterisk" %>
+                    <% else %>
+                      ---
+                    <% end %>
+                  </td>
                 </tr>
+                <tr>
+                 <% if int_ord_prod.int_ord_prod_lot_stocks.present? %>
+                  
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= int_ord_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                        <table class="w-100">
+                          <thead>
+                            <tr>
+                              <th> Cantidad </th>
+                              <th> Lote </th>
+                              <th> Laboratorio </th>
+                              <th> Vencimiento </th>
+                            </tr>
+                          </thead>
+                          </tbody>
+                            <% int_ord_prod.int_ord_prod_lot_stocks.each do |iopls| %>
+                            <tr>
+
+                              <td>
+                                <%= iopls.quantity %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.code %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.laboratory.name %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.expiry_date.present? ? iopls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                              </td>
+                            </tr>
+
+                            <% end %>
+                          </tbody>
+                        </table>
+                        <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                          <table class="w-100">
+                            <tr>
+                              <th>Descripción solicitud</th>
+                              <th>Descripción proveedor</th>
+                            </tr>
+                            <tr>
+                              <td><%= int_ord_prod.provider_observation %></td>
+                              <td><%= int_ord_prod.applicant_observation %></td>
+                            </tr>
+                          </table>
+                        <%end%>
+                      </div>
+                    </div>
+                  </td>
+
+                  <% else %>
+                  
+                  sin lote
+                  <% end %>
+                  </tr>
               <% end %>
+
             </tbody>
           </table>
         </div>

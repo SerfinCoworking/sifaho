@@ -113,7 +113,6 @@
           :style => 'width: 100px'
         }
       %>
-      <%#= f.hidden_field %>
       <%= f.hidden_field :request_quantity, :class => "request-quantity" %>
     </td>
 
@@ -154,13 +153,12 @@
           "data-select-lot-url" => find_lots_stocks_path(@internal_order),
           "data-template-fill-hidden" => fields do %>
           <% if f.object.lot_stocks.present? %>
-            <%= fa_icon "barcode" %> <%#= f.object.sector_supply_lot.lot_code %> <%#= fa_icon "cubes" %> <%#= f.object.sector_supply_lot.quantity %>
+            <%= fa_icon "barcode" %> 
           <% else %>
             <%= fa_icon "barcode" %> Seleccionar lote
           <% end %>
         <% end %>
       </div>
-      <%#= f.input :lot_stock, :as => :hidden, :input_html => { class: 'sector-supply-lot-id'} %>
     </td>
 
     <!-- Observaciones proveedor -->
