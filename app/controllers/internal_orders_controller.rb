@@ -1,6 +1,6 @@
 class InternalOrdersController < ApplicationController
-  before_action :set_internal_order, only: [:show, :edit, :update, :destroy, :delete,
-  :edit_applicant, :update_applicant, :send_provider, :receive_applicant_confirm, :receive_applicant, 
+  before_action :set_internal_order, only: [:show, :edit_provider, :update, :destroy, :delete,
+  :edit_applicant, :update_applicant, :update_provider, :send_provider, :receive_applicant_confirm, :receive_applicant, 
   :return_provider_status, :return_applicant_status, :send_applicant, :nullify, :nullify_confirm ]
 
   def statistics
@@ -97,14 +97,13 @@ class InternalOrdersController < ApplicationController
   end
 
   # GET /internal_orders/1/edit
-  def edit
+  def edit_provider
     authorize @internal_order
-    @order_type = 'provision'
     @applicant_sectors = Sector
     .select(:id, :name)
     .with_establishment_id(current_user.sector.establishment_id)
     .where.not(id: current_user.sector_id).as_json
-    @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
+    @internal_order.internal_order_products.joins(:product).order("name")
   end
 
   # GET /external_orders/1/edit_receipt
@@ -222,6 +221,42 @@ class InternalOrdersController < ApplicationController
           .where.not(id: current_user.sector_id).as_json
           @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
         format.html { render :new_applicant }
+      end
+    end
+  end
+  
+  # PATCH /internal_orders
+  # PATCH /internal_orders.json
+  def update_provider
+    authorize @internal_order
+    @internal_order.audited_by = current_user
+
+    respond_to do |format|
+      begin
+        @internal_order.update(internal_order_params)
+        @internal_order.save!
+
+        if sending?
+          @internal_order.provision_en_camino!
+          @internal_order.create_notification(current_user, "editó y envió")
+          message = "La solicitud se ha auditado y enviado correctamente."
+        else
+          @internal_order.proveedor_auditoria!
+          @internal_order.create_notification(current_user, "editó y auditó")
+          message = "La solicitud se ha editado y se encuentra en auditoria."
+        end
+
+        format.html { redirect_to @internal_order }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @provider_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+        format.html { render :edit_provider }
       end
     end
   end

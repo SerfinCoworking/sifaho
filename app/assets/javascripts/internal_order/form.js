@@ -73,6 +73,19 @@ $(document).on('turbolinks:load', function(e){
     deliveryQuantityEventBinding();
 
     lotsQuantitySelection();
+    
+    const trs = $('#internal-order-product-cocoon-container').find('tr.nested-fields');
+    trs.map((index, tr) => {
+      const toDelivery = $(tr).find("input.deliver-quantity").val(); // get delivery quanitty
+      const selectedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
+      let totalQuantitySelected = 0;
+      selectedQuantity.map((index, option) => {
+        // option
+        totalQuantitySelected += ($(option).val() * 1);
+      });
+      console.log(tr);
+      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
+    });
 
   }// initEvents function
 
@@ -81,7 +94,8 @@ $(document).on('turbolinks:load', function(e){
       const tr = $(target).closest(".nested-fields");
       tr.find("input.product-name").val(item.name); // update product name input
       tr.find("input.product-unity").val(item.unity); // update product unity input      
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input      
+      tr.find("input.stock-quantity").val(item.stock); // update product stock input
+      tr.find("input.product-id").val(item.id); // update product id input  
       tr.find("input.deliver-quantity").focus();
     }
   }
@@ -91,7 +105,8 @@ $(document).on('turbolinks:load', function(e){
       const tr = $(target).closest(".nested-fields");
       tr.find("input.product-code").val(item.code); // update product name input
       tr.find("input.product-unity").val(item.unity); // update product unity input
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input      
+      tr.find("input.stock-quantity").val(item.stock); // update product stock input
+      tr.find("input.product-id").val(item.id); // update product id input
     }
   }
 
@@ -152,13 +167,13 @@ $(document).on('turbolinks:load', function(e){
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
-      const selecteedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
-      selecteedQuantity.map((index, option) => {
+      const selectedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
+      selectedQuantity.map((index, option) => {
         // option
         totalQuantitySelected += ($(option).val() * 1);
       });
 
-      setProgress(tr, totalQuantitySelected, toDelivery, selecteedQuantity.length)
+      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
     });
   }
 
@@ -197,7 +212,6 @@ $(document).on('turbolinks:load', function(e){
     }
   }
 
-
   // Remove style
   $('#lot-selection').on('hidden.bs.modal', function (e) {
     const templateHidden = $(e.target).attr('data-template-hidden');
@@ -205,20 +219,42 @@ $(document).on('turbolinks:load', function(e){
     const tr = $("#internal-order-product-cocoon-container").find(".nested-fields")[trIndex];
     const toDelivery = $(e.target).attr('data-to-delivery');
     const hiddenTarget = $(tr).find(".lot-stocks-hidden").first();
-    $(hiddenTarget).html(''); //clean every input stored
     // handle selected options
-    const selectedOptions = $(e.target).find('tr.selected-row');
+    const selectedOptions = $(e.target).find('tbody tr.selected-row');
+    const nonSelectedOptions = $(e.target).find('tbody tr').not('.selected-row');
+    
     let totalQuantitySelected = 0;
+    // update hidden lots values
     selectedOptions.map((index, option) => {
-      // option
-      addLot(hiddenTarget, templateHidden, option);
-      totalQuantitySelected += ($(option).find('input[type="number"]').first().val() * 1);
+      const lot_stock_id = $(option).find('input[type="checkbox"]').first().val();
+      const quantity = $(option).find('input[type="number"]').first().val() * 1;
+      const lot = $(hiddenTarget).find('div.lots[data-lsid="'+ lot_stock_id +'"]').first();
+
+      // if not exists
+      if(lot.length){
+        $(lot).find('input[type="hidden"].lot_stock_quantity_ref').first().val(quantity);
+        $(lot).find('input[type="hidden"]._destroy').first().val(false);
+      }else{
+        addLot(hiddenTarget, templateHidden, lot_stock_id, quantity);
+      }
+      // totalize the quanitty
+      totalQuantitySelected += quantity;
+    });
+    
+    // remove hidden lots values
+    nonSelectedOptions.map((index, option) => {
+      const lot_stock_id = $(option).find('input[type="checkbox"]').first().val();
+      const lot = $(hiddenTarget).find('div.lots[data-lsid="'+ lot_stock_id +'"]').first();
+
+      // if exists set _destroy in TRUE
+      if(lot.length){
+        $(lot).find('input[type="hidden"]._destroy').first().val(true);
+      }
     });
 
     setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
-  });
+  }); 
 
-        
   $('#dialog').on('hidden.bs.modal', function () {
     $('#dialog .modal-header').removeClass('bg-warning');
   });

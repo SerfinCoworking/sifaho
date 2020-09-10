@@ -42,7 +42,7 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def edit_provider?
-    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+    if record.proveedor_auditoria? && record.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end

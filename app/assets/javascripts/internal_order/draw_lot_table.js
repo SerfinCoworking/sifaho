@@ -4,7 +4,7 @@
 // draw lot table selection
 function drawLotTable(value, selectedLots, toDelivery){
   
-  let tbody = $('<tbody></tbody>'); //$('#lot-selection').find('#tbody-lot-selection');
+  let tbody = $('<tbody></tbody>');
   $('#tdelivery-ref').html(toDelivery);
 
   // add every lot stock row
@@ -13,7 +13,7 @@ function drawLotTable(value, selectedLots, toDelivery){
     const tdCheck = $('<td style="vertical-align:middle;" width="5%" onclick="event.stopPropagation();"></td>');
     const inputCheck = $('<input type="checkbox" aria-label="selection" name="lot-selection['+index+']" class="lot-selection" value="'+item.id+'">');
     
-    // 
+    // checkbox change event
     inputCheck.on('change', (e) => {
       e.stopPropagation();
       const tr = $(e.target).closest('tr');
@@ -26,12 +26,14 @@ function drawLotTable(value, selectedLots, toDelivery){
       }
       
       getCurrentSelectedQuantity();
-    });
+    }); //end change event
      
     tdCheck.append(inputCheck);
 
     const thQuantity = $('<td onclick="event.stopPropagation();"></td>');
     const inputQuantity = $('<input type="number" min="0" max="100" class="form-control" aria-label="lot-quantity" name="lot-quantity['+index+']">');
+    
+    // input focus event
     inputQuantity.on('focus', (e) => {
       e.stopPropagation();
       const tr = $(e.target).closest('tr');
@@ -40,16 +42,15 @@ function drawLotTable(value, selectedLots, toDelivery){
         checkBoxe.prop("checked", true);
         checkBoxe.trigger('change');
       }
-    });
+    });//end focus event
     
+    // input focusout event
     inputQuantity.on('focusout', (e) => {
       e.stopPropagation();
       getCurrentSelectedQuantity();
-    });
+    });// end focusout event
 
     thQuantity.append(inputQuantity);
-
-
     const tdCode = $('<td> '+item.lot.code+' </td>');
     const thStock = $('<td> '+item.quantity+' </td>');
     const thStatus = $('<td> '+item.lot.status+' </td>');
@@ -57,9 +58,10 @@ function drawLotTable(value, selectedLots, toDelivery){
     const thLaboratory = $('<td width="35%"> '+item.lot.laboratory.name+' </td>');
     const tr = $('<tr></tr>');
 
+    // row click event
     tr.on('click', (e) => {
       onClickRow(e);
-    });
+    }); // end click event
 
     tr.append(tdCheck, thQuantity, tdCode, thStock, thStatus, thExpiryDate, thLaboratory);
     tbody.append(tr);
@@ -78,17 +80,17 @@ function onClickRow(e){
   checkBoxe.trigger('change');
 }
 
-function addLot($parent, formHTML, option) {
+function addLot($parent, formHTML, lot_stock_id, quantity) {
   const new_id = new Date().getTime();
   const regexp = new RegExp("id_placeholder", "g");
   let content = formHTML.replace(regexp, new_id);
 
   const lotValueRef = new RegExp("lot_stock_value", "g");
+  const fillLotStockId = new RegExp("fill_the_gap", "g");
   const quantityValueRef = new RegExp("quantity_value", "g");
-  const lot_stock = $(option).find('input[type="checkbox"]').first();
-  const quantity = $(option).find('input[type="number"]').first();
-  content = content.replace(lotValueRef, lot_stock.val());
-  content = content.replace(quantityValueRef, quantity.val());
+  content = content.replace(lotValueRef, lot_stock_id);
+  content = content.replace(fillLotStockId, lot_stock_id);
+  content = content.replace(quantityValueRef, quantity);
 
   $($parent).append(content);
 }
@@ -108,6 +110,7 @@ function initSelected(tbody, selectedLots){
   return tbody;
 }
 
+// print quantity info on modal
 function getCurrentSelectedQuantity(){
   const selectedLots = $('#table-lot-selection').find('tr.selected-row');
   let totalQuantity = 0;

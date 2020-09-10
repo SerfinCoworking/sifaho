@@ -11,8 +11,14 @@ class InternalOrder < ApplicationRecord
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :internal_order_products
+  has_many :int_ord_prod_lot_stocks, through: :internal_order_products
+  
+  
   has_many :lot_stocks, -> { with_deleted }, :through => :internal_order_products, dependent: :destroy
   has_many :lots, -> { with_deleted }, :through => :lot_stocks
+
+
+  
   has_many :products, -> { with_deleted }, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
@@ -34,7 +40,7 @@ class InternalOrder < ApplicationRecord
   # Atributos anidados
   accepts_nested_attributes_for :internal_order_products,
     :allow_destroy => true
-
+  
   # Callbacks
   before_validation :record_remit_code, on: :create
 
