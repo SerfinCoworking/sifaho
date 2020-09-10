@@ -26,6 +26,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Areas
+  resources :areas
+
   resources :permission_requests do
     member do
       get "end"

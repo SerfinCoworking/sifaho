@@ -1,0 +1,26 @@
+<% content_for :page_header do %>
+  <li class="nav-item non-sel" id="page-title">
+    <%= link_to bed_orders_path, class: "nav-link #{ active_action('statistics') }" do %>
+      <%= fa_icon "hubspot" %>
+      Rubros
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to bed_orders_path, class: "nav-link #{ active_action('index') }" do %>
+      <%= fa_icon "paper-plane" %>
+      Entregas
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to new_area_path, class: "nav-link #{ active_action('new') }" do %>
+      <%= fa_icon "plus" %>
+      Agregar rubro
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to bed_map_bed_orders_path, class: "nav-link #{ active_action('bed_map') }" do %>
+      <%= fa_icon "map" %>
+      Mapa de camas
+    <% end %>
+  </li>
+<% end %>

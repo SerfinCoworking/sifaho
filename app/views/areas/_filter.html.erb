@@ -1,0 +1,16 @@
+<%= form_tag(areas_path, method: "get", remote: true) do %>
+  <div class="d-flex justify-content-end">
+    <div class="p-1 flex-fill">
+      <%= number_field_tag :name, params[:name], placeholder: "Nombre", class: "form-control" %>
+    </div>
+    <div class="p-1 flex-fill">
+      <%= link_to areas_path, class: "btn btn-light" do %>
+        <%= fa_icon "undo" %>
+      <% end %>
+      <%= button_tag type: 'submit', class: "btn btn-info", id: "register-button", title: 'Filtrar', 
+        data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "filter" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
