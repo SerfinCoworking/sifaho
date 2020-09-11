@@ -82,7 +82,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn mr-1' %>
+    <%= link_to 'Volver', provider_index_internal_orders_path, class: 'btn mr-1' %>
   
     <button type='submit' class='btn btn-success mr-2' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='audit'>
       

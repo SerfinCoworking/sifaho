@@ -4,8 +4,7 @@
     <div class="custom-input-group">
       <div class="form-group fake optional products_product_id_fake">
         <input type="text" 
-        name="product_code_fake" 
-        id="product_code_fake" 
+        name="<%="product_code_fake-#{f.object.id}"%>" 
         value="<%= f.object.product.present? ? f.object.product.code : '' %>"
         class="form-control fake optional product-code input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
         data-autocomplete-source="<%= search_by_code_products_path %>"
@@ -32,8 +31,7 @@
     <div class="custom-input-group">
       <div class="form-group fake optional products_product_id_fake">
         <input type="text" 
-        name="product_name_fake" 
-        id="product_name_fake" 
+        name="<%="product_name_fake-#{f.object.id}"%>"
         value="<%= f.object.product.present? ? f.object.product.name : '' %>"
         class="form-control fake optional product-name input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
         data-autocomplete-source="<%= search_by_name_products_path %>"
@@ -53,7 +51,7 @@
 
   <!-- Unidad -->
   <td>
-    <%= f.input :supply_unity, as: :fake, label: false, disabled: true, required: false, 
+    <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
       input_html: {
         class: 'product-unity input-sm',
         size: 10,
@@ -69,7 +67,7 @@
 
   <!-- Stock -->
   <td>
-    <%= f.input :stock, as: :fake, label: false, disabled: true, 
+    <%= f.input :stock_fake, label: false, disabled: true, 
       input_html: {
         class: 'stock-quantity input-sm',
         size: 6, 
@@ -108,8 +106,7 @@
 
     <!-- Cantidad solicitada -->
     <td style="width: 100px">
-      <%= f.input :request_quantity,
-        as: :fake, 
+      <%= f.input :request_quantity_fake,
         disabled: true,
         label: false, 
         placeholder: 'Cant', 
