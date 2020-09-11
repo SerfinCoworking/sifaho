@@ -42,7 +42,7 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def edit_provider?
-    if record.proveedor_auditoria? && record.provider_sector == user.sector
+    if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
@@ -52,7 +52,9 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def update_provider?
-    edit_provider?
+    unless ["en_camino", "entregado"].include? record.provider_status
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
   end
 
   # def new?
