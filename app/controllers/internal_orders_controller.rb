@@ -10,7 +10,7 @@ class InternalOrdersController < ApplicationController
 
   # GET /internal_orders
   # GET /internal_orders.json
-  def index
+  def provider_index
     authorize InternalOrder
     @filterrific = initialize_filterrific(
       InternalOrder.provider(current_user.sector).without_status(0),

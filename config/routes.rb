@@ -183,6 +183,7 @@ Rails.application.routes.draw do
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
+      get "provider_index"
       get "statistics"
       post "create_applicant"
       post "create_provider"

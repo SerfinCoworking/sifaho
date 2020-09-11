@@ -1,5 +1,5 @@
 class InternalOrderPolicy < ApplicationPolicy
-  def index?
+  def provider_index?
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
   end
 
