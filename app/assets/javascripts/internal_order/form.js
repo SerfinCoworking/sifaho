@@ -110,7 +110,9 @@ $(document).on('turbolinks:load', function(e){
 
       const templateHidden = $(e.target).attr("data-template-fill-hidden");
       const tr = $(e.target).closest(".nested-fields");
-      const trIndex = $(tr).index();
+      const rows = $('#internal-order-product-cocoon-container').find('tr.nested-fields');
+
+      const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
       const url = $(e.target).attr('data-select-lot-url');
       const productCode = tr.find("input.product-code").val(); // get product code
       const toDelivery = tr.find("input.deliver-quantity").val(); // get delivery quanitty
