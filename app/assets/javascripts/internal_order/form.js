@@ -64,12 +64,6 @@ $(document).on('turbolinks:load', function(e){
       }
     });
     
-    $("input.deliver-quantity").on('change', function(e){
-      const quantity = $(e.target).val();
-      const tr = $(e.target).closest(".nested-fields");
-      tr.find("input.request-quantity").val(quantity);
-    });
-
     deliveryQuantityEventBinding();
 
     lotsQuantitySelection();
@@ -83,7 +77,7 @@ $(document).on('turbolinks:load', function(e){
         // option
         totalQuantitySelected += ($(option).val() * 1);
       });
-      console.log(tr);
+
       setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
     });
 
@@ -158,12 +152,18 @@ $(document).on('turbolinks:load', function(e){
     });// End lot selection button click action
   }
 
-  // toggle lot button disabled attribute 
+  // On change delivery quantity
   function deliveryQuantityEventBinding(){
     $('input.deliver-quantity').on('change', function(e){
-      const tr = $(e.target).closest('tr');
+      const tr = $(e.target).closest(".nested-fields");
       const toDelivery = tr.find("input.deliver-quantity").val();
       
+      // only if the origin is a "provision" can be triggered the change to request-quantity
+      if($(tr).closest('tbody').attr('data-order-status') === 'provision'){
+        const quantity = $(e.target).val();
+        tr.find("input.request-quantity").val(quantity);
+      }
+        
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
@@ -181,6 +181,9 @@ $(document).on('turbolinks:load', function(e){
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
     const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
+    
+    if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
+
 
     $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': (quantityPercent + '%')});
     $(targetRow).find('button.select-lot-btn').first().html("Seleccionados " + selectedOptionsCount);

@@ -124,6 +124,8 @@ class InternalOrdersController < ApplicationController
     @internal_order.created_by = current_user
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
+    @internal_order.applicant_sector = current_user.sector
+    @internal_order.order_type = "solicitud"
 
     respond_to do |format|
       begin
@@ -161,6 +163,7 @@ class InternalOrdersController < ApplicationController
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.provider_sector = current_user.sector
+    @internal_order.order_type = "provision"
 
     respond_to do |format|
       @internal_order.save!
@@ -533,8 +536,8 @@ class InternalOrdersController < ApplicationController
 
   # Se verifica si el value del submit del form es para enviar
   def sending?
-    submit = params[:commit]
-    return submit == "Auditar y enviar" || submit == "Enviar"
+    return params[:commit] == "sending"
+    # return submit == "Auditar y enviar" || submit == "Enviar"
   end
 
   def sending_by_provider?

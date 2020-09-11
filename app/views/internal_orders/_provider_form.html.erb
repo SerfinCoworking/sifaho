@@ -30,8 +30,6 @@
               disabled: false,
             } 
           %>
-          <%#= f.input :order_type, :as => :hidden, :input_html => { value: 'provision' } %>
-          <%#= f.hidden_field :applicant_sector_id, id: "applicant-id", value: "#{f.object.applicant_sector_id unless f.object.new_record?}" %>
         </div>
         <div class="col-3">
           <%= f.input :provider_sector_id, as: :string,
@@ -42,21 +40,8 @@
               value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
             } 
           %>
-          <%#= f.hidden_field :provider_sector_id, value: "#{if f.object.new_record?; current_user.sector_id; else; f.object.provider_sector.id; end}" %>
         </div>
-        <%# <div class='col-2'> %>
-          <%#= f.input :requested_date, label: 'Fecha solicitado', as: :string,
-            :placeholder => "Seleccionar fecha",
-            input_html: {
-              id: "requested-date",
-              required: true,
-              autocomplete: 'off',
-              :style => 'width: 110px',
-              value: "#{f.object.requested_date unless f.object.new_record?}"
-            },
-            html5: false 
-          %>
-        <%# </div> %>
+       
         <div class='col-4'>
           <%= f.input :observation, label: 'Observaciones', as: :text,
             :input_html => { :cols => 40  , :rows => 1 } %>
@@ -78,7 +63,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="internal-order-product-cocoon-container">
+          <tbody id="internal-order-product-cocoon-container" data-order-status="<%= @internal_order.order_type  %>">
             <%= f.simple_fields_for :internal_order_products do |form_quantity| %>
               <%= render "internal_order_product_fields", f: form_quantity, order_type: order_type %>
             <% end %>
