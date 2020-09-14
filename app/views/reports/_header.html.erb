@@ -1,20 +1,26 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel" id="page-title">
-    <%= link_to reports_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel" id="page-title">
+    <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')}" do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
       Reportes
     <% end %>
   </li>
-  <li class="nav-item <%= active_action('new_delivered_by_order') %> non-sel">
-    <%= link_to new_delivered_by_order_reports_path, class: 'nav-link' do %>
+  <li class="nav-item non-sel">
+    <%= link_to new_delivered_by_order_reports_path, class: "nav-link #{active_action('new_delivered_by_order')}" do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
       <span class="hidden-xs"> Entregado por pedido</span>
     <% end %>
   </li>
-  <li class="nav-item <%= active_action('new_delivered_by_establishment') %> non-sel">
-    <%= link_to new_delivered_by_establishment_reports_path, class: 'nav-link' do %>
+  <li class="nav-item active non-sel">
+    <%= link_to new_delivered_by_establishment_reports_path, class: "nav-link  #{active_action('new_delivered_by_establishment')}" do %>
       <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
       <span class="hidden-xs"> Entregado por establecimiento</span>
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
+      <%= fa_icon "pills" %>
+      <span class="hidden-xs"> Productos por pacientes</span>
     <% end %>
   </li>
 <% end %>

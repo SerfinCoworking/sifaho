@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center ml-2">
+        <%= fa_icon "plus" %>
+        <h5 class="card-title mb-0 ml-2">
+          Nuevo reporte de cantidad de producto entregado por pacientes
+        </h5>
+        </div>
+        <%= link_to :back, class: 'btn text-white' do %>
+          <%= fa_icon "times" %>
+        <% end %>
+      </div>
+      <div class="card-body" id="panel-body-new">
+        <div class="row">
+          <div class="col-3">
+            <h5>Establecimiento</h5>
+            <%= current_user.establishment_name %>
+          </div>
+          <div class="col-9">
+            <%= form_tag(reports_patient_product_reports_path, method: "post", remote: true, id: "show-report") do %>
+              <div class="d-flex justify-content-end nested-fields">
+                <!-- Nombre del producto -->
+                <div class="p-1 w-50 flex-fill">
+                  <label>Producto</label>
+                  <div class="custom-input-group">
+                    <%= text_field_tag :supply_id, params[:supply_id], id: "supply_id", 
+                      placeholder: "Nombre",
+                      class: "supply-name form-control",
+                      autocomplete: "off",
+                      required: true,
+                      value: "#{ if params[:supply_id].present?; Supply.find(params[:supply_id]).supply_name; end }",
+                      data: { autocomplete_source: search_by_name_supplies_path } %>
+                    <div class="with-loading">
+                      <%= fa_icon 'spinner', class: "fa-spin" %>
+                    </div>
+                  </div>
+                </div>
+                <%= hidden_field_tag :supply_id, params[:supply_id], class: "supply-id" %>
+                <div class="p-1 flex-fill">
+                  <label>Desde</label>
+                  <%= text_field_tag :since_date, params[:since_date], id: "since-datepicker", placeholder: "Una fecha",
+                    class: "form-control since-datepicker", autocomplete: "off", required: true %>
+                </div>
+                <div class="p-1 flex-fill">
+                  <label>Hasta</label>
+                  <%= text_field_tag :to_date, params[:to_date], id: "to-datepicker", placeholder: "Otra fecha",
+                    class: "form-control to-datepicker", autocomplete: "off", required: true %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="card col-10 mx-auto text-center" id="report-results">
+            <h4>Resultado</h4>
+          </div>
+        </div>
+      </div> 
+      <div class="card-footer text-right">
+        <%= link_to :back, class: "btn btn-light mr-2" do %>
+          Volver
+        <% end %>
+        <button type='submit' name='commit' class='btn btn-success' form='show-report'>
+          <%= fa_icon "check" %> Generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

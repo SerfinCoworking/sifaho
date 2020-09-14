@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+ 
   resources :stocks
   # Lotes
   resources :lots do
@@ -295,5 +295,10 @@ Rails.application.routes.draw do
       get "new_delivered_by_establishment"
       post "create_delivered_by_establishment"
     end
+  end
+
+  # Routes for reports
+  namespace :reports do
+    resources :patient_product_reports, only: [:new, :create]
   end
 end

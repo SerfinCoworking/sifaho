@@ -1,0 +1,2 @@
+module PatientProductReportsHelper
+end

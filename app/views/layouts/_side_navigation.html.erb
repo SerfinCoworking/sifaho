@@ -153,5 +153,14 @@
         <span class="ml-2 sb-title">Usuarios</span>
       <% end %>
     <% end %>
+
+    <% if policy(Report).index? %>
+      <%= link_to main_app.reports_path, class: "list-group-item list-group-item-action list-custom #{active_class('reports')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "vial" %>
+        </span>
+        <span class="ml-2 sb-title">Reportes</span>
+      <% end %>
+    <% end %>
   </div>
 </div>

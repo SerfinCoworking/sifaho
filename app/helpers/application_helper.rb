@@ -21,7 +21,7 @@ module ApplicationHelper
   def active_class(link_path)
     if params[:controller] == link_path
       return 'active'
-    end 
+    end
   end
 
   def active_action(link_path)

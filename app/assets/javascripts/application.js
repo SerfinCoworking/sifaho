@@ -88,6 +88,11 @@ $(document).on('turbolinks:load', function() {
     locale: 'es'
   });
 
+  $('#since-datepicker').datetimepicker({
+    format: 'DD/MM/YYYY',
+    locale: 'es'
+  });
+
   $(".required").prop('required', true);
 
   $('[data-toggle="tooltip"]').tooltip({
