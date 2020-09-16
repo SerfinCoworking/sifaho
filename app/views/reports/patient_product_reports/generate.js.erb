@@ -1,0 +1,14 @@
+<% js_results = escape_javascript(
+  render(partial: 'report_result', locals: { movements: @movements })
+) %>
+
+$("#report-results").html("<%= js_results %>");
+
+
+console.log("entr");
+
+<% if @movements.present? %>
+  $("#print-report").removeClass('disabled');
+<% else %>
+  $("#print-report").addClass('disabled');
+<% end %>

@@ -40,6 +40,14 @@ class QuantityOrdSupplyLot < ApplicationRecord
   scope :dispensed_since, lambda { |a_date| where('quantity_ord_supply_lots.dispensed_at >= ?', a_date) }
   scope :dispensed_to, lambda { |a_date| where('quantity_ord_supply_lots.dispensed_at <= ?', a_date ) }
 
+  scope :date_dispensed_since, lambda { |reference_time|
+    where('dispensed_at >= ?', reference_time)
+  }
+
+  scope :date_dispensed_to, lambda { |reference_time|
+    where('dispensed_at <= ?', reference_time)
+  }
+
   # Métodos públicos
   def increment_lot_to(a_sector)
     if self.delivered_quantity > 0

@@ -1,0 +1,36 @@
+<% if @movements.present? %>
+<table class="table table-hover table-sm">
+  <thead>
+    <tr class="d-flex">
+      <th class="col-3">Paciente</th>
+      <th class="col-3">DNI</th>
+      <th class="col-3">Fecha</th>
+      <th class="col-3">Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%# movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} %>
+    <% @movements.each do |movement|%>
+      <tr class="d-flex">
+        <td class="col-3">
+          <strong><%= movement.first.first %></strong>
+          <%= movement.first.second %>
+        </td>
+        <td class="col-3"><%= movement.first.third %></td>
+        <td class="col-3"><%= movement.first.fourth.strftime("%d/%m/%Y") %></td>
+        <td class="col-3"><%= movement.second %></td>
+      </tr>
+    <% end %>
+    <tr class="d-flex">
+      <td class="col-9 text-right">Total</td>
+      <td class="col-3"><%= @movements.sum(&:second) %></td>
+    </tr>
+  </tbody>
+</table>
+<%= link_to generate_reports_patient_product_reports_path(format: 'pdf', since_date: @since_date, to_date: @to_date), 
+  class: "btn btn-info block", id: "print-report", target: :_blank do %>
+  <%= fa_icon "print" %> Imprimir
+<% end %>
+<% else %>
+  No hay movimientos entre el <%= params[:since_date] %> y <%= params[:to_date] %>
+<% end %>

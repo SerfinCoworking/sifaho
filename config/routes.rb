@@ -299,6 +299,10 @@ Rails.application.routes.draw do
 
   # Routes for reports
   namespace :reports do
-    resources :patient_product_reports, only: [:new, :create]
+    resources :patient_product_reports, only: [:new] do
+      collection do
+        get "generate"
+      end
+    end
   end
 end
