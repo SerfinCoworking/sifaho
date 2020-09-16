@@ -11,10 +11,12 @@ class InternalOrderProduct < ApplicationRecord
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
-  validates :delivery_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_proveedor_auditoria?
-  
-  validates_associated :product
-  
+  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_proveedor_auditoria?
+  validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
+  validates_presence_of :product_id
+  validates :int_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino?
+  validates_associated :int_ord_prod_lot_stocks, if: :is_provision_en_camino?
+
   accepts_nested_attributes_for :product,
     :allow_destroy => true
 
@@ -159,13 +161,28 @@ class InternalOrderProduct < ApplicationRecord
       .includes(:quantifiable)
       .select { |qosl| qosl.delivered_with_sector?(a_sector) }
   end
-
-  # Return true if the Ordering Supply is a "Recibo"
+  
   def is_proveedor_auditoria?
     return self.internal_order.proveedor_auditoria?
-    # if quantifiable.class.name == "ExternalOrder"
-    #   return quantifiable.recibo?
-    # end 
+  end
+  
+  
+  def is_provision_en_camino?
+    return self.internal_order.provision_en_camino?
+  end
+
+  def is_provision?
+    return self.internal_order.order_type == 'provision'
+  end
+
+  def lot_stock_sum_quantity
+    total_quantity = 0
+    self.int_ord_prod_lot_stocks.each do |iopls| 
+      total_quantity += iopls.quantity
+    end
+    if self.delivery_quantity < total_quantity
+      errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")
+    end
   end
 end
 

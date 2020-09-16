@@ -100,12 +100,16 @@ function initSelected(tbody, selectedLots){
   selectedLots.map((index, lot) => {
     const lotValue = $(lot).find('.lot_stock_ref').first().val();
     const qValue = $(lot).find('.lot_stock_quantity_ref').first().val();
+    const errorMessage = $(lot).attr('data-error');
 
     const checkbox = $(tbody).find('input[type="checkbox"][value="'+ lotValue +'"]').first();
     const quantityInput = $(checkbox).closest('tr').find('input[type="number"]').first();
     
     $(checkbox).prop("checked", true).trigger("change");
     $(quantityInput).val(qValue).trigger("change");
+    if(errorMessage !== ''){
+      $(quantityInput).closest('td').append('<div class="invalid-feedback d-block">'+ errorMessage +'</div>');
+    }
   });
   return tbody;
 }

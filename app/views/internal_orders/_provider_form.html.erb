@@ -77,6 +77,8 @@
           Agregar insumo
         <% end %>
       </div>
+      
+      <input name="commit" id="submit-type" type="hidden">
     <% end %>
 
   </div>
@@ -97,9 +99,9 @@
 
     </button>
 
-    <button type='submit' class='btn btn-primary' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='receive'>
+    <button type='submit' class='btn btn-primary' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='sending'>
       <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "paper-plane" %> Guardar y recibir
+        <%= fa_icon "paper-plane" %> Guardar y enviar
       </div>
       <div class="d-none" style="pointer-events: none;">
         Guardando...

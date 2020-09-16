@@ -1,19 +1,15 @@
 class InternalOrderPolicy < ApplicationPolicy
   def provider_index?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+    show?
   end
 
   def applicant_index?
-    index?
+    show?
   end
 
   def show?
-    index?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
   end
-
-  # def create?
-  #   user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-  # end
 
   def new_provider?
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
@@ -52,7 +48,7 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def update_provider?
-    unless ["en_camino", "entregado"].include? record.provider_status
+    unless ["en_camino", "entregado"].include? record.provider_status && record.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end

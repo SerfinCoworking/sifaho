@@ -139,15 +139,20 @@
     </td>
     
     <!-- Lotes -->
+    
     <td>
+        
       <div class="lot-stocks-hidden">
 
+        <% lot_stock_error = '' %>      
         <% if f.object.int_ord_prod_lot_stocks.present?  %>
           <%= f.simple_fields_for :int_ord_prod_lot_stocks do |iopls| %>
-            <%= render "int_ord_prod_lot_stocks_fields", f: iopls %>            
+            <%= render "int_ord_prod_lot_stocks_fields", f: iopls %>      
+            <% lot_stock_error = iopls.object.errors[:quantity].first %>      
           <% end %>
         <% end %>
-        
+      </div>
+
         <%
           # template input hidden lot selection
           new_iopls = f.object.int_ord_prod_lot_stocks.build
@@ -156,15 +161,16 @@
           :child_index => "id_placeholder") do |fb|
             render "int_ord_prod_lot_stocks_fields", f: fb
           end
-          js = escape_javascript(fields)
-          fn = html_escape(js)
+          # js = escape_javascript(fields)
+          # fn = html_escape(js)
         %>
-      </div>
+      
+      
 
       <div class="btn-progress">
         <div class="bg-progress bg-info"></div>
         <%= button_tag type: "button", 
-          class: "btn  select-lot-btn text-nowrap w-100",
+          class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
           "data-select-lot-url" => find_lots_stocks_path(@internal_order),
           "data-template-fill-hidden" => fields do %>
           <% if f.object.lot_stocks.present? %>
@@ -172,6 +178,19 @@
           <% else %>
             <%= fa_icon "barcode" %> Seleccionar lote
           <% end %>
+        <% end %>
+      </div>
+
+
+
+
+      <div class="invalid-feedback d-block">
+        <% if f.object.errors[:quantity_lot_stock_sum].any? %>
+          <%= f.object.errors[:quantity_lot_stock_sum].first %>
+        <% elsif lot_stock_error.present? %>
+          Revisar las cantidades seleccionadas
+        <% elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
+          <%= f.object.errors[:int_ord_prod_lot_stocks].first %>
         <% end %>
       </div>
     </td>

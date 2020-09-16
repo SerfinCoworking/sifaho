@@ -203,7 +203,7 @@
   </div>
   <div class="card-footer text-right">
     <% if @internal_order.provision? %>
-      <%= link_to internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
+      <%= link_to provider_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
     <% else %>
       <%= link_to applicant_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
     <% end %> 

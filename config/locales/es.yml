@@ -47,7 +47,7 @@ es:
         name: "Nombre"
         establishment_id: "Establecimiento"
       internal_order:
-        applicant_sector: "Sector solicitante"
+        applicant_sector_id: "Sector solicitante"
         provider_sector: "Sector proveedor"
       internal_order_template:
         name: "Nombre"
@@ -72,6 +72,9 @@ es:
         lot_code: "Lote"
         supply_id: "Insumo"
         expiry_date: "Fecha vencimiento"
+      internal_order_product:
+        delivery_quantity: "A entregar"
+
       
 
   date:
