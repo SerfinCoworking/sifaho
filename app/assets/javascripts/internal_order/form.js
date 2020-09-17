@@ -117,7 +117,7 @@ $(document).on('turbolinks:load', function(e){
       const productCode = tr.find("input.product-code").val(); // get product code
       const toDelivery = tr.find("input.deliver-quantity").val(); // get delivery quanitty
       const hiddenTarget = tr.find(".lot-stocks-hidden").first();
-      const selectedLots = $(hiddenTarget).find('.lots');
+      const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
       
       if(!productCode){
         $('#dialog .modal-header').addClass('bg-warning');
