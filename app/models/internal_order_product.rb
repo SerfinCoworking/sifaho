@@ -183,6 +183,10 @@ class InternalOrderProduct < ApplicationRecord
     if self.delivery_quantity < total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")
     end
+    
+    if self.delivery_quantity > total_quantity
+      errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados debe ser igual a #{self.delivery_quantity}")
+    end
   end
 end
 
