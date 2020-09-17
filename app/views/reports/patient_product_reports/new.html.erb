@@ -30,7 +30,7 @@
                       class: "supply-name form-control",
                       autocomplete: "off",
                       required: true,
-                      value: "#{ if params[:supply_id].present?; Supply.find(params[:supply_id]).supply_name; end }",
+                      value: @supply.present? ? @supply.name : "",
                       data: { autocomplete_source: search_by_name_supplies_path } %>
                     <div class="with-loading">
                       <%= fa_icon 'spinner', class: "fa-spin" %>

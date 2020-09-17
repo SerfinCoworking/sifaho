@@ -17,6 +17,8 @@ class Reports::PatientProductReportsController < ApplicationController
 
     @params = params.slice(:supply_id, :since_date, :to_date)
 
+    @supply = Supply.find(params[:supply_id])
+    
     respond_to do |format|
       format.html
       format.js
@@ -32,40 +34,48 @@ class Reports::PatientProductReportsController < ApplicationController
   
   private
 
-    def generate_report(movements, params, establishment_name = current_user.establishment_name)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf')
+    def generate_report(movements, params)
+      prescription = Prescription.last
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf')
 
       report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf'), :default => true
+      
+      if prescription.cronica?
+        supply_relations = prescription.quantity_ord_supply_lots.sin_entregar.joins(:supply).order("name")
+      else
+        supply_relations = prescription.quantity_ord_supply_lots.joins(:supply).order("name")
+      end
     
-      @movements.each do |movement|
+      movements.each do |movement|
         if report.page_count == 1 && report.list.overflow?
           report.start_new_page layout: :other_page do |page|
           end
         end
-
-        # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"}
+        
+        # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  patient_name: movement.first.first+' '+movement.first.second,
+            row.values  patient_name: movement.first.first+" "+movement.first.second,
                         dni: movement.first.third,
                         delivery_date: movement.first.fourth.strftime("%d/%m/%Y"),
                         quantity: movement.second
           end
         end
         
-        if report.page_count == 1
-
-          report.page[:establishment_name] = establishment_name
-          report.page[:report_date] = Date.today.strftime("%d/%m/%Y")
-          
-          report.page[:professional_name] = movement.professional.fullname
-          report.page[:professional_dni] = movement.professional.dni
-          report.page[:professional_enrollment] = movement.professional.enrollment
-          report.page[:professional_phone] = movement.professional.phone
-
-          report.page[:patien_name] = "#{movement.patient.first_name} #{movement.patient.last_name}"
-          report.page[:patien_dni] = movement.patient.dni
-        end
       end
+      
+  
+      report.pages.each do |page|
+        page[:product_name] = Supply.find(params[:supply_id]).name
+        page[:title] = 'Reporte producto entregado por paciente'
+        page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
+        page[:since_date] = params[:since_date]
+        page[:to_date] = params[:to_date]
+        page[:page_count] = report.page_count
+        page[:establishment_name] = current_user.establishment_name
+        page[:establishment] = current_user.establishment_name
+      end
+  
+      report.generate
     end
 end

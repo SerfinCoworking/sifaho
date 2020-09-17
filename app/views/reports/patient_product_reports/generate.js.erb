@@ -1,5 +1,5 @@
 <% js_results = escape_javascript(
-  render(partial: 'report_result', locals: { movements: @movements })
+  render(partial: 'report_result', locals: { movements: @movements, supply_id: @supply.id })
 ) %>
 
 $("#report-results").html("<%= js_results %>");

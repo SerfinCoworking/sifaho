@@ -27,7 +27,8 @@
     </tr>
   </tbody>
 </table>
-<%= link_to generate_reports_patient_product_reports_path(format: 'pdf', since_date: @since_date, to_date: @to_date), 
+
+<%= link_to generate_reports_patient_product_reports_path(format: 'pdf', since_date: @params[:since_date], to_date: @params[:to_date], supply_id: @supply.id), 
   class: "btn btn-info block", id: "print-report", target: :_blank do %>
   <%= fa_icon "print" %> Imprimir
 <% end %>
