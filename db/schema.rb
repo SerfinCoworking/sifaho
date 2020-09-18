@@ -56,8 +56,6 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "parent_id"
-    t.index ["parent_id"], name: "index_areas_on_parent_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
