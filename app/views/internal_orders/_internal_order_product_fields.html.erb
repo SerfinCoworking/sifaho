@@ -24,6 +24,9 @@
     <%# Hidden product_id %>
     <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
       value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+
+    <% if uniqueness_product_on_internal_order %>
+    <% end %>
   </td>
 
   <!-- Nombre de Producto -->

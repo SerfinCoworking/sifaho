@@ -16,8 +16,6 @@ class InternalOrder < ApplicationRecord
   
   has_many :lot_stocks, -> { with_deleted }, :through => :internal_order_products, dependent: :destroy
   has_many :lots, -> { with_deleted }, :through => :lot_stocks
-
-
   
   has_many :products, -> { with_deleted }, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
@@ -31,11 +29,11 @@ class InternalOrder < ApplicationRecord
   belongs_to :rejected_by, class_name: "User", optional: true
 
   # Validaciones
-  validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
+  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates :internal_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :internal_order_products
-  # , :sector_supply_lots
   validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  
 
   # Atributos anidados
   accepts_nested_attributes_for :internal_order_products,
@@ -43,6 +41,9 @@ class InternalOrder < ApplicationRecord
   
   # Callbacks
   before_validation :record_remit_code, on: :create
+
+  after_create :set_notification_on_create
+  after_update :set_notification_on_update
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -194,27 +195,6 @@ class InternalOrder < ApplicationRecord
     self.create_notification(a_user, "anuló")
   end
 
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    if self.provider_sector == a_user.sector
-      if self.quantity_ord_supply_lots.exists?
-        if self.validate_quantity_lots
-          self.quantity_ord_supply_lots.each do |qosl|
-            qosl.decrement
-          end
-        end
-      else
-        raise ArgumentError, 'No hay insumos solicitados en el pedido'
-      end # End check if quantity_ord_supply_lots exists
-      self.sent_date = DateTime.now
-      self.sent_by_id = a_user.id
-      self.provision_en_camino!
-      self.create_notification(a_user, "envió")
-    else
-      raise ArgumentError, 'Usted no pertenece al sector proveedor.'
-    end
-  end
-
   def send_request_by(a_user)
     if self.solicitud_auditoria?
       self.sent_request_by = a_user
@@ -310,6 +290,41 @@ class InternalOrder < ApplicationRecord
     end
   end
 
+  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
+  def send_order_by(a_user)
+    puts "<====================DEBUG SEND ORDER BY"
+    
+    self.internal_order_products.each do |iop|
+      iop.decrement_stock
+    end
+
+    # solo usuarios del mismo sector pueden realizar esta accion
+    # validamos los lot_stocks
+    # validamos la cantidad de cada lote seleccionado:
+    #   la cantidad a enviar no debe superar el stock de cada lot stock
+
+
+      # if self.internal_order_products.exists?
+        # if self.validate_quantity_lots
+          # self.internal_order_products.each do |qosl|
+            # qosl.decrement
+          # end
+        # end
+      # else
+        # raise ArgumentError, 'No hay insumos solicitados en el pedido'
+      # end # End check if quantity_ord_supply_lots exists
+      self.sent_date = DateTime.now
+      self.sent_by_id = a_user.id
+      self.save!
+
+      self.create_notification(a_user, "envió")
+      # self.provision_en_camino!
+      # self.create_notification(a_user, "envió")
+    # else
+    #   raise ArgumentError, 'Usted no pertenece al sector proveedor.'
+    # end
+  end
+
   private
 
   def record_remit_code
@@ -319,4 +334,13 @@ class InternalOrder < ApplicationRecord
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
+
+  # set created notification and create stock accordding with the internal order status
+  def set_notification_on_create
+    self.create_notification(self.audited_by, "creó")
+  end
+  
+  def set_notification_on_update
+    self.create_notification(self.audited_by, "auditó")
+  end  
 end

@@ -16,6 +16,9 @@ class InternalOrderProduct < ApplicationRecord
   validates_presence_of :product_id
   validates :int_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino?
   validates_associated :int_ord_prod_lot_stocks, if: :is_provision_en_camino?
+  validate :uniqueness_product_on_internal_order
+  
+  # validates :product_id, uniqueness: { scope: :internal_order_id, message: "should happen once per year" }
 
   accepts_nested_attributes_for :product,
     :allow_destroy => true
@@ -162,10 +165,10 @@ class InternalOrderProduct < ApplicationRecord
       .select { |qosl| qosl.delivered_with_sector?(a_sector) }
   end
   
+  # new version
   def is_proveedor_auditoria?
     return self.internal_order.proveedor_auditoria?
   end
-  
   
   def is_provision_en_camino?
     return self.internal_order.provision_en_camino?
@@ -188,5 +191,18 @@ class InternalOrderProduct < ApplicationRecord
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados debe ser igual a #{self.delivery_quantity}")
     end
   end
+
+  def decrement_stock
+    self.int_ord_prod_lot_stocks.each do |iopls|
+      iopls.lot_stock.decrement(iopls.quantity)
+    end
+  end
+
+  def uniqueness_product_on_internal_order
+    if self.internal_order.internal_order_products.any?{|iop| iop.product_id == self.product_id}
+      errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra resgitrado")      
+    end
+  end
+
 end
 

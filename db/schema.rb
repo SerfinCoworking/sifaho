@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_31_151641) do
+ActiveRecord::Schema.define(version: 2020_09_18_141344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 2020_08_31_151641) do
     t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["internal_order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
     t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"
     t.index ["product_id"], name: "index_internal_order_products_on_product_id"
   end
