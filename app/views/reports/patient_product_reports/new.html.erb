@@ -64,9 +64,11 @@
         <%= link_to :back, class: "btn btn-light mr-2" do %>
           Volver
         <% end %>
-        <button type='submit' name='commit' class='btn btn-success' form='show-report'>
-          <%= fa_icon "check" %> Generar
-        </button>
+        <%= button_tag form: "show-report", class: 'btn btn-success',
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Generando".html_safe do %>
+          <%= fa_icon 'check' %>
+          Generar
+        <% end %>
       </div>
     </div>
   </div>
