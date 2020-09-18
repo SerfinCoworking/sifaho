@@ -24,8 +24,6 @@
               value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }"
             } 
           %>
-          <%#= f.input :order_type, :as => :hidden, :input_html => { value: 'solicitud' } %>
-          <%#= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id;  end}" %>
         </div>
         <div class="col-3">
           <%= f.input :provider_sector_id, label: 'Sector proveedor',
