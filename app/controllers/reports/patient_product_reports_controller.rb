@@ -28,6 +28,7 @@ class Reports::PatientProductReportsController < ApplicationController
           type: 'application/pdf',
           disposition: 'inline'
       end
+      format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
     end
   end
 
@@ -35,16 +36,9 @@ class Reports::PatientProductReportsController < ApplicationController
   private
 
     def generate_report(movements, params)
-      prescription = Prescription.last
       report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf')
 
       report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf'), :default => true
-      
-      if prescription.cronica?
-        supply_relations = prescription.quantity_ord_supply_lots.sin_entregar.joins(:supply).order("name")
-      else
-        supply_relations = prescription.quantity_ord_supply_lots.joins(:supply).order("name")
-      end
     
       movements.each do |movement|
         if report.page_count == 1 && report.list.overflow?
@@ -57,7 +51,7 @@ class Reports::PatientProductReportsController < ApplicationController
           list.add_row do |row|
             row.values  patient_name: movement.first.first+" "+movement.first.second,
                         dni: movement.first.third,
-                        delivery_date: movement.first.fourth.strftime("%d/%m/%Y"),
+                        delivery_date: movement.first.fourth.strftime("%d/%m/%Y %H:%M"),
                         quantity: movement.second
           end
         end
@@ -77,5 +71,21 @@ class Reports::PatientProductReportsController < ApplicationController
       end
   
       report.generate
+    end
+
+    def movements_to_csv(movements)
+      CSV.generate(headers: true) do |csv|
+        csv << ["Apellido", "Nombre", "DNI", "Fecha", "Cantidad", "Producto"]
+        movements.each do |movement|
+          csv << [
+            movement.first.first, 
+            movement.first.second, 
+            movement.first.third, 
+            movement.first.fourth.strftime("%d/%m/%Y %H:%M"), 
+            movement.second,
+            Supply.find(params[:supply_id]).name
+          ]
+        end
+      end
     end
 end

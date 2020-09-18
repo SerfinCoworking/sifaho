@@ -155,11 +155,11 @@
     <% end %>
 
     <% if policy(Report).index? %>
-      <%= link_to main_app.reports_path, class: "list-group-item list-group-item-action list-custom #{active_class('reports')}" do %>
+      <%= link_to new_reports_patient_product_report_path, class: "list-group-item list-group-item-action list-custom #{active_class('reports/patient_product_reports')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "vial" %>
+          <%= fa_icon "file-alt" %>
         </span>
-        <span class="ml-2 sb-title">Reportes</span>
+        <span class="ml-2 sb-title"> Reportes</span>
       <% end %>
     <% end %>
   </div>

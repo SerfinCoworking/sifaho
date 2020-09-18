@@ -1,11 +1,8 @@
 class AreaPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :enfermero)
+    user.has_any_role?(:admin)
   end
 
-  def bed_map?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
-  end
   def show?
     index?
   end

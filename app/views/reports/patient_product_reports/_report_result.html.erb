@@ -17,7 +17,7 @@
           <%= movement.first.second %>
         </td>
         <td class="col-3"><%= movement.first.third %></td>
-        <td class="col-3"><%= movement.first.fourth.strftime("%d/%m/%Y") %></td>
+        <td class="col-3"><%= movement.first.fourth.strftime("%d/%m/%Y %H:%M") %></td>
         <td class="col-3"><%= movement.second %></td>
       </tr>
     <% end %>
@@ -27,11 +27,17 @@
     </tr>
   </tbody>
 </table>
+<div class="d-flex justify-content-between">
+  <%= link_to generate_reports_patient_product_reports_path(format: 'pdf', since_date: @params[:since_date], to_date: @params[:to_date], supply_id: @supply.id), 
+    class: "btn btn-info flex-fill m-1", id: "print-report", target: :_blank do %>
+    <%= fa_icon "print" %> Imprimir
+  <% end %>
 
-<%= link_to generate_reports_patient_product_reports_path(format: 'pdf', since_date: @params[:since_date], to_date: @params[:to_date], supply_id: @supply.id), 
-  class: "btn btn-info block", id: "print-report", target: :_blank do %>
-  <%= fa_icon "print" %> Imprimir
-<% end %>
+  <%= link_to generate_reports_patient_product_reports_path(format: 'csv', since_date: @params[:since_date], to_date: @params[:to_date], supply_id: @supply.id), 
+    class: "btn btn-success flex-fill m-1", id: "print-report", target: :_blank do %>
+    <%= fa_icon "download" %> CSV
+  <% end %>
+</div>
 <% else %>
   No hay movimientos entre el <%= params[:since_date] %> y <%= params[:to_date] %>
 <% end %>

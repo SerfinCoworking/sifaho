@@ -59,7 +59,7 @@
             "description": "",
             "x": 67,
             "y": 127.3,
-            "width": 42.9,
+            "width": 44.6,
             "height": 17.9,
             "style": {
               "font-family": [
@@ -126,7 +126,7 @@
             "description": "",
             "x": 497,
             "y": 127,
-            "width": 44.8,
+            "width": 45.9,
             "height": 14,
             "style": {
               "font-family": [
@@ -259,7 +259,7 @@
               ],
               "font-size": 9,
               "color": "#000000",
-              "text-align": "left",
+              "text-align": "right",
               "vertical-align": "middle",
               "line-height": "",
               "line-height-ratio": "",
@@ -800,7 +800,7 @@
       }
     ]
   },
-  "title": "Receta digital",
+  "title": "Reporte producto entregado por paciente",
   "report": {
     "paper-type": "A4",
     "orientation": "portrait",

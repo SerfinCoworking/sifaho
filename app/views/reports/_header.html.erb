@@ -1,13 +1,14 @@
 <% content_for :page_header do %>
   <li class="nav-item non-sel" id="page-title">
     <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')}" do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+      <%= fa_icon "file-alt" %>
       Reportes
     <% end %>
   </li>
+  <!-- 
   <li class="nav-item non-sel">
     <%= link_to new_delivered_by_order_reports_path, class: "nav-link #{active_action('new_delivered_by_order')}" do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
+      <%= fa_icon "tint" %>
       <span class="hidden-xs"> Entregado por pedido</span>
     <% end %>
   </li>
@@ -17,6 +18,7 @@
       <span class="hidden-xs"> Entregado por establecimiento</span>
     <% end %>
   </li>
+  -->
   <li class="nav-item non-sel">
     <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
       <%= fa_icon "pills" %>
