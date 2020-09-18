@@ -70,18 +70,18 @@ $(document).on('turbolinks:load', function(e){
     
     const trs = $('#internal-order-product-cocoon-container').find('tr.nested-fields');
     trs.map((index, tr) => {
+      const toDelivery = $(tr).find("input.deliver-quantity").val(); // get delivery quanitty
+      let totalQuantitySelected = 0;
       const lotStockHidden = $(tr).find('.lots').has('input._destroy[value="false"]');// filter values with _destroy=true
+      let selectedQuantity;
       if(lotStockHidden.length){
-        const toDelivery = $(tr).find("input.deliver-quantity").val(); // get delivery quanitty
-        const selectedQuantity = $(lotStockHidden).find('.lot_stock_quantity_ref');
-        let totalQuantitySelected = 0;
+        selectedQuantity = $(lotStockHidden).find('.lot_stock_quantity_ref');
         selectedQuantity.map((index, option) => {
           // option
           totalQuantitySelected += ($(option).val() * 1);
         });
-  
-        setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
       }
+      setProgress(tr, totalQuantitySelected, toDelivery, (typeof(selectedQuantity) !== 'undefined' ? selectedQuantity.length : 0));
     });
 
   }// initEvents function
