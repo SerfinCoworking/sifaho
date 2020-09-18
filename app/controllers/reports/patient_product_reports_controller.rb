@@ -6,11 +6,12 @@ class Reports::PatientProductReportsController < ApplicationController
   def generate
     @movements =  QuantityOrdSupplyLot
                     .where(quantifiable_type: 'Prescription')
+                    .joins("INNER JOIN prescriptions ON prescriptions.id = quantity_ord_supply_lots.quantifiable_id")
+                    .where("prescriptions.establishment_id = ?", current_user.establishment.id)
                     .where(supply_id: params[:supply_id])
                     .entregado
                     .dispensed_since(params[:since_date])
                     .dispensed_to(params[:to_date])
-                    .joins("INNER JOIN prescriptions ON prescriptions.id = quantity_ord_supply_lots.quantifiable_id")
                     .joins("JOIN patients ON patients.id = prescriptions.patient_id")
                     .group("patients.last_name", "patients.first_name", "patients.dni", "quantity_ord_supply_lots.dispensed_at")
                     .sum(:delivered_quantity)
