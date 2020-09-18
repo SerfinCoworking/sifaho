@@ -38,8 +38,9 @@ class Reports::PatientProductReportsController < ApplicationController
 
     def generate_report(movements, params)
       report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf')
-
+      
       report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf'), :default => true
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'other_page.tlf'), id: :other_page
     
       movements.each do |movement|
         if report.page_count == 1 && report.list.overflow?
