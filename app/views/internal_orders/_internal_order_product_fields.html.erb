@@ -25,7 +25,10 @@
     <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
       value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
 
-    <% if uniqueness_product_on_internal_order %>
+    <% if f.object.errors[:uniqueness_product_on_internal_order].any? %>
+      <div class="invalid-feedback d-block">
+        <%= f.object.errors[:uniqueness_product_on_internal_order].first %>
+      </div>
     <% end %>
   </td>
 
@@ -139,6 +142,12 @@
           min: '0', step:'any', :style => 'width: 100px',
         } 
       %>
+
+      <% if f.object.errors[:out_of_stock].any? %>
+        <div class="invalid-feedback d-block">
+          <%= f.object.errors[:out_of_stock].first %>
+        </div>
+      <% end %>
     </td>
     
     <!-- Lotes -->

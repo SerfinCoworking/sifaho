@@ -12,13 +12,13 @@ class InternalOrderProduct < ApplicationRecord
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_proveedor_auditoria?
+  validate :out_of_stock, if: :is_provision_en_camino?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
   validates_presence_of :product_id
   validates :int_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino?
   validates_associated :int_ord_prod_lot_stocks, if: :is_provision_en_camino?
   validate :uniqueness_product_on_internal_order
   
-  # validates :product_id, uniqueness: { scope: :internal_order_id, message: "should happen once per year" }
 
   accepts_nested_attributes_for :product,
     :allow_destroy => true
@@ -199,9 +199,20 @@ class InternalOrderProduct < ApplicationRecord
   end
 
   def uniqueness_product_on_internal_order
-    if self.internal_order.internal_order_products.any?{|iop| iop.product_id == self.product_id}
-      errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra resgitrado")      
+    (self.internal_order.internal_order_products.uniq - [self]).each do |iop| 
+      if iop.product_id == self.product_id
+        errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra en la orden")      
+      end
     end
+  end
+  
+  def out_of_stock
+
+    total_stock = self.internal_order.provider_sector.stocks.where(product_id: self.product_id).sum(:quantity)
+    if total_stock <  self.delivery_quantity
+      errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
+    end
+
   end
 
 end
