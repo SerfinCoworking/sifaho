@@ -76,10 +76,13 @@ class StocksController < ApplicationController
     end
   end
 
-  def find_lots
+  def find_lots   
     
-    @stocks = current_user.sector.stocks.by_product_code(params[:product_code]).with_available_quantity
-    @lot_stocks = @stocks.first.lot_stocks.select(:id, :quantity, :lot_id)
+    @lot_stocks = LotStock.joins(:stock)
+      .joins(:product)
+      .where("stocks.sector_id = ?", current_user.sector.id)
+      .where("products.code like ?", params[:product_code])
+      .where("lot_stocks.quantity > ?", 0)
 
     respond_to do |format|
       format.json { render json: @lot_stocks.to_json(
