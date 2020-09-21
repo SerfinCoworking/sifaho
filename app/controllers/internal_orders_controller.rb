@@ -169,9 +169,10 @@ class InternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @internal_order.save!
+        
+        if sending?; @internal_order.send_order_by(current_user); end
 
         message = sending? ? "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente." :message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
-
         format.html { redirect_to @internal_order, notice: message }
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
