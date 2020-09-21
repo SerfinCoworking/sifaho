@@ -292,37 +292,16 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
-    puts "<====================DEBUG SEND ORDER BY"
     
     self.internal_order_products.each do |iop|
       iop.decrement_stock
     end
 
-    # solo usuarios del mismo sector pueden realizar esta accion
-    # validamos los lot_stocks
-    # validamos la cantidad de cada lote seleccionado:
-    #   la cantidad a enviar no debe superar el stock de cada lot stock
+    self.sent_date = DateTime.now
+    self.sent_by_id = a_user.id
+    self.save!(validate: false)
 
-
-      # if self.internal_order_products.exists?
-        # if self.validate_quantity_lots
-          # self.internal_order_products.each do |qosl|
-            # qosl.decrement
-          # end
-        # end
-      # else
-        # raise ArgumentError, 'No hay insumos solicitados en el pedido'
-      # end # End check if quantity_ord_supply_lots exists
-      self.sent_date = DateTime.now
-      self.sent_by_id = a_user.id
-      self.save!
-
-      self.create_notification(a_user, "envió")
-      # self.provision_en_camino!
-      # self.create_notification(a_user, "envió")
-    # else
-    #   raise ArgumentError, 'Usted no pertenece al sector proveedor.'
-    # end
+    self.create_notification(a_user, "envió")
   end
 
   private
