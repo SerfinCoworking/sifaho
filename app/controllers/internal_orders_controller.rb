@@ -288,10 +288,31 @@ class InternalOrdersController < ApplicationController
   # GET /internal_order/1/send_provider
   def send_provider
     authorize @internal_order
-    @users = User.with_sector_id(current_user.sector_id)
+
     respond_to do |format|
-      format.js
+      begin
+        @internal_order.status = "provision_en_camino"
+        @internal_order.save!
+
+        @internal_order.send_order_by(current_user);
+        
+        message = 'La provision se ha enviado correctamente.'
+
+        format.html { redirect_to @internal_order, notice: message }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @applicant_sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id).as_json
+          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+        format.html { render :edit_provider }
+      end
     end
+
+    
   end
 
   # GET /internal_orders/1/send_applicant

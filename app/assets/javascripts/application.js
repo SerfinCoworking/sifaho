@@ -102,18 +102,6 @@ $(document).on('turbolinks:load', function() {
     });
   }, 10000);
 
-  // Return confirmation modal
-  $('#return-confirm').on('show', function() {
-    var $submit = $(this).find('.btn-warning'),
-    href = $submit.attr('href');
-    $submit.attr('href', href.replace('pony', $(this).data('id')));
-  });
-
-  $('.return-confirm').click(function(e) {
-    e.preventDefault();
-    $('#return-confirm').data('id', $(this).data('id')).modal('show');
-  });
-
   $('#filterrific_with_professional_type_id').chosen({
     allow_single_deselect: true,
     no_results_text: 'No se encontró el resultado',

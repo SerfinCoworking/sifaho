@@ -225,20 +225,20 @@
       <%= link_to send_applicant_internal_order_path(@internal_order), 
         class: 'btn btn-primary btn-md mr-1' do %>
         <%= fa_icon "paper-plane" %>
-        Enviar
+        Enviar solicitud
       <% end %>
     <% end %>
     <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning mr-1">
+      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
         <%= fa_icon "redo" %>
         Retornar
-      </a>
+      </button>
     <% end %>
     <% if policy(@internal_order).send_provider? %>
-      <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
+      <%= link_to send_provider_internal_order_path(@internal_order),
         class: 'btn btn-primary btn-md' do %>
         <%= fa_icon "paper-plane" %>
-        Enviar
+        Enviar provisión
       <% end %>
     <% end %>
     <% if policy(@internal_order).receive_applicant? %>
@@ -252,25 +252,29 @@
 </div>
 
 <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-  <div class="modal" id="return-confirm">
-    <div class="modal-dialog">
-      <div class="modal-content panel-warning">
-        <div class="modal-header panel-heading">
-          <a class="close" data-dismiss="modal">×</a>
-          <h3><%= fa_icon "redo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h3>
-        </div>
-        <div class="modal-body">
-          <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
-        </div>
-        <div class="modal-footer text-right">
-          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-          <% if policy(@internal_order).return_applicant_status? %>
-            <%= link_to 'Confirmar', return_applicant_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% else %>
-            <%= link_to 'Confirmar', return_provider_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% end %>
+  <% content_for :modal do %>
+    <div class="modal" id="return-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <% if policy(@internal_order).return_applicant_status? %>
+              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, :class => 'btn btn-warning' %>
+            <% else %>
+              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, :class => 'btn btn-warning' %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  <% end %>
 <% end %>
