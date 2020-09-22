@@ -48,26 +48,20 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def update_provider?
-    unless ["en_camino", "entregado"].include? record.provider_status && record.provider_sector == user.sector
+    if ((["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector)
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
+  
+  def send_provider?
+    update_provider?
+  end
 
-  # def new?
-  #   create?
-  # end
-
-  # def update?
-  #   unless ["en_camino", "entregado"].include? record.provider_status
-  #     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-  #   end
-  # end
-
-  # def edit?
-  #   if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
-  #     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-  #   end
-  # end
+  def send_applicant?
+    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
 
   def nullify?
     edit?
@@ -76,9 +70,7 @@ class InternalOrderPolicy < ApplicationPolicy
   def nullify_confirm?
     nullify?
   end
-
  
-
   def destroy?
     if record.solicitud? 
       if record.solicitud_auditoria? && record.applicant_sector == user.sector
@@ -97,18 +89,6 @@ class InternalOrderPolicy < ApplicationPolicy
 
   def generate_report?
     new_report?
-  end
-
-  def send_provider?
-    if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
-  end
-
-  def send_applicant?
-    if record.applicant_sector == user.sector
-      record.solicitud_auditoria? && user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
   end
 
   def receive_applicant?
