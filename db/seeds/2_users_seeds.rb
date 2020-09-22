@@ -42,7 +42,7 @@ farmaceuticoUser = User.new(
 
 UserSector.create(user:farmaceuticoUser, sector: sectorFar)
 farmaceuticoUser.add_role :farmaceutico
-farmaceuticoUser.sector = sectorInformatico
+farmaceuticoUser.sector = sectorFar
 farmaceuticoUser.save!
 Profile.create(user: farmaceuticoUser, first_name: "farmaceutico", last_name: "one", email: "secretario@exmaple.com", dni: "40579158")
 
@@ -54,7 +54,7 @@ medicUser = User.new(
 
 UserSector.create(user:medicUser, sector: sectorMedic)
 medicUser.add_role :medic
-medicUser.sector = sectorInformatico
+medicUser.sector = sectorMedic
 medicUser.save!
 Profile.create(user: medicUser, first_name: "medico", last_name: "one", email: "secretario@exmaple.com", dni: "40671958")
 
@@ -76,6 +76,7 @@ medicUser = User.new(
   :password              => "12345678",
   :password_confirmation => "12345678"
 )
+UserSector.create(user:medicUser, sector: sectorMedicJunin)
 medicUser.add_role :medic
 medicUser.sector = sectorMedicJunin
 medicUser.save!
