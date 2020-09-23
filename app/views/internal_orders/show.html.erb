@@ -223,6 +223,7 @@
     <% end %>
     <% if policy(@internal_order).send_applicant? %>
       <%= link_to send_applicant_internal_order_path(@internal_order), 
+        'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: 'btn btn-primary btn-md mr-1' do %>
         <%= fa_icon "paper-plane" %>
         Enviar solicitud
@@ -268,9 +269,9 @@
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
             <% if policy(@internal_order).return_applicant_status? %>
-              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% else %>
-              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% end %>
           </div>
         </div>

@@ -15,7 +15,7 @@ class InternalOrderProduct < ApplicationRecord
   validate :out_of_stock, if: :is_provision_en_camino?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
   validates_presence_of :product_id
-  validates :int_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino?
+  validates :int_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino_and_quantity_greater_than_0?
   validates_associated :int_ord_prod_lot_stocks, if: :is_provision_en_camino?
   validate :uniqueness_product_on_internal_order
   
@@ -172,6 +172,10 @@ class InternalOrderProduct < ApplicationRecord
   
   def is_provision_en_camino?
     return self.internal_order.provision_en_camino?
+  end
+  
+  def is_provision_en_camino_and_quantity_greater_than_0?
+    return self.internal_order.provision_en_camino? && self.delivery_quantity > 0
   end
 
   def is_provision?
