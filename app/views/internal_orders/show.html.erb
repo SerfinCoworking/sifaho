@@ -199,19 +199,29 @@
   </div>
   <div class="card-footer text-right">
     <% if @internal_order.provision? %>
-      <%= link_to provider_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
+      <%= link_to provider_index_internal_orders_path,  
+        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe, 
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
     <% else %>
-      <%= link_to applicant_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
+        <%= link_to applicant_index_internal_orders_path,  
+        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
     <% end %> 
     <% if policy(@internal_order).edit_provider? %>
       <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
+        'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: "btn btn-warning mr-1" do %>
         <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>   
     <% if policy(@internal_order).edit_applicant? %>
-      <%= link_to edit_applicant_internal_order_path(@internal_order), 
+      <%= link_to edit_applicant_internal_order_path(@internal_order),  
+        'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: 'btn btn-warning btn-md mr-1' do %>
         <%= fa_icon "pen" %>
         Editar
@@ -233,13 +243,15 @@
     <% end %>
     <% if policy(@internal_order).send_provider? %>
       <%= link_to send_provider_internal_order_path(@internal_order),
+        'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: 'btn btn-primary btn-md' do %>
         <%= fa_icon "paper-plane" %>
         Enviar provisión
       <% end %>
     <% end %>
     <% if policy(@internal_order).receive_applicant? %>
-      <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
+      <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true, 
+        'data-disable-with' => "Recibiendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: 'btn btn-success btn-md' do %>
         <%= fa_icon "check" %>
         Recibir
