@@ -28,6 +28,7 @@
 @import 'notifications';
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
+@import 'treeview';
 
 
 html {
@@ -236,4 +237,8 @@ td .form-group{
       display: block;
     }
   }
+}
+
+.clickable{
+  cursor: pointer;
 }

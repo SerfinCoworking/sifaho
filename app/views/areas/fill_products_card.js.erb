@@ -1,0 +1,12 @@
+<% js_results = escape_javascript(
+  render(partial: 'products_table', locals: { products: @products })
+) %>
+
+$("#area-products").html("<%= js_results %>");
+$("#area-products-title").text("<%= @area.name %>");
+
+<% if @filtered_payments.present? %>
+  $("#print-report").removeClass('disabled');
+<% else %>
+  $("#print-report").addClass('disabled');
+<% end %>

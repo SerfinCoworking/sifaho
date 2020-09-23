@@ -27,7 +27,11 @@ Rails.application.routes.draw do
   end
 
   # Areas
-  resources :areas
+  resources :areas do
+    member do
+      get :fill_products_card
+    end
+  end
 
   resources :permission_requests do
     member do

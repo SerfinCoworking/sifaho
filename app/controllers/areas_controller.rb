@@ -1,5 +1,5 @@
 class AreasController < ApplicationController
-  before_action :set_area, only: [:show, :edit, :update, :destroy]
+  before_action :set_area, only: [:show, :edit, :update, :destroy, :fill_products_card]
 
   # GET /areas
   # GET /areas.json
@@ -9,12 +9,13 @@ class AreasController < ApplicationController
       .order(created_at: :desc)
       .page(params[:page])
 
+    @parent_areas = Area.main
     respond_to do |format|
       format.html
       format.js
     end
   end
-    
+
   # GET /areas/1
   # GET /areas/1.json
   def show
@@ -25,6 +26,7 @@ class AreasController < ApplicationController
   def new
     authorize Area
     @area = Area.new
+    @areas = Area.all
   end
 
   # GET /areas/1/edit
@@ -72,6 +74,14 @@ class AreasController < ApplicationController
     respond_to do |format|
       format.html { redirect_to areas_url, notice: 'El rubro se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
+    end
+  end
+
+  def fill_products_card
+    @products = @area.all_nested_products
+
+    respond_to do |format|
+      format.js
     end
   end
 

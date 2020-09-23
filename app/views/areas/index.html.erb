@@ -1,16 +1,64 @@
 <%= render 'header' %>
 
-<% if @bed_orders.present? %>
-
-  <%= render 'filter' %>
-
-  <%= render(
-    partial: 'bed_orders/list',
-    locals: { bed_orders: @bed_orders }
-  ) %>
-<% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'pedidos internos entregados' }
-  ) %>
-<% end %>
+<div class="row">
+  <div class="col-6 pr-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title h4 p-2">
+          <%= fa_icon "sitemap" %> Rubros
+        </div>
+        <ul id="tree1">
+          <% @parent_areas.each do |parent_area| %>
+            <li class="h5">
+            <a href="#">
+              <%= parent_area.name %>
+              <%= link_to fill_products_card_area_path(parent_area), remote: true, class: 'btn btn-light',
+                'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+                <%= parent_area.all_nested_products.count %>
+              <% end %>
+            </a>
+              <ul>
+                <% parent_area.subareas.each do |sub_area| %>
+                  <li><%= sub_area.name %>
+                    <% if sub_area.subareas.present? %>
+                      <ul>
+                        <% sub_area.subareas.each do |s_sub_area|%>
+                          <li>
+                            <%= s_sub_area.name %>
+                            <% if s_sub_area.subareas.present? %>
+                              <ul>
+                                <% s_sub_area.subareas.each do |s_s_sub_area|%>
+                                <li>
+                                  <a href="#"><% s_s_sub_area.name %></a>
+                                </li>
+                                <% end %>
+                              </ul>
+                            <% end %>
+                          </li>
+                        <% end %>
+                      </ul>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 pl-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title h4 p-2">
+          <%= fa_icon "pills" %> Productos
+          <span id="area-products-title"></span>
+        </div>
+        <%# Fill the products of specific area %>
+        <div id="area-products">
+          Click en cada rubro para ver sus productos.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
