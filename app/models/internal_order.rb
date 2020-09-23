@@ -205,16 +205,19 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Método para retornar perdido a estado anterior
+  # Método para retornar pedido a estado anterior
   def return_provider_status_by(a_user)
     if provision_en_camino?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
+      self.internal_order_products.each do |iop|
+        iop.increment_stock
       end
+  
       self.sent_by = nil
       self.sent_date = nil
+      self.status = "proveedor_auditoria"
+      self.save!(validate: false)
+
       self.create_notification(a_user, "retornó a un estado anterior")
-      self.proveedor_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
     end

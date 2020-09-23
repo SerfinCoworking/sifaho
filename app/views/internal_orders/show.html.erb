@@ -98,7 +98,7 @@
               <% @internal_order.internal_order_products.joins(:product).order("name").each do |int_ord_prod| %>
                 <tr>
                   <td>
-                    <%= int_ord_prod.product_id %>
+                    <%= int_ord_prod.product_code %>
                   </td>
                   <td>
                     <%= int_ord_prod.product_name %>
@@ -126,11 +126,10 @@
                   </td>
                 </tr>
                 <tr>
-                 <% if int_ord_prod.int_ord_prod_lot_stocks.present? %>
-                  
                   <td colspan="7" class="p-0">
                     <div id="collapse-row-<%= int_ord_prod.id %>" class="collapse in">
                       <div class="p-3">
+                      <% if int_ord_prod.int_ord_prod_lot_stocks.present? %>
                         <table class="w-100">
                           <thead>
                             <tr>
@@ -176,17 +175,14 @@
                             </tr>
                           </table>
                         <%end%>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
                       </div>
                     </div>
                   </td>
-
-                  <% else %>
-                  
-                  sin lote
-                  <% end %>
-                  </tr>
+                </tr> <%# fin Listado de lotes y descripciones %>
               <% end %>
-
             </tbody>
           </table>
         </div>

@@ -29,6 +29,7 @@ class InternalOrderProduct < ApplicationRecord
   # Delegaciones
   delegate :unity, to: :product
   delegate :name, to: :product, prefix: :product
+  delegate :code, to: :product, prefix: :product
   
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
@@ -76,15 +77,6 @@ class InternalOrderProduct < ApplicationRecord
     end
   end
 
-  # Decrement delivered quantity to sector supply lot and turn status "Entregado"
-  def decrement
-    if self.sector_supply_lot.present?
-      self.sector_supply_lot.decrement(self.delivered_quantity)
-    end
-    self.dispensed_at = DateTime.now
-    self.entregado!
-  end
-
   # Dispense supply of cronic prescription
   def decrement_to_cronic(cronic_dispensation)
     if self.sector_supply_lot.present?
@@ -99,14 +91,6 @@ class InternalOrderProduct < ApplicationRecord
       cronic_dispensation.destroy
       raise ArgumentError, 'No hay lote asignado para '+self.supply_name
     end
-  end
-
-  # Increment delivered quantity to sector supply lot and turn status "Sin entregar"
-  def increment
-    if self.sector_supply_lot.present?
-      self.sector_supply_lot.increment(self.delivered_quantity)
-    end
-    self.sin_entregar!
   end
 
   # Getter sector supply lot code
@@ -181,7 +165,22 @@ class InternalOrderProduct < ApplicationRecord
   def is_provision?
     return self.internal_order.order_type == 'provision'
   end
+  
+  # Decrement each lot_stocks quantity of each int_ord_prod_lot_stocks accordding with it quantity
+  def decrement_stock
+    self.int_ord_prod_lot_stocks.each do |iopls|
+      iopls.lot_stock.decrement(iopls.quantity)
+    end
+  end
 
+  # Increment each lot_stocks quantity of each int_ord_prod_lot_stocks accodding with it quantity
+  def increment_stock
+    self.int_ord_prod_lot_stocks.each do |iopls|
+      iopls.lot_stock.increment(iopls.quantity)
+    end
+  end
+
+  # custom validations
   def lot_stock_sum_quantity
     total_quantity = 0
     self.int_ord_prod_lot_stocks.each do |iopls| 
@@ -196,12 +195,6 @@ class InternalOrderProduct < ApplicationRecord
     end
   end
 
-  def decrement_stock
-    self.int_ord_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.decrement(iopls.quantity)
-    end
-  end
-
   def uniqueness_product_on_internal_order
     (self.internal_order.internal_order_products.uniq - [self]).each do |iop| 
       if iop.product_id == self.product_id
@@ -211,12 +204,10 @@ class InternalOrderProduct < ApplicationRecord
   end
   
   def out_of_stock
-
     total_stock = self.internal_order.provider_sector.stocks.where(product_id: self.product_id).sum(:quantity)
     if total_stock <  self.delivery_quantity
       errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
     end
-
   end
 
 end
