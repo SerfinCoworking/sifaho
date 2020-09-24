@@ -14,7 +14,7 @@ class Stock < ApplicationRecord
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
-  # Update the stock quantity 
+  # Update the stock quantity
   def update_stock
     self.quantity = self.sector_supply_lots.without_status(4).sum(:quantity)
     self.save

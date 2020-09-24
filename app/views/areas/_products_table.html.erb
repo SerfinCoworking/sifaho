@@ -14,7 +14,7 @@
           <td><%= product.name %></td>
           <td class="text-left actions-col">
             <% if policy(product).show? %>
-              <%= link_to product_path(product), class: 'btn btn-default btn-sm',
+              <%= link_to product_path(product), remote: true, class: 'btn btn-light btn-sm',
                 title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
                 <%= fa_icon "eye" %>
               <% end %>

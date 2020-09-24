@@ -51,6 +51,8 @@ class ProductsController < ApplicationController
   # GET /products/1.json
   def show
     authorize @product
+
+    @stock = current_user.sector.stock_product(@product.id).first
     respond_to do |format|
       format.html
       format.js
