@@ -162,15 +162,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :internal_orders do
+  resources :internal_orders, only: [:show, :destroy] do
     member do
       get "delete"
-      get "restore"; get "restore_confirm"
       get "send_provider"
       get "send_applicant"
       get "return_provider_status"
       get "return_applicant_status"
-      get "receive_applicant"; get "receive_applicant_confirm"
+      get "receive_applicant"
       get "edit_applicant"
       get "edit_provider"
       get "nullify_confirm"

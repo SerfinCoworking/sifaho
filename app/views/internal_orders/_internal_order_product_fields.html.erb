@@ -165,19 +165,15 @@
         <% end %>
       </div>
 
-        <%
-          # template input hidden lot selection
-          new_iopls = f.object.int_ord_prod_lot_stocks.build
-          fields = f.fields_for(:int_ord_prod_lot_stocks, 
-          new_iopls, 
-          :child_index => "id_placeholder") do |fb|
-            render "int_ord_prod_lot_stocks_fields", f: fb
-          end
-          # js = escape_javascript(fields)
-          # fn = html_escape(js)
-        %>
-      
-      
+      <%
+        # template input hidden lot selection
+        new_iopls = f.object.int_ord_prod_lot_stocks.build
+        fields = f.fields_for(:int_ord_prod_lot_stocks, 
+        new_iopls, 
+        :child_index => "id_placeholder") do |fb|
+          render "int_ord_prod_lot_stocks_fields", f: fb
+        end
+      %>
 
       <div class="btn-progress">
         <div class="bg-progress bg-info"></div>

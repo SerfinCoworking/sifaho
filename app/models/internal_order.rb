@@ -238,7 +238,7 @@ class InternalOrder < ApplicationRecord
     self.internal_order_products.each do |iop|
       iop.increment_lot_stock_to(self.applicant_sector)
     end
-    
+
     self.date_received = DateTime.now
     self.received_by = a_user
     self.create_notification(a_user, "recibió")
@@ -247,29 +247,29 @@ class InternalOrder < ApplicationRecord
   end
 
   # Método para validar las cantidades a entregar de los lotes en stock
-  def validate_quantity_lots
-    @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
-    if @qosl_with_ssl.present?
-      @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y verificando las cantidades.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    elsif @qosl_without_ssl.present?
-      @qosl_without_ssl.each do |qosl|
-        if qosl.delivered_quantity > 0
-          raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
-        end
-      end
-    else
-      raise ArgumentError, 'No hay insumos en el pedido.'
-    end 
-  end
+  # def validate_quantity_lots
+  #   @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
+  #   @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
+  #   if @qosl_with_ssl.present?
+  #     @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
+  #     # Se itera el hash por cada lote sumando y verificando las cantidades.
+  #     @sect_lots.each do |key, values|
+  #       @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
+  #       @sector_lot = SectorSupplyLot.find(key)
+  #       if @sector_lot.quantity < @sum_quantities
+  #         raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
+  #       end
+  #     end
+  #   elsif @qosl_without_ssl.present?
+  #     @qosl_without_ssl.each do |qosl|
+  #       if qosl.delivered_quantity > 0
+  #         raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
+  #       end
+  #     end
+  #   else
+  #     raise ArgumentError, 'No hay insumos en el pedido.'
+  #   end 
+  # end
 
   def create_notification(of_user, action_type)
     InternalOrderMovement.create(user: of_user, internal_order: self, action: action_type, sector: of_user.sector)
@@ -289,7 +289,6 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
-    
     self.internal_order_products.each do |iop|
       iop.decrement_stock
     end

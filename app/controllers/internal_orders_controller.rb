@@ -260,9 +260,6 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  # def create
-    
-  # end
 
   # DELETE /internal_orders/1
   # DELETE /internal_orders/1.json
@@ -310,9 +307,7 @@ class InternalOrdersController < ApplicationController
           @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
         format.html { render :edit_provider }
       end
-    end
-
-    
+    end    
   end
 
   # GET /internal_orders/1/send_applicant
@@ -340,13 +335,6 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  # GET /internal_orders/1/receive_applicant_confirm
-  # def receive_applicant_confirm
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
-
   def return_provider_status
     authorize @internal_order
     respond_to do |format|
@@ -373,78 +361,79 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  def generate_report
-    authorize InternalOrder
-    respond_to do |format|
-      if params[:internal_order][:since_date].present? && params[:internal_order][:to_date].present?
-        @since_date = DateTime.parse(params[:internal_order][:since_date])
-        @to_date = DateTime.parse(params[:internal_order][:to_date])
-        @filtered_orders =  InternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_sector).group('sectors.name').count
-        flash.now[:success] = "Reporte generado."
-        format.html { render :generate_report}
-      else
-        @internal_order = InternalOrder.new
-        flash.now[:error] = "Verifique los campos."
-        format.html { render :new_report }
-      end  
-    end
-  end
+  # def generate_report
+  #   authorize InternalOrder
+  #   respond_to do |format|
+  #     if params[:internal_order][:since_date].present? && params[:internal_order][:to_date].present?
+  #       @since_date = DateTime.parse(params[:internal_order][:since_date])
+  #       @to_date = DateTime.parse(params[:internal_order][:to_date])
+  #       @filtered_orders =  InternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_sector).group('sectors.name').count
+  #       flash.now[:success] = "Reporte generado."
+  #       format.html { render :generate_report}
+  #     else
+  #       @internal_order = InternalOrder.new
+  #       flash.now[:error] = "Verifique los campos."
+  #       format.html { render :new_report }
+  #     end  
+  #   end
+  # end
 
-  def generate_internal_order_report(internal_order)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf')
+  # def generate_internal_order_report(internal_order)
+  #   report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf')
 
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page_order.tlf'), id: :other_page
+  #   report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
+  #   report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page_order.tlf'), id: :other_page
     
-    internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
-      if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page do |page|
-        end
-      end
+  #   internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
+  #     if report.page_count == 1 && report.list.overflow?
+  #       report.start_new_page layout: :other_page do |page|
+  #       end
+  #     end
       
-      report.list do |list|
-        list.add_row do |row|
-          row.values  supply_code: qosl.supply_id,
-                      supply_name: qosl.supply.name,
-                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                      lot: qosl.sector_supply_lot_lot_code,
-                      laboratory: qosl.sector_supply_lot_laboratory_name,
-                      expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: internal_order.provision? ? qosl.provider_observation : qosl.applicant_observation
-        end
+  #     report.list do |list|
+  #       list.add_row do |row|
+  #         row.values  supply_code: qosl.supply_id,
+  #                     supply_name: qosl.supply.name,
+  #                     requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+  #                     delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+  #                     lot: qosl.sector_supply_lot_lot_code,
+  #                     laboratory: qosl.sector_supply_lot_laboratory_name,
+  #                     expiry_date: qosl.sector_supply_lot_expiry_date, 
+  #                     applicant_obs: internal_order.provision? ? qosl.provider_observation : qosl.applicant_observation
+  #       end
 
-        report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(internal_order.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(internal_order.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(internal_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          if internal_order.solicitud?
-            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
-          else
-            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
-          end
-        end
-      end
+  #       report.list.on_page_footer_insert do |footer|
+  #         footer.item(:total_supplies).value(internal_order.quantity_ord_supply_lots.count)
+  #         footer.item(:total_requested).value(internal_order.quantity_ord_supply_lots.sum(&:requested_quantity))
+  #         footer.item(:total_delivered).value(internal_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
+  #         if internal_order.solicitud?
+  #           footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+  #         else
+  #           footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
+  #         end
+  #       end
+  #     end
 
-      if report.page_count == 1
-        report.page[:applicant_sector] = internal_order.applicant_sector.name
-        report.page[:provider_sector] = internal_order.provider_sector.name
-        report.page[:observations] = internal_order.observation
-      end
-    end
+  #     if report.page_count == 1
+  #       report.page[:applicant_sector] = internal_order.applicant_sector.name
+  #       report.page[:provider_sector] = internal_order.provider_sector.name
+  #       report.page[:observations] = internal_order.observation
+  #     end
+  #   end
     
-    report.pages.each do |page|
-      page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
-      page[:remit_code] = internal_order.remit_code
-      page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
-      page[:page_count] = report.page_count
-      page[:sector] = current_user.sector_name
-      page[:establishment] = current_user.establishment_name
-    end
+  #   report.pages.each do |page|
+  #     page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
+  #     page[:remit_code] = internal_order.remit_code
+  #     page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
+  #     page[:page_count] = report.page_count
+  #     page[:sector] = current_user.sector_name
+  #     page[:establishment] = current_user.establishment_name
+  #   end
 
-    report.generate
-  end
+  #   report.generate
+  # end
 
+  # anular orden
   # patch /internal_orders/1/nullify
   def nullify
     authorize @internal_order
@@ -506,24 +495,24 @@ class InternalOrdersController < ApplicationController
     return submit == "Proveedor"
   end
 
-  def generate_apply_report(orders)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'i_o_list.tlf')
+  # def generate_apply_report(orders)
+  #   report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'i_o_list.tlf')
 
-    orders.each do |order|
-      report.list.add_row do |row|
-        row.values  code: order.remit_code,
-                    sector_name: order.provider_sector.name,
-                    origin: order.order_type.underscore.humanize,
-                    status: order.status.underscore.humanize,
-                    supplies: order.quantity_ord_supply_lots.count,
-                    movements: order.movements.count,
-                    requested_date: order.requested_date.strftime("%d/%m/%Y"),
-                    received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
-      end
-    end
-    report.page[:page_count] = report.page_count
-    report.page[:title] = 'Reporte recibos pedidos internos'
+  #   orders.each do |order|
+  #     report.list.add_row do |row|
+  #       row.values  code: order.remit_code,
+  #                   sector_name: order.provider_sector.name,
+  #                   origin: order.order_type.underscore.humanize,
+  #                   status: order.status.underscore.humanize,
+  #                   supplies: order.quantity_ord_supply_lots.count,
+  #                   movements: order.movements.count,
+  #                   requested_date: order.requested_date.strftime("%d/%m/%Y"),
+  #                   received_date: order.date_received.present? ? order.date_received.strftime("%d/%m/%Y") : '----'
+  #     end
+  #   end
+  #   report.page[:page_count] = report.page_count
+  #   report.page[:title] = 'Reporte recibos pedidos internos'
 
-    report.generate
-  end
+  #   report.generate
+  # end
 end
