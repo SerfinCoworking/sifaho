@@ -235,21 +235,15 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
-    if self.provision_en_camino?
-      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_user.sector)
-        end
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.create_notification(a_user, "recibió")
-        self.provision_entregada!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en la provisión.'
-      end # End check if sector supply exists
-    else
-      raise ArgumentError, 'La provisión aún no está en camino.'
+    self.internal_order_products.each do |iop|
+      iop.increment_lot_stock_to(self.applicant_sector)
     end
+    
+    self.date_received = DateTime.now
+    self.received_by = a_user
+    self.create_notification(a_user, "recibió")
+    self.status = "provision_entregada"
+    self.save!(validate: false)
   end
 
   # Método para validar las cantidades a entregar de los lotes en stock

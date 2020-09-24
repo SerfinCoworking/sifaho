@@ -39,20 +39,23 @@ class InternalOrderProduct < ApplicationRecord
   scope :dispensed_to, lambda { |a_date| where('quantity_ord_supply_lots.dispensed_at <= ?', a_date ) }
 
   # Métodos públicos
-  def increment_lot_to(a_sector)
-    if self.delivered_quantity > 0
-      if self.sector_supply_lot.present?
-        @sector_supply_lot = SectorSupplyLot.where(
-          sector_id: a_sector.id,
-          supply_lot_id: self.sector_supply_lot.supply_lot_id
-        ).first_or_create
-        @sector_supply_lot.increment(self.delivered_quantity)
-        self.dispensed_at = DateTime.now
-        self.entregado!
-      else
-        self.sin_stock!
-      end
+  def increment_lot_stock_to(a_sector)
+
+    self.int_ord_prod_lot_stocks.each do |iopls|
+
+      @stock = Stock.where(
+        sector_id: a_sector.id,
+        product_id: self.product_id
+      ).first_or_create
+
+      @lot_stock = LotStock.where(
+        lot_id: iopls.lot_stock.lot.id,
+        stock_id: @stock.id,
+      ).first_or_create
+
+      @lot_stock.increment(iopls.quantity)
     end
+
   end
 
   def increment_new_lot_to(a_sector)

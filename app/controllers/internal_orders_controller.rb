@@ -330,6 +330,7 @@ class InternalOrdersController < ApplicationController
     authorize @internal_order
     respond_to do |format|
       begin
+        unless @internal_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
         @internal_order.receive_order_by(current_user)
         flash[:success] = 'La '+@internal_order.order_type+' se ha recibido correctamente'
       rescue ArgumentError => e
@@ -340,11 +341,11 @@ class InternalOrdersController < ApplicationController
   end
 
   # GET /internal_orders/1/receive_applicant_confirm
-  def receive_applicant_confirm
-    respond_to do |format|
-      format.js
-    end
-  end
+  # def receive_applicant_confirm
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
 
   def return_provider_status
     authorize @internal_order
