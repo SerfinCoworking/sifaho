@@ -1,7 +1,7 @@
 class InternalOrdersController < ApplicationController
   before_action :set_internal_order, only: [:show, :edit_provider, :update, :destroy, :delete,
   :edit_applicant, :update_applicant, :update_provider, :send_provider, :receive_applicant_confirm, :receive_applicant, 
-  :return_provider_status, :return_applicant_status, :send_applicant, :nullify, :nullify_confirm ]
+  :return_provider_status, :return_applicant_status, :send_applicant, :nullify ]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)

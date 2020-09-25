@@ -13,7 +13,7 @@
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>
-      <%= link_to internal_orders_path, class: 'btn',
+      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path), class: 'btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>
       <% end %>
@@ -197,64 +197,69 @@
       </div> <!-- End comments tab pane -->
     </div> <!-- End Tab content-->
   </div>
-  <div class="card-footer text-right">
-    <% if @internal_order.provision? %>
-      <%= link_to provider_index_internal_orders_path,  
-        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe, 
-        class: "btn btn-light mr-1" do %>
-        Volver
-      <% end %>
-    <% else %>
-        <%= link_to applicant_index_internal_orders_path,  
+  <div class="card-footer d-flex justify-content-between">
+    <% if policy(@internal_order).nullify? %>
+      <span data-toggle="modal" data-target="#anular-confirm">
+        <button class="btn btn-danger btn-sm" data-toggle='tooltip' title="Anular solicitud" >
+          <%= fa_icon 'ban' %>
+        </button>
+      </span>
+    <% end %>
+    <div class="text-right w-100">
+      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path),  
         'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: "btn btn-light mr-1" do %>
         Volver
       <% end %>
-    <% end %> 
-    <% if policy(@internal_order).edit_provider? %>
-      <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
-        'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-        class: "btn btn-warning mr-1" do %>
-        <%= fa_icon "pen" %>
-        Editar
+
+      <% if policy(@internal_order).edit_provider? %>
+        <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
+          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: "btn btn-warning mr-1" do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
+      <% end %> 
+      <% if policy(@internal_order).edit_applicant? %>
+        <%= link_to edit_applicant_internal_order_path(@internal_order),  
+          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
       <% end %>
-    <% end %>   
-    <% if policy(@internal_order).edit_applicant? %>
-      <%= link_to edit_applicant_internal_order_path(@internal_order),  
-        'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-        class: 'btn btn-warning btn-md mr-1' do %>
-        <%= fa_icon "pen" %>
-        Editar
+
+      <% if policy(@internal_order).send_applicant? %>
+        <%= link_to send_applicant_internal_order_path(@internal_order), 
+          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-primary btn-md mr-1' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar solicitud
+        <% end %>
       <% end %>
-    <% end %>
-    <% if policy(@internal_order).send_applicant? %>
-      <%= link_to send_applicant_internal_order_path(@internal_order), 
-        'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-        class: 'btn btn-primary btn-md mr-1' do %>
-        <%= fa_icon "paper-plane" %>
-        Enviar solicitud
+      <% if policy(@internal_order).send_provider? %>
+        <%= link_to send_provider_internal_order_path(@internal_order),
+          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-primary btn-md' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar provisión
+        <% end %>
       <% end %>
-    <% end %>
-    <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
-        <%= fa_icon "redo" %>
-        Retornar
-      </button>
-    <% end %>
-    <% if policy(@internal_order).send_provider? %>
-      <%= link_to send_provider_internal_order_path(@internal_order),
-        'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-        class: 'btn btn-primary btn-md' do %>
-        <%= fa_icon "paper-plane" %>
-        Enviar provisión
+
+      <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
+          <%= fa_icon "redo" %>
+          Retornar
+        </button>
       <% end %>
-    <% end %>
-    <% if policy(@internal_order).receive_applicant? %>
-      <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
-        <%= fa_icon "check" %>
-        Recibir
-      </button>
-    <% end %>
+      
+      <% if policy(@internal_order).receive_applicant? %>
+        <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
+          <%= fa_icon "check" %>
+          Recibir
+        </button>
+      <% end %>
+    </div> <!-- fin botones right -->
   </div>
 </div>
 
@@ -290,7 +295,7 @@
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
           <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -301,6 +306,28 @@
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
             <%= link_to 'Confirmar', receive_applicant_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <% if policy(@internal_order).nullify? %>
+    <div class="modal fade" id="anular-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro de anular el pedido?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Anular', nullify_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>

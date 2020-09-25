@@ -63,14 +63,6 @@ class InternalOrderPolicy < ApplicationPolicy
     end
   end
 
-  def nullify?
-    edit?
-  end
-
-  def nullify_confirm?
-    nullify?
-  end
- 
   def destroy?
     if record.solicitud? 
       if record.solicitud_auditoria? && record.applicant_sector == user.sector
@@ -92,8 +84,8 @@ class InternalOrderPolicy < ApplicationPolicy
   end
 
   def receive_applicant?
-    if record.applicant_sector == user.sector
-      record.provision_en_camino? && user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    if record.applicant_sector == user.sector && record.provision_en_camino? 
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
 
@@ -108,4 +100,11 @@ class InternalOrderPolicy < ApplicationPolicy
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
+
+  def nullify?
+    if record.provider_sector == user.sector && record.solicitud? && (record.solicitud_enviada? || record.proveedor_auditoria?)
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
 end

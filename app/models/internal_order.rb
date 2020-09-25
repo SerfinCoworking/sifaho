@@ -174,7 +174,7 @@ class InternalOrder < ApplicationRecord
     return self.provider_sector == a_user.sector
   end
 
-  def is_applicant(a_user)
+  def is_applicant?(a_user)
     return self.applicant_sector == a_user.sector
   end
 
@@ -191,7 +191,8 @@ class InternalOrder < ApplicationRecord
   # Nullify the order
   def nullify_by(a_user)
     self.rejected_by = a_user
-    self.anulado!
+    self.status = "anulado"
+    self.save!(validate: false)
     self.create_notification(a_user, "anuló")
   end
 

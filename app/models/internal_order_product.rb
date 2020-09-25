@@ -11,7 +11,7 @@ class InternalOrderProduct < ApplicationRecord
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
-  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_proveedor_auditoria?
+  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: proc { is_proveedor_auditoria? || is_provision_en_camino? } 
   validate :out_of_stock, if: :is_provision_en_camino?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
   validates_presence_of :product_id
@@ -145,9 +145,9 @@ class InternalOrderProduct < ApplicationRecord
   def is_provision_en_camino?
     return self.internal_order.provision_en_camino?
   end
-  
+
   def is_provision_en_camino_and_quantity_greater_than_0?
-    return self.internal_order.provision_en_camino? && self.delivery_quantity > 0
+    return self.internal_order.provision_en_camino? && (self.delivery_quantity.present? && self.delivery_quantity > 0)
   end
 
   def is_provision?
@@ -194,11 +194,11 @@ class InternalOrderProduct < ApplicationRecord
     self.int_ord_prod_lot_stocks.each do |iopls| 
       total_quantity += iopls.quantity
     end
-    if self.delivery_quantity < total_quantity
+    if self.delivery_quantity.present? && self.delivery_quantity < total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")
     end
     
-    if self.delivery_quantity > total_quantity
+    if self.delivery_quantity.present? && self.delivery_quantity > total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados debe ser igual a #{self.delivery_quantity}")
     end
   end
@@ -215,7 +215,7 @@ class InternalOrderProduct < ApplicationRecord
   # Validacion: evitar el envio de una orden si no tiene stock para enviar
   def out_of_stock
     total_stock = self.internal_order.provider_sector.stocks.where(product_id: self.product_id).sum(:quantity)
-    if total_stock <  self.delivery_quantity
+    if self.delivery_quantity.present? && total_stock < self.delivery_quantity
       errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
     end
   end

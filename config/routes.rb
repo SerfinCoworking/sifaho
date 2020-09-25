@@ -172,8 +172,7 @@ Rails.application.routes.draw do
       get "receive_applicant"
       get "edit_applicant"
       get "edit_provider"
-      get "nullify_confirm"
-      patch "nullify"
+      get "nullify"
       patch "update_applicant"
       patch "update_provider"
     end
