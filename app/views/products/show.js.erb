@@ -7,7 +7,7 @@ $('.modal-body').html('<%= j render("show") %>');
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<a class='btn btn-secondary' href='/stocks/<%= @stock.id %>'><i class='fas fa-external-link-alt'></i> Ver en stock</a>"
+  "<a class='btn btn-secondary' target='_blank' href='/stocks/<%= @stock.id %>'><i class='fas fa-external-link-alt'></i> Ver en stock</a>"
 );
 
 // Show the dynamic dialog

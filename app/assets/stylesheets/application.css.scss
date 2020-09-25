@@ -165,6 +165,10 @@ td .form-group{
       border: none;
     }
   }
+  li > .selected{
+    background-color: $cblue2;
+    color: white;
+  }
 }
 
 // grilla de usuarios

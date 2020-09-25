@@ -10,3 +10,8 @@ $("#area-products-title").text("<%= @area.name %>");
 <% else %>
   $("#print-report").addClass('disabled');
 <% end %>
+
+$('[data-toggle="tooltip"]').tooltip({
+  'selector': '',
+  'container':'body'
+});

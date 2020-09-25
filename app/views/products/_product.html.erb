@@ -1,25 +1,19 @@
 <tr id="product_<%= product.id %>">
   <td><%= product.code %></td>
   <td><%= product.name %></td>
-  <td><%= product.area_name %></td>
   <td><%= product.unity_name %></td>
+  <td><%= product.area_name %></td>
   <td class="text-left actions-col">
     <% if policy(product).show? %>
-      <%= link_to product_path(product), class: 'btn btn-default btn-sm',
-            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= link_to product_path(product), class: 'btn btn-secondary btn-sm',
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(product).edit? %>
       <%= link_to edit_product_path(product), class: 'btn btn-warning btn-sm',
-            title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "edit" %>
-      <% end %>
-    <% end %>
-    <% if policy(product).delete? %>
-      <%= link_to delete_product_path(product), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
   </td>
