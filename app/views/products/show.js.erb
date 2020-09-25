@@ -6,9 +6,14 @@ $('.modal-body').html('<%= j render("show") %>');
 
 // Add form button
 $('.modal-footer').html(
-  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<a class='btn btn-secondary' target='_blank' href='/stocks/<%= @stock.id %>'><i class='fas fa-external-link-alt'></i> Ver en stock</a>"
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
 );
+
+<% if @stock.present? %>
+  $('.modal-footer').append(
+    "<a class='btn btn-secondary' target='_blank' href='/stocks/<%= @stock.id %>'><i class='fas fa-external-link-alt'></i> Ver en stock</a>"
+  );
+<% end %>
 
 // Show the dynamic dialog
 $('#dialog').modal("show");
