@@ -1,44 +1,32 @@
-<div class="panel panel-info" id="filter-panel">
-  <div class="panel-leftheading">
-    <%= content_tag(:span, '', class: 'glyphicon glyphicon-filter gi-2x') %>
-  </div>
-  <div class="panel-rightbody">
-    <%= form_for_filterrific @filterrific do |f| %>
-      <div class="col-md-3 col-sm-3">
-        <label>Código</label>
-        <%= f.text_field(
-          :search_code,
-          class: 'filterrific-periodically-observed form-control input-sm',
-          placeholder: 'Un número'
-        ) %>
-      </div>
-      <div class="col-md-3 col-sm-3">
-        <label>Nombre</label>
-        <%= f.text_field(
-          :search_supply,
-          class: 'filterrific-periodically-observed form-control input-sm',
-          placeholder: 'Un nombre',
-          autocomplete: 'off'
-        ) %>
-      </div>
-      <% if current_page?(controller: 'supplies') %>
-        <div class="col-md-3 col-sm-3">
-          <label>Ordenar por</label>
-          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
-        </div>
-      <% else %>
-      <div class="col-md-3 col-sm-3">
-      </div>
+<%= form_tag(products_path, method: "get", remote: true) do %>
+  <div class="d-flex justify-content-end">
+    <div class="p-1 flex-fill">
+      <label>Código</label>
+      <%= number_field_tag :search_code, params[:search_code], placeholder: "Código", class: "form-control" %>
+    </div>
+    <div class="p-1 flex-fill">
+      <label>Nombre</label>
+      <%= text_field_tag :search_name, params[:search_name], id: "search_name", placeholder: "Nombre",
+        class: "form-control", autocomplete: "off" %>
+    </div>
+    <div class="p-1 flex-fill">
+      <label>Rubros</label>
+      <%= select_tag :with_area_ids,
+        options_from_collection_for_select(@areas, 'id', 'name'), 
+        class: "selectpicker custom-select-pick form-control", 
+        multiple: true,
+        "title"=>"Rubro",
+        "data-live-search"=>true
+      %>
+    </div>
+    <div class="p-1 flex-fill">
+      <%= link_to products_path, class: "btn btn-light" do %>
+        <%= fa_icon "undo" %>
       <% end %>
-      <div class="col-md-3 col-sm-3">
-        <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-        <% end %>
-      </div>
-      <%# add an automated spinner to your form when the list is refreshed %>
-      <%= render_filterrific_spinner %>
-    <% end %>
+      <%= button_tag type: 'submit', class: "btn btn-info", id: "register-button", title: 'Filtrar', 
+        data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "filter" %>
+      <% end %>
+    </div>
   </div>
-  <div class="clearfix">
-  </div>
-</div>
+<% end %>

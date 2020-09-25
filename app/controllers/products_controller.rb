@@ -5,45 +5,9 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     authorize Product
-    @filterrific = initialize_filterrific(
-      Product,
-      params[:filterrific],
-      select_options: {
-        sorted_by: Product.options_for_sorted_by
-      },
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'codigo_asc'},
-      available_filters: [
-        :sorted_by,
-        :search_product,
-        :search_code,
-        :with_area_id,
-      ],
-    ) or return
-    @products = @filterrific.find.page(params[:page]).per_page(15)
-    @areas = Area.all
-  end
-
-  # GET /products
-  # GET /products.json
-  def trash_index
-    authorize Product
-    @filterrific = initialize_filterrific(
-      Product.only_deleted,
-      params[:filterrific],
-      select_options: {
-        sorted_by: Product.options_for_sorted_by
-      },
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'codigo_asc'},
-      available_filters: [
-        :sorted_by,
-        :search_product,
-        :with_code,
-        :with_area_id,
-      ],
-    ) or return
-    @products = @filterrific.find.page(params[:page]).per_page(15)
+    @products = Product.filter(params.slice(:search_code, :search_name, :with_area_ids))
+      .order(created_at: :desc)
+      .page(params[:page])
     @areas = Area.all
   end
 
@@ -101,12 +65,12 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.update(product_params)
         flash.now[:success] = "El insumo "+@product.name+" se ha modificado correctamente."
-        format.js
+        format.html { redirect_to @product}
       else
         @unities = Unity.all
         @areas = Area.all
         flash.now[:error] = "El insumo "+@product.name+" no se ha podido modificar."
-        format.js
+        format.html { render :edit }
       end
     end
   end
