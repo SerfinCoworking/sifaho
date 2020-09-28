@@ -1,5 +1,4 @@
 class InternalOrder < ApplicationRecord
-  acts_as_paranoid
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }
@@ -10,14 +9,14 @@ class InternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :internal_order_products
+  has_many :internal_order_products, dependent: :destroy
   has_many :int_ord_prod_lot_stocks, through: :internal_order_products
   
   
-  has_many :lot_stocks, -> { with_deleted }, :through => :internal_order_products, dependent: :destroy
-  has_many :lots, -> { with_deleted }, :through => :lot_stocks
+  has_many :lot_stocks, :through => :internal_order_products
+  has_many :lots, :through => :lot_stocks
   
-  has_many :products, -> { with_deleted }, :through => :internal_order_products
+  has_many :products, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
@@ -32,7 +31,7 @@ class InternalOrder < ApplicationRecord
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates :internal_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :internal_order_products
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  validates_uniqueness_of :remit_code
   
 
   # Atributos anidados
@@ -305,9 +304,9 @@ class InternalOrder < ApplicationRecord
 
   def record_remit_code
     if self.provision?
-      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
     elsif self.solicitud?
-      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
     end
   end
 

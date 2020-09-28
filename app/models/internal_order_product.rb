@@ -6,7 +6,7 @@ class InternalOrderProduct < ApplicationRecord
   belongs_to :internal_order
   belongs_to :product
 
-  has_many :int_ord_prod_lot_stocks
+  has_many :int_ord_prod_lot_stocks, dependent: :destroy
   has_many :lot_stocks, :through => :int_ord_prod_lot_stocks
 
   # Validaciones
