@@ -1,8 +1,0 @@
-<%= render 'shared/flash_message' %>
-
-$('#internal_orders').prepend('<%= j render (@internal_order) %>')
-
-$('#dialog').modal('toggle');
-
-// Efecto de ingreso
-$('#internal_order_<%= @internal_order.id %>').hide().fadeIn(500);
