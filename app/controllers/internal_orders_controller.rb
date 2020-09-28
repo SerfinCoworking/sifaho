@@ -268,8 +268,8 @@ class InternalOrdersController < ApplicationController
 
     @internal_order.destroy
     respond_to do |format|
-      @internal_order.create_notification(current_user, "envió a la papelera")
-      flash.now[:success] = "El pedido interno de se ha enviado a la papelera correctamente."
+      @internal_order.create_notification(current_user, "se eliminó correctamente")
+      flash.now[:success] = "El pedido interno de se ha eliminado correctamente."
       format.js
     end
   end
