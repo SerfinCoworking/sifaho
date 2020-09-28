@@ -1,0 +1,16 @@
+<%= render 'header' %>
+
+<% if @bed_orders.present? %>
+
+  <%= render 'filter' %>
+
+  <%= render(
+    partial: 'bed_orders/list',
+    locals: { bed_orders: @bed_orders }
+  ) %>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'pedidos internos entregados' }
+  ) %>
+<% end %>

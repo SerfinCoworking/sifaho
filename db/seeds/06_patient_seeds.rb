@@ -1,0 +1,1 @@
+PatientType.create(name: "Ambulatorio")

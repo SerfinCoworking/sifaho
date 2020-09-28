@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_18_141344) do
+ActiveRecord::Schema.define(version: 2020_09_28_152127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -58,8 +58,10 @@ ActiveRecord::Schema.define(version: 2020_09_18_141344) do
     t.datetime "updated_at", null: false
     t.bigint "parent_area_id"
     t.bigint "first_area_id"
+    t.bigint "parent_id"
     t.index ["first_area_id"], name: "index_areas_on_first_area_id"
     t.index ["parent_area_id"], name: "index_areas_on_parent_area_id"
+    t.index ["parent_id"], name: "index_areas_on_parent_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -328,13 +330,11 @@ ActiveRecord::Schema.define(version: 2020_09_18_141344) do
     t.datetime "updated_at", null: false
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
-    t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
     t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
     t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
-    t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"
@@ -560,7 +560,7 @@ ActiveRecord::Schema.define(version: 2020_09_18_141344) do
     t.bigint "cronic_dispensation_id"
     t.text "applicant_observation"
     t.text "provider_observation"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "dispensed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -706,7 +706,7 @@ ActiveRecord::Schema.define(version: 2020_09_18_141344) do
   create_table "supply_lots", force: :cascade do |t|
     t.string "code"
     t.string "supply_name"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "date_received"
     t.integer "quantity"
     t.integer "initial_quantity"
@@ -719,7 +719,7 @@ ActiveRecord::Schema.define(version: 2020_09_18_141344) do
     t.bigint "laboratory_id"
     t.index ["deleted_at"], name: "index_supply_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_supply_lots_on_laboratory_id"
-    t.index ["supply_id", "lot_code", "laboratory_id"], name: "index_supply_lots_on_supply_id_and_lot_code_and_laboratory_id", unique: true
+    t.index ["supply_id", "lot_code", "laboratory_id"], name: "supply_lot_laboratory_index"
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 

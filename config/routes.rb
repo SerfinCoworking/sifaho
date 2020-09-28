@@ -309,4 +309,13 @@ Rails.application.routes.draw do
       post "create_delivered_by_establishment"
     end
   end
+
+  # Routes for reports
+  namespace :reports do
+    resources :patient_product_reports, only: [:new] do
+      collection do
+        get "generate"
+      end
+    end
+  end
 end

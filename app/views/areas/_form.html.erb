@@ -1,0 +1,103 @@
+<%= simple_form_for @bed_order, html: {class: "form-inline", role: 'check-modified'} do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <%= f.hidden_field :applicant_sector_id, value: "#{if f.object.applicant_sector.present?; f.object.applicant_sector_id; else; current_user.sector_id; end}" %>
+    <div class='col-md-3'>
+      <%= f.hidden_field :establishment_id, value: "#{if f.object.establishment_id.present?; f.object.establishment.id; else; current_user.sector.establishment_id; end }" %>
+      <%= f.label :patient_id do %>
+        <span class="glyphicon glyphicon-user"></span>
+        Paciente
+          <%= link_to new_patient_path, class: "btn btn-info btn-xs", remote: 'true',
+            title: 'Nuevo paciente', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+          <% end %>
+      <% end %>
+      <%= f.input :patient_id, as: :string, class: 'form-control',
+        label: false,
+        placeholder: 'DNI | Apellido | Nombre',
+        required: true,
+        :input_html => {
+          id: 'patient',
+          data: { autocomplete_source: get_by_dni_and_fullname_patients_path },
+          value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+          size: 30
+        } 
+      %>
+      <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %><br>
+    </div>
+    <div class="col-md-3">
+      <label class="text-center"><span class="glyphicon glyphicon-bed"></span> Cama</label>
+      <%= f.input :bed_id, label: false,
+        collection:
+          @beds.map {
+            |bed| [bed.second, bed.first, data: { 'subtext': ""+bed.third+"", 'icon': 'glyphicon glyphicon-bed' }]
+          },
+        :input_html => {
+          required: true,
+          include_blank: false,
+          class: 'selectpicker',
+          "data-width"=>"auto",
+          "data-size"=>"15",
+          "title"=>"Seleccionar cama",
+          "data-live-search"=>true,
+          "data-none-results-text" => "No se encontró resultado"
+        } 
+      %>
+    </div>
+    <div class='col-md-4'>
+      <%= f.input :observation, label: 'Observaciones', as: :text,
+      :input_html => { :cols => 45  , :rows => 3 } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :remit_code, label: 'Código', as: :string, 
+        :placeholder => "Un código",
+        input_html: {
+          size: 13,
+          id: "remit-code",
+          required: true,
+          autocomplete: 'off',
+          value: "#{ unless f.object.remit_code.present?; 'CAMAprov'+BedOrder.with_deleted.maximum(:id).to_i.next.to_s; else; f.object.remit_code; end }"
+        }
+      %>
+    </div>
+  </div>
+  <hr>
+ <!-- Insumos a dispensar -->
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Cód Ins</th>
+        <th>Insumo</th>
+        <th>Tu stock</th>
+        <th>Solicitar</th>
+        <th>Unidad</th>
+        <th>Tu observación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class="quantity_ord_supply_lots">
+      <% if params[:action] == "edit" %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, @bed_order.quantity_ord_supply_lots.joins(:supply).order("name") do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
+      <% elsif params[:action] == "create" %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @bed_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
+      <% else %>
+        <%= f.simple_fields_for :quantity_ord_supply_lots, 4.times { @bed_order.quantity_ord_supply_lots.build } do |form_quantity| %>
+          <%= render "quantity_ord_supply_lot_fields", f: form_quantity %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="links" id="links-quant-form">
+    <div class="text-center">
+      <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-xs',
+        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+        Agregar insumo
+      <% end %>
+    </div>
+  </div>
+<% end %>
