@@ -1,5 +1,4 @@
 class InternalOrder < ApplicationRecord
-  acts_as_paranoid
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }

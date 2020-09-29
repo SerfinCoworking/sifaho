@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_29_111542) do
+ActiveRecord::Schema.define(version: 2020_09_29_120958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -302,13 +302,11 @@ ActiveRecord::Schema.define(version: 2020_09_29_111542) do
     t.datetime "updated_at", null: false
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
-    t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
     t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
     t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
-    t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"
