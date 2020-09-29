@@ -27,7 +27,7 @@ class InternalOrder < ApplicationRecord
   validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
   validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :quantity_ord_supply_lots, :sector_supply_lots
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  validates_uniqueness_of :remit_code
 
   # Atributos anidados
   accepts_nested_attributes_for :quantity_ord_supply_lots,
