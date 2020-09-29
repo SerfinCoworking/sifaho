@@ -308,9 +308,9 @@ class InternalOrder < ApplicationRecord
 
   def record_remit_code
     if self.provision?
-      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
     elsif self.solicitud?
-      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
     end
   end
 end

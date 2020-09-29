@@ -3,7 +3,7 @@ class ExternalOrder < ApplicationRecord
   include PgSearch
 
   enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
-  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2,
     proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
     recibo_realizado: 7, anulado: 8 }
 

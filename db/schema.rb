@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_10_150844) do
+ActiveRecord::Schema.define(version: 2020_09_29_111542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_areas_on_parent_id"
   end
 
   create_table "bed_order_movements", force: :cascade do |t|
@@ -364,6 +366,21 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.datetime "updated_at", null: false
     t.index ["number", "patient_id"], name: "index_patient_phones_on_number_and_patient_id", unique: true
     t.index ["patient_id"], name: "index_patient_phones_on_patient_id"
+  end
+
+  create_table "patient_product_reports", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.bigint "supply_id"
+    t.bigint "product_id"
+    t.bigint "establishment_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_patient_product_reports_on_establishment_id"
+    t.index ["patient_id"], name: "index_patient_product_reports_on_patient_id"
+    t.index ["product_id"], name: "index_patient_product_reports_on_product_id"
+    t.index ["supply_id"], name: "index_patient_product_reports_on_supply_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
