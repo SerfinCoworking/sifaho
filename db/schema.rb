@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_152127) do
+ActiveRecord::Schema.define(version: 2020_09_29_123449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -160,6 +160,16 @@ ActiveRecord::Schema.define(version: 2020_09_28_152127) do
     t.string "short_name"
   end
 
+  create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "external_order_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
+    t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
+  end
+
   create_table "external_order_comments", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "user_id"
@@ -180,6 +190,20 @@ ActiveRecord::Schema.define(version: 2020_09_28_152127) do
     t.index ["external_order_id"], name: "index_external_order_movements_on_external_order_id"
     t.index ["sector_id"], name: "index_external_order_movements_on_sector_id"
     t.index ["user_id"], name: "index_external_order_movements_on_user_id"
+  end
+
+  create_table "external_order_products", force: :cascade do |t|
+    t.bigint "external_order_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
+    t.text "provider_observation"
+    t.text "applicant_observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
+    t.index ["external_order_id"], name: "index_external_order_products_on_external_order_id"
+    t.index ["product_id"], name: "index_external_order_products_on_product_id"
   end
 
   create_table "external_order_template_supplies", force: :cascade do |t|

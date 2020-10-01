@@ -1,0 +1,30 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Tu stock</th>
+        <th>Solicitar</th>
+        <th>Tu observación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="order-product-cocoon-container">
+      <%= f.simple_fields_for relation do |form_quantity| %>
+        <%= render "shared/orders/order_product_fields", f: form_quantity, order_type: order_type %>
+      <% end %>
+    </tbody>
+    
+  </table>
+  <%= link_to_add_association f, relation, class: 'btn btn-primary btn-sm',
+    data: {
+      "association-insertion-node" => "tbody#order-product-cocoon-container",
+      "association-insertion-method" => "append"},
+      render_options: {locals: { order_type: order_type }} do %>
+    <%= fa_icon "plus" %>
+    Agregar insumo
+  <% end %>
+
+</div>
