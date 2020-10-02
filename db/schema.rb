@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_29_120958) do
+ActiveRecord::Schema.define(version: 2020_09_29_140932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -258,6 +258,21 @@ ActiveRecord::Schema.define(version: 2020_09_29_120958) do
     t.index ["internal_order_id"], name: "index_internal_order_movements_on_internal_order_id"
     t.index ["sector_id"], name: "index_internal_order_movements_on_sector_id"
     t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
+  end
+
+  create_table "internal_order_product_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.bigint "product_id"
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_internal_order_product_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_internal_order_product_reports_on_product_id"
+    t.index ["sector_id"], name: "index_internal_order_product_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
   end
 
   create_table "internal_order_template_supplies", force: :cascade do |t|

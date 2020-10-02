@@ -13,6 +13,7 @@ class Reports::PatientProductReportsController < ApplicationController
                     .dispensed_since(params[:since_date])
                     .dispensed_to(params[:to_date])
                     .joins("JOIN patients ON patients.id = prescriptions.patient_id")
+                    .order(dispensed_at: :desc)
                     .group("patients.last_name", "patients.first_name", "patients.dni", "quantity_ord_supply_lots.dispensed_at")
                     .sum(:delivered_quantity)
 

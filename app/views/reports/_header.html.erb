@@ -5,24 +5,16 @@
       Reportes
     <% end %>
   </li>
-  <!-- 
-  <li class="nav-item non-sel">
-    <%= link_to new_delivered_by_order_reports_path, class: "nav-link #{active_action('new_delivered_by_order')}" do %>
-      <%= fa_icon "tint" %>
-      <span class="hidden-xs"> Entregado por pedido</span>
-    <% end %>
-  </li>
-  <li class="nav-item active non-sel">
-    <%= link_to new_delivered_by_establishment_reports_path, class: "nav-link  #{active_action('new_delivered_by_establishment')}" do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-      <span class="hidden-xs"> Entregado por establecimiento</span>
-    <% end %>
-  </li>
-  -->
   <li class="nav-item non-sel">
     <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
-      <%= fa_icon "pills" %>
-      <span class="hidden-xs"> Productos por pacientes</span>
+      <%= fa_icon "user-injured" %>
+      <span class="hidden-xs"> Producto por pacientes</span>
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to reports_internal_order_product_reports_path, class: "nav-link #{active_class("reports/internal_order_products")}" do %>
+      <%= fa_icon "bezier-curve" %>
+      <span class="hidden-xs"> Producto por sectores</span>
     <% end %>
   </li>
 <% end %>

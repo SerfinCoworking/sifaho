@@ -302,4 +302,19 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Reports
+  namespace :reports, path: 'reportes' do
+    resources :index_reports, only: [:index], path: '/'
+    resources :internal_order_product_reports, 
+    only: [:show], 
+    controller: 'internal_order_products',
+    model: 'internal_order_prodcut_reports',
+    path: 'producto_por_sectores' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+  end
 end
