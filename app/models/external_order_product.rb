@@ -4,8 +4,8 @@ class ExternalOrderProduct < ApplicationRecord
   belongs_to :external_order
   belongs_to :product
 
-  has_many :ext_ord_prod_lot_stocks, dependent: :destroy
-  has_many :lot_stocks, :through => :ext_ord_prod_lot_stocks
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ExtOrdProdLotStock", foreign_key: "external_order_product_id", source: :ext_ord_prod_lot_stocks
+  has_many :lot_stocks, :through => :order_prod_lot_stocks
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
@@ -13,15 +13,15 @@ class ExternalOrderProduct < ApplicationRecord
   validate :out_of_stock, if: :is_provision_en_camino?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
   validates_presence_of :product_id
-  validates :ext_ord_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino_and_quantity_greater_than_0?
-  validates_associated :ext_ord_prod_lot_stocks, if: :is_provision_en_camino?
+  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino_and_quantity_greater_than_0?
+  validates_associated :order_prod_lot_stocks, if: :is_provision_en_camino?
   validate :uniqueness_product_on_internal_order
   
 
   accepts_nested_attributes_for :product,
     :allow_destroy => true
 
-  accepts_nested_attributes_for :ext_ord_prod_lot_stocks,
+  accepts_nested_attributes_for :order_prod_lot_stocks,
     :allow_destroy => true
 
   # Delegaciones

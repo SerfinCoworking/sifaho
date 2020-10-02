@@ -158,7 +158,7 @@
         <% lot_stock_error = '' %>      
         <% if f.object.order_prod_lot_stocks.present?  %>
           <%= f.simple_fields_for :order_prod_lot_stocks do |iopls| %>
-            <%= render "order_product_lot_stocks_fields", f: iopls %>      
+            <%= render "shared/orders/order_product_lot_stocks_fields", f: iopls %>      
             <% lot_stock_error = iopls.object.errors[:quantity].first %>      
           <% end %>
         <% end %>
@@ -170,7 +170,7 @@
         fields = f.fields_for(:order_prod_lot_stocks, 
         new_iopls, 
         :child_index => "id_placeholder") do |fb|
-          render "order_product_lot_stocks_fields", f: fb
+          render "shared/orders/order_product_lot_stocks_fields", f: fb
         end
       %>
 
