@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
- 
+  # custom error routes
+  match '/404' => 'errors#not_found', :via => :all
+  match '/406' => 'errors#not_acceptable', :via => :all
+  match '/422' => 'errors#unprocessable_entity', :via => :all
+  match '/500' => 'errors#internal_server_error', :via => :all
+
+
   resources :stocks
   # Lotes
   resources :lots do
@@ -72,12 +78,6 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :profiles, only: [ :edit, :update, :show ]
-
-  # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
-  # patch '/profile', to: 'profiles#update'
-  # Rescue errors
-  match "/404", :to => "errors#not_found", :via => :all
-  match "/500", :to => "errors#internal_server_error", :via => :all
 
   resources :bed_orders do
     member do

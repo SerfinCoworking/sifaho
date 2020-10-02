@@ -51,6 +51,7 @@
 @import 'notifications';
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
+@import 'errors';
 
 
 html {
@@ -77,24 +78,9 @@ body{
   font-style: normal;
 }
 
-@font-face {
-  font-family: "Calibri";
-  src: font-url( asset-path("Calibri-Regular.ttf") );
-  font-weight: normal;
-  font-style: normal;
+.lato {
+  font-family: Lato;
 }
-
-@font-face {
-  font-family: "Calibri-Bold";
-  src: font-url( asset-path("Calibri-Bold.ttf") );
-  font-weight: normal;
-  font-style: normal;
-}
-
-.calibri{
-  font-family: Calibri-Bold;
-}
-
 
 .turbolinks-progress-bar {
   height: 5px;

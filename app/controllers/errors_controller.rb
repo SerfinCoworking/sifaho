@@ -1,18 +1,19 @@
 class ErrorsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-  def not_found
-    flash[:error] = "No existe la página a la que intenta acceder."
-    redirect_to(request.referrer || root_path)
-  end
-
   def internal_server_error
-    flash[:error] = "Error del sistema. Por favor contacte al administrador."
-    redirect_to(request.referrer || root_path)
+    render(:status => 500)
   end
 
-  def user_not_authorized
-    flash.now[:alert] = "Usted no está autorizado para realizar esta acción."
-    redirect_to(request.referrer || root_path)
+  def not_found
+    render(:status => 404)
+  end
+
+  def unprocessable_entity
+    render(:status => 422)
+  end
+
+  def not_acceptable
+    render(:status => 406)
   end
 end

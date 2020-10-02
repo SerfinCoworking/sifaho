@@ -1,0 +1,24 @@
+<style>
+  #page-content-wrapper {
+    background-image: url("<%= asset_path('404_bg.jpg') %>");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
+
+<div class="d-flex justify-content-between h-100 align-items-center lato">
+  <div class="col-4 text-white h1 text-center error-page-number">
+    500
+  </div>
+  <div class="col-4">
+  </div>
+  <div class="col-4 text-white text-center">
+    <p class="h1">Error de servidor</p>
+    <p class="h4">Contacte a la mesa de ayuda</p>
+    <p class="h4"><a href="https://wa.me/+54 9 2944 12-7915" target="_blank"><i class="fab fa-whatsapp"></i> +54 9 2944 12-7915</p></a>
+    <%= link_to :back, class: "btn btn-link text-white" do %>
+      <%= fa_icon "long-arrow-alt-left" %> Volver
+    <% end %>
+  </div>
+</div>
