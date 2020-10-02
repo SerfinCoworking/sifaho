@@ -21,18 +21,18 @@
   </li>
 
   <li class="nav-item non-sel d-flex align-items-center">
-    <%= link_to external_orders_path, class: "nav-link #{ active_action_and_controller('index', 'external_orders') }" do %>
+    <%= link_to provider_index_external_orders_path, class: "nav-link #{ active_action_and_controller('provider_index', 'external_orders') }" do %>
       <%= fa_icon "paper-plane" %>
       Despachos
     <% end %>
     <!-- Badge notification -->
-    <% request_count = ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
-    <% if request_count > 0%>
-      <%= link_to external_orders_path(filterrific: {:with_status => 1}), class: 'badge badge-pill badge-info',
+    <%# request_count = ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+    <%# if request_count > 0%>
+      <%#= link_to external_orders_path(filterrific: {:with_status => 1}), class: 'badge badge-pill badge-info',
       title: "Solicitud", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-        <%= request_count %>
-      <% end %>
-    <% end %>
+        <%#= request_count %>
+      <%# end %>
+    <%# end %>
   </li>
 
   <% if policy(ExternalOrder).new_applicant? %>
@@ -44,14 +44,14 @@
     </li>
   <% end %>
 
-  <% if policy(ExternalOrder).new_provider? %>
+  <%# if policy(ExternalOrder).new_provider? %>
     <li class="nav-item non-sel">
-      <%= link_to new_external_order_path, class: "nav-link #{ active_action_and_controller('new', 'external_orders') }" do %>
+      <%= link_to new_provider_external_orders_path, class: "nav-link #{ active_action_and_controller('new', 'external_orders') }" do %>
         <%= fa_icon "plus" %>
         Despachar
       <% end %>
     </li>
-  <% end %>
+  <%# end %>
 
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item non-sel" id="pedido">

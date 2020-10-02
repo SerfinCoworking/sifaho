@@ -12,13 +12,17 @@
       </tr>
     </thead>
     <tbody id="order-product-cocoon-container">
-      <%= f.simple_fields_for relation do |form_quantity| %>
-        <%= render "shared/orders/order_product_fields", f: form_quantity, order_type: order_type %>
+      <%= form.simple_fields_for relation do |form_products| %>
+        <%= render "shared/orders/order_product_fields", f: form_products, order_type: order_type %>
       <% end %>
     </tbody>
     
   </table>
-  <%= link_to_add_association f, relation, class: 'btn btn-primary btn-sm',
+
+  <%= link_to_add_association form, 
+    relation, 
+    class: 'btn btn-primary btn-sm',
+    partial: "shared/orders/order_product_fields", 
     data: {
       "association-insertion-node" => "tbody#order-product-cocoon-container",
       "association-insertion-method" => "append"},

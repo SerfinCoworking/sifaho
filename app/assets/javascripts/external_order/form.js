@@ -68,7 +68,7 @@ $(document).on('turbolinks:load', function(e){
   });
 
   // cocoon init
-  $('#internal-order-product-cocoon-container').on('cocoon:after-insert', function(e) {
+  $('#order-product-cocoon-container').on('cocoon:after-insert', function(e) {
     initEvents();
   });
   

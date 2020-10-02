@@ -1,15 +1,38 @@
 class ExternalOrderPolicy < ApplicationPolicy
-  def index?
-    see_pres.any? { |role| user.has_role?(role) }
+  def provider_index?
+    show?
   end
 
   def applicant_index?
-    index?
+    show?
   end
 
+# def index?
+#   see_pres.any? { |role| user.has_role?(role) }
+# end
+
+  # def applicant_index?
+  #   index?
+  # end
+
   def show?
-    index?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
   end
+
+  # def show?
+  #   index?
+  # end
+
+  # new version
+  def new_applicant?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
+  def create_applicant?
+    new_applicant?
+  end
+
+  #  end new version
 
   def create_receipt?
     create_receipt.any? { |role| user.has_role?(role) }
@@ -32,32 +55,20 @@ class ExternalOrderPolicy < ApplicationPolicy
   end
 
 
-  def update?
-    if update_pres.any? { |role| user.has_role?(role) }
-      if record.despacho?
-        if record.proveedor_aceptado? || record.proveedor_auditoria?
-          return record.provider_sector == user.sector
-        end
-      elsif record.solicitud_abastecimiento? && record.solicitud_enviada?
-        return record.provider_sector == user.sector
-      elsif (record.solicitud_abastecimiento? && record.proveedor_auditoria?) || (record.solicitud_abastecimiento? && record.proveedor_aceptado?)
-        return record.provider_sector == user.sector
-      elsif record.solicitud_abastecimiento? && record.solicitud_auditoria?
-        return record.applicant_sector == user.sector
-      elsif record.recibo? && record.recibo_auditoria?
-        return record.applicant_sector == user.sector
-      end
-    end
-  end
+  # def update?
+  #   if update_pres.any? { |role| user.has_role?(role) }
+  #     if record.provision?
+  #       if record.proveedor_aceptado? || record.proveedor_auditoria?
+  #         return record.provider_sector == user.sector
+  #       end
+  #     elsif record.solicitud? && record.solicitud_enviada?
+  #       return record.provider_sector == user.sector
+  #     end
+  #   end
+  # end
 
-  def edit?
+  def edit_provider?
     if (["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector
-      edit_provider.any? { |role| user.has_role?(role) }
-    end
-  end
-
-  def edit_receipt?
-    if record.recibo_auditoria? && record.applicant_sector == user.sector
       edit_provider.any? { |role| user.has_role?(role) }
     end
   end
@@ -68,15 +79,23 @@ class ExternalOrderPolicy < ApplicationPolicy
     end
   end
 
+  def update_applicant?
+    edit_applicant?
+  end
+  
+  def update_provider?
+    if ((["solicitud_enviada", "proveedor_auditoria"].include? record.status) && record.provider_sector == user.sector)
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
   def destroy?
     if destroy_pres.any? { |role| user.has_role?(role) }
-      if record.despacho? && record.proveedor_auditoria?
+      if record.provision? && record.proveedor_auditoria?
         return record.provider_sector == user.sector
-      elsif record.solicitud_abastecimiento? && record.solicitud_auditoria?
+      elsif record.solicitud? && record.solicitud_auditoria?
         return record.applicant_sector == user.sector
-      elsif record.recibo? && record.recibo_auditoria?
-        return record.applicant_sector == user.sector
-      end
+      end 
     end 
   end
 
@@ -106,11 +125,34 @@ class ExternalOrderPolicy < ApplicationPolicy
     end
   end
 
-  def send_applicant?
-    if record.applicant_sector == user.sector
-      record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+  def receive_applicant?
+    if record.applicant_sector == user.sector && record.provision_en_camino? 
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
+
+  def send_applicant?
+    if record.solicitud_auditoria? && record.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+    # if record.applicant_sector == user.sector
+    #   record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
+    # end
+  end
+
+  def return_provider_status?
+    if record.provider_sector == user.sector && record.provision_en_camino?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
+  def return_applicant_status?
+    if record.applicant_sector == user.sector && record.solicitud_enviada?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
+  ####### TO REVIEW ######
 
   def receive_order?
     if record.applicant_sector == user.sector && receive_order.any? { |role| user.has_role?(role) }

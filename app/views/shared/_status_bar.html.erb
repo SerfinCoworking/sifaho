@@ -1,4 +1,4 @@
-<% if order.despacho? %>
+<% if order.provision? %>
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8 text-center">
@@ -18,27 +18,7 @@
     </div>
     <div class="col-md-2"></div>
   </div>
-<% elsif order.recibo?%>
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 text-center">
-      <label>
-        Estado:
-        <span class="badnge badnge-<%= ordering_status_label(order) %>">
-          <%= order.status.underscore.humanize %>
-        </span>
-      </label>
-      <div class="col-md-12">
-        <div class="progress" style="height: 5px;margin-bottom: -10px;">
-          <div class="progress-bar bg-<%= ordering_status_label(order) %> \
-          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-  </div>
-<% elsif order.solicitud_abastecimiento? %>
+<% elsif order.solicitud? %>
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8 text-center">

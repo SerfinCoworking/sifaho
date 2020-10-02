@@ -202,25 +202,31 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :external_orders do
+  resources :external_orders, only: [:show, :destroy] do
     member do
       get "delete"
       get "send_provider"
       get "send_applicant"
-      get "return_status"
+      get "return_provider_status"
+      get "return_applicant_status"
       get "accept_provider"; get "accept_provider_confirm"
       get "receive_order"; get "receive_order_confirm"
-      get "edit_receipt"
       get "edit_applicant"
+      get "edit_provider"
       get "nullify_confirm"
       patch "nullify"
+      patch "update_applicant"
+      patch "update_provider"
     end
     collection do
       get "new_report"; get "generate_report"
-      get "new_receipt"
       get "new_applicant"
+      get "new_provider"
       get "applicant_index"
+      get "provider_index"
       get "statistics"
+      post "create_applicant"
+      post "create_provider"
     end
   end
 

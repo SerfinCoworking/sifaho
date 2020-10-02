@@ -2,7 +2,8 @@ class ExternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
+  enum order_type: { provision: 0, solicitud: 1 }
+  
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
     proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
     recibo_realizado: 7, anulado: 8 }
@@ -13,30 +14,56 @@ class ExternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  belongs_to :audited_by, class_name: 'User', optional: true
-  belongs_to :accepted_by, class_name: 'User', optional: true
-  belongs_to :sent_by, class_name: 'User', optional: true
-  belongs_to :received_by, class_name: 'User', optional: true
-  belongs_to :created_by, class_name: 'User', optional: true
-  belongs_to :sent_request_by, class_name: 'User', optional: true
-  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :external_order_products, dependent: :destroy
+  # has_many :ext_ord_prod_lot_stocks, through: :external_order_products
+  has_many :order_prod_lot_stocks, foreign_key: "ext_ord_prod_lot_stock_id", through: :external_order_products, class_name: 'ExtOrdProdLotStock'
+
+  has_many :lot_stocks, :through => :external_order_products
+  has_many :lots, :through => :lot_stocks
+  
+  has_many :products, :through => :external_order_products
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
-  has_one :provider_establishment, :through => :provider_sector, :source => :establishment
-  has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
-  belongs_to :rejected_by, class_name: "User", optional: true
+
+  has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
+  
+  ####### DEPRECATED #########
+  # belongs_to :audited_by, class_name: 'User', optional: true
+  # belongs_to :accepted_by, class_name: 'User', optional: true
+  # belongs_to :sent_by, class_name: 'User', optional: true
+  # belongs_to :received_by, class_name: 'User', optional: true
+  # belongs_to :created_by, class_name: 'User', optional: true
+  # belongs_to :sent_request_by, class_name: 'User', optional: true
+  # belongs_to :rejected_by, class_name: "User", optional: true
+
+  # has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
+  # has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  # has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  # has_one :provider_establishment, :through => :provider_sector, :source => :establishment
+  # has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
+
 
   # Validaciones
-  validates_presence_of :applicant_sector, :provider_sector, :quantity_ord_supply_lots, :remit_code  
-  validates_associated :quantity_ord_supply_lots, :supplies, :sector_supply_lots
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
+  validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates_associated :external_order_products
+  validates_uniqueness_of :remit_code
 
-  accepts_nested_attributes_for :supplies, :sector_supply_lots
-  accepts_nested_attributes_for :quantity_ord_supply_lots,
-    reject_if: ->(qosl){ qosl['supply_id'].blank? },
+
+  # Atributos anidados
+  accepts_nested_attributes_for :external_order_products,
     :allow_destroy => true
+
+  # Callbacks
+  before_validation :record_remit_code, on: :create
+
+  # after_create :set_notification_on_create
+  # after_update :set_notification_on_update
+
+  # accepts_nested_attributes_for :supplies, :sector_supply_lots
+  # accepts_nested_attributes_for :quantity_ord_supply_lots,
+  #   reject_if: ->(qosl){ qosl['supply_id'].blank? },
+  #   :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -188,6 +215,14 @@ class ExternalOrder < ApplicationRecord
     where(provider_sector: a_sector)
   end
 
+  def is_provider?(a_user)
+    return self.provider_sector == a_user.sector
+  end
+
+  def is_applicant?(a_user)
+    return self.applicant_sector == a_user.sector
+  end
+
   def sum_to?(a_sector)
     return self.applicant_sector == a_sector
   end
@@ -293,18 +328,36 @@ class ExternalOrder < ApplicationRecord
     self.create_notification(a_user, "Anuló")
   end
 
-  def return_status
-    if proveedor_aceptado?
-      self.proveedor_auditoria!
-    elsif provision_en_camino?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
-      end
-      self.proveedor_aceptado!
-    elsif solicitud_enviada?
+  # Método para retornar perdido a estado anterior
+  def return_applicant_status_by(a_user)
+    if solicitud_enviada?
+      self.create_notification(a_user, "retornó a un estado anterior")
       self.solicitud_auditoria!
     else
-      raise ArgumentError, 'No es posible retornar a un estado anterior'
+      raise ArgumentError, "No es posible retornar a un estado anterior"
+    end
+  end
+
+  # def return_status
+  #   if proveedor_aceptado?
+  #     self.proveedor_auditoria!
+  #   elsif provision_en_camino?
+  #     self.quantity_ord_supply_lots.each do |qosl|
+  #       qosl.increment
+  #     end
+  #     self.proveedor_aceptado!
+  #   elsif solicitud_enviada?
+  #     self.solicitud_auditoria!
+  #   else
+  #     raise ArgumentError, 'No es posible retornar a un estado anterior'
+  #   end
+  # end
+  def send_request_by(a_user)
+    if self.solicitud_auditoria?
+      self.solicitud_enviada!
+      self.create_notification(a_user, "envió")
+    else
+      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
     end
   end
 
@@ -352,12 +405,19 @@ class ExternalOrder < ApplicationRecord
   private
 
   def record_remit_code
-    if self.despacho?
+    if self.provision?
       self.remit_code = self.provider_sector.name[0..3].upcase+'des'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    elsif self.solicitud_abastecimiento?
+    elsif self.solicitud?
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    elsif self.recibo?
-      self.remit_code= self.applicant_sector.name[0..3].upcase+'rec'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
+
+  # set created notification and create stock accordding with the internal order status
+  # def set_notification_on_create
+  #   self.create_notification(self.audited_by, "creó")
+  # end
+  
+  # def set_notification_on_update
+  #   self.create_notification(self.audited_by, "auditó")
+  # end  
 end

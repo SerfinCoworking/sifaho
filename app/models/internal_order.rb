@@ -10,7 +10,7 @@ class InternalOrder < ApplicationRecord
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :internal_order_products, dependent: :destroy
-  has_many :int_ord_prod_lot_stocks, through: :internal_order_products
+  has_many :order_prod_lot_stocks, through: :internal_order_products, class_name: 'IntOrdProdLotStock'
   
   
   has_many :lot_stocks, :through => :internal_order_products
@@ -20,6 +20,7 @@ class InternalOrder < ApplicationRecord
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
+  ###### DEPRECATED ######
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
