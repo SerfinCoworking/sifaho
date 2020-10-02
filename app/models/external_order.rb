@@ -15,34 +15,15 @@ class ExternalOrder < ApplicationRecord
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :external_order_products, dependent: :destroy
-  # has_many :ext_ord_prod_lot_stocks, through: :external_order_products
-  has_many :order_prod_lot_stocks, foreign_key: "ext_ord_prod_lot_stock_id", through: :external_order_products, class_name: 'ExtOrdProdLotStock'
-
+  has_many :ext_ord_prod_lot_stocks, through: :external_order_products
   has_many :lot_stocks, :through => :external_order_products
   has_many :lots, :through => :lot_stocks
-  
   has_many :products, :through => :external_order_products
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
 
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   
-  ####### DEPRECATED #########
-  # belongs_to :audited_by, class_name: 'User', optional: true
-  # belongs_to :accepted_by, class_name: 'User', optional: true
-  # belongs_to :sent_by, class_name: 'User', optional: true
-  # belongs_to :received_by, class_name: 'User', optional: true
-  # belongs_to :created_by, class_name: 'User', optional: true
-  # belongs_to :sent_request_by, class_name: 'User', optional: true
-  # belongs_to :rejected_by, class_name: "User", optional: true
-
-  # has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  # has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  # has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  # has_one :provider_establishment, :through => :provider_sector, :source => :establishment
-  # has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
-
-
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
@@ -56,14 +37,6 @@ class ExternalOrder < ApplicationRecord
 
   # Callbacks
   before_validation :record_remit_code, on: :create
-
-  # after_create :set_notification_on_create
-  # after_update :set_notification_on_update
-
-  # accepts_nested_attributes_for :supplies, :sector_supply_lots
-  # accepts_nested_attributes_for :quantity_ord_supply_lots,
-  #   reject_if: ->(qosl){ qosl['supply_id'].blank? },
-  #   :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -411,13 +384,4 @@ class ExternalOrder < ApplicationRecord
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
-
-  # set created notification and create stock accordding with the internal order status
-  # def set_notification_on_create
-  #   self.create_notification(self.audited_by, "creó")
-  # end
-  
-  # def set_notification_on_update
-  #   self.create_notification(self.audited_by, "auditó")
-  # end  
 end
