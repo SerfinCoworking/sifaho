@@ -25,7 +25,7 @@ class Reports::ExternalOrderProductsController < ApplicationController
           type: 'application/pdf',
           disposition: 'inline'
       end
-      format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
+      format.csv { send_data movements_to_csv(@movements), filename: "Reporte-#{@external_order_product_report.since_date.strftime('%d/%m/%Y')}-#{@external_order_product_report.to_date.strftime('%d/%m/%Y')}.csv" }
     end
   end
 
@@ -101,10 +101,11 @@ class Reports::ExternalOrderProductsController < ApplicationController
 
     def movements_to_csv(movements)
       CSV.generate(headers: true) do |csv|
-        csv << ["Sector", "Cantidad", "Producto"]
+        csv << ["Establecimiento", "Sector", "Cantidad", "Producto"]
         movements.each do |movement|
           csv << [
-            movement.first,
+            movement.first.first,
+            movement.first.second,
             movement.second,
             @external_order_product_report.supply_name
           ]
