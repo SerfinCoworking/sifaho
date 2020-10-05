@@ -1,8 +1,5 @@
 <%= render 'header' %>
 
-
-
-
 <div class="card fixed-custom-card">
   <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
@@ -117,7 +114,7 @@
                   </td>
                   <td>
                     <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= ext_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= ext_ord_prod.id %>">
-                      <%= ext_ord_prod.ext_ord_prod_lot_stocks.count %>
+                      <%= ext_ord_prod.order_prod_lot_stocks.count %>
                     </button>
                   </td>
                   <td>
@@ -132,7 +129,7 @@
                   <td colspan="7" class="p-0">
                     <div id="collapse-row-<%= ext_ord_prod.id %>" class="collapse in">
                       <div class="p-3">
-                      <% if ext_ord_prod.ext_ord_prod_lot_stocks.present? %>
+                      <% if ext_ord_prod.order_prod_lot_stocks.present? %>
                         <table class="w-100">
                           <thead>
                             <tr>
@@ -143,7 +140,7 @@
                             </tr>
                           </thead>
                           </tbody>
-                            <% ext_ord_prod.ext_ord_prod_lot_stocks.each do |eopls| %>
+                            <% ext_ord_prod.order_prod_lot_stocks.each do |eopls| %>
                             <tr>
 
                               <td>

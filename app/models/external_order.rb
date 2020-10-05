@@ -5,12 +5,8 @@ class ExternalOrder < ApplicationRecord
   enum order_type: { provision: 0, solicitud: 1 }
   
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, 
-    proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
-    recibo_realizado: 7, anulado: 8 }
+    proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5,  anulado: 6 }
 
-  # Callbacks
-  before_validation :record_remit_code, on: :create
- 
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
@@ -21,15 +17,15 @@ class ExternalOrder < ApplicationRecord
   has_many :products, :through => :external_order_products
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
-
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
+  has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
+
   
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :external_order_products
   validates_uniqueness_of :remit_code
-
 
   # Atributos anidados
   accepts_nested_attributes_for :external_order_products,

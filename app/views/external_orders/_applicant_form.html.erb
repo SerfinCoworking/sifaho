@@ -37,7 +37,7 @@
             required: true,
             :input_html => {
               autocomplete: 'off',
-              id: "provider-establishment",
+              id: "effector-establishment",
               data: { autocomplete_source: search_by_name_establishments_path },
               value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.establishment.name; end }",
               size: 41
@@ -54,7 +54,7 @@
             :input_html => {
               placeholder: 'Debe seleccionar establecimiento',
               required: true,
-              id: 'provider-sector',
+              id: 'effector-sector',
               class: 'selectpicker-md custom-select-pick show-tick',
               "data-width"=>"100%",
               "title"=>"Seleccionar sector",

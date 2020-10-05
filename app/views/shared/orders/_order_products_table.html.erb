@@ -11,7 +11,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody id="order-product-cocoon-container">
+    <tbody id="order-product-cocoon-container" data-order-status="<%= order_type %>">
       <%= form.simple_fields_for relation do |form_products| %>
         <%= render "shared/orders/order_product_fields", f: form_products, order_type: order_type %>
       <% end %>
