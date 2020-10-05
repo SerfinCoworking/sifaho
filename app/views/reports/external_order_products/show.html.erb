@@ -1,0 +1,90 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "bezier-curve" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por establecimientos</h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Ubicación</h5>
+        <strong><%= @external_order_product_report.sector.name %></strong>
+        <%= @external_order_product_report.establishment_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Producto</h5>
+        <%= @external_order_product_report.supply_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Desde</h5>
+        <%= @external_order_product_report.since_date.strftime("%d/%m/%Y") %>
+      </div>    
+      <div class="p-2 flex-fill">
+        <h5>Hasta</h5>
+        <%= @external_order_product_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+      
+    <%# movement => {["establishment.name", "sector.name" ] => "delivered_quantity"} %>
+    <% if @movements.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr class="d-flex">
+              <th class="col-4">Establecimiento</th>
+              <th class="col-4">Sector</th>
+              <th class="col-4">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
+              <tr class="d-flex">
+                <td class="col-4">
+                  <%= movement.first.first %>
+                </td>
+                <td class="col-4">
+                  <%= movement.first.second %>
+                </td>
+                <td class="col-4"><%= movement.second %></td>
+              </tr>
+            <% end %>
+            <tr class="d-flex">
+              <td class="col-4"></td>
+              <td class="col-4 text-right">Total</td>
+              <td class="col-4"><%= @movements.sum(&:second) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay movimientos entre el <%= @external_order_product_report.since_date.strftime("%d/%m/%Y") %> y <%= @external_order_product_report.to_date.strftime("%d/%m/%Y") %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to reports_external_order_product_report_path(format: 'pdf', id: @external_order_product_report.id), 
+      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
+    <%= link_to reports_external_order_product_report_path(format: 'csv', id: @external_order_product_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> CSV
+    <% end %>
+    <%= link_to reports_external_order_product_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>

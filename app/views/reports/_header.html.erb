@@ -17,4 +17,10 @@
       <span class="hidden-xs"> Producto por sectores</span>
     <% end %>
   </li>
+  <li class="nav-item non-sel">
+    <%= link_to reports_external_order_product_reports_path, class: "nav-link #{active_class("reports/external_order_products")}" do %>
+      <%= fa_icon "hospital" %>
+      <span class="hidden-xs"> Producto por establecimientos</span>
+    <% end %>
+  </li>
 <% end %>

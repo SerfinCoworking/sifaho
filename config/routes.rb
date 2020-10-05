@@ -306,11 +306,23 @@ Rails.application.routes.draw do
   # Reports
   namespace :reports, path: 'reportes' do
     resources :index_reports, only: [:index], path: '/'
+
     resources :internal_order_product_reports, 
-    only: [:show], 
-    controller: 'internal_order_products',
-    model: 'internal_order_prodcut_reports',
-    path: 'producto_por_sectores' do
+      only: [:show], 
+      controller: 'internal_order_products',
+      model: 'internal_order_prodcut_reports',
+      path: 'producto_por_sectores' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+
+    resources :external_order_product_reports,
+      only: [:show],
+      controller: 'external_order_products',
+      model: 'external_order_prodcut_reports',
+      path: 'producto_por_establecimientos' do
       collection do
         get :new, path: :nuevo
         post :create, path: :crear
