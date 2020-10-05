@@ -133,7 +133,6 @@ $(document).on('turbolinks:load', function(e){
         $('#dialog').modal("show");
         return;
       }
-
       $.ajax({
         url: url,
         method: 'GET',
