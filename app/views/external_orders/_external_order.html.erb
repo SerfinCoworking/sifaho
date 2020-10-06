@@ -34,7 +34,7 @@
     <%= external_order.requested_date.strftime("%d/%m/%Y") %>
   </td>
   <td>
-    <% if external_order.provision_entregada? || external_order.recibo_realizado? %>
+    <% if external_order.provision_entregada? %>
       <%= external_order.date_received.strftime("%d/%m/%y %H:%M") %>
     <% else %>
       ----

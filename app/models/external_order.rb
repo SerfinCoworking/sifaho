@@ -10,7 +10,7 @@ class ExternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :external_order_products, dependent: :destroy
+  has_many :external_order_products, dependent: :destroy, inverse_of: 'external_order'
   has_many :ext_ord_prod_lot_stocks, through: :external_order_products
   has_many :lot_stocks, :through => :external_order_products
   has_many :lots, :through => :lot_stocks

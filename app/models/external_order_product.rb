@@ -1,23 +1,22 @@
 class ExternalOrderProduct < ApplicationRecord
 
   # Relaciones
-  belongs_to :external_order
+  belongs_to :external_order, inverse_of: 'external_order_products'
   belongs_to :product
 
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ExtOrdProdLotStock", foreign_key: "external_order_product_id", source: :ext_ord_prod_lot_stocks
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ExtOrdProdLotStock", foreign_key: "external_order_product_id", source: :ext_ord_prod_lot_stocks, inverse_of: 'external_order_product'
   has_many :lot_stocks, :through => :order_prod_lot_stocks
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
-  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: proc { is_proveedor_auditoria? || is_provision_en_camino? } 
-  validate :out_of_stock, if: :is_provision_en_camino?
-  validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
+  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: proc { is_proveedor_auditoria? || is_proveedor_aceptado? } 
+  validate :out_of_stock, if: :is_proveedor_aceptado?
+  validate :lot_stock_sum_quantity, if: :is_provision? && :is_proveedor_aceptado?
   validates_presence_of :product_id
-  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino_and_quantity_greater_than_0?
-  validates_associated :order_prod_lot_stocks, if: :is_provision_en_camino?
+  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_proveedor_aceptado_and_quantity_greater_than_0?
+  validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
   validate :uniqueness_product_on_internal_order
   
-
   accepts_nested_attributes_for :product,
     :allow_destroy => true
 
@@ -37,12 +36,12 @@ class ExternalOrderProduct < ApplicationRecord
     return self.external_order.proveedor_auditoria?
   end
   
-  def is_provision_en_camino?
-    return self.external_order.provision_en_camino?
+  def is_proveedor_aceptado?
+    return self.external_order.proveedor_aceptado?
   end
 
-  def is_provision_en_camino_and_quantity_greater_than_0?
-    return self.external_order.provision_en_camino? && (self.delivery_quantity.present? && self.delivery_quantity > 0)
+  def is_proveedor_aceptado_and_quantity_greater_than_0?
+    return self.external_order.proveedor_aceptado? && (self.delivery_quantity.present? && self.delivery_quantity > 0)
   end
 
   def is_provision?
@@ -86,7 +85,7 @@ class ExternalOrderProduct < ApplicationRecord
   # Validacion: la cantidad no debe ser mayor o menor a la cantidad a entregar
   def lot_stock_sum_quantity
     total_quantity = 0
-    self.ext_ord_prod_lot_stocks.each do |iopls| 
+    self.order_prod_lot_stocks.each do |iopls| 
       total_quantity += iopls.quantity
     end
     if self.delivery_quantity.present? && self.delivery_quantity < total_quantity

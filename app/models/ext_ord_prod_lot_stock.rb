@@ -1,5 +1,5 @@
 class ExtOrdProdLotStock < ApplicationRecord
-  belongs_to :external_order_product, optional: true
+  belongs_to :external_order_product, inverse_of: 'order_prod_lot_stocks'
   belongs_to :lot_stock
 
   validates :quantity, :numericality => { :only_integer => true, :less_than_or_equal_to => :lot_stock_quantity, message: "La cantidad seleccionada debe ser menor o igual a %{count}"}, if: :is_provision
@@ -16,11 +16,11 @@ class ExtOrdProdLotStock < ApplicationRecord
   end
     
   def is_provision
-    return self.internal_order_product.internal_order.order_type == 'provision'
+    return self.external_order_product.external_order.order_type == 'provision'
   end
   
   def is_solicitud
-    return self.internal_order_product.internal_order.order_type == 'solicitud'
+    return self.external_order_product.external_order.order_type == 'solicitud'
   end
   
-end
+end 
