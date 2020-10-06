@@ -199,7 +199,6 @@ Rails.application.routes.draw do
       patch "nullify"
     end
     collection do
-      get "new_report"; get "generate_report"
       get "new_receipt"
       get "new_applicant"
       get "applicant_index"

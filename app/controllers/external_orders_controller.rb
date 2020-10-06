@@ -394,37 +394,7 @@ class ExternalOrdersController < ApplicationController
       format.js
     end
   end
-
-  def generate_report
-    authorize ExternalOrder
-    respond_to do |format|
-      if params[:external_order][:since_date].present? && params[:external_order][:to_date].present?
-        @report_type = "2"
-        @since_date = DateTime.parse(params[:external_order][:since_date])
-        @to_date = DateTime.parse(params[:external_order][:to_date])
-        if params[:external_order][:applicant_sector_id].present?
-          @applicant_establishment = Establishment.find(params[:external_order][:applicant_sector_id])
-          @filtered_orders = ExternalOrder.applicant_establishment(@applicant_establishment).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0)
-          @supplies = Array.new
-          @filtered_orders.each do |ord|
-            @supplies.concat(ord.quantity_ord_supply_lots.pluck(:supply_id, :delivered_quantity))
-          end
-          @supplies = @supplies.group_by(&:first).map { |k, v| [k, v.map(&:last).inject(:+)] }
-        else
-          @report_type = "1"
-          @filtered_orders = ExternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
-        end
-        flash.now[:success] = "Reporte generado."
-        format.html { render :generate_report}
-      else
-        @report_type = "1"
-        @external_order = ExternalOrder.new
-        flash.now[:error] = "Verifique los campos."
-        format.html { render :new_report }
-      end  
-    end
-  end
-
+  
   def generate_order_report(external_order)
     report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf')
 
