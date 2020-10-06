@@ -58,7 +58,7 @@ class InternalOrdersController < ApplicationController
       format.html
       format.js
       format.pdf do
-        send_data generate_internal_order_report(@internal_order),
+        send_data print_internal_order(@internal_order),
           filename: 'Pedido_interno_'+@internal_order.remit_code+'.pdf',
           type: 'application/pdf',
           disposition: 'inline'
@@ -71,12 +71,6 @@ class InternalOrdersController < ApplicationController
     authorize InternalOrder
     @internal_order = InternalOrder.new
     @providers = User.where.not(sector: current_user.sector_id )
-  end
-
-  # GET /internal_orders/new
-  def new_report
-    authorize InternalOrder
-    @internal_order = InternalOrder.new
   end
 
   # GET /internal_orders/new_deliver
@@ -345,24 +339,8 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  def generate_report
-    authorize InternalOrder
-    respond_to do |format|
-      if params[:internal_order][:since_date].present? && params[:internal_order][:to_date].present?
-        @since_date = DateTime.parse(params[:internal_order][:since_date])
-        @to_date = DateTime.parse(params[:internal_order][:to_date])
-        @filtered_orders =  InternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_sector).group('sectors.name').count
-        flash.now[:success] = "Reporte generado."
-        format.html { render :generate_report}
-      else
-        @internal_order = InternalOrder.new
-        flash.now[:error] = "Verifique los campos."
-        format.html { render :new_report }
-      end  
-    end
-  end
 
-  def generate_internal_order_report(internal_order)
+  def print_internal_order(internal_order)
     report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf')
 
     report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
@@ -406,7 +384,7 @@ class InternalOrdersController < ApplicationController
     end
     
     report.pages.each do |page|
-      page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
+      page[:title] = 'Pedido de productos para sector'
       page[:remit_code] = internal_order.remit_code
       page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
       page[:page_count] = report.page_count

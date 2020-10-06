@@ -164,7 +164,6 @@ Rails.application.routes.draw do
       patch "nullify"
     end
     collection do
-      get "new_report"; get "generate_report"
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
@@ -307,7 +306,7 @@ Rails.application.routes.draw do
   namespace :reports, path: 'reportes' do
     resources :index_reports, only: [:index], path: '/'
 
-    resources :internal_order_product_reports, 
+    resources :internal_order_product_reports,
       only: [:show], 
       controller: 'internal_order_products',
       model: 'internal_order_prodcut_reports',

@@ -7,14 +7,14 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 20,
+      "y": 22,
       "width": 254.8,
-      "height": 17,
+      "height": 14,
       "style": {
         "font-family": [
           "Helvetica"
         ],
-        "font-size": 16,
+        "font-size": 12,
         "color": "#000000",
         "text-align": "left",
         "vertical-align": "top",
@@ -57,15 +57,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 72,
-            "y": 127.3,
-            "width": 39.3,
-            "height": 17.9,
+            "x": 57.2,
+            "y": 127,
+            "width": 33.3,
+            "height": 12,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 11,
+              "font-size": 10,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -84,9 +84,9 @@
             "display": true,
             "description": "",
             "x": 279,
-            "y": 128,
-            "width": 48.5,
-            "height": 11.3,
+            "y": 127,
+            "width": 46.7,
+            "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -109,10 +109,10 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 222,
-            "y": 128,
-            "width": 45.7,
-            "height": 11.3,
+            "x": 221,
+            "y": 127,
+            "width": 44.5,
+            "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -151,9 +151,9 @@
             "display": true,
             "description": "",
             "x": 32,
-            "y": 127.6,
-            "width": 22.6,
-            "height": 17.9,
+            "y": 127,
+            "width": 32.8,
+            "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -178,13 +178,13 @@
             "description": "",
             "x": 337,
             "y": 127,
-            "width": 24,
-            "height": 14,
+            "width": 20,
+            "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 11,
+              "font-size": 10,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -202,15 +202,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 382,
+            "x": 385,
             "y": 127,
-            "width": 61.3,
-            "height": 14,
+            "width": 51.1,
+            "height": 12,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 11,
+              "font-size": 10,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -228,15 +228,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 452,
+            "x": 454,
             "y": 127,
-            "width": 27.3,
-            "height": 14,
+            "width": 23.3,
+            "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 11,
+              "font-size": 10,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -254,15 +254,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 482,
+            "x": 483.9,
             "y": 127,
-            "width": 80.2,
-            "height": 14,
+            "width": 67.8,
+            "height": 12,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 11,
+              "font-size": 10,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -333,7 +333,7 @@
               "color": "#000000",
               "text-align": "left",
               "vertical-align": "top",
-              "line-height": 10,
+              "line-height": 10.03125,
               "line-height-ratio": 1,
               "letter-spacing": "",
               "font-style": [],
@@ -491,7 +491,7 @@
               ],
               "font-size": 9,
               "color": "#000000",
-              "text-align": "center",
+              "text-align": "left",
               "vertical-align": "top",
               "line-height": "",
               "line-height-ratio": "",
@@ -523,7 +523,7 @@
               ],
               "font-size": 9,
               "color": "#000000",
-              "text-align": "center",
+              "text-align": "left",
               "vertical-align": "top",
               "line-height": "",
               "line-height-ratio": "",
@@ -859,7 +859,7 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 55,
+      "x": 23,
       "y": 40,
       "width": 52.6,
       "height": 12,
@@ -881,23 +881,6 @@
       "texts": [
         "Solicitante"
       ]
-    },
-    {
-      "id": "",
-      "type": "rect",
-      "display": true,
-      "description": "",
-      "x": 20,
-      "y": 40,
-      "width": 130.9,
-      "height": 29.1,
-      "style": {
-        "border-color": "#000000",
-        "border-width": 1,
-        "border-style": "dotted",
-        "fill-color": "none"
-      },
-      "border-radius": 0
     },
     {
       "id": "applicant_sector",
@@ -1056,7 +1039,7 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 290,
+      "x": 245,
       "y": 40,
       "width": 77.3,
       "height": 14,
@@ -1071,10 +1054,12 @@
         "line-height": "",
         "line-height-ratio": "",
         "letter-spacing": "",
-        "font-style": []
+        "font-style": [
+          "underline"
+        ]
       },
       "texts": [
-        "Obs.:"
+        "Observaciones"
       ]
     },
     {
@@ -1259,9 +1244,9 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 190,
+      "x": 158,
       "y": 40,
-      "width": 52.6,
+      "width": 53,
       "height": 12,
       "style": {
         "font-family": [
@@ -1281,23 +1266,6 @@
       "texts": [
         "Proveedor"
       ]
-    },
-    {
-      "id": "",
-      "type": "rect",
-      "display": true,
-      "description": "",
-      "x": 155,
-      "y": 40,
-      "width": 130.9,
-      "height": 29.1,
-      "style": {
-        "border-color": "#000000",
-        "border-width": 1,
-        "border-style": "dotted",
-        "fill-color": "none"
-      },
-      "border-radius": 0
     },
     {
       "id": "provider_sector",
