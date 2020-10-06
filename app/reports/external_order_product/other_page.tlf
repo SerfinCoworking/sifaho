@@ -235,19 +235,78 @@
       },
       "page-footer": {
         "enabled": true,
-        "height": 18,
+        "height": 19.3,
         "translate": {
           "x": -12,
           "y": -122.3
         },
-        "items": []
+        "items": [
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 412,
+            "y": 253,
+            "width": 72.7,
+            "height": 17.9,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 16,
+              "color": "#000000",
+              "text-align": "center",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "TOTAL"
+            ]
+          },
+          {
+            "id": "total_quantity",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 497.6,
+            "y": 254.8,
+            "width": 46,
+            "height": 15,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "right",
+              "vertical-align": "middle",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          }
+        ]
       },
       "footer": {
         "enabled": false,
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -151.6
+          "y": -150.3
         },
         "items": []
       },

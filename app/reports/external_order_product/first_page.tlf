@@ -235,19 +235,78 @@
       },
       "page-footer": {
         "enabled": true,
-        "height": 26,
+        "height": 21.1,
         "translate": {
           "x": -12,
           "y": -123
         },
-        "items": []
+        "items": [
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 412,
+            "y": 256.2,
+            "width": 72.7,
+            "height": 17.9,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 16,
+              "color": "#000000",
+              "text-align": "center",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "TOTAL"
+            ]
+          },
+          {
+            "id": "total_quantity",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 497.6,
+            "y": 258,
+            "width": 46,
+            "height": 15,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "right",
+              "vertical-align": "middle",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          }
+        ]
       },
       "footer": {
         "enabled": false,
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -144.3
+          "y": -149.2
         },
         "items": []
       },

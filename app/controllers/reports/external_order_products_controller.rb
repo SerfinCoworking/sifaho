@@ -84,7 +84,6 @@ class Reports::ExternalOrderProductsController < ApplicationController
         end
       end
       
-  
       report.pages.each do |page|
         page[:product_name] = @external_order_product_report.supply_name
         page[:title] = 'Reporte producto entregado por sectores'
@@ -94,6 +93,9 @@ class Reports::ExternalOrderProductsController < ApplicationController
         page[:page_count] = report.page_count
         page[:establishment_name] = @external_order_product_report.establishment_name
         page[:establishment] = @external_order_product_report.establishment_name
+        report.list.on_page_footer_insert do |footer|
+          footer.item(:total_quantity).value(movements.values.sum)
+        end
       end
   
       report.generate
