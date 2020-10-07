@@ -33,6 +33,9 @@
 //= require bootstrap-select
 //= require_tree .
 
+
+console.log("Entró application");
+
 // Se oculta el flash message
 window.setTimeout(function() {
   $(".alert").fadeTo(500, 0).slideUp(500, function(){
