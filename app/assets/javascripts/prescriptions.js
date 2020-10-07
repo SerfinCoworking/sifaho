@@ -1,3 +1,5 @@
+console.log("Entró prescriptions fuera");
+
 $(document).on('turbolinks:load', function() {
 
   console.log("Entró prescriptions");
