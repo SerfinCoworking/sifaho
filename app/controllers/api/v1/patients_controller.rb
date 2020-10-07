@@ -43,7 +43,6 @@ module Api::V1
       patient.update_attributes(last_name: _last_name, first_name: _first_name, birthdate: _birthdate, marital_status: _marital_status, 
         cuil: @cuil, andes_id: @andes_id, sex: _gender, email: @email)
 
-      puts "Photo: =>>>> "+params[:data][:photo].first["patient"].to_s
       if params[:data][:photo].present?
         patient.avatar.attach(data: params[:data][:photo].first["patient"])
       end
