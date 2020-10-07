@@ -31,7 +31,7 @@
     <%= external_order.comments.count %>
   </td>
   <td>
-    <%= external_order.requested_date.strftime("%d/%m/%Y") %>
+    <%= external_order.requested_date.present? ? external_order.requested_date.strftime("%d/%m/%Y") : '----' %>
   </td>
   <td>
     <% if external_order.provision_entregada? || external_order.recibo_realizado? %>
