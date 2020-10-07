@@ -73,7 +73,6 @@ $(document).on('turbolinks:load', function() {
     }
   );
 
-  console.log("Entro turbolinks");
   $('.since-date, .to-date, .requested-date, .prescribed-date').datepicker({
     closeText: 'Cerrar',
     prevText: '<Ant',
