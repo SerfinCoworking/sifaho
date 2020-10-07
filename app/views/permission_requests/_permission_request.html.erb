@@ -3,4 +3,5 @@
   <td><span class="badge badge-<%= permission_request_status_label(permission_request) %>"><%= permission_request.status.humanize %></span></td>
   <td><%= permission_request.establishment.titleize %></td>
   <td><%= permission_request.sector.titleize %></td>
+  <td><%= permission_request.created_at.strftime("%d/%m/%Y") %></td>
 </tr>

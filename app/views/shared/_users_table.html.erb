@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="card-title mb-0 ml-2">Usuarios</h5>
+    <h5 class="card-title mb-0 ml-2 p-1">Usuarios</h5>
     <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de usuarios"><%= users.count %></span>
   </div>
   <div class="card-body pl-0 pr-0">
@@ -8,7 +8,7 @@
       <% users.each do |user| %>
         <div class="w-users-list-item">
           <div class="card">
-            <div class="card-body p-0">
+            <div class="card-body p-0 pl-2 pr-2">
               <div class="text-center">
                 <% if user.profile.present? %>
                   <%= image_tag user_avatar(user, 150), class:"img-circle w-100 h-100" %>
@@ -19,7 +19,7 @@
 
             </div>
             <div class="card-header">
-              <h5 class="card-title"><%= user.full_name.titleize %></h5>
+              <%= user.full_name.titleize %>
             </div>
           </div>
         </div>
