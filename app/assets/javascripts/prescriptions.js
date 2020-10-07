@@ -1,5 +1,6 @@
 $(document).on('turbolinks:load', function() {
 
+  console.log("Entró prescriptions");
   $(function () {
     var today = new moment();
     var expiryDate = new moment().add(30, 'days');
