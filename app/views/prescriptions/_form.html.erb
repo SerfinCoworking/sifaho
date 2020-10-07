@@ -101,17 +101,14 @@
           </div>
           <div class='row'>
             <div class='col-6'>
-              <%= f.input :prescribed_date, label: 'Fecha recetada',
-                as: :string,
-                :placeholder => "Seleccionar fecha",
-                input_html: {
-                  tabindex: "-1",
-                  class: "form-control pull-right",
+              <%= f.input :prescribed_date, as: :string, label: "Fecha recetada", html5: true, required: true,
+                :input_html => {
                   required: true,
-                  autocomplete: 'off',
-                  value: "#{@prescription.prescribed_date unless @prescription.new_record?}"
-                },
-                html5: false %>
+                  class: "form-control prescribed-date",
+                  autocomplete: "off",
+                  value: "#{f.object.new_record? ? DateTime.now.strftime("%d/%m/%Y") : f.object.prescribed_date.strftime("%d/%m/%Y")}"
+                }
+              %>
             </div>
             <div class='col-6'>
               <%= f.input :expiry_date, label: 'Fecha vencimiento',

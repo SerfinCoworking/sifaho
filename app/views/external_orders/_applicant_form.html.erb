@@ -99,17 +99,14 @@
         <div class='col-md-4'>
           <div class="row">
             <div class="col-md-6">
-            <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
-              :placeholder => "Seleccionar fecha",
-              input_html: {
-                id: "requested-date",
-                required: true,
-                autocomplete: 'off',
-                :style => 'width: 110px',
-                value: "#{f.object.requested_date unless f.object.new_record?}"
-              },
-              html5: false 
-            %>
+              <%= f.input :requested_date, as: :string, label: "Fecha solicitado", html5: true, required: true,
+                :input_html => {
+                  required: true,
+                  class: "form-control requested-date",
+                  autocomplete: "off",
+                  value: "#{f.object.new_record? ? DateTime.now.strftime("%d/%m/%Y") : f.object.requested_date.strftime("%d/%m/%Y")}"
+                }
+              %>
             </div>
           </div>
           <%= f.input :observation, label: 'Observaciones', as: :text,
