@@ -18,7 +18,7 @@ class PermissionRequestsController < ApplicationController
         :search_name,
       ],
     ) or return
-    @permission_requests = PermissionRequest.all.page(params[:page]).per_page(15)
+    @permission_requests = @filterrific.order(created_at: :desc).page(params[:page]).per_page(15)
   end
 
   # GET /permission_requests/1
