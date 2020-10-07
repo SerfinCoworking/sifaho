@@ -16,7 +16,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require chosen-jquery
-//= require bootstrap-select
 //= require font_awesome5
 //= require popper
 //= require moment
@@ -31,6 +30,7 @@
 //= require cocoon
 //= require bootstrap-switch
 //= require bootstrap
+//= require bootstrap-select
 //= require_tree .
 
 // Se oculta el flash message
