@@ -177,6 +177,7 @@ $(document).on('turbolinks:load', function() {
     nested_form.find('.search-lots').hide();
   });
 });
+
 $(document).on('turbolinks:load', function() {
 
   $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
