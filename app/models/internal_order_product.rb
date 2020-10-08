@@ -1,9 +1,7 @@
 class InternalOrderProduct < ApplicationRecord
 
-  # enum status: { sin_entregar: 0, entregado: 1, sin_stock: 2 } # deprecated
-
   # Relaciones
-  belongs_to :internal_order
+  belongs_to :internal_order, inverse_of: 'internal_order_products'
   belongs_to :product
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "IntOrdProdLotStock", foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks
@@ -156,14 +154,14 @@ class InternalOrderProduct < ApplicationRecord
   
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.int_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.decrement(iopls.quantity)
     end
   end
 
   # Incrementamos la cantidad de cada lot stock (orden)
   def increment_stock
-    self.int_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.increment(iopls.quantity)
     end
   end
@@ -171,7 +169,7 @@ class InternalOrderProduct < ApplicationRecord
   # Incrementamos la cantidad de lot stock (solicitante)
   def increment_lot_stock_to(a_sector)
 
-    self.int_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
 
       @stock = Stock.where(
         sector_id: a_sector.id,
@@ -191,7 +189,7 @@ class InternalOrderProduct < ApplicationRecord
   # Validacion: la cantidad no debe ser mayor o menor a la cantidad a entregar
   def lot_stock_sum_quantity
     total_quantity = 0
-    self.int_ord_prod_lot_stocks.each do |iopls| 
+    self.order_prod_lot_stocks.each do |iopls| 
       total_quantity += iopls.quantity
     end
     if self.delivery_quantity.present? && self.delivery_quantity < total_quantity
@@ -218,6 +216,10 @@ class InternalOrderProduct < ApplicationRecord
     if self.delivery_quantity.present? && total_stock < self.delivery_quantity
       errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
     end
+  end
+
+  def get_order
+    return self.internal_order
   end
 
 end

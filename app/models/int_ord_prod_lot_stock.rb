@@ -1,5 +1,5 @@
 class IntOrdProdLotStock < ApplicationRecord
-  belongs_to :internal_order_product, optional: true
+  belongs_to :internal_order_product, inverse_of: 'order_prod_lot_stocks'
   belongs_to :lot_stock
 
   validates :quantity, :numericality => { :only_integer => true, :less_than_or_equal_to => :lot_stock_quantity, message: "La cantidad seleccionada debe ser menor o igual a %{count}"}, if: :is_provision

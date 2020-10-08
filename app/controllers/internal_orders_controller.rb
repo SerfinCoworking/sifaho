@@ -53,7 +53,6 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/1.json
   def show
     authorize @internal_order
-
     respond_to do |format|
       format.html
       format.js
@@ -66,7 +65,6 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-
   # GET /internal_orders/new
   def new_report
     authorize InternalOrder
@@ -77,7 +75,7 @@ class InternalOrdersController < ApplicationController
   def new_provider
     authorize InternalOrder
     @internal_order = InternalOrder.new
-    @order_type = 'provision'
+    @internal_order.order_type = 'provision'
     @applicant_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
@@ -89,6 +87,7 @@ class InternalOrdersController < ApplicationController
   def new_applicant
     authorize InternalOrder
     @internal_order = InternalOrder.new
+    @internal_order.order_type = 'solicitud'
     @provider_sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
@@ -235,8 +234,8 @@ class InternalOrdersController < ApplicationController
     @internal_order.status = sending? ? "provision_en_camino" : 'proveedor_auditoria'
         
     respond_to do |format|
+      @internal_order.update!(internal_order_params)
       begin
-        @internal_order.update!(internal_order_params)
 
         if sending?; @internal_order.send_order_by(current_user); end
         
@@ -265,7 +264,6 @@ class InternalOrdersController < ApplicationController
   # DELETE /internal_orders/1.json
   def destroy
     authorize @internal_order
-
     @internal_order.destroy
     respond_to do |format|
       @internal_order.create_notification(current_user, "se eliminó correctamente")
@@ -291,8 +289,7 @@ class InternalOrdersController < ApplicationController
         @internal_order.status = "provision_en_camino"
         @internal_order.save!
 
-        @internal_order.send_order_by(current_user);
-        
+        @internal_order.send_order_by(current_user);        
         message = 'La provision se ha enviado correctamente.'
 
         format.html { redirect_to @internal_order, notice: message }

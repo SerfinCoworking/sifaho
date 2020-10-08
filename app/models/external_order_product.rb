@@ -50,22 +50,22 @@ class ExternalOrderProduct < ApplicationRecord
   
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.ext_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.decrement(iopls.quantity)
     end
   end
 
   # Incrementamos la cantidad de cada lot stock (orden)
   def increment_stock
-    self.ext_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.increment(iopls.quantity)
     end
   end
 
-  # Incrementamos la cantidad de lot stock (solicitante)
+  # Incrementamos la cantidad de lot stock (solicitante / desde una solicitud)
   def increment_lot_stock_to(a_sector)
 
-    self.ext_ord_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |iopls|
 
       @stock = Stock.where(
         sector_id: a_sector.id,
@@ -114,5 +114,8 @@ class ExternalOrderProduct < ApplicationRecord
     end
   end
 
+  def get_order
+    return self.external_order
+  end
 end
 
