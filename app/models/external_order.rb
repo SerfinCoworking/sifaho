@@ -211,24 +211,16 @@ class ExternalOrder < ApplicationRecord
     end
   end
 
-  # Cambia estado a "en camino" y descuenta la cantidad a los insumos
-  def send_order(a_user)
-    if self.proveedor_aceptado?
-      if self.quantity_ord_supply_lots.exists?
-        if self.validate_quantity_lots
-          self.quantity_ord_supply_lots.each do |qosl|
-            qosl.decrement
-          end
-        end
-      else
-        raise ArgumentError, 'No hay insumos solicitados en el pedido'
-      end # End check if quantity_ord_supply_lots exists
-      self.sent_by = a_user
-      self.sent_date = DateTime.now
-      self.provision_en_camino!
-    else
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end 
+  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
+  def send_order_by(a_user)
+    self.external_order_products.each do |iop|
+      iop.decrement_stock
+    end
+
+    self.sent_date = DateTime.now
+    self.save!(validate: false)
+
+    self.create_notification(a_user, "envió")
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
@@ -244,22 +236,16 @@ class ExternalOrder < ApplicationRecord
     end
   end
 
-  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
-  def receive_order(a_user)
-    if provision_en_camino?
-      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_user.sector)
-        end
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.provision_entregada!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End check if sector supply exists
-    else 
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
+  def receive_order_by(a_user)
+    self.external_order_products.each do |iop|
+      iop.increment_lot_stock_to(self.applicant_sector)
     end
+
+    self.date_received = DateTime.now
+    self.create_notification(a_user, "recibió")
+    self.status = "provision_entregada"
+    self.save!(validate: false)
   end
 
   # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
@@ -307,20 +293,6 @@ class ExternalOrder < ApplicationRecord
     end
   end
 
-  # def return_status
-  #   if proveedor_aceptado?
-  #     self.proveedor_auditoria!
-  #   elsif provision_en_camino?
-  #     self.quantity_ord_supply_lots.each do |qosl|
-  #       qosl.increment
-  #     end
-  #     self.proveedor_aceptado!
-  #   elsif solicitud_enviada?
-  #     self.solicitud_auditoria!
-  #   else
-  #     raise ArgumentError, 'No es posible retornar a un estado anterior'
-  #   end
-  # end
   def send_request_by(a_user)
     if self.solicitud_auditoria?
       self.solicitud_enviada!
