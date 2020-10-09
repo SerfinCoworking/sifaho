@@ -1,5 +1,4 @@
 class Sector < ApplicationRecord
-
   include PgSearch
 
   # Relaciones

@@ -113,10 +113,9 @@ $(document).on('turbolinks:load', function() {
           }// End success
         });// End ajax
         $.ajax({
-          url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
+          url: "http://localhost:3000/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
           type: 'GET',
           data: {
-            dni: ui.item.dni,
           },
           dataType: "json",
           error: function(XMLHttpRequest, errorTextStatus, error){
@@ -227,10 +226,9 @@ $(document).on('turbolinks:load', function() {
           });// End ajax
 
           $.ajax({
-            url: "https://app.andes.gob.ar/api/modules/obraSocial/puco/", // Ruta del controlador
+            url: "http://localhost:3000/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
             type: 'GET',
             data: {
-              dni: ui.item.dni,
             },
             dataType: "json",
             error: function (XMLHttpRequest, errorTextStatus, error) {

@@ -129,56 +129,48 @@
             </div>
           </div>
         </div>
-        <div class="col-6">
-          <div class="col-12 invisible" id="non-os">
+        <div class="col-6 patient-info">
+          <div class='invisible' id="non-os">
             <div class="card">
               <div class="card-header">No posee obra social.</div>
             </div>
           </div>
-          <div class='col-12 invisible' id="pat-os">
-            <div class="row panel-pres">
-              <div class="col-12">
-                <div class="card">
-                  <!-- Default panel contents -->
-                  <table class="table table-sm">
-                    <thead>
-                      <tr class="info">
-                        <th>Financiador</th>
-                        <th>Código</th>
-                        <th>Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody id="pat-os-body">
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+          <div class='invisible' id="pat-os">
+            <div class="card">
+              <!-- Default panel contents -->
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr class="info">
+                    <th>Obra social</th>
+                    <th>Código</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-os-body">
+                </tbody>
+              </table>
             </div>
           </div>
           <div class="card invisible" id="non-pres">
             <div class="card-header">Aún no tiene prescripciones.</div>
           </div>
-          <div class="row panel-pres invisible" id="pat-pres">
-            <div class="col-12">
-              <div class="card">
-                <!-- Default panel contents -->
-                <div class="card-header">Últimas recetas</div>
-                <div class="card">
-                  <table class="table table-hover table-sm">
-                    <thead>
-                      <tr>
-                        <th>Tipo</th>
-                        <th>Profesional</th>
-                        <th>Ins</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody id="pat-pres-body">
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+          <div class="invisible" id="pat-pres">
+            <!-- Default panel contents -->
+            <div class="h5">Últimas recetas</div>
+            <div class="card">
+              <table class="table table-hover table-sm mb-0">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Profesional</th>
+                    <th>Ins</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-pres-body">
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -193,7 +185,7 @@
               <th>Tu stock</th>
               <th>Consumo/Mes</th>
               <th>Entregar</th>
-              <th colspan="2">Lote</th>
+              <th>Lote</th>
               <th>Observación</th>
               <th></th>
             </tr>

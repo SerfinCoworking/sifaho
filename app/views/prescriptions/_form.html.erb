@@ -15,92 +15,87 @@
     <%= simple_form_for @prescription, html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class='row'>
-        <div class='col-6'>
-          <div class='row'>
-            <div class="col-12">
-              <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
-              <%= f.label :professional_id do %>
-                Médico
-                <% if f.object.cronic_dispensations.count == 0 %>
-                  <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
-                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                    <%= fa_icon "plus" %>
-                  <% end %>
-                <% end %>
+        <div class="col-md-6 col-sm-12">
+          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
+          <%= f.label :professional_id do %>
+            Médico
+            <% if f.object.cronic_dispensations.count == 0 %>
+              <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+                title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                <%= fa_icon "plus" %>
               <% end %>
+            <% end %>
+          <% end %>
 
-              <div class="custom-input-group">
-                <%= f.input :professional, as: :string,
-                  label: false,
-                  placeholder: 'Matrícula | Apellido | Nombre',
-                  readonly: f.object.new_record? ? "" : true,
-                  class: "m-0",
-                  :input_html => {
-                    id: "professional",
-                    data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                    value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
-                  }
-                %>
-                <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
-                </div>
-              </div>
-              
-              <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
-              <%= f.label :patient_id, class: "text-left" do %>
-                Paciente
-                <% if policy(Patient).new? %>
-                  <% if f.object.cronic_dispensations.count == 0 %>
-                    <%= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
-                      title: 'Nuevo paciente temporal', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= fa_icon "plus" %>
-                    <% end %>
-                  <% end %>
-                <% end %>
-              <% end %>
-              <div class="row">
-                <div class="col-4">
-                  <div class="custom-input-group">
-                    <%= f.input :patient, as: :string, class: 'form-control',
-                      label: false,
-                      placeholder: 'DNI',
-                      required: true,
-                      readonly: f.object.new_record? ? "" : true,
-                      :input_html => {
-                        id: 'patient-dni',
-                        data: { autocomplete_source: get_by_dni_patients_path },
-                        value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-                      }
-                    %>
-                    <div class="with-loading">
-                      <%= fa_icon 'spinner', class: "fa-spin"%>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-8">
-                <div class="custom-input-group">
-                    <%= f.input :patient, as: :string, class: 'form-control',
-                      label: false,
-                      placeholder: 'Apellido y nombre',
-                      required: true,
-                      readonly: f.object.new_record? ? "" : true,
-                      :input_html => {
-                        id: 'patient-fullname',
-                        data: { autocomplete_source: get_by_fullname_patients_path },
-                        value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
-                      }
-                    %>
-                    <div class="with-loading">
-                      <%= fa_icon 'spinner', class: "fa-spin"%>
-                    </div>
-                  </div>
-                  <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
-                </div>
-              </div>
+          <div class="custom-input-group">
+            <%= f.input :professional, as: :string,
+              label: false,
+              placeholder: 'Matrícula | Apellido | Nombre',
+              readonly: f.object.new_record? ? "" : true,
+              class: "m-0 flex-fill",
+              :input_html => {
+                id: "professional",
+                data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
+              }
+            %>
+            <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
             </div>
           </div>
-          <div class='row'>
-            <div class='col-6'>
+          
+          <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
+          
+          <%= f.label :patient_id, class: "text-left" do %>
+            Paciente
+            <% if policy(Patient).new? %>
+              <% if f.object.cronic_dispensations.count == 0 %>
+                <%= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
+                  title: 'Nuevo paciente temporal', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                  <%= fa_icon "plus" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <div class="d-flex flex-row">
+            <div class="custom-input-group w-40 pr-1">
+              <%= f.input :patient, as: :string, class: 'form-control',
+                label: false,
+                placeholder: 'DNI',
+                required: true,
+                readonly: f.object.new_record? ? "" : true,
+                :input_html => {
+                  id: 'patient-dni',
+                  data: { autocomplete_source: get_by_dni_patients_path },
+                  value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                }
+              %>
+              <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+              </div>
+            </div>
+
+            <div class="custom-input-group flex-fill">
+              <%= f.input :patient, as: :string, class: 'form-control',
+                label: false,
+                placeholder: 'Apellido y nombre',
+                required: true,
+                readonly: f.object.new_record? ? "" : true,
+                :input_html => {
+                  id: 'patient-fullname',
+                  data: { autocomplete_source: get_by_fullname_patients_path },
+                  value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
+                }
+              %>
+              <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+              </div>
+            </div>
+            <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+          </div>
+          <div class="d-flex flex-row">
+            <div class="flex-fill pr-1">
               <%= f.input :prescribed_date, as: :string, label: "Fecha recetada", html5: true, required: true,
                 :input_html => {
                   required: true,
@@ -110,116 +105,112 @@
                 }
               %>
             </div>
-            <div class='col-6'>
+            <div class="flex-fill">
               <%= f.input :expiry_date, label: 'Fecha vencimiento',
                 as: :string,
                 :placeholder => "Seleccionar fecha",
                 input_html: {
                   tabindex: "-1",
-                  class: "form-control",
+                  class: "form-control flex-fill",
                   required: true,
                   autocomplete: 'off',
                   value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
                 },
-                html5: false %>
-            </div>
-            <div class="col-12">
-              <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
+                html5: false 
+              %>
             </div>
           </div>
+          <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
         </div>
-        <div class="col-6">
-          <div class="col-12 invisible" id="non-os">
+        <div class="patient-info d-flex flex-column col-md-6 col-sm-12 col-xs-12">
+          <div class='p-1 invisible' id="non-os">
             <div class="card table-info">
-                <div class="card-header">No posee obra social.</div>
+              <div class="card-header">No posee obra social.</div>
             </div>
           </div>
-          <div class='col-12 invisible' id="pat-os">
-            <div class="row panel-pres">
-              <div class="col-12">
-                <div class="card">
-                  <!-- Default panel contents -->
-                  <table class="table table-sm">
-                    <thead>
-                      <tr class="info">
-                        <th>Financiador</th>
-                        <th>Código</th>
-                        <th>Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody id="pat-os-body">
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+          <div class='p-1 invisible' id="pat-os">
+            <div class="card">
+              <!-- Default panel contents -->
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr class="info">
+                    <th>Obra social</th>
+                    <th>Código</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-os-body">
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="col-12 invisible" id="non-pres">
+          <div class='p-1 invisible' id="non-pres">
             <div class="card">
                 <div class="card-header">Aún no tiene recetas.</div>
             </div>
           </div>
-          <div class="row panel-pres invisible" id="pat-pres">
-            <div class="col-12">
+          <div class='p-1 invisible' id="pat-pres">
+            <div class="h5">Últimas recetas</div>
+            <div class="card">
+              <!-- Default panel contents -->
               <div class="card">
-                <!-- Default panel contents -->
-                <div class="card-header">Últimas recetas</div>
-                <div class="card">
-                  <table class="table table-hover table-sm">
-                    <thead>
-                      <tr>
-                        <th>Tipo</th>
-                        <th>Profesional</th>
-                        <th>Ins</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody id="pat-pres-body">
-                    </tbody>
-                  </table>
-                </div>
+                <table class="table table-hover table-sm mb-0">
+                  <thead>
+                    <tr>
+                      <th>Tipo</th>
+                      <th>Profesional</th>
+                      <th>Ins</th>
+                      <th>Estado</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pat-pres-body">
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Insumos solicitados -->
-      <div class="card">
-        <table class="table table-hover table-sm mb-0">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Producto</th>
-              <th>Tu stock</th>
-              <th>Solicitado</th>
-              <th>Dispensado</th>
-              <th>Lote</th>
-              <th>Observación</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody class="quantity_ord_supply_lots" id="cocoon-container">
-            <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
-              <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+      <div class="row">
+        <div class="col-12">
+          <!-- Insumos solicitados -->
+          <div class="card">
+            <table class="table table-hover table-sm mb-0">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Producto</th>
+                  <th>Tu stock</th>
+                  <th>Solicitado</th>
+                  <th>Dispensado</th>
+                  <th>Lote</th>
+                  <th>Observación</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="quantity_ord_supply_lots" id="cocoon-container">
+                <%= f.simple_fields_for :quantity_ord_supply_lots do |form_quantity| %>
+                  <%= render "quantity_ord_supply_lot_fields", :f => form_quantity %>
+                <% end %>
+              </tbody>
+            </table>
+            <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
+            data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
+                <%= fa_icon "plus" %>
+                Agregar producto
             <% end %>
-          </tbody>
-        </table>
-        <%= link_to_add_association f, :quantity_ord_supply_lots, class: 'btn btn-primary btn-sm',
-        data: {"association-insertion-node" => "tbody.quantity_ord_supply_lots", "association-insertion-method" => "append"} do %>
-            <%= fa_icon "plus" %>
-            Agregar producto
-        <% end %>
-        
-        <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
-        <% if !f.object.quantity_ord_supply_lots.any? && f.object.errors[:quantity_ord_supply_lots].any? %>
-          <div class="invalid-feedback d-block">
-            <%= f.object.errors[:quantity_ord_supply_lots].first %>
+            
+            <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
+            <% if !f.object.quantity_ord_supply_lots.any? && f.object.errors[:quantity_ord_supply_lots].any? %>
+              <div class="invalid-feedback d-block">
+                <%= f.object.errors[:quantity_ord_supply_lots].first %>
+              </div>
+            <% end %>
           </div>
-        <% end %>
+        </div>
       </div>
     <% end %>
-
   </div>
 
   <div class="card-footer d-flex justify-content-end">
