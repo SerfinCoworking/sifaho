@@ -113,7 +113,7 @@ $(document).on('turbolinks:load', function() {
           }// End success
         });// End ajax
         $.ajax({
-          url: "http://localhost:3000/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
+          url: "https://sifaho.andes.gob.ar/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
           type: 'GET',
           data: {
           },
@@ -226,7 +226,7 @@ $(document).on('turbolinks:load', function() {
           });// End ajax
 
           $.ajax({
-            url: "http://localhost:3000/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
+            url: "https://sifaho.andes.gob.ar/api/v1/insurances/get_by_dni/"+ui.item.dni, // Ruta del controlador
             type: 'GET',
             data: {
             },
