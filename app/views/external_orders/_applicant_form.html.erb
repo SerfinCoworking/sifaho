@@ -71,7 +71,7 @@
       </div>
       
       <%# INSUMOS SOLICITADOS %>
-      <%= render "shared/orders/order_products_table", form: f, :relation => :external_order_products, order_type: order_type %>
+      <%= render "shared/orders/order_products_table", form: f, :relation => :external_order_products %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>

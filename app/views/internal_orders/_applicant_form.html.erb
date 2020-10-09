@@ -48,7 +48,7 @@
         </div>
       </div>
       <!-- Productos a dispensar -->
-      <%= render "shared/orders/order_products_table", form: f, :relation => :internal_order_products, order_type: "solicitud" %>
+      <%= render "shared/orders/order_products_table", form: f, :relation => :internal_order_products %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>

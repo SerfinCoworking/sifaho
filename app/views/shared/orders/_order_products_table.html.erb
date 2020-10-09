@@ -7,13 +7,17 @@
         <th>Unidad</th>
         <th>Tu stock</th>
         <th>Solicitar</th>
+        <% if policy(form.object).show_provider_fields? %>
+          <th>Entregar</th>
+          <th>Lote</th>
+        <% end %>
         <th>Tu observación</th>
         <th></th>
       </tr>
     </thead>
-    <tbody id="order-product-cocoon-container" data-order-status="<%= order_type %>">
+    <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
       <%= form.simple_fields_for relation do |form_products| %>
-        <%= render "shared/orders/order_product_fields", f: form_products, order_type: order_type %>
+        <%= render "shared/orders/order_product_fields", f: form_products %>
       <% end %>
     </tbody>
     
@@ -25,8 +29,7 @@
     partial: "shared/orders/order_product_fields", 
     data: {
       "association-insertion-node" => "tbody#order-product-cocoon-container",
-      "association-insertion-method" => "append"},
-      render_options: {locals: { order_type: order_type }} do %>
+      "association-insertion-method" => "append"} do %>
     <%= fa_icon "plus" %>
     Agregar insumo
   <% end %>

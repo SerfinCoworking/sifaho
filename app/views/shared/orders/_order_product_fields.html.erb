@@ -81,9 +81,8 @@
         value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
       } %>
   </td>
-  
-  <% if order_type == 'solicitud' %>
     
+  <% if policy(f.object.get_order).show_applicant_fields? %>
     <!-- Cantidad solicitada -->
     <td style="width: 100px">
       <%= f.input :request_quantity, 
