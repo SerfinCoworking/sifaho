@@ -74,9 +74,6 @@ class ExternalOrderPolicy < ApplicationPolicy
     new_report?
   end
 
-
-  
-
   def destroy?
     if destroy_pres.any? { |role| user.has_role?(role) }
       if record.provision? && record.proveedor_auditoria?
@@ -95,9 +92,6 @@ class ExternalOrderPolicy < ApplicationPolicy
     dispense_pres.any? { |role| user.has_role?(role) }
   end
   
-  
-  
-
   def send_provider?
     if record.provider_sector == user.sector
       record.proveedor_aceptado? && send_order.any? { |role| user.has_role?(role) }

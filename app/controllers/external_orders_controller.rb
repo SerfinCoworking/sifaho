@@ -166,87 +166,6 @@ class ExternalOrdersController < ApplicationController
     end
   end
 
-  # def create
-  #   @external_order = ExternalOrder.new(external_order_params)
-  #   authorize @external_order
-  #   @external_order.created_by = current_user
-  #   @external_order.audited_by = current_user
-  #   respond_to do |format|
-  #     if @external_order.save
-  #       begin
-  #         if @external_order.despacho?
-  #           @external_order.proveedor_auditoria!
-  #           # Si se acepta el despacho
-  #           if accepting?
-  #             @external_order.accept_order(current_user)
-  #             @external_order.create_notification(current_user, "creó y aceptó")
-  #             flash[:success] = 'El despacho se ha creado y aceptado correctamente'
-  #           else
-  #             @external_order.create_notification(current_user, "creó")
-  #             flash[:notice] = 'El despacho se ha creado y se encuentra en auditoría.'
-  #           end
-  #         elsif @external_order.recibo?
-  #           @external_order.recibo! # Se asigna el tipo recibo
-  #           @external_order.recibo_auditoria! # Se asigna el estado recibo auditoria
-  #           if receiving?
-  #             @external_order.receive_remit(current_user)
-  #             @external_order.create_notification(current_user, "creó y realizó")
-  #             flash[:success] = 'El recibo se ha creado y realizado correctamente'
-  #           else
-  #             @external_order.create_notification(current_user, "creó")
-  #             flash[:notice] = 'El recibo se ha creado y se encuentra en auditoría.'
-  #           end
-  #         elsif @external_order.solicitud_abastecimiento?
-  #           @external_order.solicitud_abastecimiento! # Se asigna el tipo solicitud abastecimiento.
-  #           @external_order.solicitud_auditoria!
-  #           if sending?
-  #             @external_order.send_request_of(current_user)
-  #             @external_order.create_notification(current_user, "creó y envió")
-  #             flash[:success] = 'La solicitud de abastecimiento se ha creado y enviado correctamente'
-  #           else
-  #             @external_order.create_notification(current_user, "creó")
-  #             flash[:notice] = 'La solicitud de abastecimiento se ha creado y se encuentra en auditoría.'
-  #           end
-  #         end
-  #       rescue ArgumentError => e
-  #         flash[:alert] = e.message
-  #         if external_order_params[:order_type] == 'despacho'
-  #           @order_type = 'despacho'
-  #           @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id)
-  #           format.html { render :new }
-  #         elsif external_order_params[:order_type] == 'recibo'
-  #           @order_type = 'recibo'
-  #           @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #           format.html { render :new_receipt }
-  #         elsif external_order_params[:order_type] == 'solicitud_abastecimiento'
-  #           @order_type = 'solicitud_abastecimiento'
-  #           @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #           format.html { render :new_applicant }
-  #         end
-  #       else
-  #         format.html { redirect_to @external_order }
-  #       end
-  #     else
-  #       if external_order_params[:order_type] == 'despacho'
-  #         @order_type = 'despacho'
-  #         @external_order.applicant_sector.present? ? @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id) : ""
-  #         flash[:error] = "El despacho no se ha podido crear."
-  #         format.html { render :new }
-  #       elsif external_order_params[:order_type] == 'recibo'
-  #         @order_type = 'recibo'
-  #         @external_order.provider_sector.present? ? @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id) : ""
-  #         flash[:error] = "El recibo no se ha podido crear."
-  #         format.html { render :new_receipt }
-  #       elsif external_order_params[:order_type] == 'solicitud_abastecimiento'
-  #         @order_type = 'solicitud_abastecimiento'
-  #         @external_order.provider_sector.present? ? @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id) : ""
-  #         flash[:error] = "La solicitud de abastecimiento no se ha podido crear."
-  #         format.html { render :new_applicant }
-  #       end
-  #     end
-  #   end
-  # end
-
   # PATCH /external_orders
   # PATCH /external_orders.json
   def update_applicant
@@ -300,103 +219,6 @@ class ExternalOrdersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /external_orders/1
-  # PATCH/PUT /external_orders/1.json
-  # def update
-  #   authorize @external_order
-  #   respond_to do |format|
-  #     if @external_order.update(external_order_params)
-  #       begin
-  #         if @external_order.despacho?  
-  #           if accepting? # Si se acepta el despacho
-  #             @external_order.accept_order(current_user)
-  #             @external_order.create_notification(current_user, "auditó y aceptó")
-  #             flash[:success] = 'El despacho se ha auditado y aceptado correctamente'
-  #           elsif sending? # Si se envía el despacho
-  #             @external_order.send_order(current_user)
-  #             @external_order.create_notification(current_user, "auditó y envió")
-  #             flash[:success] = 'El despacho se ha auditado y enviado correctamente'
-  #           else
-  #             @external_order.create_notification(current_user, "auditó")
-  #             flash[:success] = 'El despacho se ha auditado correctamente'
-  #           end
-  #         elsif @external_order.recibo?
-  #           if receiving?
-  #             @external_order.receive_remit(current_user)
-  #             @external_order.create_notification(current_user, "auditó y realizó")
-  #             flash[:success] = 'El recibo se ha auditado y realizado correctamente'
-  #           else
-  #             @external_order.create_notification(current_user, "auditó")
-  #             flash[:success] = 'El recibo se ha auditado correctamente'
-  #           end
-  #         elsif @external_order.solicitud_abastecimiento?
-  #           if sending?
-  #             if @external_order.provider_sector == current_user.sector
-  #               @external_order.send_order(current_user)
-  #               @external_order.create_notification(current_user, "auditó y envió")
-  #               flash[:success] = 'La solicitud de abastecimiento se ha auditado y aprovisionado correctamente'
-  #             else
-  #               @external_order.send_request_of(current_user)
-  #               @external_order.create_notification(current_user, "auditó y envió")
-  #               flash[:success] = 'La solicitud de abastecimiento se ha auditado y enviado correctamente'
-  #             end
-  #           else
-  #             if @external_order.solicitud_enviada?
-  #               @external_order.proveedor_auditoria!
-  #               @external_order.create_notification(current_user, "auditó")
-  #               flash[:success] = 'La solicitud de abastecimiento se ha auditado correctamente'
-  #             elsif @external_order.proveedor_auditoria?
-  #               @external_order.accept_order(current_user)
-  #               @external_order.create_notification(current_user, "auditó y aceptó")
-  #               flash[:success] = 'La solicitud de abastecimiento se ha auditado y aceptado correctamente'
-  #             else
-  #               @external_order.create_notification(current_user, "auditó")
-  #               flash[:success] = 'La solicitud de abastecimiento se ha auditado correctamente'
-  #             end
-  #           end
-  #         end   
-  #       rescue ArgumentError => e
-  #         flash[:alert] = e.message
-  #         if @external_order.despacho?
-  #           @order_type = 'despacho'
-  #           @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id)
-  #           format.html { render :edit }
-  #         elsif @external_order.recibo?
-  #           @order_type = 'recibo'
-  #           @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #           format.html { render :edit_receipt }
-  #         elsif @external_order.solicitud_abastecimiento? && @external_order.provider_sector == current_user.sector
-  #           @order_type = 'despacho'
-  #           format.html { render :edit }
-  #         elsif @external_order.solicitud_abastecimiento?
-  #           @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #           @order_type = 'solicitud_abastecimiento'
-  #           format.html { render :edit_applicant }
-  #         end
-  #       else
-  #         format.html { redirect_to @external_order }
-  #       end
-  #     else
-  #       if @external_order.despacho?
-  #         @order_type = 'despacho'
-  #         @sectors = Sector.with_establishment_id(@external_order.applicant_sector.establishment_id)
-  #         flash[:error] = "El despacho no se ha podido auditar."
-  #         format.html { render :edit }
-  #       elsif @external_order.recibo?
-  #         @order_type = 'recibo'
-  #         @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #         flash[:error] = "El recibo no se ha podido auditar."
-  #         format.html { render :edit_receipt }
-  #       elsif @external_order.solicitud_abastecimiento?
-  #         @sectors = Sector.with_establishment_id(@external_order.provider_sector.establishment_id)
-  #         @order_type = 'solicitud_abastecimiento'
-  #         flash[:error] = "La solicitud de abastecimiento no se ha podido auditar."
-  #         format.html { render :edit_applicant }
-  #       end
-  #     end
-  #   end
-  # end
-
   # GET /external_orders/1/send_provider
   def send_provider
     authorize @external_order
@@ -422,14 +244,6 @@ class ExternalOrdersController < ApplicationController
   # GET /external_orders/1/accept_provider
   def accept_provider
     authorize @external_order
-    @external_order.proveedor_aceptado!
-    respond_to do |format|
-      format.html { render :show }
-    end
-  end
-
-  def accept_provider
-    authorize @external_order
     respond_to do |format|
       begin
         @external_order.proveedor_aceptado!
@@ -442,13 +256,6 @@ class ExternalOrdersController < ApplicationController
       format.html { render :show }
     end
   end
-
-  # GET /external_orders/1/accept_provider_confirm
-  # def accept_provider_confirm
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   # GET /external_orders/1/receive_applicant
   def receive_applicant
@@ -464,35 +271,6 @@ class ExternalOrdersController < ApplicationController
       format.html { redirect_to @external_order }
     end
   end
-
-  # GET /external_orders/1/receive_order
-  # def receive_order
-  #   authorize @external_order
-  #   respond_to do |format|
-  #     begin
-  #       @external_order.provision_entregada!
-  #       @external_order.receive_order(current_user)
-  #       @external_order.create_notification(current_user, "recibió")
-  #       flash[:success] = 'El despacho se ha recibido correctamente'
-  #       # if @external_order.despacho?
-  #       # elsif @external_order.solicitud_abastecimiento?
-  #       #   @external_order.receive_order(current_user)
-  #       #   @external_order.create_notification(current_user, "recibió")
-  #       #   flash[:success] = 'El pedido soliciado se ha recibido correctamente'
-  #       # end
-  #     rescue ArgumentError => e
-  #       flash[:error] = e.message
-  #     end 
-  #     format.html { redirect_to @external_order }
-  #   end
-  # end
-
-  # GET /external_orders/1/receive_order_confirm
-  # def receive_order_confirm
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   def return_applicant_status
     authorize @external_order
@@ -585,60 +363,6 @@ class ExternalOrdersController < ApplicationController
     end
   end
 
-  def generate_order_report(external_order)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf')
-
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), id: :other_page
-    
-    external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
-      if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page do |page|
-        end
-      end
-      
-      report.list do |list|
-        list.add_row do |row|
-          row.values  supply_code: qosl.supply_id,
-                      supply_name: qosl.supply.name,
-                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                      lot: qosl.sector_supply_lot_lot_code,
-                      laboratory: qosl.sector_supply_lot_laboratory_name,
-                      expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: qosl.provider_observation
-        end
-
-        report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(external_order.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(external_order.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(external_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          footer.item(:total_obs).value(external_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
-        end
-      end
-      
-      if report.page_count == 1
-        report.page[:applicant_sector] = external_order.applicant_sector.name
-        report.page[:applicant_establishment] = external_order.applicant_establishment.name
-        report.page[:provider_sector] = external_order.provider_sector.name
-        report.page[:provider_establishment] = external_order.provider_establishment.name
-        report.page[:observations] = external_order.observation
-      end
-    end
-    
-
-    report.pages.each do |page|
-      page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
-      page[:remit_code] = external_order.remit_code
-      page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
-      page[:page_count] = report.page_count
-      page[:sector] = current_user.sector_name
-      page[:establishment] = current_user.establishment_name
-    end
-
-    report.generate
-  end
-
   # patch /external_order/1/nullify
   def nullify
     authorize @external_order
@@ -694,10 +418,5 @@ class ExternalOrdersController < ApplicationController
 
     def sending?
       return params[:commit] == "sending"
-    end
-
-    def save_my_previous_url
-      # session[:previous_url] is a Rails built-in variable to save last url.
-      session[:my_previous_url] = URI(request.referer || '').path
     end
 end

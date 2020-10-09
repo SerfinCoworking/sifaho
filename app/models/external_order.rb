@@ -86,7 +86,7 @@ class ExternalOrder < ApplicationRecord
       order("external_orders.order_type #{ direction }")
     when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
-      order("quantity_ord_supply_lots.count #{ direction }")
+      order("external_order_products.count #{ direction }")
     when /^solicitado_/
       # Ordenamiento por la fecha de recepción
       order("external_orders.requested_date #{ direction }") 
@@ -203,13 +203,13 @@ class ExternalOrder < ApplicationRecord
     @orders = @despachos.or(@solicitud_abastecimientos.or(@recibos))
   end
 
-  def delivered_with_sector?(a_sector)
-    if self.provision_en_camino? || self.provision_entregada?
-      return self.applicant_sector == a_sector || self.provider_sector == a_sector
-    elsif self.recibo_realizado?
-      return self.applicant_sector == a_sector
-    end
-  end
+  # def delivered_with_sector?(a_sector)
+  #   if self.provision_en_camino? || self.provision_entregada?
+  #     return self.applicant_sector == a_sector || self.provider_sector == a_sector
+  #   elsif self.recibo_realizado?
+  #     return self.applicant_sector == a_sector
+  #   end
+  # end
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
@@ -224,19 +224,6 @@ class ExternalOrder < ApplicationRecord
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def accept_order(a_user)
-    if proveedor_auditoria?
-      if self.validate_quantity_lots
-        self.accepted_date = DateTime.now
-        self.accepted_by = a_user
-        self.proveedor_aceptado!
-      end
-    else
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end
-  end
-
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
     self.external_order_products.each do |iop|
       iop.increment_lot_stock_to(self.applicant_sector)
@@ -246,34 +233,6 @@ class ExternalOrder < ApplicationRecord
     self.create_notification(a_user, "recibió")
     self.status = "provision_entregada"
     self.save!(validate: false)
-  end
-
-  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
-  def receive_remit(a_user)
-    if self.recibo_auditoria?
-      if self.quantity_ord_supply_lots.where.not(lot_code: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_new_lot_to(a_user.sector)
-        end
-        self.sent_date = DateTime.now
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.recibo_realizado!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End check if sector supply exists
-    else 
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end
-  end
-
-  def send_request_of(a_user)
-    if self.solicitud_auditoria?
-      self.sent_request_by = a_user
-      self.solicitud_enviada!
-    else
-      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
-    end
   end
 
   # Nullify the order
@@ -300,31 +259,6 @@ class ExternalOrder < ApplicationRecord
     else
       raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
     end
-  end
-
-  # Método para validar las cantidades a entregar de los lotes en stock
-  def validate_quantity_lots
-    @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
-    if @qosl_with_ssl.present?
-      @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y verificando las cantidades.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    elsif @qosl_without_ssl.present?
-      @qosl_without_ssl.each do |qosl|
-        if qosl.delivered_quantity > 0
-          raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
-        end
-      end
-    else
-      raise ArgumentError, 'No hay insumos en el pedido.'
-    end 
   end
 
   def create_notification(of_user, action_type)

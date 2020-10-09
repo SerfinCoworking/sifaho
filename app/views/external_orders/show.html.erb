@@ -254,12 +254,8 @@
 
       <% if policy(@external_order).send_provider? %>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#send-confirm">
-        <%#= link_to send_provider_external_order_path(@external_order),
-          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-          class: 'btn btn-primary btn-md' do %>
           <%= fa_icon "paper-plane" %>
           Enviar provisión
-        <%# end %>
         </button>
       <% end %>
       
