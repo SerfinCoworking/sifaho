@@ -467,7 +467,7 @@ class InternalOrdersController < ApplicationController
         :applicant_observation,
         :provider_observation, 
         :_destroy,
-        int_ord_prod_lot_stocks_attributes: [
+        order_prod_lot_stocks_attributes: [
           :id,
           :quantity,
           :lot_stock_id,

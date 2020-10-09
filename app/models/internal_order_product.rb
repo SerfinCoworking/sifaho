@@ -4,7 +4,7 @@ class InternalOrderProduct < ApplicationRecord
   belongs_to :internal_order, inverse_of: 'internal_order_products'
   belongs_to :product
 
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "IntOrdProdLotStock", foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "IntOrdProdLotStock", foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks, inverse_of: 'internal_order_product'
   has_many :lot_stocks, :through => :order_prod_lot_stocks
 
   # Validaciones

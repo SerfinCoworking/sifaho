@@ -13,7 +13,7 @@ class ExternalOrderPolicy < ApplicationPolicy
 
   # new version
   def new_applicant?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    user.has_any_role?(:admin, :farmaceutico, :enfermero) 
   end
   
   def create_applicant?
@@ -48,6 +48,21 @@ class ExternalOrderPolicy < ApplicationPolicy
     edit_provider?
   end
 
+  def accept_provider?
+    if record.proveedor_auditoria? && record.provider_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
+  def show_applicant_fields?
+    if record.solicitud_auditoria?
+     record.solicitud? && (new_applicant? || edit_applicant?)
+    end
+  end
+
+  def show_provider_fields?
+    record.provision? && (new_provider? || edit_provider?)
+  end
   #  end new version
 
 
@@ -103,9 +118,9 @@ class ExternalOrderPolicy < ApplicationPolicy
     #   record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
     # end
   end
-
+  
   def return_provider_status?
-    if record.provider_sector == user.sector && record.provision_en_camino?
+    if record.provider_sector == user.sector && record.proveedor_aceptado?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
@@ -150,7 +165,7 @@ class ExternalOrderPolicy < ApplicationPolicy
   
   def nullify?
     if (["solicitud_enviada"].include? record.status) && record.provider_sector == user.sector
-      edit_provider.any? { |role| user.has_role?(role) }
+      edit_provider?
     end
   end
 

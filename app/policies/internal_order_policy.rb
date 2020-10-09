@@ -107,4 +107,13 @@ class InternalOrderPolicy < ApplicationPolicy
     end
   end
 
+  def show_applicant_fields?
+    if record.solicitud_auditoria?
+      record.solicitud? && (new_applicant? || edit_applicant?)
+    end
+  end
+  
+  def show_provider_fields?
+    record.provision? && (new_provider? || edit_provider?)
+  end
 end
