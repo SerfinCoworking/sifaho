@@ -178,19 +178,7 @@ class SectorSupplyLot < ApplicationRecord
       if self.quantity == 0
         self.status = 'agotado'
       elsif self.supply_lot.expiry_date.present?
-        @exp_date = self.supply_lot.expiry_date
-        # If expired
-        if @exp_date <= DateTime.now
-          self.status = 'vencido'
-        # If near_expiry
-        elsif @exp_date < DateTime.now + 3.month && @exp_date > DateTime.now
-          self.status = 'por_vencer'
-        # If good
-        elsif @exp_date > DateTime.now
-          self.status = 'vigente'
-        end 
-      else
-        self.status = 'vigente'
+        self.status = self.supply_lot.status
       end
     end
     self.save(validate: false)

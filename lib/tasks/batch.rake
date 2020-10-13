@@ -4,5 +4,9 @@ namespace :batch do
     SupplyLot.all.each do |lot| 
       lot.update_status_without_validate!
     end
+
+    SectorSupplyLot.all.each do |lot| 
+      lot.update_status_without_validate!
+    end
   end
 end

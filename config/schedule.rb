@@ -21,11 +21,7 @@
 
 set :output, "log/cron.log"
 
-every 1.day, at: '4:30 am' do
-  runner "SectorSupplyLot.update_status_to_all"
-end
-
 every 5.hours do
-  rake 'batch:update_status_without_validate!'
+  rake 'batch:update_lot_status'
 end
 
