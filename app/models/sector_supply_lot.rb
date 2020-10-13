@@ -177,7 +177,7 @@ class SectorSupplyLot < ApplicationRecord
     unless self.archivado?
       if self.quantity == 0
         self.status = 'agotado'
-      elsif self.supply_lot.expiry_date.present?
+      elsif self.supply_lot.present? && self.supply_lot.expiry_date.present?
         self.status = self.supply_lot.status
       end
     end
