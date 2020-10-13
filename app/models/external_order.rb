@@ -237,7 +237,6 @@ class ExternalOrder < ApplicationRecord
 
   # Nullify the order
   def nullify_by(a_user)
-    self.rejected_by = a_user
     self.anulado!
     self.create_notification(a_user, "Anuló")
   end

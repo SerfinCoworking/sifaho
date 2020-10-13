@@ -7,8 +7,6 @@ module ExternalOrdersHelper
     elsif order.proveedor_aceptado?; return 'primary'
     elsif order.provision_en_camino?; return 'primary'
     elsif order.provision_entregada?; return 'success'
-    elsif order.recibo_auditoria?; return 'warning'
-    elsif order.recibo_realizado?; return 'success' 
     elsif order.anulado?; return 'danger'
     end
   end
