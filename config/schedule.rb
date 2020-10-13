@@ -19,10 +19,13 @@
 
 # Learn more: http://github.com/javan/whenever
 
+set :output, "log/cron.log"
+
 every 1.day, at: '4:30 am' do
   runner "SectorSupplyLot.update_status_to_all"
 end
 
-every 1.day, at: '5:00 am' do
-  runner "SupplyLot.update_status_to_all"
+every 5.hours do
+  rake 'batch:update_status_without_validate!'
 end
+

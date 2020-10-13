@@ -172,15 +172,12 @@ class SupplyLot < ApplicationRecord
   def update_status_without_validate!
     unless self.auditoria?
       if self.expiry_date.present?
-        # If expired
-        if self.expiry_date <= DateTime.now
-          self.status = 'vencido'
-          # If near_expiry
-        elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
-          self.status = 'por_vencer'
-          # If good
-        elsif expiry_date > DateTime.now
+        if expiry_date > DateTime.now
           self.status = 'vigente'
+        elsif self.expiry_date < DateTime.now
+          self.status = 'vencido'
+        elsif expiry_date <= DateTime.now + 3.month
+          self.status = 'por_vencer'
         end
       end
     end
