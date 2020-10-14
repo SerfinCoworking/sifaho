@@ -1,6 +1,6 @@
 class PrescriptionsController < ApplicationController
-  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status,
-    :return_cronic_dispensation, :confirm_return_cronic ]
+  before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete,
+    :return_cronic_dispensation, :confirm_return_cronic, :return_ambulatory_dispensation, :confirm_return_ambulatory ]
 
   # GET /prescriptions
   # GET /prescriptions.json

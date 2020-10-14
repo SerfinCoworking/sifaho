@@ -341,10 +341,10 @@
       Imprimir
     <% end %>
     <% if policy(@prescription).return_ambulatory_dispensation? %>
-      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning mr-1">
-        <%= fa_icon "redo" %>
-        Retornar
-      </a>
+      <%= link_to confirm_return_ambulatory_prescription_path(@prescription), remote: true, class: 'btn btn-warning mr-1' do %>
+        <%= fa_icon 'redo' %>
+        Retornar dispensación
+      <% end %>
     <% end %>
     <% if policy(@prescription).return_cronic_dispensation? %>
       <%= link_to confirm_return_cronic_prescription_path(@prescription), remote: true, class: 'btn btn-danger mr-1' do %>

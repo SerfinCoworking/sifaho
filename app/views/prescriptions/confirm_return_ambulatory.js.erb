@@ -1,19 +1,19 @@
 // Add the dialog title
-$('.modal-header').addClass('bg-danger text-white');
+$('.modal-header').addClass('bg-warning');
 $('.modal-title').html("<i class='fa fa-redo'></i>  Retornar dispensación");
 
 // Render the edit form
 $('.modal-body').html(
   "<p>"+
-    "Seguro que desea retornar la <%= @prescription.cronic_dispensations.to_set.count %>° dispensación realizada el "+ 
-    "<%= @prescription.cronic_dispensations.newest_first.first.created_at.strftime('%d/%m/%Y %H:%M') %>?"+
+    "Seguro que desea retornar la dispensación?"+
+    "<p>Se retornarán a stock los productos dispensados</p>"+
   "</p>"
 );
 
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<a data-method='patch' href='/prescriptions/<%= @prescription.id %>/return_cronic_dispensation' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-method='patch' href='/prescriptions/<%= @prescription.id %>/return_ambulatory_dispensation' class='btn commit btn-warning pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog
@@ -26,5 +26,5 @@ $('#dialog').on('shown.bs.modal', function () {
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-header').removeClass('bg-danger text-white');
+  $('.modal-header').removeClass('bg-warning');
 });
