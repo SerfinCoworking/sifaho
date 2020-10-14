@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_09_10_150844) do
+=======
+ActiveRecord::Schema.define(version: 2020_10_05_112729) do
+>>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -178,6 +182,21 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.index ["user_id"], name: "index_external_order_movements_on_user_id"
   end
 
+  create_table "external_order_product_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.bigint "product_id"
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_external_order_product_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_external_order_product_reports_on_product_id"
+    t.index ["sector_id"], name: "index_external_order_product_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_external_order_product_reports_on_supply_id"
+  end
+
   create_table "external_order_template_supplies", force: :cascade do |t|
     t.bigint "external_order_template_id"
     t.bigint "supply_id"
@@ -260,6 +279,21 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
   end
 
+  create_table "internal_order_product_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.bigint "product_id"
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_internal_order_product_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_internal_order_product_reports_on_product_id"
+    t.index ["sector_id"], name: "index_internal_order_product_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
+  end
+
   create_table "internal_order_template_supplies", force: :cascade do |t|
     t.bigint "internal_order_template_id"
     t.bigint "supply_id"
@@ -302,13 +336,11 @@ ActiveRecord::Schema.define(version: 2020_09_10_150844) do
     t.datetime "updated_at", null: false
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
-    t.datetime "deleted_at"
     t.bigint "sent_request_by_id"
     t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
     t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
-    t.index ["deleted_at"], name: "index_internal_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"

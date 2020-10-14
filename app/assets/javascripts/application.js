@@ -16,7 +16,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require chosen-jquery
-//= require bootstrap-select
 //= require font_awesome5
 //= require popper
 //= require moment
@@ -31,6 +30,7 @@
 //= require cocoon
 //= require bootstrap-switch
 //= require bootstrap
+//= require bootstrap-select
 //= require_tree .
 
 // Se oculta el flash message
@@ -73,6 +73,24 @@ $(document).on('turbolinks:load', function() {
     }
   );
 
+  $('.since-date, .to-date, .requested-date, .prescribed-date').datepicker({
+    closeText: 'Cerrar',
+    prevText: '<Ant',
+    nextText: 'Sig>',
+    currentText: 'Hoy',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+  });
+
   $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
@@ -85,10 +103,15 @@ $(document).on('turbolinks:load', function() {
     style: 'btn btn-light',
   });
 
-  var today = new moment();
-  $('#requested-date').datetimepicker({
+  // var today = new moment();
+  // $('#requested-date').datetimepicker({
+  //   format: 'DD/MM/YYYY',
+  //   date: today,
+  //   locale: 'es'
+  // });
+
+  $('#since-datepicker').datetimepicker({
     format: 'DD/MM/YYYY',
-    date: today,
     locale: 'es'
   });
 
@@ -158,6 +181,7 @@ $(document).on('turbolinks:load', function() {
     nested_form.find('.search-lots').hide();
   });
 });
+
 $(document).on('turbolinks:load', function() {
 
   $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({

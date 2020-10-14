@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  # custom error routes
+  match '/404' => 'errors#not_found', :via => :all
+  match '/406' => 'errors#not_acceptable', :via => :all
+  match '/422' => 'errors#unprocessable_entity', :via => :all
+  match '/500' => 'errors#internal_server_error', :via => :all
+
 
   resources :stocks
   # Lotes
@@ -72,6 +78,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :patients
+      get 'insurances/get_by_dni/:dni', to: 'insurances#get_by_dni'
     end
   end
 
@@ -79,12 +86,6 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :profiles, only: [ :edit, :update, :show ]
-
-  # get '/profile/edit', to:'profiles#edit', as:'edit_profile'
-  # patch '/profile', to: 'profiles#update'
-  # Rescue errors
-  match "/404", :to => "errors#not_found", :via => :all
-  match "/500", :to => "errors#internal_server_error", :via => :all
 
   resources :bed_orders do
     member do
@@ -171,7 +172,6 @@ Rails.application.routes.draw do
       patch "nullify"
     end
     collection do
-      get "new_report"; get "generate_report"
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
@@ -207,7 +207,6 @@ Rails.application.routes.draw do
       patch "nullify"
     end
     collection do
-      get "new_report"; get "generate_report"
       get "new_receipt"
       get "new_applicant"
       get "applicant_index"
@@ -245,15 +244,17 @@ Rails.application.routes.draw do
 
   resources :prescriptions do
     member do
-      get "delete"
-      get "restore"; get "restore_confirm"
-      get "return_status"
-      get "return_cronic_dispensation"
+      get 'delete'
+      get 'restore'; get 'restore_confirm'
+      get 'confirm_return_ambulatory'
+      patch 'return_ambulatory_dispensation'
+      get 'confirm_return_cronic'
+      patch 'return_cronic_dispensation'
     end
       collection do
-      get "new_cronic"
-      get "get_by_patient_id"
-      get "get_cronic_prescriptions"
+      get 'new_cronic'
+      get 'get_by_patient_id'
+      get 'get_cronic_prescriptions'
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
@@ -298,6 +299,42 @@ Rails.application.routes.draw do
 
       get "new_delivered_by_establishment"
       post "create_delivered_by_establishment"
+    end
+  end
+
+  # Routes for reports
+  namespace :reports do
+    resources :patient_product_reports, only: [:new] do
+      collection do
+        get "generate"
+      end
+    end
+  end
+
+  # Reports
+  namespace :reports, path: 'reportes' do
+    resources :index_reports, only: [:index], path: '/'
+
+    resources :internal_order_product_reports,
+      only: [:show], 
+      controller: 'internal_order_products',
+      model: 'internal_order_prodcut_reports',
+      path: 'producto_por_sectores' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+
+    resources :external_order_product_reports,
+      only: [:show],
+      controller: 'external_order_products',
+      model: 'external_order_prodcut_reports',
+      path: 'producto_por_establecimientos' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
     end
   end
 end

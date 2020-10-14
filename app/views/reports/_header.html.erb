@@ -1,20 +1,26 @@
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel" id="page-title">
-    <%= link_to reports_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-list-alt') %>
+  <li class="nav-item non-sel" id="page-title">
+    <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')}" do %>
+      <%= fa_icon "file-alt" %>
       Reportes
     <% end %>
   </li>
-  <li class="nav-item <%= active_action('new_delivered_by_order') %> non-sel">
-    <%= link_to new_delivered_by_order_reports_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-      <span class="hidden-xs"> Entregado por pedido</span>
+  <li class="nav-item non-sel">
+    <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
+      <%= fa_icon "user-injured" %>
+      <span class="hidden-xs"> Producto por pacientes</span>
     <% end %>
   </li>
-  <li class="nav-item <%= active_action('new_delivered_by_establishment') %> non-sel">
-    <%= link_to new_delivered_by_establishment_reports_path, class: 'nav-link' do %>
-      <%= content_tag(:span, '', class: 'glyphicon glyphicon-tint') %>
-      <span class="hidden-xs"> Entregado por establecimiento</span>
+  <li class="nav-item non-sel">
+    <%= link_to reports_internal_order_product_reports_path, class: "nav-link #{active_class("reports/internal_order_products")}" do %>
+      <%= fa_icon "bezier-curve" %>
+      <span class="hidden-xs"> Producto por sectores</span>
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to reports_external_order_product_reports_path, class: "nav-link #{active_class("reports/external_order_products")}" do %>
+      <%= fa_icon "hospital" %>
+      <span class="hidden-xs"> Producto por establecimientos</span>
     <% end %>
   </li>
 <% end %>

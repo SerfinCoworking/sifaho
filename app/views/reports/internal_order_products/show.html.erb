@@ -1,0 +1,81 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "bezier-curve" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por sectores</h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+  
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Producto</h5>
+        <%= @internal_order_product_report.supply_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Desde</h5>
+        <%= @internal_order_product_report.since_date.strftime("%d/%m/%Y") %>
+      </div>    
+      <div class="p-2 flex-fill">
+        <h5>Hasta</h5>
+        <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+      
+    <%# movement => {["name"] => "delivered_quantity"} %>
+    <% if @movements.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr class="d-flex">
+              <th class="col-6">Sector</th>
+              <th class="col-6">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
+              <tr class="d-flex">
+                <td class="col-6">
+                  <%= movement.first %>
+                </td>
+                <td class="col-6"><%= movement.second %></td>
+              </tr>
+            <% end %>
+            <tr class="d-flex">
+              <td class="col-6 text-right">Total</td>
+              <td class="col-6"><%= @movements.sum(&:second) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay movimientos entre el <%= @internal_order_product_report.since_date.strftime("%d/%m/%Y") %> y <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to reports_internal_order_product_report_path(format: 'pdf', id: @internal_order_product_report.id), 
+      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
+    <%= link_to reports_internal_order_product_report_path(format: 'csv', id: @internal_order_product_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> CSV
+    <% end %>
+    <%= link_to reports_internal_order_product_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>

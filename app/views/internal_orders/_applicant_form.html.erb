@@ -44,16 +44,13 @@
           <%= f.hidden_field :provider_sector_id, id: "provider-id", value: "#{if f.object.provider_sector.present?; f.object.provider_sector_id; end}" %>
         </div>
         <div class='col-2'>
-          <%= f.input :requested_date, label: 'Fecha solicitado', as: :string,
-            :placeholder => "Seleccionar fecha",
-            input_html: {
-              id: "requested-date",
+          <%= f.input :requested_date, as: :string, label: "Fecha solicitado", html5: true, required: true,
+            :input_html => {
               required: true,
-              autocomplete: 'off',
-              :style => 'width: 110px',
-              value: "#{f.object.requested_date unless f.object.new_record?}"
-            },
-            html5: false 
+              class: "form-control requested-date",
+              autocomplete: "off",
+              value: "#{f.object.new_record? ? DateTime.now.strftime("%d/%m/%Y") : f.object.requested_date.strftime("%d/%m/%Y")}"
+            }
           %>
         </div>
         <div class='col-4'>

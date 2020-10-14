@@ -44,7 +44,9 @@
     </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', establishments_path, class: "btn mr-2" %>
+    <%= link_to :back, class: "btn btn-light mr-2" do %>
+      Volver
+    <% end %>
     <% if policy(@establishment).edit? %>
       <%= link_to edit_establishment_path(@establishment), :"data-turbolinks" => false, class: "btn btn-warning" do %>
         <%= fa_icon "pen" %>

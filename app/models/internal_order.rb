@@ -1,5 +1,4 @@
 class InternalOrder < ApplicationRecord
-  acts_as_paranoid
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }
@@ -28,7 +27,7 @@ class InternalOrder < ApplicationRecord
   validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
   validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :quantity_ord_supply_lots, :sector_supply_lots
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  validates_uniqueness_of :remit_code
 
   # Atributos anidados
   accepts_nested_attributes_for :quantity_ord_supply_lots,
@@ -167,7 +166,7 @@ class InternalOrder < ApplicationRecord
     return self.provider_sector == a_user.sector
   end
 
-  def is_applicant(a_user)
+  def is_applicant?(a_user)
     return self.applicant_sector == a_user.sector
   end
 
@@ -308,9 +307,9 @@ class InternalOrder < ApplicationRecord
 
   def record_remit_code
     if self.provision?
-      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
     elsif self.solicitud?
-      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
     end
   end
 end

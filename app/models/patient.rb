@@ -8,6 +8,7 @@ class Patient < ApplicationRecord
   # Relaciones
   belongs_to :patient_type
   belongs_to :address, optional: true
+  has_many :patient_phones, dependent: :destroy
   has_many :prescriptions, -> { with_deleted }, dependent: :destroy
   has_one_base64_attached :avatar
   has_many :patient_phones, :dependent => :destroy

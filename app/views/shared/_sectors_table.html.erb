@@ -1,18 +1,18 @@
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="card-title mb-0 ml-2"><%= title %></h5>
+    <h5 class="card-title mb-0 ml-2 p-1"><%= title %></h5>
     <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="top" title="Cantidad de sectores"><%= sectors.count %></span>
   </div>
   <div class="card-body p-0">
     <ul class="list-group">
       <% sectors.each do |sector| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span><%= sector.name%></span>
+        <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+          <span><strong><%= sector.name%></strong></span>
+          <span><%= sector.establishment_name %></span>
           <% if policy(sector).show? %>
-            <%= link_to sector_path(sector), class: 'btn btn-light btn-sm',
-                  title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-                  <%= fa_icon "eye" %>
+            <%= link_to sector_path(sector), class: 'btn btn-secondary btn-sm' do %>
+                <%= fa_icon "eye" %>
             <% end %>
           <% end %>
         </li>
