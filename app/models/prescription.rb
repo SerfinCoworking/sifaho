@@ -194,16 +194,15 @@ class Prescription < ApplicationRecord
       end
       self.cronic_dispensations.newest_first.first.destroy # Destroy the last dispensation
       self.times_dispensed -= 1 # Rest one dispensation to counter
+      self.dispensada_parcial!
     elsif self.dispensada_parcial? && self.times_dispensed == 1
       self.auditoria!
-    elsif self.dispensada? || self.dispensada_parcial?
-      self.dispensada_parcial!
     else
       raise ArgumentError, 'No es posible retornar a un estado anterior'
     end
   end
 
-  def return_status
+  def return_ambulatory_dispensation
     if self.dispensada?
       self.quantity_ord_supply_lots.each do |qosl|
         qosl.increment

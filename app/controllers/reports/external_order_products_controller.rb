@@ -42,7 +42,7 @@ class Reports::ExternalOrderProductsController < ApplicationController
     authorize @external_order_product_report
 
     respond_to do |format|
-      if @external_order_product_report.save!
+      if @external_order_product_report.save
         format.html { redirect_to reports_external_order_product_report_path(@external_order_product_report), notice: 'El reporte se ha creado correctamente.' }
       else
         @last_reports = ExternalOrderProductReport.limit(10)

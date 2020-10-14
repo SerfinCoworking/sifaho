@@ -66,6 +66,16 @@ es:
         name: "Razón social"
         cuil: "Cuil"
         gln: "GLN"
+      internal_order_product_report:
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
+        supply_id: "Producto"
+        supply: "Producto"
+      external_order_product_report:
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
+        supply_id: "Producto"
+        supply: "Producto"
 
   date:
     abbr_day_names:

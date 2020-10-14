@@ -237,15 +237,17 @@ Rails.application.routes.draw do
 
   resources :prescriptions do
     member do
-      get "delete"
-      get "restore"; get "restore_confirm"
-      get "return_status"
-      get "return_cronic_dispensation"
+      get 'delete'
+      get 'restore'; get 'restore_confirm'
+      get 'confirm_return_ambulatory'
+      patch 'return_ambulatory_dispensation'
+      get 'confirm_return_cronic'
+      patch 'return_cronic_dispensation'
     end
       collection do
-      get "new_cronic"
-      get "get_by_patient_id"
-      get "get_cronic_prescriptions"
+      get 'new_cronic'
+      get 'get_by_patient_id'
+      get 'get_cronic_prescriptions'
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"

@@ -5,6 +5,9 @@
       <h5 class="card-title mb-0 ml-2">
         <%= @prescription.new_record? ? "Agregar receta crónica" : "Editando receta crónica" %>
       </h5>
+      <span class="badge badge-<%= prescription_status_label(@prescription) %>">
+        <%= @prescription.status.underscore.humanize %>
+      </span>
     </div>
     <%= link_to :back, class: @prescription.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>

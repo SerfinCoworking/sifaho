@@ -1,6 +1,6 @@
 class PrescriptionsController < ApplicationController
   before_action :set_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_status,
-    :return_cronic_confirm, :return_cronic_dispensation ]
+    :return_cronic_dispensation, :confirm_return_cronic ]
 
   # GET /prescriptions
   # GET /prescriptions.json
@@ -174,11 +174,11 @@ class PrescriptionsController < ApplicationController
     end
   end
 
-  def return_status
+  def return_ambulatory_dispensation
     authorize @prescription
     respond_to do |format|
       begin
-        @prescription.return_status
+        @prescription.return_ambulatory_dispensation
       rescue ArgumentError => e
         flash[:alert] = e.message
       else

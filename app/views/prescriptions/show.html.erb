@@ -7,6 +7,9 @@
       <h5 class="card-title mb-0 ml-2">
         Viendo receta <%= @prescription.ambulatoria? ? "ambulatoria" : "crónica" %>
       </h5>
+      <span class="ml-2 badge badge-<%= prescription_status_label(@prescription) %>">
+        <%= @prescription.status.underscore.humanize %>
+      </span>
     </div>
     <div>
       <%= link_to prescriptions_path, class: 'btn',
@@ -337,17 +340,17 @@
       <%= fa_icon "print" %>
       Imprimir
     <% end %>
-    <% if policy(@prescription).return_status? %>
+    <% if policy(@prescription).return_ambulatory_dispensation? %>
       <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-warning mr-1">
         <%= fa_icon "redo" %>
         Retornar
       </a>
     <% end %>
     <% if policy(@prescription).return_cronic_dispensation? %>
-      <a href="#return-confirm" data-id="<%= @prescription.id %>" class="return-confirm btn btn-danger mr-1">
-        <%= fa_icon "redo" %>
+      <%= link_to confirm_return_cronic_prescription_path(@prescription), remote: true, class: 'btn btn-danger' do %>
+        <%= fa_icon 'redo' %>
         Retornar dispensación
-      </a>
+      <% end %>
     <% end %>
     <% if policy(@prescription).edit? %>
       <%= link_to edit_prescription_path(@prescription), :"data-turbolinks" => false,
@@ -358,51 +361,3 @@
     <% end %>
   </div>
 </div>
-
-
-<% if policy(@prescription).return_status? %>
-  <!-- Modal para retornar estado -->
-  <div class="modal" id="return-confirm">
-    <div class="modal-dialog">
-      <div class="modal-content panel-warning">
-        <div class="modal-header panel-heading">
-          <a class="close" data-dismiss="modal">×</a>
-          <h3><%= content_tag(:span, "", class: "glyphicon glyphicon-retweet") %> Retornar a <%= prev_status = Prescription.statuses.key(@prescription.status_before_type_cast - 1).split('_').map(&:capitalize).join(' ') %></h3>
-        </div>
-        <div class="modal-body">
-          <p>Seguro que desea retornar la prescripción a <%= prev_status %>?</p>
-          <p>Se devolverán todos los insumos a tu stock.</p>
-        </div>
-        <div class="modal-footer text-right">
-          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-          <%= link_to 'Confirmar', return_status_prescription_path, method: :get, :class => 'btn btn-warning' %>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
-
-
-<% if policy(@prescription).return_cronic_dispensation? %>
-  <!-- Modal para retornar estado -->
-  <div class="modal" id="return-confirm">
-    <div class="modal-dialog">
-      <div class="modal-content panel-danger">
-        <div class="modal-header panel-heading">
-          <a class="close" data-dismiss="modal">×</a>
-          <h3><%= fa_icon "redo" %> Retornar a stock la última dispensación.</h3>
-        </div>
-        <div class="modal-body">
-          <p>
-            Seguro que desea retornar la <%= @prescription.cronic_dispensations.to_set.count %>° dispensación realizada el 
-            <%= @prescription.cronic_dispensations.newest_first.first.created_at.strftime("%d/%m/%Y %H:%M") %>?
-          </p>
-        </div>
-        <div class="modal-footer text-right">
-          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-          <%= link_to 'Confirmar', return_cronic_dispensation_prescription_path, method: :get, :class => 'btn btn-danger' %>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
