@@ -210,10 +210,10 @@
               </a>
             </li>
             <li class='nav-item'>
-              <a class='nav-link <%= @prescription.cronic_dispensations.to_set.count > 0 ? '' : 'disabled' %>' data-toggle='tab' href='#dispensations'>
+              <a class='nav-link <%= @prescription.times_dispensed > 0 ? '' : 'disabled' %>' data-toggle='tab' href='#dispensations'>
                 <%= fa_icon "paper-plane" %>
                 Dispensaciones
-                <span class="badge badge-secondary"><%= @prescription.cronic_dispensations.to_set.count %>/<%= @prescription.times_dispensation %></span>
+                <span class="badge badge-secondary"><%= @prescription.times_dispensed %>/<%= @prescription.times_dispensation %></span>
               </a>
             </li>
             <li class='nav-item'>
@@ -347,7 +347,7 @@
       </a>
     <% end %>
     <% if policy(@prescription).return_cronic_dispensation? %>
-      <%= link_to confirm_return_cronic_prescription_path(@prescription), remote: true, class: 'btn btn-danger' do %>
+      <%= link_to confirm_return_cronic_prescription_path(@prescription), remote: true, class: 'btn btn-danger mr-1' do %>
         <%= fa_icon 'redo' %>
         Retornar dispensación
       <% end %>

@@ -179,6 +179,8 @@ class Prescription < ApplicationRecord
         self.dispensed_at = DateTime.now
         self.dispensed_by = a_user
         self.save
+      else
+        raise ArgumentError, 'La receta ya se dispensó '+self.times_dispensed.to_s+' veces'
       end
     else
       raise ArgumentError, 'La prescripción debe está '+self.status
