@@ -26,6 +26,7 @@ class Reports::ExternalOrderProductsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "Reporte-#{@external_order_product_report.since_date.strftime('%d/%m/%Y')}-#{@external_order_product_report.to_date.strftime('%d/%m/%Y')}.csv" }
+      format.xls
     end
   end
 
