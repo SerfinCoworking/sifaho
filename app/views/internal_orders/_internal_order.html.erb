@@ -65,13 +65,9 @@
       <% end %>
     <% end %>
     <% if policy(internal_order).nullify? %>
-      <%= link_to nullify_internal_order_path(internal_order),
-        :"data-toggle" => "modal",
-        :'data-target'=> "#anular-confirm-#{internal_order.id}",
-        :"data-turbolinks" => false, class: 'btn btn-danger btn-sm', 
-        title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#anular-confirm-<%=internal_order.id%>">
         <%= fa_icon "ban" %>
-      <% end %>
+      </button>
     <% end %>
   </td>
 </tr>
