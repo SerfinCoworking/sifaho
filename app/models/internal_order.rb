@@ -244,31 +244,6 @@ class InternalOrder < ApplicationRecord
     self.save!(validate: false)
   end
 
-  # Método para validar las cantidades a entregar de los lotes en stock
-  # def validate_quantity_lots
-  #   @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-  #   @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
-  #   if @qosl_with_ssl.present?
-  #     @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-  #     # Se itera el hash por cada lote sumando y verificando las cantidades.
-  #     @sect_lots.each do |key, values|
-  #       @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-  #       @sector_lot = SectorSupplyLot.find(key)
-  #       if @sector_lot.quantity < @sum_quantities
-  #         raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-  #       end
-  #     end
-  #   elsif @qosl_without_ssl.present?
-  #     @qosl_without_ssl.each do |qosl|
-  #       if qosl.delivered_quantity > 0
-  #         raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
-  #       end
-  #     end
-  #   else
-  #     raise ArgumentError, 'No hay insumos en el pedido.'
-  #   end 
-  # end
-
   def create_notification(of_user, action_type)
     InternalOrderMovement.create(user: of_user, internal_order: self, action: action_type, sector: of_user.sector)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
@@ -296,6 +271,31 @@ class InternalOrder < ApplicationRecord
     self.save!(validate: false)
 
     self.create_notification(a_user, "envió")
+  end
+
+  def get_statuses
+    @statuses =self.class.statuses
+
+    if self.solicitud?
+      # si es anulado, devolvemos solo los 2 primeros estados y "anulado"
+      if self.anulado?
+        values = @statuses.except("proveedor_auditoria", "provision_en_camino", "provision_entregada")
+      else
+        values = @statuses.except("anulado")
+      end
+    else
+      values = @statuses.except("solicitud_auditoria", "solicitud_enviada", "anulado")
+    end
+
+    return values
+  end
+
+  # status: ["key_name", 0], trae dos valores, el nombre del estado y su valor entero del enum definido
+  def set_status_class(status)
+    status_class = self.anulado? ? "anulado" : "active";
+    # obetenemos el valor del status del objeto. 
+    self_status_int = InternalOrder.statuses[self.status]
+    return status[1] <= self_status_int ? status_class : ""
   end
 
   private

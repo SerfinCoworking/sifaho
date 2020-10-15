@@ -46,11 +46,7 @@
     
     <!-- Status bar -->
     <hr>
-    <div class="row">
-      <div class="col-12">
-        <%= render 'status_bar', internal_order: @internal_order %>
-      </div>
-    </div>
+    <%= render 'shared/status_bar', order: @internal_order %>
 
     <!-- Tabs -->
     <div class="row mt-3">
