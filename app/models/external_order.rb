@@ -276,6 +276,31 @@ class ExternalOrder < ApplicationRecord
     end
   end
 
+  def get_statuses
+    @statuses =self.class.statuses
+
+    if self.solicitud?
+      # si es anulado, devolvemos solo los 2 primeros estados y "anulado"
+      if self.anulado?
+        values = @statuses.except("proveedor_auditoria", "proveedor_aceptado", "provision_en_camino", "provision_entregada")
+      else
+        values = @statuses.except("anulado")
+      end
+    else
+      values = @statuses.except("solicitud_auditoria", "solicitud_enviada", "anulado")
+    end
+
+    return values
+  end
+
+  # status: ["key_name", 0], trae dos valores, el nombre del estado y su valor entero del enum definido
+  def set_status_class(status)
+    status_class = self.anulado? ? "anulado" : "active";
+    # obetenemos el valor del status del objeto. 
+    self_status_int = ExternalOrder.statuses[self.status]
+    return status[1] <= self_status_int ? status_class : ""
+  end
+
   private
 
   def record_remit_code
