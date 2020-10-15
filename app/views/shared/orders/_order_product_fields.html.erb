@@ -177,7 +177,7 @@
         <div class="bg-progress bg-info"></div>
         <%= button_tag type: "button", 
           class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
-          "data-select-lot-url" => find_lots_stocks_path(@internal_order),
+          "data-select-lot-url" => find_lots_stocks_path(f.object.get_order),
           "data-template-fill-hidden" => fields do %>
           <% if f.object.lot_stocks.present? %>
             Seleccionados <%= f.object.lot_stocks.count %> 
