@@ -1,5 +1,0 @@
-<div class="lots" data-lsid="<%= "#{f.object.lot_stock_id.present? ? f.object.lot_stock_id : 'fill_the_gap'}" %>" data-error="<%= f.object.errors[:quantity].first %>">
-  <%= f.hidden_field :lot_stock_id, value: "#{f.object.lot_stock_id.present? ? f.object.lot_stock_id : 'lot_stock_value'}", class: "lot_stock_ref" %>
-  <%= f.hidden_field :quantity, value: "#{f.object.quantity.present? ? f.object.quantity : 'quantity_value'}", class: "lot_stock_quantity_ref" %>
-  <%= f.hidden_field :_destroy, value: false, class: "_destroy" %>
-</div>
