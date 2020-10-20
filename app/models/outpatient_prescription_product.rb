@@ -1,0 +1,2 @@
+class OutpatientPrescriptionProduct < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class OutPresProdLotStock < ApplicationRecord
+end

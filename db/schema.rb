@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_29_123449) do
+ActiveRecord::Schema.define(version: 2020_10_20_152320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -192,6 +192,21 @@ ActiveRecord::Schema.define(version: 2020_09_29_123449) do
     t.index ["user_id"], name: "index_external_order_movements_on_user_id"
   end
 
+  create_table "external_order_product_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.bigint "product_id"
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_external_order_product_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_external_order_product_reports_on_product_id"
+    t.index ["sector_id"], name: "index_external_order_product_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_external_order_product_reports_on_supply_id"
+  end
+
   create_table "external_order_products", force: :cascade do |t|
     t.bigint "external_order_id"
     t.bigint "product_id"
@@ -296,6 +311,21 @@ ActiveRecord::Schema.define(version: 2020_09_29_123449) do
     t.index ["internal_order_id"], name: "index_internal_order_movements_on_internal_order_id"
     t.index ["sector_id"], name: "index_internal_order_movements_on_sector_id"
     t.index ["user_id"], name: "index_internal_order_movements_on_user_id"
+  end
+
+  create_table "internal_order_product_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.date "since_date"
+    t.date "to_date"
+    t.bigint "product_id"
+    t.bigint "supply_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_internal_order_product_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_internal_order_product_reports_on_product_id"
+    t.index ["sector_id"], name: "index_internal_order_product_reports_on_sector_id"
+    t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
   end
 
   create_table "internal_order_products", force: :cascade do |t|
@@ -419,6 +449,44 @@ ActiveRecord::Schema.define(version: 2020_09_29_123449) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "out_pres_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "outpatient_prescription_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_stock_id"], name: "index_out_pres_prod_lot_stocks_on_lot_stock_id"
+    t.index ["outpatient_prescription_product_id"], name: "unique_out_pres_prod_lot_stocks_on_out_pres_prod"
+  end
+
+  create_table "outpatient_prescription_products", force: :cascade do |t|
+    t.bigint "outpatient_prescription_id"
+    t.bigint "product_id"
+    t.date "request_quantity"
+    t.date "delivery_quantity"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_id"], name: "unique_out_pres_prod_on_outpatient_prescriptions"
+    t.index ["product_id"], name: "index_outpatient_prescription_products_on_product_id"
+  end
+
+  create_table "outpatient_prescriptions", force: :cascade do |t|
+    t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.string "remit_code"
+    t.text "observation"
+    t.date "date_received"
+    t.date "date_dispensed"
+    t.date "date_prescribed"
+    t.date "expiry_date"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_outpatient_prescriptions_on_patient_id"
+    t.index ["professional_id"], name: "index_outpatient_prescriptions_on_professional_id"
+  end
+
   create_table "patient_phones", force: :cascade do |t|
     t.integer "phone_type", default: 1
     t.string "number"
@@ -427,21 +495,6 @@ ActiveRecord::Schema.define(version: 2020_09_29_123449) do
     t.datetime "updated_at", null: false
     t.index ["number", "patient_id"], name: "index_patient_phones_on_number_and_patient_id", unique: true
     t.index ["patient_id"], name: "index_patient_phones_on_patient_id"
-  end
-
-  create_table "patient_product_reports", force: :cascade do |t|
-    t.bigint "patient_id"
-    t.bigint "supply_id"
-    t.bigint "product_id"
-    t.bigint "establishment_id"
-    t.date "since_date"
-    t.date "to_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["establishment_id"], name: "index_patient_product_reports_on_establishment_id"
-    t.index ["patient_id"], name: "index_patient_product_reports_on_patient_id"
-    t.index ["product_id"], name: "index_patient_product_reports_on_product_id"
-    t.index ["supply_id"], name: "index_patient_product_reports_on_supply_id"
   end
 
   create_table "patient_types", force: :cascade do |t|
