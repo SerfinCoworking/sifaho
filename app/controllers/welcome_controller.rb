@@ -18,23 +18,32 @@ class WelcomeController < ApplicationController
       @percent_pend_pres_month = _helper.number_to_percentage((@count_pend_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_pend_pres_month == 0
       @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
       @last_prescriptions = @prescriptions.order(date_received: :desc).limit(5)
-
-      @supply_lots = SectorSupplyLot.lots_for_sector(current_user.sector)
-      @expired_supply_lots = @supply_lots.with_status(2).limit(3)
-      @near_expiry_supply_lots = @supply_lots.with_status(1).limit(3)
-
-      @count_total_supply_lots = @supply_lots.count
-      @count_near_expiry_supply_lots = @supply_lots.with_status(1).count
-      @count_expired_supply_lots = @supply_lots.with_status(2).count
-      @count_good_supply_lots = @supply_lots.with_status(0).count
-
-      @percent_good_supply_lots = _helper.number_to_percentage((@count_good_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
-      @percent_near_expiry_supply_lots = _helper.number_to_percentage((@count_near_expiry_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
-      @percent_expired_supply_lots = _helper.number_to_percentage((@count_expired_supply_lots.to_f / @count_total_supply_lots  * 100), precision: 0) unless @count_total_supply_lots == 0
-    
-      @external_orders = ExternalOrder.orders_to_sector(current_user.sector)
-
       
+      @lot_stocks = LotStock.joins("INNER JOIN stocks ON lot_stocks.stock_id = stocks.id").where("stocks.sector_id = #{current_user.sector.id} AND stocks.quantity > 0")
+      @expired_lot_stocks = @lot_stocks.with_status(2).limit(3)
+      @near_expiry_lots = @lot_stocks.with_status(1).limit(3)
+
+      @count_total_lots = @lot_stocks.count
+      @count_expired_lots = @expired_lot_stocks.count
+      @count_near_expiry_lots = @near_expiry_lots.count
+      @count_good_lots = @lot_stocks.with_status(0).count
+
+      # Tomamos los estados de los lotes
+      @lots = LotStock.joins(:stock).joins(:sector).joins(:lot).where("sectors.id = ?", current_user.sector).where.not("lots.status = ?", 4).group("lots.status").count
+      status_colors = {0 => "#40c95e", 1 => "#f1ae45", 2 => "#d36262" }
+      # formateamos los colores segun el tipo de estado
+      @colors = []
+      @lots.each do |status, _|
+        @colors << status_colors[status]
+      end
+
+      @percent_good_supply_lots = _helper.number_to_percentage((@count_good_lots.to_f / @count_total_lots  * 100), precision: 0) unless @count_total_lots == 0
+      @percent_near_expiry_lots = _helper.number_to_percentage((@count_near_expiry_lots.to_f / @count_total_lots  * 100), precision: 0) unless @count_total_lots == 0
+      @percent_expired_lots = _helper.number_to_percentage((@count_expired_lots.to_f / @count_total_lots  * 100), precision: 0) unless @count_total_lots == 0
+    
+      @external_orders_origin = ExternalOrder.my_orders(current_user.sector)
+      @external_orders_destination = ExternalOrder.othere_orders(current_user.sector)
+
     else
       @permission_request = PermissionRequest.new
     end

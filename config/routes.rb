@@ -302,7 +302,8 @@ Rails.application.routes.draw do
     get "by_status_current_sector_supply_lots"
     get "by_month_applicant_external_orders"
     get "by_month_provider_external_orders"
-    get "by_order_type_external_orders"
+    get "by_order_type_external_orders_my_orders"
+    get "by_order_type_external_orders_other_orders"
   end
 
   resources :reports, only: [:show, :index] do

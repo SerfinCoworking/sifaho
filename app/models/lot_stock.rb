@@ -18,6 +18,18 @@ class LotStock < ApplicationRecord
   scope :with_product, lambda { |a_product| 
     where('lot_stocks.product_id = ?', a_product.id).joins(:lot)
   }
+  
+  scope :with_status, lambda { |status| 
+    where('lots.status = ?', status).joins(:lot)
+  }
+
+  scope :without_status, lambda { |a_status|
+    where.not('lots.status = ?', a_status )
+  }
+  
+  scope :lots_for_sector, lambda { |a_sector| 
+    where(sector: a_sector)
+  }
 
   # Método para incrementar la cantidad del lote. 
   # Si se encuentra archivado, vuelve a vigente con 0 de cantidad.

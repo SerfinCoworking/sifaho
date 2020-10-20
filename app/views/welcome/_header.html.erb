@@ -99,7 +99,7 @@
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>
         <% end %>
-        <%= link_to external_orders_path, class: "dropdown-item" do %>
+        <%= link_to provider_index_external_orders_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
           <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
@@ -107,10 +107,11 @@
             <div class="label label-info pull-right"><%= count %></div>
           <% end %>
         <% end %>
-        <% if policy(ExternalOrder).new_receipt? %>
-          <%= link_to new_receipt_external_orders_path, class: "dropdown-item" do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-            R<span class="hidden-xs">ecibo</span>
+        <% if policy(Receipt).new? %>
+          <%= link_to new_receipt_path, class: "dropdown-item" do %>
+            <%= fa_icon "plus" %>
+            <%#= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            Recibo
           <% end %>
         <% end %>
         <% if policy(ExternalOrder).new_applicant? %>
@@ -119,7 +120,7 @@
             S<span class="hidden-xs">olicitud</span>
           <% end %>
         <% end %>
-        <%= link_to new_external_order_path, class: "dropdown-item" do %>
+        <%= link_to new_provider_external_orders_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
           D<span class="hidden-xs">espacho</span>
         <% end %>

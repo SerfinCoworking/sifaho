@@ -10,6 +10,7 @@ class Lot < ApplicationRecord
   # Relations
   belongs_to :product
   belongs_to :laboratory
+  has_many :lot_stocks
 
   # Validations
   # validates_presence_of :product, :laboratory, :code
@@ -102,6 +103,10 @@ class Lot < ApplicationRecord
   scope :with_product_code, lambda { |a_product_code| 
     joins(:product).where('products.code = ?', a_product_code)
   }
+
+  scope :without_status, lambda { |a_status|
+    where.not('status = ?', a_status )
+  }  
 
   def expire?
     expiry_date.present?

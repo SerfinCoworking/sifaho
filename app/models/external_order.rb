@@ -196,11 +196,17 @@ class ExternalOrder < ApplicationRecord
     return self.applicant_sector == a_sector
   end
 
-  def self.orders_to_sector(a_sector)
-    @despachos = self.despacho.provider(a_sector).or(self.despacho.applicant(a_sector))
-    @solicitud_abastecimientos = self.solicitud_abastecimiento.provider(a_sector).or(self.solicitud_abastecimiento.applicant(a_sector))
-    @recibos = self.recibo.applicant(a_sector)
-    @orders = @despachos.or(@solicitud_abastecimientos.or(@recibos))
+  def self.my_orders(a_sector)
+    @my_delivery = self.provision.where(provider_sector: a_sector )
+    @my_request = self.solicitud.where(applicant_sector: a_sector)
+    
+    return @my_delivery.or(@my_request)
+  end
+  
+  def self.othere_orders(a_sector)
+    @othere_delivery = self.provision.where(applicant_sector: a_sector)
+    @othere_request = self.solicitud.where(provider_sector: a_sector)
+    return @othere_delivery.or(@othere_request)
   end
 
   # def delivered_with_sector?(a_sector)

@@ -27,7 +27,11 @@ class ChartsController < ApplicationController
     render json: SectorSupplyLot.lots_for_sector(current_user.sector).group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
   end
 
-  def by_order_type_external_orders
-    render json: ExternalOrder.orders_to_sector(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
+  def by_order_type_external_orders_my_orders
+    render json: ExternalOrder.my_orders(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
+  end
+  
+  def by_order_type_external_orders_other_orders
+    render json: ExternalOrder.othere_orders(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
   end
 end
