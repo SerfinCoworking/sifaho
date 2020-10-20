@@ -1,17 +1,17 @@
 <% content_for :page_header do %>
-  <li class="nav-item non-sel">
+  <li class="nav-item">
     <%= link_to prescriptions_path, class: "nav-link #{ active_action('index') }" do %>
       <%= fa_icon "signature" %>
       Recetas
     <% end %>
   </li>
-  <li class="nav-item non-sel">
+  <li class="nav-item">
     <%= link_to new_prescription_path, class: "nav-link #{ active_action('new') }" do %>
       <%= fa_icon "plus" %>
       Nueva ambulatoria
     <% end %>
   </li>
-  <li class="nav-item non-sel">
+  <li class="nav-item">
     <%= link_to new_cronic_prescriptions_path, class: "nav-link #{ active_action('new_cronic') }" do %>
       <%= fa_icon "plus" %>
       Nueva crónica
