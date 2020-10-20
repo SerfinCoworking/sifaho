@@ -1,7 +1,8 @@
 require_relative 'boot'
 
 require 'rails/all'
-require "active_storage/engine"
+require 'active_storage/engine'
+require 'csv'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -38,9 +39,10 @@ module Sifaho
     I18n.available_locales = [:en, :es]
     config.i18n.default_locale = :es
 
-
-    config.autoload_paths += Dir[Rails.root.join('app', 'jobs', '**/')]
-    config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
-    config.autoload_paths += Dir[Rails.root.join('app', 'mailers', '**/')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'jobs', '*/')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'models', '*/')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'mailers', '*/')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'policies', '*/')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '*/')]
   end
 end

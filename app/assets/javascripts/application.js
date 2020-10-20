@@ -73,8 +73,7 @@ $(document).on('turbolinks:load', function() {
     }
   );
 
-  console.log("Entro turbolinks");
-  $('.since-date, .to-date').datepicker({
+  $('.since-date, .to-date, .requested-date, .prescribed-date').datepicker({
     closeText: 'Cerrar',
     prevText: '<Ant',
     nextText: 'Sig>',
@@ -100,12 +99,12 @@ $(document).on('turbolinks:load', function() {
 
   $('.selectpicker-md').selectpicker({style: 'btn-default'});
 
-  var today = new moment();
-  $('#requested-date').datetimepicker({
-    format: 'DD/MM/YYYY',
-    date: today,
-    locale: 'es'
-  });
+  // var today = new moment();
+  // $('#requested-date').datetimepicker({
+  //   format: 'DD/MM/YYYY',
+  //   date: today,
+  //   locale: 'es'
+  // });
 
   $('#since-datepicker').datetimepicker({
     format: 'DD/MM/YYYY',
@@ -144,6 +143,7 @@ $(document).on('turbolinks:load', function() {
     nested_form.find('.search-lots').hide();
   });
 });
+
 $(document).on('turbolinks:load', function() {
 
   $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({

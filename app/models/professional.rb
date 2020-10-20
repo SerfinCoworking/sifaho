@@ -1,6 +1,6 @@
 class Professional < ApplicationRecord
   include PgSearch
-
+  
   enum sex: { indeterminado: 1, mujer: 2, hombre: 3 }
 
   after_create :assign_full_name
@@ -28,19 +28,19 @@ class Professional < ApplicationRecord
   )
 
   pg_search_scope :get_by_enrollment_and_fullname,
-  against: [:enrollment, :last_name, :first_name],
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    against: [:enrollment, :last_name, :first_name],
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_professional_enrollment,
-  against: :enrollment,
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    against: :enrollment,
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_professional,
-  against: [:first_name, :last_name],
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    against: [:first_name, :last_name],
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

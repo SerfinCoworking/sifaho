@@ -13,6 +13,7 @@ class Reports::PatientProductReportsController < ApplicationController
                     .dispensed_since(params[:since_date])
                     .dispensed_to(params[:to_date])
                     .joins("JOIN patients ON patients.id = prescriptions.patient_id")
+                    .order(dispensed_at: :desc)
                     .group("patients.last_name", "patients.first_name", "patients.dni", "quantity_ord_supply_lots.dispensed_at")
                     .sum(:delivered_quantity)
 
@@ -30,6 +31,7 @@ class Reports::PatientProductReportsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
+      format.xls
     end
   end
 
@@ -80,10 +82,10 @@ class Reports::PatientProductReportsController < ApplicationController
         csv << ["Apellido", "Nombre", "DNI", "Fecha", "Cantidad", "Producto"]
         movements.each do |movement|
           csv << [
-            movement.first.first, 
-            movement.first.second, 
-            movement.first.third, 
-            movement.first.fourth.strftime("%d/%m/%Y %H:%M"), 
+            movement.first.first,
+            movement.first.second,
+            movement.first.third,
+            movement.first.fourth.strftime("%d/%m/%Y %H:%M"),
             movement.second,
             Supply.find(params[:supply_id]).name
           ]

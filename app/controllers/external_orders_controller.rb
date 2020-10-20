@@ -332,35 +332,59 @@ class ExternalOrdersController < ApplicationController
       format.js
     end
   end
+  
+  def generate_order_report(external_order)
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf')
 
-  def generate_report
-    authorize ExternalOrder
-    respond_to do |format|
-      if params[:external_order][:since_date].present? && params[:external_order][:to_date].present?
-        @report_type = "2"
-        @since_date = DateTime.parse(params[:external_order][:since_date])
-        @to_date = DateTime.parse(params[:external_order][:to_date])
-        if params[:external_order][:applicant_sector_id].present?
-          @applicant_establishment = Establishment.find(params[:external_order][:applicant_sector_id])
-          @filtered_orders = ExternalOrder.applicant_establishment(@applicant_establishment).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0)
-          @supplies = Array.new
-          @filtered_orders.each do |ord|
-            @supplies.concat(ord.quantity_ord_supply_lots.pluck(:supply_id, :delivered_quantity))
-          end
-          @supplies = @supplies.group_by(&:first).map { |k, v| [k, v.map(&:last).inject(:+)] }
-        else
-          @report_type = "1"
-          @filtered_orders = ExternalOrder.provider(current_user.sector).requested_date_since(@since_date).requested_date_to(@to_date).without_status(0).joins(:applicant_establishment).group('establishments.name').count
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), id: :other_page
+    
+    external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page layout: :other_page do |page|
         end
-        flash.now[:success] = "Reporte generado."
-        format.html { render :generate_report}
-      else
-        @report_type = "1"
-        @external_order = ExternalOrder.new
-        flash.now[:error] = "Verifique los campos."
-        format.html { render :new_report }
-      end  
+      end
+      
+      report.list do |list|
+        list.add_row do |row|
+          row.values  supply_code: qosl.supply_id,
+                      supply_name: qosl.supply.name,
+                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
+                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
+                      lot: qosl.sector_supply_lot_lot_code,
+                      laboratory: qosl.sector_supply_lot_laboratory_name,
+                      expiry_date: qosl.sector_supply_lot_expiry_date, 
+                      applicant_obs: qosl.provider_observation
+        end
+
+        report.list.on_page_footer_insert do |footer|
+          footer.item(:total_supplies).value(external_order.quantity_ord_supply_lots.count)
+          footer.item(:total_requested).value(external_order.quantity_ord_supply_lots.sum(&:requested_quantity))
+          footer.item(:total_delivered).value(external_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
+          footer.item(:total_obs).value(external_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+        end
+      end
+      
+      if report.page_count == 1
+        report.page[:applicant_sector] = external_order.applicant_sector.name
+        report.page[:applicant_establishment] = external_order.applicant_establishment.name
+        report.page[:provider_sector] = external_order.provider_sector.name
+        report.page[:provider_establishment] = external_order.provider_establishment.name
+        report.page[:observations] = external_order.observation
+      end
     end
+    
+
+    report.pages.each do |page|
+      page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+      page[:remit_code] = external_order.remit_code
+      page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
+      page[:page_count] = report.page_count
+      page[:sector] = current_user.sector_name
+      page[:establishment] = current_user.establishment_name
+    end
+
+    report.generate
   end
 
   # patch /external_order/1/nullify

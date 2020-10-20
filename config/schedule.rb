@@ -19,10 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 1.day, at: '4:30 am' do
-  runner "SectorSupplyLot.update_status_to_all"
+set :output, "log/cron.log"
+
+every 5.hours do
+  rake 'batch:update_lot_status'
 end
 
-every 1.day, at: '5:00 am' do
-  runner "SupplyLot.update_status_to_all"
-end

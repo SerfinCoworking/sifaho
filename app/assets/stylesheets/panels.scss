@@ -75,7 +75,8 @@
 }
 .panel-pres {
   /* height: 480px; */
-  height: 170px;
+  height: auto;
+  max-height: 170px;
   overflow-y: auto;
 }
 #title-chart{
@@ -89,4 +90,9 @@
     height: $min-height-list;
     overflow-y: auto;
   }
+}
+
+.patient-info{
+  max-height: 22rem!important;
+  overflow-y: auto;
 }

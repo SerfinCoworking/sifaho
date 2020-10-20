@@ -14,7 +14,7 @@
     <td>s/p</td>
     <td>s/p</td>
   <% end %>
-  <td><span class="badge"><%= user.sectors.count %></span></td>
+  <td><%= user.sectors.count %></td>
   <td><%= user.updated_at.strftime("%d/%m/%Y")%> </td>
   <td class="text-left actions-col">
     <% if policy(user).show? %>
