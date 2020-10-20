@@ -25,6 +25,5 @@ class CreateExternalOrderBaks < ActiveRecord::Migration[5.2]
     end
     add_column :external_order_baks, :deleted_at, :datetime
     add_index :external_order_baks, :deleted_at
-    add_index :external_order_baks, :remit_code, unique: true
   end
 end

@@ -11,8 +11,8 @@ class ExternalOrderBak < ApplicationRecord
   before_validation :record_remit_code, on: :create
  
   # Relaciones
-  belongs_to :applicant_sector, class_name: 'Sector'
-  belongs_to :provider_sector, class_name: 'Sector'
+  belongs_to :applicant_sector, class_name: 'Sector', optional: true
+  belongs_to :provider_sector, class_name: 'Sector', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :accepted_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
@@ -27,11 +27,6 @@ class ExternalOrderBak < ApplicationRecord
   has_one :provider_establishment, :through => :provider_sector, :source => :establishment
   has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
   belongs_to :rejected_by, class_name: "User", optional: true
-
-  # Validaciones
-  validates_presence_of :applicant_sector, :provider_sector, :quantity_ord_supply_lots, :remit_code  
-  validates_associated :quantity_ord_supply_lots, :supplies, :sector_supply_lots
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
 
   accepts_nested_attributes_for :supplies, :sector_supply_lots
   accepts_nested_attributes_for :quantity_ord_supply_lots,

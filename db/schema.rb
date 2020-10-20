@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_110636) do
+ActiveRecord::Schema.define(version: 2020_10_20_130827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -191,7 +191,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_110636) do
     t.index ["provider_sector_id"], name: "index_external_order_baks_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_external_order_baks_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_external_order_baks_on_rejected_by_id"
-    t.index ["remit_code"], name: "index_external_order_baks_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_external_order_baks_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_order_baks_on_sent_request_by_id"
   end
@@ -321,7 +320,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_110636) do
     t.index ["provider_sector_id"], name: "index_internal_order_baks_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_internal_order_baks_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_internal_order_baks_on_rejected_by_id"
-    t.index ["remit_code"], name: "index_internal_order_baks_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_internal_order_baks_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_internal_order_baks_on_sent_request_by_id"
   end
@@ -630,34 +628,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_110636) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
-  end
-
-  create_table "quantity_ord_supply_lot_baks", force: :cascade do |t|
-    t.string "lot_code"
-    t.string "quantifiable_type"
-    t.bigint "quantifiable_id"
-    t.integer "requested_quantity", default: 0
-    t.integer "delivered_quantity", default: 0
-    t.integer "status", default: 0
-    t.integer "treatment_duration"
-    t.integer "daily_dose"
-    t.bigint "supply_id"
-    t.bigint "sector_supply_lot_id"
-    t.bigint "supply_lot_id"
-    t.bigint "laboratory_id"
-    t.bigint "cronic_dispensation_id"
-    t.text "applicant_observation"
-    t.text "provider_observation"
-    t.date "expiry_date"
-    t.datetime "dispensed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cronic_dispensation_id"], name: "index_quantity_ord_supply_lot_baks_on_cronic_dispensation_id"
-    t.index ["laboratory_id"], name: "index_quantity_ord_supply_lot_baks_on_laboratory_id"
-    t.index ["quantifiable_type", "quantifiable_id"], name: "quant_ord_sup_lot_polym"
-    t.index ["sector_supply_lot_id"], name: "index_quantity_ord_supply_lot_baks_on_sector_supply_lot_id"
-    t.index ["supply_id"], name: "index_quantity_ord_supply_lot_baks_on_supply_id"
-    t.index ["supply_lot_id"], name: "index_quantity_ord_supply_lot_baks_on_supply_lot_id"
   end
 
   create_table "quantity_ord_supply_lots", force: :cascade do |t|

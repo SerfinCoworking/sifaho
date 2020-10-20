@@ -25,6 +25,5 @@ class CreateInternalOrderBaks < ActiveRecord::Migration[5.2]
     end
     add_column :internal_order_baks, :deleted_at, :datetime
     add_index :internal_order_baks, :deleted_at
-    add_index :internal_order_baks, :remit_code, unique: true
   end
 end
