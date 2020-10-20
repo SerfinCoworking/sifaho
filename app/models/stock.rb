@@ -14,7 +14,7 @@ class Stock < ApplicationRecord
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
-  # Update the stock quantity 
+  # Update the stock quantity
   def update_stock
     self.quantity = self.sector_supply_lots.without_status(4).sum(:quantity)
     self.save
@@ -31,14 +31,14 @@ class Stock < ApplicationRecord
     :ignoring => :accents # Ignorar tildes.
 
 
-  filterrific(
-    default_filter_params: { sorted_by: 'codigo_asc' },
-    available_filters: [
-      :search_product_code,
-      :search_product_name,
-      :sorted_by,
-    ]
-  )
+  # To filter records by controller params
+  # Slice params "search_code, search_name, with_area_ids"
+  def self.filter(params)
+    @stocks = self.all
+    @stocks = params[:search_code].present? ? self.search_product_code( params[:search_code] ) : @stocks
+    @stocks = params[:search_name].present? ? self.search_product_name( params[:search_name] ) : @stocks
+    @stocks = params[:with_area_ids].present? ? self.with_area_ids( params[:with_area_ids] ) : @stocks
+  end
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

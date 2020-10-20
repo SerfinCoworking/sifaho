@@ -14,15 +14,14 @@ class Product < ApplicationRecord
   delegate :name, to: :area, prefix: true
   delegate :name, to: :unity, prefix: true
 
-  filterrific(
-    default_filter_params: { sorted_by: 'codigo_asc' },
-    available_filters: [
-      :search_code,
-      :sorted_by,
-      :search_supply,
-      :with_area_id,
-    ]
-  )
+  # To filter records by controller params
+  # Slice params "search_code, search_name, with_area_ids"
+  def self.filter(params)
+    @products = self.all
+    @products = params[:search_code].present? ? self.search_code( params[:search_code] ) : @products
+    @products = params[:search_name].present? ? self.search_name( params[:search_name] ) : @products
+    @products = params[:with_area_ids].present? ? self.with_area_ids( params[:with_area_ids] ) : @products
+  end
 
   # Scopes
   pg_search_scope :search_code,
@@ -32,7 +31,7 @@ class Product < ApplicationRecord
     },
     :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_text,
+  pg_search_scope :search_name,
     against: :name,
     :associated_against => {
       :supply_area => :name
@@ -65,17 +64,11 @@ class Product < ApplicationRecord
     where('products.supply_area_id = ?', an_id)
   }
 
+  scope :with_area_ids, lambda { |ids|
+    where('products.area_id = ?', ids)
+  }
+
   def self.search_supply(a_name)
     Supply.search_text(a_name).with_pg_search_rank
-  end
-
-  # Método para establecer las opciones del select input del filtro
-  # Es llamado por el controlador como parte de `initialize_filterrific`.
-  def self.options_for_sorted_by
-   [
-     ['Código (asc)', 'codigo_asc'],
-     ['Nombre (a-z)', 'nombre_asc'],
-     ['Unidad (a-z)', 'unidad_asc']
-   ]
   end
 end

@@ -95,9 +95,13 @@ $(document).on('turbolinks:load', function() {
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
   });
 
-  $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker
+  $('.selectpicker').selectpicker({
+    style: 'btn-light'
+  }); // Se inicializa selectpicker
 
-  $('.selectpicker-md').selectpicker({style: 'btn-default'});
+  $('.selectpicker-md').selectpicker({
+    style: 'btn btn-light',
+  });
 
   // var today = new moment();
   // $('#requested-date').datetimepicker({

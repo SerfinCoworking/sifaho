@@ -1,6 +1,6 @@
 class PrescriptionPolicy < ApplicationPolicy
   def index?
-    see_pres.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic)
   end
 
   def show?
@@ -8,7 +8,7 @@ class PrescriptionPolicy < ApplicationPolicy
   end
 
   def create?
-    new_pres.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic)
   end
 
   def new?
@@ -21,7 +21,7 @@ class PrescriptionPolicy < ApplicationPolicy
 
   def update?
     if record.pendiente? || record.dispensada_parcial?
-      update_pres.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end
 
@@ -31,7 +31,7 @@ class PrescriptionPolicy < ApplicationPolicy
 
   def destroy?
     unless record.dispensada? || record.dispensada_parcial?
-      destroy_pres.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico)
     end
   end
 
@@ -41,46 +41,19 @@ class PrescriptionPolicy < ApplicationPolicy
 
   def dispense?
     if record.provider_sector == user.sector
-      dispense_pres.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end
 
-  def return_status?
-    if record.dispensada? && record.provider_sector == user.sector
-      update_pres.any? { |role| user.has_role?(role) }
+  def return_ambulatory_dispensation?
+    if record.dispensada? && (record.provider_sector == user.sector) && record.ambulatoria?
+      user.has_any_role?(:admin, :farmaceutico)
     end
   end
 
   def return_cronic_dispensation?
     if record.cronica? && record.cronic_dispensations.to_set.count > 0
-      return_pres.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico)
     end
-  end
-
-
-  private
-
-  def return_pres
-    [ :admin, :farmaceutico ]
-  end
-
-  def update_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia ]
-  end
-
-  def see_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic ]
-  end
-
-  def new_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :medic ]
-  end
-
-  def destroy_pres
-    [ :admin, :farmaceutico ]
-  end
-
-  def dispense_pres
-    [ :admin, :farmaceutico, :auxiliar_farmacia ]
   end
 end

@@ -32,6 +32,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # Areas
+  resources :areas do
+    member do
+      get :fill_products_card
+    end
+  end
+
   resources :permission_requests do
     member do
       get "end"
@@ -71,6 +78,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :patients
+      get 'insurances/get_by_dni/:dni', to: 'insurances#get_by_dni'
     end
   end
 
@@ -236,15 +244,17 @@ Rails.application.routes.draw do
 
   resources :prescriptions do
     member do
-      get "delete"
-      get "restore"; get "restore_confirm"
-      get "return_status"
-      get "return_cronic_dispensation"
+      get 'delete'
+      get 'restore'; get 'restore_confirm'
+      get 'confirm_return_ambulatory'
+      patch 'return_ambulatory_dispensation'
+      get 'confirm_return_cronic'
+      patch 'return_cronic_dispensation'
     end
       collection do
-      get "new_cronic"
-      get "get_by_patient_id"
-      get "get_cronic_prescriptions"
+      get 'new_cronic'
+      get 'get_by_patient_id'
+      get 'get_cronic_prescriptions'
     end
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"

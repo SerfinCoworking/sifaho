@@ -6,4 +6,6 @@ class InternalOrderProductReport < ApplicationRecord
 
   delegate :name, to: :supply, prefix: true
   delegate :establishment_name, to: :sector
+
+  validates_presence_of :supply_id, :since_date, :to_date
 end

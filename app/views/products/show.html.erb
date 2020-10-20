@@ -1,46 +1,59 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-7 col-md-offset-2">
-    <div class="panel panel-default">
-      <div class="panel-heading hidden-print">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo insumo
-          <%= link_to products_path, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
-      </div>
-      <div class="visible-print-block"><%= current_user.establishment_name %></div>
-      <div class="panel-body" id="panel-body-new">
-        
-        <div class="row">
-          <div class="col-md-12">
-            <h5><strong>Código: </strong><%= @product.code%></h5>
-            
-            <h5><strong>Insumo: </strong><%= @product.name %></h5>
-
-            <h5><strong>Unidad: </strong><%= @product.unity_name %></h5>
-
-            <h5><strong>Rubro: </strong><%= @product.area_name %></h5>
-
-            <h5><strong>Descripción: </strong>
-              <%= @product.description.present? ? @product.description : "----" %>
-            </h5>
-
-            <h5><strong>Observación: </strong>
-              <%= @product.observation.present? ? @product.observation : "----" %>
-            </h5>
-          </div>
-        </div>
-      </div>
-
-      <!-- Botones de acción footer -->
-      <div class="panel-footer text-right">
-        <%= link_to 'Volver', products_path, class: "btn btn-light" %>
-      </div>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo producto
+      </h5>
     </div>
+    <%= link_to products_path, class: 'btn btn-light' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+
+  <div class="card-body">
+    <p class="border-bottom mt-2">
+      <strong>Código: </strong><%= @product.id%>
+    </p>
+
+    <p class="border-bottom mt-2">
+      <strong>Nombre: </strong><%= @product.name %>
+    </p>
+
+    <p class="border-bottom mt-2">
+      <strong>Unidad: </strong><%= @product.unity_name %>
+    </p>
+
+    <p class="border-bottom mt-2">
+      <strong>Rubro: </strong><%= @product.area_name %>
+    </p>
+
+    <p class="border-bottom mt-2">
+      <strong>Descripción: </strong>
+      <%= @product.description.present? ? @product.description : "----" %>
+    </p>
+
+    <p class="border-bottom mt-2">
+      <strong>Observación: </strong>
+      <%= @product.observation.present? ? @product.observation : "----" %>
+    </p>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', products_path, class: "btn mr-2" %>
+    <% if policy(@product).edit? %>
+      <%= link_to edit_product_path(@product), :"data-turbolinks" => false, class: "btn btn-warning mr-2" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+    <% if @stock.present? && policy(@stock).show? %>
+      <%= link_to stock_path(@stock), target: :_blank, class: "btn btn-secondary" do %>
+        <%= fa_icon "eye" %>
+        Ver stock
+      <% end %>
+    <% end %>
   </div>
 </div>
-

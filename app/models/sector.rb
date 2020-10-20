@@ -1,5 +1,4 @@
 class Sector < ApplicationRecord
-
   include PgSearch
 
   # Relaciones
@@ -11,6 +10,7 @@ class Sector < ApplicationRecord
   has_many :user_sectors
   has_many :users, :through => :user_sectors
   has_many :reports, dependent: :destroy
+  has_many :stocks
 
   has_many :provider_external_orders, foreign_key: "provider_sector_id", class_name: "ExternalOrder"
   has_many :provider_ordering_quantity_supplies, through: :provider_external_orders, source: "quantity_ord_supply_lots"
@@ -101,5 +101,9 @@ class Sector < ApplicationRecord
       .entregado
       .group(:quantifiable_id, :quantifiable_type).order("sum_amount DESC")
       .select(:quantifiable_id, :quantifiable_type, "SUM(delivered_quantity) as sum_amount")
+  end
+
+  def stock_product(id)
+    stocks.where(product_id: id)
   end
 end
