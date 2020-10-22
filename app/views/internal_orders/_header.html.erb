@@ -25,7 +25,7 @@
   </li>
   <% if policy(InternalOrder).new_provider? %>
     <li class="nav-item non-sel">
-      <%= link_to internal_orders_path, class: "nav-link #{ active_action_and_controller('index', 'internal_orders') }" do %>
+      <%= link_to provider_index_internal_orders_path, class: "nav-link #{ active_action_and_controller('provider_index', 'internal_orders') }" do %>
         <%= fa_icon "paper-plane" %>
         Entregas
       <% end %>

@@ -13,7 +13,7 @@
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>
-      <%= link_to internal_orders_path, class: 'btn',
+      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path), class: 'btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>
       <% end %>
@@ -46,11 +46,7 @@
     
     <!-- Status bar -->
     <hr>
-    <div class="row">
-      <div class="col-12">
-        <%= render 'status_bar', internal_order: @internal_order %>
-      </div>
-    </div>
+    <%= render 'shared/status_bar', order: @internal_order %>
 
     <!-- Tabs -->
     <div class="row mt-3">
@@ -59,7 +55,7 @@
           <li class='nav-item'>
             <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
               <%= fa_icon "cubes" %> Productos
-              <span class="badge badge-secondary"><%= @internal_order.quantity_ord_supply_lots.count %></span>
+              <span class="badge badge-secondary"><%= @internal_order.internal_order_products.count %></span>
             </a>
           </li>
           <li class="nav-item">
@@ -86,55 +82,102 @@
               <tr>
                 <th>Código</th>
                 <th>Producto</th>
+                <th>Unidad</th>
                 <th>Solicitado</th>
                 <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
-                <th>Lote</th>
-                <th>Laboratorio</th>
-                <th>Vencimiento</th>
-                <% if @internal_order.solicitud? %>
-                  <th>Obs. Sol.</th>
-                <% end %>
-                <th>Obs. Prov.</th>
+                <th>Lotes</th>
+                <th>Observaciones</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <% @internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+              <% @internal_order.internal_order_products.joins(:product).order("name").each do |int_ord_prod| %>
                 <tr>
                   <td>
-                    <%= qosl.supply_id %>
+                    <%= int_ord_prod.product_code %>
                   </td>
                   <td>
-                    <%= qosl.supply_name %>
+                    <%= int_ord_prod.product_name %>
                   </td>
                   <td>
-                    <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                    <%= int_ord_prod.unity %>
                   </td>
                   <td>
-                    <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                    <%= int_ord_prod.request_quantity %> 
                   </td>
-                  <% if qosl.sector_supply_lot.present? %>
-                    <td>
-                      <%= qosl.sector_supply_lot.lot_code %>
-                    </td>
-                    <td>
-                      <%= qosl.sector_supply_lot.laboratory %>
-                    </td>
-                    <td>
-                      <% if qosl.supply.needs_expiration %>
-                        <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
-                      <% else %>
-                        No vence
-                      <% end %>
-                    </td>
-                  <% else %>
-                    <td>Sin lote</td><td>----</td><td>----</td>
-                  <% end %>
-                  <% if @internal_order.solicitud? %>
-                    <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
-                  <% end %>
-                  <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                  <td>
+                    <%= int_ord_prod.delivery_quantity %>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= int_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= int_ord_prod.id %>">
+                      <%= int_ord_prod.order_prod_lot_stocks.count %>
+                    </button>
+                  </td>
+                  <td>
+                    <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                      <%= fa_icon "asterisk" %>
+                    <% else %>
+                      ---
+                    <% end %>
+                  </td>
                 </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= int_ord_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                      <% if int_ord_prod.order_prod_lot_stocks.present? %>
+                        <table class="w-100">
+                          <thead>
+                            <tr>
+                              <th> Cantidad </th>
+                              <th> Lote </th>
+                              <th> Laboratorio </th>
+                              <th> Vencimiento </th>
+                            </tr>
+                          </thead>
+                          </tbody>
+                            <% int_ord_prod.order_prod_lot_stocks.each do |iopls| %>
+                            <tr>
+
+                              <td>
+                                <%= iopls.quantity %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.code %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.laboratory.name %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.expiry_date.present? ? iopls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                              </td>
+                            </tr>
+
+                            <% end %>
+                          </tbody>
+                        </table>
+                        <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                          <table class="w-100">
+                            <tr>
+                              <th>Descripción solicitud</th>
+                              <th>Descripción proveedor</th>
+                            </tr>
+                            <tr>
+                              <td><%= int_ord_prod.provider_observation %></td>
+                              <td><%= int_ord_prod.applicant_observation %></td>
+                            </tr>
+                          </table>
+                        <%end%>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
               <% end %>
             </tbody>
           </table>
@@ -150,76 +193,140 @@
       </div> <!-- End comments tab pane -->
     </div> <!-- End Tab content-->
   </div>
-  <div class="card-footer text-right">
-    <% if @internal_order.provision? %>
-      <%= link_to internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
-    <% else %>
-      <%= link_to applicant_index_internal_orders_path, class: "btn btn-light mr-1" do %>Volver<% end %>
-    <% end %> 
-    <% if policy(@internal_order).edit? %>
-      <%= link_to edit_internal_order_path(@internal_order), :"data-turbolinks" => false,
-        class: "btn btn-warning mr-1" do %>
-        <%= fa_icon "pen" %>
-        Editar
-      <% end %>
-    <% end %>   
-    <% if policy(@internal_order).edit_applicant? %>
-      <%= link_to edit_applicant_internal_order_path(@internal_order), 
-        class: 'btn btn-warning btn-md mr-1' do %>
-        <%= fa_icon "pen" %>
-        Editar
-      <% end %>
+  <div class="card-footer d-flex justify-content-between">
+    <% if policy(@internal_order).nullify? %>
+      <span data-toggle="modal" data-target="#anular-confirm">
+        <button class="btn btn-danger btn-sm" data-toggle='tooltip' title="Anular solicitud" >
+          <%= fa_icon 'ban' %>
+        </button>
+      </span>
     <% end %>
-    <% if policy(@internal_order).send_applicant? %>
-      <%= link_to send_applicant_internal_order_path(@internal_order), 
-        class: 'btn btn-primary btn-md mr-1' do %>
-        <%= fa_icon "paper-plane" %>
-        Enviar
+    <div class="text-right w-100">
+      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path),  
+        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
       <% end %>
-    <% end %>
-    <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-      <a href="#return-confirm" data-id="<%= @internal_order.id %>" class="return-confirm btn btn-warning mr-1">
-        <%= fa_icon "redo" %>
-        Retornar
-      </a>
-    <% end %>
-    <% if policy(@internal_order).send_provider? %>
-      <%= link_to send_provider_internal_order_path(@internal_order), remote: true,
-        class: 'btn btn-primary btn-md' do %>
-        <%= fa_icon "paper-plane" %>
-        Enviar
+
+      <% if policy(@internal_order).edit_provider? %>
+        <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
+          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: "btn btn-warning mr-1" do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
+      <% end %> 
+      <% if policy(@internal_order).edit_applicant? %>
+        <%= link_to edit_applicant_internal_order_path(@internal_order),  
+          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
       <% end %>
-    <% end %>
-    <% if policy(@internal_order).receive_applicant? %>
-      <%= link_to receive_applicant_confirm_internal_order_path(@internal_order), remote: true,
-        class: 'btn btn-success btn-md' do %>
-        <%= fa_icon "check" %>
-        Recibir
+
+      <% if policy(@internal_order).send_applicant? %>
+        <%= link_to send_applicant_internal_order_path(@internal_order), 
+          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-primary btn-md mr-1' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar solicitud
+        <% end %>
       <% end %>
-    <% end %>
+      <% if policy(@internal_order).send_provider? %>
+        <%= link_to send_provider_internal_order_path(@internal_order),
+          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-primary btn-md' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar provisión
+        <% end %>
+      <% end %>
+
+      <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
+          <%= fa_icon "redo" %>
+          Retornar
+        </button>
+      <% end %>
+      
+      <% if policy(@internal_order).receive_applicant? %>
+        <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
+          <%= fa_icon "check" %>
+          Recibir
+        </button>
+      <% end %>
+    </div> <!-- fin botones right -->
   </div>
 </div>
 
-<% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
-  <div class="modal" id="return-confirm">
-    <div class="modal-dialog">
-      <div class="modal-content panel-warning">
-        <div class="modal-header panel-heading">
-          <a class="close" data-dismiss="modal">×</a>
-          <h3><%= fa_icon "redo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h3>
-        </div>
-        <div class="modal-body">
-          <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
-        </div>
-        <div class="modal-footer text-right">
-          <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-          <% if policy(@internal_order).return_applicant_status? %>
-            <%= link_to 'Confirmar', return_applicant_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% else %>
-            <%= link_to 'Confirmar', return_provider_status_internal_order_path, method: :get, :class => 'btn btn-warning' %>
-          <% end %>
+<% content_for :modal do %>
+  <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+    <div class="modal" id="return-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <% if policy(@internal_order).return_applicant_status? %>
+              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+            <% else %>
+              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  <% end %>
+  
+  <% if policy(@internal_order).receive_applicant? %>
+    <div class="modal fade" id="receive-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro que ha recibido el pedido?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Confirmar', receive_applicant_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <% if policy(@internal_order).nullify? %>
+    <div class="modal fade" id="anular-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro de anular el pedido?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Anular', nullify_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 <% end %>

@@ -32,7 +32,7 @@ body {
 
     &.toggled > #wrapper-2 > #sidebar-wrapper:hover{
         width: $sidebar-width-visible!important;
-        @media(min-width: 1200px) and (max-width: 1480px){
+        @media(min-width: 1200px) and (max-width: 1600px){
             width: $sidebar-width-visible-bml!important;
         }
         .list-group-item{
@@ -47,7 +47,7 @@ body {
     }
     &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
         width: calc(100% - #{$sidebar-width-visible})!important;
-        @media(min-width: 1200px) and (max-width: 1480px){
+        @media(min-width: 1200px) and (max-width: 1600px){
             width: calc(100% - #{$sidebar-width-visible-bml})!important;
         }
     }
@@ -55,7 +55,7 @@ body {
         width: 100%;
 
         height: calc(100vh - #{$navbar-height});
-        @media(min-width: 1200px) and (max-width: 1480px){
+        @media(min-width: 1200px) and (max-width: 1600px){
             height: calc(100vh - #{$navbar-height-bml});
         }
         #sidebar-wrapper{
@@ -65,7 +65,7 @@ body {
             overflow-y: auto;
             overflow-x: hidden;
             direction: rtl;
-            @media(min-width: 1200px) and (max-width: 1480px){
+            @media(min-width: 1200px) and (max-width: 1600px){
                 width: $sidebar-width-visible-bml;
             }
             /* width */
@@ -128,7 +128,7 @@ body {
         #page-content-wrapper{
             transition: width 0.35s ease-out;
             width: calc(100% - #{$sidebar-width-visible});
-            @media(min-width: 1200px) and (max-width: 1480px){
+            @media(min-width: 1200px) and (max-width: 1600px){
                 width: calc(100% - #{$sidebar-width-visible-bml});
             }
         }

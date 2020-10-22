@@ -1,0 +1,37 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Tu stock</th>
+        <th>Solicitar</th>
+        <% if policy(form.object).show_provider_fields? %>
+          <th>Entregar</th>
+          <th>Lote</th>
+        <% end %>
+        <th>Tu observación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
+      <%= form.simple_fields_for relation do |form_products| %>
+        <%= render "shared/orders/order_product_fields", f: form_products %>
+      <% end %>
+    </tbody>
+    
+  </table>
+
+  <%= link_to_add_association form, 
+    relation, 
+    class: 'btn btn-primary btn-sm',
+    partial: "shared/orders/order_product_fields", 
+    data: {
+      "association-insertion-node" => "tbody#order-product-cocoon-container",
+      "association-insertion-method" => "append"} do %>
+    <%= fa_icon "plus" %>
+    Agregar insumo
+  <% end %>
+
+</div>

@@ -65,6 +65,27 @@ class StocksController < ApplicationController
     end
   end
 
+  def find_lots   
+    
+    @lot_stocks = LotStock.joins(:stock)
+      .joins(:product)
+      .where("stocks.sector_id = ?", current_user.sector.id)
+      .where("products.code like ?", params[:product_code])
+      .where("lot_stocks.quantity > ?", 0)
+
+    respond_to do |format|
+      format.json { render json: @lot_stocks.to_json(
+        :include => { 
+          :lot => {
+            :only => [:code, :expiry_date, :status], 
+            :include => {
+              :laboratory => {:only => [:name]}
+            } 
+          }
+        }), status: :ok }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_stock

@@ -1,12 +1,24 @@
 Rails.application.routes.draw do
+
+  resources :receipts do
+    member do
+      get "delete"
+    end
+  end
+  
+  resources :stocks do
+    collection do
+      get "find_lots/(:id)",
+        to: 'stocks#find_lots',
+        as: 'find_lots'
+    end
+  end
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all
   match '/406' => 'errors#not_acceptable', :via => :all
   match '/422' => 'errors#unprocessable_entity', :via => :all
   match '/500' => 'errors#internal_server_error', :via => :all
-
-
-  resources :stocks
+  
   # Lotes
   resources :lots do
     member do
@@ -28,7 +40,7 @@ Rails.application.routes.draw do
     collection do
       get "trash_index"
       get "search_by_code"
-      get "search_by_name"
+      get "search_by_name"      
     end
   end
 
@@ -158,24 +170,28 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :internal_orders do
+  resources :internal_orders, only: [:show, :destroy] do
     member do
       get "delete"
-      get "restore"; get "restore_confirm"
       get "send_provider"
       get "send_applicant"
       get "return_provider_status"
       get "return_applicant_status"
-      get "receive_applicant"; get "receive_applicant_confirm"
+      get "receive_applicant"
       get "edit_applicant"
-      get "nullify_confirm"
-      patch "nullify"
+      get "edit_provider"
+      get "nullify"
+      patch "update_applicant"
+      patch "update_provider"
     end
     collection do
       get "new_applicant"
       get "new_provider"
       get "applicant_index"
+      get "provider_index"
       get "statistics"
+      post "create_applicant"
+      post "create_provider"
     end
   end
 
@@ -193,24 +209,29 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :external_orders do
+  resources :external_orders, only: [:show, :destroy] do
     member do
       get "delete"
       get "send_provider"
       get "send_applicant"
-      get "return_status"
-      get "accept_provider"; get "accept_provider_confirm"
-      get "receive_order"; get "receive_order_confirm"
-      get "edit_receipt"
+      get "return_provider_status"
+      get "return_applicant_status"
+      get "accept_provider"
+      get "receive_applicant"
       get "edit_applicant"
-      get "nullify_confirm"
-      patch "nullify"
+      get "edit_provider"
+      get "nullify"
+      patch "update_applicant"
+      patch "update_provider"
     end
     collection do
-      get "new_receipt"
       get "new_applicant"
+      get "new_provider"
       get "applicant_index"
+      get "provider_index"
       get "statistics"
+      post "create_applicant"
+      post "create_provider"
     end
   end
 
@@ -289,7 +310,8 @@ Rails.application.routes.draw do
     get "by_status_current_sector_supply_lots"
     get "by_month_applicant_external_orders"
     get "by_month_provider_external_orders"
-    get "by_order_type_external_orders"
+    get "by_order_type_external_orders_my_orders"
+    get "by_order_type_external_orders_other_orders"
   end
 
   resources :reports, only: [:show, :index] do

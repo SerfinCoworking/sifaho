@@ -1,61 +1,16 @@
-<% if order.despacho? %>
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 text-center">
-      <label>
-        Estado:
-        <span class="badge badge-<%= ordering_status_label(order) %>">
-          <%= order.status.underscore.humanize %>
-        </span>
-      </label>
-      <div class="col-md-12">
-        <div class="progress" style="height: 5px;margin-bottom: -10px;">
-          <div class="progress-bar bg-<%= ordering_status_label(order) %> \
-          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
+<div class="w-60 m-auto">
+  <div class="custom-progress-bar">
+    <div class="progress-bar" id="progress-bar"></div>
+    <ul>
+      <% order.get_statuses.each do |status| %>
+        <li class="<%= order.set_status_class(status) %>">
+          <div class="indicator-circle"></div>
+          <%# Nos muestra el úlimo estado en que se encuentra la orden %>
+          <% if status.include?(order.status) %>
+            <div class="status-title badge"><%= status[0].humanize %></div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
   </div>
-<% elsif order.recibo?%>
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 text-center">
-      <label>
-        Estado:
-        <span class="badnge badnge-<%= ordering_status_label(order) %>">
-          <%= order.status.underscore.humanize %>
-        </span>
-      </label>
-      <div class="col-md-12">
-        <div class="progress" style="height: 5px;margin-bottom: -10px;">
-          <div class="progress-bar bg-<%= ordering_status_label(order) %> \
-          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-  </div>
-<% elsif order.solicitud_abastecimiento? %>
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 text-center">
-      <label>
-        Estado:
-        <span class="badge badge-<%= ordering_status_label(order) %>">
-          <%= order.status.underscore.humanize %>
-        </span>
-      </label>
-      <div class="col-md-12">
-        <div class="progress" style="height: 5px;margin-bottom: -10px;">
-          <div class="progress-bar bg-<%= ordering_status_label(order) %> \
-          align-left" role="progressbar" style="width:<%= ordering_percent_status(order) %>%" id="status-bar">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-  </div>
-<% end %>
+</div>

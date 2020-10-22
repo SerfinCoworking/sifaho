@@ -6,6 +6,7 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "SIFAHO App farmacia HSMA" %>">
     <%= favicon_link_tag 'sifaho-favicon.png' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
+    <%= tag :meta, name: :psj, action: action_name, controller: controller_name %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
     <%= yield(:head) %>
     <%= csrf_meta_tags %>
@@ -49,4 +50,7 @@
       </div>
     </div>
   </body>
+  <footer>
+    <%= yield(:modal) %>    
+  </footer>
 </html>

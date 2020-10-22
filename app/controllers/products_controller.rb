@@ -114,15 +114,28 @@ class ProductsController < ApplicationController
   end
 
   def search_by_name
-    @products = Product.order(:name).search_text(params[:term]).limit(15)
-    render json: @products.map{ |sup| { label: sup.name, id: sup.id, expiry: sup.needs_expiration,
-      unity: sup.unity, product_area: sup.product_area.name } }
+    @products = Product.order(:name).search_text(params[:term]).limit(8)
+    render json: @products.map{ |product| { 
+        label: product.name,
+        id: product.id,
+        code: product.code,
+        unity: product.unity,
+        stock: current_user.sector.stock_to(product.id)
+      } 
+    }
   end
 
-  def search_by_id
+  def search_by_code
     @products = Product.order(:id).with_code(params[:term]).limit(8)
-    render json: @products.map{ |sup| { label: sup.id.to_s+" "+sup.name, value: sup.id,
-      name: sup.name , expiry: sup.needs_expiration, unity: sup.unity, product_area: sup.product_area.name } }
+    render json: @products.map{ |product| { 
+      label: product.code, 
+      id: product.id,
+      name: product.name,
+      unity: product.unity,
+      stock: current_user.sector.stock_to(product.id)
+    } 
+  }
+  # product_area: product.product_area.name 
   end
 
   private

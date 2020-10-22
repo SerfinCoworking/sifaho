@@ -2,41 +2,57 @@ class ExternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
-  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2,
-    proveedor_aceptado: 3, provision_en_camino: 4, provision_entregada: 5, recibo_auditoria: 6,
-    recibo_realizado: 7, anulado: 8 }
+  # New enum
+  enum order_type: { provision: 0, solicitud: 1 }
+  enum status: { 
+    solicitud_auditoria: 0, 
+    solicitud_enviada: 1, 
+    proveedor_auditoria: 2, 
+    proveedor_aceptado: 3, 
+    provision_en_camino: 4, 
+    provision_entregada: 5,  
+    anulado: 6 
+  }
 
-  # Callbacks
-  before_validation :record_remit_code, on: :create
- 
+  # Old enum
+  # enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
+  # enum status: { 
+  #   solicitud_auditoria: 0, 
+  #   solicitud_enviada: 1, 
+  #   proveedor_auditoria: 2,
+  #   proveedor_aceptado: 3, 
+  #   provision_en_camino: 4, 
+  #   provision_entregada: 5, 
+  #   recibo_auditoria: 6,
+  #   recibo_realizado: 7, 
+  #   anulado: 8 }
+
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  belongs_to :audited_by, class_name: 'User', optional: true
-  belongs_to :accepted_by, class_name: 'User', optional: true
-  belongs_to :sent_by, class_name: 'User', optional: true
-  belongs_to :received_by, class_name: 'User', optional: true
-  belongs_to :created_by, class_name: 'User', optional: true
-  belongs_to :sent_request_by, class_name: 'User', optional: true
-  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :external_order_products, dependent: :destroy, inverse_of: 'external_order'
+  has_many :ext_ord_prod_lot_stocks, through: :external_order_products
+  has_many :lot_stocks, :through => :external_order_products
+  has_many :lots, :through => :lot_stocks
+  has_many :products, :through => :external_order_products
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
-  has_one :provider_establishment, :through => :provider_sector, :source => :establishment
-  has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
-  belongs_to :rejected_by, class_name: "User", optional: true
+  has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
+  has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
 
+  
   # Validaciones
-  validates_presence_of :applicant_sector, :provider_sector, :quantity_ord_supply_lots, :remit_code  
-  validates_associated :quantity_ord_supply_lots, :supplies, :sector_supply_lots
-  validates_uniqueness_of :remit_code, conditions: -> { with_deleted }
+  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
+  validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates_associated :external_order_products
+  validates_uniqueness_of :remit_code
 
-  accepts_nested_attributes_for :supplies, :sector_supply_lots
-  accepts_nested_attributes_for :quantity_ord_supply_lots,
-    reject_if: ->(qosl){ qosl['supply_id'].blank? },
+  # Atributos anidados
+  accepts_nested_attributes_for :external_order_products,
     :allow_destroy => true
+
+  # Callbacks
+  before_validation :record_remit_code, on: :create
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -90,7 +106,7 @@ class ExternalOrder < ApplicationRecord
       order("external_orders.order_type #{ direction }")
     when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
-      order("quantity_ord_supply_lots.count #{ direction }")
+      order("external_order_products.count #{ direction }")
     when /^solicitado_/
       # Ordenamiento por la fecha de recepción
       order("external_orders.requested_date #{ direction }") 
@@ -188,149 +204,86 @@ class ExternalOrder < ApplicationRecord
     where(provider_sector: a_sector)
   end
 
+  def is_provider?(a_user)
+    return self.provider_sector == a_user.sector
+  end
+
+  def is_applicant?(a_user)
+    return self.applicant_sector == a_user.sector
+  end
+
   def sum_to?(a_sector)
     return self.applicant_sector == a_sector
   end
 
-  def self.orders_to_sector(a_sector)
-    @despachos = self.despacho.provider(a_sector).or(self.despacho.applicant(a_sector))
-    @solicitud_abastecimientos = self.solicitud_abastecimiento.provider(a_sector).or(self.solicitud_abastecimiento.applicant(a_sector))
-    @recibos = self.recibo.applicant(a_sector)
-    @orders = @despachos.or(@solicitud_abastecimientos.or(@recibos))
+  def self.my_orders(a_sector)
+    @my_delivery = self.provision.where(provider_sector: a_sector )
+    @my_request = self.solicitud.where(applicant_sector: a_sector)
+    
+    return @my_delivery.or(@my_request)
+  end
+  
+  def self.othere_orders(a_sector)
+    @othere_delivery = self.provision.where(applicant_sector: a_sector)
+    @othere_request = self.solicitud.where(provider_sector: a_sector)
+    return @othere_delivery.or(@othere_request)
   end
 
-  def delivered_with_sector?(a_sector)
-    if self.provision_en_camino? || self.provision_entregada?
-      return self.applicant_sector == a_sector || self.provider_sector == a_sector
-    elsif self.recibo_realizado?
-      return self.applicant_sector == a_sector
+  # def delivered_with_sector?(a_sector)
+  #   if self.provision_en_camino? || self.provision_entregada?
+  #     return self.applicant_sector == a_sector || self.provider_sector == a_sector
+  #   elsif self.recibo_realizado?
+  #     return self.applicant_sector == a_sector
+  #   end
+  # end
+
+  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
+  def send_order_by(a_user)
+    self.external_order_products.each do |iop|
+      iop.decrement_stock
     end
-  end
 
-  # Cambia estado a "en camino" y descuenta la cantidad a los insumos
-  def send_order(a_user)
-    if self.proveedor_aceptado?
-      if self.quantity_ord_supply_lots.exists?
-        if self.validate_quantity_lots
-          self.quantity_ord_supply_lots.each do |qosl|
-            qosl.decrement
-          end
-        end
-      else
-        raise ArgumentError, 'No hay insumos solicitados en el pedido'
-      end # End check if quantity_ord_supply_lots exists
-      self.sent_by = a_user
-      self.sent_date = DateTime.now
-      self.provision_en_camino!
-    else
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end 
+    self.sent_date = DateTime.now
+    self.save!(validate: false)
+
+    self.create_notification(a_user, "envió")
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def accept_order(a_user)
-    if proveedor_auditoria?
-      if self.validate_quantity_lots
-        self.accepted_date = DateTime.now
-        self.accepted_by = a_user
-        self.proveedor_aceptado!
-      end
-    else
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+  def receive_order_by(a_user)
+    self.external_order_products.each do |iop|
+      iop.increment_lot_stock_to(self.applicant_sector)
     end
-  end
 
-  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
-  def receive_order(a_user)
-    if provision_en_camino?
-      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_user.sector)
-        end
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.provision_entregada!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End check if sector supply exists
-    else 
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end
-  end
-
-  # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
-  def receive_remit(a_user)
-    if self.recibo_auditoria?
-      if self.quantity_ord_supply_lots.where.not(lot_code: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_new_lot_to(a_user.sector)
-        end
-        self.sent_date = DateTime.now
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.recibo_realizado!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en el pedido'
-      end # End check if sector supply exists
-    else 
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
-    end
-  end
-
-  def send_request_of(a_user)
-    if self.solicitud_auditoria?
-      self.sent_request_by = a_user
-      self.solicitud_enviada!
-    else
-      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
-    end
+    self.date_received = DateTime.now
+    self.create_notification(a_user, "recibió")
+    self.status = "provision_entregada"
+    self.save!(validate: false)
   end
 
   # Nullify the order
   def nullify_by(a_user)
-    self.rejected_by = a_user
     self.anulado!
     self.create_notification(a_user, "Anuló")
   end
 
-  def return_status
-    if proveedor_aceptado?
-      self.proveedor_auditoria!
-    elsif provision_en_camino?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
-      end
-      self.proveedor_aceptado!
-    elsif solicitud_enviada?
+  # Método para retornar perdido a estado anterior
+  def return_applicant_status_by(a_user)
+    if solicitud_enviada?
+      self.create_notification(a_user, "retornó a un estado anterior")
       self.solicitud_auditoria!
     else
-      raise ArgumentError, 'No es posible retornar a un estado anterior'
+      raise ArgumentError, "No es posible retornar a un estado anterior"
     end
   end
 
-  # Método para validar las cantidades a entregar de los lotes en stock
-  def validate_quantity_lots
-    @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
-    if @qosl_with_ssl.present?
-      @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y verificando las cantidades.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    elsif @qosl_without_ssl.present?
-      @qosl_without_ssl.each do |qosl|
-        if qosl.delivered_quantity > 0
-          raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
-        end
-      end
+  def send_request_by(a_user)
+    if self.solicitud_auditoria?
+      self.solicitud_enviada!
+      self.create_notification(a_user, "envió")
     else
-      raise ArgumentError, 'No hay insumos en el pedido.'
-    end 
+      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
+    end
   end
 
   def create_notification(of_user, action_type)
@@ -349,15 +302,38 @@ class ExternalOrder < ApplicationRecord
     end
   end
 
+  def get_statuses
+    @statuses =self.class.statuses
+
+    if self.solicitud?
+      # si es anulado, devolvemos solo los 2 primeros estados y "anulado"
+      if self.anulado?
+        values = @statuses.except("proveedor_auditoria", "proveedor_aceptado", "provision_en_camino", "provision_entregada")
+      else
+        values = @statuses.except("anulado")
+      end
+    else
+      values = @statuses.except("solicitud_auditoria", "solicitud_enviada", "anulado")
+    end
+
+    return values
+  end
+
+  # status: ["key_name", 0], trae dos valores, el nombre del estado y su valor entero del enum definido
+  def set_status_class(status)
+    status_class = self.anulado? ? "anulado" : "active";
+    # obetenemos el valor del status del objeto. 
+    self_status_int = ExternalOrder.statuses[self.status]
+    return status[1] <= self_status_int ? status_class : ""
+  end
+
   private
 
   def record_remit_code
-    if self.despacho?
+    if self.provision?
       self.remit_code = self.provider_sector.name[0..3].upcase+'des'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    elsif self.solicitud_abastecimiento?
+    elsif self.solicitud?
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    elsif self.recibo?
-      self.remit_code= self.applicant_sector.name[0..3].upcase+'rec'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
 end

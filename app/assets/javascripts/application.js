@@ -129,18 +129,6 @@ $(document).on('turbolinks:load', function() {
     });
   }, 10000);
 
-  // Return confirmation modal
-  $('#return-confirm').on('show', function() {
-    var $submit = $(this).find('.btn-warning'),
-    href = $submit.attr('href');
-    $submit.attr('href', href.replace('pony', $(this).data('id')));
-  });
-
-  $('.return-confirm').click(function(e) {
-    e.preventDefault();
-    $('#return-confirm').data('id', $(this).data('id')).modal('show');
-  });
-
   $('#filterrific_with_professional_type_id').chosen({
     allow_single_deselect: true,
     no_results_text: 'No se encontró el resultado',
@@ -151,28 +139,6 @@ $(document).on('turbolinks:load', function() {
     allow_single_deselect: true,
     no_results_text: 'No se encontró el resultado',
     width: '200px'
-  });
-
-  // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
-  $('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date')
-  .datetimepicker({
-    format: 'MM/YY',
-    viewMode: 'months',
-    locale: 'es',
-    useCurrent: false,
-  });
-  
-  $('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
-    const inputDate = $(e.target).find('input.datetimepicker-input').first().val();
-    if(typeof inputDate !== 'undefined'){
-      const td = $(e.target).closest('td');
-      const expiryDateFormated = moment(inputDate, "MM/YY");
-      $(td).find('input.new-expiry-date-hidden').first().val(expiryDateFormated.endOf("month").format("YYYY-MM-DD"));
-    }
-  });
-  
-  $('.external_order_quantity_ord_supply_lots_expiry_date_fake .input-group.date input.datetimepicker-input').on('change', function(e){
-    $(e.target).parent().trigger('change.datetimepicker');
   });
 
   $('.search-lots').click(function (event) {

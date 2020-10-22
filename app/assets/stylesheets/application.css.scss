@@ -52,11 +52,13 @@
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
 @import 'treeview';
+@import "table_customized";
+@import "custom_progress_bar";
 @import 'errors';
 
 
 html {
-  @media(min-width: 1200px) and (max-width: 1480px){
+  @media(min-width: 1200px) and (max-width: 1600px){
     font-size: 12px;
   }
 }
@@ -107,12 +109,12 @@ td .form-group{
 .navbar{
   padding: 8px 16px 8px 3px;
   height: $navbar-height;
-  @media(min-width: 1200px) and (max-width: 1480px){
+  @media(min-width: 1200px) and (max-width: 1600px){
     height: $navbar-height-bml;
   }
   .brand-container{
     width: $sidebar-width-visible;
-    @media(min-width: 1200px) and (max-width: 1480px){
+    @media(min-width: 1200px) and (max-width: 1600px){
       width: $sidebar-width-visible-bml;
     }
     a.navbar-brand{
@@ -256,6 +258,41 @@ a {
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
 }
+
 .clickable{
   cursor: pointer;
+}
+
+.btn-progress{
+  width: 10rem;
+  position:relative;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  border: 1px solid #ced4da;
+  .bg-progress{
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    width: 100%;
+    z-index: 1;
+    transition: width .5s ease-out, background-color .5s ease-out;
+    &.complete-progress{
+      background-color: #28a745!important;
+    }
+    &.fail-progress{
+      background-color: #dc3545!important;
+    }
+  }
+  .btn{
+    border: none!important;
+    background-color: transparent!important; 
+    z-index: 10;
+    position: relative;
+    color: #000;
+    transition: color .5s ease-out; // color .5s .5s ease-out;
+    &.complete-progress, &.fail-progress{      
+      color: #e9ecef
+    }
+  }
 }

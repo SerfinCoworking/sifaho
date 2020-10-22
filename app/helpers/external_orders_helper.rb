@@ -7,16 +7,14 @@ module ExternalOrdersHelper
     elsif order.proveedor_aceptado?; return 'primary'
     elsif order.provision_en_camino?; return 'primary'
     elsif order.provision_entregada?; return 'success'
-    elsif order.recibo_auditoria?; return 'warning'
-    elsif order.recibo_realizado?; return 'success' 
     elsif order.anulado?; return 'danger'
     end
   end
 
   def ordering_percent_status(order)
-    if order.despacho?
+    if order.provision?
       self.ordering_despacho_percent_bar(order)
-    elsif order.solicitud_abastecimiento?
+    elsif order.solicitud?
       self.ordering_solicitud_percent_bar(order)
     elsif order.recibo?
       self.ordering_recibo_percent_bar(order)

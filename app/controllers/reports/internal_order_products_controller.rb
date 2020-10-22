@@ -25,6 +25,7 @@ class Reports::InternalOrderProductsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
+      format.xls
     end
   end
 
@@ -97,8 +98,8 @@ class Reports::InternalOrderProductsController < ApplicationController
       report.generate
     end
 
-    def movements_to_csv(movements)
-      CSV.generate(headers: true) do |csv|
+    def movements_to_csv(movements, options = {})
+      CSV.generate(header: true) do |csv|
         csv << ["Sector", "Cantidad", "Producto"]
         movements.each do |movement|
           csv << [

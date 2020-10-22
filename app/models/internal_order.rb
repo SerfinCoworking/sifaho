@@ -2,20 +2,22 @@ class InternalOrder < ApplicationRecord
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }
-
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, 
-    provision_entregada: 4, anulado: 5 }
+  provision_entregada: 4, anulado: 5 }
+
   
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
-  has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
-  has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
-  has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
+  has_many :internal_order_products, dependent: :destroy, inverse_of: 'internal_order'
+  has_many :int_ord_prod_lot_stocks, through: :internal_order_products  
+  has_many :lot_stocks, :through => :internal_order_products
+  has_many :lots, :through => :lot_stocks  
+  has_many :products, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
+  ###### DEPRECATED ######
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :audited_by, class_name: 'User', optional: true
   belongs_to :sent_by, class_name: 'User', optional: true
@@ -24,18 +26,21 @@ class InternalOrder < ApplicationRecord
   belongs_to :rejected_by, class_name: "User", optional: true
 
   # Validaciones
-  validates_presence_of :provider_sector, :applicant_sector, :requested_date, :remit_code
-  validates :quantity_ord_supply_lots, :presence => {:message => "Debe agregar almenos 1 insumo"}
-  validates_associated :quantity_ord_supply_lots, :sector_supply_lots
+  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
+  validates :internal_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates_associated :internal_order_products
   validates_uniqueness_of :remit_code
+  
 
   # Atributos anidados
-  accepts_nested_attributes_for :quantity_ord_supply_lots,
-    :reject_if => :all_blank,
+  accepts_nested_attributes_for :internal_order_products,
     :allow_destroy => true
-
+  
   # Callbacks
   before_validation :record_remit_code, on: :create
+
+  after_create :set_notification_on_create
+  after_update :set_notification_on_update
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -183,29 +188,9 @@ class InternalOrder < ApplicationRecord
   # Nullify the order
   def nullify_by(a_user)
     self.rejected_by = a_user
-    self.anulado!
+    self.status = "anulado"
+    self.save!(validate: false)
     self.create_notification(a_user, "anuló")
-  end
-
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    if self.provider_sector == a_user.sector
-      if self.quantity_ord_supply_lots.exists?
-        if self.validate_quantity_lots
-          self.quantity_ord_supply_lots.each do |qosl|
-            qosl.decrement
-          end
-        end
-      else
-        raise ArgumentError, 'No hay insumos solicitados en el pedido'
-      end # End check if quantity_ord_supply_lots exists
-      self.sent_date = DateTime.now
-      self.sent_by_id = a_user.id
-      self.provision_en_camino!
-      self.create_notification(a_user, "envió")
-    else
-      raise ArgumentError, 'Usted no pertenece al sector proveedor.'
-    end
   end
 
   def send_request_by(a_user)
@@ -218,16 +203,19 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Método para retornar perdido a estado anterior
+  # Método para retornar pedido a estado anterior
   def return_provider_status_by(a_user)
     if provision_en_camino?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
+      self.internal_order_products.each do |iop|
+        iop.increment_stock
       end
+  
       self.sent_by = nil
       self.sent_date = nil
+      self.status = "proveedor_auditoria"
+      self.save!(validate: false)
+
       self.create_notification(a_user, "retornó a un estado anterior")
-      self.proveedor_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
     end
@@ -245,46 +233,15 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
-    if self.provision_en_camino?
-      if self.quantity_ord_supply_lots.where.not(sector_supply_lot: nil).exists?
-        self.quantity_ord_supply_lots.each do |qosl|
-          qosl.increment_lot_to(a_user.sector)
-        end
-        self.date_received = DateTime.now
-        self.received_by = a_user
-        self.create_notification(a_user, "recibió")
-        self.provision_entregada!
-      else
-        raise ArgumentError, 'No hay insumos para recibir en la provisión.'
-      end # End check if sector supply exists
-    else
-      raise ArgumentError, 'La provisión aún no está en camino.'
+    self.internal_order_products.each do |iop|
+      iop.increment_lot_stock_to(self.applicant_sector)
     end
-  end
 
-  # Método para validar las cantidades a entregar de los lotes en stock
-  def validate_quantity_lots
-    @qosl_with_ssl = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    @qosl_without_ssl = self.quantity_ord_supply_lots.where(sector_supply_lot_id: nil) # Donde existe el lote
-    if @qosl_with_ssl.present?
-      @sect_lots = @qosl_with_ssl.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y verificando las cantidades.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    elsif @qosl_without_ssl.present?
-      @qosl_without_ssl.each do |qosl|
-        if qosl.delivered_quantity > 0
-          raise ArgumentError, 'No hay lote asignado para el insumo cód '+ qosl.supply_id.to_s 
-        end
-      end
-    else
-      raise ArgumentError, 'No hay insumos en el pedido.'
-    end 
+    self.date_received = DateTime.now
+    self.received_by = a_user
+    self.create_notification(a_user, "recibió")
+    self.status = "provision_entregada"
+    self.save!(validate: false)
   end
 
   def create_notification(of_user, action_type)
@@ -303,6 +260,44 @@ class InternalOrder < ApplicationRecord
     end
   end
 
+  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
+  def send_order_by(a_user)
+    self.internal_order_products.each do |iop|
+      iop.decrement_stock
+    end
+
+    self.sent_date = DateTime.now
+    self.sent_by_id = a_user.id
+    self.save!(validate: false)
+
+    self.create_notification(a_user, "envió")
+  end
+
+  def get_statuses
+    @statuses =self.class.statuses
+
+    if self.solicitud?
+      # si es anulado, devolvemos solo los 2 primeros estados y "anulado"
+      if self.anulado?
+        values = @statuses.except("proveedor_auditoria", "provision_en_camino", "provision_entregada")
+      else
+        values = @statuses.except("anulado")
+      end
+    else
+      values = @statuses.except("solicitud_auditoria", "solicitud_enviada", "anulado")
+    end
+
+    return values
+  end
+
+  # status: ["key_name", 0], trae dos valores, el nombre del estado y su valor entero del enum definido
+  def set_status_class(status)
+    status_class = self.anulado? ? "anulado" : "active";
+    # obetenemos el valor del status del objeto. 
+    self_status_int = InternalOrder.statuses[self.status]
+    return status[1] <= self_status_int ? status_class : ""
+  end
+
   private
 
   def record_remit_code
@@ -312,4 +307,13 @@ class InternalOrder < ApplicationRecord
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
     end
   end
+
+  # set created notification and create stock accordding with the internal order status
+  def set_notification_on_create
+    self.create_notification(self.audited_by, "creó")
+  end
+  
+  def set_notification_on_update
+    self.create_notification(self.audited_by, "auditó")
+  end  
 end

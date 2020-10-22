@@ -1,18 +1,19 @@
-class Product < ApplicationRecord  
-  acts_as_paranoid
+class Product < ApplicationRecord
   include PgSearch
   
   # Relations
-  belongs_to :unity, optional: true
-  belongs_to :area
+  # belongs_to :unity, optional: true
+  # belongs_to :area
+  has_many :stocks, dependent: :destroy
   
   # Validations
-  validates_presence_of :name, :code, :area
+  validates_presence_of :name, :code
+  # :area
   validates_uniqueness_of :code
 
   # Delegations
-  delegate :name, to: :area, prefix: true
-  delegate :name, to: :unity, prefix: true
+  # delegate :name, to: :area, prefix: true
+  # delegate :name, to: :unity, prefix: true
 
   # To filter records by controller params
   # Slice params "search_code, search_name, with_area_ids"
@@ -33,9 +34,6 @@ class Product < ApplicationRecord
 
   pg_search_scope :search_name,
     against: :name,
-    :associated_against => {
-      :supply_area => :name
-    },
     :using => {
       :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
     },
@@ -53,13 +51,17 @@ class Product < ApplicationRecord
       order("LOWER(products.name) #{ direction }")
     when /^unidad_/
       # Ordenamiento por la unidad
-      order("LOWER(unities.name) #{ direction }").joins(:unity)
+      # order("LOWER(unities.name) #{ direction }").joins(:unity)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
 
+  scope :with_code, lambda { |product_code|
+    where('products.code = ?', product_code)
+  }
+  
   scope :with_area_id, lambda { |an_id|
     where('products.supply_area_id = ?', an_id)
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_144941) do
+ActiveRecord::Schema.define(version: 2020_10_05_112729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -57,6 +57,10 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "parent_id"
+    t.bigint "parent_area_id"
+    t.bigint "first_area_id"
+    t.index ["first_area_id"], name: "index_areas_on_first_area_id"
+    t.index ["parent_area_id"], name: "index_areas_on_parent_area_id"
     t.index ["parent_id"], name: "index_areas_on_parent_id"
   end
 
@@ -162,6 +166,16 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.string "short_name"
   end
 
+  create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "external_order_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
+    t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
+  end
+
   create_table "external_order_baks", force: :cascade do |t|
     t.bigint "applicant_sector_id"
     t.bigint "provider_sector_id"
@@ -232,6 +246,20 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.index ["supply_id"], name: "index_external_order_product_reports_on_supply_id"
   end
 
+  create_table "external_order_products", force: :cascade do |t|
+    t.bigint "external_order_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
+    t.text "provider_observation"
+    t.text "applicant_observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
+    t.index ["external_order_id"], name: "index_external_order_products_on_external_order_id"
+    t.index ["product_id"], name: "index_external_order_products_on_product_id"
+  end
+
   create_table "external_order_template_supplies", force: :cascade do |t|
     t.bigint "external_order_template_id"
     t.bigint "supply_id"
@@ -290,6 +318,16 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
     t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
+  end
+
+  create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "internal_order_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_product_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_product_id"
+    t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
   end
 
   create_table "internal_order_baks", force: :cascade do |t|
@@ -361,6 +399,20 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
   end
 
+  create_table "internal_order_products", force: :cascade do |t|
+    t.bigint "internal_order_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
+    t.text "provider_observation"
+    t.text "applicant_observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
+    t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"
+    t.index ["product_id"], name: "index_internal_order_products_on_product_id"
+  end
+
   create_table "internal_order_template_supplies", force: :cascade do |t|
     t.bigint "internal_order_template_id"
     t.bigint "supply_id"
@@ -425,14 +477,25 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
   end
 
+  create_table "lot_stocks", force: :cascade do |t|
+    t.bigint "lot_id"
+    t.bigint "stock_id"
+    t.integer "quantity", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
+    t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
+  end
+
   create_table "lots", force: :cascade do |t|
     t.bigint "product_id"
     t.bigint "laboratory_id"
     t.string "code"
-    t.datetime "expiry_date"
+    t.date "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "status", default: 0
     t.index ["deleted_at"], name: "index_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_lots_on_laboratory_id"
     t.index ["product_id"], name: "index_lots_on_product_id"
@@ -586,9 +649,8 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "area_id"
-    t.datetime "deleted_at"
     t.index ["area_id"], name: "index_products_on_area_id"
-    t.index ["deleted_at"], name: "index_products_on_deleted_at"
+    t.index ["code"], name: "index_products_on_code", unique: true
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
 
@@ -659,6 +721,51 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.index ["supply_lot_id"], name: "index_quantity_ord_supply_lots_on_supply_lot_id"
   end
 
+  create_table "receipt_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "receipt_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receipt_id"], name: "index_receipt_movements_on_receipt_id"
+    t.index ["sector_id"], name: "index_receipt_movements_on_sector_id"
+    t.index ["user_id"], name: "index_receipt_movements_on_user_id"
+  end
+
+  create_table "receipt_products", force: :cascade do |t|
+    t.bigint "receipt_id"
+    t.bigint "lot_stock_id"
+    t.bigint "product_id"
+    t.bigint "laboratory_id"
+    t.integer "quantity"
+    t.string "lot_code"
+    t.date "expiry_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
+    t.index ["lot_stock_id"], name: "index_receipt_products_on_lot_stock_id"
+    t.index ["product_id"], name: "index_receipt_products_on_product_id"
+    t.index ["receipt_id"], name: "index_receipt_products_on_receipt_id"
+  end
+
+  create_table "receipts", force: :cascade do |t|
+    t.string "code"
+    t.bigint "provider_sector_id"
+    t.bigint "applicant_sector_id"
+    t.bigint "created_by_id"
+    t.bigint "received_by_id"
+    t.integer "status", default: 0
+    t.text "observation"
+    t.datetime "received_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_sector_id"], name: "index_receipts_on_applicant_sector_id"
+    t.index ["created_by_id"], name: "index_receipts_on_created_by_id"
+    t.index ["provider_sector_id"], name: "index_receipts_on_provider_sector_id"
+    t.index ["received_by_id"], name: "index_receipts_on_received_by_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "name", default: "Reporte"
     t.datetime "since_date"
@@ -694,10 +801,8 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.bigint "stock_id"
     t.index ["deleted_at"], name: "index_sector_supply_lots_on_deleted_at"
     t.index ["sector_id", "supply_lot_id"], name: "sector_supply_lot"
-    t.index ["stock_id"], name: "index_sector_supply_lots_on_stock_id"
   end
 
   create_table "sectors", force: :cascade do |t|
@@ -836,7 +941,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_144941) do
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"
-  add_foreign_key "sector_supply_lots", "stocks"
   add_foreign_key "sectors", "establishments"
   add_foreign_key "states", "countries"
   add_foreign_key "stocks", "products"

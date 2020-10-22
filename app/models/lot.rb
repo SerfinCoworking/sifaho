@@ -2,12 +2,28 @@ class Lot < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
+  enum status: { vigente: 0, por_vencer: 1, vencido: 2 }
+
+  #callback
+  after_validation :update_status
+
   # Relations
   belongs_to :product
   belongs_to :laboratory
+  has_many :lot_stocks
 
   # Validations
-  validates_presence_of :product, :laboratory, :code
+  # validates_presence_of :product, :laboratory, :code
+
+  validates :product, 
+    :uniqueness => { :scope => [:laboratory_id, :code],
+    unless: :expire?
+  }
+
+  validates :product,
+    :uniqueness => { :scope => [:laboratory_id, :code, :expiry_date], 
+    if: :expire?
+  }
 
   # Delegations
   delegate :name, :code, to: :product, prefix: true
@@ -83,4 +99,37 @@ class Lot < ApplicationRecord
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
+
+  scope :with_product_code, lambda { |a_product_code| 
+    joins(:product).where('products.code = ?', a_product_code)
+  }
+
+  scope :without_status, lambda { |a_status|
+    where.not('status = ?', a_status )
+  }  
+
+  def expire?
+    expiry_date.present?
+  end
+  
+  # Métodos privados #----------------------------------------------------------
+  private
+  
+  # Se actualiza el estado de expiración sin guardar
+  def update_status
+    unless self.vencido?
+      if self.expiry_date.present?
+        # If expired
+        if self.expiry_date <= DateTime.now
+          self.status = "vencido"
+          # If near_expiry
+        elsif expiry_date < DateTime.now + 3.month && expiry_date > DateTime.now
+          self.status = "por_vencer"
+          # If good
+        elsif expiry_date > DateTime.now
+          self.status = "vigente"
+        end
+      end
+    end
+  end
 end

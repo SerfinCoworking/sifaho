@@ -9,21 +9,31 @@
     </div>
     <ul class="nav nav-tabs card-header-tabs" id="title-chart">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#order-type">Total
-          <span class="badge badge-secondary"><%= @external_orders.count %></span>
+        <a class="nav-link active" data-toggle="tab" href="#order-origin">Origen
+          <span class="badge badge-secondary"><%= @external_orders_origin.count %></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#order-destination">Destino
+          <span class="badge badge-secondary"><%= @external_orders_destination.count %></span>
         </a>
       </li>
     </ul>
     <div class="d-flex align-items-center">
-      <%= link_to external_orders_path, class: 'btn btn-secondary btn-sm' do %>
+      <%= link_to provider_index_external_orders_path, class: 'btn btn-secondary btn-sm' do %>
         Ver más
       <% end %>
     </div>
   </div>
   <div class="panel-body">
     <div class="tab-content">
-      <div id="order-type" class="tab-pane fade show active">
-        <%= bar_chart charts_by_order_type_external_orders_path,
+      <div id="order-origin" class="tab-pane fade show active">
+        <%= bar_chart charts_by_order_type_external_orders_my_orders_path,
+          label: "Cantidad",
+          adapter: "highcharts" %>
+      </div>
+      <div id="order-destination" class="tab-pane fade show">
+        <%= bar_chart charts_by_order_type_external_orders_other_orders_path,
           label: "Cantidad",
           adapter: "highcharts" %>
       </div>
@@ -38,12 +48,12 @@
             </tr>
           </thead>
           <tbody>
-            <% @expired_supply_lots.each do |esl|%>
+            <% @expired_lot_stocks.each do |esl|%>
               <tr>
-                <td><%= esl.lot_code %></td>
-                <td class="ins-col-alert"><%= esl.supply_name %></td>
+                <td><%= esl.lot.code %></td>
+                <td class="ins-col-alert"><%= esl.product_name %></td>
                 <td><span class="label label-default"><%= esl.quantity %></span></td>
-                <td><%= esl.expiry_date.strftime("%d/%m/%y") %></td>
+                <td><%= esl.lot.expiry_date.strftime("%d/%m/%y") %></td>
               </tr>
             <% end %>
           </tbody>
@@ -65,12 +75,12 @@
             </tr>
           </thead>
           <tbody>
-            <% @near_expiry_supply_lots.each do |nesl|%>
+            <% @near_expiry_lots.each do |nesl|%>
               <tr>
-                <td><%= nesl.lot_code %></td>
-                <td><%= nesl.supply_name %></td>
+                <td><%= nesl.lot.code %></td>
+                <td><%= nesl.product_name %></td>
                 <td><span class="label label-default"><%= nesl.quantity %></span></td>
-                <td><%= nesl.expiry_date.present? ? nesl.expiry_date.strftime("%d/%m/%y") : "---" %></td>
+                <td><%= nesl.lot.expiry_date.present? ? nesl.lot.expiry_date.strftime("%d/%m/%y") : "---" %></td>
               </tr>
             <% end %>
           </tbody>

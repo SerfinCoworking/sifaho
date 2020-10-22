@@ -20,12 +20,12 @@
       <span class="caret"></span>
     </a>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
-      <% if policy(ExternalOrder).new_receipt? %>
-        <%= link_to new_receipt_external_orders_path, class: "dropdown-item" do %>
-          <%= fa_icon "plus" %>
-          Cargar por recibo
-        <% end %>
-      <% end %>
+      <%# if policy(ExternalOrder).new_receipt? %>
+        <%#= link_to new_receipt_external_orders_path, class: "dropdown-item" do %>
+          <%#= fa_icon "plus" %>
+          <!--Cargar por recibo-->
+        <%# end %>
+      <%# end %>
       <% if policy(InternalOrder).new_applicant? %>
         <%= link_to new_applicant_internal_orders_path, class: "dropdown-item" do %>
           <%= fa_icon "plus" %>
@@ -65,6 +65,20 @@
     <%= link_to group_by_supply_sector_supply_lots_path(format: 'pdf'), target: :_blank, class: 'nav-link' do %>
       <%= fa_icon "print" %>
       Imprimir
+    <% end %>
+  </li>
+
+  <li class="nav-item non-sel">
+    <%= link_to receipts_path, class: "nav-link #{ active_action_and_controller('index', 'receipts') }" do %>
+      <%= fa_icon "receipt" %>
+      Recibos
+    <% end %>
+  </li>
+  
+  <li class="nav-item non-sel">
+    <%= link_to new_receipt_path, class: "nav-link #{ active_action_and_controller('new', 'receipts') }" do %>
+      <%= fa_icon "receipt" %>
+      Cargar por recibo
     <% end %>
   </li>
 <% end %>
