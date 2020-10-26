@@ -249,7 +249,7 @@ td .form-group{
   }
 }
 
-.btn-progress{
+.btn-progress{  
   width: 10rem;
   position:relative;
   border-radius: 0.25rem;
@@ -281,4 +281,8 @@ td .form-group{
       color: #e9ecef
     }
   }
+}
+
+.btn .fas, .btn .fa, .btn svg{
+  pointer-events: none;
 }

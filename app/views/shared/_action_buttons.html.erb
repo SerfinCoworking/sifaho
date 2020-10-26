@@ -1,0 +1,44 @@
+<% if  defined?(object) and object.class.is_a?(Class) %>
+
+  <div class="d-flex justify-content-end">
+    <!-- Show -->
+    <% if defined?(show) and show %>
+      <% if policy(object).show?%>
+        <%= link_to polymorphic_path(object), 
+          class: 'btn btn-sm btn-secondary mr-1 ml-1', 
+          title: t("actions.tooltip.show"), 
+          data: { toggle: 'tooltip', placement: 'top' } do %>
+          
+          <%= fa_icon "eye" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <!-- Edit -->
+    <% if defined?(edit) and edit %>
+      <% if policy(object).edit? %>
+        <%= link_to edit_polymorphic_path(object),
+          class: 'btn btn-sm btn-warning mr-1 ml-1',
+          title: t("actions.tooltip.edit"),
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+
+          <%= fa_icon "pen" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <!-- Destroy -->
+    <% if defined?(destroy) and destroy %>
+      <% if policy(object).delete? %>
+        <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        data-target="#delete-item" 
+        data-title="<%= delete_title %>"
+        data-body="<%= delete_body %>"
+        data-href="<%= destroy_path %>">
+          <%= fa_icon "trash" %>
+        </button>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
