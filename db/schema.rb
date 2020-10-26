@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_152320) do
+ActiveRecord::Schema.define(version: 2020_10_23_134258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -459,11 +459,23 @@ ActiveRecord::Schema.define(version: 2020_10_20_152320) do
     t.index ["outpatient_prescription_product_id"], name: "unique_out_pres_prod_lot_stocks_on_out_pres_prod"
   end
 
+  create_table "outpatient_prescription_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "outpatient_prescription_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_id"], name: "unique_out_pres_on_out_pres_movements"
+    t.index ["sector_id"], name: "index_outpatient_prescription_movements_on_sector_id"
+    t.index ["user_id"], name: "index_outpatient_prescription_movements_on_user_id"
+  end
+
   create_table "outpatient_prescription_products", force: :cascade do |t|
     t.bigint "outpatient_prescription_id"
     t.bigint "product_id"
-    t.date "request_quantity"
-    t.date "delivery_quantity"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -474,17 +486,20 @@ ActiveRecord::Schema.define(version: 2020_10_20_152320) do
   create_table "outpatient_prescriptions", force: :cascade do |t|
     t.bigint "professional_id"
     t.bigint "patient_id"
+    t.bigint "provider_sector_id"
+    t.bigint "establishment_id"
     t.string "remit_code"
     t.text "observation"
-    t.date "date_received"
-    t.date "date_dispensed"
-    t.date "date_prescribed"
+    t.datetime "date_dispensed"
+    t.datetime "date_prescribed"
     t.date "expiry_date"
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_outpatient_prescriptions_on_establishment_id"
     t.index ["patient_id"], name: "index_outpatient_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_outpatient_prescriptions_on_professional_id"
+    t.index ["provider_sector_id"], name: "index_outpatient_prescriptions_on_provider_sector_id"
   end
 
   create_table "patient_phones", force: :cascade do |t|

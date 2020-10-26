@@ -1,0 +1,52 @@
+<tr id="outpatient_prescription_<%= outpatient_prescription.id %>">
+  <td><%= outpatient_prescription.remit_code %></th>
+  <td><%#= outpatient_prescription.order_type.humanize %></th>
+  <td class="pres-col-pro"><%= outpatient_prescription.professional.full_name %></td>
+  <td class="pres-col-pat"><%= outpatient_prescription.patient.full_info %></td>
+  <td>
+    <span class="badge badge-<%#= outpatient_prescription_status_label(outpatient_prescription) %>">
+      <%= outpatient_prescription.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%# if outpatient_prescription.ambulatoria? %>
+      <%= outpatient_prescription.outpatient_prescription_products.count %>
+    <%# else %>
+      <%#= outpatient_prescription.quantity_ord_supply_lots.sin_entregar.count %>
+    <%# end %>
+  </td>
+  <td>
+    <%= outpatient_prescription.movements.count %>
+  </td>
+  <td>
+    <% if outpatient_prescription.date_prescribed.present? %>
+      <%= outpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+    <% if outpatient_prescription.date_dispensed.present? %>
+      <td>
+      <%= outpatient_prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <td class="text-center">
+      ----
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    <%= render(
+            partial: 'shared/action_buttons',
+            locals:{ 
+                object: outpatient_prescription, 
+                show: true, 
+                edit: true, 
+                destroy: true,
+                delete_title: "Eliminar prescripción",
+                delete_body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.professional.full_name }?",
+                destroy_path: "/outpatient_prescriptions/#{outpatient_prescription.id}"
+            }
+        ) 
+    %>
+
+  </td>
+</tr>

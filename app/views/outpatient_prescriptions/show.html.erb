@@ -1,0 +1,209 @@
+<%= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo receta ambulatoria
+      </h5>
+      <!--span class="ml-2 badge badge-<%#= prescription_status_label(@outpatient_prescription) %>">
+        <%#= @outpatient_prescription.status.underscore.humanize %>
+      </span-->
+    </div>
+    <div>
+      <%= link_to prescriptions_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <!-- Professional profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to professional_path(@outpatient_prescription.professional), class: "link" do %>
+              <%= image_tag professional_avatar(@outpatient_prescription.professional, 83), class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Médico</h4>
+            <p>
+              <%= link_to professional_path(@outpatient_prescription.professional), class: "link" do %>
+                <%= @outpatient_prescription.professional_fullname %>
+              <% end %>
+            </p>
+            <p><strong>Matrícula: </strong><%= @outpatient_prescription.professional_enrollment %></p>
+          </div>
+        </div> 
+      </div><!-- End professional profile -->
+
+      <!-- Patient profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to patient_path(@outpatient_prescription.patient), class: "link" do %>
+              <%= image_tag patient_avatar(@outpatient_prescription.patient, 83, 102), class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Paciente</h4>
+            <p>
+              <%= link_to patient_path(@outpatient_prescription.patient), class: "link" do %>
+                <%= @outpatient_prescription.patient_fullname.titleize %>
+              <% end %>    
+            </p>
+            <p><strong>DNI: </strong><%= @outpatient_prescription.patient_dni %></p>
+            <p><strong>Edad: </strong><%= @outpatient_prescription.patient_age_string %></p>
+          </div>
+        </div>
+      </div> <!-- End Patient profile -->
+
+      <!-- Extra info -->
+      <div class='col-md-6 col-xs-6'>
+        <div class='row'>
+          <div class='col-md-3 col-xs-3'>    
+            <strong>Recetada:</strong><br>
+            <%= @outpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+          </div>
+          <div class='col-md-3 col-xs-3'>
+            <strong>Vencimiento:</strong><br>
+            <%= @outpatient_prescription.expiry_date.strftime("%d/%m/%Y") %>
+          </div>
+          <div class='col-md-3 col-xs-3'>
+            <strong>Código:</strong>
+            <%= @outpatient_prescription.remit_code %>
+          </div>
+        </div>
+        <hr>
+        <strong>Observaciones:</strong>
+        <%= @outpatient_prescription.observation.present? ? @outpatient_prescription.observation : 'Sin observaciones' %>
+      </div><!-- End extra info -->
+    </div>
+    <!-- Insumos a dispensar -->
+    <div class="card">
+      <table class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <th>Cód Ins</th>
+            <th>Insumo</th>
+            <th>Solicitado</th>
+            <th><%= @outpatient_prescription.dispensada? ? 'Entregado' : 'A entregar' %></th>
+            <th>Lote</th>
+            <th>Observaciones</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @outpatient_prescription.outpatient_prescription_products.each do |outpatient_prescription_product| %>
+            <tr>
+              <td>
+                <%= outpatient_prescription_product.product_code %>
+              </td>
+              <td>
+                <%= outpatient_prescription_product.product_name %>
+              </td>
+              <td>
+                <%= outpatient_prescription_product.request_quantity %> <%= outpatient_prescription_product.unity.pluralize(outpatient_prescription_product.request_quantity) %>
+              </td>
+              <td>
+                <%= outpatient_prescription_product.delivery_quantity %> <%= outpatient_prescription_product.unity.pluralize(outpatient_prescription_product.delivery_quantity) %>
+              </td>
+
+              <td>
+                <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= outpatient_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= outpatient_prescription_product.id %>">
+                  <%= outpatient_prescription_product.order_prod_lot_stocks.count %>
+                </button>
+              </td>
+              <td>
+                <% if outpatient_prescription_product.observation.present? %>
+                  <%= fa_icon "asterisk" %>
+                <% else %>
+                  ---
+                <% end %>
+              </td>              
+            </tr>
+            <tr>
+              <td colspan="7" class="p-0">
+                <div id="collapse-row-<%= outpatient_prescription_product.id %>" class="collapse in">
+                  <div class="p-3">
+                  <% if outpatient_prescription_product.order_prod_lot_stocks.present? %>
+                    <table class="w-100">
+                      <thead>
+                        <tr>
+                          <th> Cantidad </th>
+                          <th> Lote </th>
+                          <th> Laboratorio </th>
+                          <th> Vencimiento </th>
+                        </tr>
+                      </thead>
+                      </tbody>
+                        <% outpatient_prescription_product.order_prod_lot_stocks.each do |oppls| %>
+                        <tr>
+
+                          <td>
+                            <%= oppls.quantity %>
+                          </td>
+                          
+                          <td>
+                            <%= oppls.lot_stock.lot.code %>
+                          </td>
+                          
+                          <td>
+                            <%= oppls.lot_stock.lot.laboratory.name %>
+                          </td>
+                          
+                          <td>
+                            <%= oppls.lot_stock.lot.expiry_date.present? ? oppls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                          </td>
+                        </tr>
+
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <% if outpatient_prescription_product.observation.present? %>
+                      <table class="w-100">
+                        <tr>
+                          <th>Descripción</th>
+                        </tr>
+                        <tr>
+                          <td><%= outpatient_prescription_product.observation %></td>
+                        </tr>
+                      </table>
+                    <%end%>
+                    <% else %>
+                        No tiene lotes asignados
+                    <% end %>
+                  </div>
+                </div>
+              </td>
+            </tr> <%# fin Listado de lotes y descripciones %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', prescriptions_path, class: "btn btn-light mr-1" %>
+    <%= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+      <%= fa_icon "print" %>
+      Imprimir
+    <% end %>
+    <% if policy(@outpatient_prescription).return_dispensation? %>
+      <%#= link_to confirm_return_ambulatory_prescription_path(@outpatient_prescription), remote: true, class: 'btn btn-warning mr-1' do %>
+        <%= fa_icon 'redo' %>
+        Retornar dispensación
+      <%# end %>
+    <% end %>
+    <% if policy(@outpatient_prescription).edit? %>
+      <%= link_to edit_outpatient_prescription_path(@outpatient_prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
+</div>

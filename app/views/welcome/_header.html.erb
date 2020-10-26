@@ -78,14 +78,6 @@
             <span> Plantillas </span>
           </div>
         <% end %>
-        <% if policy(InternalOrder).new_report? %>
-          <%= link_to new_report_internal_orders_path, class: "dropdown-item d-flex justify-content-between aling-items-center" do %>
-            <div>
-              <span class="mr-1"> <%= fa_icon "chart-line" %> </span>
-              <span> Reporte </span>
-            </div>
-          <% end %>
-        <% end %>
       </div>
     </li>
     <li class="nav-item dropdown">
