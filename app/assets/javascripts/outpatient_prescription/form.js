@@ -29,7 +29,8 @@ $(document).on('turbolinks:load', function(e){
     firstDay: 1,
     isRTL: false,
     showMonthAfterYear: false,
-    yearSuffix: ''
+    yearSuffix: '',
+    maxDate: moment().format("DD/MM/YYYY")
   });
 
   $('.date-prescribed').on('change', function(e) {
