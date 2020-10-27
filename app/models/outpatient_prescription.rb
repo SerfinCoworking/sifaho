@@ -137,78 +137,31 @@ class OutpatientPrescription < ApplicationRecord
   end
 
   # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
-  def dispense_by(a_user_id)
-    if self.pendiente?
-      if self.quantity_ord_supply_lots.exists?
-        if self.validate_quantity_lots
-          self.quantity_ord_supply_lots.each do |qosl|
-            qosl.decrement
-          end
-        end
-      else
-        raise ArgumentError, 'No hay insumos solicitados la prescripción'
-      end # End check if quantity_ord_supply_lots exists
-      self.dispensed_at = DateTime.now
-      self.dispensed_by_id = a_user_id
-      self.dispensada!
-    else
-      raise ArgumentError, 'La prescripción debe estar antes en pendiente.'
+  def dispense_by(a_user)
+    self.outpatient_prescription_products.each do |iop|
+      iop.decrement_stock
     end
+
+    self.date_dispensed = DateTime.now
+    self.save!(validate: false)
+
+    self.create_notification(a_user, "dispensó")
   end
 
-  # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
-  def dispense_cronic_by(a_user)
-    if self.pendiente? || self.dispensada_parcial?
-      if self.times_dispensed < self.times_dispensation
-        if self.quantity_ord_supply_lots.sin_entregar.exists?
-          if self.validate_undelivered_quantity_lots(a_user.sector)
-            cp = CronicDispensation.create(prescription: self)
-            self.quantity_ord_supply_lots.sin_entregar.each do |qosl|
-              qosl.decrement_to_cronic(cp)
-            end
-          end
-        else
-          raise ArgumentError, 'No hay insumos sin entregar en la prescripción'
-        end # End check if quantity_ord_supply_lots exists
-        self.times_dispensed += 1
-        if self.times_dispensed == self.times_dispensation; self.dispensada!;else; self.dispensada_parcial!; end
-        self.dispensed_at = DateTime.now
-        self.dispensed_by = a_user
-        self.save
-      else
-        raise ArgumentError, 'La receta ya se dispensó '+self.times_dispensed.to_s+' veces'
-      end
-    else
-      raise ArgumentError, 'La prescripción debe está '+self.status
-    end
-  end
-
-  # Return the last cronic dispensation
-  def return_cronic_dispensation
-    if self.dispensada_parcial? || self.dispensada?
-      # Iterate through the supplies of the last dispensation
-      self.cronic_dispensations.newest_first.first.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment # Return delivered quantity to stock
-      end
-      self.cronic_dispensations.newest_first.first.destroy # Destroy the last dispensation
-      self.times_dispensed -= 1 # Rest one dispensation to counter
-      self.dispensada_parcial!
-    elsif self.dispensada_parcial? && self.times_dispensed == 1
-      self.auditoria!
-    else
-      raise ArgumentError, 'No es posible retornar a un estado anterior'
-    end
-  end
-
-  def return_ambulatory_dispensation
+  # Método para retornar pedido a estado anterior
+  def return_dispensation(a_user)
     if self.dispensada?
-      self.quantity_ord_supply_lots.each do |qosl|
-        qosl.increment
-        qosl.sin_entregar!
+      self.outpatient_prescription_products.each do |opp|
+        opp.increment_stock
       end
-      self.pendiente!
+
+      self.date_dispensed = nil
+      self.status = "pendiente"
+      self.save!(validate: false)
+
+      self.create_notification(a_user, "retornó a un estado anterior")
     else
-      raise ArgumentError, 'No es posible retornar a un estado anterior'
+      raise ArgumentError, "No es posible retornar a un estado anterior"
     end
   end
 
@@ -258,44 +211,6 @@ class OutpatientPrescription < ApplicationRecord
       ['Fecha dispensada (asc)', 'dispensada_asc'],
       ['Cantidad', 'cantidad_asc']
     ]
-  end
-
-  # Método para validar las cantidades a entregar de los lotes en stock
-  def validate_quantity_lots
-    @lots = self.quantity_ord_supply_lots.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    if @lots.present?
-      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y se verifica que las cantidades a dispensar no superen las que hay en stock.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    else
-      raise ArgumentError, 'No hay lotes asignados.'
-    end
-  end
-
-  def validate_undelivered_quantity_lots(sector)
-    @lots = self.quantity_ord_supply_lots.sin_entregar.where.not(sector_supply_lot_id: nil) # Donde existe el lote
-    if @lots.present?
-      @sect_lots = @lots.select('sector_supply_lot_id, delivered_quantity').group_by(&:sector_supply_lot_id) # Agrupado por lote
-      # Se itera el hash por cada lote sumando y se verifica que las cantidades a dispensar no superen las que hay en stock.
-      @sect_lots.each do |key, values|
-        @sum_quantities = values.inject(0) { |sum, lot| sum += lot[:delivered_quantity]}
-        @sector_lot = SectorSupplyLot.find(key)
-        if @sector_lot.sector != sector
-          raise ArgumentError, 'El lote '+@sector_lot.lot_code+' no pertenece a tu sector.'
-        end
-        if @sector_lot.quantity < @sum_quantities
-          raise ArgumentError, 'Stock insuficiente del lote '+@sector_lot.lot_code+' insumo: '+@sector_lot.supply_name
-        end
-      end
-    else
-      raise ArgumentError, 'No hay lotes asignados.'
-    end
   end
 
   def create_notification(of_user, action_type)

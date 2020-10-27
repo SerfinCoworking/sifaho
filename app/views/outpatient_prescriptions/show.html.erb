@@ -7,12 +7,9 @@
       <h5 class="card-title mb-0 ml-2">
         Viendo receta ambulatoria
       </h5>
-      <!--span class="ml-2 badge badge-<%#= prescription_status_label(@outpatient_prescription) %>">
-        <%#= @outpatient_prescription.status.underscore.humanize %>
-      </span-->
     </div>
     <div>
-      <%= link_to prescriptions_path, class: 'btn',
+      <%= link_to outpatient_prescriptions_path, class: 'btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>
       <% end %>
@@ -187,23 +184,56 @@
     </div>
   </div>
   <div class="card-footer text-right">
-    <%= link_to 'Volver', prescriptions_path, class: "btn btn-light mr-1" %>
-    <%= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
-      <%= fa_icon "print" %>
-      Imprimir
-    <% end %>
+    <%= link_to 'Volver', outpatient_prescriptions_path, class: "btn btn-light mr-1" %>
+    <%#= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+      <%#= fa_icon "print" %>
+      <%# Imprimir %>
+    <%# end %>
     <% if policy(@outpatient_prescription).return_dispensation? %>
-      <%#= link_to confirm_return_ambulatory_prescription_path(@outpatient_prescription), remote: true, class: 'btn btn-warning mr-1' do %>
-        <%= fa_icon 'redo' %>
-        Retornar dispensación
-      <%# end %>
+      <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">
+        <%= fa_icon "redo" %>
+        Retornar
+      </button>
     <% end %>
     <% if policy(@outpatient_prescription).edit? %>
       <%= link_to edit_outpatient_prescription_path(@outpatient_prescription), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
+        class: "btn btn-warning mr-1" do %>
         <%= fa_icon "pen" %>
         Editar
       <% end %>
     <% end %>
+    
+    <% if policy(@outpatient_prescription).dispense? %>
+      <%= link_to dispense_outpatient_prescription_path(@outpatient_prescription), :"data-turbolinks" => false,
+        class: "btn btn-primary" do %>
+        <%= fa_icon "paper-plane" %>
+        Dispensar
+      <% end %>
+    <% end %>
   </div>
 </div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(@outpatient_prescription).return_dispensation? %>
+    <div class="modal" id="return-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = OutpatientPrescription.statuses.key(@outpatient_prescription.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Seguro que desea retornar la receta ambulatoria actual a <%= prev_status %>?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Confirmar', return_dispensation_outpatient_prescription_path(@outpatient_prescription), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

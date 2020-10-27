@@ -257,19 +257,10 @@ Rails.application.routes.draw do
   end
 
   resources :outpatient_prescriptions do
-    # member do
-    #   get 'delete'
-    #   get 'restore'; get 'restore_confirm'
-    #   get 'confirm_return_ambulatory'
-    #   patch 'return_ambulatory_dispensation'
-    #   get 'confirm_return_cronic'
-    #   patch 'return_cronic_dispensation'
-    # end
-    #   collection do
-    #   get 'new_cronic'
-    #   get 'get_by_patient_id'
-    #   get 'get_cronic_prescriptions'
-    # end
+    member do
+      get 'return_dispensation'
+      get 'dispense'
+    end
   end
   
   resources :prescriptions do

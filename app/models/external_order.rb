@@ -247,7 +247,7 @@ class ExternalOrder < ApplicationRecord
     self.create_notification(a_user, "Anuló")
   end
 
-  # Método para retornar perdido a estado anterior
+  # Método para retornar pedido a estado anterior
   def return_applicant_status_by(a_user)
     if solicitud_enviada?
       self.create_notification(a_user, "retornó a un estado anterior")

@@ -13,8 +13,7 @@ class OutpatientPrescriptionPolicy < ApplicationPolicy
 
   def create?
     new?
-  end
-  
+  end  
   
   def edit?
     if record.pendiente?
@@ -23,6 +22,10 @@ class OutpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def update?
+    edit?
+  end
+  
+  def dispense?
     edit?
   end
   

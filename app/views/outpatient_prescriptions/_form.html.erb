@@ -17,7 +17,6 @@
       <%= f.error_notification %>
       <div class='row'>
         <div class="col-md-6 col-sm-12">
-          <%= f.input :order_type, :as => :hidden, :input_html => { value: 'ambulatoria' } %>
           <%= f.label :professional_id do %>
             Médico
             <%# if f.object.cronic_dispensations.count == 0 %>
@@ -111,20 +110,7 @@
               <div class="p-2" id="expiry-date">
                 <%= f.object.expiry_date.strftime("%d/%m/%Y") unless f.object.new_record? %>
               </div>
-
             </div>
-              <%#= f.input :expiry_date, label: 'Fecha vencimiento',
-                as: :string,
-                :placeholder => "Seleccionar fecha",
-                input_html: {
-                  tabindex: "-1",
-                  class: "form-control flex-fill",
-                  required: true,
-                  autocomplete: 'off',
-                  value: "#{f.object.expiry_date unless f.object.new_record? || f.object.expiry_date.present?}"
-                },
-                html5: false 
-              %>
           </div>
           <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
         </div>

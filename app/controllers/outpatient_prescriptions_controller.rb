@@ -1,6 +1,5 @@
 class OutpatientPrescriptionsController < ApplicationController
-  before_action :set_outpatient_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete,
-    :return_cronic_dispensation, :confirm_return_cronic, :return_ambulatory_dispensation, :confirm_return_ambulatory ]
+  before_action :set_outpatient_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_dispensation ]
 
   # GET /outpatient_prescriptions
   # GET /outpatient_prescriptions.json
@@ -60,7 +59,7 @@ class OutpatientPrescriptionsController < ApplicationController
       begin
         @outpatient_prescription.save
 
-        if(dispensing?); @outpatient_prescription.dispense_by(current_user.id); end
+        if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
 
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = dispensing? ? "creó y dispensó" : "creó"
@@ -124,42 +123,32 @@ class OutpatientPrescriptionsController < ApplicationController
     end
   end
 
-  # GET /prescriptions/1/dispense
-  # def dispense
-  #   authorize @outpatient_prescription
-  #   respond_to do |format|
-  #     begin
-  #       @outpatient_prescription.dispense_by(current_user.id)
+  # GET /outpatient_prescriptions/1/dispense
+  def dispense
 
-  #     rescue ArgumentError => e
-  #       flash.now[:error] = e.message
-  #       format.js
-  #     else
-  #       if @outpatient_prescription.save!
-  #         flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."
-  #         format.js
-  #       else
-  #         flash.now[:error] = "La receta no se ha podido dispensar."
-  #         format.js
-  #       end
-  #     end
-  #   end
-  # end
+    authorize @outpatient_prescription
+    @outpatient_prescription.status= 'dispensada'
+    @outpatient_prescription.dispense_by(current_user)
+    respond_to do |format|
+      flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."
+      format.html { redirect_to @internal_order }
+    end
+  end
 
 
-  # def return_ambulatory_dispensation
-  #   authorize @outpatient_prescription
-  #   respond_to do |format|
-  #     begin
-  #       @outpatient_prescription.return_ambulatory_dispensation
-  #     rescue ArgumentError => e
-  #       flash[:alert] = e.message
-  #     else
-  #       flash[:notice] = 'La receta se ha retornado a '+@outpatient_prescription.status+'.'
-  #     end
-  #     format.html { redirect_to @outpatient_prescription }
-  #   end
-  # end
+  def return_dispensation
+    authorize @outpatient_prescription
+    respond_to do |format|
+      begin
+        @outpatient_prescription.return_dispensation(current_user)
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      else
+        flash[:notice] = 'La receta se ha retornado a '+@outpatient_prescription.status+'.'
+      end
+      format.html { redirect_to @outpatient_prescription }
+    end
+  end
 
   def get_by_patient_id
     @outpatient_prescriptions = Prescription.with_patient_id(params[:term]).order(created_at: :desc).limit(10)
@@ -239,25 +228,16 @@ class OutpatientPrescriptionsController < ApplicationController
       params.require(:outpatient_prescription).permit(
         :professional_id,
         :patient_id,
-        :observation,
-
-        # :date_received,
-
-        :status,
-        
+        :observation,        
         :date_prescribed,
         :expiry_date,
-        # :remit_code,
-        # :times_dispensation,
-        # :order_type,
         outpatient_prescription_products_attributes: [
           :id, 
           :product_id, 
           :lot_stock_id,
           :request_quantity,
           :delivery_quantity,
-          :applicant_observation,
-          :provider_observation, 
+          :observation,
           :_destroy,
           order_prod_lot_stocks_attributes: [
             :id,

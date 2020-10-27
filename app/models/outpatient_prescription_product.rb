@@ -45,40 +45,17 @@ class OutpatientPrescriptionProduct < ApplicationRecord
     return self.is_provision_dispensed? && (self.delivery_quantity.present? && self.delivery_quantity > 0)
   end
 
-  def is_provision?
-    return self.internal_order.order_type == 'provision'
-  end
-  
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.decrement(iopls.quantity)
+    self.order_prod_lot_stocks.each do |oppls|
+      oppls.lot_stock.decrement(oppls.quantity)
     end
   end
 
   # Incrementamos la cantidad de cada lot stock (orden)
   def increment_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.increment(iopls.quantity)
-    end
-  end
-
-  # Incrementamos la cantidad de lot stock (solicitante)
-  def increment_lot_stock_to(a_sector)
-
-    self.order_prod_lot_stocks.each do |iopls|
-
-      @stock = Stock.where(
-        sector_id: a_sector.id,
-        product_id: self.product_id
-      ).first_or_create
-
-      @lot_stock = LotStock.where(
-        lot_id: iopls.lot_stock.lot.id,
-        stock_id: @stock.id,
-      ).first_or_create
-
-      @lot_stock.increment(iopls.quantity)
+    self.order_prod_lot_stocks.each do |oppls|
+      oppls.lot_stock.increment(oppls.quantity)
     end
   end
 
@@ -86,8 +63,8 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   # Validacion: la cantidad no debe ser mayor o menor a la cantidad a entregar
   def lot_stock_sum_quantity
     total_quantity = 0
-    self.order_prod_lot_stocks.each do |iopls| 
-      total_quantity += iopls.quantity
+    self.order_prod_lot_stocks.each do |oppls| 
+      total_quantity += oppls.quantity
     end
     if self.delivery_quantity.present? && self.delivery_quantity < total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")
@@ -100,8 +77,8 @@ class OutpatientPrescriptionProduct < ApplicationRecord
 
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_on_outpatient_prescription
-    (self.outpatient_prescription.outpatient_prescription_products.uniq - [self]).each do |iop| 
-      if iop.product_id == self.product_id
+    (self.outpatient_prescription.outpatient_prescription_products.uniq - [self]).each do |opp| 
+      if opp.product_id == self.product_id
         errors.add(:uniqueness_product_on_outpatient_prescription, "Este producto ya se encuentra en la orden")      
       end
     end
@@ -118,6 +95,4 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   def get_order
     return self.outpatient_prescription
   end
-
-
 end

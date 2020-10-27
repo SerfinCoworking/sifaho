@@ -9,11 +9,7 @@
     </span>
   </td>
   <td>
-    <%# if outpatient_prescription.ambulatoria? %>
-      <%= outpatient_prescription.outpatient_prescription_products.count %>
-    <%# else %>
-      <%#= outpatient_prescription.quantity_ord_supply_lots.sin_entregar.count %>
-    <%# end %>
+    <%= outpatient_prescription.outpatient_prescription_products.count %>
   </td>
   <td>
     <%= outpatient_prescription.movements.count %>
