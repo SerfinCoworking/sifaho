@@ -40,7 +40,6 @@ class OutpatientPrescription < ApplicationRecord
       :sorted_by,
       :with_order_type,
       :date_prescribed_since,
-      :date_dispensed_since,
     ]
   )
 
@@ -86,9 +85,6 @@ class OutpatientPrescription < ApplicationRecord
     when /^recibida_/
       # Ordenamiento por la fecha de recepción
       order("outpatient_prescriptions.date_received #{ direction }")
-    when /^dispensada_/
-      # Ordenamiento por la fecha de dispensación
-      order("outpatient_prescriptions.date_dispensed #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -98,11 +94,6 @@ class OutpatientPrescription < ApplicationRecord
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
     where('outpatient_prescriptions.prescribed_date >= ?', reference_time)
-  }
-
-  # Prescripciones dispensadas desde una fecha
-  scope :date_dispensed_since, lambda { |reference_time|
-    where('outpatient_prescriptions.date_dispensed >= ?', reference_time)
   }
 
   scope :with_order_type, lambda { |a_order_type|
@@ -138,13 +129,15 @@ class OutpatientPrescription < ApplicationRecord
 
   # Cambia estado a "dispensada" y descuenta la cantidad a los lotes de insumos
   def dispense_by(a_user)
+    if self.expiry_date < Date.today
+      raise ArgumentError, "No es posible dispensar recetas vencidas."
+    end
+
     self.outpatient_prescription_products.each do |iop|
       iop.decrement_stock
     end
 
-    self.date_dispensed = DateTime.now
     self.save!(validate: false)
-
     self.create_notification(a_user, "dispensó")
   end
 
@@ -155,7 +148,6 @@ class OutpatientPrescription < ApplicationRecord
         opp.increment_stock
       end
 
-      self.date_dispensed = nil
       self.status = "pendiente"
       self.save!(validate: false)
 

@@ -20,15 +20,6 @@
     <% else %>
       ------
     <% end %>
-  </td>
-    <% if outpatient_prescription.date_dispensed.present? %>
-      <td>
-      <%= outpatient_prescription.date_dispensed.strftime("%d/%m/%y %H:%M") %>
-    <% else %>
-      <td class="text-center">
-      ----
-    <% end %>
-  </td>
   <td class="text-left actions-col">
     <%= render(
             partial: 'shared/action_buttons',

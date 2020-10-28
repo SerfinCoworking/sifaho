@@ -8,7 +8,6 @@ class CreateOutpatientPrescriptions < ActiveRecord::Migration[5.2]
       t.string :remit_code
       t.text :observation
 
-      t.datetime :date_dispensed
       t.datetime :date_prescribed
       t.date :expiry_date
 
