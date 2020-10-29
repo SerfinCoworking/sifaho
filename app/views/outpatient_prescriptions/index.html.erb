@@ -33,20 +33,8 @@
             ) %>
           </div>
           <div class="col-2">
-            <label>Tipo</label>
-            <%#= f.select(:with_order_type,
-              OutpatientPrescription.order_types.map{ |type| [type.first.humanize, type.second] },{:include_blank => 'Todos'},
-              { class: "selectpicker-md custom-select-pick show-tick", "data-width"=>"100%"}) %>
-          </div>
-          <div class="col-2">
               <label>Recetado desde</label>
               <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
-                class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
-                placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
-          </div>
-          <div class="col-2">
-              <label>Dispensado desde</label>
-              <%= f.text_field(:date_dispensed_since, autocomplete: 'off',
                 class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
                 placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
           </div>

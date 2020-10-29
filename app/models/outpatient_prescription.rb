@@ -12,8 +12,8 @@ class OutpatientPrescription < ApplicationRecord
   belongs_to :establishment
 
   has_many :outpatient_prescription_products, dependent: :destroy
-  has_many :lot_stocks, :through => :outpatient_prescription_products, dependent: :destroy
-  has_many :lots, :through => :lot_stocks
+  # has_many :lot_stocks, :through => :outpatient_prescription_products, dependent: :destroy
+  # has_many :lots, :through => :lot_stocks
 
   has_many :products,:through => :outpatient_prescription_products
   has_many :movements, class_name: "OutpatientPrescriptionMovement"
