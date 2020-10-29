@@ -1,0 +1,2 @@
+class ChronicDispensation < ApplicationRecord
+end

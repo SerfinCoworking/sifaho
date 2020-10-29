@@ -1,0 +1,2 @@
+class ChronPresProdLotStock < ApplicationRecord
+end

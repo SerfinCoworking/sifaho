@@ -1,0 +1,2 @@
+class ChronicPrescription < ApplicationRecord
+end

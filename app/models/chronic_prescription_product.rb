@@ -1,0 +1,2 @@
+class ChronicPrescriptionProduct < ApplicationRecord
+end
