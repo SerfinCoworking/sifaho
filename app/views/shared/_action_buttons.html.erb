@@ -29,7 +29,7 @@
 
     <!-- Destroy -->
     <% if defined?(destroy) and destroy %>
-      <% if policy(object).delete? %>
+      <% if policy(object).destroy? %>
         <button type="button" 
         class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
         title="<%= t("actions.tooltip.delete") %>"

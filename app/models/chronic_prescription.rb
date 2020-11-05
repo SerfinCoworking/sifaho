@@ -45,7 +45,7 @@ class ChronicPrescription < ApplicationRecord
     available_filters: [
       :search_by_professional,
       :search_by_patient,
-      :search_by_prduct,
+      :search_by_product,
       :sorted_by,
       :date_prescribed_since,
     ]
@@ -61,7 +61,7 @@ class ChronicPrescription < ApplicationRecord
   :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_by_prduct,
+  pg_search_scope :search_by_product,
   :associated_against => { products: [ :id, :name ] },
   :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
   :ignoring => :accents # Ignorar tildes.

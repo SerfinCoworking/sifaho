@@ -34,13 +34,9 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    unless record.dispensada?
+    if record.pendiente?
       user.has_any_role?(:admin, :farmaceutico)
     end
-  end
-
-  def delete?
-    destroy?
   end
 
   def nullify?
