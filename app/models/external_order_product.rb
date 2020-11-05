@@ -15,7 +15,7 @@ class ExternalOrderProduct < ApplicationRecord
   validates_presence_of :product_id
   validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_proveedor_aceptado_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
-  validate :uniqueness_product_on_internal_order
+  validate :uniqueness_product_on_external_order
   
   accepts_nested_attributes_for :product,
     :allow_destroy => true
@@ -24,10 +24,8 @@ class ExternalOrderProduct < ApplicationRecord
     :allow_destroy => true
 
   # Delegaciones
-  delegate :unity, to: :product
-  delegate :name, to: :product, prefix: :product
-  delegate :code, to: :product, prefix: :product
-  
+  delegate :code, :name, :unity_name, to: :product, prefix: :product
+
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
   
@@ -98,10 +96,10 @@ class ExternalOrderProduct < ApplicationRecord
   end
 
   # Validacion: evitar duplicidad de productos en una misma orden
-  def uniqueness_product_on_internal_order
-    (self.external_order.external_order_products.uniq - [self]).each do |iop| 
-      if iop.product_id == self.product_id
-        errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra en la orden")      
+  def uniqueness_product_on_external_order
+    (self.external_order.external_order_products.uniq - [self]).each do |eop|
+      if eop.product_id == self.product_id
+        errors.add(:uniqueness_product_on_external_order, "El producto código ya se encuentra en la orden")      
       end
     end
   end

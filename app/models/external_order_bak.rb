@@ -123,7 +123,7 @@ class ExternalOrderBak < ApplicationRecord
   }
 
   scope :without_order_type, lambda { |an_order_type|
-    where.not('external_orders.order_type = ?', an_order_type )
+    where.not('external_order_baks.order_type = ?', an_order_type )
   }
 
   scope :with_order_type, lambda { |a_order_type|

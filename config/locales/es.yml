@@ -74,6 +74,8 @@ es:
         expiry_date: "Fecha vencimiento"
       internal_order_product:
         delivery_quantity: "A entregar"
+      lot:
+        product: 'Producto'
 
       
 

@@ -2,8 +2,8 @@ class Product < ApplicationRecord
   include PgSearch
   
   # Relations
-  # belongs_to :unity, optional: true
-  # belongs_to :area
+  belongs_to :unity, optional: true
+  belongs_to :area
   has_many :stocks, dependent: :destroy
   
   # Validations
@@ -12,8 +12,8 @@ class Product < ApplicationRecord
   validates_uniqueness_of :code
 
   # Delegations
-  # delegate :name, to: :area, prefix: true
-  # delegate :name, to: :unity, prefix: true
+  delegate :name, to: :area, prefix: true
+  delegate :name, to: :unity, prefix: true
 
   # To filter records by controller params
   # Slice params "search_code, search_name, with_area_ids"

@@ -16,27 +16,27 @@ class ExternalOrder < ApplicationRecord
 
   # Old enum
   # enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
-  # enum status: { 
-  #   solicitud_auditoria: 0, 
-  #   solicitud_enviada: 1, 
+  # enum status: {
+  #   solicitud_auditoria: 0,
+  #   solicitud_enviada: 1,
   #   proveedor_auditoria: 2,
-  #   proveedor_aceptado: 3, 
+  #   proveedor_aceptado: 3,
   #   provision_en_camino: 4, 
-  #   provision_entregada: 5, 
+  #   provision_entregada: 5,
   #   recibo_auditoria: 6,
-  #   recibo_realizado: 7, 
+  #   recibo_realizado: 7,
   #   anulado: 8 }
 
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :external_order_products, dependent: :destroy, inverse_of: 'external_order'
-  has_many :ext_ord_prod_lot_stocks, through: :external_order_products
+  has_many :ext_ord_prod_lot_stocks, through: :external_order_products, inverse_of: 'external_order'
   has_many :lot_stocks, :through => :external_order_products
   has_many :lots, :through => :lot_stocks
   has_many :products, :through => :external_order_products
   has_many :movements, class_name: "ExternalOrderMovement"
-  has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
+  has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
 
