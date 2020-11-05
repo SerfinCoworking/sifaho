@@ -30,6 +30,22 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 es:
+  action: Acción
+  actions:
+    add: Agregar %{model}
+    new: Nuevo %{model}
+    create: Crear %{model}
+    show: "Viendo %{model}"
+    edit: Editar %{model}
+    save: Guardar
+    back: Volver
+    trash: Enviar a la papelera
+    confirm: Confirmar
+    tooltip:
+      show: Ver
+      edit: Editar
+      delete: Eliminar
+      filter: Filtrar
   activerecord:
     models:
       external_order: "Pedido abastecimiento"

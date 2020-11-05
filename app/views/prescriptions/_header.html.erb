@@ -5,14 +5,28 @@
       Recetas
     <% end %>
   </li>
+  
   <li class="nav-item non-sel">
-    <%= link_to new_outpatient_prescription_path, class: "nav-link #{ active_action('new') }" do %>
+    <%= link_to outpatient_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'outpation_prescriptions') }" do %>
+      <%= fa_icon "signature" %>
+      Ambulatorias
+    <% end %>
+  </li>
+  
+  <li class="nav-item non-sel">
+    <%= link_to chronic_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'chronic_prescriptions') }" do %>
+      <%= fa_icon "signature" %>
+      Crónicas
+    <% end %>
+  </li>
+  <li class="nav-item non-sel">
+    <%= link_to new_outpatient_prescription_path, class: "nav-link #{ active_action_and_controller('new', 'outpation_prescriptions') }" do %>
       <%= fa_icon "plus" %>
       Nueva ambulatoria
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to new_cronic_prescriptions_path, class: "nav-link #{ active_action('new_cronic') }" do %>
+    <%= link_to new_chronic_prescription_path, class: "nav-link #{ active_action_and_controller('new', 'chronic_prescriptions') }" do %>
       <%= fa_icon "plus" %>
       Nueva crónica
     <% end %>

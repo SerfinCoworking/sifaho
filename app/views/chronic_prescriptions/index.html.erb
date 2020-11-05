@@ -1,6 +1,6 @@
 <%= render 'prescriptions/header' %>
 
-<% if @outpatient_prescriptions.present? %>
+<% if @chronic_prescriptions.present? %>
   <div class="card fixed-custom-card">
     <div class="card-header">
       <%= form_for_filterrific @filterrific do |f| %>
@@ -50,8 +50,8 @@
     </div>
     <div class="card-body fixed-panel-index">
       <%= render(
-        partial: 'outpatient_prescriptions/list',
-        locals: { outpatient_prescriptions: @outpatient_prescriptions }
+        partial: 'chronic_prescriptions/list',
+        locals: { chronic_prescriptions: @chronic_prescriptions }
       ) %>
     </div>
   </div>
