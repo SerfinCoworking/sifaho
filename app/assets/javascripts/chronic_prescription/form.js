@@ -46,6 +46,14 @@ $(document).on('turbolinks:load', function(e){
     const expiryDate = datePrescribed.add(duration, 'month');
     $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
     $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
+
+    /* actualiza todos los totales de dosis cargados por cada producto */
+    $("#original-order-product-cocoon-container tr").each((index, tr) => {
+      const reqByMonth = $(tr).find('.request-quantity').first().val();
+      $(tr).find("input.total-quantity-fake").first().val(duration * reqByMonth);
+      $(tr).find("input[type='hidden'].total-request-quantity").first().val(duration * reqByMonth);
+    });
+
   });
 
   // Función para autocompletar nombre y apellido del doctor
@@ -213,6 +221,15 @@ $(document).on('turbolinks:load', function(e){
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
+    });
+
+    /* actualizamos el total de dosis que el tratamiento requiere */
+    $(".request-quantity").on("change", function(e){
+      const treatmentDuration = $("input[name='duration-treatment']").val();
+      const tr = $(e.target).closest("tr");
+      const reqByMonth = $(e.target).val();
+      $(tr).find("input.total-quantity-fake").first().val(treatmentDuration * reqByMonth);
+      $(tr).find("input[type='hidden'].total-request-quantity").first().val(treatmentDuration * reqByMonth);
     });
   
   }// initEvents function

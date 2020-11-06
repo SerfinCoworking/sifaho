@@ -83,15 +83,23 @@
           min: '0', step:'any', :style => 'width: 100px',
         } 
       %>
-
       <%# if f.object.errors[:out_of_stock].any? %>
         <!--div class="invalid-feedback d-block"-->
           <%#= f.object.errors[:out_of_stock].first %>
         <!--/div-->
       <%# end %>
     </td>
-    
-   
+    <td>
+      <%= f.input :total_request_quantity_fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'total-quantity-fake input-sm',
+          size: 10,
+          placeholder: "Unidad",
+          value: "#{f.object.total_request_quantity.present? ?  f.object.total_request_quantity : 0}"
+        } 
+      %> 
+      <%= f.hidden_field :total_request_quantity, class: "total-request-quantity", value: "#{f.object.total_request_quantity.present? ? f.object.total_request_quantity : 0 }" %>
+    </td>
 
     <!-- Observaciones proveedor -->
     <td>
