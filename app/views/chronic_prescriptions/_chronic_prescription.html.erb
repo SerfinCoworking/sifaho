@@ -21,6 +21,13 @@
       ------
     <% end %>
   <td class="text-left actions-col">
+    <div class="d-flex align-items-center justify-content-center">
+    <%= link_to dispense_chronic_prescription_path(chronic_prescription),
+      class: 'btn btn-sm btn-primary mr-1 ml-1',
+      title: t("actions.tooltip.dispense"),
+      data: { toggle: 'tooltip', placement: 'top'} do %> 
+      <%= fa_icon "paper-plane"%>
+    <% end %>
     <%= render(
             partial: 'shared/action_buttons',
             locals:{ 
@@ -35,5 +42,6 @@
         ) 
     %>
 
+    </div>
   </td>
 </tr>

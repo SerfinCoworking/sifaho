@@ -7,29 +7,17 @@
         <th>Unidad</th>
         <!--th>Tu stock</th-->
         <!--th>Solicitar</th-->
-        <th>Entregar</th>
+        <th>Dosis</th>
         <th>Lote</th>
-        <th>Tu observación</th>
+        <th>observación</th>
         <th></th>
       </tr>
     </thead>
-    <tbody id="order-product-cocoon-container">
+    <tbody id="chronic-product-cocoon-container">
       <%= form.simple_fields_for relation do |form_products| %>
-        <%#= render "order_product_fields", f: form_products %>
       <% end %>
     </tbody>
     
   </table>
-
-  <%#= link_to_add_association form, 
-    relation, 
-    class: 'btn btn-primary btn-sm',
-    partial: "shared/orders/order_product_fields", 
-    data: {
-      "association-insertion-node" => "tbody#order-product-cocoon-container",
-      "association-insertion-method" => "append"} do %>
-    <%#= fa_icon "plus" %>
-    <!--Agregar insumo-->
-  <%# end %>
 
 </div>

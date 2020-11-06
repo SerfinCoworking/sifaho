@@ -119,7 +119,7 @@
         <div class="bg-progress bg-info"></div>
         <%= button_tag type: "button", 
           class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
-          "data-select-lot-url" => find_lots_stocks_path(f.object.get_order),
+          "data-select-lot-url" => find_lots_stocks_path,
           "data-template-fill-hidden" => fields do %>
           <% if f.object.lot_stocks.present? %>
             Seleccionados <%= f.object.lot_stocks.count %> 
@@ -142,14 +142,14 @@
 
     <!-- Observaciones proveedor -->
     <td>
-      <%= f.input :provider_observation, label: false, as: :text,
+      <%= f.input :observation, label: false, as: :text,
         :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
     </td>
 
 
   <td>
     <!-- Botón quitar -->
-    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-sm btn-warning',
       title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "minus" %>
     <% end %>

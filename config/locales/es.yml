@@ -46,6 +46,7 @@ es:
       edit: Editar
       delete: Eliminar
       filter: Filtrar
+      dispense: Dispensar
   activerecord:
     models:
       external_order: "Pedido abastecimiento"
