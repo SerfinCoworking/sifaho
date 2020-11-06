@@ -4,8 +4,8 @@ class CreateOriginalChronicPrescriptionProducts < ActiveRecord::Migration[5.2]
       t.references :chronic_prescription, index: {name: :unique_chron_pres_on_org_cron_pres_prod}
       t.references :product, index: true
       t.integer :request_quantity
-      t.integer :total_request_quantity
-      t.integer :total_delivery_quantity
+      t.integer :total_request_quantity, :default => 0
+      t.integer :total_delivered_quantity, :default => 0
       t.text :observation
 
       t.timestamps
