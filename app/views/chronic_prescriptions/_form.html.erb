@@ -105,7 +105,7 @@
                   class: "form-control pull-right date-prescribed",
                   required: true,
                   autocomplete: 'off',
-                  value: "#{@chronic_prescription.date_prescribed.strftime("%d/%m/%Y") unless @chronic_prescription.new_record?}"
+                  value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
                 },
             html5: false %>
           </div>
@@ -115,7 +115,7 @@
               Duración de tratamiento
             <%end%>
               <div class="input-group mb-3">
-                <input type="text" class="form-control" name="duration-treatment" value="6" aria-describedby="meses-addon">
+                <input type="text" class="form-control" name="duration-treatment" value="<%=f.object.date_prescribed.present? && f.object.expiry_date.present? ? ((f.object.expiry_date.year * 12 + f.object.expiry_date.month) - (f.object.date_prescribed.year * 12 + f.object.date_prescribed.month)) : 6%>" aria-describedby="meses-addon">
                 <div class="input-group-append">
                   <span class="input-group-text" id="meses-addon">Meses</span>
                 </div>
