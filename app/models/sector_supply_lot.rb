@@ -14,6 +14,7 @@ class SectorSupplyLot < ApplicationRecord
   belongs_to :stock
   belongs_to :supply_lot, -> { with_deleted }
   has_one :supply, :through => :supply_lot
+  has_one :supply_area, through: :supply
 
   has_many :quantity_ord_supply_lots
   has_many :prescriptions, -> { with_deleted },

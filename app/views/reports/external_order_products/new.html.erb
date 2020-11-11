@@ -86,37 +86,37 @@
             <% end %>
           </div>
         </div>
-        <div class="row mt-3">
-          <div class="col-6" id="client-last-reports">
-          </div>
-          <div class="col-6">
+        <div class="row mt-3 d-flex justify-content-center align-items-center">
+          <div class="col-8">
             <h5>Últimos reportes generados</h5>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Desde</th>
-                  <th>Hasta</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @last_reports.each do |report|%>
+            <div class="card">
+              <table class="table">
+                <thead>
                   <tr>
-                    <td><%= report.supply_name %></td>
-                    <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
-                    <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
-                    <td>
-                      <%= link_to reports_external_order_product_report_path(report), class: 'btn btn-light btn-sm',
-                        title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
-                        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-                        <%= fa_icon "eye" %>
-                      <% end %>
-                    </td>
+                    <th>Producto</th>
+                    <th>Desde</th>
+                    <th>Hasta</th>
+                    <th></th>
                   </tr>
-                <% end %>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <% @last_reports.each do |report|%>
+                    <tr>
+                      <td><%= report.supply_name %></td>
+                      <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
+                      <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
+                      <td>
+                        <%= link_to reports_external_order_product_report_path(report), class: 'btn btn-light btn-sm',
+                          title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
+                          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+                          <%= fa_icon "eye" %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div> 
