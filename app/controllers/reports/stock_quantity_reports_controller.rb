@@ -4,7 +4,7 @@ class Reports::StockQuantityReportsController < ApplicationController
   def show
     authorize @stock_quantity_report
     @movements = SectorSupplyLot
-      .lots_for_sector(8)
+      .lots_for_sector(current_user.sector)
       .joins(:supply, :supply_area)
       .where(supplies: { supply_area_id: @stock_quantity_report.supply_areas.ids })
       .group("supplies.id", "supplies.name", "supply_areas.name")
