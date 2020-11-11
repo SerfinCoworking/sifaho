@@ -24,6 +24,10 @@
         <h5>Rubros</h5>
         <%= @stock_quantity_report.supply_areas.map(&:name).join(", ") %>
       </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha</h5>
+        <%= Date.today.strftime("%d/%m/%Y") %>
+      </div>
     </div>
       
     <%# movement => {["supply_name", "supply_area" ] => "quantity"} %>
