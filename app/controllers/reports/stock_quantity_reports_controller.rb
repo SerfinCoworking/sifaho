@@ -4,7 +4,7 @@ class Reports::StockQuantityReportsController < ApplicationController
   def show
     authorize @stock_quantity_report
     @movements = SectorSupplyLot
-      .lots_for_sector(current_user.sector)
+      .lots_for_sector(@stock_quantity_report.sector)
       .joins(:supply, :supply_area)
       .where(supplies: { supply_area_id: @stock_quantity_report.supply_areas.ids })
       .order("supplies.name ASC")
@@ -86,6 +86,7 @@ class Reports::StockQuantityReportsController < ApplicationController
         page[:title] = 'Reporte de stock disponible por rubros'
         page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
+        page[:sector_name] = @stock_quantity_report.sector.name
         page[:establishment_name] = @stock_quantity_report.sector.establishment_name
         page[:establishment] = @stock_quantity_report.sector.establishment_name
         report.list.on_page_footer_insert do |footer|
