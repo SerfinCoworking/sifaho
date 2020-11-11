@@ -7,6 +7,7 @@
   <Worksheet ss:Name="Sheet1">
     <Table>
       <Row>
+        <Cell><Data ss:Type="String">Código</Data></Cell>
         <Cell><Data ss:Type="String">Producto</Data></Cell>
         <Cell><Data ss:Type="String">Rubro</Data></Cell>
         <Cell><Data ss:Type="String">Cantidad</Data></Cell>
@@ -15,6 +16,7 @@
       <Row>
         <Cell><Data ss:Type="String"><%= movement.first.first %></Data></Cell>
         <Cell><Data ss:Type="String"><%= movement.first.second %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= movement.first.third %></Data></Cell>
         <Cell><Data ss:Type="Number"><%= movement.second %></Data></Cell>
       </Row>
     <% end %>

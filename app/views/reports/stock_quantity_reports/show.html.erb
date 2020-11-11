@@ -32,27 +32,32 @@
         <table class="table table-hover table-sm">
           <thead>
             <tr class="d-flex">
-              <th class="col-4">Producto</th>
-              <th class="col-4">Rubro</th>
-              <th class="col-4">Cantidad</th>
+              <th class="col-1">Código</th>
+              <th class="col-5">Producto</th>
+              <th class="col-3">Rubro</th>
+              <th class="col-3">Cantidad</th>
             </tr>
           </thead>
           <tbody>
             <% @movements.each do |movement|%>
               <tr class="d-flex">
-                <td class="col-4">
+                <td class="col-1">
                   <%= movement.first.first %>
                 </td>
-                <td class="col-4">
+                <td class="col-5">
                   <%= movement.first.second %>
                 </td>
-                <td class="col-4"><%= movement.second %></td>
+                <td class="col-3">
+                  <%= movement.first.third %>
+                </td>
+                <td class="col-3"><%= movement.second %></td>
               </tr>
             <% end %>
             <tr class="d-flex">
-              <td class="col-4"></td>
-              <td class="col-4 text-right">Total</td>
-              <td class="col-4"><%= @movements.sum(&:second) %></td>
+              <td class="col-1"></td>
+              <td class="col-5"></td>
+              <td class="col-3 text-right">Total</td>
+              <td class="col-3"><%= @movements.sum(&:second) %></td>
             </tr>
           </tbody>
         </table>

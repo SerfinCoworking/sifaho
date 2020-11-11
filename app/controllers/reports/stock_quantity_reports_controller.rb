@@ -7,7 +7,7 @@ class Reports::StockQuantityReportsController < ApplicationController
       .lots_for_sector(8)
       .joins(:supply, :supply_area)
       .where(supplies: { supply_area_id: @stock_quantity_report.supply_areas.ids })
-      .group("supplies.name", "supply_areas.name")
+      .group("supplies.id", "supplies.name", "supply_areas.name")
       .sum("quantity")
       
     respond_to do |format|
@@ -72,8 +72,9 @@ class Reports::StockQuantityReportsController < ApplicationController
         # movement => {["supply_name", "supply_area"] => "quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  product_name: movement.first.first,
-                        supply_area: movement.first.second,
+            row.values  product_code: movement.first.first,
+                        product_name: movement.first.second,
+                        supply_area: movement.first.third,
                         quantity: movement.second
           end
         end
@@ -96,11 +97,12 @@ class Reports::StockQuantityReportsController < ApplicationController
 
     def movements_to_csv(movements)
       CSV.generate(headers: true) do |csv|
-        csv << ["Producto", "Rubro", "Cantidad"]
+        csv << ["Codigo", "Producto", "Rubro", "Cantidad"]
         movements.each do |movement|
           csv << [
             movement.first.first,
             movement.first.second,
+            movement.first.third,
             movement.second
           ]
         end
