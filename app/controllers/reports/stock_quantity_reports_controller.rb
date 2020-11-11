@@ -7,6 +7,7 @@ class Reports::StockQuantityReportsController < ApplicationController
       .lots_for_sector(current_user.sector)
       .joins(:supply, :supply_area)
       .where(supplies: { supply_area_id: @stock_quantity_report.supply_areas.ids })
+      .order("supplies.name ASC")
       .group("supplies.id", "supplies.name", "supply_areas.name")
       .sum("quantity")
       
