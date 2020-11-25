@@ -6,12 +6,13 @@ class SectorSupplyLot < ApplicationRecord
 
   # Callbacks
   before_validation :assign_constants
-  before_validation :assign_stock, if: :need_stock? 
-  after_validation :update_status, :update_stock
+  # before_validation :assign_stock, if: :need_stock? 
+  after_validation :update_status
+  # after_validation :update_status, :update_stock
 
   # Relaciones
   belongs_to :sector
-  belongs_to :stock
+  belongs_to :stock, optional: true
   belongs_to :supply_lot, -> { with_deleted }
   has_one :supply, :through => :supply_lot
   has_one :supply_area, through: :supply
@@ -33,7 +34,7 @@ class SectorSupplyLot < ApplicationRecord
     :source_type => 'ExternalOrder'
 
   # Validaciones
-  validates_presence_of :supply_lot, :quantity, :initial_quantity, :stock
+  validates_presence_of :supply_lot, :quantity, :initial_quantity
 
   # Delegaciones
   delegate :unity, :format_expiry_date, :code, :lot_code, :supply_name, :expiry_date, :needs_expiration?, to: :supply_lot
