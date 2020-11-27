@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
   create_table "chronic_dispensations", force: :cascade do |t|
     t.bigint "chronic_prescription_id"
     t.text "observation"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chronic_prescription_id"], name: "index_chronic_dispensations_on_chronic_prescription_id"
@@ -167,14 +168,15 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
   end
 
   create_table "chronic_prescription_products", force: :cascade do |t|
+    t.bigint "original_chronic_prescription_product_id"
     t.bigint "chronic_dispensation_id"
     t.bigint "product_id"
-    t.integer "request_quantity"
     t.integer "delivery_quantity"
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chronic_dispensation_id"], name: "index_chronic_prescription_products_on_chronic_dispensation_id"
+    t.index ["original_chronic_prescription_product_id"], name: "unique_org_chronic_prescription_product_cpp"
     t.index ["product_id"], name: "index_chronic_prescription_products_on_product_id"
   end
 
@@ -523,8 +525,8 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
     t.bigint "chronic_prescription_id"
     t.bigint "product_id"
     t.integer "request_quantity"
-    t.integer "total_request_quantity"
-    t.integer "total_delivery_quantity"
+    t.integer "total_request_quantity", default: 0
+    t.integer "total_delivered_quantity", default: 0
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

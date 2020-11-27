@@ -25,8 +25,14 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
     edit?
   end
   
+  def dispense_new?
+    if record.pendiente? || record.dispensada_parcial?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+    end
+  end
+  
   def dispense?
-    edit?
+    dispense_new?
   end
   
   def return_dispensation?

@@ -1,0 +1,24 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm-unsaved">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <div class="d-flex align-items-center">
+          <%= fa_icon 'exclamation', class: "mr-2" %>
+          <h5 class="modal-title">
+            Cambios sin guardar
+          </h5>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Desea salir igualmente?
+      </div>
+      <div class="modal-footer card-footer text-right">
+        <button type="button" class="btn btn-light" id="no-confirm-unsaved-btn">Cancelar</button>
+        <button type="button" class="btn btn-secondary" id="confirm-unsaved-btn">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

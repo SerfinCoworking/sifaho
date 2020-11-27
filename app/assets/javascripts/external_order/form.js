@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
+  console.log("IN EXTER",  _PAGE.controller, _PAGE.action, _PAGE.controller !== 'external_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant') );
   if( _PAGE.controller !== 'external_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant') ) return false;
-  
   $('#effector-establishment').autocomplete({
     source: $('#effector-establishment').data('autocomplete-source'),
     minLength: 2,

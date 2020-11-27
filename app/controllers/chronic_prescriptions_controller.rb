@@ -54,9 +54,8 @@ class ChronicPrescriptionsController < ApplicationController
 
     respond_to do |format|
         # Si se entrega la receta
-        @chronic_prescription.save!
       begin
-
+        @chronic_prescription.save!
         message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = "creó"
         
@@ -110,13 +109,18 @@ class ChronicPrescriptionsController < ApplicationController
   end
 
   # GET /chronic_prescriptions/1/dispense
-  def dispense
-
+  def dispense_new
     authorize @chronic_prescription
-    @chronic_prescription.status= 'dispensada'
+    # @chronic_prescription.chronic_dispensations.build
+  end
+
+  def dispense
+    authorize @chronic_prescription
+    @chronic_prescription.status = 'dispensada_parcial'
+
     respond_to do |format|
       begin
-
+        @chronic_prescription.update!(chronic_prescription_dispensation_params)
         @chronic_prescription.dispense_by(current_user)
         flash.now[:success] = "La receta de "+@chronic_prescription.professional.fullname+" se ha dispensado correctamente."
         format.html { redirect_to @chronic_prescription }
@@ -124,8 +128,8 @@ class ChronicPrescriptionsController < ApplicationController
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @chronic_prescription_products = @chronic_prescription.chronic_prescription_products.present? ? @chronic_prescription.chronic_prescription_products : @chronic_prescription.chronic_prescription_products.build        
-        format.html { redirect_to edit_chronic_prescription_path(@chronic_prescription) }
+        # @chronic_dispensations = @chronic_prescription.chronic_dispensations.present? ? @chronic_prescription.chronic_dispensations : @chronic_prescription.chronic_dispensations.build        
+        format.html { redirect_to dispense_new_chronic_prescription_path(@chronic_prescription) }
       end
     end
   end
@@ -230,6 +234,7 @@ class ChronicPrescriptionsController < ApplicationController
           :id,
           :product_id, 
           :request_quantity,
+          :total_request_quantity,
           :observation,
           :_destroy
         ]
@@ -238,19 +243,26 @@ class ChronicPrescriptionsController < ApplicationController
 
     def chronic_prescription_dispensation_params
       params.require(:chronic_prescription).permit(
-        chronic_prescription_products_attributes: [
-          :id, 
-          :product_id, 
-          :lot_stock_id,
-          :request_quantity,
-          :delivery_quantity,
+        chronic_dispensations_attributes: [
+          :id,
+          :status,
           :observation,
           :_destroy,
-          order_prod_lot_stocks_attributes: [
-            :id,
-            :quantity,
+          chronic_prescription_products_attributes: [
+            :id, 
+            :original_chronic_prescription_product_id,
+            :product_id, 
             :lot_stock_id,
-            :_destroy
+            :request_quantity,
+            :delivery_quantity,
+            :observation,
+            :_destroy,
+            order_prod_lot_stocks_attributes: [
+              :id,
+              :quantity,
+              :lot_stock_id,
+              :_destroy
+            ]
           ]
         ]
       )

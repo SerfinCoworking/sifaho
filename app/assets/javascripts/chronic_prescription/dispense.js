@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if( _PAGE.controller !== 'chronic_prescriptions' || (_PAGE.action !== 'dispense') ) return false;
+  if( _PAGE.controller !== 'chronic_prescriptions' || (_PAGE.action !== 'dispense_new') ) return false;
   
   initEvents();
   

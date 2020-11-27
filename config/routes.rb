@@ -9,9 +9,6 @@ Rails.application.routes.draw do
   resources :stocks do
     collection do
       get "find_lots"
-      # get "find_lots/(:id)",
-      #   to: 'stocks#find_lots',
-      #   as: 'find_lots'
     end
   end
   # custom error routes
@@ -266,7 +263,9 @@ Rails.application.routes.draw do
   
   resources :chronic_prescriptions do 
     member do
-      get 'dispense'
+      get 'dispense_new'
+      patch 'dispense'
+      get 'return_dispensation_chronic_prescription_path'
     end
   end
   
@@ -279,7 +278,7 @@ Rails.application.routes.draw do
       get 'confirm_return_cronic'
       patch 'return_cronic_dispensation'
     end
-      collection do
+    collection do
       get 'new_cronic'
       get 'get_by_patient_id'
       get 'get_cronic_prescriptions'

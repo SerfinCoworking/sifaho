@@ -2,6 +2,7 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
 
   # Relaciones
   belongs_to :chronic_prescription, inverse_of: 'original_chronic_prescription_products'
+  has_many :chronic_prescription_products, inverse_of: 'original_chronic_prescription_products'
   belongs_to :product
 
   # Validaciones

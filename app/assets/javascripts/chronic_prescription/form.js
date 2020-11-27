@@ -1,5 +1,6 @@
 $(document).on('turbolinks:load', function(e){
-  if( _PAGE.controller !== 'chronic_prescriptions' || !(_PAGE.controller === 'chronic_prescriptions' && (_PAGE.action === 'new' || _PAGE.action === 'edit')) ) return false;
+  console.log("DEBUG CHRONIC", _PAGE.controller, _PAGE.action);
+  if( _PAGE.controller !== 'chronic_prescriptions' || !(_PAGE.controller === 'chronic_prescriptions' && (['new', 'edit'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   // button submit
@@ -77,7 +78,7 @@ $(document).on('turbolinks:load', function(e){
       $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
     }
   });
-
+  console.log("AUTOCOMPLETE DNI");
   $('#patient-dni').autocomplete({
       source: $('#patient-dni').data('autocomplete-source'),
       autoFocus: true,
