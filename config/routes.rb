@@ -262,13 +262,10 @@ Rails.application.routes.draw do
   end
   
   resources :chronic_prescriptions do 
-    member do
-      get 'dispense_new'
-      patch 'dispense'
-      get 'return_dispensation_chronic_prescription_path'
-    end
+    resources :chronic_dispensations, only: [:new, :create]
   end
   
+    
   resources :prescriptions do
     member do
       get 'delete'

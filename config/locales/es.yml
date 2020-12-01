@@ -91,6 +91,8 @@ es:
         expiry_date: "Fecha vencimiento"
       internal_order_product:
         delivery_quantity: "A entregar"
+      chronic_prescription_product:
+        delivery_quantity: "Dosis"
 
       
 

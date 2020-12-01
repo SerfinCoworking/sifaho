@@ -11,7 +11,7 @@ class ChronicPrescription < ApplicationRecord
   belongs_to :establishment
 
   has_many :chronic_dispensations, dependent: :destroy, inverse_of: 'chronic_prescription'
-  # has_many :chronic_prescription_products, :through => :chronic_dispensations
+  has_many :chronic_prescription_products, :through => :chronic_dispensations
   has_many :original_chronic_prescription_products, dependent: :destroy, inverse_of: 'chronic_prescription'
   
   # has_many :lot_stocks, :through => :chronic_prescription_products, dependent: :destroy
@@ -31,6 +31,9 @@ class ChronicPrescription < ApplicationRecord
   :allow_destroy => true
   
   accepts_nested_attributes_for :chronic_dispensations,
+  :allow_destroy => true
+  
+  accepts_nested_attributes_for :chronic_prescription_products,
   :allow_destroy => true
 
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
@@ -120,29 +123,10 @@ class ChronicPrescription < ApplicationRecord
 
   # Actualiza el estado de: ChronicPrescription a "dispensada" y si se completo el ciclo de la receta
   # se actualiza el estado de la receta a "dispensada"
-  def dispense_by(a_user)
-    self.chronic_dispensations.pendiente.first.chronic_prescription_products.each do | cpp |
-      cpp.decrement_stock
-    end
-
-    # actualizamos las dosis restantes totales de cada producto recetado
-    self.original_chronic_prescription_products.each do |ocpp|
-      is_original_present = self.chronic_dispensations.pendiente.first.chronic_prescription_products.where(original_chronic_prescription_product_id: ocpp.id).first
-      if is_original_present.present?
-        ocpp.total_delivered_quantity += ocpp.request_quantity
-      end
-    end
-       
-    # actualizamos el estado de la dispensacion
-    self.chronic_dispensations.pendiente.first.dispensada! 
-    self.save!
-
-    # si completamos las dispensaciones de cada producto, entonces actualiamos el estado de la receta a "dispensada"
+  def dispense_by
+    # si completamos las dispensaciones de cada producto, entonces actualizamos el estado de la receta a "dispensada"
     if self.original_chronic_prescription_products.sum(:total_request_quantity) <= self.original_chronic_prescription_products.sum(:total_delivered_quantity)
       self.dispensada!
     end
-    
-
-    self.create_notification(a_user, "envió") 
   end
 end

@@ -1,0 +1,154 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "paper-plane"%>
+      <h5 class="card-title mb-0 ml-2">
+        Dispensar receta crónica: <%= @chronic_dispensation.chronic_prescription.patient.fullname.titleize %>
+      </h5>
+    </div>
+    <%= link_to :back, class: 'btn text-white' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+  <div class="card-body">
+    <%= simple_form_for @chronic_dispensation, :url => chronic_prescription_chronic_dispensations_path(@chronic_dispensation.chronic_prescription), html: { role: 'check-modified'} do |form_chronic_dispensation| %>
+
+      <%= form_chronic_dispensation.hidden_field :status, value: "pendiente" %>
+      <%= form_chronic_dispensation.hidden_field :chronic_prescription_id, value: @chronic_dispensation.chronic_prescription.id %>
+      <div class="row">
+        <div class="col-6">
+          <%# Medico %>
+          <div>
+            <label class="font-weight-bold">
+              Médico:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.professional.fullname.titleize %>
+          </div>
+          <%# Paciente %>
+          <div>
+            <label class="font-weight-bold">
+              Paciente:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.patient.fullname.titleize %>
+            
+            <label class="font-weight-bold">
+              Dni:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.patient.dni %>
+            
+          </div>
+
+          <%# Fecha recetada %>
+          <div>
+            <label class="font-weight-bold">
+              Fecha recetada:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+          </div>
+          
+          <%# Duracion tratamiento %>
+          <div>
+            <label class="font-weight-bold">
+              Duración de tratamiento:
+            </label>
+            <%= ((@chronic_dispensation.chronic_prescription.expiry_date.year * 12 + @chronic_dispensation.chronic_prescription.expiry_date.month) - (@chronic_dispensation.chronic_prescription.date_prescribed.year * 12 + @chronic_dispensation.chronic_prescription.date_prescribed.month))  %>
+            meses
+          </div>
+          
+          <%# Fecha expiracion %>
+          <div>
+            <label class="font-weight-bold">
+              Fecha vencimiento:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.expiry_date.strftime("%d/%m/%Y") %>
+          </div>
+      
+          <%# diagnostico %>
+          <div>
+            <label class="font-weight-bold">
+              Diagnóstico:
+            </label>
+            <%= @chronic_dispensation.chronic_prescription.diagnostic %>
+          </div>
+        </div>
+        
+        
+        <!-- Aqui se carga la obra social -->
+        <div class="col-6">
+          <div id="pat-os-body"></div>
+        </div>
+      </div>
+
+      <table class="table table-bordered m-0">
+        <tr>
+          <th>Productos recetados</th>
+          <th class="text-center">dosis / mes</th>
+          <th class="text-center">resto</th>
+          <th></th>
+        </tr>
+        <% @chronic_dispensation.chronic_prescription.original_chronic_prescription_products.each do |ocpp| %>
+          <tr class="bg-ocpp-light-blue">
+            <td>
+              <%= ocpp.product.name %>
+            </td>
+            <td class="text-center">
+              <%= ocpp.request_quantity %>
+            </td>
+            <td class="text-center">
+              <%= ocpp.total_request_quantity - ocpp.total_delivered_quantity %>
+            </td>
+            <td class="text-center">
+              <% if (ocpp.total_request_quantity - ocpp.total_delivered_quantity) > 0 %>
+                <%= link_to_add_association form_chronic_dispensation, 
+                  :chronic_prescription_products, 
+                  class: 'btn btn-primary btn-sm',
+                  partial: "chronic_dispensations/partials/order_products_fields", 
+                  data: {
+                    "association-insertion-node" => "tbody#chronic-product-cocoon-container#{ocpp.id}",
+                    "association-insertion-method" => "append"},
+                  render_options: {locals: { ocpp_id: ocpp.id }} do %>
+                  <%= fa_icon "plus" %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" class="pt-0 pb-0 pr-0">
+              <% if ocpp.observation.present? %>
+                <div>
+                  <label class="font-weight-bold"> Observaciones: </label>
+                  <%= ocpp.observation %>
+                </div>
+              <% end %>
+              <%= render 'chronic_dispensations/partials/order_products_table', form: form_chronic_dispensation, :relation => :chronic_prescription_products, :ocpp_id => ocpp.id %>
+            </td>
+          </tr>
+        <%end%>
+      </table>  
+    <%end%>
+
+  </div><!-- /fin .card-body -->
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', chronic_prescriptions_path, class: 'btn mr-1' %>
+  
+    <button type='submit' class='btn btn-success mr-2' form="new_chronic_dispensation" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Dispensar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Dispensando...
+        <%= fa_icon "spinner", class: "fa-spin" %>
+      </div>
+
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>

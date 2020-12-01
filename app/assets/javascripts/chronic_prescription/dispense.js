@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if( _PAGE.controller !== 'chronic_prescriptions' || (_PAGE.action !== 'dispense_new') ) return false;
+  if( _PAGE.controller !== 'chronic_dispensations' || !(['new', 'create'].includes(_PAGE.action)) ) return false;
   
   initEvents();
   
@@ -17,7 +17,7 @@ $(document).on('turbolinks:load', function(e){
 
 
   // cocoon init
-  $('#chronic-product-cocoon-container').on('cocoon:after-insert', function(e) {
+  $('.chronic-product-cocoon-container').on('cocoon:after-insert', function(e) {
     initEvents();
   });
   
@@ -72,7 +72,7 @@ $(document).on('turbolinks:load', function(e){
 
     lotsQuantitySelection();
     
-    const trs = $('#chronic-product-cocoon-container').find('tr.nested-fields');
+    const trs = $('.chronic-product-cocoon-container').find('tr.nested-fields');
     trs.map((index, tr) => {
       const toDelivery = $(tr).find("input.deliver-quantity").val(); // get delivery quanitty
       let totalQuantitySelected = 0;
@@ -116,7 +116,7 @@ $(document).on('turbolinks:load', function(e){
     $(".select-lot-btn").on('click', function(e){
       const templateHidden = $(e.target).attr("data-template-fill-hidden");
       const tr = $(e.target).closest(".nested-fields");
-      const rows = $('#chronic-product-cocoon-container').find('tr.nested-fields');
+      const rows = $('.chronic-product-cocoon-container').find('tr.nested-fields');
       
       const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
       const url = $(e.target).attr('data-select-lot-url');
@@ -233,7 +233,7 @@ $(document).on('turbolinks:load', function(e){
   $('#lot-selection').on('hidden.bs.modal', function (e) {
     const templateHidden = $(e.target).attr('data-template-hidden');
     const trIndex = $(e.target).attr('data-index-row');
-    const tr = $("#chronic-product-cocoon-container").find(".nested-fields")[trIndex];
+    const tr = $(".chronic-product-cocoon-container").find(".nested-fields")[trIndex];
     const toDelivery = $(e.target).attr('data-to-delivery');
     const hiddenTarget = $(tr).find(".lot-stocks-hidden").first();
     // handle selected options

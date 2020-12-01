@@ -23,7 +23,7 @@
   <td class="text-left actions-col">
     <div class="d-flex align-items-center justify-content-center">
       <% if policy(chronic_prescription).dispense_new? %>
-        <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
+        <%= link_to dispense_new_chronic_prescription_path(chronic_prescription),
           class: 'btn btn-sm btn-primary mr-1 ml-1',
           title: t("actions.tooltip.dispense"),
           data: { toggle: 'tooltip', placement: 'top'} do %> 
