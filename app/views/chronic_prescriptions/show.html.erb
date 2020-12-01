@@ -151,13 +151,13 @@
       <% end %>
     <% end %>
     
-    <%# if policy(@chronic_prescription).dispense? %>
-      <%#= link_to dispense_chronic_prescription_path(@chronic_prescription), :"data-turbolinks" => false,
+    <% if policy(@chronic_prescription).dispense_new? %>
+      <%= link_to new_chronic_prescription_chronic_dispensation_path(@chronic_prescription), :"data-turbolinks" => false,
         class: "btn btn-primary" do %>
-        <%#= fa_icon "paper-plane" %>
-        <!--Dispensar-->
-      <%# end %>
-    <%# end %>
+        <%= fa_icon "paper-plane" %>
+        Dispensar
+      <% end %>
+    <% end %>
   </div>
 </div>
 

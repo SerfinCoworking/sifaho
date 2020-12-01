@@ -60,7 +60,11 @@ class ChronicPrescriptionsController < ApplicationController
         notification_type = "creó"
         
         @chronic_prescription.create_notification(current_user, notification_type)
-        format.html { redirect_to @chronic_prescription, notice: message }
+        if dispensing?
+          format.html { redirect_to new_chronic_prescription_chronic_dispensation_path(@chronic_prescription), notice: message }
+        else
+          format.html { redirect_to @chronic_prescription, notice: message }
+        end
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
         flash[:error] = e.message
@@ -85,7 +89,11 @@ class ChronicPrescriptionsController < ApplicationController
         notification_type = "auditó"
 
         @chronic_prescription.create_notification(current_user, notification_type)
-        format.html { redirect_to @chronic_prescription, notice: message }
+        if dispensing?
+          format.html { redirect_to new_chronic_prescription_chronic_dispensation_path(@chronic_prescription), notice: message }
+        else
+          format.html { redirect_to @chronic_prescription, notice: message }
+        end
       rescue ArgumentError => e
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid

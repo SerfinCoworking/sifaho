@@ -152,6 +152,7 @@
     <%# carga de productos originales %>
     <%= render 'chronic_prescriptions/partials/original_order_products_table', form: f, :relation => :original_chronic_prescription_products %>
       
+    <input name="commit" id="submit-type" type="hidden">
   <%end%>
 
   </div><!-- /fin .card-body -->
