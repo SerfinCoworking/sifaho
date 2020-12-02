@@ -261,8 +261,6 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :chronic_prescription_comments, only: [ :show, :create]
-
   resources :chronic_prescriptions do 
     resources :chronic_dispensations, only: [:new, :create]
   end

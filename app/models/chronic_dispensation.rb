@@ -32,7 +32,6 @@ class ChronicDispensation < ApplicationRecord
     if self.chronic_prescription.pendiente? 
       self.chronic_prescription.dispensada_parcial!
     end
-
     
     self.chronic_prescription.dispense_by
 

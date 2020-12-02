@@ -97,12 +97,6 @@
               <span class="badge badge-secondary"><%= @chronic_prescription.movements.count %></span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
-              <%= fa_icon "exchange-alt" %> Comentarios
-              <span class="badge badge-secondary" id="comments-count"><%= @chronic_prescription.comments.count %></span>
-            </a>
-          </li>
         </ul>
       </div>
     </div>
@@ -176,11 +170,6 @@
         <!-- Tabla de movimientos -->
         <%= render '/shared/movements_table', order: @chronic_prescription %>
       </div> <!-- End last movements tab pane -->
-
-      <div id='comments' class='tab-pane fade'>
-        <!-- Tabla de movimientos -->
-        <%= render '/shared/comments', order: @chronic_prescription, new_comment: ChronicPrescriptionComment.new %>
-      </div> <!-- End comments tab pane -->
 
     </div>
   </div>
