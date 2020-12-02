@@ -84,6 +84,7 @@
       <table class="table table-bordered m-0">
         <tr>
           <th>Productos recetados</th>
+          <th width="200"></th>
           <th class="text-center">dosis / mes</th>
           <th class="text-center">resto</th>
           <th></th>
@@ -92,6 +93,12 @@
           <tr class="bg-ocpp-light-blue">
             <td>
               <%= ocpp.product.name %>
+            </td>
+            <td>
+              <div class="custom-progress progress bg-light position-relative">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-total-request="<%= ocpp.total_request_quantity%>" data-total-delivered="<%= ocpp.total_delivered_quantity%>"></div>
+                <div class="percentage-text text-black position-absolute font-weight-bold">0%</div>
+              </div>
             </td>
             <td class="text-center">
               <%= ocpp.request_quantity %>
@@ -115,7 +122,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="4" class="pt-0 pb-0 pr-0">
+            <td colspan="5" class="pt-0 pb-0 pr-0">
               <% if ocpp.observation.present? %>
                 <div>
                   <label class="font-weight-bold"> Observaciones: </label>

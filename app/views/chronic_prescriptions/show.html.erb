@@ -80,55 +80,108 @@
         <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Sin observaciones' %>
       </div><!-- End extra info -->
     </div>
-    <!-- Insumos a dispensar -->
-    <div class="card">
-      <table class="table table-hover table-sm">
-        <thead>
-          <tr>
-            <th>Cód Ins</th>
-            <th>Insumo</th>
-            <th>Cantidad mensual</th>
-            <th>Observaciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @chronic_prescription.original_chronic_prescription_products.each do |org_chron_pres_prod| %>
-            <tr>
-              <td>
-                <%= org_chron_pres_prod.product_code %>
-              </td>
-              <td>
-                <%= org_chron_pres_prod.product_name %>
-              </td>
-              <td>
-                <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.pluralize(org_chron_pres_prod.request_quantity) %>
-              </td>
-              
 
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" data-toggle="popover" title="Observaciones" data-placement="left" data-trigger="focus" data-content="<%= org_chron_pres_prod.observation %>">
-                  <%= fa_icon "comment-dots", class: "far"%>
-                </button>
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos recetados
+              <span class="badge badge-secondary"><%= @chronic_prescription.original_chronic_prescription_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @chronic_prescription.movements.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
+              <%= fa_icon "exchange-alt" %> Comentarios
+              <span class="badge badge-secondary" id="comments-count"><%= @chronic_prescription.comments.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-                <!--button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%#= org_chron_pres_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%#= org_chron_pres_prod.id %>">
-                  Observaciones
-                  <%#= org_chron_pres_prod.order_prod_lot_stocks.count %>
-                </button-->
-              </td>
-             
-            </tr>
-            <tr>
-              <td colspan="7" class="p-0">
-                <div id="collapse-row-<%= org_chron_pres_prod.id %>" class="collapse in">
-                  <div class="p-3">
-                    <%= org_chron_pres_prod.observation %>
-                  </div>
-                </div>
-              </td>
-            </tr> <%# fin Listado de lotes y descripciones %>
-          <% end %>
-        </tbody>
-      </table>
+    <div class="tab-content">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Cantidad mensual</th>
+                <th>Dispensada</th>
+                <th width="200">Proceso</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @chronic_prescription.original_chronic_prescription_products.each do |org_chron_pres_prod| %>
+                <tr>
+                  <td>
+                    <%= org_chron_pres_prod.product_code %>
+                  </td>
+                  <td>
+                    <%= org_chron_pres_prod.product_name %>
+                  </td>
+                  <td>
+                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.pluralize(org_chron_pres_prod.request_quantity) %>
+                  </td>
+                  <td>
+                    <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
+                  </td>
+                  <td>
+                    <% progress = (org_chron_pres_prod.total_delivered_quantity * 100 / org_chron_pres_prod.total_request_quantity) %>
+                    <div class="custom-progress progress bg-light position-relative">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
+                      <div class="percentage-text text-black position-absolute font-weight-bold"><%=progress%>%</div>
+                    </div>
+                  </td>
+                  
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="popover" title="Observaciones" data-placement="left" data-trigger="focus" data-content="<%= org_chron_pres_prod.observation %>">
+                      <%= fa_icon "comment-dots", class: "far"%>
+                    </button>
+
+                    <!--button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%#= org_chron_pres_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%#= org_chron_pres_prod.id %>">
+                      Observaciones
+                      <%#= org_chron_pres_prod.order_prod_lot_stocks.count %>
+                    </button-->
+                  </td>
+                
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= org_chron_pres_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                        <%= org_chron_pres_prod.observation %>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @chronic_prescription %>
+      </div> <!-- End last movements tab pane -->
+
+      <div id='comments' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/comments', order: @chronic_prescription, new_comment: ChronicPrescriptionComment.new %>
+      </div> <!-- End comments tab pane -->
+
     </div>
   </div>
   <div class="card-footer text-right">

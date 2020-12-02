@@ -14,7 +14,12 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
-
+  $(".progress-bar").each((index, element) => {
+    const percentage = (($(element).attr('data-total-delivered') * 100) / $(element).attr('data-total-request')).toFixed(2);
+    $(element).css({"width": percentage+"%"});
+    $(element).attr("aria-valuenow", percentage);
+    $(element).siblings('.percentage-text').first().text(percentage+"%");
+  });
 
   // cocoon init
   $('.chronic-product-cocoon-container').on('cocoon:after-insert', function(e) {

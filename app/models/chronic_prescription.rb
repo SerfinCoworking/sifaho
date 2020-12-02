@@ -19,6 +19,7 @@ class ChronicPrescription < ApplicationRecord
 
   has_many :products, :through => :chronic_prescription_products
   has_many :movements, class_name: "ChronicPrescriptionMovement"
+  has_many :comments, class_name: "ChronicPrescriptionComment"
 
   # Validaciones
   validates_presence_of :patient, :professional, :date_prescribed, :remit_code
