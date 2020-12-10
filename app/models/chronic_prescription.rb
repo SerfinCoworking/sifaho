@@ -131,13 +131,14 @@ class ChronicPrescription < ApplicationRecord
     end
   end
     
-  def return_dispense_by
+  def return_dispense_by(a_user)
     # dispensacion incompleta con previo estado "dispensada": cambio de estado a "dispensada_parcial"
     if self.original_chronic_prescription_products.sum(:total_request_quantity) > self.original_chronic_prescription_products.sum(:total_delivered_quantity) && self.dispensada?
       self.dispensada_parcial!
-    elsif self.chronic_dispensations.count == 0
+    elsif self.chronic_dispensations.count == 0 && self.dispensada_parcial!
       self.pendiente!
     end
 
+    self.create_notification(a_user, "retorno una dispensación")
   end
 end
