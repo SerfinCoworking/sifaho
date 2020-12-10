@@ -4,7 +4,7 @@ class ReceiptsController < ApplicationController
   # GET /receipts
   # GET /receipts.json
   def index
-    authorize ExternalOrder
+    authorize Receipt
     @filterrific = initialize_filterrific(
       Receipt.order(created_at: :desc),
       params[:filterrific],
