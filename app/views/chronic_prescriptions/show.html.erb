@@ -92,14 +92,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle='tab' href='#dispensations' role="tab">
+            <a class="nav-link <%= @chronic_prescription.chronic_dispensations.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#dispensations' role="tab">
               <%= fa_icon "paper-plane" %> Dispensaciones
               <span class="badge badge-secondary"><%= @chronic_prescription.chronic_dispensations.count %></span>
             </a>
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+            <a class="nav-link <%= @chronic_prescription.movements.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#last-movements' role="tab">
               <%= fa_icon "exchange-alt" %> Movimientos
               <span class="badge badge-secondary"><%= @chronic_prescription.movements.count %></span>
             </a>
