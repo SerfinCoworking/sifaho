@@ -125,9 +125,17 @@ class ChronicPrescription < ApplicationRecord
   # Actualiza el estado de: ChronicPrescription a "dispensada" y si se completo el ciclo de la receta
   # se actualiza el estado de la receta a "dispensada"
   def dispense_by
-    # si completamos las dispensaciones de cada producto, entonces actualizamos el estado de la receta a "dispensada"
+    # dispensacion completa: cambio de estado a "dispensada"
     if self.original_chronic_prescription_products.sum(:total_request_quantity) <= self.original_chronic_prescription_products.sum(:total_delivered_quantity)
       self.dispensada!
     end
+  end
+    
+  def return_dispense_by
+    # dispensacion incompleta con previo estado "dispensada": cambio de estado a "dispensada_parcial"
+    if self.original_chronic_prescription_products.sum(:total_request_quantity) > self.original_chronic_prescription_products.sum(:total_delivered_quantity) && self.dispensada?
+      self.dispensada_parcial!
+    end
+
   end
 end

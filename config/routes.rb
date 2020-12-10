@@ -262,7 +262,10 @@ Rails.application.routes.draw do
   end
   
   resources :chronic_prescriptions do 
-    resources :chronic_dispensations, only: [:new, :create]
+    resources :chronic_dispensations, only: [:new, :create] do
+      get 'return_dispensation_modal'
+      patch 'return_dispensation'
+    end
   end
   
     
@@ -273,7 +276,6 @@ Rails.application.routes.draw do
       get 'confirm_return_ambulatory'
       patch 'return_ambulatory_dispensation'
       get 'confirm_return_cronic'
-      patch 'return_cronic_dispensation'
     end
     collection do
       get 'new_cronic'

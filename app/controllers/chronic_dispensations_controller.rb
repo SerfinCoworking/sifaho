@@ -1,7 +1,5 @@
 class ChronicDispensationsController < ApplicationController
-  before_action :set_chronic_prescription, only: [:new, :create ]
-
-  
+  before_action :set_chronic_prescription, only: [:new, :create, :return_dispensation] 
 
   # GET /chronic_dispensations/new
   def new
@@ -10,13 +8,6 @@ class ChronicDispensationsController < ApplicationController
     authorize @chronic_dispensation
   end
 
-  # GET /chronic_prescriptions/1/edit
-  # def edit
-  #   authorize @chronic_prescription
-  # end
-
-  # POST /chronic_dispensations
-  # POST /chronic_dispensations.json
   def create
     @chronic_dispensation = ChronicDispensation.new(chronic_prescription_dispensation_params)
     authorize @chronic_dispensation
@@ -37,43 +28,25 @@ class ChronicDispensationsController < ApplicationController
 
   end
 
-  # PATCH/PUT /chronic_prescriptions/1
-  # PATCH/PUT /chronic_prescriptions/1.json
-  # def update
-  #   authorize @chronic_prescription
+  def return_dispensation_modal
 
-  #   respond_to do |format|
-  #     begin
-  #       @chronic_prescription.update!(chronic_prescription_params)
-
-  #       message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha auditado correctamente."
-  #       notification_type = "auditó"
-
-  #       @chronic_prescription.create_notification(current_user, notification_type)
-  #       format.html { redirect_to @chronic_prescription, notice: message }
-  #     rescue ArgumentError => e
-  #       flash[:error] = e.message
-  #     rescue ActiveRecord::RecordInvalid
-  #     ensure
-  #       @chronic_prescription_products = @chronic_prescription.original_chronic_prescription_products.present? ? @chronic_prescription.original_chronic_prescription_products : @chronic_prescription.original_chronic_prescription_products.build        
-  #       format.html { redirect_to edit_chronic_prescription_path(@chronic_prescription) }
-  #     end
-  #   end
-  # end
-
- 
+    @chronic_dispensation = ChronicDispensation.find(params[:chronic_dispensation_id])
+    # authorize @chronic_dispensation
+  end
 
   def return_dispensation
-    authorize @chronic_prescription
+    @chronic_dispensation = ChronicDispensation.find(params[:chronic_dispensation_id])
+    # authorize @chronic_dispensation
     respond_to do |format|
       begin
-        @chronic_prescription.return_dispensation(current_user)
+        @chronic_dispensation.return_dispensation
+        @chronic_dispensation.chronic_prescription.create_notification(current_user, "retorno una dispensación")
+        @chronic_dispensation.destroy
+        flash.now[:success] = "La receta de "+@chronic_dispensation.chronic_prescription.professional.fullname+" se ha retornado una dispensa correctamente."
       rescue ArgumentError => e
         flash[:error] = e.message
-      else
-        flash[:notice] = 'La receta se ha retornado a '+@chronic_prescription.status+'.'
       end
-      format.html { redirect_to @chronic_prescription }
+      format.html { redirect_to chronic_prescription_path(@chronic_prescription) }
     end
   end
 

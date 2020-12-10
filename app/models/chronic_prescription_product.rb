@@ -25,7 +25,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
     :allow_destroy => true
 
   # Delegaciones
-  delegate :unity, to: :product
+  delegate :unity, to: :product, prefix: :product
   delegate :name, to: :product, prefix: :product
   delegate :code, to: :product, prefix: :product
 
@@ -72,8 +72,14 @@ class ChronicPrescriptionProduct < ApplicationRecord
 
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.decrement(iopls.quantity)
+    self.order_prod_lot_stocks.each do |cpp|
+      cpp.lot_stock.decrement(cpp.quantity)
+    end
+  end
+
+  def increment_stock
+    self.order_prod_lot_stocks.each do |cpp|
+      cpp.lot_stock.increment(cpp.quantity)
     end
   end
 end

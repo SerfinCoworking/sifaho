@@ -92,6 +92,13 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#dispensations' role="tab">
+              <%= fa_icon "paper-plane" %> Dispensaciones
+              <span class="badge badge-secondary"><%= @chronic_prescription.chronic_dispensations.count %></span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
             <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
               <%= fa_icon "exchange-alt" %> Movimientos
               <span class="badge badge-secondary"><%= @chronic_prescription.movements.count %></span>
@@ -101,7 +108,7 @@
       </div>
     </div>
 
-    <div class="tab-content">
+    <div class="tab-content mt-2">
       <div id='supplies' class='tab-pane fade show active'>
         <!-- Insumos a dispensar -->
         <div class="card">
@@ -166,6 +173,94 @@
         </div>
       </div>
 
+      <div id='dispensations' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <div class="row">
+          
+          <div class="col-3">
+            <div class="card">
+
+              <div class="list-group p-1" id="list-tab" role="tablist">
+                <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
+                  <div class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
+                    
+                    <div>
+                      <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
+                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
+                    </div>       
+                    <%# if policy(chronic_dispensation).return_dispensation? %> 
+                    <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
+                        class: 'btn btn-sm btn-warning ml-2 return-dispensation-modal', title: 'Rertornar dispensación', data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon "undo" %>
+                    <% end %>
+
+                    <!--button type="button" 
+                    class="btn btn-sm btn-warning ml-2 return-dispensation-modal" 
+                    data-target="#return-confirm" 
+                    data-url="<%#= chronic_prescription_chronic_dispensation_return_dispensation_path(@chronic_prescription.id, chronic_dispensation.id) %>" 
+                    data-title="<%#= chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>" 
+                    data-products="<%#= chronic_dispensation.chronic_prescription_products.to_json(:only => [:delivery_quantity], :include => { 
+                      :product => {
+                        :only => [:code, :name, :unity], 
+                      }
+                    }) %>">
+                      <%#= fa_icon "undo" %>
+                    </button-->
+
+                    <%# end %>
+                  </div>
+                <% end %>
+              </div>
+
+              <%# <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"> %>
+                <%# @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
+                  <%# <a href="#tab-<%=index" aria-controls="tab-<%=index" class="nav-link <%= index == 0 ? 'active' : '' " role="tab" data-toggle="tab"> %>
+                    <%# <span class="badge badge-secondary"><%= (index + 1) °</span> &nbsp; %>
+                    <%#=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
+                  <%# </a> %>
+                <%# <% end %>
+              <%# </div> %>
+            </div>
+          </div>
+
+          <div class="col-9">
+            <div class="card table-sm tab-content" id="nav-tabContent">
+              <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
+                <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Cód Ins</th>
+                        <th>Insumo</th>
+                        <th>Unidad</th>
+                        <th>Dosis</th>
+                        <th>Lotes</th>
+                        <th>Observaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      <% chronic_dispensation.chronic_prescription_products.each do |chronic_prescription_product| %>
+                        <tr>
+                          <td><%= chronic_prescription_product.product_code %></td>
+                          <td><%= chronic_prescription_product.product_name %></td>
+                          <td><%= chronic_prescription_product.product_unity %></td>
+                          <td><%= chronic_prescription_product.delivery_quantity %></td>
+                          <td>Lotes</td>
+                          <td>Observaciones</td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        
+      </div> <!-- End last movements tab pane -->
+      
       <div id='last-movements' class='tab-pane fade'>
         <!-- Tabla de movimientos -->
         <%= render '/shared/movements_table', order: @chronic_prescription %>
@@ -204,26 +299,9 @@
 </div>
 
 <% content_for :modal do %>
+  <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
   <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
-  <% if policy(@chronic_prescription).return_dispensation? %>
-    <div class="modal" id="return-confirm">
-      <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = ChronicPrescription.statuses.key(@chronic_prescription.status_before_type_cast - 1).underscore.humanize %></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Seguro que desea retornar la receta ambulatoria actual a <%= prev_status %>?</p>
-          </div>
-          <div class="modal-footer text-right">
-            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%#= link_to 'Confirmar', return_dispensation_chronic_prescription_path(@chronic_prescription), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <%# if policy(@chronic_prescription).return_dispensation? %>
+    
+  <%# end %>
 <% end %>
