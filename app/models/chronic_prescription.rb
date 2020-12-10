@@ -13,13 +13,8 @@ class ChronicPrescription < ApplicationRecord
   has_many :chronic_dispensations, dependent: :destroy, inverse_of: 'chronic_prescription'
   has_many :chronic_prescription_products, :through => :chronic_dispensations
   has_many :original_chronic_prescription_products, dependent: :destroy, inverse_of: 'chronic_prescription'
-  
-  # has_many :lot_stocks, :through => :chronic_prescription_products, dependent: :destroy
-  # has_many :lots, :through => :lot_stocks
-
   has_many :products, :through => :chronic_prescription_products
   has_many :movements, class_name: "ChronicPrescriptionMovement"
-  has_many :comments, class_name: "ChronicPrescriptionComment"
 
   # Validaciones
   validates_presence_of :patient, :professional, :date_prescribed, :remit_code

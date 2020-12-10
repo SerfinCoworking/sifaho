@@ -1,0 +1,45 @@
+<tr>
+  <td colspan="7" class="p-0">
+    <div id="collapse-row-<%= model.id %>" class="collapse in">
+      <div class="p-3">
+        <% if model.order_prod_lot_stocks.present? %>
+          <table class="w-100">
+            <thead>
+              <tr>
+                <th> Cantidad </th>
+                <th> Lote </th>
+                <th> Laboratorio </th>
+                <th> Vencimiento </th>
+              </tr>
+            </thead>
+            </tbody>
+              <% model.order_prod_lot_stocks.each do |opls| %>
+              <tr>
+
+                <td>
+                  <%= opls.quantity %>
+                </td>
+                
+                <td>
+                  <%= opls.lot_stock.lot.code %>
+                </td>
+                
+                <td>
+                  <%= opls.lot_stock.lot.laboratory.name %>
+                </td>
+                
+                <td>
+                  <%= opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                </td>
+              </tr>
+
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+            No tiene lotes asignados
+        <% end %>
+      </div>
+    </div>
+  </td>
+</tr> <%# fin Listado de lotes y descripciones %>

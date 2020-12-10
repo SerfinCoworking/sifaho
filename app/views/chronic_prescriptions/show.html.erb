@@ -174,7 +174,7 @@
       </div>
 
       <div id='dispensations' class='tab-pane fade'>
-        <!-- Tabla de movimientos -->
+        <!-- Tabla de dispensaciones -->
         <div class="row">
           
           <div class="col-3">
@@ -223,9 +223,14 @@
                           <td><%= chronic_prescription_product.product_name %></td>
                           <td><%= chronic_prescription_product.product_unity %></td>
                           <td><%= chronic_prescription_product.delivery_quantity %></td>
-                          <td>Lotes</td>
+                          <td>
+                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
+                              <%= chronic_prescription_product.order_prod_lot_stocks.count %>
+                            </button>
+                          </td>
                           <td>Observaciones</td>
                         </tr>
+                        <%= render '/shared/selected_lots', model: chronic_prescription_product %>
                       <% end %>
                     </tbody>
                   </table>
@@ -233,9 +238,7 @@
               <% end %>
             </div>
           </div>
-        </div>
-
-        
+        </div>        
       </div> <!-- End last movements tab pane -->
       
       <div id='last-movements' class='tab-pane fade'>

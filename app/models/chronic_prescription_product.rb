@@ -15,7 +15,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
 
   validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_dispensation?
   validates_associated :order_prod_lot_stocks, if: :is_dispensation?
-  validate :uniqueness_product_on_internal_order
+  validate :uniqueness_product_on_chronic_prescription
   validates_presence_of :original_chronic_prescription_product, if: :is_not_dispensation?
   
   accepts_nested_attributes_for :product,
@@ -62,10 +62,10 @@ class ChronicPrescriptionProduct < ApplicationRecord
   end
 
    # Validacion: evitar duplicidad de productos en una misma orden
-   def uniqueness_product_on_internal_order
+   def uniqueness_product_on_chronic_prescription
     (self.chronic_dispensation.chronic_prescription_products.uniq - [self]).each do |iop| 
       if iop.product_id == self.product_id
-        errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra en la orden")      
+        errors.add(:uniqueness_product_on_chronic_prescription, "Este producto ya se encuentra en la orden")      
       end
     end
   end
