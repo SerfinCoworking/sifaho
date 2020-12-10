@@ -31,12 +31,12 @@ class ChronicDispensationsController < ApplicationController
   def return_dispensation_modal
 
     @chronic_dispensation = ChronicDispensation.find(params[:chronic_dispensation_id])
-    # authorize @chronic_dispensation
+    authorize @chronic_dispensation
   end
 
   def return_dispensation
     @chronic_dispensation = ChronicDispensation.find(params[:chronic_dispensation_id])
-    # authorize @chronic_dispensation
+    authorize @chronic_dispensation
     respond_to do |format|
       begin
         @chronic_dispensation.return_dispensation

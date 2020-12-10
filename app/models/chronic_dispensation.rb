@@ -50,7 +50,6 @@ class ChronicDispensation < ApplicationRecord
     self.chronic_prescription_products.each do | cpp |
       cpp.increment_stock
     end
-    # self.chronic_prescription.return_dispense_by
   end
 
 end
