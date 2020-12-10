@@ -188,38 +188,15 @@
                       <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
                       <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
                     </div>       
-                    <%# if policy(chronic_dispensation).return_dispensation? %> 
-                    <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
-                        class: 'btn btn-sm btn-warning ml-2 return-dispensation-modal', title: 'Rertornar dispensación', data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= fa_icon "undo" %>
+                    <% if policy(chronic_dispensation).return_dispensation? %> 
+                      <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
+                          class: 'btn btn-sm btn-warning ml-2 return-dispensation-modal', title: 'Rertornar dispensación', data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= fa_icon "undo" %>
+                      <% end %>
                     <% end %>
-
-                    <!--button type="button" 
-                    class="btn btn-sm btn-warning ml-2 return-dispensation-modal" 
-                    data-target="#return-confirm" 
-                    data-url="<%#= chronic_prescription_chronic_dispensation_return_dispensation_path(@chronic_prescription.id, chronic_dispensation.id) %>" 
-                    data-title="<%#= chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>" 
-                    data-products="<%#= chronic_dispensation.chronic_prescription_products.to_json(:only => [:delivery_quantity], :include => { 
-                      :product => {
-                        :only => [:code, :name, :unity], 
-                      }
-                    }) %>">
-                      <%#= fa_icon "undo" %>
-                    </button-->
-
-                    <%# end %>
                   </div>
                 <% end %>
               </div>
-
-              <%# <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"> %>
-                <%# @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
-                  <%# <a href="#tab-<%=index" aria-controls="tab-<%=index" class="nav-link <%= index == 0 ? 'active' : '' " role="tab" data-toggle="tab"> %>
-                    <%# <span class="badge badge-secondary"><%= (index + 1) °</span> &nbsp; %>
-                    <%#=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
-                  <%# </a> %>
-                <%# <% end %>
-              <%# </div> %>
             </div>
           </div>
 
@@ -274,12 +251,6 @@
       <%#= fa_icon "print" %>
       <%# Imprimir %>
     <%# end %>
-    <% if policy(@chronic_prescription).return_dispensation? %>
-      <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">
-        <%= fa_icon "redo" %>
-        Retornar
-      </button>
-    <% end %>
     <% if policy(@chronic_prescription).edit? %>
       <%= link_to edit_chronic_prescription_path(@chronic_prescription), :"data-turbolinks" => false,
         class: "btn btn-warning mr-1" do %>
@@ -299,9 +270,8 @@
 </div>
 
 <% content_for :modal do %>
-  <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
   <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
-  <%# if policy(@chronic_prescription).return_dispensation? %>
-    
-  <%# end %>
+  <% if policy(@chronic_prescription).return_dispensation? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
 <% end %>

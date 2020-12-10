@@ -135,6 +135,8 @@ class ChronicPrescription < ApplicationRecord
     # dispensacion incompleta con previo estado "dispensada": cambio de estado a "dispensada_parcial"
     if self.original_chronic_prescription_products.sum(:total_request_quantity) > self.original_chronic_prescription_products.sum(:total_delivered_quantity) && self.dispensada?
       self.dispensada_parcial!
+    elsif self.chronic_dispensations.count == 0
+      self.pendiente!
     end
 
   end

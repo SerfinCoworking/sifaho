@@ -36,7 +36,8 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
   end
   
   def return_dispensation?
-    record.dispensada?
+    # no se puede retornar ninguna dispensacion, si la receta esta vencida
+    !record.vencida?
   end
 
   def destroy?
