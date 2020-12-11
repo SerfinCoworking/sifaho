@@ -2,10 +2,10 @@ class ExtOrdProdLotStock < ApplicationRecord
   belongs_to :external_order_product, inverse_of: 'order_prod_lot_stocks'
   belongs_to :lot_stock
 
-  # validates :quantity, :numericality => { :only_integer => true, :less_than_or_equal_to => :lot_stock_quantity, message: "La cantidad seleccionada debe ser menor o igual a %{count}"}, if: :is_provision
-  # validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_solicitud
-  # validates_presence_of :lot_stock_id
-  
+  validates :quantity, :numericality => { :only_integer => true, :less_than_or_equal_to => :lot_stock_quantity, message: "La cantidad seleccionada debe ser menor o igual a %{count}"}, if: :is_provision
+  validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_solicitud
+  validates_presence_of :lot_stock_id
+
   accepts_nested_attributes_for :lot_stock,
     :allow_destroy => true
 

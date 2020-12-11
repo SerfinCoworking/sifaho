@@ -12,12 +12,15 @@ namespace :batch do
 
   desc 'Migrate external orders'
   task migrate_external_orders: :environment do
-    ExternalOrder.find_each.each do |order|
+    ExternalOrder.with_deleted.find_each.each do |order|
+      order.destroy!
+    end
+    ExternalOrder.with_deleted.find_each.each do |order|
       order.really_destroy!
     end
-    
+
     puts "Comienza migración de "+ExternalOrderBak.solicitud_abastecimiento.count.to_s+" solicitudes y "+ExternalOrderBak.despacho.count.to_s+" despachos de establecimiento"
-    
+
     # Get all solicitud abastecimiento and despachos
     ExternalOrderBak.without_order_type(2).find_each do |solicitud|
       if solicitud.quantity_ord_supply_lots.present?
@@ -135,6 +138,16 @@ namespace :batch do
 
         if external_order.external_order_products.size > 0
           external_order.save
+          solicitud.movements.each do |solicitud|
+            ExternalOrderMovement.create(
+              user_id: solicitud.user_id,
+              external_order_id: solicitud.external_order_id,
+              sector_id: solicitud.sector_id,
+              action: solicitud.action,
+              created_at: solicitud.created_at,
+              updated_at: solicitud.updated_at
+            )
+          end
         end
       end
     end
@@ -156,7 +169,8 @@ namespace :batch do
     puts "Comienza migración de "+ExternalOrderBak.recibo.count.to_s+" recibos de establecimiento"
     
     # Get all solicitud abastecimiento and despachos
-    ExternalOrderBak.recibo.find_each do |recibo|
+    ExternalOrderBak.recibo.each do |recibo|
+      puts "Recibo id: "+recibo.id.to_s
       if recibo.quantity_ord_supply_lots.present?
         new_receipt = Receipt.new(
           id: recibo.id,
@@ -177,15 +191,11 @@ namespace :batch do
           new_receipt.status = 'auditoria'
         end
 
-        puts "Estado recibo: "+new_receipt.status
-
         recibo.quantity_ord_supply_lots.each do |qosl|
           product_id = Product.where(code: qosl.supply_id).first.id
 
           receipt_prod = new_receipt.receipt_products.build
           receipt_prod.product_id = product_id
-
-
 
           recibo.quantity_ord_supply_lots.each do |qosl|
             receipt_prod.product_id = product_id
@@ -196,25 +206,39 @@ namespace :batch do
             receipt_prod.created_at = qosl.created_at
             receipt_prod.updated_at = qosl.updated_at
           
-            stock_id = new_receipt.applicant_sector.stocks.where(product_id: product_id).first.id
-            lot_id = Lot.where(
-              product_id: product_id,
-              laboratory_id: qosl.laboratory_id,
-              code: qosl.lot_code,
-              expiry_date: qosl.expiry_date
-            ).first.id
-            puts "Stock id: "+stock_id.to_s
-            puts "Lot id: "+lot_id.to_s
-            receipt_prod.lot_stock_id = LotStock.where(
-              stock_id: stock_id,
-              lot_id: lot_id
-            ).first.id
+            # Se busca el primer stock del sector que coincida con el producto
+            stock = new_receipt.applicant_sector.stocks.where(product_id: product_id).first
+            # Se busca el primer lote que coincida con los parámetros ingresados en la relación
+            lot = Lot.where( product_id: product_id, laboratory_id: qosl.laboratory_id, code: qosl.lot_code, expiry_date: qosl.expiry_date).first
+            
+            # Una vez encontrados el lote y el stock, se busca el lote en stock para asignarla a la relación
+            if lot.present? && stock.present?
+              lot_stock_received = LotStock.where( stock_id: stock.id, lot_id: lot.id).first
+              receipt_prod.lot_stock_id = lot_stock_received.present? ? lot_stock_received.id : ''
+            end
           end
         end
 
         if new_receipt.receipt_products.size > 0
           puts new_receipt.status
-          new_receipt.save!
+          if new_receipt.valid?(:code)
+            new_receipt.save!
+            puts "Código válido"
+          else
+            new_receipt.code = new_receipt.code+"_bis"
+            new_receipt.save!
+          end
+        end
+
+        recibo.movements.each do |movement|
+          ReceiptMovement.create(
+            user_id: movement.user_id,
+            receipt_id: movement.external_order_id,
+            sector_id: movement.sector_id,
+            action: movement.action,
+            created_at: movement.created_at,
+            updated_at: movement.updated_at
+          )
         end
       end
     end

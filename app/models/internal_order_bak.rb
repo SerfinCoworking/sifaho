@@ -13,7 +13,7 @@ class InternalOrderBak < ApplicationRecord
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots, dependent: :destroy
   has_many :supply_lots, -> { with_deleted }, :through => :sector_supply_lots
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  has_many :movements, class_name: "InternalOrderMovement"
+  has_many :movements, class_name: "InternalOrderMovement", foreign_key: "internal_order_id"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
 
   belongs_to :created_by, class_name: 'User', optional: true
@@ -32,7 +32,7 @@ class InternalOrderBak < ApplicationRecord
     :allow_destroy => true
 
   # Callbacks
-  before_validation :record_remit_code, on: :create
+  # before_validation :record_remit_code, on: :create
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

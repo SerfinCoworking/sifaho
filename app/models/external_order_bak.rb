@@ -8,7 +8,7 @@ class ExternalOrderBak < ApplicationRecord
     recibo_realizado: 7, anulado: 8 }
 
   # Callbacks
-  before_validation :record_remit_code, on: :create
+  # before_validation :record_remit_code, on: :create
  
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector', optional: true
@@ -22,7 +22,7 @@ class ExternalOrderBak < ApplicationRecord
   has_many :quantity_ord_supply_lots, :as => :quantifiable, dependent: :destroy, inverse_of: :quantifiable
   has_many :supplies, -> { with_deleted }, :through => :quantity_ord_supply_lots
   has_many :sector_supply_lots, -> { with_deleted }, :through => :quantity_ord_supply_lots
-  has_many :movements, class_name: "ExternalOrderMovement"
+  has_many :movements, class_name: "ExternalOrderMovement", foreign_key: "external_order_id"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id"
   has_one :provider_establishment, :through => :provider_sector, :source => :establishment
   has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
