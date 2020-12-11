@@ -57,8 +57,7 @@ class OutpatientPrescriptionsController < ApplicationController
     respond_to do |format|
         # Si se entrega la receta
       begin
-        @outpatient_prescription.save
-
+        @outpatient_prescription.save!
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
 
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado correctamente."
@@ -90,9 +89,7 @@ class OutpatientPrescriptionsController < ApplicationController
 
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
        
-        @outpatient_prescription.update(outpatient_prescription_params)
-
-
+        @outpatient_prescription.update!(outpatient_prescription_params)
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado correctamente."
         notification_type = dispensing? ? "auditó y dispensó" : "auditó"
 
@@ -103,7 +100,7 @@ class OutpatientPrescriptionsController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @outpatient_prescription_products = @outpatient_prescription.outpatient_prescription_products.present? ? @outpatient_prescription.outpatient_prescription_products : @outpatient_prescription.outpatient_prescription_products.build        
-        format.html { redirect_to edit_outpatient_prescription_path(@outpatient_prescription) }
+        format.html { render :edit }
       end
     end
   end
@@ -122,21 +119,20 @@ class OutpatientPrescriptionsController < ApplicationController
 
   # GET /outpatient_prescriptions/1/dispense
   def dispense
-
     authorize @outpatient_prescription
-    @outpatient_prescription.status= 'dispensada'
+    @outpatient_prescription.status = 'dispensada'
+    puts "<=============== DEBUG"
     respond_to do |format|
       begin
-
         @outpatient_prescription.dispense_by(current_user)
-          flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."
-          format.html { redirect_to @outpatient_prescription }
+        flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."
+        format.html { redirect_to @outpatient_prescription }
       rescue ArgumentError => e
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
         @outpatient_prescription_products = @outpatient_prescription.outpatient_prescription_products.present? ? @outpatient_prescription.outpatient_prescription_products : @outpatient_prescription.outpatient_prescription_products.build        
-        format.html { redirect_to edit_outpatient_prescription_path(@outpatient_prescription) }
+        format.html { render :edit }
       end
     end
   end

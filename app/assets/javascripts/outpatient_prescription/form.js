@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(_PAGE.controller === 'outpatient_prescriptions' && (['new', 'edit', 'create'].includes(_PAGE.action))) ) return false;
+  if(!(_PAGE.controller === 'outpatient_prescriptions' && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   
@@ -34,16 +34,104 @@ $(document).on('turbolinks:load', function(e){
     maxDate: moment().format("DD/MM/YYYY")
   });
 
+  setExpirydate($('.date-prescribed').first().val());
+
   $('.date-prescribed').on('change', function(e) {
-    const datePrescribed = moment(e.target.value, "DD/MM/YYYY");
+    setExpirydate(e.target.value);
+  });
+
+  // Calculamos el valor de vencimiento de la receta
+  function setExpirydate(value){
+    const datePrescribed = moment(value, "DD/MM/YYYY");
     const expiryDate = datePrescribed.add(3, 'month');
     $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
+  }
 
-  });
 
   // cocoon init
   $('#order-product-cocoon-container').on('cocoon:after-insert', function(e) {
     initEvents();
+  });
+
+  // Función para autocompletar nombre y apellido del doctor
+  $('#professional').autocomplete({
+    source: $('#professional').data('autocomplete-source'),
+    minLength: 2,
+    autoFocus:true,
+    messages: {
+      noResults: function(count) {
+        $(".ui-menu-item-wrapper").html("No se encontró al médico");
+      }
+    },
+    search: function( event, ui ) {
+      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+    },
+    select:
+    function (event, ui) {
+      $("#professional_id").val(ui.item.id);
+    },
+    response: function(event, ui) {
+      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+    }
+  });
+  $('#patient-dni').autocomplete({
+    source: $('#patient-dni').data('autocomplete-source'),
+    autoFocus: true,
+    minLength: 7,
+    messages: {
+      noResults: function() {
+        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+      }
+    },
+    search: function( event, ui ) {
+      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+    },
+    response: function (event, ui) {
+      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+    },
+    select:
+    function (event, ui) {
+      event.preventDefault();
+      $("#patient").tooltip('hide');
+      $("#patient_id").val(ui.item.id);
+      $("#patient-dni").val(ui.item.dni);
+      $("#patient-fullname").val(ui.item.fullname);
+      const url = $('#patient-dni').attr('data-insurance-url');
+      getInsurances(url, ui.item.dni);
+    }
+  });
+
+  // Función para autocompletar por nombre o apellido de paciente
+  $('#patient-fullname').autocomplete({
+    source: $('#patient-fullname').data('autocomplete-source'),
+    autoFocus: true,
+    minLength: 3,
+    messages: {
+      noResults: function() {
+        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+      }
+    },
+    search: function( event, ui ) {
+      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+    },
+    response: function (event, ui) {
+      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+      if (!ui.content.length) {
+        $("#patient").tooltip({
+          placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
+        }).tooltip('show');
+      }
+    },
+    select:
+      function (event, ui) {
+        event.preventDefault();
+        $("#patient").tooltip('hide');
+        $("#patient_id").val(ui.item.id);
+        $("#patient-dni").val(ui.item.dni);
+        $("#patient-fullname").val(ui.item.fullname);
+        const url = $('#patient-dni').attr('data-insurance-url');
+        getInsurances(url, ui.item.dni);
+      }
   });
   
   // set expiry date calendar format

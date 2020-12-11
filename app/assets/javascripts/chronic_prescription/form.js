@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(_PAGE.controller === 'chronic_prescriptions' && (['new', 'edit', 'create'].includes(_PAGE.action))) ) return false;
+  if(!(_PAGE.controller === 'chronic_prescriptions' && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   // button submit
@@ -78,21 +78,54 @@ $(document).on('turbolinks:load', function(e){
     }
   });
   $('#patient-dni').autocomplete({
-      source: $('#patient-dni').data('autocomplete-source'),
-      autoFocus: true,
-      minLength: 7,
-      messages: {
-        noResults: function() {
-          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
-        }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      response: function (event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      },
-      select:
+    source: $('#patient-dni').data('autocomplete-source'),
+    autoFocus: true,
+    minLength: 7,
+    messages: {
+      noResults: function() {
+        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+      }
+    },
+    search: function( event, ui ) {
+      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+    },
+    response: function (event, ui) {
+      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+    },
+    select:
+    function (event, ui) {
+      event.preventDefault();
+      $("#patient").tooltip('hide');
+      $("#patient_id").val(ui.item.id);
+      $("#patient-dni").val(ui.item.dni);
+      $("#patient-fullname").val(ui.item.fullname);
+      const url = $('#patient-dni').attr('data-insurance-url');
+      getInsurances(url, ui.item.dni);
+    }
+  });
+
+  // Función para autocompletar por nombre o apellido de paciente
+  $('#patient-fullname').autocomplete({
+    source: $('#patient-fullname').data('autocomplete-source'),
+    autoFocus: true,
+    minLength: 3,
+    messages: {
+      noResults: function() {
+        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
+      }
+    },
+    search: function( event, ui ) {
+      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+    },
+    response: function (event, ui) {
+      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+      if (!ui.content.length) {
+        $("#patient").tooltip({
+          placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
+        }).tooltip('show');
+      }
+    },
+    select:
       function (event, ui) {
         event.preventDefault();
         $("#patient").tooltip('hide');
@@ -102,73 +135,7 @@ $(document).on('turbolinks:load', function(e){
         const url = $('#patient-dni').attr('data-insurance-url');
         getInsurances(url, ui.item.dni);
       }
-    });
-
-    // Función para autocompletar por nombre o apellido de paciente
-    $('#patient-fullname').autocomplete({
-      source: $('#patient-fullname').data('autocomplete-source'),
-      autoFocus: true,
-      minLength: 3,
-      messages: {
-        noResults: function() {
-          $(".ui-menu-item-wrapper").html("No se encontró el paciente");
-        }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      response: function (event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-        if (!ui.content.length) {
-          $("#patient").tooltip({
-            placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
-          }).tooltip('show');
-        }
-      },
-      select:
-        function (event, ui) {
-          event.preventDefault();
-          $("#patient").tooltip('hide');
-          $("#patient_id").val(ui.item.id);
-          $("#patient-dni").val(ui.item.dni);
-          $("#patient-fullname").val(ui.item.fullname);
-          const url = $('#patient-dni').attr('data-insurance-url');
-          getInsurances(url, ui.item.dni);
-        }
-    });
-
-  function getInsurances(url, dni){
-    $.ajax({
-      url: url + '/' + dni, // Ruta del controlador
-      type: 'GET',
-      data: {
-      },
-      dataType: "json",
-      error: function (XMLHttpRequest, errorTextStatus, error) {
-      },
-      success: function (data) {
-        if (!data.length) {
-          $('#non-os').toggleClass('invisible', false);
-          $('#pat-os').toggleClass('invisible', true);
-        } else {
-          $("#pat-os-body").html("");
-          for (var i in data) {
-            var momentDate = moment(data[i].version)
-            $("#pat-os-body").append(
-              "<tr>" +
-              '<td>' + data[i].financiador + '</td>' +
-              '<td class="pres-col-pro">' + data[i].codigoFinanciador + '</td>' +
-              '<td>' + momentDate.format("DD/MM/YYYY") + '</td>' +
-              "</tr>"
-            );
-          }
-          $('#non-os').toggleClass('invisible', true);
-          $('#pat-os').toggleClass('invisible', false);
-        } // End if
-      }// End success
-    });// End ajax
-  }
-
+  });
 
   // cocoon init
   $('#original-order-product-cocoon-container').on('cocoon:after-insert', function(e) {

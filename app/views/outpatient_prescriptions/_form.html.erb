@@ -19,18 +19,13 @@
         <div class="col-md-6 col-sm-12">
           <%= f.label :professional_id do %>
             Médico
-            <%# if f.object.cronic_dispensations.count == 0 %>
-              <%#= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
-                title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                <%#= fa_icon "plus" %>
-              <%# end %>
-            <%# end %>
           <% end %>
 
           <div class="custom-input-group">
             <%= f.input :professional, as: :string,
               label: false,
               placeholder: 'Matrícula | Apellido | Nombre',
+              autocomplete: false,
               readonly: f.object.new_record? ? "" : true,
               class: "m-0 flex-fill",
               :input_html => {
@@ -48,14 +43,6 @@
           
           <%= f.label :patient_id, class: "text-left" do %>
             Paciente
-            <% if policy(Patient).new? %>
-              <%# if f.object.cronic_dispensations.count == 0 %>
-                <%#= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
-                  title: 'Nuevo paciente temporal', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                  <%#= fa_icon "plus" %>
-                <%# end %>
-              <%# end %>
-            <% end %>
           <% end %>
 
           <div class="d-flex flex-row">
@@ -64,6 +51,7 @@
                 label: false,
                 placeholder: 'DNI',
                 required: true,
+                autocomplete: false,
                 readonly: f.object.new_record? ? "" : true,
                 :input_html => {
                   id: 'patient-dni',

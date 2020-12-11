@@ -25,11 +25,9 @@ class ChronicDispensationsController < ApplicationController
         format.html { render :new }
       end
     end
-
   end
 
   def return_dispensation_modal
-
     @chronic_dispensation = ChronicDispensation.find(params[:chronic_dispensation_id])
     authorize @chronic_dispensation
   end

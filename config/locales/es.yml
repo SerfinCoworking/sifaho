@@ -96,6 +96,13 @@ es:
         request_quantity: "Dosis mensual"
       original_chronic_prescription_product:
         request_quantity: "Dosis mensual"
+      outpatient_prescription:
+        professional: "Profesional"
+        patient: "Paciente"
+        date_prescribed: "Fecha recetada"
+      outpatient_prescription_product:
+        request_quantity: "Solicitar"
+        delivery_quantity: "Entregar"
 
       chronic_prescription:
         professional: "Profesional"

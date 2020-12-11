@@ -12,15 +12,13 @@ class OutpatientPrescription < ApplicationRecord
   belongs_to :establishment
 
   has_many :outpatient_prescription_products, dependent: :destroy
-  # has_many :lot_stocks, :through => :outpatient_prescription_products, dependent: :destroy
-  # has_many :lots, :through => :lot_stocks
 
   has_many :products,:through => :outpatient_prescription_products
   has_many :movements, class_name: "OutpatientPrescriptionMovement"
 
   # Validaciones
-  validates_presence_of :patient, :professional, :date_prescribed, :remit_code
-  validates :outpatient_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
+  validates :outpatient_prescription_products, :presence => { :message => "Debe agregar almenos 1 insumo" }
   validates_associated :outpatient_prescription_products
   validates_uniqueness_of :remit_code
 

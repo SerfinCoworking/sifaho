@@ -29,7 +29,8 @@
     <%= fa_icon "plus" %>
     Agregar insumo
   <% end %>
-  <% if form.object.errors[:original_chronic_prescription_products].any? && form.object.original_chronic_prescription_products.size == 1 %>
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if form.object.errors[:original_chronic_prescription_products].any? && !form.object.original_chronic_prescription_products.first.errors[:product_id].any? %>
     <div class="invalid-feedback d-block">
       <%= form.object.errors[:original_chronic_prescription_products].first %>
     </div>

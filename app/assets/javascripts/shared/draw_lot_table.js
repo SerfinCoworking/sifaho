@@ -1,5 +1,4 @@
-
-// if( _PAGE.controller !== 'internal_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant') ) return;
+// Este Js dibuja la table de seleccion de lotes
 
 // draw lot table selection
 function drawLotTable(value, selectedLots, toDelivery){
