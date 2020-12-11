@@ -99,7 +99,7 @@ class ChronicPrescriptionsController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @chronic_prescription_products = @chronic_prescription.original_chronic_prescription_products.present? ? @chronic_prescription.original_chronic_prescription_products : @chronic_prescription.original_chronic_prescription_products.build        
-        format.html { redirect_to edit_chronic_prescription_path(@chronic_prescription) }
+        format.html { render :edit }
       end
     end
   end

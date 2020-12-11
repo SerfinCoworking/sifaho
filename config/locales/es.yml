@@ -93,6 +93,14 @@ es:
         delivery_quantity: "A entregar"
       chronic_prescription_product:
         delivery_quantity: "Dosis"
+        request_quantity: "Dosis mensual"
+      original_chronic_prescription_product:
+        request_quantity: "Dosis mensual"
+
+      chronic_prescription:
+        professional: "Profesional"
+        patient: "Paciente"
+        date_prescribed: "Fecha recetada"
 
       
 

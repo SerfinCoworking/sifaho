@@ -29,5 +29,10 @@
     <%= fa_icon "plus" %>
     Agregar insumo
   <% end %>
-
+  <% if form.object.errors[:original_chronic_prescription_products].any? && form.object.original_chronic_prescription_products.size == 1 %>
+    <div class="invalid-feedback d-block">
+      <%= form.object.errors[:original_chronic_prescription_products].first %>
+    </div>
+  <% end %>
+  
 </div>
