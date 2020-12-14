@@ -11,7 +11,7 @@
     un 
     <span class="visible-print">despacho</span>
     de 
-    <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
+    <%= osCount = notification.target.external_order_products.count %><%= ' insumo'.pluralize(osCount) %>
     para <%= notification.target.applicant_sector.name %> de <%= notification.target.applicant_sector.establishment.name %>.
   </div>
 <% end%>
