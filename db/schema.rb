@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_05_112729) do
+
+ActiveRecord::Schema.define(version: 2020_10_29_144702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -125,11 +126,84 @@ ActiveRecord::Schema.define(version: 2020_10_05_112729) do
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
 
+<<<<<<< HEAD
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+=======
+  create_table "chron_pres_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "chronic_prescription_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronic_prescription_product_id"], name: "unique_chron_pres_prod_lot_stock_cpp"
+    t.index ["lot_stock_id"], name: "index_chron_pres_prod_lot_stocks_on_lot_stock_id"
+  end
+
+  create_table "chronic_dispensations", force: :cascade do |t|
+    t.bigint "chronic_prescription_id"
+    t.text "observation"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronic_prescription_id"], name: "index_chronic_dispensations_on_chronic_prescription_id"
+  end
+
+  create_table "chronic_prescription_comments", force: :cascade do |t|
+    t.bigint "chronic_prescription_id"
+    t.bigint "user_id"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronic_prescription_id"], name: "unique_chron_pres_on_out_pres_comments"
+    t.index ["user_id"], name: "index_chronic_prescription_comments_on_user_id"
+  end
+
+  create_table "chronic_prescription_movements", force: :cascade do |t|
+    t.bigint "chronic_prescription_id"
+    t.bigint "user_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronic_prescription_id"], name: "unique_chron_pres_on_out_pres_movements"
+    t.index ["sector_id"], name: "index_chronic_prescription_movements_on_sector_id"
+    t.index ["user_id"], name: "index_chronic_prescription_movements_on_user_id"
+  end
+
+  create_table "chronic_prescription_products", force: :cascade do |t|
+    t.bigint "original_chronic_prescription_product_id"
+    t.bigint "chronic_dispensation_id"
+    t.bigint "product_id"
+    t.integer "delivery_quantity"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chronic_dispensation_id"], name: "index_chronic_prescription_products_on_chronic_dispensation_id"
+    t.index ["original_chronic_prescription_product_id"], name: "unique_org_chronic_prescription_product_cpp"
+    t.index ["product_id"], name: "index_chronic_prescription_products_on_product_id"
+  end
+
+  create_table "chronic_prescriptions", force: :cascade do |t|
+    t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.bigint "provider_sector_id"
+    t.bigint "establishment_id"
+    t.string "remit_code"
+    t.text "diagnostic"
+    t.datetime "date_prescribed"
+    t.date "expiry_date"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_chronic_prescriptions_on_establishment_id"
+    t.index ["patient_id"], name: "index_chronic_prescriptions_on_patient_id"
+    t.index ["professional_id"], name: "index_chronic_prescriptions_on_professional_id"
+    t.index ["provider_sector_id"], name: "index_chronic_prescriptions_on_provider_sector_id"
+>>>>>>> receipt_form
   end
 
   create_table "cities", force: :cascade do |t|
@@ -521,29 +595,69 @@ ActiveRecord::Schema.define(version: 2020_10_05_112729) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "office_supplies", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "quantity"
-    t.integer "status", default: 0
-    t.bigint "sector_id"
+  create_table "original_chronic_prescription_products", force: :cascade do |t|
+    t.bigint "chronic_prescription_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "total_request_quantity", default: 0
+    t.integer "total_delivered_quantity", default: 0
+    t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "remit_code"
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_office_supplies_on_deleted_at"
-    t.index ["remit_code"], name: "index_office_supplies_on_remit_code", unique: true
-    t.index ["sector_id"], name: "index_office_supplies_on_sector_id"
+    t.index ["chronic_prescription_id"], name: "unique_chron_pres_on_org_cron_pres_prod"
+    t.index ["product_id"], name: "index_original_chronic_prescription_products_on_product_id"
   end
 
-  create_table "office_supply_categorizations", force: :cascade do |t|
-    t.bigint "office_supply_id"
-    t.bigint "category_id"
-    t.integer "position"
+  create_table "out_pres_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "outpatient_prescription_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_office_supply_categorizations_on_category_id"
-    t.index ["office_supply_id"], name: "index_office_supply_categorizations_on_office_supply_id"
+    t.index ["lot_stock_id"], name: "index_out_pres_prod_lot_stocks_on_lot_stock_id"
+    t.index ["outpatient_prescription_product_id"], name: "unique_out_pres_prod_lot_stocks_on_out_pres_prod"
+  end
+
+  create_table "outpatient_prescription_movements", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "outpatient_prescription_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_id"], name: "unique_out_pres_on_out_pres_movements"
+    t.index ["sector_id"], name: "index_outpatient_prescription_movements_on_sector_id"
+    t.index ["user_id"], name: "index_outpatient_prescription_movements_on_user_id"
+  end
+
+  create_table "outpatient_prescription_products", force: :cascade do |t|
+    t.bigint "outpatient_prescription_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.integer "delivery_quantity"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["outpatient_prescription_id"], name: "unique_out_pres_prod_on_outpatient_prescriptions"
+    t.index ["product_id"], name: "index_outpatient_prescription_products_on_product_id"
+  end
+
+  create_table "outpatient_prescriptions", force: :cascade do |t|
+    t.bigint "professional_id"
+    t.bigint "patient_id"
+    t.bigint "provider_sector_id"
+    t.bigint "establishment_id"
+    t.string "remit_code"
+    t.text "observation"
+    t.datetime "date_prescribed"
+    t.date "expiry_date"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["establishment_id"], name: "index_outpatient_prescriptions_on_establishment_id"
+    t.index ["patient_id"], name: "index_outpatient_prescriptions_on_patient_id"
+    t.index ["professional_id"], name: "index_outpatient_prescriptions_on_professional_id"
+    t.index ["provider_sector_id"], name: "index_outpatient_prescriptions_on_provider_sector_id"
   end
 
   create_table "patient_phones", force: :cascade do |t|

@@ -45,6 +45,8 @@ $('[data-toggle="tooltip"]').tooltip({
   'container':'body'
 });
 
+
+
 $('#filterrific_filter').on(
   "change",
   ":input",
@@ -73,7 +75,7 @@ $(document).on('turbolinks:load', function() {
     }
   );
 
-  $('.since-date, .to-date, .requested-date, .prescribed-date').datepicker({
+/*   $('.since-date, .to-date, .requested-date, .prescribed-date').datepicker({
     closeText: 'Cerrar',
     prevText: '<Ant',
     nextText: 'Sig>',
@@ -89,7 +91,7 @@ $(document).on('turbolinks:load', function() {
     isRTL: false,
     showMonthAfterYear: false,
     yearSuffix: ''
-  });
+  }); */
 
   $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
@@ -157,4 +159,24 @@ $(document).on('turbolinks:load', function() {
       time: "far fa-clock",
     }
   });
+
+  
+  /* new version */
+  $('[data-toggle="popover"]').popover();
+  
+  $('.delete-item').on('click', function(e) {
+    const modal = $(e.target).attr('data-target');
+    const title = $(e.target).attr('data-title');
+    const body = $(e.target).attr('data-body');
+    const href = $(e.target).attr('data-href');
+
+    $(modal).find('.modal-title').text(title);
+    $(modal).find('.modal-body').text(body);
+    $(modal).find('.btn[data-method="delete"]').attr('href', href);
+    $(modal).modal('toggle');
+    
+  });
+
 });
+
+// delete confirm

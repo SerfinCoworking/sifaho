@@ -8,9 +8,7 @@ Rails.application.routes.draw do
   
   resources :stocks do
     collection do
-      get "find_lots/(:id)",
-        to: 'stocks#find_lots',
-        as: 'find_lots'
+      get "find_lots"
     end
   end
   # custom error routes
@@ -90,7 +88,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :patients
-      get 'insurances/get_by_dni/:dni', to: 'insurances#get_by_dni'
+      get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
     end
   end
 
@@ -263,6 +261,21 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :outpatient_prescriptions do
+    member do
+      get 'return_dispensation'
+      get 'dispense'
+    end
+  end
+  
+  resources :chronic_prescriptions do 
+    resources :chronic_dispensations, only: [:new, :create] do
+      get 'return_dispensation_modal'
+      patch 'return_dispensation'
+    end
+  end
+  
+    
   resources :prescriptions do
     member do
       get 'delete'
@@ -270,9 +283,8 @@ Rails.application.routes.draw do
       get 'confirm_return_ambulatory'
       patch 'return_ambulatory_dispensation'
       get 'confirm_return_cronic'
-      patch 'return_cronic_dispensation'
     end
-      collection do
+    collection do
       get 'new_cronic'
       get 'get_by_patient_id'
       get 'get_cronic_prescriptions'

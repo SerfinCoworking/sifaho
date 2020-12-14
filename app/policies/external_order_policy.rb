@@ -61,7 +61,7 @@ class ExternalOrderPolicy < ApplicationPolicy
   end
 
   def show_provider_fields?
-    record.provision? && (new_provider? || edit_provider?)
+    (record.provision? && new_provider?) || edit_provider?
   end
   #  end new version
 

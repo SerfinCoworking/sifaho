@@ -11,31 +11,34 @@
   &.finish-success{
     .progress-bar{
       background-color: #218838!important;
-      box-shadow: 0px 0px 3px 0px rgba(33,136,57,0.9);
+      box-shadow: 0px 2px 3px -1px black;
+      // box-shadow: 0px 2px 3px -1px rgba(33,136,57,0.9);
     }
     ul > li > .indicator-circle{
       background-color: #218839!important;
       border-color: #145623!important;
-      box-shadow: 0px 0px 3px .5px rgba(33,136,57,0.9);
+      // box-shadow: 0px 0px 3px .5px rgba(33,136,57,0.9);
     }
   }
   
   &.finish-danger{
     .progress-bar{
       background-color: #dc3545!important;
-      box-shadow: 0px 0px 3px 0px rgba(220,53,69,0.9);
+      box-shadow: 0px 2px 3px -1px black;
+      // box-shadow: 0px 2px 3px -1px rgba(220,53,69,0.9);
     }
     ul > li > .indicator-circle{
       background-color: #dc3545!important;
       border-color: #940f1c!important;
-      box-shadow: 0px 0px 3px .5px rgba(148,15,28,0.9);
+      // box-shadow: 0px 0px 3px .5px rgba(148,15,28,0.9);
     }
   }
   
   .progress-bar{
     width: 0%;
     background-color: $cblue2;
-    box-shadow: 0px 0px 3px 0px rgba(0,64,122,0.9);
+    box-shadow: 0px 2px 3px -1px black;
+    // box-shadow: 0px 2px 3px -1px rgba(0,64,122,0.9);
     height: 3px;
     position: absolute;
     left: 0;
@@ -58,7 +61,7 @@
       &.active{
         .indicator-circle{
           background-color: $cblue3;
-          box-shadow: 0px 0px 3px 0px rgba(0,64,122,0.9);
+          // box-shadow: 0px 0px 3px 0px rgba(0,64,122,0.9);
         }
       }
       .indicator-circle{
@@ -79,5 +82,18 @@
     }
 
    
+  }
+}
+
+.custom-progress{
+  height: 20px;
+  .progress-bar{
+    background-color: #2ec1ac;
+  }
+  .percentage-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

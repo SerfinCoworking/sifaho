@@ -235,7 +235,7 @@
       <% end %>
       <% if policy(@external_order).return_provider_status? || policy(@external_order).return_applicant_status? %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
-          <%= fa_icon "redo" %>
+          <%= fa_icon "undo" %>
           Retornar
         </button>
       <% end %>
@@ -272,7 +272,7 @@
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
           <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

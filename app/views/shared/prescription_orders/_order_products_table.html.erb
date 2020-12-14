@@ -1,0 +1,42 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Tu stock</th>
+        <th>Solicitar</th>
+        <th>Entregar</th>
+        <th>Lote</th>
+        <th>Tu observación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="order-product-cocoon-container">
+      <%= form.simple_fields_for relation do |form_products| %>
+        <%= render "shared/prescription_orders/order_product_fields", f: form_products %>
+      <% end %>
+    </tbody>
+    
+  </table>
+
+  <%= link_to_add_association form, 
+    relation, 
+    class: 'btn btn-primary btn-sm',
+    partial: "shared/prescription_orders/order_product_fields", 
+    data: {
+      "association-insertion-node" => "tbody#order-product-cocoon-container",
+      "association-insertion-method" => "append"} do %>
+    <%= fa_icon "plus" %>
+    Agregar insumo
+  <% end %>
+
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>  
+  <% if form.object.errors[:outpatient_prescription_products].any? && form.object.outpatient_prescription_products.count == 0 && !form.object.outpatient_prescription_products.first.errors[:product_id].any? %>
+    <div class="invalid-feedback d-block">
+      <%= form.object.errors[:outpatient_prescription_products].first %>
+    </div>
+  <% end %>
+
+</div>

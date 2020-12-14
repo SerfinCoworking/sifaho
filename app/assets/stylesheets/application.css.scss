@@ -296,3 +296,11 @@ a {
     }
   }
 }
+
+.btn .fas, .btn .fa, .btn svg{
+  pointer-events: none;
+}
+
+.bg-ocpp-light-blue{
+  background-color: $light-blue;
+}

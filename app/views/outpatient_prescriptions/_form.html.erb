@@ -1,0 +1,193 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @outpatient_prescription.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@outpatient_prescription.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @outpatient_prescription.new_record? ? 'Agregar receta ambulatoria' : 'Editando receta ambulatoria' %>
+        
+      </h5>
+    </div>
+    <%= link_to :back, class: @outpatient_prescription.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+    <%= simple_form_for @outpatient_prescription, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class='row'>
+        <div class="col-md-6 col-sm-12">
+          <%= f.label :professional_id do %>
+            Médico
+          <% end %>
+
+          <div class="custom-input-group">
+            <%= f.input :professional, as: :string,
+              label: false,
+              placeholder: 'Matrícula | Apellido | Nombre',
+              autocomplete: false,
+              readonly: f.object.new_record? ? "" : true,
+              class: "m-0 flex-fill",
+              :input_html => {
+                id: "professional",
+                data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
+              }
+            %>
+            <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+          
+          <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
+          
+          <%= f.label :patient_id, class: "text-left" do %>
+            Paciente
+          <% end %>
+
+          <div class="d-flex flex-row">
+            <div class="custom-input-group w-40 pr-1">
+              <%= f.input :patient, as: :string, class: 'form-control',
+                label: false,
+                placeholder: 'DNI',
+                required: true,
+                autocomplete: false,
+                readonly: f.object.new_record? ? "" : true,
+                :input_html => {
+                  id: 'patient-dni',
+                  data: { autocomplete_source: get_by_dni_patients_path },
+                  value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
+                }
+              %>
+              <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+              </div>
+            </div>
+
+            <div class="custom-input-group flex-fill">
+              <%= f.input :patient, as: :string, class: 'form-control',
+                label: false,
+                placeholder: 'Apellido y nombre',
+                required: true,
+                readonly: f.object.new_record? ? "" : true,
+                :input_html => {
+                  id: 'patient-fullname',
+                  data: { autocomplete_source: get_by_fullname_patients_path },
+                  value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
+                }
+              %>
+              <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+              </div>
+            </div>
+            <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
+          </div>
+          <div class="d-flex flex-row">
+            <div class="flex-fill pr-1 w-50 mr-2">
+              <%= f.input :date_prescribed, as: :string, label: "Fecha recetada", html5: true, required: true,
+                :input_html => {
+                  required: true,
+                  class: "form-control date-prescribed",
+                  autocomplete: "off",
+                  value: "#{f.object.new_record? ? DateTime.now.strftime("%d/%m/%Y") : f.object.date_prescribed.strftime("%d/%m/%Y")}"
+                }
+              %>
+            </div>
+            <div class="flex-fill w-50">
+              <label class="form-control-label string"> Fecha vencimiento </label>
+              <div class="p-2" id="expiry-date">
+                <%= f.object.expiry_date.strftime("%d/%m/%Y") unless f.object.new_record? %>
+              </div>
+            </div>
+          </div>
+          <%= f.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
+        </div>
+        <div class="patient-info d-flex flex-column col-md-6 col-sm-12 col-xs-12">
+          <div class='p-1 invisible' id="non-os">
+            <div class="card table-info">
+              <div class="card-header">No posee obra social.</div>
+            </div>
+          </div>
+          <div class='p-1 invisible' id="pat-os">
+            <div class="card">
+              <!-- Default panel contents -->
+              <table class="table table-sm mb-0">
+                <thead>
+                  <tr class="info">
+                    <th>Obra social</th>
+                    <th>Código</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+                <tbody id="pat-os-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class='p-1 invisible' id="non-pres">
+            <div class="card">
+                <div class="card-header">Aún no tiene recetas.</div>
+            </div>
+          </div>
+          <div class='p-1 invisible' id="pat-pres">
+            <div class="h5">Últimas recetas</div>
+            <div class="card">
+              <!-- Default panel contents -->
+              <div class="card">
+                <table class="table table-hover table-sm mb-0">
+                  <thead>
+                    <tr>
+                      <th>Tipo</th>
+                      <th>Profesional</th>
+                      <th>Ins</th>
+                      <th>Estado</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pat-pres-body">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Productos a dispensar -->
+      <%= render "shared/prescription_orders/order_products_table", form: f, :relation => :outpatient_prescription_products %>
+
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', outpatient_prescriptions_path, class: 'btn mr-1' %>
+  
+    <button type='submit' class='btn btn-success mr-2' form="<%= @outpatient_prescription.new_record? ? 'new_outpatient_prescription' : 'edit_outpatient_prescription_' + @outpatient_prescription.id.to_s %>" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+
+    </button>
+
+    <button type='submit' class='btn btn-primary' form="<%= @outpatient_prescription.new_record? ? 'new_outpatient_prescription' : 'edit_outpatient_prescription_' + @outpatient_prescription.id.to_s %>" data-value='dispensing'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Guardar y dispensar
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>

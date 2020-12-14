@@ -66,7 +66,7 @@ class StocksController < ApplicationController
   end
 
   def find_lots   
-    
+    # Buscamos los lot_stocks que pertenezcan al sector del usuario y ademas tengan stock
     @lot_stocks = LotStock.joins(:stock)
       .joins(:product)
       .where("stocks.sector_id = ?", current_user.sector.id)

@@ -1,0 +1,56 @@
+
+<div class="modal-dialog modal-lg">
+  <div class="modal-content panel-warning">
+    <div class="modal-header panel-heading bg-danger">
+      <h5 class="m-0 d-flex align-items-center text-white">
+        <%= fa_icon "undo" %> 
+        <div class="ml-2 title">Retornar y eliminar dispensación con fecha <%= @chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %></div>
+      </h5>
+      <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="products-list">
+        <div class="mb-2 body-title">Se volverán a stock los siguientes productos:</div>
+        <div class="card mb-2">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Unidad</th>
+                <th>Cantidad entregada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @chronic_dispensation.chronic_prescription_products.each do |cpp| %>
+                <tr>
+                  <td> <%= cpp.product.code %> </td>
+                  <td> <%= cpp.product.name %> </td>
+                  <td> <%= cpp.product.unity %> </td>
+                  <td> <%= cpp.delivery_quantity %> </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p>
+        Está seguro de que desea retornar?
+      </p>            
+    </div>
+    <div class="modal-footer text-right">
+      <a href="#" data-dismiss="modal" class="btn btn-light">Cancelar</a>
+      <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_path(@chronic_dispensation.chronic_prescription.id, @chronic_dispensation.id), method: :patch,
+        class: 'btn btn-danger',
+        data: { 
+          "disable-with": "Enviando...<i class='fa fa-spinner fa-spin'></i>"
+        } do %> 
+        <%#= fa_icon "paper-plane"%>
+        Continuar
+      <% end %>
+
+    </div>
+  </div>
+</div>
