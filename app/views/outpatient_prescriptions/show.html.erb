@@ -223,7 +223,7 @@
     <%# end %>
     <% if policy(@outpatient_prescription).return_dispensation? %>
       <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">
-        <%= fa_icon "redo" %>
+        <%= fa_icon "undo" %>
         Retornar
       </button>
     <% end %>
@@ -252,7 +252,7 @@
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
           <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "redo" %> Retornar a <%= prev_status = OutpatientPrescription.statuses.key(@outpatient_prescription.status_before_type_cast - 1).underscore.humanize %></h5>
+            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = OutpatientPrescription.statuses.key(@outpatient_prescription.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
