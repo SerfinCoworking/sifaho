@@ -138,27 +138,12 @@ namespace :batch do
 
         if external_order.external_order_products.size > 0
           external_order.save
-          solicitud.movements.each do |solicitud|
-            ExternalOrderMovement.create(
-              user_id: solicitud.user_id,
-              external_order_id: solicitud.external_order_id,
-              sector_id: solicitud.sector_id,
-              action: solicitud.action,
-              created_at: solicitud.created_at,
-              updated_at: solicitud.updated_at
-            )
-          end
         end
       end
     end
     puts "Se migraron "+ExternalOrder.solicitud.count.to_s+" de "+ExternalOrderBak.solicitud_abastecimiento.count.to_s+" solicitudes"
     puts "Se migraron "+ExternalOrder.provision.count.to_s+" de "+ExternalOrderBak.despacho.count.to_s+" despachos"
   end
-
-
-
-
-
 
   desc 'Migrate receipts'
   task migrate_receipts: :environment do
@@ -170,7 +155,6 @@ namespace :batch do
     
     # Get all solicitud abastecimiento and despachos
     ExternalOrderBak.recibo.each do |recibo|
-      puts "Recibo id: "+recibo.id.to_s
       if recibo.quantity_ord_supply_lots.present?
         new_receipt = Receipt.new(
           id: recibo.id,
@@ -223,7 +207,6 @@ namespace :batch do
           puts new_receipt.status
           if new_receipt.valid?(:code)
             new_receipt.save!
-            puts "Código válido"
           else
             new_receipt.code = new_receipt.code+"_bis"
             new_receipt.save!
@@ -245,35 +228,99 @@ namespace :batch do
     puts "Se migraron "+Receipt.count.to_s+" de "+ExternalOrderBak.recibo.count.to_s+" recibos"
   end
 
-  # Receipt products
-  # t.bigint "receipt_id"-
-  # t.bigint "lot_stock_id"-
-  # t.bigint "product_id"-
-  # t.bigint "laboratory_id"-
-  # t.integer "quantity"-
-  # t.string "lot_code"-
-  # t.date "expiry_date"
-  # t.datetime "created_at", null: false
-  # t.datetime "updated_at", null: false
+  desc 'Migrate internal order products'
+  task migrate_internal_orders: :environment do
+    InternalOrderBak.all.each do |old_internal_order|
+      new_internal_order = InternalOrder.find(old_internal_order.id)
+      puts "Pedido interno id: "+new_internal_order.id.to_s
 
-  # t.integer "supply_lot"
-  # t.string "quantifiable_type"
-  # t.bigint "quantifiable_id"
-  # t.integer "requested_quantity", default: 0
-  # t.integer "delivered_quantity", default: 0
-  # t.datetime "created_at", null: false
-  # t.datetime "updated_at", null: false
-  # t.bigint "sector_supply_lot_id"
-  # t.bigint "supply_id"
-  # t.bigint "supply_lot_id"
-  # t.date "expiry_date"
-  # t.string "lot_code"
-  # t.bigint "laboratory_id"
-  # t.integer "status", default: 0
-  # t.text "applicant_observation"
-  # t.text "provider_observation"
-  # t.integer "treatment_duration"
-  # t.integer "daily_dose"
-  # t.datetime "dispensed_at"
-  # t.bigint "cronic_dispensation_id"
+      if old_internal_order.quantity_ord_supply_lots.present?
+        old_internal_order.quantity_ord_supply_lots.each do |qosl|
+          product_id = Product.where(code: qosl.supply_id).first.id
+
+          # Check if qosl has a selected lot and was created on LotStock
+          if old_internal_order.provision_en_camino? || old_internal_order.provision_entregada?
+
+            if qosl.sector_supply_lot_id.present? && LotStock.where(id: qosl.sector_supply_lot_id).present?
+
+              # Check if the product was already created
+              if new_internal_order.internal_order_products.to_ary.select { |iop| iop.product_id == product_id }.size == 0
+                int_ord_prod = new_internal_order.internal_order_products.build
+                int_ord_prod.product_id = product_id
+
+                old_internal_order.quantity_ord_supply_lots.where(supply_id: qosl.supply_id).each do |qosl_with_same_supply|
+                  if int_ord_prod.delivery_quantity.present?
+                    int_ord_prod.delivery_quantity += qosl_with_same_supply.delivered_quantity
+                  else
+                    int_ord_prod.delivery_quantity = 0
+                    int_ord_prod.delivery_quantity += qosl_with_same_supply.delivered_quantity
+                  end
+                  if int_ord_prod.request_quantity.present?
+                    int_ord_prod.request_quantity += qosl_with_same_supply.delivered_quantity
+                  else
+                    int_ord_prod.request_quantity = 0
+                    int_ord_prod.request_quantity += qosl_with_same_supply.delivered_quantity
+                  end
+                  if qosl_with_same_supply.provider_observation.present?; int_ord_prod.provider_observation = qosl_with_same_supply.provider_observation; end
+                  if qosl_with_same_supply.applicant_observation.present?; int_ord_prod.applicant_observation = qosl_with_same_supply.applicant_observation; end
+                  int_ord_prod.created_at = qosl_with_same_supply.created_at
+                  int_ord_prod.updated_at = qosl_with_same_supply.updated_at
+      
+                  if qosl_with_same_supply.sector_supply_lot_id.present? && LotStock.where(id: qosl_with_same_supply.sector_supply_lot_id).present?
+                    int_ord_prod.order_prod_lot_stocks.build(
+                      lot_stock_id: qosl_with_same_supply.sector_supply_lot_id,
+                      quantity: qosl_with_same_supply.delivered_quantity,
+                      created_at: qosl_with_same_supply.created_at,
+                      updated_at: qosl_with_same_supply.updated_at
+                    )
+                  else
+                    int_ord_prod.delivery_quantity -= qosl_with_same_supply.delivered_quantity 
+                  end
+                end
+              end
+            end
+          else
+            # Check if the product was already created
+            if new_internal_order.internal_order_products.to_ary.select { |iop| iop.product_id == product_id }.size == 0
+              int_ord_prod = new_internal_order.internal_order_products.build
+              int_ord_prod.product_id = product_id
+
+              old_internal_order.quantity_ord_supply_lots.where(supply_id: qosl.supply_id).each do |qosl_with_same_supply|
+                if int_ord_prod.delivery_quantity.present?
+                  int_ord_prod.delivery_quantity += qosl_with_same_supply.delivered_quantity 
+                else
+                  int_ord_prod.delivery_quantity = 0
+                  int_ord_prod.delivery_quantity += qosl_with_same_supply.delivered_quantity
+                end
+                if int_ord_prod.request_quantity.present? 
+                  int_ord_prod.request_quantity += qosl_with_same_supply.delivered_quantity 
+                else
+                  int_ord_prod.request_quantity = 0
+                  int_ord_prod.request_quantity += qosl_with_same_supply.delivered_quantity
+                end
+                if qosl_with_same_supply.provider_observation.present?; int_ord_prod.provider_observation = qosl_with_same_supply.provider_observation; end
+                if qosl_with_same_supply.applicant_observation.present?; int_ord_prod.applicant_observation = qosl_with_same_supply.applicant_observation; end
+                int_ord_prod.created_at = qosl_with_same_supply.created_at
+                int_ord_prod.updated_at = qosl_with_same_supply.updated_at
+    
+                if qosl_with_same_supply.sector_supply_lot_id.present? && LotStock.where(id: qosl_with_same_supply.sector_supply_lot_id).present?
+                  int_ord_prod.order_prod_lot_stocks.build(
+                    lot_stock_id: qosl_with_same_supply.sector_supply_lot_id,
+                    quantity: qosl_with_same_supply.delivered_quantity,
+                    created_at: qosl_with_same_supply.created_at,
+                    updated_at: qosl_with_same_supply.updated_at
+                  )
+                else
+                  int_ord_prod.delivery_quantity -= qosl_with_same_supply.delivered_quantity 
+                end
+              end
+            end
+          end
+        end
+        if new_internal_order.internal_order_products.size > 0
+          new_internal_order.save!
+        end
+      end
+    end
+  end
 end

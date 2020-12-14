@@ -34,7 +34,7 @@ class ExternalOrder < ApplicationRecord
   has_many :ext_ord_prod_lot_stocks, through: :external_order_products, inverse_of: 'external_order'
   has_many :lot_stocks, :through => :external_order_products
   has_many :lots, :through => :lot_stocks
-  has_many :products, :through => :external_order_products
+  has_many :products, :through => :external_order_products  
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
