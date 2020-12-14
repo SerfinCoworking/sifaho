@@ -131,11 +131,9 @@ class OutpatientPrescription < ApplicationRecord
       raise ArgumentError, "No es posible dispensar recetas vencidas."
     end
 
-    self.outpatient_prescription_products.each do |iop|
-      iop.decrement_stock
+    self.outpatient_prescription_products.each do |opp|
+      opp.decrement_stock
     end
-
-    self.save!(validate: false)
     self.create_notification(a_user, "dispensó")
   end
 

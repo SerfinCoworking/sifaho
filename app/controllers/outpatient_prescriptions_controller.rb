@@ -120,10 +120,9 @@ class OutpatientPrescriptionsController < ApplicationController
   # GET /outpatient_prescriptions/1/dispense
   def dispense
     authorize @outpatient_prescription
-    @outpatient_prescription.status = 'dispensada'
-    puts "<=============== DEBUG"
     respond_to do |format|
       begin
+        @outpatient_prescription.dispensada!
         @outpatient_prescription.dispense_by(current_user)
         flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."
         format.html { redirect_to @outpatient_prescription }
