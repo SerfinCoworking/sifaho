@@ -1,6 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if( (_PAGE.controller !== 'internal_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant')) 
-  && (_PAGE.controller !== 'external_orders' && (_PAGE.action !== 'new_applicant' || _PAGE.action !== 'edit_applicant')) ) return false;
+  if(!(['external_orders', 'internal_orders'].includes(_PAGE.controller) && (['new_applicant', 'edit_applicant','new_provider', 'edit_provider', 'accept_provider'].includes(_PAGE.action))) ) return false;
 
   initEvents();
   

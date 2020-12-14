@@ -247,13 +247,18 @@ class ExternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @external_order.proveedor_aceptado!
+        @external_order.send_order_by(current_user)        
+
+        format.html { redirect_to @external_order, notice: 'La provision se ha aceptado correctamente.' }
       rescue ArgumentError => e
+        # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
-      else
-        @external_order.create_notification(current_user, "aceptó")
-        flash[:notice] = 'La provisión ha sido aceptado correctamente.'
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @external_order.external_order_products || @external_order.external_order_products.build
+        @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
+        format.html { render :edit_provider }
       end
-      format.html { render :show }
     end
   end
 
