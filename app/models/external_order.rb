@@ -3,29 +3,29 @@ class ExternalOrder < ApplicationRecord
   include PgSearch
 
   # New enum
-  # enum order_type: { provision: 0, solicitud: 1 }
-  # enum status: { 
-  #   solicitud_auditoria: 0, 
-  #   solicitud_enviada: 1, 
-  #   proveedor_auditoria: 2, 
-  #   proveedor_aceptado: 3, 
-  #   provision_en_camino: 4, 
-  #   provision_entregada: 5,  
-  #   anulado: 6 
-  # }
+  enum order_type: { provision: 0, solicitud: 1 }
+  enum status: { 
+    solicitud_auditoria: 0, 
+    solicitud_enviada: 1, 
+    proveedor_auditoria: 2, 
+    proveedor_aceptado: 3, 
+    provision_en_camino: 4, 
+    provision_entregada: 5,  
+    anulado: 6 
+  }
 
   # Old enum
-  enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
-  enum status: {
-    solicitud_auditoria: 0,
-    solicitud_enviada: 1,
-    proveedor_auditoria: 2,
-    proveedor_aceptado: 3,
-    provision_en_camino: 4, 
-    provision_entregada: 5,
-    recibo_auditoria: 6,
-    recibo_realizado: 7,
-    anulado: 8 }
+  # enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
+  # enum status: {
+  #   solicitud_auditoria: 0,
+  #   solicitud_enviada: 1,
+  #   proveedor_auditoria: 2,
+  #   proveedor_aceptado: 3,
+  #   provision_en_camino: 4, 
+  #   provision_entregada: 5,
+  #   recibo_auditoria: 6,
+  #   recibo_realizado: 7,
+  #   anulado: 8 }
 
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'

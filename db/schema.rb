@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 2020_10_29_144702) do
 
   # These are extensions that must be enabled in order to support this database
@@ -126,13 +125,13 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
 
-<<<<<<< HEAD
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-=======
+  end
+
   create_table "chron_pres_prod_lot_stocks", force: :cascade do |t|
     t.bigint "chronic_prescription_product_id"
     t.bigint "lot_stock_id"
@@ -203,7 +202,6 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
     t.index ["patient_id"], name: "index_chronic_prescriptions_on_patient_id"
     t.index ["professional_id"], name: "index_chronic_prescriptions_on_professional_id"
     t.index ["provider_sector_id"], name: "index_chronic_prescriptions_on_provider_sector_id"
->>>>>>> receipt_form
   end
 
   create_table "cities", force: :cascade do |t|
@@ -593,6 +591,31 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
     t.index ["actor_sector_id"], name: "index_notifications_on_actor_sector_id"
     t.index ["user_id", "notify_type"], name: "index_notifications_on_user_id_and_notify_type"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "office_supplies", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "quantity"
+    t.integer "status", default: 0
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "remit_code"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_office_supplies_on_deleted_at"
+    t.index ["remit_code"], name: "index_office_supplies_on_remit_code", unique: true
+    t.index ["sector_id"], name: "index_office_supplies_on_sector_id"
+  end
+
+  create_table "office_supply_categorizations", force: :cascade do |t|
+    t.bigint "office_supply_id"
+    t.bigint "category_id"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_office_supply_categorizations_on_category_id"
+    t.index ["office_supply_id"], name: "index_office_supply_categorizations_on_office_supply_id"
   end
 
   create_table "original_chronic_prescription_products", force: :cascade do |t|

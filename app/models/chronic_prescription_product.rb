@@ -25,10 +25,8 @@ class ChronicPrescriptionProduct < ApplicationRecord
     :allow_destroy => true
 
   # Delegaciones
-  delegate :unity, to: :product, prefix: :product
-  delegate :name, to: :product, prefix: :product
-  delegate :code, to: :product, prefix: :product
-
+  delegate :unity_name, :name, :code, to: :product, prefix: :product
+  
   # custom validations
   def is_dispensation?
     return self.chronic_dispensation.present? && self.chronic_dispensation.pendiente?

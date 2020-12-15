@@ -114,12 +114,12 @@ class ProductsController < ApplicationController
   end
 
   def search_by_name
-    @products = Product.order(:name).search_text(params[:term]).limit(8)
+    @products = Product.order(:name).search_name(params[:term]).limit(8)
     render json: @products.map{ |product| { 
         label: product.name,
         id: product.id,
         code: product.code,
-        unity: product.unity,
+        unity: product.unity.name,
         stock: current_user.sector.stock_to(product.id)
       } 
     }
@@ -131,7 +131,7 @@ class ProductsController < ApplicationController
       label: product.code, 
       id: product.id,
       name: product.name,
-      unity: product.unity,
+      unity: product.unity.name,
       stock: current_user.sector.stock_to(product.id)
     } 
   }
