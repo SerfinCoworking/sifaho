@@ -33,11 +33,11 @@ class Stock < ApplicationRecord
 
   # To filter records by controller params
   # Slice params "search_code, search_name, with_area_ids"
-  def self.filter(params)
-    @stocks = self.all
-    @stocks = params[:search_code].present? ? self.search_product_code( params[:search_code] ) : @stocks
-    @stocks = params[:search_name].present? ? self.search_product_name( params[:search_name] ) : @stocks
-    @stocks = params[:with_area_ids].present? ? self.with_area_ids( params[:with_area_ids] ) : @stocks
+  def self.filter(params, a_sector)
+    @stocks = self.to_sector(a_sector)
+    @stocks = params[:search_code].present? ? @stocks.search_product_code( params[:search_code] ) : @stocks
+    @stocks = params[:search_name].present? ? @stocks.search_product_name( params[:search_name] ) : @stocks
+    @stocks = params[:with_area_ids].present? ? @stocks.with_area_ids( params[:with_area_ids] ) : @stocks
   end
 
   scope :sorted_by, lambda { |sort_option|

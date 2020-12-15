@@ -5,7 +5,8 @@ class StocksController < ApplicationController
   # GET /stocks.json
   def index
     authorize Stock
-    @stocks = Stock.filter(params.slice(:search_code, :search_name, :with_area_ids))
+    @stocks = Stock
+      .filter(params.slice(:search_code, :search_name, :with_area_ids), current_user.sector)
       .order(created_at: :desc)
       .page(params[:page])
     @areas = Area.all
