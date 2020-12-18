@@ -12,6 +12,5 @@ class OutPresProdLotStock < ApplicationRecord
   
   def lot_stock_quantity
     return self.lot_stock.quantity
-  end
-     
+  end  
 end

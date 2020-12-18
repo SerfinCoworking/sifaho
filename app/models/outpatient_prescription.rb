@@ -1,5 +1,4 @@
 class OutpatientPrescription < ApplicationRecord
-
   include PgSearch
 
   # Estados
