@@ -3,7 +3,7 @@
   <td class="pres-col-pro"><%= outpatient_prescription.professional.full_name %></td>
   <td class="pres-col-pat"><%= outpatient_prescription.patient.full_info %></td>
   <td>
-    <span class="badge badge-<%#= outpatient_prescription_status_label(outpatient_prescription) %>">
+    <span class="badge badge-<%= outpatient_prescription_status_label(outpatient_prescription) %>">
       <%= outpatient_prescription.status.underscore.humanize %>
     </span>
   </td>

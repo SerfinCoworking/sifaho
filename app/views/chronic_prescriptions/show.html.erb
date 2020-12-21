@@ -186,7 +186,7 @@
                     
                     <div>
                       <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
-                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
+                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
                     </div>       
                     <% if policy(chronic_dispensation).return_dispensation? %> 
                       <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,

@@ -1,7 +1,7 @@
 namespace :batch do
   desc 'Migrate chronic prescriptions'
   task migrate_chronic_prescriptions: :environment do
-    Prescription.cronica.last(100).each do |old_prescription|
+    Prescription.cronica.each do |old_prescription|
       puts "Receta crónica id: "+old_prescription.id.to_s
 
       if old_prescription.quantity_ord_supply_lots.present?
@@ -21,7 +21,6 @@ namespace :batch do
         # Create original chronic prescriptions products
         puts "Estado de receta: "+old_prescription.status
         if (old_prescription.dispensada_parcial? || old_prescription.dispensada?) && old_prescription.cronic_dispensations.count > 0
-          puts "Entró creacion"
           puts "Cantidad de dispensaciones: "+old_prescription.cronic_dispensations.count.to_s
           old_prescription.cronic_dispensations.first.quantity_ord_supply_lots.each do |qosl|
             product_id = Product.where(code: qosl.supply_id).first.id
@@ -29,34 +28,25 @@ namespace :batch do
               product_id: product_id,
               request_quantity: qosl.requested_quantity,
               total_request_quantity: qosl.requested_quantity * old_prescription.times_dispensation,
-              total_delivered_quantity: old_prescription.quantity_ord_supply_lots.where(supply_id: qosl.supply_id).where.not(sector_supply_lot_id: nil).sum(:delivered_quantity)
+              total_delivered_quantity: 0
             )
           end
           
           new_prescription.save!
 
-          old_prescription.cronic_dispensations.each do |cronic_dispensation|
+          old_prescription.cronic_dispensations.distinct(:created_at).each do |cronic_dispensation|
             # Create ChronicDispensation
             new_chronic_dispensation = new_prescription.chronic_dispensations.build
             new_chronic_dispensation.created_at = cronic_dispensation.created_at
             new_chronic_dispensation.updated_at = cronic_dispensation.updated_at
-            if old_prescription.times_dispensation == old_prescription.times_dispensed
-              new_chronic_dispensation.status = 'dispensada'
-            elsif cronic_dispensation == old_prescription.cronic_dispensations.last
-              new_chronic_dispensation.status = 'pendiente'
-            else
-              new_chronic_dispensation.status = 'dispensada'
-            end
-
+            new_chronic_dispensation.status = 'dispensada'
 
             cronic_dispensation.quantity_ord_supply_lots.each do |qosl|
               product_id = Product.where(code: qosl.supply_id).first.id
             
               if qosl.sector_supply_lot_id.present? && LotStock.where(id: qosl.sector_supply_lot_id).present?
-                puts "Entró if qosl sector present"
                 # Check if the product was already created
                 if new_chronic_dispensation.chronic_prescription_products.to_ary.select { |opp| opp.product_id == product_id }.size == 0
-                  puts "entró chronic prescription products"
                   cron_pre_prod = new_chronic_dispensation.chronic_prescription_products.build
                   cron_pre_prod.product_id = product_id
                   
@@ -93,19 +83,34 @@ namespace :batch do
               product_id: product_id,
               request_quantity: qosl.requested_quantity,
               total_request_quantity: qosl.requested_quantity * (old_prescription.times_dispensation.present? ? old_prescription.times_dispensation : 6),
-              total_delivered_quantity: old_prescription.quantity_ord_supply_lots.where(supply_id: qosl.supply_id).where.not(sector_supply_lot_id: nil).sum(:delivered_quantity)
+              total_delivered_quantity: 0
             )
           end
         end
 
-        puts "Cantidad de productos: "+new_prescription.chronic_prescription_products.size.to_s
         if new_prescription.chronic_prescription_products.size > 0 || new_prescription.original_chronic_prescription_products.size > 0
           if new_prescription.save!
+
             new_prescription.original_chronic_prescription_products.each do |original_product|
+              original_product.total_delivered_quantity = new_prescription.chronic_prescription_products.where(product_id: original_product.product_id).joins(:chronic_dispensation).where("chronic_dispensations.status = 1").sum(:delivery_quantity)
+              
+              original_product.save!
+            end
+            old_prescription.movements.each do |movement|
+              ChronicPrescriptionMovement.create(
+                user_id: movement.user_id,
+                chronic_prescription_id: new_prescription.id,
+                sector_id: movement.sector_id,
+                action: movement.action,
+                created_at: movement.created_at,
+                updated_at: movement.updated_at
+              )
             end
           end
         end
       end
+
+      puts "Se migraron "+ChronicPrescription.count.to_s+" de "+Prescription.cronica.count.to_s+" recetas crónicas"
     end
   end
 end

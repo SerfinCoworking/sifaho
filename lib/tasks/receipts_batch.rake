@@ -58,7 +58,6 @@ namespace :batch do
         end
 
         if new_receipt.receipt_products.size > 0
-          puts new_receipt.status
           if new_receipt.valid?(:code)
             new_receipt.save!
           else

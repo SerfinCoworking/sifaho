@@ -61,7 +61,18 @@ namespace :batch do
           end # End if sector supply lot present
         end
         if new_prescription.outpatient_prescription_products.size > 0
-          new_prescription.save!
+          if new_prescription.save!
+            old_prescription.movements.each do |movement|
+              OutpatientPrescriptionMovement.create(
+                user_id: movement.user_id,
+                outpatient_prescription_id: new_prescription.id,
+                sector_id: movement.sector_id,
+                action: movement.action,
+                created_at: movement.created_at,
+                updated_at: movement.updated_at
+              )
+            end
+          end
         end
       end
     end
