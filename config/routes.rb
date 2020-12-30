@@ -132,6 +132,8 @@ Rails.application.routes.draw do
       get "search_by_name"
     end
   end
+  
+  resources :purchases
 
   resources :sectors do
     member do

@@ -1,0 +1,99 @@
+<tr>
+  <!-- Presentacion -->
+  <td>
+    <%= f.input :presentation, placeholder: 'Presentación', required: false,
+      label: false, :input_html => { class: 'purchase-presentation input-sm', min: '0', :style => 'width: 100px' }
+    %>
+  </td>
+  
+  <!-- Cantidad a cargar -->
+  <td>
+    <%= f.input :quantity, placeholder: 'Cant', required: false,
+      label: false, :input_html => { class: 'purchase-quantity input-sm', min: '0', :style => 'width: 100px' }
+    %>
+  </td>
+
+  <!-- Lote -->
+  <td>
+    <div class="custom-input-group">
+      <%= f.input :lot_code, as: :string,
+        placeholder: 'Código',
+        label: false,
+        required: false,
+        :input_html => {
+          "data-tooltip" => true,
+          :title => "",
+          class: "purchase-product-lot-code has-tip input-sm",
+          data: { autocomplete_source: search_by_code_lots_path },
+          size: 11,
+          autocomplete: 'off',
+        }
+      %>
+          <%#%"data-product-code" => "#{f.object.product.present? ? f.object.product.id : ""}",
+          value: "#{if f.object.lot_code.present?; f.object.lot_code; end }",%>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+
+  </td>
+
+  <!-- Laboratorio -->
+  <td>
+    <div class="custom-input-group">
+      <div class="form-group fake optional purchase_purchase_products_laboratory_id_fake">
+        <input type="text" 
+        name="laboratory_id_fake" 
+        id="laboratory_id_fake" 
+        value="<%= f.object.laboratory.present? ? f.object.laboratory.name : '' %>"
+        class="form-control fake optional purchase-laboratory-name input-sm <%= ("is-invalid" if f.object.errors[:laboratory_id].any? ) %> <%= ("is-valid" if f.object.laboratory_id.present? && !f.object.errors[:laboratory_id].any? ) %>" 
+        data-autocomplete-source="<%= search_by_name_laboratories_path %>"
+        size="35" 
+        autocomplete="off" 
+        placeholder="Razón social">
+        <div id="laboratory_id_fake" class="invalid-feedback">
+          Laboratorio <%= f.object.errors[:laboratory_id].first %>
+        </div>
+      </div>
+      
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+
+    <%= f.input :laboratory_id, :as => :hidden, :error => false, :input_html =>  { class: "purchase-laboratory-id" },
+      value: "#{ if f.object.laboratory_id.present?; f.object.laboratory_id; end }" %>
+  </td>
+
+  <!-- Vencimiento -->
+  <td>
+    <%= f.input :expiry_date_fake, 
+      as: :tempus_dominus, 
+      label: false,
+      input_html: {
+        placeholder: "MM/AA",
+        required: false,
+        autocomplete: 'off',
+        value: "#{
+          if f.object.expiry_date.present?
+            f.object.expiry_date.strftime("%m/%y")
+          else
+            'n/a'
+          end
+        }"
+      },
+      html5: false
+    %>
+    <%= f.input :expiry_date, :as => :hidden, 
+    :input_html =>  { class: "purchase-expiry-date" }, 
+    value: "#{ if f.object.expiry_date.present?; f.object.expiry_date.strftime("%m/%y"); end }"%>
+  </td>
+
+  <!-- Botón quitar -->
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= fa_icon "minus" %>
+    <% end %>
+  </td>
+</tr>

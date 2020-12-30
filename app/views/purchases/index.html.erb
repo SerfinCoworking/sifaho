@@ -1,0 +1,22 @@
+<%= render 'header' %>
+
+<% if @purchases.present? %>
+
+    <div class="card fixed-custom-card">
+      <div class="card-header">
+        <%= render 'filter'%>
+      </div>
+      <div class="card-body fixed-panel-index">
+        <%= render(
+          partial: 'purchases/list',
+          locals: { purchases: @purchases }
+        ) %>
+      </div>
+    </div>
+
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'remitos' }
+  ) %>
+<% end %>

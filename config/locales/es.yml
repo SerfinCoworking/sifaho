@@ -108,6 +108,8 @@ es:
         professional: "Profesional"
         patient: "Paciente"
         date_prescribed: "Fecha recetada"
+      purchase:
+        code_number: "Código"
 
       
 

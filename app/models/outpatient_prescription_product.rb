@@ -17,7 +17,6 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   validates_associated :order_prod_lot_stocks, if: :is_provision_dispensed?
   validate :uniqueness_product_on_outpatient_prescription
   
-
   accepts_nested_attributes_for :product,
     :allow_destroy => true
 

@@ -1,0 +1,24 @@
+
+<div class="modal-dialog modal-lg">
+  <div class="modal-content panel-warning">
+    <div class="modal-header panel-heading bg-primary">
+      <h5 class="m-0 d-flex align-items-center text-white">
+        <%= fa_icon "barcode" %> 
+        <div class="ml-2 title">Seleccionar lotes</div>
+      </h5>
+      <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <%= render 'purchases/partials/purchase_prod_lot_stock_table', form: @purchase_product%>
+
+    </div>
+
+    <div class="modal-footer text-right">
+      <a href="#" data-dismiss="modal" class="btn btn-light">Cancelar</a>
+    </div>    
+
+  </div>
+</div>

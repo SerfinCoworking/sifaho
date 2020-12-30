@@ -54,6 +54,15 @@
         <span class="ml-2 sb-title">Establecimientos</span>
       <% end %>
     <% end %>
+    
+    <% if policy(Purchase).index? %>
+      <%= link_to main_app.purchases_path, class: "list-group-item list-group-item-action list-custom #{active_class('purchases')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "truck-moving"%>
+        </span>
+        <span class="ml-2 sb-title">Abastecimientos</span>
+      <% end %>
+    <% end %>
 
     <% if policy(Stock).index? %>
       <%= link_to main_app.stocks_path, class: "list-group-item list-group-item-action list-custom #{active_class('stocks')}" do %>
