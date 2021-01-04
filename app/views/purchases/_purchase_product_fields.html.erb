@@ -88,7 +88,7 @@
     <%#= link_to modal_add_lot_purchases_path("replace", product_id: 1), remote: true, class: 'btn btn-sm btn-primary', title: 'Seleccionar lotes', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%#= fa_icon "plus" %>
     <%# end %>
-      <button class="btn btn-primary btn-coll" type="button">
+      <button class="btn btn-primary btn-coll" type="button" data-target="#collapsable-custom">
         <%= fa_icon "plus" %>
       </button>
     <%#= f.input :request_quantity, placeholder: 'Cant', required: false,
@@ -111,7 +111,7 @@
 </tr>
 <tr class="collapsable-row">
   <td colspan="6">
-    <div class="collapse-custom">
+    <div class="collapse-custom" id="collapsable-custom">
       <div class="card card-body">
       <%#
         .-Agregar collapsable para mostrar el cocoon de lotes

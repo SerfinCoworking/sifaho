@@ -8,7 +8,16 @@ $(document).on('turbolinks:load', function(e){
     $(insertedItem[0]).find('input.purchase-product-line').first().val(lastChildCount);
   });
 
+  /* Boton para visualizar el collapsable */
+  $("#purchase-cocoon-container .btn-coll").on('click', function(e){  
+    e.stopPropagation();
+    const collapsable = $(e.target).closest('tbody').find($(e.target).attr('data-target'));
+
+    $(collapsable).toggleClass("show");
+  });
   initializerEvents();
+
+  initLotStockCocoon();
   // button submit
   $("button[type='submit']").on('click', function(e){
     e.preventDefault();
@@ -76,59 +85,37 @@ $(document).on('turbolinks:load', function(e){
       $('#provider-sector').selectpicker('refresh', {style: 'btn-sm btn-default'});
     }
   }
-
-  // cocoon init
-  $('#purchase-cocoon-container').on('cocoon:after-insert', function(e) {
-    initializerEvents();
-  });
-
   
-  
+  /* cocoon principal init */  
   $('#purchase-cocoon-container').on('cocoon:after-insert', function(e, added_task) {
-    const btn = $(added_task).find(".btn-coll[data-target='#collapse-custom']").first();
-    const collapseContent = $(added_task).find(".collapse-custom#collapse-custom").first();
-    const collapsableRow = $(added_task).siblings("tr.collapsable-row").first();
-
+    const addedTaskArr = $(added_task).toArray(); // el template que se inserta tiene mas de un tr, por lo tanto 
+    const mainRow = addedTaskArr.find((element) => {
+      return $(element).hasClass('nested-fields');
+    });
+    const lotSelectionRow = addedTaskArr.find((element) => {
+      return $(element).hasClass('collapsable-row');
+    });
+    
+    const btnLotSelection = $(mainRow).find('.btn-coll').first();
+    const collapseContent = $(lotSelectionRow).find(".collapse-custom#collapsable-custom").first();
+    
     // debemos actualizar el ID del collapse y el boton que lo despliega
-    $(btn).attr("data-target", "#collapse-custom-" + e.timeStamp);
-    $(collapseContent).attr("id", "collapse-custom-" + e.timeStamp);
-
-    // bind button click event
-    /* $(btn).on('click', function(e){      
-      $($(e.target).attr("data-target")).toggleClass("show");
-    }); */
-
+    $(btnLotSelection).attr("data-target", "#collapsable-custom-" + e.timeStamp);
+    $(collapseContent).attr("id", "collapsable-custom-" + e.timeStamp);
     // debemos actualizar el ID de la tabla donde se hace el prepend de cada lote y el link con ese ID
-    const tBodyLots = $(collapsableRow).find("tbody#lot-stock-cocoon-container").first();
-    const buttonAddLot = $(collapsableRow).find("a.btn-add-lote-association").first();
+    const tBodyLots = $(lotSelectionRow).find("tbody#lot-stock-cocoon-container").first();
+    const buttonAddLot = $(lotSelectionRow).find("a.btn-add-lote-association").first();
     $(tBodyLots).attr("id", "lot-stock-cocoon-container-" + e.timeStamp);
     $(buttonAddLot).attr("data-association-insertion-node", "tbody#lot-stock-cocoon-container-" + e.timeStamp);
+    initializerEvents(btnLotSelection);
   });
   
   $('#lot-stock-cocoon-container').on('cocoon:after-insert', function(e, added_task) {
-    console.log("inserted, cocoon");
-    initializerEvents();
+    initLotStockCocoon();
   });
   
   // set expiry date calendar format
-  function initializerEvents(){
-    // date input change 
-    $('input.datetimepicker-input').on('change', function(e){
-      setExpiryDate(e.target);    
-    });
-    // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
-    $('.purchase_purchase_products_expiry_date_fake .input-group.date').datetimepicker({
-      format: 'MM/YY',
-      viewMode: 'months',
-      locale: 'es',
-      useCurrent: false,
-    });
-    
-    $('.purchase_purchase_products_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
-      const target = $(e.target).find('input.datetimepicker-input').first();
-      setExpiryDate(target);
-    });
-
+  function initializerEvents(btnLoteSelection){
     // autocomplete product code input
     $('.purchase-product-code').autocomplete({
       source: $('.purchase-product-code').attr('data-autocomplete-source'),
@@ -177,7 +164,33 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
+    if(typeof btnLoteSelection !== 'undefined'){
+      // Accion desplegar collapseable de seleccion de lotes
+      $(btnLoteSelection).on('click', function(e){  
+        e.stopPropagation();
+        const collapsable = $(e.target).closest('tbody').find($(e.target).attr('data-target'));
+        $(collapsable).toggleClass("show");
+      });
+    }
+  }
 
+  function initLotStockCocoon(){
+    // date input change 
+    $('input.datetimepicker-input').on('change', function(e){
+      setExpiryDate(e.target);    
+    });
+    // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
+    $('.purchase_purchase_products_expiry_date_fake .input-group.date').datetimepicker({
+      format: 'MM/YY',
+      viewMode: 'months',
+      locale: 'es',
+      useCurrent: false,
+    });
+    
+    $('.purchase_purchase_products_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
+      const target = $(e.target).find('input.datetimepicker-input').first();
+      setExpiryDate(target);
+    });
     // Función para autocompletar código de lote
     $(".purchase-product-lot-code").on("focus", function(e) {
       const _this = $(e.target);
@@ -232,18 +245,7 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
-
-    // Accion desplegar collapseable de seleccion de lotes
-    $(".btn-coll").on('click', function(e){  
-      e.stopPropagation();
-      const trLotSelection = $(e.target).closest('tr').siblings('tr.collapsable-row:first');
-      const collapsable = $(trLotSelection).find('.collapse-custom').first();
-
-      console.log(collapsable, "===========LOT SELECTION");
-  
-      $(collapsable).toggleClass("show");
-    });
-  }
+  } //fin initializer
 
   function setExpiryDate(target){
     const expireDate = moment($(target).val(), "MM/YY");
