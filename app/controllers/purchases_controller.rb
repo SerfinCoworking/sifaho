@@ -41,12 +41,12 @@ class PurchasesController < ApplicationController
   # POST /purchases.json
   def create
     @purchase = Purchase.new(purchase_params)
-    @purchase.remit_code = 
+    @purchase.applicant_sector_id = current_user.sector.id
     respond_to do |format|
       begin
+        @purchase.save!
         puts "==================PURCHASE"
         puts @purchase
-        @purchase.save!
         message = "El abastecimiento se ha creado correctamente."
         format.html { redirect_to @purchase, notice: message }
 

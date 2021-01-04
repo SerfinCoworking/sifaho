@@ -1,12 +1,12 @@
 class PurchaseProdLotStock < ApplicationRecord
   belongs_to :purchase_product, inverse_of: 'order_prod_lot_stocks'
   # belongs_to :product, through: :purchase_product
-  belongs_to :lot_stock
+  belongs_to :lot_stock, optional: true
   belongs_to :laboratory
 
   # validates :quantity, :numericality => { :only_integer => true, :less_than_or_equal_to => :lot_stock_quantity, message: "La cantidad seleccionada debe ser menor o igual a %{count}"}, if: :is_provision
   # validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_solicitud
-  validates_presence_of :lot_stock_id
+  # validates_presence_of :lot_stock_id
 
   accepts_nested_attributes_for :lot_stock,
     :allow_destroy => true

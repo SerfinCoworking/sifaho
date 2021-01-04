@@ -88,7 +88,9 @@ $(document).on('turbolinks:load', function(e){
   
   /* cocoon principal init */  
   $('#purchase-cocoon-container').on('cocoon:after-insert', function(e, added_task) {
-    const addedTaskArr = $(added_task).toArray(); // el template que se inserta tiene mas de un tr, por lo tanto 
+    // el template que se inserta tiene mas de un tr, por lo tanto lo transformamos a un array 
+    // y luego buscamos el tr correspondiente
+    const addedTaskArr = $(added_task).toArray(); 
     const mainRow = addedTaskArr.find((element) => {
       return $(element).hasClass('nested-fields');
     });
@@ -177,7 +179,7 @@ $(document).on('turbolinks:load', function(e){
   function initLotStockCocoon(){
     // date input change 
     $('input.datetimepicker-input').on('change', function(e){
-      setExpiryDate(e.target);    
+      setExpiryDate(e.target);
     });
     // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
     $('.purchase_purchase_products_expiry_date_fake .input-group.date').datetimepicker({
@@ -187,10 +189,6 @@ $(document).on('turbolinks:load', function(e){
       useCurrent: false,
     });
     
-    $('.purchase_purchase_products_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
-      const target = $(e.target).find('input.datetimepicker-input').first();
-      setExpiryDate(target);
-    });
     // Función para autocompletar código de lote
     $(".purchase-product-lot-code").on("focus", function(e) {
       const _this = $(e.target);
@@ -238,8 +236,8 @@ $(document).on('turbolinks:load', function(e){
       },
       select:
       function (event, ui) {
-        const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.purchase-laboratory-id").val(ui.item.id).trigger('change'); // update product name input
+        const td = $(event.target).closest("td");
+        td.find("input[type='hidden']").val(ui.item.id).trigger('change'); // update product name input
       },
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
@@ -249,7 +247,7 @@ $(document).on('turbolinks:load', function(e){
 
   function setExpiryDate(target){
     const expireDate = moment($(target).val(), "MM/YY");
-    const inputHidden = $(target).closest("td").find('.hidden.purchase_purchase_products_expiry_date input[type="hidden"]');
+    const inputHidden = $(target).closest("td").find('input[type="hidden"]');
     $(inputHidden).val(expireDate.endOf('month').format("YYYY-MM-DD")); 
   }  
 

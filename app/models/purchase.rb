@@ -14,7 +14,7 @@ class Purchase < ApplicationRecord
   has_many :products, :through => :purchase_products
 
   # Validaciones
-  validates_presence_of :provider_sector_id, :applicant_sector
+  validates_presence_of :provider_sector_id, :applicant_sector_id
   validate :validate_purchase_products_length
   validates_associated :purchase_products
 
