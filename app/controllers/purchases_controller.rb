@@ -42,6 +42,7 @@ class PurchasesController < ApplicationController
   def create
     @purchase = Purchase.new(purchase_params)
     @purchase.applicant_sector_id = current_user.sector.id
+    @purchase.status = 'auditoria'
     respond_to do |format|
       begin
         @purchase.save!

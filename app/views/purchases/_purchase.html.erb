@@ -1,5 +1,5 @@
 <tr id="purchase_<%= purchase.id %>" >
-  <td><%= purchase.code %></td>
+  <td><%= purchase.remit_code %></td>
 
   <td class="sol-col-aba">
     <%= purchase.provider_sector.name %>
@@ -28,25 +28,18 @@
     <% end %>
   </td>
   <td class="text-left actions-col">
-    <% if policy(purchase).show? %>
-      <%= link_to purchase_path(purchase),
-        class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "eye" %>
-      <% end %>
-    <% end %>
- 
-    <% if policy(purchase).edit? %>
-      <%= link_to edit_purchase_path(purchase), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "pen" %>
-      <% end %>
-    <% end %>
- 
-    <% if policy(purchase).delete? %>
-      <%= link_to delete_purchase_path(purchase), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
-      <% end %>
-    <% end %>
+    <%= render(
+      partial: 'shared/action_buttons',
+        locals:{ 
+            object: purchase, 
+            show: true, 
+            edit: true, 
+            destroy: true,
+            delete_title: "Eliminar abastecimiento",
+            delete_body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
+            destroy_path: "/purchases/#{purchase.id}"
+        }
+      ) 
+    %>
   </td>
 </tr>
