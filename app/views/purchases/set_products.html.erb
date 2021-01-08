@@ -1,0 +1,147 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @purchase.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@purchase.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @purchase.new_record? ? "Agregar abastecimiento" : "Editando abastecimiento" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @purchase.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%# Establecimiento Proveedor %>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-4">
+            <%# Establecimiento %>
+            <div class="d-flex">
+              <label class="font-weight-bold mr-2">Establecimiento:</label>
+              <div>
+                <%= @purchase.provider_sector.establishment.name.humanize %>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-4">
+            <%# Sector proveedor %>
+            <div class="d-flex">
+              <label class="font-weight-bold mr-2">Sector proveedor:</label>
+              <div>
+                <%= @purchase.provider_sector.name.humanize %>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-4">
+            <%# Sector solicitante %>
+            <div class="d-flex">
+              <label class="font-weight-bold mr-2">Sector solicitante:</label>
+              <div>
+                <%= @purchase.applicant_sector.name.humanize %>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-4">
+            <%# Numero de codigo %>
+            <div class="d-flex">
+              <label class="font-weight-bold mr-2">Número de código:</label>
+              <div>
+                <%= @purchase.code_number %>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-4">
+            <%# Observaciones %>
+            <div class="d-flex">
+              <label class="font-weight-bold mr-2">Observaciones:</label>
+              <div>
+                <%= @purchase.observation %>
+              </div>
+            </div>
+          </div>
+        </div><!-- datos de la orden de compra-->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+
+          <%= simple_form_for @purchase, url: save_products_purchase_path(@purchase), html: {class: "", role: 'check-modified', id: "save_products_purchase_" + @purchase.id.to_s} do |form| %>
+          <%= form.error_notification %>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-hover table-sm mb-0">
+                <thead>
+                  <tr>
+                    <th>Renglón</th>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Lotes</th>
+                    <th>Descripción</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="purchase-cocoon-container">
+                  <%= form.simple_fields_for :purchase_products do |form_builder| %>
+                    <%= render "purchase_product_fields", f: form_builder %>
+                  <% end %>
+                </tbody>
+              </table>
+              <%= link_to_add_association form, :purchase_products, class: 'btn btn-primary btn-sm w-100',
+                data: {"association-insertion-node" => "tbody#purchase-cocoon-container", "association-insertion-method" => "append"} do %>
+                <%= fa_icon "plus" %>
+                Agregar insumo recibido
+              <% end %>
+
+              <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
+              <% if form.object.errors[:purchase_products_legnth].any? %>
+                <div class="invalid-feedback d-block">
+                  <%= form.object.errors[:purchase_products_legnth].first %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <%# Este hidden se rellana con el valor del boton submit que se presione %>
+          <input name="commit" id="submit-type" type="hidden">
+        <% end %>        
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', receipts_path, class: 'btn mr-2' %>
+
+    <button type='submit' class='btn btn-success mr-2' form="<%= "save_products_purchase_" + @purchase.id.to_s %>" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+
+    </button>
+    <button type='submit' class='btn btn-primary' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='receive'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Guardar y recibir
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+
+  </div>
+</div>
+ 
+<% content_for :modal do %>
+  <div class="modal fade" tabindex="-1" role="dialog" id="select-lot"></div>
+<% end %>

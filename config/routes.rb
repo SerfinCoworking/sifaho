@@ -133,7 +133,12 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :purchases
+  resources :purchases do 
+    member do
+      get "set_products"
+      patch "save_products"
+    end
+  end
 
   resources :sectors do
     member do

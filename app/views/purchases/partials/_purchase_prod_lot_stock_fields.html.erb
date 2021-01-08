@@ -43,15 +43,15 @@
     <div class="custom-input-group">
       <div class="form-group fake optional purchase_purchase_products_laboratory_id_fake">
         <input type="text" 
-        name="laboratory_id_fake" 
-        id="laboratory_id_fake" 
+        name="<%= f.object.laboratory.present? ? ("laboratory_id_fake_" + f.object.laboratory.id.to_s) : "laboratory_id_fake" %>" 
+        id="<%= f.object.laboratory.present? ? ("laboratory_id_fake_" + f.object.laboratory.id.to_s) : "laboratory_id_fake" %>" 
         value="<%= f.object.laboratory.present? ? f.object.laboratory.name : '' %>"
         class="form-control fake optional purchase-laboratory-name input-sm <%= ("is-invalid" if f.object.errors[:laboratory_id].any? ) %> <%= ("is-valid" if f.object.laboratory_id.present? && !f.object.errors[:laboratory_id].any? ) %>" 
         data-autocomplete-source="<%= search_by_name_laboratories_path %>"
         size="35" 
         autocomplete="off" 
         placeholder="Razón social">
-        <div id="laboratory_id_fake" class="invalid-feedback">
+        <div class="invalid-feedback">
           Laboratorio <%= f.object.errors[:laboratory_id].first %>
         </div>
       </div>

@@ -1,7 +1,7 @@
 class Purchase < ApplicationRecord
   include PgSearch
 
-  enum status: { auditoria: 0, recibido: 1}
+  enum status: { inicial: 0,  auditoria: 1, recibido: 2}
     
   belongs_to :provider_sector, class_name: 'Sector'
   belongs_to :applicant_sector, class_name: 'Sector'
@@ -15,7 +15,10 @@ class Purchase < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id
-  validate :validate_purchase_products_length
+  # debemos agregar condicion solo para que corra esta validacion solo si se encuentra 
+  # en el paso de carga de productos, 
+  # agregar estado inicial a la compra (este indica el salto de validacion de productos)
+  validate :validate_purchase_products_length, if: :is_not_inicial?
   validates_associated :purchase_products
 
   # Atributos anidados
@@ -92,6 +95,11 @@ class Purchase < ApplicationRecord
   scope :received_date_to, lambda { |a_date|
     where('received_date <= ?', a_date)
   }
+
+  # Si es estado inicial, debemos solo guardar los campos requeridos
+  def is_not_inicial?
+    return !self.inicial?
+  end
 
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.

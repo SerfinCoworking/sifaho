@@ -1,5 +1,5 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products]
 
   # GET /purchases
   # GET /purchases.json
@@ -28,8 +28,6 @@ class PurchasesController < ApplicationController
   # GET /purchases/new
   def new
     @purchase = Purchase.new
-    @purchase.purchase_products.build
-    @purchase.purchase_products.first.line = "1" # debemos inicializar el primer renglon
     @sectors = []
   end
 
@@ -37,21 +35,21 @@ class PurchasesController < ApplicationController
   def edit
   end
 
+
   # POST /purchases
+  # Guardamos los datos principales de la compra
+  # sin validar los productos asociados
   # POST /purchases.json
   def create
     @purchase = Purchase.new(purchase_params)
     @purchase.applicant_sector_id = current_user.sector.id
-    @purchase.status = 'auditoria'
+    @purchase.status = 'inicial'
     respond_to do |format|
       begin
         @purchase.save!
-        puts "==================PURCHASE"
-        puts @purchase
         message = "El abastecimiento se ha creado correctamente."
-        format.html { redirect_to @purchase, notice: message }
+        format.html { redirect_to set_products_purchase_path(@purchase), notice: message }
 
-        # @external_order.save!
         # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
         # notification_type = sending? ? "creó y envió" : "creó y auditó"
 
@@ -60,7 +58,7 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
+        # @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
         @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
           # flash[:error] = "El abastecimiento no se ha podido crear."
         format.html { render :new }
@@ -103,6 +101,41 @@ class PurchasesController < ApplicationController
       format.js
     end
   end
+
+  def set_products
+    # este metodo se utiliza para guardar el listado de productos asignados a la compra
+    # debe validar los atributos de cada producto y lote asociado
+    # Si no tiene productos asociados debes hacer un build y setear el renglon
+    if @purchase.purchase_products.count == 0
+      @purchase.purchase_products.build
+      @purchase.purchase_products.first.line = "1" # debemos inicializar el primer renglon
+    end
+  end
+  
+  def save_products
+    
+    @purchase.status = 'auditoria'
+    respond_to do |format|
+      begin
+        @purchase.update(purchase_products_params)
+        @purchase.save!
+        message = "Los productos se han creado correctamente."
+        format.html { redirect_to @purchase, notice: message }
+
+        # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
+        # notification_type = sending? ? "creó y envió" : "creó y auditó"
+
+        # @external_order.create_notification(current_user, notification_type)        
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
+        message = "No se han podido cargar productos en el abastecimiento."
+        format.html { render :set_products, notice: message }
+      end
+    end
+  end
   
   def search_by_name
     @purchases = Purchase.order(:name).search_name(params[:term]).limit(10).where_not_id(current_user.sector.purchase_id)
@@ -123,6 +156,30 @@ class PurchasesController < ApplicationController
       :area_id,
       :code_number,
       :observation,
+      purchase_products_attributes: [
+        :id,
+        :product_id,
+        :request_quantity,
+        :line,
+        :observation,
+        :_destroy,
+        order_prod_lot_stocks_attributes: [
+          :id,
+          :purchase_product_id,
+          :lot_stock_id,
+          :laboratory_id,
+          :lot_code,
+          :expiry_date,
+          :quantity,
+          :presentation,
+          :_destroy
+        ]
+      ]
+    )
+  end
+  
+  def purchase_products_params
+    params.require(:purchase).permit(
       purchase_products_attributes: [
         :id,
         :product_id,

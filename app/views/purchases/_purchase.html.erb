@@ -28,18 +28,30 @@
     <% end %>
   </td>
   <td class="text-left actions-col">
-    <%= render(
-      partial: 'shared/action_buttons',
-        locals:{ 
-            object: purchase, 
-            show: true, 
-            edit: true, 
-            destroy: true,
-            delete_title: "Eliminar abastecimiento",
-            delete_body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
-            destroy_path: "/purchases/#{purchase.id}"
-        }
-      ) 
-    %>
+    <div class="d-flex">
+      <%# modificar los productos cargados en la orden  %>
+      <% if policy(purchase).set_products? %>
+        <%= link_to set_products_purchase_path(purchase),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: "Editar products",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'dolly-flatbed'%>
+        <% end %>
+      <% end %>
+      
+      <%= render(
+        partial: 'shared/action_buttons',
+          locals:{ 
+              object: purchase, 
+              show: true, 
+              edit: true, 
+              destroy: true,
+              delete_title: "Eliminar abastecimiento",
+              delete_body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
+              destroy_path: "/purchases/#{purchase.id}"
+          }
+        ) 
+      %>
+    </div>
   </td>
 </tr>

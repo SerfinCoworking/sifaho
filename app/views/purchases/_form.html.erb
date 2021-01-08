@@ -17,9 +17,9 @@
 
       <div class="row">
         <%# Establecimiento Proveedor %>
-        <div class="col-md-4">
+        <div class="col-md-7 border-right">
           <%= form.label :establishment_id, "Establecimiento" %>
-          <div class="custom-input-group">
+          <div class="custom-input-group w-75">
             <%= form.input :establishment_id, as: :fake,
               label: false,
               placeholder: 'Buscar por nombre',
@@ -37,12 +37,14 @@
               <%= fa_icon 'spinner', class: "fa-spin"%>
             </div>
           </div>
-        </div>
+        <!--/div-->
 
         <%# Sector Proveedor %>
-        <div class="col-md-4">
+        <!--div class="col-md-4"-->
+        <%= form.label :provider_sector_id, "Sector proveedor" %>
+        <div class="custom-input-group w-75">
           <%= form.input :provider_sector_id,
-            label: 'Sector proveedor',
+            label: false,
             collection: @sectors.map {
               |sector| [sector.name, sector.id]
             },
@@ -61,57 +63,29 @@
         </div>
 
         <%# Observation %>
-        <div class="col-md-4">
-          <%= form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
+        <!--div class="col-md-4"-->
+        <%= form.label :observation, "Observaciones" %>
+        <div class="custom-input-group w-75">
+          <%= form.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
         </div>
-      </div>
+      <!--/div>
+        </div>
         
       <div class="row">
-        <div class="col-4">
+        <div class="col-4"-->
           <%= form.input :code_number, :as => :string, :input_html =>  { 
-              class: "form-control purchase-product-line input-sm",
+              class: "form-control purchase-product-line input-sm w-75",
               size: 8,
               placeholder: "Código",
               value: "#{ if form.object.code_number.present?; form.object.code_number; end }"
               }
             %>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-12">
-          <table class="table table-hover table-sm mb-0">
-            <thead>
-              <tr>
-                <th>Renglón</th>
-                <th>Código</th>
-                <th>Producto</th>
-                <th>Unidad</th>
-                <th>Lotes</th>
-                <th>Descripción</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="purchase-cocoon-container">
-              <%= form.simple_fields_for :purchase_products do |form_builder| %>
-                <%= render "purchase_product_fields", f: form_builder %>
-              <% end %>
-            </tbody>
-          </table>
-          <%= link_to_add_association form, :purchase_products, class: 'btn btn-primary btn-sm w-100',
-            data: {"association-insertion-node" => "tbody#purchase-cocoon-container", "association-insertion-method" => "append"} do %>
-            <%= fa_icon "plus" %>
-            Agregar insumo recibido
-          <% end %>
-
-          <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
-          <% if form.object.errors[:purchase_products_legnth].any? %>
-            <div class="invalid-feedback d-block">
-              <%= form.object.errors[:purchase_products_legnth].first %>
-            </div>
-          <% end %>
+        <div class="col-5">
+          Otra información...
         </div>
       </div>
+
       <%# Este hidden se rellana con el valor del boton submit que se presione %>
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
@@ -120,10 +94,10 @@
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', receipts_path, class: 'btn mr-2' %>
 
-    <button type='submit' class='btn btn-success mr-2' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='audit'>
+    <button type='submit' class='btn btn-primary mr-2' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='audit'>
       
       <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "save" %> Guardar 
+        <%= fa_icon "save" %> Guardar y cargar productos
       </div>
       
       <div class="d-none" style="pointer-events: none;">
@@ -131,15 +105,6 @@
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
       </div>
 
-    </button>
-    <button type='submit' class='btn btn-primary' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='receive'>
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "paper-plane" %> Guardar y recibir
-      </div>
-      <div class="d-none" style="pointer-events: none;">
-        Guardando...
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
-      </div>
     </button>
 
   </div>

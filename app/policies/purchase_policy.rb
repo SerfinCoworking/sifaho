@@ -22,6 +22,10 @@ class PurchasePolicy < ApplicationPolicy
   def edit?
     update?
   end
+  
+  def set_products?
+    record.inicial? || record.auditoria?
+  end
 
   def destroy?
     user.has_any_role?(:admin)

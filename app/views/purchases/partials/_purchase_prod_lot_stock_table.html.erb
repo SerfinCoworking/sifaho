@@ -20,7 +20,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody id="lot-stock-cocoon-container">
+    <tbody class="lot-stock-cocoon-container" id="lot-stock-cocoon-container">
       <%= f.simple_fields_for :order_prod_lot_stocks do |form_lot| %>
         <%= render "purchases/partials/purchase_prod_lot_stock_fields", f: form_lot %>
       <% end %>
