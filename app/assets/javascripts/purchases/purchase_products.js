@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(_PAGE.controller === 'purchases' && (['set_products'].includes(_PAGE.action))) ) return false;
+  if(!(_PAGE.controller === 'purchases' && (['set_products', 'save_products'].includes(_PAGE.action))) ) return false;
   /* Se agrega el numero de renglon a apartir del siguiente numero del ultimo renglon */
   let lastChildCount = $('#purchase-cocoon-container').find('tr.nested-fields').length;
   $('#purchase-cocoon-container').on('cocoon:before-insert', function(e, insertedItem, originalEvent) {

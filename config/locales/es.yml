@@ -110,6 +110,10 @@ es:
         date_prescribed: "Fecha recetada"
       purchase:
         code_number: "Código"
+      purchase_prod_lot_stock:
+        presentation: "Presentación"
+        quantity: "Cantidad"
+        lot_code: "Código"
 
       
 

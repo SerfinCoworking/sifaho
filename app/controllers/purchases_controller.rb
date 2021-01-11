@@ -117,7 +117,7 @@ class PurchasesController < ApplicationController
     @purchase.status = 'auditoria'
     respond_to do |format|
       begin
-        @purchase.update(purchase_products_params)
+        @purchase.update!(purchase_products_params)
         @purchase.save!
         message = "Los productos se han creado correctamente."
         format.html { redirect_to @purchase, notice: message }
