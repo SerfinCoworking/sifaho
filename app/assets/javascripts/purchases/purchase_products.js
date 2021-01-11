@@ -6,16 +6,31 @@ $(document).on('turbolinks:load', function(e){
   $('#purchase-cocoon-container').on('cocoon:before-insert', function(e, insertedItem, originalEvent) {
     lastChildCount++;
     $(insertedItem[0]).find('input.purchase-product-line').first().val(lastChildCount);
+  }).on('cocoon:before-remove', function(e, nestedFieldsTr) {
+    /*Debemos elimnar el collapse de seleccion de lotes*/
+    e.stopPropagation();
+    $(this).data('remove-timeout', 500);
+    $(nestedFieldsTr).fadeOut(500);
+    
+    const dataNestedFields = $(nestedFieldsTr).attr("data-nested-fields");
+    const collapseTr = $(nestedFieldsTr).siblings('tr[data-collapsable-row="'+ dataNestedFields +'"]');
+    $(collapseTr).remove();
   });
+  
   
   /* Inicializamos el evento BEFORE-INSERT de los concoons de seleccion de lote */
   $(".lot-stock-cocoon-container").on('cocoon:before-insert', function(e, added_task) {
     e.stopPropagation();
-  });
-  /* Inicializamos el evento AFTER-INSERT de los concoons de seleccion de lote */
-  $(".lot-stock-cocoon-container").on('cocoon:after-insert', function(e, added_task) {
+  }).on('cocoon:after-insert', function(e, added_task) {
+    /* Inicializamos el evento AFTER-INSERT de los concoons de seleccion de lote */
     e.stopPropagation();
     initLotStockFields();
+  }).on('cocoon:before-remove', function(e, lotSelectionTr) {
+    /* Al eliminar un lote asignado */
+    e.stopPropagation();
+    // allow some time for the animation to complete
+    $(this).data('remove-timeout', 500);
+    $(lotSelectionTr).fadeOut(500);
   });
 
   /* Boton para visualizar el collapsable */
@@ -50,6 +65,10 @@ $(document).on('turbolinks:load', function(e){
     const lotSelectionRow = addedTaskArr.find((element) => {
       return $(element).hasClass('collapsable-row');
     });
+    
+    // Con esto podemos indentificar los TR que debemos eliminar al quitar un producto del listado
+    $(mainRow).attr("data-nested-fields", e.timeStamp);
+    $(lotSelectionRow).attr("data-collapsable-row", e.timeStamp);
     
     const btnLotSelection = $(mainRow).find('.btn-coll').first();
     const collapseContent = $(lotSelectionRow).find(".collapse-custom#collapsable-custom").first();

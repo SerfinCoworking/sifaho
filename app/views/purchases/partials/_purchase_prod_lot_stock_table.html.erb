@@ -1,9 +1,9 @@
-  <%= link_to_add_association f, 
+  <%= link_to_add_association fPurchaseProduct, 
     :order_prod_lot_stocks, 
     class: 'btn btn-primary btn-sm btn-add-lote-association',
     partial: "purchases/partials/purchase_prod_lot_stock_fields", 
     data: {
-      "association-insertion-node" => "tbody#lot-stock-cocoon-container",
+      "association-insertion-node" => (fPurchaseProduct.object.product.present? ? "tbody#lot-stock-cocoon-container-"+fPurchaseProduct.object.product.id.to_s : "tbody#lot-stock-cocoon-container"),
       "association-insertion-method" => "prepend"} do %>
     <%= fa_icon "plus" %>
     Agregar lote
@@ -20,18 +20,17 @@
         <th></th>
       </tr>
     </thead>
-    <tbody class="lot-stock-cocoon-container" id="lot-stock-cocoon-container">
-      <%= f.simple_fields_for :order_prod_lot_stocks do |form_lot| %>
+    <tbody class="lot-stock-cocoon-container" id="<%= (fPurchaseProduct.object.product.present? ? "lot-stock-cocoon-container-"+fPurchaseProduct.object.product.id.to_s : "lot-stock-cocoon-container") %>">
+      <%= fPurchaseProduct.simple_fields_for :order_prod_lot_stocks do |form_lot| %>
         <%= render "purchases/partials/purchase_prod_lot_stock_fields", f: form_lot %>
       <% end %>
     </tbody>    
   </table>
-
   
 
   <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>  
-  <% if f.object.errors[:outpatient_prescription_products].any? && f.object.outpatient_prescription_products.count == 0 && !f.object.outpatient_prescription_products.first.errors[:product_id].any? %>
+  <% if fPurchaseProduct.object.errors[:outpatient_prescription_products].any? && fPurchaseProduct.object.outpatient_prescription_products.count == 0 && !fPurchaseProduct.object.outpatient_prescription_products.first.errors[:product_id].any? %>
     <div class="invalid-feedback d-block">
-      <%= f.object.errors[:outpatient_prescription_products].first %>
+      <%= fPurchaseProduct.object.errors[:outpatient_prescription_products].first %>
     </div>
   <% end %>

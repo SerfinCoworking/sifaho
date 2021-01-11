@@ -68,6 +68,5 @@ $(document).on('turbolinks:load', function(e){
       $('#provider-sector').find('option').remove();
       $('#provider-sector').selectpicker('refresh', {style: 'btn-sm btn-default'});
     }
-  }
-  
+  }  
 });

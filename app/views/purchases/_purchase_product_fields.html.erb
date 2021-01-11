@@ -1,5 +1,5 @@
 
-<tr class="nested-fields">
+<tr class="nested-fields" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : '' %>">
   <td>
     <%= f.input :line, :as => :string, label: false, :input_html =>  { 
       class: "form-control purchase-product-line input-sm",
@@ -100,12 +100,12 @@
     <% end %>
   </td>
 </tr>
-<tr class="collapsable-row">
+<tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : '' %>">
   <td colspan="6">
     <div class="collapse-custom" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
       <div class="card card-body">
         <%# .-Seleccion de lotes Collapsable %>
-        <%= render "purchases/partials/purchase_prod_lot_stock_table", f: f %>
+        <%= render "purchases/partials/purchase_prod_lot_stock_table", fPurchaseProduct: f %>
       </div>
     </div>
   </td>
