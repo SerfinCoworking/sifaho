@@ -136,7 +136,7 @@ Rails.application.routes.draw do
   resources :purchases do 
     member do
       get "set_products"
-      patch "save_products"
+      patch "set_products", to: "purchases#save_products"
     end
   end
 

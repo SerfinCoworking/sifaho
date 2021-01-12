@@ -70,7 +70,7 @@
     <div class="row">
       <div class="col-12">
 
-          <%= simple_form_for @purchase, url: save_products_purchase_path(@purchase), html: {class: "", role: 'check-modified', id: "save_products_purchase_" + @purchase.id.to_s} do |form| %>
+        <%= simple_form_for @purchase, url: set_products_purchase_path(@purchase), method: :patch, html: {class: "", role: 'check-modified', id: "save_products_purchase_" + @purchase.id.to_s} do |form| %>
           <%= form.error_notification %>
 
           <div class="row">

@@ -102,7 +102,7 @@
 </tr>
 <tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : '' %>">
   <td colspan="6">
-    <div class="collapse-custom" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
+    <div class="collapse-custom <%= f.object.errors[:order_prod_lot_stocks].any? ? 'show' : '' %>" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
       <div class="card card-body">
         <%# .-Seleccion de lotes Collapsable %>
         <%= render "purchases/partials/purchase_prod_lot_stock_table", fPurchaseProduct: f %>
