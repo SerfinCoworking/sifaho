@@ -7,9 +7,16 @@ class PurchaseProduct < ApplicationRecord
   has_many :lot_stocks, :through => :order_prod_lot_stocks
 
   validates_associated :order_prod_lot_stocks
+  validates_presence_of :product_id
+  validate :atleast_one_lot_selected
   # Atributos anidados
   accepts_nested_attributes_for :order_prod_lot_stocks,
     :allow_destroy => true
 
-  # scope :sort_by_order_prod_lot_stocks, -> { purchase_prod.joins(:order_prod_lot_stocks).order('position DESC') }
+  # Validacion: evitar el envio de una orden si no tiene stock para enviar
+  def atleast_one_lot_selected
+    if self.order_prod_lot_stocks.size == 0
+      errors.add(:atleast_one_lot_selected, "Debe seleccionar almenos 1 lote")
+    end
+  end
 end
