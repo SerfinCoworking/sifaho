@@ -22,14 +22,13 @@ $(document).on('turbolinks:load', function(e){
   $(".lot-stock-cocoon-container").on('cocoon:before-insert', function(e, added_task) {
     e.stopPropagation();
     const lastInsert = $(this).find('tr.nested-fields').first();
-    lastPosition = (parseInt(lastInsert.find('input.purchase-prod-lot-stock-position').first().val()) + 1) || 0;
+    lastPosition = (parseInt(lastInsert.find('input.purchase-prod-lot-stock-position').first().val() || 0) + 1);
   }).on('cocoon:after-insert', function(e, added_task) {
     /* Inicializamos el evento AFTER-INSERT de los concoons de seleccion de lote */
     e.stopPropagation();
     $(added_task).find('td input.purchase-prod-lot-stock-position').first().val(lastPosition);    
     initLotStockFields();
   }).on('cocoon:before-remove', function(e, lotSelectionTr) {
-    /* Al eliminar un lote asignado */
     e.stopPropagation();
     // allow some time for the animation to complete
     $(this).data('remove-timeout', 500);
@@ -88,12 +87,19 @@ $(document).on('turbolinks:load', function(e){
     
     $("#lot-stock-cocoon-container-" + e.timeStamp).on('cocoon:before-insert', function(e, added_task) {
       e.stopPropagation();
+      const lastInsert = $(this).find('tr.nested-fields').first();
+      lastPosition = (parseInt(lastInsert.find('input.purchase-prod-lot-stock-position').first().val() || 0) + 1);
+    }).on('cocoon:after-insert', function(e, added_task) {
+      e.stopPropagation();
+      $(added_task).find('td input.purchase-prod-lot-stock-position').first().val(lastPosition);    
+      initLotStockFields();
+    }).on('cocoon:before-remove', function(e, lotSelectionTr) {
+      e.stopPropagation();
+      // allow some time for the animation to complete
+      $(this).data('remove-timeout', 500);
+      $(lotSelectionTr).fadeOut(500);
     });
 
-    $("#lot-stock-cocoon-container-" + e.timeStamp).on('cocoon:after-insert', function(e, added_task) {
-      e.stopPropagation();
-      initLotStockFields();
-    });
     
   });
   
