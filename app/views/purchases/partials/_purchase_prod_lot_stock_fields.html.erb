@@ -1,6 +1,9 @@
 <tr class="nested-fields">
   <!-- Presentacion -->
   <td>
+    <%= f.input :position, :as => :hidden, :error => false, :input_html =>  { class: "purchase-prod-lot-stock-position" },
+      value: "#{ if f.object.position.present?; f.object.position; end }" %>
+      
     <%= f.input :presentation, placeholder: 'Presentación', required: false,
       label: false, :input_html => { class: 'purchase-presentation input-sm', min: '0', :style => 'width: 100px' }
     %>

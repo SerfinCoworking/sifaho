@@ -763,6 +763,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_185249) do
     t.bigint "laboratory_id"
     t.string "lot_code"
     t.date "expiry_date"
+    t.integer "position"
     t.integer "quantity"
     t.integer "presentation"
     t.datetime "created_at", null: false

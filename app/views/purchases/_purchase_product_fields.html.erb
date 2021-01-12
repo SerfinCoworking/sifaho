@@ -1,5 +1,5 @@
 
-<tr class="nested-fields" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : '' %>">
+<tr class="nested-fields main-tr" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : '' %>">
   <td>
     <%= f.input :line, :as => :string, label: false, :input_html =>  { 
       class: "form-control purchase-product-line input-sm",

@@ -2,7 +2,7 @@ $(document).on('turbolinks:load', function(e){
 
   if(!(_PAGE.controller === 'purchases' && (['set_products', 'save_products'].includes(_PAGE.action))) ) return false;
   /* Se agrega el numero de renglon a apartir del siguiente numero del ultimo renglon */
-  let lastChildCount = $('#purchase-cocoon-container').find('tr.nested-fields').length;
+  let lastChildCount = $('#purchase-cocoon-container').find('tr.nested-fields.main-tr').length;
   $('#purchase-cocoon-container').on('cocoon:before-insert', function(e, insertedItem, originalEvent) {
     lastChildCount++;
     $(insertedItem[0]).find('input.purchase-product-line').first().val(lastChildCount);
@@ -17,13 +17,16 @@ $(document).on('turbolinks:load', function(e){
     $(collapseTr).remove();
   });
   
-  
+  let lastPosition = 0;
   /* Inicializamos el evento BEFORE-INSERT de los concoons de seleccion de lote */
   $(".lot-stock-cocoon-container").on('cocoon:before-insert', function(e, added_task) {
     e.stopPropagation();
+    const lastInsert = $(this).find('tr.nested-fields').first();
+    lastPosition = (parseInt(lastInsert.find('input.purchase-prod-lot-stock-position').first().val()) + 1) || 0;
   }).on('cocoon:after-insert', function(e, added_task) {
     /* Inicializamos el evento AFTER-INSERT de los concoons de seleccion de lote */
     e.stopPropagation();
+    $(added_task).find('td input.purchase-prod-lot-stock-position').first().val(lastPosition);    
     initLotStockFields();
   }).on('cocoon:before-remove', function(e, lotSelectionTr) {
     /* Al eliminar un lote asignado */
@@ -175,7 +178,6 @@ $(document).on('turbolinks:load', function(e){
     // Autocompletar código de lote
     $(".purchase-product-lot-code").on("focus", function(e) {
       const _this = $(e.target);
-      console.log("DEBUG");
       jQuery(function() {
         return $('.purchase-product-lot-code').autocomplete({
           source: '/lots/search_by_code?product_code='+_this.closest(".nested-fields").find(".purchase-product-code").val(),

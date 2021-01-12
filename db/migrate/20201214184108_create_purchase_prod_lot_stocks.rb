@@ -7,6 +7,7 @@ class CreatePurchaseProdLotStocks < ActiveRecord::Migration[5.2]
       
       t.string :lot_code
       t.date :expiry_date
+      t.integer :position # campo para ordenar
       t.integer :quantity
       t.integer :presentation
       t.timestamps

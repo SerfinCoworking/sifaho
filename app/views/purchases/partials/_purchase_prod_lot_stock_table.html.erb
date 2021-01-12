@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody class="lot-stock-cocoon-container" id="<%= (fPurchaseProduct.object.product.present? ? "lot-stock-cocoon-container-"+fPurchaseProduct.object.product.id.to_s : "lot-stock-cocoon-container") %>">
-      <%= fPurchaseProduct.simple_fields_for :order_prod_lot_stocks do |form_lot| %>
+      <%= fPurchaseProduct.simple_fields_for :order_prod_lot_stocks, fPurchaseProduct.object.order_prod_lot_stocks.sort_by{|obj| obj.position.to_s }.reverse do |form_lot| %>
         <%= render "purchases/partials/purchase_prod_lot_stock_fields", f: form_lot %>
       <% end %>
     </tbody>    

@@ -156,25 +156,26 @@ class PurchasesController < ApplicationController
       :area_id,
       :code_number,
       :observation,
-      purchase_products_attributes: [
-        :id,
-        :product_id,
-        :request_quantity,
-        :line,
-        :observation,
-        :_destroy,
-        order_prod_lot_stocks_attributes: [
-          :id,
-          :purchase_product_id,
-          :lot_stock_id,
-          :laboratory_id,
-          :lot_code,
-          :expiry_date,
-          :quantity,
-          :presentation,
-          :_destroy
-        ]
-      ]
+      # purchase_products_attributes: [
+      #   :id,
+      #   :product_id,
+      #   :request_quantity,
+      #   :line,
+      #   :observation,
+      #   :_destroy,
+      #   order_prod_lot_stocks_attributes: [
+      #     :id,
+      #     :purchase_product_id,
+      #     :lot_stock_id,
+      #     :laboratory_id,
+      #     :lot_code,
+      #     :expiry_date,
+      #     :quantity,
+      #     :presentation
+      #     :position,
+      #     :_destroy
+      #   ]
+      # ]
     )
   end
   
@@ -196,6 +197,7 @@ class PurchasesController < ApplicationController
           :expiry_date,
           :quantity,
           :presentation,
+          :position,
           :_destroy
         ]
       ]
