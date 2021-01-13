@@ -29,6 +29,16 @@
   </td>
   <td class="text-left actions-col">
     <div class="d-flex">
+      <%# recibo de remito  %>
+      <% if policy(purchase).set_products? %>
+        <%= link_to save_and_receive_purchase_purchase_path(purchase),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: "Recibir",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'check'%>
+        <% end %>
+      <% end %>
+      
       <%# modificar los productos cargados en la orden  %>
       <% if policy(purchase).set_products? %>
         <%= link_to set_products_purchase_path(purchase),

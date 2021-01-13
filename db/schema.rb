@@ -793,6 +793,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_185249) do
     t.string "remit_code"
     t.text "observation"
     t.integer "status"
+    t.date "received_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["applicant_sector_id"], name: "index_purchases_on_applicant_sector_id"

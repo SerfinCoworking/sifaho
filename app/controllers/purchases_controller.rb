@@ -1,5 +1,5 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products]
+  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products, :save_and_receive_purchase]
 
   # GET /purchases
   # GET /purchases.json
@@ -130,7 +130,8 @@ class PurchasesController < ApplicationController
       begin
         @purchase.update!(purchase_products_params)
         @purchase.save!
-        message = "Los productos se han creado correctamente."
+        message = "Los productos se han cargado correctamente."
+
         format.html { redirect_to @purchase, notice: message }
 
         # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
@@ -142,8 +143,26 @@ class PurchasesController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
-        message = "No se han podido cargar productos en el abastecimiento."
+        message = "No se han podido cargar productos en el remito."
         format.html { render :set_products, notice: message }
+      end
+    end
+  end
+  
+  def save_and_receive_purchase    
+    respond_to do |format|
+      begin
+        @purchase.receive_remit_by(current_user)
+        message = "El remito se ha recibido correctamente."
+        format.html { redirect_to @purchase, notice: message }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
+        message = "No se ha podido recibir el remito."
+        format.html { redirect_to save_products_purchase_path(@purchase), notice: message }
+        # format.html { render :set_products, notice: message }
       end
     end
   end
@@ -193,6 +212,10 @@ class PurchasesController < ApplicationController
         ]
       ]
     )
+  end
+
+  def receive?
+    return params[:commit] == "receive"
   end
 
 end

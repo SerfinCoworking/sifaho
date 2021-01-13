@@ -19,4 +19,36 @@ class PurchaseProduct < ApplicationRecord
       errors.add(:atleast_one_lot_selected, "Debe seleccionar almenos 1 lote")
     end
   end
+
+  # Incrementamos la cantidad de lot stock 
+  def increment_lot_stock_to(a_sector)
+
+    self.order_prod_lot_stocks.each do |opls|
+    # Se busca o crea Lote
+    @lot = Lot.where(
+      product_id: self.product_id,
+      code: opls.lot_code,
+      laboratory_id: opls.laboratory_id,
+      expiry_date: opls.expiry_date
+    ).first_or_create
+
+    # Se busca o crea Stock
+    @stock = Stock.where(
+      sector_id: a_sector.id,
+      product_id: self.product_id
+    ).first_or_create
+
+    # Se busca o crea LotStock
+    @lot_stock = LotStock.where(
+      lot_id: @lot.id,
+      stock_id: @stock.id,
+    ).first_or_create
+
+    # Se incrementa el LotStock
+    @lot_stock.increment((opls.quantity * opls.presentation))
+    opls.lot_stock_id = @lot_stock.id
+    opls.save!
+
+    end
+  end
 end

@@ -122,21 +122,15 @@ class Purchase < ApplicationRecord
   end
 
   # Cambia estado del pedido a "Paquete recibido" y se reciben los lotes
-  def receive_remit(a_user)
-    if self.auditoria?
-      if self.purchase_products.where.not(lot_code: nil).exists?
-        self.purchase_products.each do |r_products|
-          r_products.increment_new_lot_to(a_user.sector)
-        end
-        self.received_date = DateTime.now
-        self.received_by = a_user
-        self.recibido!
-      else
-        raise ArgumentError, 'No hay productos para recibir en el pedido'
-      end # End check if sector supply exists
-    else 
-      raise ArgumentError, 'El pedido está en'+ self.status.split('_').map(&:capitalize).join(' ')
+  def receive_remit_by(a_user)
+    self.purchase_products.each do |purchase_product|
+      purchase_product.increment_lot_stock_to(self.applicant_sector)
     end
+
+    self.received_date = DateTime.now
+    self.create_notification(a_user, "recibió")
+    self.recibido!
+    
   end
 
   def validate_purchase_products_length
@@ -144,15 +138,15 @@ class Purchase < ApplicationRecord
   end
 
   def create_notification(of_user, action_type)
-    ReceiptMovement.create(user: of_user, purchase: self, action: action_type, sector: of_user.sector)
+    PurchaseMovement.create(user: of_user, purchase: self, action: action_type, sector: of_user.sector)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
-      @not = Notification.where( actor: of_user, user: user, target: self, notify_type: "recibo", action_type: action_type, actor_sector: of_user.sector ).first_or_create
+      @not = Notification.where( actor: of_user, user: user, target: self, notify_type: "abastecimiento", action_type: action_type, actor_sector: of_user.sector ).first_or_create
       @not.updated_at = DateTime.now
       @not.read_at = nil
       @not.save
     end
     (self.provider_sector.users.uniq - [of_user]).each do |user|
-      @not = Notification.where( actor: of_user, user: user, target: self, notify_type: "recibo", action_type: action_type, actor_sector: of_user.sector ).first_or_create
+      @not = Notification.where( actor: of_user, user: user, target: self, notify_type: "abastecimiento", action_type: action_type, actor_sector: of_user.sector ).first_or_create
       @not.updated_at = DateTime.now
       @not.read_at = nil
       @not.save
