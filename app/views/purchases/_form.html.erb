@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@purchase.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @purchase.new_record? ? "Agregar abastecimiento" : "Editando abastecimiento" %>
+        <%= @purchase.new_record? ? "Agregar remito" : "Editando remito" %>
       </h5>
     </div>
     <%= link_to :back, class: @purchase.new_record? ? 'btn text-white' : 'btn' do %>
@@ -37,10 +37,8 @@
               <%= fa_icon 'spinner', class: "fa-spin"%>
             </div>
           </div>
-        <!--/div-->
 
         <%# Sector Proveedor %>
-        <!--div class="col-md-4"-->
         <%= form.label :provider_sector_id, "Sector proveedor" %>
         <div class="custom-input-group w-75">
           <%= form.input :provider_sector_id,
@@ -63,23 +61,18 @@
         </div>
 
         <%# Observation %>
-        <!--div class="col-md-4"-->
         <%= form.label :observation, "Observaciones" %>
         <div class="custom-input-group w-75">
           <%= form.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
         </div>
-      <!--/div>
-        </div>
-        
-      <div class="row">
-        <div class="col-4"-->
-          <%= form.input :code_number, :as => :string, :input_html =>  { 
-              class: "form-control purchase-product-line input-sm w-75",
-              size: 8,
-              placeholder: "Código",
-              value: "#{ if form.object.code_number.present?; form.object.code_number; end }"
-              }
-            %>
+
+        <%= form.input :code_number, :as => :string, :input_html =>  { 
+            class: "form-control purchase-product-line input-sm w-75",
+            size: 8,
+            placeholder: "Código",
+            value: "#{ if form.object.code_number.present?; form.object.code_number; end }"
+            }
+          %>
         </div>
         <div class="col-5">
           Otra información...
@@ -95,7 +88,6 @@
     <%= link_to 'Volver', receipts_path, class: 'btn mr-2' %>
 
     <button type='submit' class='btn btn-primary mr-2' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='audit'>
-      
       <div class="c-msg" style="pointer-events: none;">
         <%= fa_icon "save" %> Guardar y cargar productos
       </div>
@@ -104,12 +96,7 @@
         Guardando...
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
       </div>
-
     </button>
 
   </div>
 </div>
- 
-<% content_for :modal do %>
-  <div class="modal fade" tabindex="-1" role="dialog" id="select-lot"></div>
-<% end %>

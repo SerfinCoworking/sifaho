@@ -33,6 +33,7 @@ class PurchasesController < ApplicationController
 
   # GET /purchases/1/edit
   def edit
+    @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
   end
 
 
@@ -72,14 +73,24 @@ class PurchasesController < ApplicationController
   # PATCH/PUT /purchases/1.json
   def update
     respond_to do |format|
-      if @purchase.update(purchase_params)
-        flash.now[:success] = @purchase.name + " se ha modificado correctamente."
-        format.html { redirect_to @purchase }
-        format.js
-      else
-        flash.now[:error] = @purchase.name + " no se ha podido modificar."
-        format.html { render :edit }
-        format.js
+      begin
+        @purchase.update!(purchase_params)
+
+        message = "El remito se ha modificado correctamente."
+        format.html { redirect_to set_products_purchase_path(@purchase), notice: message }
+
+        # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
+        # notification_type = sending? ? "creó y envió" : "creó y auditó"
+
+        # @external_order.create_notification(current_user, notification_type)        
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        # @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
+        @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
+          # flash[:error] = "El abastecimiento no se ha podido crear."
+        format.html { render :new }
       end
     end
   end
@@ -155,27 +166,7 @@ class PurchasesController < ApplicationController
       :provider_sector_id,
       :area_id,
       :code_number,
-      :observation,
-      # purchase_products_attributes: [
-      #   :id,
-      #   :product_id,
-      #   :request_quantity,
-      #   :line,
-      #   :observation,
-      #   :_destroy,
-      #   order_prod_lot_stocks_attributes: [
-      #     :id,
-      #     :purchase_product_id,
-      #     :lot_stock_id,
-      #     :laboratory_id,
-      #     :lot_code,
-      #     :expiry_date,
-      #     :quantity,
-      #     :presentation
-      #     :position,
-      #     :_destroy
-      #   ]
-      # ]
+      :observation
     )
   end
   

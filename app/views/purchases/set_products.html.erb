@@ -1,10 +1,8 @@
 <div class="card fixed-custom-card">
   <div class="card-header <%= @purchase.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon (@purchase.new_record? ?  "plus" : "edit")%>
-      <h5 class="card-title mb-0 ml-2">
-        <%= @purchase.new_record? ? "Agregar abastecimiento" : "Editando abastecimiento" %>
-      </h5>
+      <%= fa_icon "edit" %>
+      <h5 class="card-title mb-0 ml-2"> Editando remito </h5>
     </div>
     <%= link_to :back, class: @purchase.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>
