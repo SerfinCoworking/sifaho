@@ -48,22 +48,16 @@ class PurchasesController < ApplicationController
     respond_to do |format|
       begin
         @purchase.save!
-        message = "El abastecimiento se ha creado correctamente."
-        format.html { redirect_to set_products_purchase_path(@purchase), notice: message }
+        @purchase.create_notification(current_user, "creó")        
+        format.html { redirect_to set_products_purchase_path(@purchase), notice: "El remito se ha creado correctamente." }
 
-        # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
-        # notification_type = sending? ? "creó y envió" : "creó y auditó"
-
-        # @external_order.create_notification(current_user, notification_type)        
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        # @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
         @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
-          # flash[:error] = "El abastecimiento no se ha podido crear."
+        flash[:error] = "El remito no se ha podido crear."
         format.html { render :new }
-        # format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
 
@@ -75,22 +69,15 @@ class PurchasesController < ApplicationController
     respond_to do |format|
       begin
         @purchase.update!(purchase_params)
-
-        message = "El remito se ha modificado correctamente."
-        format.html { redirect_to set_products_purchase_path(@purchase), notice: message }
-
-        # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
-        # notification_type = sending? ? "creó y envió" : "creó y auditó"
-
-        # @external_order.create_notification(current_user, notification_type)        
+        @purchase.create_notification(current_user, "auditó")        
+        format.html { redirect_to set_products_purchase_path(@purchase), notice: "El remito se ha modificado correctamente." }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        # @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
         @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
-          # flash[:error] = "El abastecimiento no se ha podido crear."
-        format.html { render :new }
+        flash[:error] = "El remito no se ha podido modificar."
+        format.html { render :edit }
       end
     end
   end
@@ -130,14 +117,9 @@ class PurchasesController < ApplicationController
       begin
         @purchase.update!(purchase_products_params)
         @purchase.save!
-        message = "Los productos se han cargado correctamente."
+        @purchase.create_notification(current_user, 'auditó')        
+        format.html { redirect_to @purchase, notice: "Los productos se han cargado correctamente." }
 
-        format.html { redirect_to @purchase, notice: message }
-
-        # message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
-        # notification_type = sending? ? "creó y envió" : "creó y auditó"
-
-        # @external_order.create_notification(current_user, notification_type)        
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -162,7 +144,6 @@ class PurchasesController < ApplicationController
         @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
         message = "No se ha podido recibir el remito."
         format.html { redirect_to save_products_purchase_path(@purchase), notice: message }
-        # format.html { render :set_products, notice: message }
       end
     end
   end

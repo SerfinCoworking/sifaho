@@ -13,6 +13,9 @@ class PurchaseProduct < ApplicationRecord
   accepts_nested_attributes_for :order_prod_lot_stocks,
     :allow_destroy => true
 
+  delegate :code, to: :product, prefix: true
+  delegate :name, to: :product, prefix: true
+
   # Validacion: evitar el envio de una orden si no tiene stock para enviar
   def atleast_one_lot_selected
     if self.order_prod_lot_stocks.size == 0
@@ -51,4 +54,9 @@ class PurchaseProduct < ApplicationRecord
 
     end
   end
+
+  def get_quantity
+    return self.order_prod_lot_stocks.sum('presentation * quantity')
+  end
+
 end

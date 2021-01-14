@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo recibo
+        Viendo remito
       </h5>
     </div>
     <div>
@@ -21,31 +21,31 @@
       <div class='col-md-4 col-xs-4'>
         <div class="text-center"><strong>Solicitante</strong></div>
         <strong>Establecimiento:</strong>
-        <%= @receipt.applicant_sector.establishment_name%><br>
+        <%= @purchase.applicant_sector.establishment_name%><br>
         <strong>Sector:</strong>
-        <%= @receipt.applicant_sector.name%>
+        <%= @purchase.applicant_sector.name%>
       </div>
       <div class="col-md-4 col-xs-4">
         <div class="text-center"><strong>Proveedor</strong></div>
         <strong>Establecimiento:</strong>
-        <%= @receipt.provider_sector.establishment_name%><br>
+        <%= @purchase.provider_sector.establishment_name%><br>
         <strong>Sector:</strong>
-        <%= @receipt.provider_sector.name%>
+        <%= @purchase.provider_sector.name%>
       </div>
       <div class='col-md-4 col-xs-4'>
         <div class='row'>
           <div class='col-md-6 col-xs-6'>
             <strong>Solicitado:</strong>
-            <%= @receipt.received_date.present? ? @receipt.received_date.strftime("%d/%m/%Y") : ' ---- '%><br>
+            <%= @purchase.received_date.present? ? @purchase.received_date.strftime("%d/%m/%Y") : ' ---- '%><br>
           </div>
           <div class='col-md-6 col-xs-6'>
             <strong>Código:</strong>
-            <%= @receipt.code %>
+            <%= @purchase.code_number %>
           </div>
         </div>
         <hr>
         <strong>Observaciones:</strong>
-          <%= @receipt.observation? ? @receipt.observation : 'Sin observaciones' %>
+          <%= @purchase.observation? ? @purchase.observation : 'Sin observaciones' %>
       </div>
     </div>
     <hr>
@@ -57,14 +57,14 @@
             <a class="nav-link active" data-toggle='tab' href='#products'>
               <%= fa_icon "cubes" %>
               Productos
-              <span class="badge badge-secondary"><%= @receipt.receipt_products.count %></span>
+              <span class="badge badge-secondary"><%= @purchase.purchase_products.count %></span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle='tab' href='#last-movements'>
               <%= fa_icon "exchange-alt"%>
               Movimientos
-              <span class="badge badge-secondary"><%= @receipt.movements.count %></span>
+              <span class="badge badge-secondary"><%= @purchase.movements.count %></span>
             </a>
           </li>
         </ul>
@@ -82,33 +82,86 @@
                     <th>Código</th>
                     <th>Producto</th>
                     <th>Recibido</th>
-                    <th>Lote</th>
-                    <th>Laboratorio</th>
-                    <th>Vencimiento</th>
+                    <th>Lotes</th>
+                    <th>Observaciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% @receipt.receipt_products.joins(:product).order("name").each do |r_products| %>
+                  <% @purchase.purchase_products.joins(:product).order("name").each do |purchase_product| %>
                     <tr>
                       <td>
-                        <%= r_products.product_code %>
+                        <%= purchase_product.product_code %>
                       </td>
                       <td>
-                        <%= r_products.product_name %>
+                        <%= purchase_product.product_name %>
                       </td>
                       <td>
-                        <%= r_products.quantity %>
+                        <%= purchase_product.get_quantity %>
                       </td>
                       <td>
-                        <%= r_products.lot_code.present? ? r_products.lot_code : 'n/a' %>
+                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= purchase_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= purchase_product.id %>">
+                          <%= purchase_product.order_prod_lot_stocks.count %>
+                        </button>
                       </td>
                       <td>
-                        <%= r_products.laboratory_id.present? ? Laboratory.find_by_id(r_products.laboratory_id).name : 'n/a' %>
-                      </td>
-                      <td>
-                        <%= r_products.expiry_date.present? ? r_products.expiry_date.strftime("%m/%y") : 'No vence' %>
+                        <%# if purchase_product.provider_observation.present? || purchase_product.applicant_observation.present? %>
+                          <%#= fa_icon "asterisk" %>
+                        <%# else %>
+                          ---
+                        <%# end %>
                       </td>
                     </tr>
+                    <tr>
+                      <td colspan="7" class="p-0">
+                        <div id="collapse-row-<%= purchase_product.id %>" class="collapse in">
+                          <div class="p-3">
+                          <% if purchase_product.order_prod_lot_stocks.present? %>
+                            <table class="w-100">
+                              <thead>
+                                <tr>
+                                  <th> Presentación </th>
+                                  <th> Cantidad </th>
+                                  <th> Lote </th>
+                                  <th> Laboratorio </th>
+                                  <th> Vencimiento </th>
+                                </tr>
+                              </thead>
+                              </tbody>
+                                <% purchase_product.order_prod_lot_stocks.each do |opls| %>
+                                <tr>
+
+                                  <td>
+                                    <%= opls.presentation %>
+                                  </td>
+
+                                  <td>
+                                    <%= opls.quantity %>
+                                  </td>
+                                  
+                                  <td>
+                                    <%= opls.lot_stock.lot.code %>
+                                  </td>
+                                  
+                                  <td>
+                                    <%= opls.lot_stock.lot.laboratory.name %>
+                                  </td>
+                                  
+                                  <td>
+                                    <%= opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                                  </td>
+                                </tr>
+
+                                <% end %>
+                              </tbody>
+                            </table>
+                           
+                            <% else %>
+                                No tiene lotes asignados
+                            <% end %>
+                          </div>
+                        </div>
+                      </td>
+                    </tr> <%# fin Listado de lotes y descripciones %>
                   <% end %>
                 </tbody>
               </table>
@@ -117,7 +170,7 @@
         </div>
         <div id='last-movements' class='tab-pane fade'>
           <!-- Tabla de movimientos -->
-          <%= render '/shared/movements_table', order: @receipt %>
+          <%= render '/shared/movements_table', order: @purchase %>
         </div> <!-- End last movements tab pane -->
       </div> <!-- End Tab content-->
     </div> <!-- End col-md-12 -->
@@ -125,9 +178,9 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', receipts_path, class: "btn btn-light mr-1" %>
-    <% if policy(@receipt).edit? %>
-      <%= link_to edit_receipt_path(@receipt), :"data-turbolinks" => false,
+    <%= link_to 'Volver', purchases_path, class: "btn btn-light mr-1" %>
+    <% if policy(@purchase).edit? %>
+      <%= link_to edit_purchase_path(@purchase), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
         <%= fa_icon "pen" %>
         Editar
