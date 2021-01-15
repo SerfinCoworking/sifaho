@@ -184,9 +184,12 @@ $(document).on('turbolinks:load', function(e){
     // Autocompletar código de lote
     $(".purchase-product-lot-code").on("focus", function(e) {
       const _this = $(e.target);
+      const lotRow = _this.closest("tr.collapsable-row");      
+      const productRow = $(lotRow).siblings("tr.main-tr[data-nested-fields='"+$(lotRow).attr('data-collapsable-row')+"']").first();//.find("input.purchase-product-id").first().val();
+      const productCode = $(productRow).find("input.purchase-product-code").first().val();
       jQuery(function() {
         return $('.purchase-product-lot-code').autocomplete({
-          source: '/lots/search_by_code?product_code='+_this.closest(".nested-fields").find(".purchase-product-code").val(),
+          source: '/lots/search_by_code?product_code='+productCode,
           minLength: 1,
           messages: {
             noResults: function(count) {

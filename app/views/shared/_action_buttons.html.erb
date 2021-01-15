@@ -45,3 +45,11 @@
     <% end %>
   </div>
 <% end %>
+
+<% content_for :modal do %>
+  <% if defined?(destroy) and destroy %>
+    <% if policy(object).destroy? %>
+      <%= render(partial: 'shared/modals/delete_confirmation') %>
+    <%end%>
+  <%end%>
+<%end%>

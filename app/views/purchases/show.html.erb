@@ -139,15 +139,19 @@
                                   </td>
                                   
                                   <td>
-                                    <%= opls.lot_stock.lot.code %>
+                                    <% if opls.lot_code.present? %>
+                                      <%= opls.lot_code %>
+                                    <% end %>
                                   </td>
                                   
                                   <td>
-                                    <%= opls.lot_stock.lot.laboratory.name %>
+                                    <% if opls.laboratory.present? %>
+                                      <%= opls.laboratory.name %>
+                                    <% end %>
                                   </td>
                                   
                                   <td>
-                                    <%= opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                                    <%= opls.expiry_date.present? ? opls.expiry_date.strftime("%m/%y") : "Sin asignar" %>
                                   </td>
                                 </tr>
 
@@ -179,11 +183,27 @@
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', purchases_path, class: "btn btn-light mr-1" %>
+    <% if policy(@purchase).receive_purchase? %>
+      <%= link_to receive_purchase_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-primary mr-1" do %>
+        <%= fa_icon "check" %>
+        Recibir
+      <% end %>
+    <% end %>
+    
     <% if policy(@purchase).edit? %>
       <%= link_to edit_purchase_path(@purchase), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
+        class: "btn btn-warning mr-1" do %>
         <%= fa_icon "pen" %>
         Editar
+      <% end %>
+    <% end %>
+    
+    <% if policy(@purchase).set_products? %>
+      <%= link_to set_products_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "dolly-flatbed" %>
+        Editar productos
       <% end %>
     <% end %>
   </div>

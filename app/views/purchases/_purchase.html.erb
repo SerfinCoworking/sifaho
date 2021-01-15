@@ -31,7 +31,7 @@
     <div class="d-flex">
       <%# recibo de remito  %>
       <% if policy(purchase).set_products? %>
-        <%= link_to save_and_receive_purchase_purchase_path(purchase),
+        <%= link_to receive_purchase_purchase_path(purchase),
           class: 'btn btn-sm btn-primary mr-1 ml-1',
           title: "Recibir",
           data: { toggle: 'tooltip', placement: 'top'} do %> 

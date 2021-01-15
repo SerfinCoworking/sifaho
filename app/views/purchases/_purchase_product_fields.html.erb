@@ -1,5 +1,5 @@
 
-<tr class="nested-fields main-tr <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'table-danger' : '' %>" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : '' %>">
+<tr class="nested-fields main-tr <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'table-danger' : '' %>" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : 0 %>">
   <td>
     <%= f.input :line, :as => :string, label: false, :input_html =>  { 
       class: "form-control purchase-product-line input-sm",
@@ -100,7 +100,7 @@
     <% end %>
   </td>
 </tr>
-<tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : '' %>">
+<tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : 0 %>">
   <td colspan="6">
     <div class="collapse-custom <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'show' : '' %>" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
       <div class="card card-body">

@@ -1,5 +1,5 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products, :save_and_receive_purchase]
+  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products, :receive_purchase]
 
   # GET /purchases
   # GET /purchases.json
@@ -36,7 +36,6 @@ class PurchasesController < ApplicationController
     @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
   end
 
-
   # POST /purchases
   # Guardamos los datos principales de la compra
   # sin validar los productos asociados
@@ -55,12 +54,10 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
-        flash[:error] = "El remito no se ha podido crear."
+        @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : []
         format.html { render :new }
       end
     end
-
   end
 
   # PATCH/PUT /purchases/1
@@ -75,8 +72,7 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
-        flash[:error] = "El remito no se ha podido modificar."
+        @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : []
         format.html { render :edit }
       end
     end
@@ -85,7 +81,7 @@ class PurchasesController < ApplicationController
   # DELETE /purchases/1
   # DELETE /purchases/1.json
   def destroy
-    purchase_name = @purchase.name
+    purchase_name = @purchase.code_number.to_s
     @purchase.destroy
     respond_to do |format|
       flash.now[:success] = "El abastecimiento "+purchase_name+" se ha eliminado correctamente."
@@ -117,7 +113,7 @@ class PurchasesController < ApplicationController
       begin
         @purchase.update!(purchase_products_params)
         @purchase.save!
-        @purchase.create_notification(current_user, 'auditó')        
+        @purchase.create_notification(current_user, 'auditó')
         format.html { redirect_to @purchase, notice: "Los productos se han cargado correctamente." }
 
       rescue ArgumentError => e
@@ -131,19 +127,17 @@ class PurchasesController < ApplicationController
     end
   end
   
-  def save_and_receive_purchase    
+  def receive_purchase    
     respond_to do |format|
       begin
         @purchase.receive_remit_by(current_user)
-        message = "El remito se ha recibido correctamente."
-        format.html { redirect_to @purchase, notice: message }
+        format.html { redirect_to @purchase, notice: "El remito se ha recibido correctamente." }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
         @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
-        message = "No se ha podido recibir el remito."
-        format.html { redirect_to save_products_purchase_path(@purchase), notice: message }
+        format.html { redirect_to save_products_purchase_path(@purchase), error: "No se ha podido recibir el remito." }
       end
     end
   end

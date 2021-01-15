@@ -137,7 +137,7 @@ Rails.application.routes.draw do
     member do
       get "set_products"
       patch "set_products", to: "purchases#save_products"
-      get "save_and_receive_purchase"
+      get "receive_purchase"
     end
   end
 

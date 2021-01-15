@@ -16,19 +16,23 @@ class PurchasePolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:admin)
+    edit?
   end
-
+  
   def edit?
-    update?
+    user.has_any_role?(:admin) && record.inicial? || record.auditoria?
   end
   
   def set_products?
     record.inicial? || record.auditoria?
   end
+  
+  def receive_purchase?
+    record.auditoria?
+  end
 
   def destroy?
-    user.has_any_role?(:admin)
+    user.has_any_role?(:admin) && record.inicial? || record.auditoria?
   end
 
   def delete?
