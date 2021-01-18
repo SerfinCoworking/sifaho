@@ -27,12 +27,19 @@ class PurchasePolicy < ApplicationPolicy
     record.inicial? || record.auditoria?
   end
   
-  def receive_purchase?
+  def receive_purchase?    
     record.auditoria?
   end
   
   def return_to_audit?
-    record.recibido?
+    # si fue recibido y tiene fecha de recibido, se debe controlar que no halla superado las
+    # 24 horas de recibido y controlar el rol del usuario
+    if record.recibido? && record.received_date.present?
+      diff_in_hours = (DateTime.now.to_time - record.received_date.to_time) / 1.hours
+      if diff_in_hours < 24
+        user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+      end
+    end
   end
 
   def return_to_audit_confirm?
