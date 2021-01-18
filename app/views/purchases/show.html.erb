@@ -183,6 +183,14 @@
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', purchases_path, class: "btn btn-light mr-1" %>
+    <%# modificar los productos cargados en la orden  %>
+      <% if policy(@purchase).return_to_audit_confirm? %>
+        <%= link_to return_to_audit_confirm_purchase_path(@purchase), remote: true, class: 'btn btn-warning mr-1 ml-1' do %> 
+          <%= fa_icon 'undo'%>
+          Retornar
+        <% end %>
+      <% end %>
+    
     <% if policy(@purchase).receive_purchase? %>
       <%= link_to receive_purchase_purchase_path(@purchase), :"data-turbolinks" => false,
         class: "btn btn-primary mr-1" do %>
@@ -208,3 +216,10 @@
     <% end %>
   </div>
 </div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(@purchase).return_to_audit_confirm? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
+<% end %>
