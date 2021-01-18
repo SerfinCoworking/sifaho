@@ -49,6 +49,15 @@
         <% end %>
       <% end %>
       
+      <%# modificar los productos cargados en la orden  %>
+      <% if policy(purchase).return_to_audit_confirm? %>
+        <%= link_to return_to_audit_confirm_purchase_path(purchase), remote: true, class: 'btn btn-sm btn-warning mr-1 ml-1',
+          title: "Retornar",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'undo'%>
+        <% end %>
+      <% end %>
+      
       <%= render(
         partial: 'shared/action_buttons',
           locals:{ 
@@ -65,3 +74,10 @@
     </div>
   </td>
 </tr>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(purchase).return_to_audit_confirm? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
+<% end %>

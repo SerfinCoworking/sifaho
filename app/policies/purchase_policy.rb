@@ -30,6 +30,14 @@ class PurchasePolicy < ApplicationPolicy
   def receive_purchase?
     record.auditoria?
   end
+  
+  def return_to_audit?
+    record.recibido?
+  end
+
+  def return_to_audit_confirm?
+    return_to_audit?
+  end
 
   def destroy?
     user.has_any_role?(:admin) && record.inicial? || record.auditoria?

@@ -152,6 +152,16 @@ class Purchase < ApplicationRecord
       @not.save
     end
   end
+
+  def return_to_audit(a_user)
+    # primero actualizamos los totales de la dosis de cada producto original recetado
+    self.purchase_products.each do | cpp |
+      cpp.decrement_stock
+    end
+
+    self.auditoria!
+    self.create_notification(a_user, "retorno un remito")
+  end
   
   private
 

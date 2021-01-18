@@ -1,5 +1,14 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [:show, :edit, :update, :destroy, :delete, :set_products, :save_products, :receive_purchase]
+  before_action :set_purchase, only: [:show,
+  :edit,
+  :update,
+  :destroy,
+  :delete,
+  :set_products,
+  :save_products,
+  :receive_purchase,
+  :return_to_audit_confirm,
+  :return_to_audit]
 
   # GET /purchases
   # GET /purchases.json
@@ -148,6 +157,25 @@ class PurchasesController < ApplicationController
   def search_by_name
     @purchases = Purchase.order(:name).search_name(params[:term]).limit(10).where_not_id(current_user.sector.purchase_id)
     render json: @purchases.map{ |est| { label: est.name, id: est.id } }
+  end
+
+  def return_to_audit_confirm
+    respond_to do |format|
+      format.js
+    end
+  end
+  
+  def return_to_audit
+    authorize @purchase
+    respond_to do |format|
+      begin
+        @purchase.return_to_audit(current_user)
+        flash.now[:success] = "El remito "+@purchase.remit_code+" se ha retornado correctamente."
+      rescue ArgumentError => e
+        flash[:error] = e.message
+      end
+      format.html { redirect_to purchase_path(@purchase) }
+    end
   end
 
   private

@@ -59,4 +59,11 @@ class PurchaseProduct < ApplicationRecord
     return self.order_prod_lot_stocks.sum('presentation * quantity')
   end
 
+  # Decrementamos la cantidad de cada lot stock (proveedor)
+  def decrement_stock
+    self.order_prod_lot_stocks.each do |opls|
+      opls.lot_stock.decrement(opls.presentation * opls.quantity)
+    end
+  end
+
 end

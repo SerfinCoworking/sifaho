@@ -138,6 +138,8 @@ Rails.application.routes.draw do
       get "set_products"
       patch "set_products", to: "purchases#save_products"
       get "receive_purchase"
+      get "return_to_audit_confirm"
+      patch "return_to_audit"
     end
   end
 
