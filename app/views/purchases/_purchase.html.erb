@@ -7,7 +7,7 @@
   </td>
 
   <td>
-    <span class="badge badge-<%= purchase.auditoria? ? 'warning' : 'success' %>">
+    <span class="badge badge-<%= purchase.inicial? || purchase.auditoria? ? 'warning' : 'success' %>">
       <%= purchase.status.humanize %>
     </span>
   </td>
@@ -22,7 +22,7 @@
   
   <td>
     <% if purchase.recibido? %>
-      <%= purchase.received_date.strftime("%d/%m/%y %H:%M") %>
+      <%= purchase.received_date.strftime("%d/%m/%y") %>
     <% else %>
       ----
     <% end %>

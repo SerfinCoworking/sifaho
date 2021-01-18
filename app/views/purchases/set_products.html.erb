@@ -1,3 +1,5 @@
+<%= render 'header' %>
+
 <div class="card fixed-custom-card">
   <div class="card-header <%= @purchase.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
@@ -127,17 +129,6 @@
       </div>
 
     </button>
-    <%#
-    <button type='submit' class='btn btn-primary' form="<%= "save_products_purchase_" + @purchase.id.to_s >" data-value='receive'>
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "paper-plane" > Guardar y recibir
-      </div>
-      <div class="d-none" style="pointer-events: none;">
-        Guardando...
-        <%= fa_icon "spinner", class: "fa-spin send-audit" >
-      </div>
-    </button>
-    %>
 
   </div>
 </div>

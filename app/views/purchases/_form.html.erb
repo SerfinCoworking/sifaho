@@ -38,41 +38,42 @@
             </div>
           </div>
 
-        <%# Sector Proveedor %>
-        <%= form.label :provider_sector_id, "Sector proveedor" %>
-        <div class="custom-input-group w-75">
-          <%= form.input :provider_sector_id,
-            label: false,
-            collection: @sectors.map {
-              |sector| [sector.name, sector.id]
-            },
-            :input_html => {
-              placeholder: 'Debe seleccionar establecimiento',
-              required: true,
-              id: 'provider-sector',
-              class: 'selectpicker-md custom-select-pick show-tick',
-              "data-width"=>"100%",
-              "title"=>"Seleccionar sector",
-              "data-size"=>"10",
-              "data-live-search"=>true,
-              value: form.object.provider_sector.present? ? form.object.provider_sector.id : ""
-            }
-          %>
-        </div>
+          <%# Sector Proveedor %>
+          <%= form.label :provider_sector_id, "Sector proveedor" %>
+          <div class="custom-input-group w-75">
+            <%= form.input :provider_sector_id,
+              label: false,
+              collection: @sectors.map {
+                |sector| [sector.name, sector.id]
+              },
+              :input_html => {
+                placeholder: 'Debe seleccionar establecimiento',
+                required: true,
+                id: 'provider-sector',
+                class: 'selectpicker-md custom-select-pick show-tick',
+                "data-width"=>"100%",
+                "title"=>"Seleccionar sector",
+                "data-size"=>"10",
+                "data-live-search"=>true,
+                value: form.object.provider_sector.present? ? form.object.provider_sector.id : ""
+              }
+            %>
+          </div>
 
-        <%# Observation %>
-        <%= form.label :observation, "Observaciones" %>
-        <div class="custom-input-group w-75">
-          <%= form.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
-        </div>
-
-        <%= form.input :code_number, :as => :string, :input_html =>  { 
+          <%# Code number %>
+          <%= form.input :code_number, :as => :string, :input_html =>  { 
             class: "form-control purchase-product-line input-sm w-75",
             size: 8,
             placeholder: "Código",
             value: "#{ if form.object.code_number.present?; form.object.code_number; end }"
             }
           %>
+
+          <%# Observation %>
+          <%= form.label :observation, "Observaciones" %>
+          <div class="custom-input-group w-75">
+            <%= form.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
+          </div>
         </div>
         <div class="col-5">
           Otra información...
