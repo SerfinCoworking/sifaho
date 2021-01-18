@@ -9,8 +9,11 @@ class PurchasesController < ApplicationController
       params[:filterrific],
       persistence_id: false,
       available_filters: [
-        :sorted_by,
-        :search_name,
+        :search_code,
+        :search_provider,
+        :received_date_since,
+        :received_date_to,
+        :sorted_by
       ],
     ) or return
     @purchases = @filterrific.find.page(params[:page]).per_page(15)

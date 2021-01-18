@@ -14,7 +14,7 @@ class Purchase < ApplicationRecord
   has_many :products, :through => :purchase_products
 
   # Validaciones
-  validates_presence_of :provider_sector_id, :applicant_sector_id
+  validates_presence_of :provider_sector_id, :applicant_sector_id, :code_number
   # debemos agregar condicion solo para que corra esta validacion solo si se encuentra 
   # en el paso de carga de productos, 
   # agregar estado inicial a la compra (este indica el salto de validacion de productos)
@@ -41,7 +41,7 @@ class Purchase < ApplicationRecord
   )
 
   pg_search_scope :search_code,
-    :against => :code,
+    :against => :remit_code,
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
   
