@@ -20,7 +20,7 @@ class PurchasePolicy < ApplicationPolicy
   end
   
   def edit?
-    user.has_any_role?(:admin) && record.inicial? || record.auditoria?
+    user.has_any_role?(:admin) && (record.inicial? || record.auditoria?)
   end
   
   def set_products?
@@ -47,7 +47,7 @@ class PurchasePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_any_role?(:admin) && record.inicial? || record.auditoria?
+    user.has_any_role?(:admin) && (record.inicial? || record.auditoria?)
   end
 
   def delete?

@@ -31,6 +31,7 @@ class PurchasesController < ApplicationController
   # GET /purchases/1
   # GET /purchases/1.json
   def show
+    authorize @puchase
     respond_to do |format|
       format.html
       format.js
@@ -40,11 +41,13 @@ class PurchasesController < ApplicationController
   # GET /purchases/new
   def new
     @purchase = Purchase.new
+    authorize @puchase
     @sectors = []
   end
 
   # GET /purchases/1/edit
   def edit
+    authorize @puchase
     @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
   end
 
@@ -54,6 +57,7 @@ class PurchasesController < ApplicationController
   # POST /purchases.json
   def create
     @purchase = Purchase.new(purchase_params)
+    authorize @puchase
     @purchase.applicant_sector_id = current_user.sector.id
     @purchase.status = 'inicial'
     respond_to do |format|
@@ -75,6 +79,7 @@ class PurchasesController < ApplicationController
   # PATCH/PUT /purchases/1
   # PATCH/PUT /purchases/1.json
   def update
+    authorize @puchase
     respond_to do |format|
       begin
         @purchase.update!(purchase_params)
@@ -93,6 +98,7 @@ class PurchasesController < ApplicationController
   # DELETE /purchases/1
   # DELETE /purchases/1.json
   def destroy
+    authorize @puchase
     purchase_name = @purchase.code_number.to_s
     @purchase.destroy
     respond_to do |format|
@@ -109,6 +115,7 @@ class PurchasesController < ApplicationController
   end
 
   def set_products
+    authorize @puchase
     # este metodo se utiliza para guardar el listado de productos asignados a la compra
     # debe validar los atributos de cada producto y lote asociado
     # Si no tiene productos asociados debes hacer un build y setear el renglon
@@ -119,7 +126,7 @@ class PurchasesController < ApplicationController
   end
   
   def save_products
-    
+    authorize @puchase
     @purchase.status = 'auditoria'
     respond_to do |format|
       begin
@@ -139,7 +146,8 @@ class PurchasesController < ApplicationController
     end
   end
   
-  def receive_purchase    
+  def receive_purchase
+    authorize @puchase
     respond_to do |format|
       begin
         @purchase.receive_remit_by(current_user)
@@ -155,6 +163,7 @@ class PurchasesController < ApplicationController
   end
   
   def search_by_name
+    authorize @puchase
     @purchases = Purchase.order(:name).search_name(params[:term]).limit(10).where_not_id(current_user.sector.purchase_id)
     render json: @purchases.map{ |est| { label: est.name, id: est.id } }
   end
