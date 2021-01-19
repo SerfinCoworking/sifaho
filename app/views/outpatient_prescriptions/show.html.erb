@@ -128,10 +128,10 @@
                     <%= outpatient_prescription_product.product_name %>
                   </td>
                   <td>
-                    <%= outpatient_prescription_product.request_quantity %> <%= outpatient_prescription_product.unity.pluralize(outpatient_prescription_product.request_quantity) %>
+                    <%= outpatient_prescription_product.request_quantity %> <%= outpatient_prescription_product.unity.name.pluralize(outpatient_prescription_product.request_quantity) %>
                   </td>
                   <td>
-                    <%= outpatient_prescription_product.delivery_quantity %> <%= outpatient_prescription_product.unity.pluralize(outpatient_prescription_product.delivery_quantity) %>
+                    <%= outpatient_prescription_product.delivery_quantity %> <%= outpatient_prescription_product.unity.name.pluralize(outpatient_prescription_product.delivery_quantity) %>
                   </td>
 
                   <td>

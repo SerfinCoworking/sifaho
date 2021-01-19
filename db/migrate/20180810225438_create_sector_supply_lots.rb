@@ -6,7 +6,6 @@ class CreateSectorSupplyLots < ActiveRecord::Migration[5.1]
       t.integer :quantity, default: 0
       t.integer :initial_quantity, default: 0
       t.integer :status, default: 0
-      t.references :stock, index: true
 
       t.timestamps
     end

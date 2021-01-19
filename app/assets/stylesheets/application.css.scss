@@ -51,6 +51,7 @@
 @import 'notifications';
 @import 'notifications-list';
 @import "tempusdominus-bootstrap-4";
+@import 'treeview';
 @import "table_customized";
 @import "custom_progress_bar";
 @import 'errors';
@@ -176,6 +177,10 @@ td .form-group{
       border: none;
     }
   }
+  li > .selected{
+    background-color: $cblue2;
+    color: white;
+  }
 }
 
 // grilla de usuarios
@@ -250,7 +255,16 @@ td .form-group{
   }
 }
 
-.btn-progress{  
+a {
+  -webkit-user-drag: none;
+  -webkit-app-region: no-drag;
+}
+
+.clickable{
+  cursor: pointer;
+}
+
+.btn-progress{
   width: 10rem;
   position:relative;
   border-radius: 0.25rem;

@@ -5,21 +5,11 @@ class StocksController < ApplicationController
   # GET /stocks.json
   def index
     authorize Stock
-    @filterrific = initialize_filterrific(
-      Stock.to_sector(current_user.sector),
-      params[:filterrific],
-      select_options: {
-        sorted_by: Stock.options_for_sorted_by
-      },
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'codigo_asc'},
-      available_filters: [
-        :sorted_by,
-        :search_product_name,
-        :search_product_code,
-      ],
-    ) or return
-    @stocks = @filterrific.find.page(params[:page]).per_page(15)
+    @stocks = Stock
+      .filter(params.slice(:search_code, :search_name, :with_area_ids), current_user.sector)
+      .order(created_at: :desc)
+      .page(params[:page])
+    @areas = Area.all
   end
 
   # GET /stocks/1

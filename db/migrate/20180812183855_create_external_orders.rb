@@ -8,6 +8,8 @@ class CreateExternalOrders < ActiveRecord::Migration[5.1]
       t.references :sent_by, index: true
       t.references :received_by, index: true
       t.references :created_by, index: true
+      t.references :sent_request_by, index: true
+      t.references :rejected_by, index: true
       t.text :observation
       t.string :remit_code
 
@@ -24,6 +26,5 @@ class CreateExternalOrders < ActiveRecord::Migration[5.1]
     add_column :external_orders, :deleted_at, :datetime
     add_index :external_orders, :deleted_at
     add_index :external_orders, :remit_code, unique: true
-    add_reference :external_orders, :sent_request_by, index: true
   end
 end

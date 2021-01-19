@@ -17,6 +17,13 @@
       overflow-y: auto;
     }
   }
+  #filter_results{
+    height: 100%;
+    .card{
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+  }
 
   /* plantillas */
   .mh-custom-row{

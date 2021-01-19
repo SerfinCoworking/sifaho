@@ -17,7 +17,7 @@ class CreateQuantityOrdSupplyLots < ActiveRecord::Migration[5.1]
       t.text :applicant_observation
       t.text :provider_observation
 
-      t.datetime :expiry_date
+      t.date :expiry_date
       t.datetime :dispensed_at
 
       t.timestamps

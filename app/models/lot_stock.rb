@@ -14,6 +14,7 @@ class LotStock < ApplicationRecord
   
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, to: :product, prefix: true
+  delegate :code, to: :lot, prefix: true
 
   scope :with_product, lambda { |a_product| 
     where('lot_stocks.product_id = ?', a_product.id).joins(:lot)

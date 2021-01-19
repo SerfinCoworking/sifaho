@@ -10,8 +10,7 @@ class ChronicDispensation < ApplicationRecord
   accepts_nested_attributes_for :chronic_prescription_products,
   :allow_destroy => true
 
-  after_create :decrement_stock, :dispense_prescription
-  
+  # after_create :decrement_stock, :dispense_prescription
   
   def decrement_stock
     self.chronic_prescription_products.each do | cpp |

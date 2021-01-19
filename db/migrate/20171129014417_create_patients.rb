@@ -11,6 +11,7 @@ class CreatePatients < ActiveRecord::Migration[5.1]
       t.datetime :birthdate
       t.string :email, :limit => 50
       t.string :cuil
+      t.references :patient_type, index: true, default: 1      
 
       t.timestamps
     end

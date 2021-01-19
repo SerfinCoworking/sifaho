@@ -3,6 +3,7 @@ class CreateEstablishments < ActiveRecord::Migration[5.1]
     create_table :establishments do |t|
       t.string :code
       t.string :name
+      t.string :short_name
       t.string :cuit
       t.string :domicile
       t.string :phone

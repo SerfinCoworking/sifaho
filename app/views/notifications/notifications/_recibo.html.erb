@@ -9,7 +9,7 @@
     <%= notification.action_type %> un 
     <span class="visible-print">recibo</span>
     de 
-    <%= osCount = notification.target.quantity_ord_supply_lots.count %><%= ' insumo'.pluralize(osCount) %>
+    <%= osCount = notification.target.receipt_products.count %><%= ' insumo'.pluralize(osCount) %>
     proveniente de <%= notification.target.provider_sector.establishment.name %>.
   </div>
 <% end %>

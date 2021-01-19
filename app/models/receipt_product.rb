@@ -1,7 +1,7 @@
 class ReceiptProduct < ApplicationRecord
   belongs_to :receipt
   belongs_to :product
-  belongs_to :laboratory
+  belongs_to :laboratory, optional: true
   belongs_to :lot_stock, optional: true
   belongs_to :lot, optional: true
   

@@ -77,7 +77,7 @@
         </div>
         <hr>
         <strong>Diagnóstico:</strong>
-        <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Sin observaciones' %>
+        <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Ninguno' %>
       </div><!-- End extra info -->
     </div>
 
@@ -133,7 +133,7 @@
                     <%= org_chron_pres_prod.product_name %>
                   </td>
                   <td>
-                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.pluralize(org_chron_pres_prod.request_quantity) %>
+                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.name.pluralize(org_chron_pres_prod.request_quantity) %>
                   </td>
                   <td>
                     <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
@@ -186,7 +186,7 @@
                     
                     <div>
                       <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
-                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%m") %>
+                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
                     </div>       
                     <% if policy(chronic_dispensation).return_dispensation? %> 
                       <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
@@ -221,7 +221,7 @@
                         <tr>
                           <td><%= chronic_prescription_product.product_code %></td>
                           <td><%= chronic_prescription_product.product_name %></td>
-                          <td><%= chronic_prescription_product.product_unity %></td>
+                          <td><%= chronic_prescription_product.product_unity_name %></td>
                           <td><%= chronic_prescription_product.delivery_quantity %></td>
                           <td>
                             <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">

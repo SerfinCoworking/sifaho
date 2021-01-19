@@ -1,10 +1,15 @@
 class CreateInternalOrders < ActiveRecord::Migration[5.1]
   def change
     create_table :internal_orders do |t|
+      t.references :provider_sector, index: true
+      t.references :applicant_sector, index: true
+  
       t.references :audited_by, index: true
       t.references :sent_by, index: true
-      t.references :received_by, index: true    
+      t.references :received_by, index: true
       t.references :created_by, index: true
+      t.references :rejected_by, index: true
+      t.references :sent_request_by, index: true
 
       t.datetime :sent_date
       t.datetime :requested_date
@@ -18,11 +23,8 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_reference :internal_orders, :provider_sector, index: true
-    add_reference :internal_orders, :applicant_sector, index: true
     add_column :internal_orders, :deleted_at, :datetime
     add_index :internal_orders, :deleted_at
-    add_reference :internal_orders, :sent_request_by, index: true
     add_index :internal_orders, :remit_code, unique: true
   end
 end

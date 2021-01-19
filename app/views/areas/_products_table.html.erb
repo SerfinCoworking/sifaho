@@ -1,0 +1,27 @@
+<div class="card fixed-panel-list">
+  <table class="table table-hover table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th class="text-center"></th>
+      </tr>
+    </thead>
+    <tbody id="products">
+      <% @products.each do |product|%>
+        <tr id="product_<%= product.id %>">
+          <td><%= product.code %></td>
+          <td><%= product.name %></td>
+          <td class="text-left actions-col">
+            <% if policy(product).show? %>
+              <%= link_to product_path(product), remote: true, class: 'btn btn-light btn-sm',
+                title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+                <%= fa_icon "eye" %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

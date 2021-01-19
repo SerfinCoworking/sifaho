@@ -42,6 +42,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # Areas
+  resources :areas do
+    member do
+      get :fill_products_card
+    end
+  end
+
   resources :permission_requests do
     member do
       get "end"

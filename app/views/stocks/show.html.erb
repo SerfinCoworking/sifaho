@@ -1,37 +1,40 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-7 col-md-offset-2">
-    <div class="panel panel-default">
-      <div class="panel-heading hidden-print">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo stock de <%= @stock.product_name %>
-          <%= link_to stocks_path, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center"> 
+      <%= fa_icon 'eye' %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo stock de <%= @stock.product_name %>
+      </h5>
+    </div>
+    <%= link_to stocks_path, class: 'btn btn-light',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-start">
+      <div class="p-1 flex-fill">
+        <h5>Código: </h5><%= @stock.product_code %>
       </div>
-      <div class="panel-body" id="panel-body-new">
-        
-        <div class="row">
-          <div class="col-md-7">
-            <h5><strong>Código: </strong><%= @stock.product_code %></h5>
-
-            <h5><strong>Producto: </strong><%= @stock.product_name %></h5>
-
-            <h5><strong>Unidad: </strong><%= @stock.product_unity_name %></h5>
-
-            <h5><strong>Área: </strong><%= @stock.product_area_name %></h5>
-
-          </div>
-        </div>
+      <div class="p-1 flex-fill">
+        <h5>Producto: </h5><%= @stock.product_name %>
       </div>
-
-      <!-- Botones de acción footer -->
-      <div class="panel-footer text-right hidden-print">
-        <%= link_to 'Volver', stocks_path, class: "btn" %>
+      <div class="p-1 flex-fill">
+        <h5>Cantidad: </h5><%= @stock.quantity %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Unidad: </h5><%= @stock.product_unity_name %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Área: </h5><%= @stock.product_area_name %>
       </div>
     </div>
+  </div>
+
+  <!-- Botones de acción footer -->
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', stocks_path, class: "btn" %>
   </div>
 </div>

@@ -2,15 +2,15 @@ class InternalOrder < ApplicationRecord
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }
-
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, 
-    provision_entregada: 4, anulado: 5 }
+  provision_entregada: 4, anulado: 5 }
+
   
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :internal_order_products, dependent: :destroy, inverse_of: 'internal_order'
-  has_many :int_ord_prod_lot_stocks, through: :internal_order_products  
+  has_many :int_ord_prod_lot_stocks, through: :internal_order_products
   has_many :lot_stocks, :through => :internal_order_products
   has_many :lots, :through => :lot_stocks  
   has_many :products, :through => :internal_order_products
@@ -27,7 +27,7 @@ class InternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates :internal_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  validates :internal_order_products, :presence => { :message => "Debe agregar almenos 1 insumo" }
   validates_associated :internal_order_products
   validates_uniqueness_of :remit_code
   

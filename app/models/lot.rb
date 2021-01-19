@@ -16,13 +16,19 @@ class Lot < ApplicationRecord
   # validates_presence_of :product, :laboratory, :code
 
   validates :product, 
-    :uniqueness => { :scope => [:laboratory_id, :code],
-    unless: :expire?
+    uniqueness: { :scope => [:laboratory_id, :code],
+    unless: :expire?,
+    message: ->(object, data) do
+      "El lote #{object.code}!, ya existe con ese laboratorio! Intenta con otro!"
+    end
   }
 
   validates :product,
-    :uniqueness => { :scope => [:laboratory_id, :code, :expiry_date], 
-    if: :expire?
+    uniqueness: { :scope => [:laboratory_id, :code, :expiry_date], 
+    if: :expire?,
+    message: ->(object, data) do
+      "El lote #{object.code} ya existe con ese laboratorio y fecha de vencimiento! Intenta con otro!"
+    end
   }
 
   # Delegations

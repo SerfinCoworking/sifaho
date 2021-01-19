@@ -7,7 +7,7 @@ class CreateReceiptProducts < ActiveRecord::Migration[5.2]
       t.references :laboratory, index: true
       t.integer :quantity
       t.string :lot_code
-      t.datetime :expiry_date
+      t.date :expiry_date
 
       t.timestamps
     end

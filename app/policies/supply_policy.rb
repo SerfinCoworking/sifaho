@@ -1,15 +1,15 @@
 class SupplyPolicy < ApplicationPolicy
 
   def index?
-    index_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def trash_index?
-    trash_index_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def lots_for_supply?
-    index_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def show?
@@ -17,7 +17,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def create?
-    create_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def new?
@@ -25,7 +25,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def update?
-    update_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def edit?
@@ -33,7 +33,7 @@ class SupplyPolicy < ApplicationPolicy
   end
 
   def destroy?
-    destroy_sup.any? { |role| user.has_role?(role) }
+    user.has_any_role?(:admin)
   end
 
   def delete?
@@ -42,31 +42,5 @@ class SupplyPolicy < ApplicationPolicy
 
   def restore?
     destroy?
-  end
-
-  private
-
-  def index_sup
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
-  end
-
-  def trash_index_sup
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
-  end
-
-  def see_supplies
-    [ :admin, :farmaceutico, :auxiliar_farmacia, :enfermero, :medico, :farmaceutico_central ]
-  end
-
-  def destroy_sup
-    [ :admin, :farmaceutico_central ]
-  end
-
-  def update_sup
-    [ :admin, :central_pharmacist ]
-  end
-
-  def create_sup
-    [ :admin, :central_pharmacist ]
   end
 end
