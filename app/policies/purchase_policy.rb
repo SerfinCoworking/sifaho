@@ -27,6 +27,10 @@ class PurchasePolicy < ApplicationPolicy
     record.inicial? || record.auditoria?
   end
   
+  def save_products?
+    set_products?
+  end
+  
   def receive_purchase?    
     record.auditoria?
   end

@@ -86,7 +86,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', receipts_path, class: 'btn mr-2' %>
+    <%= link_to 'Volver', purchases_path, class: 'btn mr-2' %>
 
     <button type='submit' class='btn btn-primary mr-2' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='audit'>
       <div class="c-msg" style="pointer-events: none;">
