@@ -6,7 +6,7 @@ class ReceiptsController < ApplicationController
   def index
     authorize Receipt
     @filterrific = initialize_filterrific(
-      Receipt.order(created_at: :desc),
+      Receipt.applicant(current_user.sector).order(created_at: :desc),
       params[:filterrific],
       select_options: { },
       persistence_id: false

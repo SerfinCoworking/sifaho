@@ -149,6 +149,14 @@ class Receipt < ApplicationRecord
     end
   end
 
+  def self.applicant(a_sector)
+    where(applicant_sector: a_sector)
+  end
+
+  def self.provider(a_sector)
+    where(provider_sector: a_sector)
+  end
+
   # Returns the name of the efetor who deliver the products
   def origin_name
     self.provider_sector.name+" "+self.provider_establishment.name

@@ -14,8 +14,7 @@ class StocksController < ApplicationController
 
   def movements
     authorize @stock
-
-    @movements = @stock.movements.paginate(:page => params[:page], :per_page => 15)
+    @movements = @stock.movements.sort_by{|e| e[:created_at]}.reverse.paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /stocks/1
