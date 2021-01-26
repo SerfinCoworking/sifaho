@@ -1,0 +1,83 @@
+<tr id="purchase_<%= purchase.id %>" >
+  <td><%= purchase.remit_code %></td>
+
+  <td class="sol-col-aba">
+    <%= purchase.provider_sector.name %>
+    <%= purchase.provider_sector.establishment_name %></td>
+  </td>
+
+  <td>
+    <span class="badge badge-<%= purchase.inicial? || purchase.auditoria? ? 'warning' : 'success' %>">
+      <%= purchase.status.humanize %>
+    </span>
+  </td>
+
+  <td>
+    <%= purchase.purchase_products.count %>
+  </td>
+
+  <td>
+    <%= purchase.movements.count %>
+  </td>
+  
+  <td>
+    <% if purchase.recibido? %>
+      <%= purchase.received_date.strftime("%d/%m/%y") %>
+    <% else %>
+      ----
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    <div class="d-flex">
+      <%# recibo de remito  %>
+      <% if policy(purchase).set_products? %>
+        <%= link_to receive_purchase_purchase_path(purchase),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: "Recibir",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'check'%>
+        <% end %>
+      <% end %>
+      
+      <%# modificar los productos cargados en la orden  %>
+      <% if policy(purchase).set_products? %>
+        <%= link_to set_products_purchase_path(purchase),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: "Editar products",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'dolly-flatbed'%>
+        <% end %>
+      <% end %>
+      
+      <%# modificar los productos cargados en la orden  %>
+      <% if policy(purchase).return_to_audit_confirm? %>
+        <%= link_to return_to_audit_confirm_purchase_path(purchase), remote: true, class: 'btn btn-sm btn-warning mr-1 ml-1',
+          title: "Retornar",
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon 'undo'%>
+        <% end %>
+      <% end %>
+      
+      <%= render(
+        partial: 'shared/action_buttons',
+          locals:{ 
+              object: purchase, 
+              show: true, 
+              edit: true, 
+              destroy: true,
+              delete_title: "Eliminar abastecimiento",
+              delete_body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
+              destroy_path: "/purchases/#{purchase.id}"
+          }
+        ) 
+      %>
+    </div>
+  </td>
+</tr>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(purchase).return_to_audit_confirm? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
+<% end %>

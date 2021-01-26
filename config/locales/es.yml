@@ -112,6 +112,12 @@ es:
         professional: "Profesional"
         patient: "Paciente"
         date_prescribed: "Fecha recetada"
+      purchase:
+        code_number: "Número de orden"
+      purchase_prod_lot_stock:
+        presentation: "Presentación"
+        quantity: "Cantidad"
+        lot_code: "Código"
 
       
 

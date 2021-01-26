@@ -1,0 +1,225 @@
+<%= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo remito
+      </h5>
+    </div>
+    <div>
+      <%= link_to receipts_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class='col-md-4 col-xs-4'>
+        <div class="text-center"><strong>Solicitante</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @purchase.applicant_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @purchase.applicant_sector.name%>
+      </div>
+      <div class="col-md-4 col-xs-4">
+        <div class="text-center"><strong>Proveedor</strong></div>
+        <strong>Establecimiento:</strong>
+        <%= @purchase.provider_sector.establishment_name%><br>
+        <strong>Sector:</strong>
+        <%= @purchase.provider_sector.name%>
+      </div>
+      <div class='col-md-4 col-xs-4'>
+        <div class='row'>
+          <div class='col-md-6 col-xs-6'>
+            <strong>Recibido:</strong>
+            <%= @purchase.received_date.present? ? @purchase.received_date.strftime("%d/%m/%Y") : ' ---- '%><br>
+          </div>
+          <div class='col-md-6 col-xs-6'>
+            <strong>Número de orden:</strong>
+            <%= @purchase.code_number %>
+          </div>
+        </div>
+        <hr>
+        <strong>Observaciones:</strong>
+          <%= @purchase.observation? ? @purchase.observation : 'Sin observaciones' %>
+      </div>
+    </div>
+    <hr>
+    <!-- Barra de estado -->
+    <div class='row mt-3'>
+      <div class='col-12'>
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#products'>
+              <%= fa_icon "cubes" %>
+              Productos
+              <span class="badge badge-secondary"><%= @purchase.purchase_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements'>
+              <%= fa_icon "exchange-alt"%>
+              Movimientos
+              <span class="badge badge-secondary"><%= @purchase.movements.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="tab-content">
+        <div id='products' class='tab-pane fade show active'>
+          
+            <!-- Productos a recibir -->
+            <div class="card">
+              <table class="table table-hover table-sm mb-0">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Recibido</th>
+                    <th>Lotes</th>
+                    <th>Observaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @purchase.purchase_products.joins(:product).order("name").each do |purchase_product| %>
+                    <tr>
+                      <td>
+                        <%= purchase_product.product_code %>
+                      </td>
+                      <td>
+                        <%= purchase_product.product_name %>
+                      </td>
+                      <td>
+                        <%= purchase_product.get_quantity %>
+                      </td>
+                      <td>
+                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= purchase_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= purchase_product.id %>">
+                          <%= purchase_product.order_prod_lot_stocks.count %>
+                        </button>
+                      </td>
+                      <td>
+                        <%# if purchase_product.provider_observation.present? || purchase_product.applicant_observation.present? %>
+                          <%#= fa_icon "asterisk" %>
+                        <%# else %>
+                          ---
+                        <%# end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="7" class="p-0">
+                        <div id="collapse-row-<%= purchase_product.id %>" class="collapse in">
+                          <div class="p-3">
+                          <% if purchase_product.order_prod_lot_stocks.present? %>
+                            <table class="w-100">
+                              <thead>
+                                <tr>
+                                  <th> Presentación </th>
+                                  <th> Cantidad </th>
+                                  <th> Lote </th>
+                                  <th> Laboratorio </th>
+                                  <th> Vencimiento </th>
+                                </tr>
+                              </thead>
+                              </tbody>
+                                <% purchase_product.order_prod_lot_stocks.each do |opls| %>
+                                <tr>
+
+                                  <td>
+                                    <%= opls.presentation %>
+                                  </td>
+
+                                  <td>
+                                    <%= opls.quantity %>
+                                  </td>
+                                  
+                                  <td>
+                                    <% if opls.lot_code.present? %>
+                                      <%= opls.lot_code %>
+                                    <% end %>
+                                  </td>
+                                  
+                                  <td>
+                                    <% if opls.laboratory.present? %>
+                                      <%= opls.laboratory.name %>
+                                    <% end %>
+                                  </td>
+                                  
+                                  <td>
+                                    <%= opls.expiry_date.present? ? opls.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                                  </td>
+                                </tr>
+
+                                <% end %>
+                              </tbody>
+                            </table>
+                           
+                            <% else %>
+                                No tiene lotes asignados
+                            <% end %>
+                          </div>
+                        </div>
+                      </td>
+                    </tr> <%# fin Listado de lotes y descripciones %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          
+        </div>
+        <div id='last-movements' class='tab-pane fade'>
+          <!-- Tabla de movimientos -->
+          <%= render '/shared/movements_table', order: @purchase %>
+        </div> <!-- End last movements tab pane -->
+      </div> <!-- End Tab content-->
+    </div> <!-- End col-md-12 -->
+  </div>
+
+  <!-- Botones de acción footer -->
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', purchases_path, class: "btn btn-light mr-1" %>
+    <%# modificar los productos cargados en la orden  %>
+      <% if policy(@purchase).return_to_audit_confirm? %>
+        <%= link_to return_to_audit_confirm_purchase_path(@purchase), remote: true, class: 'btn btn-warning mr-1 ml-1' do %> 
+          <%= fa_icon 'undo'%>
+          Retornar
+        <% end %>
+      <% end %>
+    
+    <% if policy(@purchase).receive_purchase? %>
+      <%= link_to receive_purchase_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-primary mr-1" do %>
+        <%= fa_icon "check" %>
+        Recibir
+      <% end %>
+    <% end %>
+    
+    <% if policy(@purchase).edit? %>
+      <%= link_to edit_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+    
+    <% if policy(@purchase).set_products? %>
+      <%= link_to set_products_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-warning" do %>
+        <%= fa_icon "dolly-flatbed" %>
+        Editar productos
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(@purchase).return_to_audit_confirm? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
+<% end %>

@@ -1,0 +1,115 @@
+
+<tr class="nested-fields main-tr <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'table-danger' : '' %>" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : 0 %>">
+  <td>
+    <%= f.input :line, :as => :string, label: false, :input_html =>  { 
+      class: "form-control purchase-product-line input-sm",
+      size: 8,
+      placeholder: "Renglón",
+      value: "#{ if f.object.line.present?; f.object.line; end }"
+      }
+    %>
+    
+  </td>
+  <!-- Código del producto -->
+  <td>
+    <div class="custom-input-group">
+      <div class="form-group fake optional purchase_products_product_id_fake">
+        <input type="text" 
+        name="<%= f.object.product.present? ? ("product_code_fake_" + f.object.product.code.to_s) : "product_code_fake" %>" 
+        value="<%= f.object.product.present? ? f.object.product.code : '' %>"
+        class="form-control fake optional purchase-product-code input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
+        data-autocomplete-source="<%= search_by_code_products_path %>"
+        size="6" 
+        autocomplete="off" 
+        placeholder="Código">
+        <div class="invalid-feedback">
+          Producto <%= f.object.errors[:product_id].first %>
+        </div>
+      </div>
+
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+
+    <%# Hidden product_id %>
+    <%= f.input :product_id, 
+      :as => :hidden, 
+      :error => false, 
+      :input_html =>  {
+        class: "purchase-product-id" 
+      },
+      value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+  </td>
+
+  <!-- Nombre del producto -->
+  <td>
+    <div class="custom-input-group">
+      <div class="form-group fake optional purchase_products_product_id_fake">
+        <input type="text" 
+        name="<%= f.object.product.present? ? "product_name_fake_" + f.object.product.id.to_s : '' %>" 
+        id="<%= f.object.product.present? ? "product_name_fake_" + f.object.product.id.to_s : '' %>" 
+        value="<%= f.object.product.present? ? f.object.product.name : '' %>"
+        class="form-control fake optional purchase-product-name input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
+        data-autocomplete-source="<%= search_by_name_products_path %>"
+        size="45" 
+        autocomplete="off" 
+        placeholder="Nombre">
+        <div class="invalid-feedback">
+          Producto <%= f.object.errors[:product_id].first %>
+        </div>
+      </div>
+
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+  </td>
+
+  <!-- Unidad del producto -->
+  <td>
+    <%= f.input :product_unity, as: :fake, label: false, disabled: true, required: false,
+      input_html: {
+        class: 'purchase-unity input-sm',
+        size: 10,
+        placeholder: "Unidad",
+        value: "#{
+          if f.object.product.present?
+            f.object.product.unity.name
+          end
+        }"
+      }
+    %>
+  </td>
+
+  <!-- Cantidad a cargar -->
+  <td class="link-to-lot-modal">
+    <button class="btn btn-primary btn-coll" type="button" data-target="#<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>" data-toggle="tooltip" title="Agregar lotes">
+      <%= fa_icon "plus" %>
+    </button>    
+  </td>
+  <td>
+    <%= f.input :observation, label: false, as: :text, :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+  </td>
+    
+  <!-- Botón quitar -->
+  <td>
+    <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+      title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= fa_icon "minus" %>
+    <% end %>
+  </td>
+</tr>
+<tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : 0 %>">
+  <td colspan="6">
+    <div class="collapse-custom <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'show' : '' %>" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
+      <div class="card card-body">
+        <%# .-Seleccion de lotes Collapsable %>
+        <%= render "purchases/partials/purchase_prod_lot_stock_table", fPurchaseProduct: f %>
+        <div class="invalid-feedback d-block">
+          <%= f.object.errors[:atleast_one_lot_selected].first %>
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_150408) do
+ActiveRecord::Schema.define(version: 2020_12_14_185249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -827,6 +827,72 @@ ActiveRecord::Schema.define(version: 2020_11_05_150408) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "purchase_comments", force: :cascade do |t|
+    t.bigint "purchase_id"
+    t.bigint "user_id"
+    t.text "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_id"], name: "index_purchase_comments_on_purchase_id"
+    t.index ["user_id"], name: "index_purchase_comments_on_user_id"
+  end
+
+  create_table "purchase_movements", force: :cascade do |t|
+    t.bigint "purchase_id"
+    t.bigint "user_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_id"], name: "index_purchase_movements_on_purchase_id"
+    t.index ["sector_id"], name: "index_purchase_movements_on_sector_id"
+    t.index ["user_id"], name: "index_purchase_movements_on_user_id"
+  end
+
+  create_table "purchase_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "purchase_product_id"
+    t.bigint "lot_stock_id"
+    t.bigint "laboratory_id"
+    t.string "lot_code"
+    t.date "expiry_date"
+    t.integer "position"
+    t.integer "quantity"
+    t.integer "presentation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["laboratory_id"], name: "index_purchase_prod_lot_stocks_on_laboratory_id"
+    t.index ["lot_stock_id"], name: "index_purchase_prod_lot_stocks_on_lot_stock_id"
+    t.index ["purchase_product_id"], name: "index_purchase_prod_lot_stocks_on_purchase_product_id"
+  end
+
+  create_table "purchase_products", force: :cascade do |t|
+    t.bigint "purchase_id"
+    t.bigint "product_id"
+    t.integer "request_quantity"
+    t.text "observation"
+    t.string "line"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_purchase_products_on_product_id"
+    t.index ["purchase_id"], name: "index_purchase_products_on_purchase_id"
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.bigint "applicant_sector_id"
+    t.bigint "provider_sector_id"
+    t.bigint "area_id"
+    t.integer "code_number"
+    t.string "remit_code"
+    t.text "observation"
+    t.integer "status"
+    t.date "received_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_sector_id"], name: "index_purchases_on_applicant_sector_id"
+    t.index ["area_id"], name: "index_purchases_on_area_id"
+    t.index ["provider_sector_id"], name: "index_purchases_on_provider_sector_id"
   end
 
   create_table "quantity_ord_supply_lots", force: :cascade do |t|

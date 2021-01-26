@@ -1,0 +1,30 @@
+<% if @purchases.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead>
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :código) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th>Ins</th>
+            <th>Mov</th>
+            <th>Recibido</th>
+            <th colspan="3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id=purchases>
+          <%= render @purchases %>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @purchases, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'reportes' }
+  ) %>
+<% end %>

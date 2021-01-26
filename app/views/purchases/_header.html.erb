@@ -1,0 +1,16 @@
+<% content_for :page_header do %>
+  <li class="nav-item non-sel">
+    <%= link_to purchases_path, class: "nav-link #{ active_action('index') }" do %>
+      <%= fa_icon "truck-moving" %>
+      Abastecimientos
+    <% end %>
+  </li>
+  <% if policy(Product).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_purchase_path, class: "nav-link #{ active_action('new') }" do %>
+        <%= fa_icon "plus" %>
+        Cargar remito
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

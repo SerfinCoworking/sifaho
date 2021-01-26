@@ -1,0 +1,103 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @purchase.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@purchase.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @purchase.new_record? ? "Agregar remito" : "Editando remito" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @purchase.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+    <%= simple_form_for @purchase, html: {class: "", role: 'check-modified'} do |form| %>
+      <%= form.error_notification %>
+
+      <div class="row">
+        <%# Establecimiento Proveedor %>
+        <div class="col-md-7 border-right">
+          <%= form.label :establishment_id, "Establecimiento" %>
+          <div class="custom-input-group w-75">
+            <%= form.input :establishment_id, as: :fake,
+              label: false,
+              placeholder: 'Buscar por nombre',
+              hint: "Debe seleccionar un establecimiento para indicar el sector",
+              :input_html => {
+                autocomplete: 'off',
+                id: "purchase-provider-id",
+                data: { autocomplete_source: search_by_name_establishments_path },
+                size: 41,
+                value: form.object.provider_sector.present? ? form.object.provider_sector.establishment.name : '',
+              } 
+            %>
+            
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+
+          <%# Sector Proveedor %>
+          <%= form.label :provider_sector_id, "Sector proveedor" %>
+          <div class="custom-input-group w-75">
+            <%= form.input :provider_sector_id,
+              label: false,
+              collection: @sectors.map {
+                |sector| [sector.name, sector.id]
+              },
+              :input_html => {
+                placeholder: 'Debe seleccionar establecimiento',
+                required: true,
+                id: 'provider-sector',
+                class: 'selectpicker-md custom-select-pick show-tick',
+                "data-width"=>"100%",
+                "title"=>"Seleccionar sector",
+                "data-size"=>"10",
+                "data-live-search"=>true,
+                value: form.object.provider_sector.present? ? form.object.provider_sector.id : ""
+              }
+            %>
+          </div>
+
+          <%# Code number %>
+          <%= form.input :code_number, :as => :string, :input_html =>  { 
+            class: "form-control purchase-product-line input-sm w-75",
+            size: 8,
+            placeholder: "Número de orden",
+            value: "#{ if form.object.code_number.present?; form.object.code_number; end }"
+            }
+          %>
+
+          <%# Observation %>
+          <%= form.label :observation, "Observaciones" %>
+          <div class="custom-input-group w-75">
+            <%= form.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
+          </div>
+        </div>
+        <div class="col-5">
+          Otra información...
+        </div>
+      </div>
+
+      <%# Este hidden se rellana con el valor del boton submit que se presione %>
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', purchases_path, class: 'btn mr-2' %>
+
+    <button type='submit' class='btn btn-primary mr-2' form="<%= @purchase.new_record? ? 'new_purchase' : 'edit_purchase_' + @purchase.id.to_s %>" data-value='audit'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar y cargar productos
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+
+  </div>
+</div>
