@@ -1,0 +1,17 @@
+<tr id="movement_<%= movement.id %>">
+  <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+  <th scope="row"><%= movement.lot_stock.lot_code %></th>
+  <td><%= movement.order_human_name %></td>
+  <td><%= movement.origin_name %></td>
+  <td><%= movement.destiny_name %></td>
+  <td><%= movement.status.humanize %></td>
+  <td class="text-<%= movement.is_destiny?(@stock.sector) ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+  <td class="text-left actions-col">
+    <% if policy(movement).show? %>
+      <%= link_to polymorphic_path(movement.order), target: :_blank, class: 'btn btn-secondary btn-sm',
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

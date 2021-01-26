@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_29_144702) do
+ActiveRecord::Schema.define(version: 2020_11_05_150408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -956,6 +956,26 @@ ActiveRecord::Schema.define(version: 2020_10_29_144702) do
     t.bigint "country_id"
     t.string "name"
     t.index ["country_id"], name: "index_states_on_country_id"
+  end
+
+  create_table "stock_quantity_reports", force: :cascade do |t|
+    t.bigint "created_by_id"
+    t.bigint "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_stock_quantity_reports_on_created_by_id"
+    t.index ["sector_id"], name: "index_stock_quantity_reports_on_sector_id"
+  end
+
+  create_table "stock_report_areas", force: :cascade do |t|
+    t.bigint "stock_quantity_report_id"
+    t.bigint "area_id"
+    t.bigint "supply_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_stock_report_areas_on_area_id"
+    t.index ["stock_quantity_report_id"], name: "index_stock_report_areas_on_stock_quantity_report_id"
+    t.index ["supply_area_id"], name: "index_stock_report_areas_on_supply_area_id"
   end
 
   create_table "stocks", force: :cascade do |t|

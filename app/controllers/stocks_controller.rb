@@ -1,5 +1,5 @@
 class StocksController < ApplicationController
-  before_action :set_stock, only: [:show, :edit, :update, :destroy]
+  before_action :set_stock, only: [:show, :edit, :update, :destroy, :movements]
 
   # GET /stocks
   # GET /stocks.json
@@ -10,6 +10,12 @@ class StocksController < ApplicationController
       .order(created_at: :desc)
       .page(params[:page])
     @areas = Area.all
+  end
+
+  def movements
+    authorize @stock
+
+    @movements = @stock.movements.paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /stocks/1

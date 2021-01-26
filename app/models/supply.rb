@@ -42,14 +42,14 @@ class Supply < ApplicationRecord
   )
 
   pg_search_scope :search_text,
-  against: :name,
-  :associated_against => {
-    :supply_area => :name
-  },
-  :using => {
-    :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
-  },
-  :ignoring => :accents # Ignorar tildes.
+    against: :name,
+    :associated_against => {
+      :supply_area => :name
+    },
+    :using => {
+      :tsearch => {:prefix => true} # Buscar coincidencia desde las primeras letras.
+    },
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

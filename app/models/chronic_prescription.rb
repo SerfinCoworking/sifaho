@@ -136,4 +136,14 @@ class ChronicPrescription < ApplicationRecord
 
     self.create_notification(a_user, "retorno una dispensación")
   end
+
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.professional.fullname
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.patient.fullname
+  end
 end

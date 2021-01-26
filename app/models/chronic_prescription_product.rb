@@ -1,6 +1,7 @@
 class ChronicPrescriptionProduct < ApplicationRecord
   # Relaciones
   belongs_to :chronic_dispensation, inverse_of: 'chronic_prescription_products'
+  has_one :chronic_prescription, through: :chronic_dispensation
   belongs_to :original_chronic_prescription_product, inverse_of: 'chronic_prescription_products', optional: true
   belongs_to :product
 

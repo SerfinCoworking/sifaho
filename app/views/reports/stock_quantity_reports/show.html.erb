@@ -1,0 +1,95 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pills" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de cantidad de stock por rubro</h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Ubicación</h5>
+        <strong><%= @stock_quantity_report.sector.name %></strong>
+        <%= @stock_quantity_report.sector.establishment_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Rubros</h5>
+        <%= @stock_quantity_report.supply_areas.map(&:name).join(", ") %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha</h5>
+        <%= Date.today.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+      
+    <%# movement => {["supply_name", "supply_area" ] => "quantity"} %>
+    <% if @movements.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr class="d-flex">
+              <th class="col-1">Código</th>
+              <th class="col-5">Producto</th>
+              <th class="col-3">Rubro</th>
+              <th class="col-3">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
+              <tr class="d-flex">
+                <td class="col-1">
+                  <%= movement.first.first %>
+                </td>
+                <td class="col-5">
+                  <%= movement.first.second %>
+                </td>
+                <td class="col-3">
+                  <%= movement.first.third %>
+                </td>
+                <td class="col-3"><%= movement.second %></td>
+              </tr>
+            <% end %>
+            <tr class="d-flex">
+              <td class="col-1"></td>
+              <td class="col-5"></td>
+              <td class="col-3 text-right">Total</td>
+              <td class="col-3"><%= @movements.sum(&:second) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay stock de rubro <%= @stock_quantity_report.supply_areas.map(&:name).join(", ") %> y <%= @stock_quantity_report.to_date.strftime("%d/%m/%Y") %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to reports_stock_quantity_report_path(format: 'pdf', id: @stock_quantity_report.id), 
+      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
+    <%= link_to reports_stock_quantity_report_path(format: 'csv', id: @stock_quantity_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> CSV
+    <% end %>
+    <%= link_to reports_stock_quantity_report_path(format: 'xls', id: @stock_quantity_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> Excel
+    <% end %>
+    <%= link_to reports_stock_quantity_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>

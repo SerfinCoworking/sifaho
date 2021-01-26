@@ -3,6 +3,10 @@ class LotStock < ApplicationRecord
   belongs_to :stock
 
   has_many :int_ord_prod_lot_stocks
+  has_many :ext_ord_prod_lot_stocks
+  has_many :out_pres_prod_lot_stocks
+  has_many :chron_pres_prod_lot_stocks
+  has_many :receipt_products
 
   has_one :sector, :through => :stock
   has_one :product, :through => :lot
@@ -47,5 +51,23 @@ class LotStock < ApplicationRecord
       self.quantity -= a_quantity
       self.save!
     end
+  end
+
+  # Return all merged movements relationships
+  def movements
+    return self.int_ord_prod_lot_stocks +
+      self.ext_ord_prod_lot_stocks +
+      self.out_pres_prod_lot_stocks +
+      self.chron_pres_prod_lot_stocks +
+      self.receipt_products
+  end
+
+  # Return count movements
+  def movements_count
+    return self.int_ord_prod_lot_stocks.count +
+      self.ext_ord_prod_lot_stocks.count +
+      self.out_pres_prod_lot_stocks.count +
+      self.chron_pres_prod_lot_stocks.count +
+      self.receipt_products.count
   end
 end

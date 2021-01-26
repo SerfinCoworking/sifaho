@@ -163,6 +163,20 @@ class OutpatientPrescription < ApplicationRecord
     self.dispensed_at
   end
 
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.professional.fullname
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.patient.fullname
+  end
+
+  def is_destiny?(a_sector)
+    return false
+  end
+  
   # Métodos de clase #----------------------------------------------------------
   scope :with_patient_id, lambda { |an_id|
     where(patient_id: [*an_id])

@@ -148,4 +148,14 @@ class Receipt < ApplicationRecord
       @not.save
     end
   end
+
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.provider_sector.name+" "+self.provider_establishment.name
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.applicant_sector.name+" "+self.applicant_establishment.name
+  end
 end

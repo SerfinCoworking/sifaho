@@ -298,6 +298,16 @@ class InternalOrder < ApplicationRecord
     return status[1] <= self_status_int ? status_class : ""
   end
 
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.provider_sector.name
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.applicant_sector.name
+  end
+
   private
 
   def record_remit_code

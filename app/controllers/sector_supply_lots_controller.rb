@@ -203,7 +203,7 @@ class SectorSupplyLotsController < ApplicationController
           list.add_row do |row|
             row.values  code: supply.id,
                         supply_name: supply.name,
-                        quantity: SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(supply).sum(:quantity),
+                        quantity: SectorSupplyLot.where(sector_id: current_user.sector_id).without_status(4).with_supply(supply).sum(:quantity),
                         area: supply.supply_area.name
             end
           

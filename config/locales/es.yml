@@ -50,6 +50,10 @@ es:
   activerecord:
     models:
       external_order: "Pedido abastecimiento"
+      internal_order: "Pedido interno"
+      outpatient_prescription: "Receta ambulatoria"
+      chronic_prescription: "Receta crónica"
+      receipt: "Recibo" 
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:

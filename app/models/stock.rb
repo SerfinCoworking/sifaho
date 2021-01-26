@@ -7,6 +7,11 @@ class Stock < ApplicationRecord
   has_many :lot_stocks
   has_one :area, through: :product
   has_one :unity, through: :product
+  has_many :internal_movements, through: :lot_stocks, source: :int_ord_prod_lot_stocks
+  has_many :external_movements, through: :lot_stocks, source: :ext_ord_prod_lot_stocks
+  has_many :receipt_movements, through: :lot_stocks, source: :receipt_products
+  has_many :outpatient_prescription_movements, through: :lot_stocks, source: :out_pres_prod_lot_stocks
+  has_many :chronic_prescription_movements, through: :lot_stocks, source: :chron_pres_prod_lot_stocks
 
   # Validations
   validates_presence_of :product, :sector
@@ -91,5 +96,9 @@ class Stock < ApplicationRecord
   def refresh_quantity
     self.quantity = self.lot_stocks.sum(:quantity)
     self.save!
+  end
+
+  def movements
+    return self.internal_movements + self.external_movements + self.receipt_movements + self.outpatient_prescription_movements + self.chronic_prescription_movements
   end
 end

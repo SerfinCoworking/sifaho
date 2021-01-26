@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   end
   
   resources :stocks do
+    member do
+      get :movements, path: :movimientos
+    end
     collection do
       get "find_lots"
     end
@@ -365,6 +368,17 @@ Rails.application.routes.draw do
       controller: 'external_order_products',
       model: 'external_order_prodcut_reports',
       path: 'producto_por_establecimientos' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+
+    resources :stock_quantity_reports,
+      only: [:show],
+      controller: 'stock_quantity_reports',
+      model: 'stock_quantity_reports',
+      path: 'stock_por_rubros' do
       collection do
         get :new, path: :nuevo
         post :create, path: :crear

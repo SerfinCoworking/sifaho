@@ -5,13 +5,13 @@ class ReceiptProduct < ApplicationRecord
   belongs_to :lot_stock, optional: true
   belongs_to :lot, optional: true
   
-  
   # Validaciones
   validates_presence_of :receipt, :product_id, :lot_code, :laboratory_id
   validates_presence_of :lot_stock_id, if: :is_recibido? 
 
   delegate :code, to: :product, prefix: true
   delegate :name, to: :product, prefix: true
+  delegate :destiny_name, :origin_name, :status, to: :receipt
 
   def increment_new_lot_to(a_sector)
     @lot = Lot.where(
@@ -40,5 +40,16 @@ class ReceiptProduct < ApplicationRecord
     self.receipt.recibido?
   end
 
+  def order_human_name
+    self.receipt.class.model_name.human
+  end
+
+  def is_destiny?(a_sector)
+    return self.receipt.applicant_sector == a_sector
+  end
+
+  def order
+    self.receipt
+  end
 end
 

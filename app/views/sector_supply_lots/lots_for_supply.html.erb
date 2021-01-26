@@ -34,7 +34,7 @@
               <tr>
                 <td><%= @supply.id %></td>
                 <td><%= @supply.name %></td>
-                <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(@supply) %>
+                <% @lots = SectorSupplyLot.where(sector_id: current_user.sector_id).with_supply(@supply).without_status(4) %>
                 <td><%@sum_lots = @lots.sum(:quantity)%>
                   <%= @sum_lots %>
                 </td>
