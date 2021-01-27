@@ -270,8 +270,8 @@
   <% if policy(@external_order).return_provider_status? || policy(@external_order).return_applicant_status? %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
             <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -283,9 +283,9 @@
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
             <% if policy(@external_order).return_applicant_status? %>
-              <%= link_to 'Confirmar', return_applicant_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_applicant_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% else %>
-              <%= link_to 'Confirmar', return_provider_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_provider_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% end %>
           </div>
         </div>
@@ -297,15 +297,16 @@
   <% if policy(@external_order).receive_applicant? %>
     <div class="modal fade" id="receive-confirm">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).underscore.humanize %></h5>
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= @external_order.human_name.downcase %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Esta seguro que ha recibido el pedido?</p>
+            <p>Esta seguro que ha recibido el <%= @external_order.human_name.downcase %> código <%= @external_order.remit_code %>?</p>
+            <p>El pedido contenía <%= @external_order.external_order_products.count %> productos diferentes.</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
@@ -320,19 +321,20 @@
   <% if policy(@external_order).send_provider? %>
     <div class="modal fade" id="send-confirm">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "check" %> Confirmar envío de <%= ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).underscore.humanize %></h5>
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar envío de despacho <%= @external_order.remit_code %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Esta seguro de enviar el pedido?</p>
+            <p>Esta seguro de enviar el despacho?</p>
+            <p>Una vez que esté en camino, no se podrá retornar a stock!</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', send_provider_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
+            <%= link_to 'Confirmar', send_provider_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
           </div>
         </div>
       </div>

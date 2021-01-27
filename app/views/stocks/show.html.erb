@@ -94,11 +94,11 @@
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
                 <th scope="row"><%= movement.lot_stock.lot_code %></th>
-                <td><%= movement.order_human_name %></td>
-                <td><%= movement.origin_name %></td>
-                <td><%= movement.destiny_name %></td>
-                <td><%= movement.status.humanize %></td>
-                <td class="text-<%= movement.is_destiny?(@stock.sector) ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+                <td><%= movement.order.class.model_name.human %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
+                <td><%= movement.order_status.humanize %></td>
+                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
                 <td><%= link_to polymorphic_path(movement.order), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
               </tr>
             <% end %>
