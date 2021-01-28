@@ -61,9 +61,17 @@ class PurchaseProduct < ApplicationRecord
 
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
+    any_insufficient_lot_stock = self.order_prod_lot_stocks.any? do |opls|
+      opls.lot_stock.quantity < (opls.presentation * opls.quantity)
+    end
+
     self.order_prod_lot_stocks.each do |opls|
-      opls.lot_stock.decrement(opls.presentation * opls.quantity)
-      opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+      if any_insufficient_lot_stock
+        raise ArgumentError, "No se puede retornar el remito #{self.purchase.remit_code} debido a que uno o más lotes seleccionados no poseen la cantidad suficiente en stock para devolver."
+      else
+        opls.lot_stock.decrement(opls.presentation * opls.quantity)
+        opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+      end
     end
   end
 
