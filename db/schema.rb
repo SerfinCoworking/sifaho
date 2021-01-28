@@ -244,8 +244,6 @@ ActiveRecord::Schema.define(version: 2021_01_26_185100) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "destined_lot_stock_id"
-    t.index ["destined_lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_destined_lot_stock_id"
     t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
     t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
   end
@@ -889,7 +887,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_185100) do
     t.string "remit_code"
     t.text "observation"
     t.integer "status"
-    t.date "received_date"
+    t.datetime "received_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["applicant_sector_id"], name: "index_purchases_on_applicant_sector_id"
