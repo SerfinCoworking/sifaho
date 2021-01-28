@@ -20,6 +20,7 @@ class Purchase < ApplicationRecord
   # en el paso de carga de productos, 
   # agregar estado inicial a la compra (este indica el salto de validacion de productos)
   validate :validate_purchase_products_length, if: :is_not_inicial?
+  validates :code_number, uniqueness: true
   validates_associated :purchase_products
 
   # Atributos anidados
