@@ -1,6 +1,8 @@
 class ExternalOrdersController < ApplicationController
   before_action :set_external_order, only: [:show, :send_provider, :send_applicant, :destroy, :delete, :return_applicant_status, :return_provider_status, :edit_provider, :edit_applicant,
     :update_applicant, :update_provider, :accept_provider, :receive_applicant_confirm, :receive_applicant, :receive_applicant, :nullify, :nullify_confirm ]
+  before_action :set_highlight_row, only: [:show]
+  
 
   def statistics
     @external_orders = ExternalOrder.all
@@ -213,7 +215,7 @@ class ExternalOrdersController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @external_order.external_order_products || @external_order.external_order_products.build
-        @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
+        @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :edit_provider }
       end
     end
@@ -447,5 +449,9 @@ class ExternalOrdersController < ApplicationController
 
     def sending?
       return params[:commit] == "sending"
+    end
+
+    def set_highlight_row
+      params[:resaltar].present? ? @highlight_row = params[:resaltar].to_i : @highlight_row = -1
     end
 end

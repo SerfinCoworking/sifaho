@@ -14,6 +14,7 @@ class OutpatientPrescription < ApplicationRecord
 
   has_many :products,:through => :outpatient_prescription_products
   has_many :movements, class_name: "OutpatientPrescriptionMovement"
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
@@ -173,8 +174,9 @@ class OutpatientPrescription < ApplicationRecord
     self.patient.fullname
   end
 
-  def is_destiny?(a_sector)
-    return false
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
   end
   
   # Métodos de clase #----------------------------------------------------------

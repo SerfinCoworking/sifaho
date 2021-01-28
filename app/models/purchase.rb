@@ -12,6 +12,7 @@ class Purchase < ApplicationRecord
   has_many :movements, class_name: "PurchaseMovement"
   has_many :purchase_products, dependent: :destroy, inverse_of: 'purchase'
   has_many :products, :through => :purchase_products
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :code_number
@@ -161,6 +162,21 @@ class Purchase < ApplicationRecord
 
     self.auditoria!
     self.create_notification(a_user, "retorno un remito")
+  end
+
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.provider_sector.name
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.applicant_sector.name
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
   end
   
   private

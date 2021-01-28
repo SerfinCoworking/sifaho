@@ -99,7 +99,7 @@
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
                 <td><%= movement.order_status.humanize %></td>
                 <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
-                <td><%= link_to polymorphic_path(movement.order), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
+                <td><%= link_to polymorphic_path(movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
               </tr>
             <% end %>
           </tbody>

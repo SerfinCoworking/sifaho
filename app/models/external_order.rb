@@ -39,8 +39,8 @@ class ExternalOrder < ApplicationRecord
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-  
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
@@ -251,8 +251,8 @@ class ExternalOrder < ApplicationRecord
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
-    self.external_order_products.each do |iop|
-      iop.increment_lot_stock_to(self.applicant_sector)
+    self.external_order_products.each do |eop|
+      eop.increment_lot_stock_to(self.applicant_sector)
     end
 
     self.date_received = DateTime.now
@@ -335,6 +335,11 @@ class ExternalOrder < ApplicationRecord
   # Returns the name of the efetor who receive the products
   def destiny_name
     self.applicant_sector.name+" "+self.applicant_establishment.name
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
   end
 
   private

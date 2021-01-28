@@ -63,7 +63,7 @@ class ExternalOrderProduct < ApplicationRecord
   # Incrementamos la cantidad de lot stock (solicitante / desde una solicitud)
   def increment_lot_stock_to(a_sector)
 
-    self.order_prod_lot_stocks.each do |iopls|
+    self.order_prod_lot_stocks.each do |opls|
 
       @stock = Stock.where(
         sector_id: a_sector.id,
@@ -71,11 +71,13 @@ class ExternalOrderProduct < ApplicationRecord
       ).first_or_create
 
       @lot_stock = LotStock.where(
-        lot_id: iopls.lot_stock.lot.id,
+        lot_id: opls.lot_stock.lot.id,
         stock_id: @stock.id,
       ).first_or_create
 
-      @lot_stock.increment(iopls.quantity)
+      @lot_stock.increment(opls.quantity)
+      
+      @stock.create_stock_movement(a_sector, self.external_order, @lot_stock, opls.quantity, true)
     end
   end
 

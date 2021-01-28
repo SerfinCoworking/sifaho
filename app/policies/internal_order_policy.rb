@@ -114,6 +114,10 @@ class InternalOrderPolicy < ApplicationPolicy
   end
   
   def show_provider_fields?
-    record.provision? && (new_provider? || edit_provider?)
+    if record.provision?
+      return new_provider? || edit_provider?
+    elsif record.solicitud?
+      return edit_provider?
+    end
   end
 end

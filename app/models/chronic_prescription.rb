@@ -15,6 +15,7 @@ class ChronicPrescription < ApplicationRecord
   has_many :original_chronic_prescription_products, dependent: :destroy, inverse_of: 'chronic_prescription'
   has_many :products, :through => :chronic_prescription_products
   has_many :movements, class_name: "ChronicPrescriptionMovement"
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
@@ -145,5 +146,10 @@ class ChronicPrescription < ApplicationRecord
   # Returns the name of the efetor who receive the products
   def destiny_name
     self.patient.fullname
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
   end
 end

@@ -23,11 +23,11 @@
   <div class="card-body">
     <div class="row">
       <div class='col-2'>
-        <strong>Sector solicitante:</strong>
+        <strong>Solicitante:</strong>
         <%= @internal_order.applicant_sector.name%>
       </div>
       <div class="col-2">
-        <strong>Sector proveedor:</strong>
+        <strong>Proveedor:</strong>
         <%= @internal_order.provider_sector.name%>
       </div>
       <div class='col-3'>
@@ -66,7 +66,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
-              <%= fa_icon "exchange-alt" %> Comentarios
+              <%= fa_icon "comments" %> Comentarios
               <span class="badge badge-secondary" id="comments-count"><%= @internal_order.comments.count %></span>
             </a>
           </li>
@@ -92,12 +92,25 @@
             </thead>
             <tbody>
               <% @internal_order.internal_order_products.joins(:product).order("name").each do |int_ord_prod| %>
-                <tr>
-                  <td>
-                    <%= int_ord_prod.product_code %>
+                <tr class="<%= highlight_row(int_ord_prod.product_id) %>">
+                  <% @stock = Stock.where(sector: current_user.sector, product: int_ord_prod.product ).first %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: int_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_code %>
+                    <% end %>
                   </td>
-                  <td>
-                    <%= int_ord_prod.product_name %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: int_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_name %>
+                    <% end %>
                   </td>
                   <td>
                     <%= int_ord_prod.unity.name %>
@@ -263,22 +276,23 @@
   <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
+            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).humanize.downcase %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
+            <p>De esta manera podrá seguir agregando o quitando productos del pedido.</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
             <% if policy(@internal_order).return_applicant_status? %>
-              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_applicant_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% else %>
-              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_provider_status_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
             <% end %>
           </div>
         </div>
@@ -289,19 +303,20 @@
   <% if policy(@internal_order).receive_applicant? %>
     <div class="modal fade" id="receive-confirm">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
-            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= @internal_order.human_name.downcase %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Esta seguro que ha recibido el pedido?</p>
+            <p>Esta seguro que ha recibido el pedido código <%= @internal_order.remit_code %>?</p>
+            <p>Contiene <%= pluralize(@internal_order.internal_order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', receive_applicant_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
+            <%= link_to 'Confirmar', receive_applicant_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Recibiendo... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
           </div>
         </div>
       </div>

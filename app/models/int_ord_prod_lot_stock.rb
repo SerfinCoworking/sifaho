@@ -11,7 +11,6 @@ class IntOrdProdLotStock < ApplicationRecord
     :allow_destroy => true
 
   delegate :code, to: :lot_stocks, prefix: :product
-  delegate :destiny_name, :origin_name, :status, to: :order
   
   def lot_stock_quantity
     return self.lot_stock.quantity
@@ -23,13 +22,5 @@ class IntOrdProdLotStock < ApplicationRecord
   
   def is_solicitud
     return self.internal_order_product.internal_order.order_type == 'solicitud'
-  end
-  
-  def order_human_name
-    self.order.class.model_name.human
-  end
-
-  def is_destiny?(a_sector)
-    return self.order.applicant_sector == a_sector
   end
 end

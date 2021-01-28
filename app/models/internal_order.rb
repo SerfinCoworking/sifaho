@@ -16,6 +16,7 @@ class InternalOrder < ApplicationRecord
   has_many :products, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   ###### DEPRECATED ######
   belongs_to :created_by, class_name: 'User', optional: true
@@ -308,6 +309,11 @@ class InternalOrder < ApplicationRecord
     self.applicant_sector.name
   end
 
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
+  end
+
   private
 
   def record_remit_code
@@ -324,6 +330,8 @@ class InternalOrder < ApplicationRecord
   end
   
   def set_notification_on_update
-    self.create_notification(self.audited_by, "auditó")
+    unless self.provision_entregada?
+      self.create_notification(self.audited_by, "auditó")
+    end
   end  
 end

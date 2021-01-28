@@ -108,6 +108,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'solargraph'
   gem 'rails_layout'
   #Gem with better erros show de variables
   gem 'binding_of_caller'

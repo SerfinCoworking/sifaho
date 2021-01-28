@@ -7,23 +7,13 @@ class Stock < ApplicationRecord
   has_many :lot_stocks
   has_one :area, through: :product
   has_one :unity, through: :product
-  has_many :internal_movements, through: :lot_stocks, source: :int_ord_prod_lot_stocks
-  has_many :external_movements, through: :lot_stocks, source: :ext_ord_prod_lot_stocks
-  has_many :receipt_movements, through: :lot_stocks, source: :receipt_products
-  has_many :outpatient_prescription_movements, through: :lot_stocks, source: :out_pres_prod_lot_stocks
-  has_many :chronic_prescription_movements, through: :lot_stocks, source: :chron_pres_prod_lot_stocks
+  has_many :movements, class_name: 'StockMovement'
 
   # Validations
   validates_presence_of :product, :sector
 
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
-
-  # Update the stock quantity 
-  # def update_stock
-  #   self.quantity = self.sector_supply_lots.without_status(4).sum(:quantity)
-  #   self.save
-  # end
 
   pg_search_scope :search_product_code,
     :associated_against => { :product => :code },
@@ -98,7 +88,7 @@ class Stock < ApplicationRecord
     self.save!
   end
 
-  def movements
-    return self.internal_movements + self.external_movements + self.receipt_movements + self.outpatient_prescription_movements + self.chronic_prescription_movements
+  def create_stock_movement(a_sector, an_order, a_lot_stock, a_quantity, adds_param)
+    StockMovement.create(stock: self, order: an_order, lot_stock: a_lot_stock, quantity: a_quantity, adds: adds_param)
   end
 end

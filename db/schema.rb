@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_142942) do
+ActiveRecord::Schema.define(version: 2021_01_26_185100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -244,6 +244,8 @@ ActiveRecord::Schema.define(version: 2021_01_26_142942) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "destined_lot_stock_id"
+    t.index ["destined_lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_destined_lot_stock_id"
     t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
     t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
   end
@@ -1022,6 +1024,20 @@ ActiveRecord::Schema.define(version: 2021_01_26_142942) do
     t.bigint "country_id"
     t.string "name"
     t.index ["country_id"], name: "index_states_on_country_id"
+  end
+
+  create_table "stock_movements", force: :cascade do |t|
+    t.string "order_type"
+    t.bigint "order_id"
+    t.bigint "stock_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity", default: 0
+    t.boolean "adds", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_stock_id"], name: "index_stock_movements_on_lot_stock_id"
+    t.index ["order_type", "order_id"], name: "order_polymorphic"
+    t.index ["stock_id"], name: "index_stock_movements_on_stock_id"
   end
 
   create_table "stock_quantity_reports", force: :cascade do |t|

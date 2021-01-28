@@ -12,6 +12,8 @@ class Receipt < ApplicationRecord
   has_many :receipt_products
   has_many :supplies, through: :receipt_products
   has_many :movements, class_name: "ReceiptMovement"
+  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
+
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector, :code
@@ -165,5 +167,10 @@ class Receipt < ApplicationRecord
   # Returns the name of the efetor who receive the products
   def destiny_name
     self.applicant_sector.name+" "+self.applicant_establishment.name
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
   end
 end

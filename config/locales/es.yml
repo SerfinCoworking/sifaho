@@ -49,11 +49,12 @@ es:
       dispense: Dispensar
   activerecord:
     models:
-      external_order: "Pedido abastecimiento"
-      internal_order: "Pedido interno"
+      external_order: "Pedido de establecimiento"
+      internal_order: "Pedido de sector"
       outpatient_prescription: "Receta ambulatoria"
       chronic_prescription: "Receta crónica"
-      receipt: "Recibo" 
+      receipt: "Recibo"
+      purchase: "Compra"
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
@@ -95,6 +96,7 @@ es:
         expiry_date: "Fecha vencimiento"
       internal_order_product:
         delivery_quantity: "A entregar"
+        request_quantity: "Cantidad solicitada"
       chronic_prescription_product:
         delivery_quantity: "Dosis"
         request_quantity: "Dosis mensual"

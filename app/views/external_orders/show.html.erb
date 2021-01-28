@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo <%= @external_order.order_type %>
+        Viendo <%= @external_order.human_name.downcase %>
       </h5>
     </div>
     <div>
@@ -22,15 +22,17 @@
 
   <div class="card-body">
     <div class="row">
+      <div class='col'>
+        <strong>Solicitante:</strong>
+        <%= @external_order.applicant_sector.name %><br>
+        <%= @external_order.applicant_establishment.name %>
+      </div>
+      <div class="col">
+        <strong>Proveedor:</strong>
+        <%= @external_order.provider_sector.name %><br>
+        <%= @external_order.provider_establishment.name %>
+      </div>
       <div class='col-2'>
-        <strong>Sector solicitante:</strong>
-        <%= @external_order.applicant_sector.name%>
-      </div>
-      <div class="col-2">
-        <strong>Sector proveedor:</strong>
-        <%= @external_order.provider_sector.name%>
-      </div>
-      <div class='col-3'>
         <strong>Solicitado:</strong>
         <%= @external_order.requested_date.strftime("%d/%m/%Y")%>
       </div>
@@ -66,7 +68,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
-              <%= fa_icon "exchange-alt" %> Comentarios
+              <%= fa_icon "comments" %> Comentarios
               <span class="badge badge-secondary" id="comments-count"><%= @external_order.comments.count %></span>
             </a>
           </li>
@@ -92,12 +94,25 @@
             </thead>
             <tbody>
               <% @external_order.external_order_products.joins(:product).order("name").each do |ext_ord_prod| %>
-                <tr>
-                  <td>
-                    <%= ext_ord_prod.product_code %>
+                <tr class="<%= highlight_row(ext_ord_prod.product_id) %>">
+                  <td class="text-secondary">
+                    <% @stock = Stock.where(sector: current_user.sector, product: ext_ord_prod.product ).first %>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= ext_ord_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= ext_ord_prod.product_code %>
+                    <% end %>
                   </td>
-                  <td>
-                    <%= ext_ord_prod.product_name %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= ext_ord_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= ext_ord_prod.product_name %>
+                    <% end %>
                   </td>
                   <td>
                     <%= ext_ord_prod.product_unity_name %>
@@ -306,7 +321,7 @@
           </div>
           <div class="modal-body">
             <p>Esta seguro que ha recibido el <%= @external_order.human_name.downcase %> código <%= @external_order.remit_code %>?</p>
-            <p>El pedido contenía <%= @external_order.external_order_products.count %> productos diferentes.</p>
+            <p>El pedido contiene <%= pluralize(@external_order.external_order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>

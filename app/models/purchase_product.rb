@@ -27,31 +27,31 @@ class PurchaseProduct < ApplicationRecord
   def increment_lot_stock_to(a_sector)
 
     self.order_prod_lot_stocks.each do |opls|
-    # Se busca o crea Lote
-    @lot = Lot.where(
-      product_id: self.product_id,
-      code: opls.lot_code,
-      laboratory_id: opls.laboratory_id,
-      expiry_date: opls.expiry_date
-    ).first_or_create
+      # Se busca o crea Lote
+      @lot = Lot.where(
+        product_id: self.product_id,
+        code: opls.lot_code,
+        laboratory_id: opls.laboratory_id,
+        expiry_date: opls.expiry_date
+      ).first_or_create
 
-    # Se busca o crea Stock
-    @stock = Stock.where(
-      sector_id: a_sector.id,
-      product_id: self.product_id
-    ).first_or_create
+      # Se busca o crea Stock
+      @stock = Stock.where(
+        sector_id: a_sector.id,
+        product_id: self.product_id
+      ).first_or_create
 
-    # Se busca o crea LotStock
-    @lot_stock = LotStock.where(
-      lot_id: @lot.id,
-      stock_id: @stock.id,
-    ).first_or_create
+      # Se busca o crea LotStock
+      @lot_stock = LotStock.where(
+        lot_id: @lot.id,
+        stock_id: @stock.id,
+      ).first_or_create
 
-    # Se incrementa el LotStock
-    @lot_stock.increment((opls.quantity * opls.presentation))
-    opls.lot_stock_id = @lot_stock.id
-    opls.save!
-
+      # Se incrementa el LotStock
+      @lot_stock.increment((opls.quantity * opls.presentation))
+      opls.lot_stock_id = @lot_stock.id
+      opls.save!
+      @stock.create_stock_movement(a_sector, self.purchase, @lot_stock, opls.quantity * opls.presentation, true)
     end
   end
 
@@ -63,6 +63,7 @@ class PurchaseProduct < ApplicationRecord
   def decrement_stock
     self.order_prod_lot_stocks.each do |opls|
       opls.lot_stock.decrement(opls.presentation * opls.quantity)
+      opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
     end
   end
 
