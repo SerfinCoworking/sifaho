@@ -68,6 +68,9 @@ es:
       sector:
         name: "Nombre"
         establishment_id: "Establecimiento"
+      external_order:
+        applicant_sector_id: "Sector solicitante"
+        provider_sector: "Sector proveedor"
       internal_order:
         applicant_sector_id: "Sector solicitante"
         provider_sector: "Sector proveedor"
