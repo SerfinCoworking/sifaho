@@ -18,9 +18,9 @@ class OutpatientPrescription < ApplicationRecord
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
-  validates :outpatient_prescription_products, :presence => { :message => "Debe agregar almenos 1 insumo" }
   validates_associated :outpatient_prescription_products
   validates_uniqueness_of :remit_code
+  validate :presence_of_products_into_the_order
 
   # Atributos anidados
   accepts_nested_attributes_for :outpatient_prescription_products,
@@ -226,4 +226,10 @@ class OutpatientPrescription < ApplicationRecord
     end
   end
 
+  private
+  def presence_of_products_into_the_order
+    if self.outpatient_prescription_products.size == 0
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
+  end
 end

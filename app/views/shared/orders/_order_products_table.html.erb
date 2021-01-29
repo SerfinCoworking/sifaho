@@ -33,5 +33,11 @@
     <%= fa_icon "plus" %>
     Agregar insumo
   <% end %>
-
+  
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
+    <div class="invalid-feedback d-block">
+      <%= form.object.errors[:presence_of_products_into_the_order].first %>
+    </div>
+  <% end %>
 </div>

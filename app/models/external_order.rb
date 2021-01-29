@@ -43,9 +43,9 @@ class ExternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates :external_order_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :external_order_products
   validates_uniqueness_of :remit_code
+  validate :presence_of_products_into_the_order
 
   # Atributos anidados
   accepts_nested_attributes_for :external_order_products,
@@ -351,4 +351,11 @@ class ExternalOrder < ApplicationRecord
       self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
     end
   end
+
+  def presence_of_products_into_the_order
+    if self.external_order_products.size == 0
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
+  end
+
 end

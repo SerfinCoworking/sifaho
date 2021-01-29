@@ -26,9 +26,9 @@
     <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
       value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
 
-    <% if f.object.errors[:uniqueness_product_on_internal_order].any? %>
+    <% if f.object.errors[:uniqueness_product_in_the_order].any? %>
       <div class="invalid-feedback d-block">
-        <%= f.object.errors[:uniqueness_product_on_internal_order].first %>
+        <%= f.object.errors[:uniqueness_product_in_the_order].first %>
       </div>
     <% end %>
   </td>

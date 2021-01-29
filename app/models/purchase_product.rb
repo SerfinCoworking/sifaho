@@ -9,6 +9,7 @@ class PurchaseProduct < ApplicationRecord
   validates_associated :order_prod_lot_stocks
   validates_presence_of :product_id
   validate :atleast_one_lot_selected
+  validate :uniqueness_product_on_purchase
   # Atributos anidados
   accepts_nested_attributes_for :order_prod_lot_stocks,
     :allow_destroy => true
@@ -57,6 +58,15 @@ class PurchaseProduct < ApplicationRecord
 
   def get_quantity
     return self.order_prod_lot_stocks.sum('presentation * quantity')
+  end
+
+  # Validacion: evitar duplicidad de productos en una misma orden
+  def uniqueness_product_on_purchase
+    (self.purchase.purchase_products.uniq - [self]).each do |eop|
+      if eop.product_id == self.product_id
+        errors.add(:uniqueness_product_on_purchase, "El producto código ya se encuentra en la orden")      
+      end
+    end
   end
 
   # Decrementamos la cantidad de cada lot stock (proveedor)
