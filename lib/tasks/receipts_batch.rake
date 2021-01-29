@@ -65,6 +65,23 @@ namespace :batch do
             new_receipt.save!
           end
         end
+        
+        # Iterate through the persisted receipt products and create stock movements
+        if new_receipt.persisted?
+          new_receipt.receipt_products.each do |receipt_product|
+            if receipt_product.lot_stock.present?
+              StockMovement.create(
+                stock: receipt_product.lot_stock.stock, 
+                order: new_receipt, 
+                lot_stock: receipt_product.lot_stock, 
+                quantity: receipt_product.quantity,
+                adds: true,
+                created_at: receipt_product.updated_at,
+                updated_at: receipt_product.updated_at
+              )
+            end
+          end
+        end
 
         recibo.movements.each do |movement|
           ReceiptMovement.create(

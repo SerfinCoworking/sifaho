@@ -39,7 +39,7 @@ class ExternalOrder < ApplicationRecord
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
-  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
+  # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code

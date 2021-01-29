@@ -16,7 +16,7 @@ class InternalOrder < ApplicationRecord
   has_many :products, :through => :internal_order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
-  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
+  # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   ###### DEPRECATED ######
   belongs_to :created_by, class_name: 'User', optional: true
