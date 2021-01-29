@@ -68,6 +68,9 @@ es:
       sector:
         name: "Nombre"
         establishment_id: "Establecimiento"
+      external_order:
+        applicant_sector_id: "Sector solicitante"
+        provider_sector: "Sector proveedor"
       internal_order:
         applicant_sector_id: "Sector solicitante"
         provider_sector: "Sector proveedor"
@@ -95,6 +98,9 @@ es:
         supply_id: "Insumo"
         expiry_date: "Fecha vencimiento"
       internal_order_product:
+        delivery_quantity: "A entregar"
+        request_quantity: "Cantidad solicitada"
+      external_order_product:
         delivery_quantity: "A entregar"
         request_quantity: "Cantidad solicitada"
       chronic_prescription_product:

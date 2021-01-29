@@ -30,9 +30,9 @@
     Agregar insumo
   <% end %>
   <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
-  <% if form.object.errors[:original_chronic_prescription_products].any? && !form.object.original_chronic_prescription_products.first.errors[:product_id].any? %>
+  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
     <div class="invalid-feedback d-block">
-      <%= form.object.errors[:original_chronic_prescription_products].first %>
+      <%= form.object.errors[:presence_of_products_into_the_order].first %>
     </div>
   <% end %>
   

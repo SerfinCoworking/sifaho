@@ -15,7 +15,7 @@ class InternalOrderProduct < ApplicationRecord
   validates_presence_of :product_id
   validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_provision_en_camino_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_provision_en_camino?
-  validate :uniqueness_product_on_internal_order
+  validate :uniqueness_product_in_the_order
   
 
   accepts_nested_attributes_for :product,
@@ -103,10 +103,10 @@ class InternalOrderProduct < ApplicationRecord
   end
 
   # Validacion: evitar duplicidad de productos en una misma orden
-  def uniqueness_product_on_internal_order
+  def uniqueness_product_in_the_order
     (self.internal_order.internal_order_products.uniq - [self]).each do |iop| 
       if iop.product_id == self.product_id
-        errors.add(:uniqueness_product_on_internal_order, "Este producto ya se encuentra en la orden")      
+        errors.add(:uniqueness_product_in_the_order, "Este producto ya se encuentra en la orden")      
       end
     end
   end

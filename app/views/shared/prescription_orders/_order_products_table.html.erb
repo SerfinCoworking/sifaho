@@ -32,10 +32,10 @@
     Agregar insumo
   <% end %>
 
-  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>  
-  <% if form.object.errors[:outpatient_prescription_products].any? && form.object.outpatient_prescription_products.count == 0 && !form.object.outpatient_prescription_products.first.errors[:product_id].any? %>
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
     <div class="invalid-feedback d-block">
-      <%= form.object.errors[:outpatient_prescription_products].first %>
+      <%= form.object.errors[:presence_of_products_into_the_order].first %>
     </div>
   <% end %>
 

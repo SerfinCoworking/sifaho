@@ -28,7 +28,7 @@ class InternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates :internal_order_products, :presence => { :message => "Debe agregar almenos 1 insumo" }
+  validate :presence_of_products_into_the_order
   validates_associated :internal_order_products
   validates_uniqueness_of :remit_code
   
@@ -334,4 +334,10 @@ class InternalOrder < ApplicationRecord
       self.create_notification(self.audited_by, "auditó")
     end
   end  
+
+  def presence_of_products_into_the_order
+    if self.internal_order_products.size == 0
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
+  end
 end

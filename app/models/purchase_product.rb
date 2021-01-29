@@ -9,6 +9,7 @@ class PurchaseProduct < ApplicationRecord
   validates_associated :order_prod_lot_stocks
   validates_presence_of :product_id
   validate :atleast_one_lot_selected
+  validate :uniqueness_product_on_purchase
   # Atributos anidados
   accepts_nested_attributes_for :order_prod_lot_stocks,
     :allow_destroy => true
@@ -59,11 +60,28 @@ class PurchaseProduct < ApplicationRecord
     return self.order_prod_lot_stocks.sum('presentation * quantity')
   end
 
+  # Validacion: evitar duplicidad de productos en una misma orden
+  def uniqueness_product_on_purchase
+    (self.purchase.purchase_products.uniq - [self]).each do |eop|
+      if eop.product_id == self.product_id
+        errors.add(:uniqueness_product_on_purchase, "El producto código ya se encuentra en la orden")      
+      end
+    end
+  end
+
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
+    any_insufficient_lot_stock = self.order_prod_lot_stocks.any? do |opls|
+      opls.lot_stock.quantity < (opls.presentation * opls.quantity)
+    end
+
     self.order_prod_lot_stocks.each do |opls|
-      opls.lot_stock.decrement(opls.presentation * opls.quantity)
-      opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+      if any_insufficient_lot_stock
+        raise ArgumentError, "No se puede retornar el remito #{self.purchase.remit_code} debido a que uno o más lotes seleccionados no poseen la cantidad suficiente en stock para devolver."
+      else
+        opls.lot_stock.decrement(opls.presentation * opls.quantity)
+        opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+      end
     end
   end
 

@@ -8,7 +8,7 @@ class CreatePurchases < ActiveRecord::Migration[5.2]
       t.string :remit_code
       t.text :observation
       t.integer :status
-      t.date :received_date
+      t.datetime :received_date
       t.timestamps
     end
   end

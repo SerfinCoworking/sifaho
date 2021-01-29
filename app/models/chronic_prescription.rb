@@ -19,9 +19,10 @@ class ChronicPrescription < ApplicationRecord
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
-  validates :original_chronic_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  # validates :original_chronic_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
   validates_associated :original_chronic_prescription_products
   validates_uniqueness_of :remit_code
+  validate :presence_of_products_into_the_order
 
   # Atributos anidados
   accepts_nested_attributes_for :original_chronic_prescription_products,
@@ -102,12 +103,6 @@ class ChronicPrescription < ApplicationRecord
     where('chronic_prescriptions.establishment_id = ?', a_establishment)
   }
 
-  # def is_dispensing?
-  #   return self.dispensada_parcial?
-  # end
-
-  
-
   def create_notification(of_user, action_type)
     ChronicPrescriptionMovement.create(user: of_user, chronic_prescription: self, action: action_type, sector: of_user.sector)
     (of_user.sector.users.uniq - [of_user]).each do |user|
@@ -151,5 +146,12 @@ class ChronicPrescription < ApplicationRecord
   # Return the i18n model name
   def human_name
     self.class.model_name.human
+  end
+  
+  private
+  def presence_of_products_into_the_order
+    if self.original_chronic_prescription_products.size == 0
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
   end
 end
