@@ -91,6 +91,51 @@ namespace :batch do
         if new_internal_order.internal_order_products.size > 0
           new_internal_order.save!
         end
+
+        # Creación de movimientos de stock tanto para proveedor como para solicitante
+        if new_internal_order.persisted?
+          # En los estados "provision en camino" y "provision entregada" debe existir el movimiento de stock de descarga en el proveedor
+          if new_internal_order.provision_en_camino? || new_internal_order.provision_entregada?
+            new_internal_order.internal_order_products.each do |int_ord_product|
+              int_ord_product.order_prod_lot_stocks.each do |iopls|
+                # Movimiento de baja para proveedor con fecha de envío "sent_date"
+                StockMovement.create!(
+                  stock: iopls.lot_stock.stock,
+                  order: new_internal_order,
+                  lot_stock: iopls.lot_stock,
+                  quantity: iopls.quantity,
+                  adds: false,
+                  created_at: new_internal_order.sent_date,
+                  updated_at: new_internal_order.sent_date
+                )
+              end
+            end
+          end # End if en camino || entregada
+          # Si está entregada debe existir el movimiento de stock de carga en el solicitante
+          if new_internal_order.provision_entregada?
+            new_internal_order.internal_order_products.each do |int_ord_product|
+              int_ord_product.order_prod_lot_stocks.each do |iopls|
+
+                # Buscamos stock del producto del sector solicitante
+                @applicant_stock = Stock.where(sector_id: new_internal_order.applicant_sector.id, product_id: int_ord_product.product_id).first
+                if @applicant_stock.present?
+                  @applicant_lot_stock = LotStock.where(lot_id: iopls.lot_stock.lot_id, stock_id: @applicant_stock.id).first
+                  if @applicant_lot_stock.present?
+                    StockMovement.create!(
+                      stock: @applicant_stock,
+                      order: new_internal_order,
+                      lot_stock: @applicant_lot_stock,
+                      quantity: iopls.quantity,
+                      adds: true,
+                      created_at: new_internal_order.date_received,
+                      updated_at: new_internal_order.date_received
+                    )
+                  end
+                end
+              end
+            end
+          end # End provision entregada
+        end # End if persisted
       end
     end
   end

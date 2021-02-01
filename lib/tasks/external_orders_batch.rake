@@ -128,6 +128,49 @@ namespace :batch do
         if external_order.external_order_products.size > 0
           external_order.save
         end
+
+        # Creación de movimientos de stock tanto para proveedor como para solicitante
+        if external_order.persisted?
+          # En los estados "provision en camino" y "provision entregada" debe existir el movimiento de stock de descarga en el proveedor
+          if external_order.provision_en_camino? || external_order.provision_entregada?
+            external_order.external_order_products.each do |ext_ord_product|
+              ext_ord_product.order_prod_lot_stocks.each do |eopls|
+                # Movimiento de baja para proveedor con fecha de envío "sent_date"
+                StockMovement.create(
+                  stock: eopls.lot_stock.stock,
+                  order: external_order,
+                  lot_stock: eopls.lot_stock,
+                  quantity: eopls.quantity,
+                  adds: false,
+                  created_at: external_order.sent_date,
+                  updated_at: external_order.sent_date
+                )
+              end
+            end
+          end # End if en camino || entregada
+          # Si está entregada debe existir el movimiento de stock de carga en el solicitante
+          if external_order.provision_entregada?
+            external_order.external_order_products.each do |ext_ord_product|
+              ext_ord_product.order_prod_lot_stocks.each do |eopls|
+
+                # Buscamos stock del producto del sector solicitante
+                @applicant_stock = Stock.where(sector_id: external_order.applicant_sector.id, product_id: ext_ord_product.product_id).first
+                if @applicant_stock.present?
+                  @applicant_lot_stock = LotStock.where(lot_id: eopls.lot_stock.lot_id, stock_id: @applicant_stock.id).first
+                  StockMovement.create(
+                    stock: @applicant_stock,
+                    order: external_order,
+                    lot_stock: @applicant_lot_stock,
+                    quantity: eopls.quantity,
+                    adds: true,
+                    created_at: external_order.date_received,
+                    updated_at: external_order.date_received
+                  )
+                end
+              end
+            end
+          end # End provision entregada
+        end # End if persisted
       end
     end
     puts "Se migraron "+ExternalOrder.solicitud.count.to_s+" de "+ExternalOrderBak.solicitud_abastecimiento.count.to_s+" solicitudes"

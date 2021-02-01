@@ -15,14 +15,13 @@ class ChronicPrescription < ApplicationRecord
   has_many :original_chronic_prescription_products, dependent: :destroy, inverse_of: 'chronic_prescription'
   has_many :products, :through => :chronic_prescription_products
   has_many :movements, class_name: "ChronicPrescriptionMovement"
-  has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
   # validates :original_chronic_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
-  validates_associated :original_chronic_prescription_products
+  # validates_associated :original_chronic_prescription_products
   validates_uniqueness_of :remit_code
-  validate :presence_of_products_into_the_order
+  # validate :presence_of_products_into_the_order
 
   # Atributos anidados
   accepts_nested_attributes_for :original_chronic_prescription_products,

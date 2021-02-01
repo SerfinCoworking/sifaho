@@ -6,8 +6,8 @@ class ReceiptProduct < ApplicationRecord
   belongs_to :lot, optional: true
   
   # Validaciones
-  # validates_presence_of :receipt, :product_id, :lot_code, :laboratory_id
-  # validates_presence_of :lot_stock_id, if: :is_recibido? 
+  validates_presence_of :receipt, :product_id, :lot_code, :laboratory_id
+  validates_presence_of :lot_stock_id, if: :is_recibido? 
 
   delegate :code, to: :product, prefix: true
   delegate :name, to: :product, prefix: true

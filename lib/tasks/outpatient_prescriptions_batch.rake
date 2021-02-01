@@ -62,6 +62,7 @@ namespace :batch do
         end
         if new_prescription.outpatient_prescription_products.size > 0
           if new_prescription.save!
+            # Creación de movimientos de la orden
             old_prescription.movements.each do |movement|
               OutpatientPrescriptionMovement.create(
                 user_id: movement.user_id,
@@ -72,6 +73,24 @@ namespace :batch do
                 updated_at: movement.updated_at
               )
             end
+
+            # Creación de movimientos del stock
+            if new_prescription.dispensada?
+              new_prescription.outpatient_prescription_products.each do |out_pre_product|
+                out_pre_product.order_prod_lot_stocks.each do |opls|
+                  # Movimiento de baja para proveedor con fecha de dispensación "updated_at"
+                  StockMovement.create!(
+                    stock: opls.lot_stock.stock,
+                    order: new_prescription,
+                    lot_stock: opls.lot_stock,
+                    quantity: opls.quantity,
+                    adds: false,
+                    created_at: opls.updated_at,
+                    updated_at: opls.updated_at
+                  )
+                end
+              end
+            end # End if en camino || entregada
           end
         end
       end

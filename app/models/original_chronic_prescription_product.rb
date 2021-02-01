@@ -8,8 +8,8 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :product_id
-  validate :uniqueness_product_on_org_chron_pres_prod
-  validate :uniqueness_original_product_in_the_order
+  # validate :uniqueness_product_on_org_chron_pres_prod
+  # validate :uniqueness_original_product_in_the_order
   
   accepts_nested_attributes_for :product,
     :allow_destroy => true

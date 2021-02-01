@@ -4,13 +4,13 @@ class ChronicDispensation < ApplicationRecord
 
   enum status: { pendiente: 0, dispensada: 1}
 
-  validates :chronic_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
-  validates_associated :chronic_prescription_products
+  # validates :chronic_prescription_products, :presence => {:message => "Debe agregar almenos 1 insumo"}
+  # validates_associated :chronic_prescription_products
   
   accepts_nested_attributes_for :chronic_prescription_products,
   :allow_destroy => true
 
-  after_create :decrement_stock, :dispense_prescription
+  # after_create :decrement_stock, :dispense_prescription
   
   def decrement_stock
     self.chronic_prescription_products.each do | cpp |

@@ -141,6 +141,26 @@ namespace :batch do
             updated_at: movement.updated_at
           )
         end
+
+        # Creación de movimientos del stock
+        if new_prescription.persisted?
+          if new_prescription.dispensada_parcial? || new_prescription.dispensada?
+            new_prescription.chronic_prescription_products.each do |chron_pre_product|
+              chron_pre_product.order_prod_lot_stocks.each do |opls|
+                # Movimiento de baja para proveedor con fecha de dispensación "updated_at"
+                StockMovement.create!(
+                  stock: opls.lot_stock.stock,
+                  order: new_prescription,
+                  lot_stock: opls.lot_stock,
+                  quantity: opls.quantity,
+                  adds: false,
+                  created_at: opls.updated_at,
+                  updated_at: opls.updated_at
+                )
+              end
+            end
+          end
+        end # End if en camino || entregada
       elsif
         puts "====> No se creó la receta cuyo id: #{old_prescription.id} porque tiene #{old_prescription.quantity_ord_supply_lots.count} productos asociados".colorize(:light_blue).colorize( :background => :red)
       end
