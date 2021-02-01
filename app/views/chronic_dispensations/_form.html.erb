@@ -115,7 +115,7 @@
                   data: {
                     "association-insertion-node" => "tbody#chronic-product-cocoon-container#{ocpp.id}",
                     "association-insertion-method" => "append"},
-                  render_options: {locals: { ocpp_id: ocpp.id }} do %>
+                  render_options: {locals: { ocpp_id: ocpp.id, original_product_code: ocpp.product.code, original_product_name: ocpp.product.name, original_product_id: ocpp.product.id }} do %>
                   <%= fa_icon "plus" %>
                 <% end %>
               <% end %>
