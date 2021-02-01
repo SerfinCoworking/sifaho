@@ -64,7 +64,7 @@ class PurchaseProduct < ApplicationRecord
   def uniqueness_product_on_purchase
     (self.purchase.purchase_products.uniq - [self]).each do |eop|
       if eop.product_id == self.product_id
-        errors.add(:uniqueness_product_on_purchase, "El producto código ya se encuentra en la orden")      
+        errors.add(:uniqueness_product_on_purchase, "Este producto ya se encuentra en la orden")      
       end
     end
   end

@@ -131,7 +131,6 @@ class PurchasesController < ApplicationController
     respond_to do |format|
       begin
         @purchase.update!(purchase_products_params)
-        @purchase.save!
         @purchase.create_notification(current_user, 'auditó')
         format.html { redirect_to @purchase, notice: "Los productos se han cargado correctamente." }
 
@@ -139,7 +138,10 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @purchase.purchase_products.present? ? @purchase.purchase_products : @purchase.purchase_products.build
+        if @purchase.purchase_products.size == 0
+          @purchase.purchase_products.build
+          @purchase.purchase_products.first.line = "1" # debemos inicializar el primer renglon
+        end
         message = "No se han podido cargar productos en el remito."
         format.html { render :set_products, notice: message }
       end

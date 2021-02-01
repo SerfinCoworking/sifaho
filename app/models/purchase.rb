@@ -19,7 +19,7 @@ class Purchase < ApplicationRecord
   # debemos agregar condicion solo para que corra esta validacion solo si se encuentra 
   # en el paso de carga de productos, 
   # agregar estado inicial a la compra (este indica el salto de validacion de productos)
-  validate :validate_purchase_products_length, if: :is_not_inicial?
+  validate :presence_of_products_into_the_order, if: :is_not_inicial?
   validates :code_number, uniqueness: true
   validates_associated :purchase_products
 
@@ -135,10 +135,6 @@ class Purchase < ApplicationRecord
     
   end
 
-  def validate_purchase_products_length
-    errors.add(:purchase_products_legnth, "Debe agregar almenos 1 producto") if self.purchase_products.size < 1
-  end
-
   def create_notification(of_user, action_type)
     PurchaseMovement.create(user: of_user, purchase: self, action: action_type, sector: of_user.sector)
     (self.applicant_sector.users.uniq - [of_user]).each do |user|
@@ -184,5 +180,11 @@ class Purchase < ApplicationRecord
 
   def record_remit_code
     self.remit_code = Date.today.strftime("%d%m%Y")+'C'+Purchase.maximum(:id).to_i.next.to_s
+  end
+
+  def presence_of_products_into_the_order
+    if self.purchase_products.size == 0
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
   end
 end

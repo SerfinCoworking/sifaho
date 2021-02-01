@@ -72,7 +72,8 @@
 
         <%= simple_form_for @purchase, url: set_products_purchase_path(@purchase), method: :patch, html: {class: "", role: 'check-modified', id: "save_products_purchase_" + @purchase.id.to_s} do |form| %>
           <%= form.error_notification %>
-
+          <%# No se usa este input%>
+          <%= form.input :code_number, as: :hidden %>
           <div class="row">
             <div class="col-12">
               <table class="table table-hover table-sm mb-0">
@@ -100,9 +101,9 @@
               <% end %>
 
               <%# Mostramos el mensaje de validación, en el caso de que no tenga un insumo cargado. %>
-              <% if form.object.errors[:purchase_products_legnth].any? %>
+              <% if form.object.errors[:presence_of_products_into_the_order].any? %>
                 <div class="invalid-feedback d-block">
-                  <%= form.object.errors[:purchase_products_legnth].first %>
+                  <%= form.object.errors[:presence_of_products_into_the_order].first %>
                 </div>
               <% end %>
             </div>

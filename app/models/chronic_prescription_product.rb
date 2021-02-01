@@ -9,8 +9,8 @@ class ChronicPrescriptionProduct < ApplicationRecord
   has_many :lot_stocks, :through => :order_prod_lot_stocks
 
   # Validaciones
-  # validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than => 0 }
-  # validate :out_of_stock, if: :is_dispensation?
+  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than => 0 }
+  validate :out_of_stock, if: :is_dispensation?
   validate :lot_stock_sum_quantity, if: :is_dispensation?
   validates_presence_of :product_id
 
