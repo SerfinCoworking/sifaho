@@ -40,9 +40,8 @@
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="movements-tab" data-toggle="tab" href="#movements" role="tab" aria-controls="movements" aria-selected="false">
-          <%= fa_icon "exchange-alt" %> Movimientos <span class="badge badge-secondary"><%= @movements_count = @stock.movements.count %></span>
+          <%= fa_icon "exchange-alt" %> Últimos movimientos
         </a>
-      </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="statistics-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false"><%= fa_icon "chart-bar" %> Estadísticas</a>
       </li>
@@ -104,7 +103,7 @@
             <% end %>
           </tbody>
         </table>
-        <% if @movements_count > 10 %>
+        <% if @stock.movements.count > 10 %>
           <div class="row d-flex justify-content-center">
             <%= link_to movements_stock_path(@stock), class: 'btn btn-secondary' do %>
               <%= fa_icon "eye" %> Ver todos
