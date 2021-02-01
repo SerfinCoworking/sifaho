@@ -1,5 +1,5 @@
 
-<tr class="nested-fields main-tr <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'table-danger' : '' %>" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : 0 %>">
+<tr class="nested-fields main-tr <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any? || f.object.errors[:uniqueness_product_on_purchase].any?) ? 'table-danger' : '' %>" data-nested-fields="<%= f.object.product.present? ? f.object.product.id : 0 %>">
   <td>
     <%= f.input :line, :as => :string, label: false, :input_html =>  { 
       class: "form-control purchase-product-line input-sm",
@@ -17,13 +17,17 @@
         <input type="text" 
         name="<%= f.object.product.present? ? ("product_code_fake_" + f.object.product.code.to_s) : "product_code_fake" %>" 
         value="<%= f.object.product.present? ? f.object.product.code : '' %>"
-        class="form-control fake optional purchase-product-code input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
+        class="form-control fake optional purchase-product-code input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_on_purchase].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_on_purchase].any?) ) %>"
         data-autocomplete-source="<%= search_by_code_products_path %>"
         size="6" 
         autocomplete="off" 
         placeholder="Código">
         <div class="invalid-feedback">
-          Producto <%= f.object.errors[:product_id].first %>
+          <% if f.object.errors[:product_id].any? %>
+            Producto <%= f.object.errors[:product_id].first %>
+          <% elsif f.object.errors[:uniqueness_product_on_purchase].any? %>
+            <%= f.object.errors[:uniqueness_product_on_purchase].first %>
+          <% end %>
         </div>
       </div>
 
@@ -50,14 +54,16 @@
         name="<%= f.object.product.present? ? "product_name_fake_" + f.object.product.id.to_s : '' %>" 
         id="<%= f.object.product.present? ? "product_name_fake_" + f.object.product.id.to_s : '' %>" 
         value="<%= f.object.product.present? ? f.object.product.name : '' %>"
-        class="form-control fake optional purchase-product-name input-sm <%= ("is-invalid" if f.object.errors[:product_id].any? ) %> <%= ("is-valid" if f.object.product_id.present? && !f.object.errors[:product_id].any? ) %>" 
+        class="form-control fake optional purchase-product-name input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_on_purchase].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_on_purchase].any?) ) %>"
         data-autocomplete-source="<%= search_by_name_products_path %>"
         size="45" 
         autocomplete="off" 
         placeholder="Nombre">
-        <div class="invalid-feedback">
-          Producto <%= f.object.errors[:product_id].first %>
-        </div>
+        <% if f.object.errors[:product_id].any? %>
+          <div class="invalid-feedback">
+            Producto <%= f.object.errors[:product_id].first %>
+          </div>
+        <% end %>
       </div>
 
       <div class="with-loading">
@@ -84,7 +90,7 @@
 
   <!-- Cantidad a cargar -->
   <td class="link-to-lot-modal">
-    <button class="btn btn-primary btn-coll" type="button" data-target="#<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>" data-toggle="tooltip" title="Agregar lotes">
+    <button class="btn btn-primary btn-coll" type="button" data-target="#<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s + f.object.line.to_s) : 'collapsable-custom'%>" data-toggle="tooltip" title="Agregar lotes">
       <%= fa_icon "plus" %>
     </button>    
   </td>
@@ -101,8 +107,8 @@
   </td>
 </tr>
 <tr class="collapsable-row" data-collapsable-row="<%= f.object.product.present? ? f.object.product.id : 0 %>">
-  <td colspan="6">
-    <div class="collapse-custom <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'show' : '' %>" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s) : 'collapsable-custom'%>">
+  <td colspan="7">
+    <div class="collapse-custom <%= (f.object.errors[:atleast_one_lot_selected].any? || f.object.errors[:order_prod_lot_stocks].any?) ? 'show' : '' %>" id="<%= f.object.product.present? ? ('collapsable-custom' + f.object.product.id.to_s + f.object.line.to_s) : 'collapsable-custom'%>">
       <div class="card card-body">
         <%# .-Seleccion de lotes Collapsable %>
         <%= render "purchases/partials/purchase_prod_lot_stock_table", fPurchaseProduct: f %>
