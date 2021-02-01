@@ -1,0 +1,15 @@
+<tr id="stock_<%= stock.id %>">
+  <td><%= stock.product_code %></td>
+  <td><%= stock.product_name %></td>
+  <td><%= stock.quantity %></td>
+  <td><%= stock.product_unity_name %></td>
+  <td><%= stock.product_area_name %></td>
+  <td class="text-left actions-col">
+    <% if policy(stock).show? %>
+      <%= link_to stock_path(stock), class: 'btn btn-secondary btn-sm',
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

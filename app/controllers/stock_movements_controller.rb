@@ -1,15 +1,34 @@
-class StocksController < ApplicationController
-  before_action :set_stock, only: [:show, :edit, :update, :destroy, :movements]
+class StockMovementsController < ApplicationController
 
   # GET /stocks
   # GET /stocks.json
   def index
-    authorize Stock
-    @stocks = Stock
-      .filter(params.slice(:search_code, :search_name, :with_area_ids), current_user.sector)
-      .order(created_at: :desc)
-      .page(params[:page])
-    @areas = Area.all
+    authorize StockMovement
+    @filterrific = initialize_filterrific(
+      StockMovement.to_stock_id(params[:id]),
+      params[:filterrific],
+      select_options: {
+        sorted_by: StockMovement.options_for_sorted_by
+      },
+      persistence_id: false,
+    ) or return
+
+    if request.format.xls?
+      @stock_movements = @filterrific.find
+    else
+      @stock_movements = @filterrific.find.page(params[:page]).per_page(20)
+    end
+    
+    respond_to do |format|
+      format.html
+      format.js
+      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteFábrica_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
+    end
+  end
+
+  def movements
+    authorize @stock
+    @movements = @stock.movements.sort_by{|e| e[:created_at]}.reverse.paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /stocks/1

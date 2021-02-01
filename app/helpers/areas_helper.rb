@@ -1,3 +1,0 @@
-module AreasHelper
-
-end

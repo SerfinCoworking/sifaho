@@ -30,8 +30,4 @@ class StockPolicy < ApplicationPolicy
   def delete?
     destroy?
   end
-
-  def movements?
-    return record.sector == user.sector
-  end
 end
