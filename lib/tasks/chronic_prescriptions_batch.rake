@@ -56,6 +56,8 @@ namespace :batch do
                 status: 'dispensada'
               )
 
+              new_prescription.dispensada_parcial!
+
               puts "Se creó la Dispensación n°: ".green + (index + 1).to_s.colorize(:white).colorize( :background => :blue)
               #4 Se agregan los productos dispensados a cada dispensacion
               cronic_dispensation.quantity_ord_supply_lots.each do |qosl|
