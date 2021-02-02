@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_185100) do
+ActiveRecord::Schema.define(version: 2021_02_01_184219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -827,6 +827,13 @@ ActiveRecord::Schema.define(version: 2021_01_26_185100) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "purchase_areas", force: :cascade do |t|
+    t.bigint "purchase_id"
+    t.bigint "area_id"
+    t.index ["area_id"], name: "index_purchase_areas_on_area_id"
+    t.index ["purchase_id"], name: "index_purchase_areas_on_purchase_id"
   end
 
   create_table "purchase_comments", force: :cascade do |t|

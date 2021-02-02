@@ -60,6 +60,26 @@
             %>
           </div>
 
+          <div class="custom-input-group w-75">
+            <%= form.input :area_ids, label: 'Rubros',
+              collection: 
+              @areas.map {
+                |area| [area.second.humanize, area.first]
+              },
+              :input_html => {
+                multiple: true,
+                required: true,
+                include_blank: false,
+                class: 'selectpicker custom-select-pick',
+                "data-width"=>"100%",
+                "data-size"=>"10",
+                "title"=>"Seleccionar rubros",
+                "data-live-search"=>true,
+                "data-none-results-text" => "No se encontró el rubro"
+              }
+            %>
+          </div>
+
           <%# Code number %>
           <%= form.input :code_number, :as => :string, :input_html =>  { 
             class: "form-control purchase-product-line input-sm w-75",

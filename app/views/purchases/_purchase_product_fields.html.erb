@@ -18,7 +18,7 @@
         name="<%= f.object.product.present? ? ("product_code_fake_" + f.object.product.code.to_s) : "product_code_fake" %>" 
         value="<%= f.object.product.present? ? f.object.product.code : '' %>"
         class="form-control fake optional purchase-product-code input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_on_purchase].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_on_purchase].any?) ) %>"
-        data-autocomplete-source="<%= search_by_code_products_path %>"
+        data-autocomplete-source="<%= search_by_code_to_order_products_path(:area_ids => f.object.purchase.areas.pluck(:id).join("_") ) %>"
         size="6" 
         autocomplete="off" 
         placeholder="Código">

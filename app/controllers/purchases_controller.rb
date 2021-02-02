@@ -43,12 +43,14 @@ class PurchasesController < ApplicationController
     authorize Purchase
     @purchase = Purchase.new
     @sectors = []
+    @areas = Area.all.order(:name).pluck(:id, :name)
   end
 
   # GET /purchases/1/edit
   def edit
     authorize @purchase
     @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : [] 
+    @areas = Area.all.order(:name).pluck(:id, :name)
   end
 
   # POST /purchases
@@ -70,6 +72,7 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @areas = Area.all.order(:name).pluck(:id, :name)
         @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : []
         format.html { render :new }
       end
@@ -89,6 +92,7 @@ class PurchasesController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @areas = Area.all.order(:name).pluck(:id, :name)
         @sectors = @purchase.provider_sector.present? ? @purchase.provider_establishment.sectors : []
         format.html { render :edit }
       end
@@ -200,9 +204,9 @@ class PurchasesController < ApplicationController
     params.require(:purchase).permit(
       :applicant_sector_id,
       :provider_sector_id,
-      :area_id,
       :code_number,
-      :observation
+      :observation,
+      area_ids: []
     )
   end
   
@@ -226,7 +230,7 @@ class PurchasesController < ApplicationController
           :presentation,
           :position,
           :_destroy
-        ]
+        ],
       ]
     )
   end

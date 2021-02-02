@@ -13,6 +13,9 @@ class Purchase < ApplicationRecord
   has_many :purchase_products, dependent: :destroy, inverse_of: 'purchase'
   has_many :products, :through => :purchase_products
   has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
+  
+  has_many :purchase_areas
+  has_many :areas, through: :purchase_areas 
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :code_number
@@ -25,8 +28,11 @@ class Purchase < ApplicationRecord
 
   # Atributos anidados
   accepts_nested_attributes_for :purchase_products,
-    :allow_destroy => true
+  :allow_destroy => true
   
+  accepts_nested_attributes_for :areas,
+  :allow_destroy => true
+
   # Callbacks
   before_validation :record_remit_code, on: :create
   
