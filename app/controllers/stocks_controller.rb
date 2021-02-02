@@ -5,11 +5,28 @@ class StocksController < ApplicationController
   # GET /stocks.json
   def index
     authorize Stock
-    @stocks = Stock
-      .filter(params.slice(:search_code, :search_name, :with_area_ids), current_user.sector)
-      .order(created_at: :desc)
-      .page(params[:page])
-    @areas = Area.all
+    @filterrific = initialize_filterrific(
+      Stock.to_sector(current_user.sector),
+      params[:filterrific],
+      select_options: {
+        sorted_by: Stock.options_for_sorted_by
+      },
+      persistence_id: false,
+    ) or return
+    if request.format.xls?
+      @stocks = @filterrific.find
+    else
+      @areas = Area.all
+      @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
+    end
+
+    puts "Stock "+@stocks.count.to_s
+    
+    respond_to do |format|
+      format.html
+      format.js
+      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteStock_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
+    end
   end
 
   # GET /stocks/1
