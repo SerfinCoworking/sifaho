@@ -25,6 +25,16 @@ class Stock < ApplicationRecord
     :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
+  filterrific(
+    default_filter_params: { sorted_by: 'nombre_desc'},
+    available_filters: [
+      :search_product_code,
+      :search_product_name,
+      :with_area_ids,
+      :by_areas,
+      :sorted_by,
+    ]
+  )
 
   # To filter records by controller params
   # Slice params "search_code, search_name, with_area_ids"

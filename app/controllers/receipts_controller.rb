@@ -1,5 +1,6 @@
 class ReceiptsController < ApplicationController
   before_action :set_receipt, only: [:show, :new, :edit, :update, :delete, :destroy]
+  before_action :set_highlight_row, only: [:show]
 
   # GET /receipts
   # GET /receipts.json
@@ -151,5 +152,9 @@ class ReceiptsController < ApplicationController
     def receiving?
       submit = params[:commit]
       return submit == "receive"
+    end
+    
+    def set_highlight_row
+      params[:resaltar].present? ? @highlight_row = params[:resaltar].to_i : @highlight_row = -1
     end
 end

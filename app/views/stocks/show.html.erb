@@ -105,7 +105,7 @@
         </table>
         <% if @stock.movements.count > 10 %>
           <div class="row d-flex justify-content-center">
-            <%= link_to movements_stock_path(@stock), class: 'btn btn-secondary' do %>
+            <%= link_to stock_movements_path(), class: 'btn btn-secondary' do %>
               <%= fa_icon "eye" %> Ver todos
             <% end %>
           </div>

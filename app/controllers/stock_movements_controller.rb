@@ -1,32 +1,35 @@
-class StocksController < ApplicationController
-  before_action :set_stock, only: [:show, :edit, :update, :destroy, :movements]
+class StockMovementsController < ApplicationController
 
   # GET /stocks
   # GET /stocks.json
   def index
-    authorize Stock
+    authorize StockMovement
+    @stock = Stock.find(params[:id])
     @filterrific = initialize_filterrific(
-      Stock.to_sector(current_user.sector),
+      StockMovement.to_stock_id(@stock.id),
       params[:filterrific],
       select_options: {
-        sorted_by: Stock.options_for_sorted_by
+        sorted_by: StockMovement.options_for_sorted_by
       },
       persistence_id: false,
     ) or return
-    if request.format.xls?
-      @stocks = @filterrific.find
-    else
-      @areas = Area.all
-      @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
-    end
 
-    puts "Stock "+@stocks.count.to_s
+    if request.format.xls?
+      @stock_movements = @filterrific.find
+    else
+      @stock_movements = @filterrific.find.page(params[:page]).per_page(20)
+    end
     
     respond_to do |format|
       format.html
       format.js
-      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteStock_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
+      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteFábrica_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
     end
+  end
+
+  def movements
+    authorize @stock
+    @movements = @stock.movements.sort_by{|e| e[:created_at]}.reverse.paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /stocks/1

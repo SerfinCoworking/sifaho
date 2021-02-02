@@ -1,0 +1,25 @@
+<% render 'stocks/header' %>
+
+<% if @stock_movements.present? %>
+  <div class="card fixed-custom-card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between">
+        <p><%= fa_icon 'exchange-alt' %> Movimientos <%= @stock.product.name %></p>
+        <p>Rubro <%= @stock.product.area.name %></p>
+        <p>En stock <%= @stock.quantity %></p>
+      </div>
+      <%= render 'filter' %>
+    </div>
+    <div class="card-body fixed-panel-index">
+      <%= render(
+        partial: 'stock_movements/list',
+        locals: { stock_movements: @stock_movements }
+      ) %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found',
+    locals: { object_name: 'stock_movements' }
+  ) %>
+<% end %>

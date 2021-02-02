@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   
   resources :stocks do
     member do
-      get :movements, path: :movimientos
+      resources :stock_movements, only: :index, path: :movimientos
     end
     collection do
       get "find_lots"

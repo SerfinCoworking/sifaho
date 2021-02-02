@@ -6,6 +6,9 @@
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
         Viendo receta crónica
+        <span class="badge badge-<%= chronic_prescription_status_label(@chronic_prescription) %>">
+          <%= @chronic_prescription.status.underscore.humanize %>
+        </span>
       </h5>
     </div>
     <div>
@@ -113,7 +116,7 @@
         <!-- Insumos a dispensar -->
         <div class="card">
           <table class="table table-hover table-sm">
-            <thead>
+            <thead class="thead-light">
               <tr>
                 <th>Cód Ins</th>
                 <th>Insumo</th>
@@ -126,11 +129,24 @@
             <tbody>
               <% @chronic_prescription.original_chronic_prescription_products.each do |org_chron_pres_prod| %>
                 <tr>
-                  <td>
-                    <%= org_chron_pres_prod.product_code %>
+                  <% @stock = Stock.where(sector: current_user.sector, product: org_chron_pres_prod.product).first %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= org_chron_pres_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= org_chron_pres_prod.product_code %>
+                    <% end %>
                   </td>
-                  <td>
-                    <%= org_chron_pres_prod.product_name %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= org_chron_pres_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= org_chron_pres_prod.product_name %>
+                    <% end %>
                   </td>
                   <td>
                     <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.name.pluralize(org_chron_pres_prod.request_quantity) %>
@@ -205,7 +221,7 @@
               <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
                 <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
                   <table class="table table-hover">
-                    <thead>
+                    <thead class="thead-light">
                       <tr>
                         <th>Cód Ins</th>
                         <th>Insumo</th>
