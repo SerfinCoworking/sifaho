@@ -24,7 +24,7 @@ class StockMovement < ApplicationRecord
   # Scopes
 
   pg_search_scope :search_lot,
-    associated_against: { lot: [:name] },
+    associated_against: { lot: [:code] },
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
@@ -37,10 +37,10 @@ class StockMovement < ApplicationRecord
       reorder("stock_movements.created_at #{ direction }")
     when /^lote_/
       # Order by lot
-      reorder("lots.name #{ direction}").left_joins(:lot)
+      reorder("lots.code #{ direction}").left_joins(:lot)
     when /^cantidad_/
       # Order by supplies count
-      reorder("stock_movements.supplies_count #{ direction}")
+      reorder("stock_movements.quantity #{ direction}")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")

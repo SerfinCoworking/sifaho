@@ -1,21 +1,16 @@
 <div id="filter_results">
   <div class="card fixed-panel-list">
     <table class="table table-hover table-striped table-sm">
-      <thead>
+      <thead class="thead-light">
         <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Cantidad</th>
-          <th>Unidad</th>
-          <th>Rubro</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Lote</th>
-              <th scope="col">Movimiento</th>
-              <th scope="col">Origen</th>
-              <th scope="col">Destino</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col" class="text-center"></th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Lote</th>
+          <th scope="col">Movimiento</th>
+          <th scope="col">Origen</th>
+          <th scope="col">Destino</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col" class="text-center"></th>
         </tr>
       </thead>
       <tbody id="stock_movements">
@@ -23,7 +18,20 @@
       </tbody>
     </table>
   </div>
-  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-    <%= will_paginate @stock_movements, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  <div class="row d-flex align-items-center" style="height: 50px">
+    <div class="col-3">
+      <%= will_paginate @stock_movements, list_classes: %w(pagination mb-0), 
+        previous_label: '<i class="fa fa-angle-left"></i>',
+        next_label: '<i class="fa fa-angle-right"></i>', 
+        renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+    <div class="col-6 d-flex justify-content-around align-items-center">
+      <div>
+        Movimientos <span class="badge badge-secondary"><%= @stock_movements.count %></span>
+      </div>
+    </div>
+    <div class="col-3 d-flex justify-content-end align-items-center">
+      <%= link_to 'Volver', :back, class: "btn btn-light" %>
+    </div>
   </div>
 </div>

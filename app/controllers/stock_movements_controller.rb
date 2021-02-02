@@ -4,8 +4,9 @@ class StockMovementsController < ApplicationController
   # GET /stocks.json
   def index
     authorize StockMovement
+    @stock = Stock.find(params[:id])
     @filterrific = initialize_filterrific(
-      StockMovement.to_stock_id(params[:id]),
+      StockMovement.to_stock_id(@stock.id),
       params[:filterrific],
       select_options: {
         sorted_by: StockMovement.options_for_sorted_by
