@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :notifiction_set_as_read, only: [:show]
+  before_action :notifiction_set_as_read, :set_highlight_row, only: [:show]
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   #before_action :configure_permitted_parameters, if: :devise_controller?
@@ -18,6 +18,10 @@ class ApplicationController < ActionController::Base
     
     def configure_permitted_parameters
       devise_parameter_sanitizer.permit(:sign_in) { |u| u.permit({ roles: [] }, :password, :password_confirmation, :username) }
+    end
+
+    def set_highlight_row
+      params[:resaltar].present? ? @highlight_row = params[:resaltar].to_i : @highlight_row = -1
     end
     
   private

@@ -2,7 +2,6 @@ class InternalOrdersController < ApplicationController
   before_action :set_internal_order, only: [:show, :edit_provider, :update, :destroy, :delete,
   :edit_applicant, :update_applicant, :update_provider, :send_provider, :receive_applicant_confirm, :receive_applicant, 
   :return_provider_status, :return_applicant_status, :send_applicant, :nullify ]
-  before_action :set_highlight_row, only: [:show]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)
@@ -468,9 +467,5 @@ class InternalOrdersController < ApplicationController
   def provider?
     submit = params[:commit]
     return submit == "Proveedor"
-  end
-
-  def set_highlight_row
-    params[:resaltar].present? ? @highlight_row = params[:resaltar].to_i : @highlight_row = -1
   end
 end

@@ -40,7 +40,7 @@ class ChronicDispensationsController < ApplicationController
         @chronic_dispensation.return_dispensation
         @chronic_dispensation.destroy
         @chronic_prescription.return_dispense_by(current_user)
-        flash.now[:success] = "La receta de "+@chronic_dispensation.chronic_prescription.professional.fullname+" se ha retornado una dispensa correctamente."
+        flash[:success] = "La receta de "+@chronic_dispensation.chronic_prescription.professional.fullname+" se ha retornado una dispensa correctamente."
       rescue ArgumentError => e
         flash[:error] = e.message
       end

@@ -28,7 +28,7 @@
                 <tr>
                   <td> <%= cpp.product.code %> </td>
                   <td> <%= cpp.product.name %> </td>
-                  <td> <%= cpp.product.unity %> </td>
+                  <td> <%= cpp.product.unity.name %> </td>
                   <td> <%= cpp.delivery_quantity %> </td>
                 </tr>
               <% end %>
@@ -45,9 +45,8 @@
       <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_path(@chronic_dispensation.chronic_prescription.id, @chronic_dispensation.id), method: :patch,
         class: 'btn btn-danger',
         data: { 
-          "disable-with": "Enviando...<i class='fa fa-spinner fa-spin'></i>"
-        } do %> 
-        <%#= fa_icon "paper-plane"%>
+          "disable-with": "Retornando...<i class='fa fa-spinner fa-spin'></i>"
+        } do %>
         Continuar
       <% end %>
 

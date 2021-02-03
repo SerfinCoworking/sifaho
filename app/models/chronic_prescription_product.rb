@@ -74,12 +74,14 @@ class ChronicPrescriptionProduct < ApplicationRecord
   def decrement_stock
     self.order_prod_lot_stocks.each do |cpp|
       cpp.lot_stock.decrement(cpp.quantity)
+      cpp.lot_stock.stock.create_stock_movement(self.chronic_prescription, cpp.lot_stock, cpp.quantity, false)
     end
   end
 
   def increment_stock
     self.order_prod_lot_stocks.each do |cpp|
       cpp.lot_stock.increment(cpp.quantity)
+      cpp.lot_stock.stock.create_stock_movement(self.chronic_prescription, cpp.lot_stock, cpp.quantity, true)
     end
   end
 end

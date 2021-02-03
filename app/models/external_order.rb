@@ -357,5 +357,4 @@ class ExternalOrder < ApplicationRecord
       errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
     end
   end
-
 end

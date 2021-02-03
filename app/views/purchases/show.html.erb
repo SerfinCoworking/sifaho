@@ -88,12 +88,25 @@
                 </thead>
                 <tbody>
                   <% @purchase.purchase_products.joins(:product).order("name").each do |purchase_product| %>
-                    <tr>
-                      <td>
-                        <%= purchase_product.product_code %>
+                    <tr class="<%= highlight_row(purchase_product.product_id) %>">
+                      <% @stock = Stock.where(sector: current_user.sector, product: purchase_product.product ).first %>
+                      <td class="text-secondary">
+                        <% if @stock.present? %>
+                          <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                            <%= purchase_product.product_code %>
+                          <% end %>
+                        <% else %>
+                          <%= purchase_product.product_code %>
+                        <% end %>
                       </td>
-                      <td>
-                        <%= purchase_product.product_name %>
+                      <td class="text-secondary">
+                        <% if @stock.present? %>
+                          <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                            <%= purchase_product.product_name %>
+                          <% end %>
+                        <% else %>
+                          <%= purchase_product.product_name %>
+                        <% end %>
                       </td>
                       <td>
                         <%= purchase_product.get_quantity %>
@@ -190,15 +203,7 @@
           Retornar
         <% end %>
       <% end %>
-    
-    <% if policy(@purchase).receive_purchase? %>
-      <%= link_to receive_purchase_purchase_path(@purchase), :"data-turbolinks" => false,
-        class: "btn btn-primary mr-1" do %>
-        <%= fa_icon "check" %>
-        Recibir
-      <% end %>
-    <% end %>
-    
+       
     <% if policy(@purchase).edit? %>
       <%= link_to edit_purchase_path(@purchase), :"data-turbolinks" => false,
         class: "btn btn-warning mr-1" do %>
@@ -209,9 +214,17 @@
     
     <% if policy(@purchase).set_products? %>
       <%= link_to set_products_purchase_path(@purchase), :"data-turbolinks" => false,
-        class: "btn btn-warning" do %>
+        class: "btn btn-warning mr-1" do %>
         <%= fa_icon "dolly-flatbed" %>
         Editar productos
+      <% end %>
+    <% end %>
+
+    <% if policy(@purchase).receive_purchase? %>
+      <%= link_to receive_purchase_purchase_path(@purchase), :"data-turbolinks" => false,
+        class: "btn btn-primary" do %>
+        <%= fa_icon "check" %>
+        Recibir
       <% end %>
     <% end %>
   </div>

@@ -48,6 +48,7 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   def decrement_stock
     self.order_prod_lot_stocks.each do |oppls|
       oppls.lot_stock.decrement(oppls.quantity)
+      oppls.lot_stock.stock.create_stock_movement(self.outpatient_prescription, oppls.lot_stock, oppls.quantity, false)
     end
   end
 
@@ -55,6 +56,7 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   def increment_stock
     self.order_prod_lot_stocks.each do |oppls|
       oppls.lot_stock.increment(oppls.quantity)
+      oppls.lot_stock.stock.create_stock_movement(self.outpatient_prescription, oppls.lot_stock, oppls.quantity, true)
     end
   end
 

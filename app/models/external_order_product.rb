@@ -77,7 +77,7 @@ class ExternalOrderProduct < ApplicationRecord
 
       @lot_stock.increment(opls.quantity)
       
-      @stock.create_stock_movement(a_sector, self.external_order, @lot_stock, opls.quantity, true)
+      @stock.create_stock_movement(self.external_order, @lot_stock, opls.quantity, true)
     end
   end
 

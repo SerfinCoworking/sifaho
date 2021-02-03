@@ -52,7 +52,7 @@ class PurchaseProduct < ApplicationRecord
       @lot_stock.increment((opls.quantity * opls.presentation))
       opls.lot_stock_id = @lot_stock.id
       opls.save!
-      @stock.create_stock_movement(a_sector, self.purchase, @lot_stock, opls.quantity * opls.presentation, true)
+      @stock.create_stock_movement(self.purchase, @lot_stock, opls.quantity * opls.presentation, true)
     end
   end
 
@@ -80,7 +80,7 @@ class PurchaseProduct < ApplicationRecord
         raise ArgumentError, "No se puede retornar el remito #{self.purchase.remit_code} debido a que uno o más lotes seleccionados no poseen la cantidad suficiente en stock para devolver."
       else
         opls.lot_stock.decrement(opls.presentation * opls.quantity)
-        opls.lot_stock.stock.create_stock_movement(self.purchase.applicant_sector, self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+        opls.lot_stock.stock.create_stock_movement(self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
       end
     end
   end

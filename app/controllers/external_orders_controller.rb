@@ -1,9 +1,7 @@
 class ExternalOrdersController < ApplicationController
   before_action :set_external_order, only: [:show, :send_provider, :send_applicant, :destroy, :delete, :return_applicant_status, :return_provider_status, :edit_provider, :edit_applicant,
     :update_applicant, :update_provider, :accept_provider, :receive_applicant_confirm, :receive_applicant, :receive_applicant, :nullify, :nullify_confirm ]
-  before_action :set_highlight_row, only: [:show]
   
-
   def statistics
     @external_orders = ExternalOrder.all
     @requests_sent = ExternalOrder.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
@@ -449,9 +447,5 @@ class ExternalOrdersController < ApplicationController
 
     def sending?
       return params[:commit] == "sending"
-    end
-
-    def set_highlight_row
-      params[:resaltar].present? ? @highlight_row = params[:resaltar].to_i : @highlight_row = -1
     end
 end

@@ -107,7 +107,7 @@
         <!-- Insumos a dispensar -->
         <div class="card">
           <table class="table table-hover table-sm">
-            <thead>
+            <thead class="thead-light">
               <tr>
                 <th>Cód Ins</th>
                 <th>Insumo</th>
@@ -120,12 +120,25 @@
             </thead>
             <tbody>
               <% @outpatient_prescription.outpatient_prescription_products.each do |outpatient_prescription_product| %>
-                <tr>
-                  <td>
-                    <%= outpatient_prescription_product.product_code %>
+                <tr class="<%= highlight_row(outpatient_prescription_product .product_id) %>">
+                  <% @stock = Stock.where(sector: current_user.sector, product: outpatient_prescription_product.product ).first %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= outpatient_prescription_product.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= outpatient_prescription_product.product_code %>
+                    <% end %>
                   </td>
-                  <td>
-                    <%= outpatient_prescription_product.product_name %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= outpatient_prescription_product.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= outpatient_prescription_product.product_name %>
+                    <% end %>
                   </td>
                   <td>
                     <%= outpatient_prescription_product.request_quantity %> <%= outpatient_prescription_product.unity.name.pluralize(outpatient_prescription_product.request_quantity) %>

@@ -6,10 +6,10 @@ class AreasController < ApplicationController
   def index
     authorize Area
     @areas = Area.filter(params.slice(:name))
-      .order(created_at: :desc)
+      .order(name: :asc)
       .page(params[:page])
 
-    @parent_areas = Area.main
+    @parent_areas = Area.main.order(name: :asc)
     respond_to do |format|
       format.html
       format.js
