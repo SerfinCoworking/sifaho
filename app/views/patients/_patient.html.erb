@@ -12,8 +12,8 @@
     </td>
     <td><%= patient.age_string %></td>
     <td><%= patient.sex.humanize %></td>
-    <td><%= @patient.outpatient_prescriptions.count %></td>
-    <td><%= @patient.chronic_prescriptions.count %></td>
+    <td><%= patient.outpatient_prescriptions.count %></td>
+    <td><%= patient.chronic_prescriptions.count %></td>
     <td class="text-left actions-col">
       <% if policy(patient).show? %>
         <%= link_to patient_path(patient), class: 'btn btn-secondary btn-sm',
