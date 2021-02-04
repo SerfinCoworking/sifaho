@@ -9,7 +9,8 @@ class Patient < ApplicationRecord
   belongs_to :patient_type
   belongs_to :address, optional: true
   has_many :patient_phones, dependent: :destroy
-  has_many :prescriptions, -> { with_deleted }, dependent: :destroy
+  has_many :outpatient_prescriptions, dependent: :destroy
+  has_many :chronic_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar
   has_many :patient_phones, :dependent => :destroy
     accepts_nested_attributes_for :patient_phones, :allow_destroy => true

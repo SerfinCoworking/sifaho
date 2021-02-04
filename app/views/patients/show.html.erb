@@ -25,10 +25,17 @@
             </a>
           </li>
           <li class='nav-item'>
-            <a class="nav-link" data-toggle='<%= @patient.prescriptions.count > 0 ? 'tab' : '' %>' href='#prescriptions'>
+            <a class="nav-link" data-toggle='<%= @patient.outpatient_prescriptions.count > 0 ? 'tab' : '' %>' href='#outpatient_prescriptions'>
               <%= fa_icon "signature" %>
-              Recetas
-              <span class="badge badge-secondary"><%= @patient.prescriptions.count %></span>
+              Recetas ambulatorias
+              <span class="badge badge-secondary"><%= @patient.outpatient_prescriptions.count %></span>
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class="nav-link" data-toggle='<%= @patient.chronic_prescriptions.count > 0 ? 'tab' : '' %>' href='#chronic_prescriptions'>
+              <%= fa_icon "signature" %>
+              Recetas crónicas
+              <span class="badge badge-secondary"><%= @patient.chronic_prescriptions.count %></span>
             </a>
           </li>
         </ul>
@@ -95,31 +102,8 @@
               <% end %>
             </div>
           </div>
-          <div id='prescriptions' class='tab-pane container fade'>
+          <div id='outpatient_prescriptions' class='tab-pane container fade'>
             <br>
-            <h5 class="panel-title d-flex items-align-center justify-content-between">
-              <p>
-              <strong>Total </strong><%= @patient.prescriptions.count %>
-              </p>
-              <p>
-                Pendientes 
-                <span class="badge badge-secondary">
-                  <%= @patient.prescriptions.pendiente.count %>
-                </span>
-              </p>
-              <p>
-                Dispensadas parcial
-                <span class="badge badge-primary">
-                <%= @patient.prescriptions.dispensada_parcial.count %>
-                </span>
-              </p>
-              <p> 
-                Dispensadas 
-                <span class="badge badge-success">
-                  <%= @patient.prescriptions.dispensada.count %>
-                </span>
-              </p>
-            </h5>
             <div class="card">
               <table class="table table-hover table-sm">
                 <thead>
@@ -127,53 +111,116 @@
                     <th>Código</th>
                     <th>Médico</th>
                     <th>Estado</th>
-                    <th>Insumos</th>
-                    <th>
-                      Recetada
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                    </th>
-                    <th>
-                      Dispensada
-                      <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                    </th>
+                    <th>Productos</th>
+                    <th>Movimientos</th>
+                    <th>Recetada</th>
                     <th class="text-center"></th>
                   </tr>
                 </thead>
                 <tbody id=patients>
-                  <% @patient.prescriptions.each do |prescription| %>
-                    <tr id="prescription_<%= prescription.id %>">
-                      <td><%= prescription.remit_code %></th>
-                      <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
+                  <% @patient.outpatient_prescriptions.each do |outpatient_prescription| %>
+                    <tr id="outpatient_prescription_<%= outpatient_prescription.id %>">
+                      <td><%= outpatient_prescription.remit_code %></th>
+                      <td class="pres-col-pro"><%= outpatient_prescription.professional.full_name %></td>
                       <td>
-                        <span class="badge badge-<%= prescription_status_label(prescription) %>">
-                          <%= prescription.status.underscore.humanize %>
+                        <span class="badge badge-<%= outpatient_prescription_status_label(outpatient_prescription) %>">
+                          <%= outpatient_prescription.status.underscore.humanize %>
                         </span>
                       </td>
                       <td>
-                        <%= prescription.quantity_ord_supply_lots.count %>
+                        <%= outpatient_prescription.outpatient_prescription_products.count %>
                       </td>
                       <td>
-                        <% if prescription.prescribed_date.present? %>
-                          <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
+                        <%= outpatient_prescription.movements.count %>
+                      </td>
+                      <td>
+                        <% if outpatient_prescription.date_prescribed.present? %>
+                          <%= outpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
                         <% else %>
                           ------
                         <% end %>
+                      <td class="text-left actions-col">
+                        <%= render(
+                                partial: 'shared/action_buttons',
+                                locals:{ 
+                                    object: outpatient_prescription, 
+                                    show: true, 
+                                    edit: true, 
+                                    destroy: true,
+                                    delete_title: "Eliminar prescripción",
+                                    delete_body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.professional.full_name }?",
+                                    destroy_path: "/outpatient_prescriptions/#{outpatient_prescription.id}"
+                                }
+                            ) 
+                        %>
                       </td>
-                        <% if prescription.dispensada? %>
-                          <td>
-                          <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id='chronic_prescriptions' class='tab-pane container fade'>
+            <br>
+            <div class="card">
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Médico</th>
+                    <th>Estado</th>
+                    <th>Productos</th>
+                    <th>Movimientos</th>
+                    <th>Recetada</th>
+                    <th class="text-center"></th>
+                  </tr>
+                </thead>
+                <tbody id=patients>
+                  <% @patient.chronic_prescriptions.each do |chronic_prescription| %>
+                    <tr id="chronic_prescription_<%= chronic_prescription.id %>">
+                      <td><%= chronic_prescription.remit_code %></th>
+                      <td class="pres-col-pro"><%= chronic_prescription.professional.full_name %></td>
+                      <td>
+                        <span class="badge badge-<%= chronic_prescription_status_label(chronic_prescription) %>">
+                          <%= chronic_prescription.status.underscore.humanize %>
+                        </span>
+                      </td>
+                      <td>
+                        <%= chronic_prescription.original_chronic_prescription_products.count %>
+                      </td>
+                      <td>
+                        <%= chronic_prescription.movements.count %>
+                      </td>
+                      <td>
+                        <% if chronic_prescription.date_prescribed.present? %>
+                          <%= chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
                         <% else %>
-                          <td>
-                          ----
+                          ------
                         <% end %>
-                      </td>
-                      <td class="actions-col">
-                        <% if policy(prescription).show? %>
-                          <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm',
-                            title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
-                            <%= fa_icon "eye" %>
+                      <td class="text-left actions-col">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <% if policy(chronic_prescription).dispense_new? %>
+                            <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
+                              class: 'btn btn-sm btn-primary mr-1 ml-1',
+                              title: t("actions.tooltip.dispense"),
+                              data: { toggle: 'tooltip', placement: 'top'} do %> 
+                              <%= fa_icon "paper-plane"%>
+                            <% end %>
                           <% end %>
-                        <% end %>
+                          <%= render(
+                                  partial: 'shared/action_buttons',
+                                  locals:{ 
+                                      object: chronic_prescription, 
+                                      show: true, 
+                                      edit: true, 
+                                      destroy: true,
+                                      delete_title: "Eliminar prescripción",
+                                      delete_body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.full_name }?",
+                                      destroy_path: "/chronic_prescriptions/#{chronic_prescription.id}"
+                                  }
+                              ) 
+                          %>
+                        </div>
                       </td>
                     </tr>
                   <% end %>
