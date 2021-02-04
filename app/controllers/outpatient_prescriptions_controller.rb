@@ -8,9 +8,12 @@ class OutpatientPrescriptionsController < ApplicationController
     @filterrific = initialize_filterrific(
       OutpatientPrescription.with_establishment(current_user.establishment),
       params[:filterrific],
+      select_options: {
+        sorted_by: OutpatientPrescription.options_for_sorted_by
+      },
       persistence_id: false
     ) or return
-    @outpatient_prescriptions = @filterrific.find.page(params[:page]).per_page(15)
+    @outpatient_prescriptions = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /outpatient_prescriptions/1

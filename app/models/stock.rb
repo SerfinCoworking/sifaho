@@ -15,18 +15,8 @@ class Stock < ApplicationRecord
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
-  pg_search_scope :search_product_code,
-    :associated_against => { :product => :code },
-    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_product_name,
-    :associated_against => { :product => :name },
-    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
   filterrific(
-    default_filter_params: { sorted_by: 'nombre_desc'},
+    default_filter_params: { sorted_by: 'nombre_desc' },
     available_filters: [
       :search_product_code,
       :search_product_name,
@@ -36,14 +26,15 @@ class Stock < ApplicationRecord
     ]
   )
 
-  # To filter records by controller params
-  # Slice params "search_code, search_name, with_area_ids"
-  def self.filter(params, a_sector)
-    @stocks = self.to_sector(a_sector)
-    @stocks = params[:search_code].present? ? @stocks.search_product_code( params[:search_code] ) : @stocks
-    @stocks = params[:search_name].present? ? @stocks.search_product_name( params[:search_name] ) : @stocks
-    @stocks = params[:with_area_ids].present? ? @stocks.with_area_ids( params[:with_area_ids] ) : @stocks
-  end
+  pg_search_scope :search_product_code,
+    associated_against: { product: [:code] },
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_product_name,
+    :associated_against => { :product => :name },
+    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -51,22 +42,22 @@ class Stock < ApplicationRecord
     case sort_option.to_s
     when /^modificado_/s
       # Ordenamiento por fecha de creación en la BD
-      order("stocks.updated_at #{ direction }")
+      reorder("stocks.updated_at #{ direction }")
     when /^codigo_/
       # Ordenamiento por id de insumo
-      order("products.code #{ direction }").joins(:product)
+      reorder("products.code #{ direction }").joins(:product)
     when /^cantidad_/
       # Ordenamiento por la cantidad de stock
-      order("stocks.quantity #{ direction }")
+      reorder("stocks.quantity #{ direction }")
     when /^nombre_/
       # Ordenamiento por el nombre del producto
-      order("LOWER(products.name) #{ direction }").joins(:product)
+      reorder("products.name #{ direction }").joins(:product)
     when /^rubro_/
       # Ordenamiento por el rubro del producto
-      order("LOWER(areas.name) #{ direction }").joins(:product, :area)
+      reorder("areas.name #{ direction }").joins(:product, :area)
     when /^unidad_/
       # Ordenamiento por la unidad del prudcto
-      order("LOWER(unities.name) #{ direction }").joins(:product, :unity)
+      reorder("unities.name #{ direction }").joins(:product, :unity)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")

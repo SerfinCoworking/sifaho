@@ -10,7 +10,7 @@ class ChronicPrescriptionsController < ApplicationController
       params[:filterrific],
       persistence_id: false
     ) or return
-    @chronic_prescriptions = @filterrific.find.page(params[:page]).per_page(15)
+    @chronic_prescriptions = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /chronic_prescriptions/1

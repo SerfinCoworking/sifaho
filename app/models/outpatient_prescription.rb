@@ -64,27 +64,38 @@ class OutpatientPrescription < ApplicationRecord
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
-      order("outpatient_prescriptions.created_at #{ direction }")
+      reorder("outpatient_prescriptions.created_at #{ direction }")
     when /^profesional_/
       # Ordenamiento por nombre de droga
-      order("LOWER(professionals.first_name) #{ direction }").joins(:professional)
+      reorder("LOWER(professionals.first_name) #{ direction }").joins(:professional)
     when /^paciente_/
       # Ordenamiento por marca de medicamento
-      order("LOWER(patients.first_name) #{ direction }").joins(:patient)
+      reorder("LOWER(patients.first_name) #{ direction }").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("outpatient_prescriptions.status #{ direction }")
+      reorder("outpatient_prescriptions.status #{ direction }")
     when /^recetada_/
       # Ordenamiento por la fecha de recepción
-      order("outpatient_prescriptions.date_prescribed #{ direction }")
+      reorder("outpatient_prescriptions.date_prescribed #{ direction }")
     when /^recibida_/
       # Ordenamiento por la fecha de recepción
-      order("outpatient_prescriptions.date_received #{ direction }")
+      reorder("outpatient_prescriptions.date_received #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
+
+  def self.options_for_sorted_by
+    [
+      ["Código (a-z)", "codigo_desc"],
+      ["Código (z-a)", "codigo_asc"],
+      ["Creado (nueva primero)", "creado_desc"],
+      ["Creado (antigua primero)", "creado_asc"],
+      ["Cliente (a-z)", "cliente_asc"],
+      ["Cliente (z-a)", "cliente_desc"],
+    ]
+  end
 
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|

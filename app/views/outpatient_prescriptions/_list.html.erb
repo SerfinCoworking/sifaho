@@ -28,8 +28,26 @@
         </tbody>
       </table>
     </div>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-      <%= will_paginate @outpatient_prescription, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-4">
+        <%= will_paginate @outpatient_prescriptions, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-5 d-flex justify-content-around align-items-center">
+        <div>
+          Recetas <span class="badge badge-secondary"><%= @outpatient_prescriptions.count %></span>
+        </div>
+        <div>
+          Pendientes <span class="badge badge-secondary"><%= @outpatient_prescriptions.pendiente.count %></span>
+        </div>
+        <div>
+          Dispensadas <span class="badge badge-success"><%= @outpatient_prescriptions.dispensada.count %></span>
+        </div>
+      </div>
+      <div class="col-3 d-flex justify-content-end align-items-center">
+      </div>
     </div>
   </div>
 <% else %>

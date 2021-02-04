@@ -19,8 +19,6 @@ class StocksController < ApplicationController
       @areas = Area.all
       @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
     end
-
-    puts "Stock "+@stocks.count.to_s
     
     respond_to do |format|
       format.html
