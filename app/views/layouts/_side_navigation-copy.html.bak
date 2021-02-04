@@ -73,6 +73,15 @@
       <% end %>
     <% end %>
 
+    <% if policy(SectorSupplyLot).index? %>
+      <%= link_to main_app.group_by_supply_sector_supply_lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('sector_supply_lots')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "cubes" %>
+        </span>
+        <span class="ml-2 sb-title">Stock (Deprecated)</span>
+      <% end %>
+    <% end %>
+
     <% if policy(SupplyLot).index? %>
       <%= link_to main_app.supply_lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('supply_lots')}"  do %>
         <span class="sb-icon">
@@ -88,6 +97,15 @@
           <%= fa_icon "barcode" %>
         </span>
         <span class="ml-2 sb-title">Lotes (a migrar)</span>
+      <% end %>
+    <% end %>
+
+    <% if policy(Supply).index? %>
+      <%= link_to main_app.supplies_path, class: "list-group-item list-group-item-action list-custom #{active_class('supplies')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "pills" %>
+        </span>
+        <span class="ml-2 sb-title">Supplies (Deprecated)</span>
       <% end %>
     <% end %>
 
