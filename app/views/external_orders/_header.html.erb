@@ -37,21 +37,21 @@
 
   <% if policy(ExternalOrder).new_applicant? %>
     <li class="nav-item non-sel">
-      <%= link_to new_applicant_external_orders_path, class: "nav-link #{ active_action('new_applicant') }" do %>
+      <%= link_to new_applicant_external_orders_path, class: "nav-link #{ active_action_and_controller('new_applicant', 'external_orders') }" do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
     </li>
   <% end %>
 
-  <%# if policy(ExternalOrder).new_provider? %>
+  <% if policy(ExternalOrder).new_provider? %>
     <li class="nav-item non-sel">
-      <%= link_to new_provider_external_orders_path, class: "nav-link #{ active_action_and_controller('new', 'external_orders') }" do %>
+      <%= link_to new_provider_external_orders_path, class: "nav-link #{ active_action_and_controller('new_provider', 'external_orders') }" do %>
         <%= fa_icon "plus" %>
         Despachar
       <% end %>
     </li>
-  <%# end %>
+  <% end %>
 
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item non-sel" id="pedido">
