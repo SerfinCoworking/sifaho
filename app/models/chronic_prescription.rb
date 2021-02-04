@@ -38,28 +38,28 @@ class ChronicPrescription < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
+      :search_by_remit_code,
       :search_by_professional,
       :search_by_patient,
-      :search_by_product,
       :sorted_by,
       :date_prescribed_since,
     ]
   )
 
+  pg_search_scope :search_by_remit_code,
+    against: :remit_code,
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+
   pg_search_scope :search_by_professional,
-  :associated_against => { professional: [ :last_name, :first_name ] },
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { professional: [ :last_name, :first_name ] },
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_by_patient,
-  :associated_against => { patient: [ :last_name, :first_name, :dni ] },
-  :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_by_product,
-  :associated_against => { products: [ :id, :name ] },
-  :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-  :ignoring => :accents # Ignorar tildes.
+    :associated_against => { patient: [ :last_name, :first_name, :dni ] },
+    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -77,12 +77,9 @@ class ChronicPrescription < ApplicationRecord
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("chronic_prescriptions.status #{ direction }")
-    when /^insumos_solicitados_/
-      # Ordenamiento por nombre de insumo
-      order("supplies.name #{ direction }").joins(:supplies)
     when /^recetada_/
       # Ordenamiento por la fecha de recepción
-      order("chronic_prescriptions.prescribed_date #{ direction }")
+      order("chronic_prescriptions.date_prescribed #{ direction }")
     when /^recibida_/
       # Ordenamiento por la fecha de recepción
       order("chronic_prescriptions.date_received #{ direction }")
@@ -94,7 +91,7 @@ class ChronicPrescription < ApplicationRecord
   
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
-    where('chronic_prescriptions.prescribed_date >= ?', reference_time)
+    where('chronic_prescriptions.date_prescribed >= ?', reference_time)
   }
 
   scope :with_establishment, lambda { |a_establishment|

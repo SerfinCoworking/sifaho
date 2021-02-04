@@ -82,15 +82,6 @@
       <% end %>
     <% end %>
 
-    <% if policy(Lot).index? %>
-      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('lots')}" do %>
-        <span class="sb-icon">
-          <%= fa_icon "barcode" %>
-        </span>
-        <span class="ml-2 sb-title">Lotes (a migrar)</span>
-      <% end %>
-    <% end %>
-
     <% if policy(Product).index? %>
       <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom #{active_class('products')}" do %>
         <span class="sb-icon">

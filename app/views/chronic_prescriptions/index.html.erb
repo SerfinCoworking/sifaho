@@ -6,6 +6,16 @@
       <%= form_for_filterrific @filterrific do |f| %>
         <div class="row justify-content-between">
           <div class="col-2">
+            <label>Código</label>
+            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+            <%= f.text_field(
+              :search_by_remit_code,
+              class: 'filterrific-periodically-observed form-control input-sm',
+              placeholder: 'Un código',
+              autocomplete: 'off',
+            ) %>
+          </div>
+          <div class="col-2">
             <label>Profesional</label>
             <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
             <%= f.text_field(
@@ -23,14 +33,6 @@
               class: 'filterrific-periodically-observed form-control input-sm',
               placeholder: 'Nombre/Apellido/DNI',
               autocomplete: 'off',
-            ) %>
-          </div>
-          <div class="col-2">
-            <label>Insumo</label>
-            <%= f.text_field(
-              :search_by_product,
-              class: 'filterrific-periodically-observed form-control input-sm',
-              placeholder: 'Código o nombre'
             ) %>
           </div>
           <div class="col-2">

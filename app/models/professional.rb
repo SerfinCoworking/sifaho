@@ -6,7 +6,8 @@ class Professional < ApplicationRecord
   after_create :assign_full_name
 
   # Relaciones
-  has_many :prescriptions
+  has_many :outpatient_prescriptions
+  has_many :chronic_prescriptions
   belongs_to :professional_type, optional: true
   has_one :user
   has_one_attached :avatar
