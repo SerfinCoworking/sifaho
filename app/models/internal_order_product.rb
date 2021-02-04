@@ -53,7 +53,7 @@ class InternalOrderProduct < ApplicationRecord
   def decrement_stock
     self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.decrement(iopls.quantity)
-      iopls.lot_stock.stock.create_stock_movement(self.internal_order.provider_sector, self.internal_order, iopls.lot_stock, iopls.quantity, false)
+      iopls.lot_stock.stock.create_stock_movement(self.internal_order, iopls.lot_stock, iopls.quantity, false)
     end
   end
 
@@ -61,7 +61,7 @@ class InternalOrderProduct < ApplicationRecord
   def increment_stock
     self.order_prod_lot_stocks.each do |iopls|
       iopls.lot_stock.increment(iopls.quantity)
-      iopls.lot_stock.stock.create_stock_movement(self.internal_order.provider_sector, self.internal_order, iopls.lot_stock, iopls.quantity, true)
+      iopls.lot_stock.stock.create_stock_movement(self.internal_order, iopls.lot_stock, iopls.quantity, true)
     end
   end
 
@@ -82,7 +82,7 @@ class InternalOrderProduct < ApplicationRecord
 
       @lot_stock.increment(iopls.quantity)
 
-      @stock.create_stock_movement(a_sector, self.internal_order, @lot_stock, iopls.quantity, true)
+      @stock.create_stock_movement(self.internal_order, @lot_stock, iopls.quantity, true)
     end
   end
 
