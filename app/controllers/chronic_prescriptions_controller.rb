@@ -8,6 +8,9 @@ class ChronicPrescriptionsController < ApplicationController
     @filterrific = initialize_filterrific(
       ChronicPrescription.with_establishment(current_user.establishment),
       params[:filterrific],
+      select_options: {
+        sorted_by: ChronicPrescription.options_for_sorted_by
+      },
       persistence_id: false
     ) or return
     @chronic_prescriptions = @filterrific.find.paginate(page: params[:page], per_page: 15)

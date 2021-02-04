@@ -68,27 +68,51 @@ class ChronicPrescription < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("chronic_prescriptions.created_at #{ direction }")
-    when /^profesional_/
+    when /^medico_/
       # Ordenamiento por nombre de droga
-      order("LOWER(professionals.first_name) #{ direction }").joins(:professional)
+      order("professionals.last_name #{ direction }").joins(:professional)
     when /^paciente_/
       # Ordenamiento por marca de medicamento
-      order("LOWER(patients.first_name) #{ direction }").joins(:patient)
+      order("patients.last_name #{ direction }").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
       order("chronic_prescriptions.status #{ direction }")
+    when /^productos_/
+      left_joins(:original_chronic_prescription_products)
+      .group(:id)
+      .reorder("COUNT(original_chronic_prescription_products.id) #{ direction }")
+    when /^movimientos_/
+      left_joins(:movements)
+      .group(:id)
+      .reorder("COUNT(chronic_prescription_movements.id) #{ direction }")
     when /^recetada_/
       # Ordenamiento por la fecha de recepción
       order("chronic_prescriptions.date_prescribed #{ direction }")
-    when /^recibida_/
-      # Ordenamiento por la fecha de recepción
-      order("chronic_prescriptions.date_received #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
-  
+
+  # Método para establecer las opciones del select sorted_by
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
+  def self.options_for_sorted_by
+    [
+      ['Creación (nueva primero)', 'created_at_desc'],
+      ['Creación (antigua primero)', 'created_at_asc'],
+      ['Medico (a-z)', 'medico_asc'],
+      ['Medico (z-a)', 'medico_desc'],
+      ['Paciente (a-z)', 'paciente_asc'],
+      ['Estado (a-z)', 'estado_asc'],
+      ['Productos (mayor primero)', 'productos_desc'],
+      ['Productos (menor primero)', 'productos_asc'],
+      ['Movimientos (mayor primero)', 'movimientos_desc'],
+      ['Movimientos (menor primero)', 'movimientos_asc'],
+      ['Fecha recetada (nueva primero)', 'recetada_asc'],
+      ['Fecha recetada (antigua primero)', 'recetada_desc'],
+    ]
+  end
+
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
     where('chronic_prescriptions.date_prescribed >= ?', reference_time)

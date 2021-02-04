@@ -59,8 +59,8 @@ class OutpatientPrescriptionsController < ApplicationController
 
     respond_to do |format|
         # Si se entrega la receta
+      @outpatient_prescription.save!
       begin
-        @outpatient_prescription.save!
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
 
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado correctamente."

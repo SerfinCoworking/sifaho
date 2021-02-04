@@ -30,7 +30,7 @@ class OutpatientPrescription < ApplicationRecord
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
   filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
+    default_filter_params: { sorted_by: 'creado_desc' },
     available_filters: [
       :search_by_remit_code,
       :search_by_professional,
@@ -65,35 +65,43 @@ class OutpatientPrescription < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       reorder("outpatient_prescriptions.created_at #{ direction }")
-    when /^profesional_/
+    when /^medico_/
       # Ordenamiento por nombre de droga
-      reorder("LOWER(professionals.first_name) #{ direction }").joins(:professional)
+      reorder("LOWER(professionals.last_name) #{ direction }").joins(:professional)
     when /^paciente_/
       # Ordenamiento por marca de medicamento
-      reorder("LOWER(patients.first_name) #{ direction }").joins(:patient)
+      reorder("LOWER(patients.last_name) #{ direction }").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
       reorder("outpatient_prescriptions.status #{ direction }")
     when /^recetada_/
       # Ordenamiento por la fecha de recepción
       reorder("outpatient_prescriptions.date_prescribed #{ direction }")
-    when /^recibida_/
+    when /^creado_/
       # Ordenamiento por la fecha de recepción
-      reorder("outpatient_prescriptions.date_received #{ direction }")
+      reorder("outpatient_prescriptions.created_at #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
 
+  # Método para establecer las opciones del select sorted_by
+  # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
-      ["Código (a-z)", "codigo_desc"],
-      ["Código (z-a)", "codigo_asc"],
-      ["Creado (nueva primero)", "creado_desc"],
-      ["Creado (antigua primero)", "creado_asc"],
-      ["Cliente (a-z)", "cliente_asc"],
-      ["Cliente (z-a)", "cliente_desc"],
+      ['Creación (nueva primero)', 'created_at_desc'],
+      ['Creación (antigua primero)', 'created_at_asc'],
+      ['Medico (a-z)', 'medico_asc'],
+      ['Medico (z-a)', 'medico_desc'],
+      ['Paciente (a-z)', 'paciente_asc'],
+      ['Estado (a-z)', 'estado_asc'],
+      ['Productos (mayor primero)', 'productos_desc'],
+      ['Productos (menor primero)', 'productos_asc'],
+      ['Movimientos (mayor primero)', 'movimientos_desc'],
+      ['Movimientos (menor primero)', 'movimientos_asc'],
+      ['Fecha recetada (nueva primero)', 'recetada_asc'],
+      ['Fecha recetada (antigua primero)', 'recetada_desc'],
     ]
   end
 
@@ -206,22 +214,6 @@ class OutpatientPrescription < ApplicationRecord
 
   def self.current_month
     where("prescribed_date >= :month", { month: DateTime.now.beginning_of_month })
-  end
-
-  # Método para establecer las opciones del select sorted_by
-  # Es llamado por el controlador como parte de `initialize_filterrific`.
-  def self.options_for_sorted_by
-    [
-      ['Creación', 'created_at_asc'],
-      ['Doctor (a-z)', 'doctor_asc'],
-      ['Paciente (a-z)', 'paciente_asc'],
-      ['Estado (a-z)', 'estado_asc'],
-      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
-      ['Fecha recetada (desc)', 'recetada_desc'],
-      ['Fecha recibida (desc)', 'recibida_desc'],
-      ['Fecha dispensada (asc)', 'dispensada_asc'],
-      ['Cantidad', 'cantidad_asc']
-    ]
   end
 
   def create_notification(of_user, action_type)

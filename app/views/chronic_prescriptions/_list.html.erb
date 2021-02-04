@@ -5,22 +5,13 @@
         <thead>
           <tr>
             <th>Código</th>
-            <th><%= filterrific_sorting_link(@filterrific, :profesional) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :medico) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-              <%= filterrific_sorting_link(@filterrific, :ins) %>
-            </th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
-              <%= filterrific_sorting_link(@filterrific, :mov) %>
-            </th>
-            <th>
-              <%= filterrific_sorting_link(@filterrific, :recetada) %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-            </th>
-            <th class="text-center">Acciones <%= @chronic_prescriptions.count%></th>
+            <th><%= filterrific_sorting_link(@filterrific, :productos) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :movimientos) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :recetada) %></th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody id="chronic_prescriptions">
@@ -28,8 +19,29 @@
         </tbody>
       </table>
     </div>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-      <%= will_paginate @outpatient_prescription, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-5">
+        <%= will_paginate @chronic_prescriptions, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-5 d-flex justify-content-around align-items-center">
+        <div>
+          Recetas <span class="badge badge-secondary"><%= @chronic_prescriptions.count %></span>
+        </div>
+        <div>
+          Pendientes <span class="badge badge-secondary"><%= @chronic_prescriptions.pendiente.count %></span>
+        </div>
+        <div>
+          Dispensadas parcial <span class="badge badge-primary"><%= @chronic_prescriptions.dispensada_parcial.count %></span>
+        </div>
+        <div>
+          Dispensadas <span class="badge badge-success"><%= @chronic_prescriptions.dispensada_parcial.count %></span>
+        </div>
+      </div>
+      <div class="col-2 d-flex justify-content-end align-items-center">
+      </div>
     </div>
   </div>
 <% else %>
