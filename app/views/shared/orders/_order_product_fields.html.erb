@@ -82,7 +82,6 @@
       } %>
   </td>
     
-  <% if policy(f.object.get_order).show_applicant_fields? %>
     <!-- Cantidad solicitada -->
     <td style="width: 100px">
       <%= f.input :request_quantity, 
@@ -96,11 +95,13 @@
           "data-placement"=>"right",
           min: '1', 
           step:'any',
-          :style => 'width: 100px'
+          :style => 'width: 100px',
+          value: f.object.request_quantity.present? ?  f.object.request_quantity : 0
         }
       %>
     </td>
 
+    <% if policy(f.object.get_order).show_applicant_fields? %>
     <!-- Observaciones proveedor -->
     <td>
       <%= f.input :applicant_observation, label: false, as: :text,
@@ -108,10 +109,9 @@
     </td>
 
   <% else %>
-
     <!-- Cantidad solicitada -->
-    <td style="width: 100px">
-      <%= f.input :request_quantity_fake,
+    <!--td style="width: 100px"-->
+      <%#= f.input :request_quantity_fake,
         disabled: true,
         label: false, 
         placeholder: 'Cant', 
@@ -127,8 +127,8 @@
           value: "#{ f.object.request_quantity.present? ? f.object.request_quantity : 0 }"
         }
       %>
-      <%= f.hidden_field :request_quantity, :class => "request-quantity" %>
-    </td>
+      <%#= f.hidden_field :request_quantity, :class => "request-quantity" %>
+    <!--/td-->
 
     <!-- Cantidad entregada -->
     <td>
@@ -139,6 +139,7 @@
           :title=>"Cantidad entregada",
           "data-placement"=>"right",
           min: '0', step:'any', :style => 'width: 100px',
+          value: f.object.delivery_quantity.present? ?  f.object.delivery_quantity : 0
         } 
       %>
 
