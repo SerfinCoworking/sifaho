@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
   
-  if(!(_PAGE.controller === 'external_orders' && (['new_applicant', 'edit_applicant', 'new_provider', 'edit_provider', 'accept_provider'].includes(_PAGE.action))) ) return false;
+  if(!(_PAGE.controller === 'external_orders' && (['new_applicant', 'edit_applicant', 'new_provider', 'edit_provider', 'accept_provider', 'create_applicant', 'update_applicant', 'create_provider', 'update_provider'].includes(_PAGE.action))) ) return false;
   $('#effector-establishment').autocomplete({
     source: $('#effector-establishment').data('autocomplete-source'),
     minLength: 2,

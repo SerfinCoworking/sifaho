@@ -185,7 +185,7 @@ class Purchase < ApplicationRecord
   private
 
   def record_remit_code
-    self.remit_code = Date.today.strftime("%d%m%Y")+'C'+Purchase.maximum(:id).to_i.next.to_s
+    self.remit_code = "AB"+DateTime.now.to_s(:number)
   end
 
   def presence_of_products_into_the_order

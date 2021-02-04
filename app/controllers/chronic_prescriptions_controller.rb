@@ -52,7 +52,7 @@ class ChronicPrescriptionsController < ApplicationController
     authorize @chronic_prescription
     @chronic_prescription.provider_sector = current_user.sector
     @chronic_prescription.establishment = current_user.sector.establishment
-    @chronic_prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+ChronicPrescription.maximum(:id).to_i.next.to_s
+    @chronic_prescription.remit_code = "CR"+DateTime.now.to_s(:number)
     @chronic_prescription.status = 'pendiente'
 
     respond_to do |format|

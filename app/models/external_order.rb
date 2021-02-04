@@ -345,11 +345,12 @@ class ExternalOrder < ApplicationRecord
   private
 
   def record_remit_code
-    if self.provision?
-      self.remit_code = self.provider_sector.name[0..3].upcase+'des'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    elsif self.solicitud?
-      self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
-    end
+    self.remit_code = "ES"+DateTime.now.to_s(:number)
+    # if self.provision?
+    #   self.remit_code = self.provider_sector.name[0..3].upcase+'des'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+    # elsif self.solicitud?
+    #   self.remit_code = self.applicant_sector.name[0..3].upcase+'sla'+ExternalOrder.with_deleted.maximum(:id).to_i.next.to_s
+    # end
   end
 
   def presence_of_products_into_the_order

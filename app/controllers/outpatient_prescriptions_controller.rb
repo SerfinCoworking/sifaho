@@ -52,15 +52,15 @@ class OutpatientPrescriptionsController < ApplicationController
     authorize @outpatient_prescription
     @outpatient_prescription.provider_sector = current_user.sector
     @outpatient_prescription.establishment = current_user.sector.establishment
-    @outpatient_prescription.remit_code = current_user.sector.name[0..3].upcase+'pres'+OutpatientPrescription.maximum(:id).to_i.next.to_s
+    @outpatient_prescription.remit_code = "AM"+DateTime.now.to_s(:number)
     
     @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
 
     respond_to do |format|
-        # Si se entrega la receta
-        @outpatient_prescription.save!
+      # Si se entrega la receta
       begin
+        @outpatient_prescription.save!
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
 
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado correctamente."

@@ -317,11 +317,12 @@ class InternalOrder < ApplicationRecord
   private
 
   def record_remit_code
-    if self.provision?
-      self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
-    elsif self.solicitud?
-      self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
-    end
+    self.remit_code = "SE"+DateTime.now.to_s(:number)
+    # if self.provision?
+    #   self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
+    # elsif self.solicitud?
+    #   self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
+    # end
   end
 
   # set created notification and create stock accordding with the internal order status

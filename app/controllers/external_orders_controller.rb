@@ -118,8 +118,8 @@ class ExternalOrdersController < ApplicationController
     @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
 
     respond_to do |format|
+      @external_order.save!
       begin
-        @external_order.save!
         message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
         notification_type = sending? ? "creó y envió" : "creó y auditó"
 

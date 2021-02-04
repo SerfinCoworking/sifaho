@@ -37,7 +37,7 @@ class ReceiptsController < ApplicationController
     respond_to do |format|
       @receipt.applicant_sector = current_user.sector
       @receipt.created_by = current_user
-      @receipt.code = @receipt.applicant_sector.name[0..3].upcase+'rec'+Receipt.maximum(:id).to_i.next.to_s
+      @receipt.code = "RE"+DateTime.now.to_s(:number)
       
       begin
         @receipt.auditoria! #default status
