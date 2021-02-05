@@ -28,7 +28,7 @@
     </div>
     <div class="col">
       <label>Rubros</label>
-      <%= f.select :by_areas, 
+      <%= f.select :with_area_ids, 
         options_for_select(
           @areas.collect {|cs| [cs.name, cs.id]},
           selected: params[:filterrific].present? ? params[:filterrific][:by_establishment] : "",
@@ -42,6 +42,7 @@
         }
       %>
     </div>
+
     <div class="col">
       <label>Ordenar por</label>
       <div class="input-group">
@@ -52,5 +53,6 @@
           { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
       </div>
     </div>
+
   </div>
 <% end %>
