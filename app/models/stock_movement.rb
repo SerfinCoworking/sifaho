@@ -58,9 +58,11 @@ class StockMovement < ApplicationRecord
     ]
   end
 
-  scope :since_date, lambda { |a_date| where('stock_movements.created_at >= ?', a_date.beginning_of_day) }
+  scope :since_date, lambda { 
+    |a_date| where('stock_movements.created_at >= ?', DateTime.strptime(a_date, '%d/%m/%Y').beginning_of_day) 
+  }
 
-  scope :to_date, lambda { |a_date| where('stock_movements.created_at <= ?', a_date.end_of_day) }
+  scope :to_date, lambda { |a_date| where('stock_movements.created_at <= ?', DateTime.strptime(a_date, '%d/%m/%Y').end_of_day) }
 
   scope :to_stock_id, lambda { |an_id| where(stock_id: an_id) }
 end
