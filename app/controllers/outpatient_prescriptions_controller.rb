@@ -89,10 +89,10 @@ class OutpatientPrescriptionsController < ApplicationController
 
     respond_to do |format|
       begin
+        @outpatient_prescription.update!(outpatient_prescription_params)
 
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
        
-        @outpatient_prescription.update!(outpatient_prescription_params)
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado correctamente."
         notification_type = dispensing? ? "auditó y dispensó" : "auditó"
 
