@@ -6,10 +6,14 @@
   <td><%= stock.product_area_name %></td>
   <td class="text-left actions-col">
     <% if policy(stock).show? %>
-      <%= link_to stock_path(stock), class: 'btn btn-secondary btn-sm',
+      <%= link_to stock_path(stock), class: 'btn btn-light btn-sm',
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "eye" %>
       <% end %>
+    <% end %>
+    <%= link_to stock_movements_path(id: stock.id), class: 'btn btn-secondary btn-sm',
+      title: 'Ver movimientos', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= fa_icon "exchange-alt" %>
     <% end %>
   </td>
 </tr>
