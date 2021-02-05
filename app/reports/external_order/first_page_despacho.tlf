@@ -7,15 +7,15 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 94.7,
+      "y": 90,
       "width": 555.2,
-      "height": 727.1,
+      "height": 744.6,
       "header": {
         "enabled": true,
-        "height": 18.5,
+        "height": 15.7,
         "translate": {
           "x": -12,
-          "y": -32.3
+          "y": -37
         },
         "items": [
           {
@@ -40,7 +40,7 @@
             "description": "",
             "x": 57.2,
             "y": 127,
-            "width": 35.2,
+            "width": 255.3,
             "height": 12,
             "style": {
               "font-family": [
@@ -64,10 +64,10 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 279,
-            "y": 127,
-            "width": 48.5,
-            "height": 11,
+            "x": 461.8,
+            "y": 129.2,
+            "width": 90.7,
+            "height": 11.4,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -90,9 +90,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 221,
-            "y": 127,
-            "width": 45.8,
+            "x": 371.7,
+            "y": 131.7,
+            "width": 89.4,
             "height": 11,
             "style": {
               "font-family": [
@@ -142,9 +142,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 337,
-            "y": 127,
-            "width": 21.9,
+            "x": 551.8,
+            "y": 129.8,
+            "width": 35.4,
             "height": 11,
             "style": {
               "font-family": [
@@ -168,35 +168,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 385,
-            "y": 127,
-            "width": 53,
-            "height": 12,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 10,
-              "color": "#000000",
-              "text-align": "center",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": []
-            },
-            "texts": [
-              "Laboratorio"
-            ]
-          },
-          {
-            "id": "",
-            "type": "text",
-            "display": true,
-            "description": "",
-            "x": 454,
-            "y": 127,
-            "width": 24.2,
+            "x": 311.7,
+            "y": 129.1,
+            "width": 59.6,
             "height": 11,
             "style": {
               "font-family": [
@@ -212,53 +186,27 @@
               "font-style": []
             },
             "texts": [
-              "Venc"
-            ]
-          },
-          {
-            "id": "",
-            "type": "text",
-            "display": true,
-            "description": "",
-            "x": 483.9,
-            "y": 127,
-            "width": 68.6,
-            "height": 12,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 10,
-              "color": "#000000",
-              "text-align": "center",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": []
-            },
-            "texts": [
-              "Observaciones"
+              "Unidad"
             ]
           }
         ]
       },
       "detail": {
-        "height": 23.6,
+        "height": 22.2,
         "translate": {
           "x": -12,
-          "y": -76.8
+          "y": -84.3
         },
         "items": [
           {
-            "id": "supply_code",
+            "id": "requested_quantity",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 32,
+            "x": 372.5,
             "y": 190,
-            "width": 28.3,
-            "height": 10.4,
+            "width": 89.2,
+            "height": 22.1,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -266,7 +214,7 @@
               "font-size": 9,
               "color": "#000000",
               "text-align": "left",
-              "vertical-align": "top",
+              "vertical-align": "middle",
               "line-height": "",
               "line-height-ratio": "",
               "letter-spacing": "",
@@ -276,20 +224,20 @@
             },
             "reference-id": "",
             "value": "",
-            "multiple-line": false,
+            "multiple-line": true,
             "format": {
               "base": "",
               "type": ""
             }
           },
           {
-            "id": "supply_name",
+            "id": "product_name",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 57.2,
+            "x": 60.3,
             "y": 190,
-            "width": 161.3,
+            "width": 251.4,
             "height": 22.1,
             "style": {
               "font-family": [
@@ -298,7 +246,7 @@
               "font-size": 9,
               "color": "#000000",
               "text-align": "left",
-              "vertical-align": "top",
+              "vertical-align": "middle",
               "line-height": 10.03125,
               "line-height-ratio": 1,
               "letter-spacing": "",
@@ -315,45 +263,13 @@
             }
           },
           {
-            "id": "requested_quantity",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 221,
-            "y": 190,
-            "width": 56.9,
-            "height": 22.1,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "truncate",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
             "id": "delivered_quantity",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 279,
-            "y": 190,
-            "width": 56.9,
+            "x": 463.2,
+            "y": 190.1,
+            "width": 88.4,
             "height": 22.1,
             "style": {
               "font-family": [
@@ -362,7 +278,7 @@
               "font-size": 9,
               "color": "#000000",
               "text-align": "left",
-              "vertical-align": "top",
+              "vertical-align": "middle",
               "line-height": "",
               "line-height-ratio": "",
               "letter-spacing": "",
@@ -379,13 +295,13 @@
             }
           },
           {
-            "id": "lot",
+            "id": "lot_quantity",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 337,
+            "x": 552.5,
             "y": 190,
-            "width": 46,
+            "width": 34.7,
             "height": 22.1,
             "style": {
               "font-family": [
@@ -394,103 +310,7 @@
               "font-size": 9,
               "color": "#000000",
               "text-align": "left",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "laboratory",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 385,
-            "y": 190,
-            "width": 67.8,
-            "height": 22.1,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "expiry_date",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 454,
-            "y": 190,
-            "width": 29.1,
-            "height": 10.4,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "center",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "truncate",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": false,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "applicant_obs",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 483.9,
-            "y": 190,
-            "width": 103.3,
-            "height": 22.1,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "center",
-              "vertical-align": "top",
+              "vertical-align": "middle",
               "line-height": "",
               "line-height-ratio": "",
               "letter-spacing": "",
@@ -520,6 +340,70 @@
             "y1": 211.8,
             "x2": 587.2,
             "y2": 211.8
+          },
+          {
+            "id": "product_unity",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 311.7,
+            "y": 190.1,
+            "width": 61.2,
+            "height": 22.1,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "truncate",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          },
+          {
+            "id": "product_code",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 32,
+            "y": 190.1,
+            "width": 27.6,
+            "height": 22.1,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
           }
         ]
       },
@@ -528,7 +412,7 @@
         "height": 22.6,
         "translate": {
           "x": -12,
-          "y": -116.2
+          "y": -125.1
         },
         "items": [
           {
@@ -813,11 +697,11 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -140.9
+          "y": -149.8
         },
         "items": []
       },
-      "content-height": 708.6,
+      "content-height": 728.9,
       "auto-page-break": true
     },
     {

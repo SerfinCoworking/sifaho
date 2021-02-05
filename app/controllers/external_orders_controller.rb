@@ -344,7 +344,7 @@ class ExternalOrdersController < ApplicationController
     report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), :default => true
     report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), id: :other_page
     
-    external_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
+    external_order.external_order_products.joins(:product).order("name").each do |eop|
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page layout: :other_page do |page|
         end
@@ -352,21 +352,22 @@ class ExternalOrdersController < ApplicationController
       
       report.list do |list|
         list.add_row do |row|
-          row.values  supply_code: qosl.supply_id,
-                      supply_name: qosl.supply.name,
-                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                      lot: qosl.sector_supply_lot_lot_code,
-                      laboratory: qosl.sector_supply_lot_laboratory_name,
-                      expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: qosl.provider_observation
+          row.values  product_code: eop.product.code,
+                      product_name: eop.product.name,
+                      product_unity: eop.product.unity.name,
+                      requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
+                      delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
+                      lot_quantity: eop.order_prod_lot_stocks.count
+                     
         end
-
+        # laboratory: eop.sector_supply_lot_laboratory_name,
+        # expiry_date: eop.sector_supply_lot_expiry_date, 
+        # applicant_obs: eop.provider_observation   
         report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(external_order.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(external_order.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(external_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          footer.item(:total_obs).value(external_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
+          footer.item(:total_supplies).value(external_order.external_order_products.count)
+          footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
+          footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
+          footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
         end
       end
       
@@ -449,3 +450,5 @@ class ExternalOrdersController < ApplicationController
       return params[:commit] == "sending"
     end
 end
+
+
