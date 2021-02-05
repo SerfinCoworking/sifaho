@@ -36,7 +36,7 @@ class ChronicPrescription < ApplicationRecord
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
   filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
+    default_filter_params: { sorted_by: 'updated_at_desc' },
     available_filters: [
       :search_by_remit_code,
       :search_by_professional,
@@ -65,6 +65,9 @@ class ChronicPrescription < ApplicationRecord
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
+    when /^updated_at_/s
+      # Ordenamiento por fecha de modificación en la BD
+      order("chronic_prescriptions.updated_at #{ direction }")
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("chronic_prescriptions.created_at #{ direction }")
@@ -98,6 +101,8 @@ class ChronicPrescription < ApplicationRecord
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
+      ['Modificación (nueva primero)', 'updated_at_desc'],
+      ['Modificación (antigua primero)', 'updated_at_asc'],
       ['Creación (nueva primero)', 'created_at_desc'],
       ['Creación (antigua primero)', 'created_at_asc'],
       ['Medico (a-z)', 'medico_asc'],

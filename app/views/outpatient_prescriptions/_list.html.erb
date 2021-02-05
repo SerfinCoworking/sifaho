@@ -20,7 +20,7 @@
       </table>
     </div>
     <div class="row d-flex align-items-center" style="height: 50px">
-      <div class="col-4">
+      <div class="col-5">
         <%= will_paginate @outpatient_prescriptions, list_classes: %w(pagination mb-0), 
           previous_label: '<i class="fa fa-angle-left"></i>',
           next_label: '<i class="fa fa-angle-right"></i>', 
@@ -37,7 +37,7 @@
           Dispensadas <span class="badge badge-success"><%= @outpatient_prescriptions.dispensada.count %></span>
         </div>
       </div>
-      <div class="col-3 d-flex justify-content-end align-items-center">
+      <div class="col-2 d-flex justify-content-end align-items-center">
       </div>
     </div>
   </div>
