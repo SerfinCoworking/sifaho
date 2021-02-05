@@ -47,15 +47,15 @@ $('[data-toggle="tooltip"]').tooltip({
 
 
 
-// $('#filterrific_filter').on(
-//   "change",
-//   ":input",
-//   function (e) {
-//     e.stopImmediatePropagation();
-//     $(this).off("blur");
-//     Filterrific.submitFilterForm;
-//   }
-// );
+$('#filterrific_filter').on(
+  "change",
+  ":input",
+  function (e) {
+    e.stopImmediatePropagation();
+    $(this).off("blur");
+    Filterrific.submitFilterForm;
+  }
+);
 
 $(document).on('turbolinks:load', function() {
 
@@ -65,15 +65,15 @@ $(document).on('turbolinks:load', function() {
     });
   });
 
-  // $('#filterrific_filter').on(
-  //   "change",
-  //   ":input",
-  //   function (e) {
-  //   e.stopImmediatePropagation();
-  //   $(this).off("blur");
-  //   Filterrific.submitFilterForm;
-  //   }
-  // );
+  $('#filterrific_filter').on(
+    "change",
+    ":input",
+    function (e) {
+    e.stopImmediatePropagation();
+    $(this).off("blur");
+    Filterrific.submitFilterForm;
+    }
+  );
 
   $('.since-date, .to-date, .requested-date, .prescribed-date, .datetimepicker').datepicker({
     closeText: 'Cerrar',
