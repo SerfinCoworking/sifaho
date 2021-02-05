@@ -15,27 +15,26 @@ class Stock < ApplicationRecord
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
+  pg_search_scope :search_product_code,
+    :associated_against => { product: [:code] },
+    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+
+  pg_search_scope :search_product_name,
+    :associated_against => { product: [:name] },
+    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
+    :ignoring => :accents # Ignorar tildes.
+
   filterrific(
     default_filter_params: { sorted_by: 'nombre_desc' },
     available_filters: [
       :search_product_code,
       :search_product_name,
       :with_area_ids,
-      :by_areas,
       :sorted_by,
     ]
   )
-
-  pg_search_scope :search_product_code,
-    associated_against: { product: [:code] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_product_name,
-    :associated_against => { :product => :name },
-    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
+  
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
@@ -71,6 +70,9 @@ class Stock < ApplicationRecord
   scope :by_product_code, lambda { |product_code|
     joins(:product).where('products.code': product_code)
   }
+  
+  scope :with_area_ids, ->(area_ids) { joins(:product).where('products.area_id': area_ids) }
+  
   
   scope :with_available_quantity, lambda {
     joins(:lot_stocks).where("lot_stocks.quantity > ?", 0) 
