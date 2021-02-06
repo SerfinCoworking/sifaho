@@ -345,10 +345,18 @@ class ExternalOrdersController < ApplicationController
     report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), id: :other_page
     
     external_order.external_order_products.joins(:product).order("name").each do |eop|
+      
       if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page do |page|
-        end
+        report.start_new_page layout: :other_page
       end
+      
+      report.list.on_footer_insert do |footer|
+        footer.item(:total_products).value(external_order.external_order_products.count)
+        footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
+        footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
+        footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+      end
+
       
       report.list do |list|
         list.add_row do |row|
@@ -358,20 +366,46 @@ class ExternalOrdersController < ApplicationController
                       requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
                       delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
                       lot_quantity: eop.order_prod_lot_stocks.count
-                     
+          
+          row.item(:lot_indicator).hide
         end
-        # laboratory: eop.sector_supply_lot_laboratory_name,
-        # expiry_date: eop.sector_supply_lot_expiry_date, 
-        # applicant_obs: eop.provider_observation   
-        report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(external_order.external_order_products.count)
-          footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
-          footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
-          footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+        
+        if eop.order_prod_lot_stocks.count > 0
+          list.add_row do |row|
+            row.values  lot_code_title: "Lote Cód",
+                lot_q_title: "Cantidad",
+                lot_name_title: "Laboratorio",
+                expiry_date_title: "Vencimiento"
+
+                # if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
+                  row.item(:lot_border).show
+                  row.item(:border).hide
+                # end
+              end
+        
+
+          eop.order_prod_lot_stocks.each_with_index do |opls, index|
+            list.add_row do |row|
+              row.values  lot_code: opls.lot_stock.lot.code,
+                  lot_q: opls.lot_stock.quantity,
+                  lot_name: opls.lot_stock.lot.laboratory.name,
+                  expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'
+
+                  if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
+                    row.item(:border).hide
+                  end
+                end
+              
+          end
         end
+         
+       
       end
       
       if report.page_count == 1
+        report.page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+        report.page[:remit_code] = external_order.remit_code
+        report.page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
         report.page[:applicant_sector] = external_order.applicant_sector.name
         report.page[:applicant_establishment] = external_order.applicant_establishment.name
         report.page[:provider_sector] = external_order.provider_sector.name
@@ -382,9 +416,9 @@ class ExternalOrdersController < ApplicationController
     
 
     report.pages.each do |page|
-      page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
-      page[:remit_code] = external_order.remit_code
-      page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
+      # page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+      # page[:remit_code] = external_order.remit_code
+      # page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
       page[:page_count] = report.page_count
       page[:sector] = current_user.sector_name
       page[:establishment] = current_user.establishment_name
