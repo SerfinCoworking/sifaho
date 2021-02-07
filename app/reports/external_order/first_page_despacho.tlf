@@ -38,7 +38,7 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 459,
+            "x": 377,
             "y": 127,
             "width": 90,
             "height": 11,
@@ -64,7 +64,7 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 369,
+            "x": 287,
             "y": 127,
             "width": 90,
             "height": 11,
@@ -116,9 +116,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 549,
+            "x": 467,
             "y": 127,
-            "width": 38,
+            "width": 60.2,
             "height": 11,
             "style": {
               "font-family": [
@@ -134,7 +134,7 @@
               "font-style": []
             },
             "texts": [
-              "Lotes"
+              "Obs Solic."
             ]
           },
           {
@@ -142,9 +142,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 309,
+            "x": 527.1,
             "y": 127,
-            "width": 60,
+            "width": 60.1,
             "height": 11,
             "style": {
               "font-family": [
@@ -160,13 +160,13 @@
               "font-style": []
             },
             "texts": [
-              "Unidad"
+              "Obs Prov."
             ]
           }
         ]
       },
       "detail": {
-        "height": 19,
+        "height": 18,
         "translate": {
           "x": -12,
           "y": -23.5
@@ -241,7 +241,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 369.2,
+            "x": 287,
             "y": 190,
             "width": 90,
             "height": 18,
@@ -275,7 +275,7 @@
             "description": "",
             "x": 59,
             "y": 190,
-            "width": 250,
+            "width": 228,
             "height": 18,
             "style": {
               "font-family": [
@@ -305,7 +305,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 459.2,
+            "x": 377,
             "y": 190,
             "width": 90,
             "height": 18,
@@ -333,13 +333,13 @@
             }
           },
           {
-            "id": "lot_quantity",
+            "id": "obs_req",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 549.2,
+            "x": 467,
             "y": 190,
-            "width": 38,
+            "width": 60.1,
             "height": 18,
             "style": {
               "font-family": [
@@ -380,13 +380,13 @@
             "y2": 208
           },
           {
-            "id": "product_unity",
+            "id": "obs_del",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 309.2,
+            "x": 527,
             "y": 190,
-            "width": 60,
+            "width": 60.2,
             "height": 18,
             "style": {
               "font-family": [
@@ -400,7 +400,7 @@
               "line-height-ratio": "",
               "letter-spacing": "",
               "font-style": [],
-              "overflow": "truncate",
+              "overflow": "fit",
               "word-wrap": "break-word"
             },
             "reference-id": "",
@@ -448,7 +448,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 195,
+            "x": 127,
             "y": 190,
             "width": 245,
             "height": 18,
@@ -480,9 +480,9 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 440,
+            "x": 372,
             "y": 190,
-            "width": 147.2,
+            "width": 110,
             "height": 18,
             "style": {
               "font-family": [
@@ -512,137 +512,9 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 127,
+            "x": 482,
             "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_code_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 59,
-            "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_q_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 127,
-            "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_name_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 195,
-            "y": 190,
-            "width": 245,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "expiry_date_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 440,
-            "y": 190,
-            "width": 147.2,
+            "width": 105.2,
             "height": 18,
             "style": {
               "font-family": [
@@ -979,7 +851,7 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -67.5
+          "y": -68.5
         },
         "items": []
       },
@@ -988,7 +860,7 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -114.8
+          "y": -115.8
         },
         "items": []
       },

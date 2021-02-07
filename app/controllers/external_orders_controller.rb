@@ -370,37 +370,45 @@ class ExternalOrdersController < ApplicationController
         list.add_row do |row|
           row.values  product_code: eop.product.code,
                       product_name: eop.product.name,
-                      product_unity: eop.product.unity.name,
                       requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
                       delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
-                      lot_quantity: eop.order_prod_lot_stocks.count
+                      obs_req: eop.applicant_observation,
+                      obs_del: eop.provider_observation
           
           row.item(:lot_indicator).hide
         end
         
         # Si el producto tiene lotes asignados, los vamos agregando
         if eop.order_prod_lot_stocks.count > 0
-          list.add_row do |row|
-            row.values  lot_code_title: "Lote",
-              lot_q_title: "Cantidad",
-              lot_name_title: "Laboratorio",
-              expiry_date_title: "Vencimiento"
-              row.item(:lot_border).show
-              row.item(:border).hide
-          end
-        
-
+   
           eop.order_prod_lot_stocks.each_with_index do |opls, index|
+
+            # Si en los lotes, se agrega una nueva pagina, entonces debemos rellenarla con los lotes
+            if report.page_count == 1 && report.list.overflow?
+              report.start_new_page do |page|
+                page.list.add_row do |row|
+                  row.values  lot_code: "L:  #{opls.lot_stock.lot.code}",
+                  lot_name:"LAB: #{ opls.lot_stock.lot.laboratory.name}",
+                  expiry_date:"V: #{ opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'}",
+                  lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
+    
+                    if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
+                      row.item(:border).hide
+                    end
+                  end
+              end
+            end
             list.add_row do |row|
-              row.values  lot_code: opls.lot_stock.lot.code,
-                lot_q: opls.lot_stock.quantity,
-                lot_name: opls.lot_stock.lot.laboratory.name,
-                expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'
+              row.values  lot_code: "L:  #{opls.lot_stock.lot.code}",
+              lot_name:"LAB: #{ opls.lot_stock.lot.laboratory.name}",
+              expiry_date:"V: #{ opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'}",
+              lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
 
                 if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
                   row.item(:border).hide
                 end
-            end
+              end
+
           end
         end # fin lotes       
        
