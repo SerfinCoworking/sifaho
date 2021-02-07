@@ -339,24 +339,32 @@ class ExternalOrdersController < ApplicationController
   end
   
   def generate_order_report(external_order)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf')
+    report = Thinreports::Report.new
 
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), id: :other_page
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), id: :cover_page
     
+    # Comenzamos con la pagina principal
+    report.start_new_page layout: :cover_page
+
+    # Agregamos el encabezado
+    report.page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+    report.page[:remit_code] = external_order.remit_code
+    report.page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
+    report.page[:applicant_sector] = external_order.applicant_sector.name
+    report.page[:applicant_establishment] = external_order.applicant_establishment.name
+    report.page[:provider_sector] = external_order.provider_sector.name
+    report.page[:provider_establishment] = external_order.provider_establishment.name
+    report.page[:observations] = external_order.observation
+  
+
+    # Se van agregando los productos
     external_order.external_order_products.joins(:product).order("name").each do |eop|
       
+      # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)
       if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page
+        report.start_new_page
       end
-      
-      report.list.on_footer_insert do |footer|
-        footer.item(:total_products).value(external_order.external_order_products.count)
-        footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
-        footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
-        footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
-      end
-
       
       report.list do |list|
         list.add_row do |row|
@@ -370,55 +378,66 @@ class ExternalOrdersController < ApplicationController
           row.item(:lot_indicator).hide
         end
         
+        # Si el producto tiene lotes asignados, los vamos agregando
         if eop.order_prod_lot_stocks.count > 0
           list.add_row do |row|
-            row.values  lot_code_title: "Lote Cód",
-                lot_q_title: "Cantidad",
-                lot_name_title: "Laboratorio",
-                expiry_date_title: "Vencimiento"
-
-                # if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
-                  row.item(:lot_border).show
-                  row.item(:border).hide
-                # end
-              end
+            row.values  lot_code_title: "Lote",
+              lot_q_title: "Cantidad",
+              lot_name_title: "Laboratorio",
+              expiry_date_title: "Vencimiento"
+              row.item(:lot_border).show
+              row.item(:border).hide
+          end
         
 
           eop.order_prod_lot_stocks.each_with_index do |opls, index|
             list.add_row do |row|
               row.values  lot_code: opls.lot_stock.lot.code,
-                  lot_q: opls.lot_stock.quantity,
-                  lot_name: opls.lot_stock.lot.laboratory.name,
-                  expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'
+                lot_q: opls.lot_stock.quantity,
+                lot_name: opls.lot_stock.lot.laboratory.name,
+                expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'
 
-                  if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
-                    row.item(:border).hide
-                  end
+                if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
+                  row.item(:border).hide
                 end
-              
+            end
           end
-        end
-         
+        end # fin lotes       
        
-      end
-      
-      if report.page_count == 1
-        report.page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
-        report.page[:remit_code] = external_order.remit_code
-        report.page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
-        report.page[:applicant_sector] = external_order.applicant_sector.name
-        report.page[:applicant_establishment] = external_order.applicant_establishment.name
-        report.page[:provider_sector] = external_order.provider_sector.name
-        report.page[:provider_establishment] = external_order.provider_establishment.name
-        report.page[:observations] = external_order.observation
-      end
-    end
+      end # fin lista      
+    end # fin productos
     
+    # Agregamos el footer, que solo lo tiene el layout por defecto
+    report.list.on_footer_insert do |footer|
+      footer.item(:total_products).value(external_order.external_order_products.count)
+      footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
+      footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
+      footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+    end
 
+    # En caso de que solo sea 1 hoja, agregamos el mismo contenido del footer pero a nivel row
+    if report.page_count == 1
+      report.list do |list|
+        list.add_row do |row|
+          row.item(:total_title).show
+          row.item(:product_title).show
+          row.item(:requested_title).show
+          row.item(:delivered_title).show
+          row.item(:obs_title).show
+          row.item(:total_border).show
+          row.item(:border).hide
+          row.item(:lot_indicator).hide
+
+          row.item(:total_products).value(external_order.external_order_products.count)
+          row.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
+          row.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
+          row.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+        end
+      end  
+    end
+
+    # A cada pagina le agregamos el pie de pagina
     report.pages.each do |page|
-      # page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
-      # page[:remit_code] = external_order.remit_code
-      # page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
       page[:page_count] = report.page_count
       page[:sector] = current_user.sector_name
       page[:establishment] = current_user.establishment_name
