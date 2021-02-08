@@ -64,7 +64,7 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 377,
+            "x": 459,
             "y": 127,
             "width": 90,
             "height": 11,
@@ -90,7 +90,7 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 287,
+            "x": 369,
             "y": 127,
             "width": 90,
             "height": 11,
@@ -142,9 +142,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 527.1,
+            "x": 549,
             "y": 127,
-            "width": 60.1,
+            "width": 38,
             "height": 11,
             "style": {
               "font-family": [
@@ -160,7 +160,7 @@
               "font-style": []
             },
             "texts": [
-              "Obs Prov"
+              "Lotes"
             ]
           },
           {
@@ -168,9 +168,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 467,
+            "x": 309,
             "y": 127,
-            "width": 60.2,
+            "width": 60,
             "height": 11,
             "style": {
               "font-family": [
@@ -186,13 +186,13 @@
               "font-style": []
             },
             "texts": [
-              "Obs Solic."
+              "Unidad"
             ]
           }
         ]
       },
       "detail": {
-        "height": 18,
+        "height": 19,
         "translate": {
           "x": -12,
           "y": -154.3
@@ -267,7 +267,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 287,
+            "x": 369.2,
             "y": 190,
             "width": 90,
             "height": 18,
@@ -301,7 +301,7 @@
             "description": "",
             "x": 59,
             "y": 190,
-            "width": 228,
+            "width": 250,
             "height": 18,
             "style": {
               "font-family": [
@@ -331,7 +331,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 377,
+            "x": 459.2,
             "y": 190,
             "width": 90,
             "height": 18,
@@ -359,13 +359,13 @@
             }
           },
           {
-            "id": "obs_req",
+            "id": "lot_quantity",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 467,
+            "x": 549.2,
             "y": 190,
-            "width": 60.2,
+            "width": 38,
             "height": 18,
             "style": {
               "font-family": [
@@ -406,13 +406,13 @@
             "y2": 208
           },
           {
-            "id": "obs_del",
+            "id": "product_unity",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 527.1,
+            "x": 309.2,
             "y": 190,
-            "width": 60.1,
+            "width": 60,
             "height": 18,
             "style": {
               "font-family": [
@@ -474,7 +474,7 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 127,
+            "x": 195,
             "y": 190,
             "width": 245,
             "height": 18,
@@ -506,9 +506,9 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 372,
+            "x": 440,
             "y": 190,
-            "width": 110,
+            "width": 147.2,
             "height": 18,
             "style": {
               "font-family": [
@@ -538,9 +538,137 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 482,
+            "x": 127,
             "y": 190,
-            "width": 105.2,
+            "width": 68,
+            "height": 18,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          },
+          {
+            "id": "lot_code_title",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 59,
+            "y": 190,
+            "width": 68,
+            "height": 18,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          },
+          {
+            "id": "lot_q_title",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 127,
+            "y": 190,
+            "width": 68,
+            "height": 18,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          },
+          {
+            "id": "lot_name_title",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 195,
+            "y": 190,
+            "width": 245,
+            "height": 18,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
+          },
+          {
+            "id": "expiry_date_title",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 440,
+            "y": 190,
+            "width": 147.2,
             "height": 18,
             "style": {
               "font-family": [
@@ -602,7 +730,7 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -199.3
+          "y": -198.3
         },
         "items": []
       },
@@ -611,7 +739,7 @@
         "height": 18,
         "translate": {
           "x": -12,
-          "y": -246.6
+          "y": -245.6
         },
         "items": [
           {
