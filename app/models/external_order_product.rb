@@ -48,15 +48,17 @@ class ExternalOrderProduct < ApplicationRecord
   
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.decrement(iopls.quantity)
+    self.order_prod_lot_stocks.each do |opls|
+      opls.lot_stock.decrement(opls.quantity)
+      opls.lot_stock.stock.create_stock_movement(self.external_order, opls.lot_stock, opls.quantity, false)
     end
   end
 
   # Incrementamos la cantidad de cada lot stock (orden)
   def increment_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.increment(iopls.quantity)
+    self.order_prod_lot_stocks.each do |opls|
+      opls.lot_stock.increment(opls.quantity)
+      opls.lot_stock.stock.create_stock_movement(self.external_order, opls.lot_stock, opls.quantity, true)
     end
   end
 

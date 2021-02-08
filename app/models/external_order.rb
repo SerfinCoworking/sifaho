@@ -239,8 +239,8 @@ class ExternalOrder < ApplicationRecord
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
-    self.external_order_products.each do |iop|
-      iop.decrement_stock
+    self.external_order_products.each do |eop|
+      eop.decrement_stock
     end
 
     self.sent_date = DateTime.now

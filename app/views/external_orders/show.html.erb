@@ -218,22 +218,29 @@
     <% end %>
     <div class="text-right w-100">
       <%= link_to (@external_order.is_applicant?(current_user) ? applicant_index_external_orders_path : provider_index_external_orders_path),  
-        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
         class: "btn btn-light mr-1" do %>
         Volver
       <% end %>
 
+      <% if policy(@external_order).show? %>
+        <%= link_to external_order_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
+
       <% if policy(@external_order).edit_provider? %>
         <%= link_to edit_provider_external_order_path(@external_order), :"data-turbolinks" => false,
-          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
           class: "btn btn-warning mr-1" do %>
           <%= fa_icon "pen" %>
           Editar
         <% end %>
-      <% end %> 
+      <% end %>
+
       <% if policy(@external_order).edit_applicant? %>
         <%= link_to edit_applicant_external_order_path(@external_order),  
-          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
           class: 'btn btn-warning btn-md mr-1' do %>
           <%= fa_icon "pen" %>
           Editar
@@ -242,12 +249,13 @@
 
       <% if policy(@external_order).send_applicant? %>
         <%= link_to send_applicant_external_order_path(@external_order), 
-          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>
           <%= fa_icon "paper-plane" %>
           Enviar solicitud
         <% end %>
       <% end %>
+      
       <% if policy(@external_order).return_provider_status? || policy(@external_order).return_applicant_status? %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
@@ -257,7 +265,7 @@
       
       <% if policy(@external_order).accept_provider? %>
         <%= link_to accept_provider_external_order_path(@external_order),  
-          'data-disable-with' => "Aceptar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Aceptando... ".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>
           <%= fa_icon "thumbs-up" %> Aceptar
         <% end %>
@@ -298,9 +306,9 @@
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
             <% if policy(@external_order).return_applicant_status? %>
-              <%= link_to 'Confirmar', return_applicant_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_applicant_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Retornando...".html_safe, :class => 'btn btn-warning' %>
             <% else %>
-              <%= link_to 'Confirmar', return_provider_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+              <%= link_to 'Confirmar', return_provider_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Retornando...".html_safe, :class => 'btn btn-warning' %>
             <% end %>
           </div>
         </div>
@@ -325,7 +333,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', receive_applicant_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
+            <%= link_to 'Confirmar', receive_applicant_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Recibiendo...".html_safe, :class => 'btn btn-success' %>
           </div>
         </div>
       </div>
@@ -349,7 +357,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', send_provider_external_order_path(@external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+            <%= link_to 'Confirmar', send_provider_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando...".html_safe, :class => 'btn btn-warning' %>
           </div>
         </div>
       </div>

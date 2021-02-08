@@ -47,8 +47,14 @@
         <%= fa_icon "eye" %>
       <% end %>
     <% end %>
+    <% if policy(external_order).show? %>
+      <%= link_to external_order_path(external_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+    <% end %>
     <% if policy(external_order).send_provider? %>
-      <%= link_to send_provider_external_order_path(external_order), remote: true,
+      <%= link_to send_provider_external_order_path(external_order),
         class: 'btn btn-primary btn-sm', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "paper-plane" %>
       <% end %>
@@ -72,9 +78,12 @@
       <% end %>
     <% end %>
     <% if policy(external_order).nullify? %>
-      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#anular-confirm-<%=external_order.id%>">
-        <%= fa_icon "ban" %>
-      </button>
+      <span data-toggle="modal" data-target="#anular-confirm-<%= external_order.id %>">
+        <%= button_tag class:"btn btn-sm btn-danger",
+          title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "ban" %>
+        <% end %>
+      </span>
     <% end %>
   </td>
 </tr>
@@ -84,19 +93,19 @@
   <% if policy(external_order).nullify? %>
     <div class="modal fade" id="anular-confirm-<%=external_order.id%>">
       <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
             <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= ExternalOrder.statuses.key(external_order.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Esta seguro de anular el pedido?</p>
+            <p>Esta seguro de anular el <%= external_order.human_name.downcase %> <%= external_order.remit_code %>?</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Anular', nullify_external_order_path(external_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
+            <%= link_to 'Anular', nullify_external_order_path(external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando...".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>
