@@ -5,21 +5,28 @@
   <div>
     <h5>Selección múltiple de lotes:</h5>
     <p>
-      Selección múltiple de lotes de un mismo producto en los distintos tipos de órdenes. 
+      Se implementó la selección múltiple de lotes de un mismo producto en los distintos tipos de órdenes. 
       La función cuenta con la posibilidad de seleccionar distintas cantidades de diferentes lotes para completar la cantidad solicitada o a entregar para un producto.
     </p>
-
+      
       <%= image_tag 'update_notifications/lot_selection.png', class: "mw-100" %>
 
-    <p>
+    <p class="mt-2">El botón de selección de lotes, también tiene un indicador de cuantos lotes se han seleccionado y una barra con diferentes colores </p>
+    <ul>
+      <li><span class="badge">Blanco:</span> que no se ha seleccionado ningun lote.</li>
+      <li><span class="badge badge-primary">Azul:</span> indica lotes seleccionados con una cantidad total que no completa la cantidad a entregar.</li>
+      <li><span class="badge badge-success">Verde:</span> indica lotes seleccionados con cantidad total a entregar.</li>
+      <li><span class="badge badge-danger">Rojo:</span> indica lotes seleccionados con una cantidad mayor a la cantidad a entregar.</li>
+    </ul>
+      <%= image_tag 'update_notifications/lot_indicator.png', class: "mw-100" %>
+    <p class="mt-2">
       Dicha mejora, abarca:
     </p>
     <ul>
-      <li>Pedidos de Sectores</li>
-      <li>Pedidos de Establecimientos</li>
-      <li>Recetas Ambulatorias</li>
-      <li>Recetas Crónicas</li>
-      <li>Carga por Abastecimientos</li>
+      <li class="font-weight-bold">Pedidos de Sectores</li>
+      <li class="font-weight-bold">Pedidos de Establecimientos</li>
+      <li class="font-weight-bold">Recetas Ambulatorias / Crónicas</li>
+      <li class="font-weight-bold">Remitos de Abastecimientos</li>
     </ul>
 
   </div>
@@ -30,7 +37,7 @@
     <ul>
       <li>Selección de Establecimiento.</li>
       <li>Selección de Sector del Establecimiento seleccionado.</li>
-      <li>Selección de Rubros a cargar en el remito.</li>
+      <li>Selección de Rubros a cargar en el remito. Esto tambien limita a los productos de los mismos.</li>
       <li>Asignación de un código alfanumérico como identificador del remito.</li>
       <li>
         Carga de productos:
@@ -44,9 +51,9 @@
             <li>
               Asignación de Lotes:
               <ul>
-                <li>Asignación Presentación</li>
-                <li>Asignación Cantidad</li>
-                <li>Asignación Código de lote / Nombre de lote / fecha expiración de lote</li>
+                <li>Asignación Presentación.</li>
+                <li>Asignación Cantidad.</li>
+                <li>Asignación Código de lote / Nombre de lote / fecha expiración de lote.</li>
               </ul>
             </li>
         </ul>
@@ -57,22 +64,26 @@
   <div>
     <h5>Módulo Recibos:</h5>
     <ul>
-      <li>Mejoras en la carga por Recibos.</li>
-      <li>Mejores validaciones.</li>
+      <li>Optimización de carga por Recibos.</li>
+      <li>Optimización de validaciones.</li>
     </ul>
   </div>
   <div>
     <h5>Módulo Stock:</h5>
     <ul>
       <li>
-        Mejora de listado de stock por productos.
+        Mejoras de listado de stock por productos.
       </li>
       <li>Botón con acceso a los movimientos de un producto desde el listado.</li>
       <li>
-        Se mejoró el detalle de cada producto
+        Se optimizó el detalle de cada producto.
         <ul>
-          <li>Listado de lotes</li>
-          <li>Listado de últimos movimientos</li>
+          <li>Listado de lotes.</li>
+          <li>Listado de últimos movimientos.
+            <ul>
+              <li>Se agregó filtros para listado de movimientos.</li>
+            </ul>
+          </li>
         </ul>
       </li>
     </ul>
@@ -82,73 +93,104 @@
     <ul>
       <li>Nueva trazabilidad de estados.</li>
       <li>Se quitó el retorno una vez que se encuentra en camino.</li>
-      <li>Mejores validaciones.</li>
+      <li>Optimización de validaciones.</li>
       <li>Selector múltiple de lotes.</li>
     </ul>
   </div>  
   <div>
     <h5>Módulo Sectores:</h5>
     <ul>
-      <li>Mejores validaciones.</li>
+      <li>Optimización de validaciones.</li>
       <li>Selector múltiple de lotes.</li>
     </ul>
   </div>
   <div>
     <h5>Módulo Productos:</h5>
-    <p>Mejoras en el modúlo productos relacionado al stock y lotes.</p>
+    <ul>
+      <li>Optimización del modúlo Productos.</li>
+    </ul>
   </div>
   <div>
     <h5>Módulo Rubros:</h5>
-    <p>Se implementó módulo Rubros.</p>
     <ul>
-      <li>
-        Se agregó listado de rubros y subrubros en forma de directorios con jerarquias.
+      <li>Se implementó módulo Rubros.
+        <div>
+          <%= image_tag 'update_notifications/product_areas.png', class: "mw-100" %>
+        </div>
+        <ul>
+          <li>
+            Listado de rubros y subrubros en forma de directorios con jerarquias.
+          </li>
+          <li>Listado de productos que contiene cada rubro con acceso al detalle del mismo.</li>
+        </ul>
       </li>
-      <li>Se agregó listado de productos que contiene cada rubro con acceso al mismo.</li>
     </ul>
-  </div>
+  </div>  
   <div>
-    <h5>Módulo Prescripciones:</h5>
-    <p>Se dividió el listado de prescripciones en dos listados: Crónicas / Ambulatorias</p>
+    <h5>Módulo Recetas:</h5>
+    <p>Se dividió el listado de prescripciones entre Crónicas y Ambulatorias:</p>
     <ul>
       <li>
-        Prescripciones Ambulatorias
+        Recetas Ambulatorias
         <ul>
           <li>Selector múltiple de lotes</li>
-          <li>Mejoras en válidaciones</li>
+          <li>Optimización de válidaciones</li>
         </ul>
       </li>
       <li>
-        Prescripciones Crónicas
+        Recetas Crónicas
         <ul>
-          <li>Creación de prescripción crónica:
+          <li>Creación de receta crónica:
             <ul>
-              <li>Se dividió en dos pasos: creación de receta con los productos recetados, y "creacion y dispensación"</li>
-              <li>La dispensación cuenta con la posibilidad de asignar más de un producto por cada producto recetado.
-                <span class="text-danger">La cantidad de productos dispensados en un mismo producto cuenta como 1 dosis de tratamiento.</span>
+              <li>Se dividió en dos pasos:
+                <ul>
+                  <li>
+                  Creación con los productos originales recetados por el médico:
+                    <div>
+                      <%= image_tag 'update_notifications/chronic_form.png', class: "mw-100" %>
+                      <ul>
+                        <li>El sistema automáticamente cálcula la cantidad a ser dispensada basado en la cantidad de dosis.</li>
+                      </ul>
+                    </div>
+
+                  </li>
+                  <li>
+                  Dispensación:
+                    <div>
+                      <%= image_tag 'update_notifications/chronic_dispensation.png', class: "mw-100" %>
+                      <ul>
+                        <li>Botón agregar productos.</li>
+                        <li>La dispensación cuenta con la posibilidad de asignar más de un producto por cada producto recetado.
+                          <span class="text-danger">La cantidad de productos dispensados en un mismo producto cuenta como 1 dosis de tratamiento.</span>
+                        </li>
+                        <li>Cada producto recetado cuenta con un indicador porcentual de lo que lleva dispensado.</li>
+                        <li>Cada dispensación puede o no dispensar la totalidad de productos asignados en la receta.</li>
+                      <ul>
+                    </div>
+
+                  </li>
+                </ul>
               </li>
-              <li>Cada producto recetado cuenta con un indicador porcentual de lo que lleva dispensado.</li>
-              <li>Se pueden generar la cantidad de dispensasiones necesariaas para lograr completar la prescripción</li>
-              <li>Cada dispensación puede o no dispensar la totalidad de productos asignados en la receta.</li>
-              <li>El porcentual de dispensación esta basado en el calculo entre Fecha recetada y Duración del tratamiento.</li>
+              <li>
+                Porcentaje dispensado de cada producto:
+                <div>
+                  <%= image_tag 'update_notifications/chronic_products_detail.png', class: "mw-100" %>
+                </div>
+              </li>
+              <li>Dispensaciones realizadas:
+                <div>
+                  <%= image_tag 'update_notifications/chronic_dispensations_detail.png', class: "mw-100" %>
+                  <ul>
+                    <li>Se pueden generar las dispensasiones necesarias para completar la receta.</li>
+                    <li>Listado de dispensaciones realizadas con la posibilidad de retornar <span class="text-danger">en un período de 24 horas</span>.</li>
+                    <li>Botón para desplegar el listado de lotes seleccionados en la dispensación de cada producto.</li>
+                  </ul>
+                </div>
+              </li>
             </ul>
           </li>
-          <li>Selector múltiple de lotes</li>
-          <li>Mejoras en válidaciones</li>
-          <li>Mejoras en el detalle de cada prescripción</li>
-          <li>Listado de dispensaciones con la posibilidad de retornar</li>
         </ul>
       </li>
     </ul>
-    <p>Se implementó módulo Rubros.</p>
-    <ul>
-      <li>
-        Se agregó listado de rubros y subrubros en forma de directorios con jerarquias.
-      </li>
-      <li>Se agregó listado de productos que contiene cada rubro con acceso al mismo.</li>
-    </ul>
   </div>
-
-
-
 </div>
