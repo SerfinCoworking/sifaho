@@ -19,6 +19,10 @@
         <div class="col-md-6 col-sm-12">
           <%= f.label :professional_id do %>
             Médico
+            <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+              title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "plus" %>
+            <% end %>
           <% end %>
 
           <div class="custom-input-group">
