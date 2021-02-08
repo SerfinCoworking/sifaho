@@ -57,7 +57,6 @@ class ProfessionalsController < ApplicationController
       if @professional.save
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
         if remote?
-          puts "==============================> DEBUG"
           format.js
         else
           format.html { redirect_to @professional }

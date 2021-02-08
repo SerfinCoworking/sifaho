@@ -51,9 +51,12 @@ class PatientsController < ApplicationController
 
     respond_to do |format|
       if @patient.save
-        flash.now[:success] = @patient.full_info+" se ha creado correctamente."
-        format.html { redirect_to @patient }
-        format.js
+        if remote?
+          format.js
+        else
+          flash.now[:success] = @patient.full_info+" se ha creado correctamente."
+          format.html { redirect_to @patient }
+        end
       else
         flash[:error] = "El paciente no se ha podido crear."
         format.html { render :new }
@@ -125,5 +128,9 @@ class PatientsController < ApplicationController
       params.require(:patient).permit(:first_name, :last_name, :dni,
         :email, :birthdate, :sex, :marital_status,
         patient_phones_attributes: [:id, :phone_type, :number, :_destroy])
+    end
+
+    def remote?
+      return params[:commit] == "remote"
     end
 end

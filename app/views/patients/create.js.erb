@@ -1,5 +1,4 @@
 <%= render 'shared/flash_message' %>
-console.log("entró");
 
 $('#dialog').modal('toggle');
 
@@ -9,6 +8,6 @@ $('#patients').prepend('<%= j render (@patient) %>')
 $('#patient_<%= @patient.id %>').hide().fadeIn(500);
 
 // Se rellena la prescripción
-$('#patient').val('<%= @patient.fullname %>');
-$('#patient_dni').val('<%= @patient.dni %>');
+$('#patient-fullname').val('<%= @patient.fullname %>');
+$('#patient-dni').val('<%= @patient.dni %>');
 $('#patient_id').val('<%= @patient.id %>');

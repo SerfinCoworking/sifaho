@@ -47,6 +47,11 @@
           
           <%= f.label :patient_id, class: "text-left" do %>
             Paciente
+            <%= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
+              title: 'Nuevo paciente', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon "plus" %>
+            <% end %>
+
           <% end %>
 
           <div class="d-flex flex-row">
