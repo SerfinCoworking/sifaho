@@ -3,9 +3,8 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@external_order.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%=
-          @external_order.new_record? ? 'Nueva solicitud de abastecimiento' : 'Editando solicitud de abastecimiento'
-        %>
+        <%= @external_order.new_record? ? 'Nueva' : 'Editando' %> <%= @external_order.order_type %> de establecimiento
+        código <%= @external_order.remit_code if @external_order.persisted? %>
       </h5>
     </div>
     <%= link_to :back, class: @external_order.new_record? ? 'btn text-white' : 'btn' do %>
@@ -78,7 +77,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn mr-1' %>
+    <%= link_to 'Volver', applicant_index_external_orders_path, class: 'btn btn-light mr-2' %>
   
     <button type='submit' class='btn btn-success mr-2' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='audit'>
       
@@ -87,8 +86,8 @@
       </div>
       
       <div class="d-none" style="pointer-events: none;">
-        Guardando...
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
       </div>
 
     </button>
@@ -98,8 +97,8 @@
         <%= fa_icon "paper-plane" %> Guardar y enviar
       </div>
       <div class="d-none" style="pointer-events: none;">
-        Guardando...
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
       </div>
     </button>
   </div>

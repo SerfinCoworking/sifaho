@@ -89,6 +89,7 @@
         placeholder: 'Cant', 
         required: false,
         input_html: {
+          disabled: f.object.get_order.solicitud? && policy(f.object.get_order).edit_provider?,
           "data-tooltip"=>true,
           :class=>"request-quantity input-sm",
           :title=>"Cantidad solicitada",

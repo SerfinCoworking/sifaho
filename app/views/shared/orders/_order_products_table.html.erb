@@ -6,7 +6,7 @@
         <th>Producto</th>
         <th>Unidad</th>
         <th>Tu stock</th>
-        <th><%= form.object.order_type == 'provision' ? 'Solicitado' : 'Solicitar' %></th>
+        <th><%= policy(form.object).edit_provider? || form.object.provision?  ? 'Solicitado' : 'Solicitar' %></th>
         <% if policy(form.object).show_provider_fields? %>
           <th>Entregar</th>
           <th>Lote</th>

@@ -3,9 +3,8 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@external_order.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%=
-          @external_order.new_record? ? 'Nueva provisión de abastecimiento' : 'Editando provisión de abastecimiento'
-        %>
+        <%= @external_order.new_record? ? 'Nueva' : 'Editando' %> <%= @external_order.order_type %> de establecimiento
+        código <%= @external_order.remit_code if @external_order.persisted? %>
       </h5>
     </div>
     <%= link_to :back, class: @external_order.new_record? ? 'btn text-white' : 'btn' do %>
@@ -18,6 +17,7 @@
      html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
+        <% if @external_order.provision? %>
         <div class='col-md-3'>
           <%# ESTABLECIMIENTO SOLICITANTE %>
           <%= f.input :applicant_establishment_id, as: :string,
@@ -64,6 +64,16 @@
             } 
           %>
         </div>
+        <% else %>
+          <div class="col">
+            <h5>Solicitante</h5>
+            <%= @external_order.applicant_sector.name+" "+@external_order.applicant_establishment.name %>
+          </div>
+          <div class="col">
+            <h5>Proveedor</h5>
+            <%= @external_order.provider_sector.name+" "+@external_order.provider_establishment.name %>
+          </div>
+        <% end %>
         
         <div class='col-md-3'>
           <%= f.input :observation, label: 'Observaciones', as: :text,
@@ -79,7 +89,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', provider_index_external_orders_path, class: 'btn mr-1' %>
+    <%= link_to 'Volver', provider_index_external_orders_path, class: 'btn btn-light mr-2' %>
   
     <button type='submit' class='btn btn-success mr-2' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='audit'>
       
@@ -88,8 +98,8 @@
       </div>
       
       <div class="d-none" style="pointer-events: none;">
-        Guardando...
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
       </div>
 
     </button>
@@ -99,8 +109,8 @@
         <%= fa_icon "thumbs-up" %> Guardar y aceptar
       </div>
       <div class="d-none" style="pointer-events: none;">
-        Guardando...
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
       </div>
     </button>
   </div>
