@@ -1,13 +1,21 @@
-<div class="row">
-  <div class="jumbotron col-10 ml-auto pb-4 pt-5">
-    <div class="row">
-      <div class="col-8">
-        <h3>Hola, te damos la bienvenida al Sistema Farmacéutico Hospitalario!</h3>
-        <p class="lead">Somos un grupo de personas que crece día a día. Nos especializamos en facilitar el control y seguimiento de los insumos que llegan todos los días a cada uno de los efectores de salud. Llevamos más de 2 años de funcionamiento en Neuquén y queremos seguir creciendo para brindar cada vez más y mejores respuestas a nuestros usuarios.</p>
-        <hr class="my-4">
-        <p>Ante cualquier duda, no dudes en comunicarte con la mesa de ayuda <a href="https://wa.me/+54 9 2944 12-7915" target="_blank"><i class="fab fa-whatsapp"></i> +54 9 2944 12-7915</a></p>
+<div class="container-fluid ml-auto mr-auto">
+  <div class="row">
+    <div class="col-9">
+      <div class="jumbotron pb-4 pt-5">
+        <div >
+          <h3 class="border-bottom">Hola, te damos la bienvenida al Sistema Farmacéutico Hospitalario!</h3>
+          <p class="lead">Somos un grupo de personas que crece día a día. Nos especializamos en facilitar el control y seguimiento de los insumos que llegan todos los días a cada uno de los efectores de salud. Llevamos más de 2 años de funcionamiento en Neuquén y queremos seguir creciendo para brindar cada vez más y mejores respuestas a nuestros usuarios.</p>
+          <hr class="my-4">
+          <p>Ante cualquier duda, no dudes en comunicarte con la mesa de ayuda <a href="https://wa.me/+54 9 2944 12-7915" target="_blank"><i class="fab fa-whatsapp"></i> +54 9 2944 12-7915</a></p>
+        </div>
+        <div class="container-news">
+          <%= render '/welcome/update_notifications/notifcation_2021_02_04' %>
+        </div>
       </div>
-      <div class="col-3 ml-auto">
+    </div>
+
+    <div class="col-3 ml-auto">
+      <div class="jumbotron ml-auto pb-4 pt-5">
         <p class="text-center pb-4"><%= image_tag("sifaho-brand.png", size: "180x55", align: "center", alt: "Logo Sifaho") %></p>
         <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
           <%= devise_error_messages! %>
@@ -26,26 +34,17 @@
             <%= f.password_field :password, class: 'form-control' %>
           </div>
             <%= button_tag(type: 'submit', class: "btn btn-success btn-md btn-block", 'data-disable-with' => "Iniciando <i class='fa fa-circle-notch fa-spin'></i>".html_safe) do %>
+    
               Iniciar sesión
             <% end %>
         <% end %>
-      </div>
-    </div>
-  </div>
 
-  <div class="col-10 ml-auto d-flex justify-content-around">
-    <%= image_tag("logo_01.svg", size: "170x50", alt: "Logo Sifaho") %>
-    <%= image_tag("logo_02.svg", size: "170x50", alt: "Logo Sifaho") %>
-    <%= image_tag("logo_03.svg", size: "100x50", alt: "Logo Sifaho") %>
-  </div>
-
-  <div class="col-10 ml-auto mt-4">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0"><%= fa_icon "bullhorn" %> Novedades</h5>
+        <div class="mt-3">
+          Contacto: <a href="https://wa.me/+54 9 2944 12-7915" target="_blank"><i class="fab fa-whatsapp"></i> +54 9 2944 12-7915</a>
+        </div>
       </div>
       <div class="card-body news-panel">
-        <p class="border-bottom">Actualización 18/01/2021</p>
+        <!--p class="border-bottom">Actualización 18/01/2021</p>
         <p>Correción en cantidad de stock (reporte PDF).</p>
         <p class="border-bottom">Actualización 11/11/2020</p>
         <p>Nuevo reporte de stock por rubro</p>
@@ -80,8 +79,20 @@
         <p class="border-bottom">Actualización 06/07/2020</p>
         <p>Nueva interfaz de pacientes. Recepción de imágenes del paciente. Correcciones en las vistas.</p>
         <p class="border-bottom">Actualización 30/06/2020</p>
-        <p>Implementamos una nueva interfaz de usuario que se adapta mejor a tus necesidades.</p>
+        <p>Implementamos una nueva interfaz de usuario que se adapta mejor a tus necesidades.</p-->
+      <div class="d-flex max-width-100 flex-column align-items-center">
+        <div class="prov-logo-container">
+          <%= image_tag("logo_01.svg", alt: "Logo Sifaho", class: "mw-100") %>
+        </div>
+        <div class="prov-logo-container">
+          <%= image_tag("logo_02.svg", alt: "Logo Sifaho", class: "mw-100") %>
+        </div>
+        <div class="prov-logo-container">
+          <%= image_tag("logo_03.svg", alt: "Logo Sifaho", class: "mw-100") %>
+        </div>
+
       </div>
     </div>
+    
   </div>
 </div>
