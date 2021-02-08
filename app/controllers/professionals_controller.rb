@@ -54,7 +54,7 @@ class ProfessionalsController < ApplicationController
     authorize @professional
     @professional = Professional.new(professional_params)
     respond_to do |format|
-      if @professional.save
+      if @professional.save!
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
         if remote?
           format.js

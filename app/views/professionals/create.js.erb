@@ -2,8 +2,6 @@
 
 $('#dialog').modal('toggle');
 
-$('#professionals').prepend('<%= j render (@professional) %>')
-
 // Efecto de ingreso
 $('#professional_<%= @professional.id %>').hide().fadeIn(500);
 
