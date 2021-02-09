@@ -16,61 +16,24 @@
 
   <div class="card-body">
     <div class="row">
-      <div class="col-3">
-        <div class="col-md-12">
-          <%= image_tag professional_avatar(@professional, 200), class:"img-thumbnail media-object mb-2" %>
-          <h5><strong>Nombre</strong></h5>
-          <%= @professional.first_name %>
-          <h5><strong>Apellido</strong></h5>
-            <%= @professional.last_name %>
-          <h5><strong>DNI: </strong></h5>
-          <%= @professional.dni %>
-          <h5><strong>Activo?: </strong></h5>
-          <%= @professional.is_active? ? "Si" : "No" %>
-          <h5><strong>Matrícula: </strong></h5>
-          <%= @professional.enrollment %>
-          <h5><strong>Legajo: </strong></h5>
-          <%= @professional.docket %>
-          <h5><strong>Especialdad </strong></h5>
-          <% if @professional_type.present? %>
-            <%= @professional.professional_type.name %>
-          <% else %>
-            ----
-          <% end %>
-        </div>
-      </div>
-      <div class="col-md-9">
-        <h5 class="card-title">
-          <strong>Recetas </strong><span class="badge badge-secondary"><%= (@professional.outpatient_prescriptions.count + @professional.chronic_prescriptions.count) %></span>
-          <div class="float-right">
-            Pendientes <span class="badge badge-secondary"><%#= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
-            Dispensadas <span class="badge badge-success"><%#= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
-          </div>
-        </h5>
+      <!-- Panel Tab-->
+      <div class="col-10">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#outpatient-prescriptions' role="tab">
+              <%= fa_icon "cubes" %> Recetas ambulatorias
+              <span class="badge badge-secondary"><%= @professional.outpatient_prescriptions.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= @professional.chronic_prescriptions.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#chronic-prescriptions' role="tab">
+              <%= fa_icon "paper-plane" %> Recetas crónicas
+              <span class="badge badge-secondary"><%= @professional.chronic_prescriptions.count %></span>
+            </a>
+          </li>          
+        </ul>
 
-
-            <!-- Panel -->
-        <div class="row mt-3">
-          <div class="col-12">
-            <ul class='nav nav-tabs nav-justified'>
-              <li class='nav-item'>
-                <a class="nav-link active" data-toggle='tab' href='#outpatient-prescriptions' role="tab">
-                  <%= fa_icon "cubes" %> Recetas ambulatorias
-                  <span class="badge badge-secondary"><%= @professional.outpatient_prescriptions.count %></span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link <%= @professional.chronic_prescriptions.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#chronic-prescriptions' role="tab">
-                  <%= fa_icon "paper-plane" %> Recetas crónicas
-                  <span class="badge badge-secondary"><%= @professional.chronic_prescriptions.count %></span>
-                </a>
-              </li>
-              
-            </ul>
-          </div>
-        </div>
-
-        <div class="tab-content mt-2">
+        <div class="tab-content">
           <div id='outpatient-prescriptions' class='tab-pane fade show active'>
             <!-- Insumos a dispensar -->
             <div class="card">
@@ -228,8 +191,67 @@
             </div>        
           </div> <!-- End last movements tab pane -->
         </div>
-      </div>
-    </div>
+      </div><!-- fin .col[panel tab]-->
+
+      <!-- Datos del profesional -->
+      <div class="col-2 border-left">
+
+
+        <%= image_tag professional_avatar(@professional, 200), class:"img-thumbnail" %>
+        <h5 class="mt-3"><strong><%= @professional.last_name %>,</strong> <%= @professional.first_name %></h5>
+
+        <h5 class="mt-3"> <%= @professional.dni %> </h5>
+
+        <h5><strong>Activo?: </strong> <%= @professional.is_active? ? "Si" : "No" %> </h5>
+        <h5><strong>Matrícula: </strong> <%= @professional.enrollment %> </h5>
+        <h5><strong>Legajo: </strong> <%= @professional.docket %> </h5>
+        <h5><strong>Especialdad </strong>
+          <% if @professional_type.present? %>
+            <%= @professional.professional_type.name %>
+          <% else %>
+            ----
+          <% end %>
+        </h5>
+
+        <h5> 
+          <strong>Recetas generadas</strong>
+          <span class="badge badge-secondary"><%= (@professional.outpatient_prescriptions.count + @professional.chronic_prescriptions.count) %></span>
+        </h5>
+        <% 
+          # Suma de prescripciones pendientes cronicas / ambulatorias #
+          total_pending = (@professional.outpatient_prescriptions.pendiente.count + @professional.chronic_prescriptions.pendiente.count) 
+          # Suma de prescripciones parcialmente dispensadas cronicas  #
+          total_partial_dispense = @professional.chronic_prescriptions.dispensada_parcial.count 
+          # Suma de prescripciones dispensadas cronicas / ambulatorias #
+          total_dispense = (@professional.outpatient_prescriptions.dispensada.count + @professional.chronic_prescriptions.dispensada.count) 
+          # Suma de prescripciones vencidas dispensadas cronicas / ambulatorias  #
+          total_out_of_date = (@professional.outpatient_prescriptions.vencida.count + @professional.chronic_prescriptions.vencida.count) 
+        %>
+        <ul class="pl-4">
+          <li>
+            <h5>
+              <% total_dispensed = @professional.outpatient_prescriptions.pendiente.count %>
+              Pendientes <span class="badge badge-secondary"><%= total_pending  %></span>
+            </h5>
+          </li>
+          <li>
+            <h5>
+              Parcialmente dispensadas <span class="badge badge-primary"><%= total_partial_dispense %></span>
+            </h5>
+          </li>
+          <li>
+            <h5>
+              Dispensadas <span class="badge badge-success"><%= total_dispense %></span>
+            </h5>
+          </li>
+          <li>
+            <h5>
+              Vencidas <span class="badge badge-danger"><%= total_out_of_date %></span>
+            </h5>
+          </li>
+        </ul>
+      </div><!-- fin .col[datos del profesional] -->
+    </div><!-- fin .row --> 
   </div>
 
 
