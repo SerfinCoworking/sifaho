@@ -56,6 +56,7 @@ class OutpatientPrescriptionsController < ApplicationController
     
     @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
+    @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
 
     respond_to do |format|
       # Si se entrega la receta
@@ -85,6 +86,7 @@ class OutpatientPrescriptionsController < ApplicationController
     authorize @outpatient_prescription
 
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
+    @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
     @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
 
     respond_to do |format|
@@ -125,6 +127,7 @@ class OutpatientPrescriptionsController < ApplicationController
     authorize @outpatient_prescription
     respond_to do |format|
       begin
+        @outpatient_prescription.date_dispensed = DateTime.now
         @outpatient_prescription.dispensada!
         @outpatient_prescription.dispense_by(current_user)
         flash.now[:success] = "La receta de "+@outpatient_prescription.professional.fullname+" se ha dispensado correctamente."

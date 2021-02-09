@@ -71,7 +71,11 @@
                       </td>
                       
                       <td>
-                        <%= outpatient_prescription.date_dispensed.strftime("%d/%m/%Y %H:%M") %>
+                        <% if outpatient_prescription.date_dispensed.present? %>
+                          <%= outpatient_prescription.date_dispensed.strftime("%d/%m/%Y %H:%M") %>
+                        <% else %>
+                          -----
+                        <% end %>
                       </td>
                       
                       <td class="text-left actions-col">
