@@ -401,6 +401,7 @@ class ExternalOrdersController < ApplicationController
             delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
             obs_req: eop.applicant_observation,
             obs_del: eop.provider_observation
+            row.item(:border).show
           end
         end
       end # fin lista      
@@ -424,8 +425,7 @@ class ExternalOrdersController < ApplicationController
           row.item(:delivered_title).show
           row.item(:obs_title).show
           row.item(:total_border).show
-          row.item(:border).hide
-          row.item(:lot_indicator).hide
+          row.item(:lot_border).hide
 
           row.item(:total_products).value(external_order.external_order_products.count)
           row.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
