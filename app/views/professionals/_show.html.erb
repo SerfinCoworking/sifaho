@@ -1,3 +1,5 @@
+
+<%=asdsadasd%>
 <div class="row">
   <div class="col-md-4">
     <h5><strong>Nombres</strong></h5>
@@ -16,11 +18,11 @@
     <%= @professional.docket %>
     <h5><strong>Especialdad </strong></h5>
     <%= @professional.professional_type.name %>
-    <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= @professional.prescriptions.count %><span></h5>
+    <h5><strong>Cantidad de prescripciones: </strong><span class="badge"><%= (@professional.outpatient_prescriptions.count + @professional.chronic_prescriptions.count) %><span></h5>
   </div>
   <div class="row">
     <div class="col-md-4">
-      <% if @professional.prescriptions.present? %>
+      <% if @professional.outpatient_prescriptions.present? || @professional.chronic_prescriptions %>
       <h5><strong>Últimas prescripciones</strong></h5>
       <% end %>
     </div>

@@ -45,6 +45,10 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
       user.has_any_role?(:admin, :farmaceutico)
     end
   end
+  
+  def delete?
+    destroy?
+  end
 
   def nullify?
     if record.provider_sector == user.sector && record.solicitud? && (record.solicitud_enviada? || record.proveedor_auditoria?)

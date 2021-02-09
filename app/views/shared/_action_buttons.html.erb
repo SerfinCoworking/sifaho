@@ -2,11 +2,12 @@
 
   <div class="d-flex justify-content-end">
     <!-- Show -->
-    <% if defined?(show) and show %>
+    <% if defined?(show) and show[:visible] %>
       <% if policy(object).show?%>
         <%= link_to polymorphic_path(object), 
           class: 'btn btn-sm btn-secondary mr-1 ml-1', 
           title: t("actions.tooltip.show"), 
+          target: show[:target].present? ? show[:target] : :_self,
           data: { toggle: 'tooltip', placement: 'top' } do %>
           
           <%= fa_icon "eye" %>
@@ -15,11 +16,12 @@
     <% end %>
 
     <!-- Edit -->
-    <% if defined?(edit) and edit %>
+    <% if defined?(edit) and edit[:visible] %>
       <% if policy(object).edit? %>
         <%= link_to edit_polymorphic_path(object),
           class: 'btn btn-sm btn-warning mr-1 ml-1',
           title: t("actions.tooltip.edit"),
+          target: show[:target].present? ? show[:target] : :_self,
           data: { toggle: 'tooltip', placement: 'top'} do %> 
 
           <%= fa_icon "pen" %>
@@ -28,7 +30,7 @@
     <% end %>
 
     <!-- Destroy -->
-    <% if defined?(destroy) and destroy %>
+    <% if defined?(destroy) and destroy[:visible] %>
       <% if policy(object).destroy? %>
         <button type="button" 
         class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
@@ -36,9 +38,9 @@
         data-toggle="tooltip"
         data-placement="top"
         data-target="#delete-item" 
-        data-title="<%= delete_title %>"
-        data-body="<%= delete_body %>"
-        data-href="<%= destroy_path %>">
+        data-title="<%= destroy[:title] %>"
+        data-body="<%= destroy[:body] %>"
+        data-href="<%= destroy[:path] %>">
           <%= fa_icon "trash" %>
         </button>
       <% end %>
