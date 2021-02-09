@@ -198,6 +198,9 @@
                             <% end %>
                           </tbody>
                         </table>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
                         <% if outpatient_prescription_product.observation.present? %>
                           <table class="w-100">
                             <tr>
@@ -208,9 +211,6 @@
                             </tr>
                           </table>
                         <%end%>
-                        <% else %>
-                            No tiene lotes asignados
-                        <% end %>
                       </div>
                     </div>
                   </td>
