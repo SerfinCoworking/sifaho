@@ -3,12 +3,12 @@
   <% if current_page?(action: 'applicant_index') %>
     <td class="sol-col-aba">
       <%= external_order.provider_sector.name %>
-      <%= external_order.provider_sector.establishment_name %></td>
+      <%= external_order.provider_sector.establishment_short_name %>
     </td>
   <% else %>
     <td class="sol-col-aba">
       <%= external_order.applicant_sector.name %>
-      <%= external_order.applicant_sector.establishment_name %>  
+      <%= external_order.applicant_sector.establishment_short_name %>
     </td>
   <% end %>
   <td>
@@ -26,9 +26,6 @@
   </td>
   <td>
     <%= external_order.movements.count %>
-  </td>
-  <td>
-    <%= external_order.comments.count %>
   </td>
   <td>
     <%= external_order.requested_date.present? ? external_order.requested_date.strftime("%d/%m/%Y") : '----' %>

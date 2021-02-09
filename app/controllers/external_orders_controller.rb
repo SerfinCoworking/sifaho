@@ -26,11 +26,12 @@ class ExternalOrdersController < ApplicationController
       ExternalOrder.provider(current_user.sector).without_status(0),
       params[:filterrific],
       select_options: {
-        with_status: ExternalOrder.options_for_status
+        with_status: ExternalOrder.options_for_status,
+        sorted_by: ExternalOrder.options_for_sorted_by
       },
       persistence_id: false,
     ) or return
-    @external_orders = @filterrific.find.page(params[:page]).per_page(15)
+    @external_orders = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /external_orders

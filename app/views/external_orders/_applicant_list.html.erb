@@ -2,22 +2,18 @@
   <div id="filterrific_results">
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :codigo) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :proveedor) %></th>
+            <th>Proveedor</th>
             <th><%= filterrific_sorting_link(@filterrific, :tipo) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
             <th>
-              <%= fa_icon "barcode" %>
-              <%= filterrific_sorting_link(@filterrific, :ins) %></th>
-            </th>
+              <%= fa_icon "cubes" %>
+              Prod
             <th>
               <%= fa_icon "exchange-alt" %>
-              <%= filterrific_sorting_link(@filterrific, :mov) %>
-            </th>
-            <th>
-              <%= fa_icon "comments" %>
+              Mov
             </th>
             <th>
               <%= fa_icon "calendar" %>
@@ -30,14 +26,46 @@
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody id=applicant_orders>
+        <tbody id="applicant_orders">
           <%= render @applicant_orders %>
         </tbody>
       </table>
     </div>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-      <%= will_paginate @applicant_orders, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-    </div>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-5">
+        <%= will_paginate @applicant_orders, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-5 d-flex justify-content-around align-items-center">
+        <div>
+          Recibos <span class="badge badge-secondary"><%= @applicant_orders.count %></span>
+        </div>
+        <div>
+          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 0}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver solicitudes en auditoría", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            En auditoría <span class="badge badge-warning"><%= @applicant_orders.solicitud_enviada.count %></span>
+          <% end %>
+        </div>
+        <div>
+          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 1}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver solicitudes enviadas", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            Enviadas <span class="badge badge-info"><%= @applicant_orders.solicitud_enviada.count %></span>
+          <% end %>
+        </div>
+        <div>
+          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 2}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver provisiones en camino", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            Provisiones en camino <span class="badge badge-primary"><%= @applicant_orders.proveedor_auditoria.count %></span>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-1 d-flex justify-content-end align-items-center">
+      </div>
   </div>
 <% else %>
   <%= render(

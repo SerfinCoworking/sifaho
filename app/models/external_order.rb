@@ -5,12 +5,12 @@ class ExternalOrder < ApplicationRecord
   # New enum
   enum order_type: { provision: 0, solicitud: 1 }
   enum status: { 
-    solicitud_auditoria: 0, 
-    solicitud_enviada: 1, 
-    proveedor_auditoria: 2, 
-    proveedor_aceptado: 3, 
-    provision_en_camino: 4, 
-    provision_entregada: 5,  
+    solicitud_auditoria: 0,
+    solicitud_enviada: 1,
+    proveedor_auditoria: 2,
+    proveedor_aceptado: 3,
+    provision_en_camino: 4,
+    provision_entregada: 5,
     anulado: 6 
   }
 
@@ -76,12 +76,12 @@ class ExternalOrder < ApplicationRecord
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-    :associated_against => { :applicant_sector => :name, :applicant_establishment => :name },
+    :associated_against => { applicant_sector: :name, applicant_establishment: :short_name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-    :associated_against => { :provider_sector => :name, :provider_establishment => :name },
+    :associated_against => { provider_sector: :name, provider_establishment: :short_name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
@@ -92,27 +92,21 @@ class ExternalOrder < ApplicationRecord
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
       order("external_orders.created_at #{ direction }")
-    when /^responsable_/
-      # Ordenamiento por nombre de responsable
-      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = external_orders.responsable_id")
     when /^sector_/
       # Ordenamiento por nombre de sector
-      order("sectors.name #{ direction }").joins(:sector)
+      reorder("sectors.name #{ direction }").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("external_orders.status #{ direction }")
+      reorder("external_orders.status #{ direction }")
     when /^tipo_/
       # Ordenamiento por nombre de estado
-      order("external_orders.order_type #{ direction }")
-    when /^ins_/
-      # Ordenamiento por nombre de insumo solicitado
-      order("order_products.count #{ direction }")
+      reorder("external_orders.order_type #{ direction }")
     when /^solicitado_/
       # Ordenamiento por la fecha de recepción
-      order("external_orders.requested_date #{ direction }") 
+      reorder("external_orders.requested_date #{ direction }")
     when /^recibido_/
       # Ordenamiento por la fecha de recepción
-      order("external_orders.date_received #{ direction }")
+      reorder("external_orders.date_received #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -155,12 +149,14 @@ class ExternalOrder < ApplicationRecord
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
-      ['Creación (desc)', 'created_at_desc'],
-      ['Sector (a-z)', 'sector_asc'],
-      ['Responsable (a-z)', 'responsable_asc'],
-      ['Estado (a-z)', 'estado_asc'],
-      ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
-      ['Fecha recibido (asc)', 'recibido_desc'],
+      ['Creación (nueva primero)', 'created_at_desc'],
+      ['Creación (antigua primero)', 'created_at_asc'],
+      ['Solicitado (nueva primero)', 'solicitado_at_desc'],
+      ['Solicitado (antigua primero)', 'solicitado_at_asc'],
+      ['Recibido (nueva primero)', 'recibido_at_desc'],
+      ['Recibido (antigua primero)', 'recibido_at_asc'],
+      ['Estado (a-z)', 'estado_desc'],
+      ['Estado (z-a)', 'estado_asc'],
     ]
   end
 
