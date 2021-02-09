@@ -39,6 +39,16 @@
         <% else %>
             No tiene lotes asignados
         <% end %>
+         <% if opls.observation.present? %>
+            <table class="w-100">
+              <tr>
+                <th>Descripción</th>
+              </tr>
+              <tr>
+                <td><%= opls.observation %></td>
+              </tr>
+            </table>
+          <%end%>
       </div>
     </div>
   </td>
