@@ -405,12 +405,12 @@ class ExternalOrdersController < ApplicationController
     end # fin productos
     
     # Agregamos el footer, que solo lo tiene el layout por defecto
-    report.list.on_footer_insert do |footer|
-      footer.item(:total_products).value(external_order.order_products.count)
-      footer.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
-      footer.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
-      footer.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)    
-    end
+    # report.list.on_footer_insert do |footer|
+    #   footer.item(:total_products).value(external_order.order_products.count)
+    #   footer.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
+    #   footer.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
+    #   footer.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)    
+    # end
 
     # En caso de que solo sea 1 hoja, agregamos el mismo contenido del footer pero a nivel row
     if report.page_count == 1
