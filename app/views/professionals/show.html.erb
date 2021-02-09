@@ -14,298 +14,223 @@
   </div>
   
 
-    <div class="card-body">
-      <div class="row">
-        <div class="col-3">
-          <div class="col-md-12">
-            <%= image_tag professional_avatar(@professional, 200), class:"img-thumbnail media-object mb-2" %>
-            <h5><strong>Nombre</strong></h5>
-            <%= @professional.first_name %>
-            <h5><strong>Apellido</strong></h5>
-              <%= @professional.last_name %>
-            <h5><strong>DNI: </strong></h5>
-            <%= @professional.dni %>
-            <h5><strong>Activo?: </strong></h5>
-            <%= @professional.is_active? ? "Si" : "No" %>
-            <h5><strong>Matrícula: </strong></h5>
-            <%= @professional.enrollment %>
-            <h5><strong>Legajo: </strong></h5>
-            <%= @professional.docket %>
-            <h5><strong>Especialdad </strong></h5>
-            <% if @professional_type.present? %>
-              <%= @professional.professional_type.name %>
-            <% else %>
-              ----
-            <% end %>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-3">
+        <div class="col-md-12">
+          <%= image_tag professional_avatar(@professional, 200), class:"img-thumbnail media-object mb-2" %>
+          <h5><strong>Nombre</strong></h5>
+          <%= @professional.first_name %>
+          <h5><strong>Apellido</strong></h5>
+            <%= @professional.last_name %>
+          <h5><strong>DNI: </strong></h5>
+          <%= @professional.dni %>
+          <h5><strong>Activo?: </strong></h5>
+          <%= @professional.is_active? ? "Si" : "No" %>
+          <h5><strong>Matrícula: </strong></h5>
+          <%= @professional.enrollment %>
+          <h5><strong>Legajo: </strong></h5>
+          <%= @professional.docket %>
+          <h5><strong>Especialdad </strong></h5>
+          <% if @professional_type.present? %>
+            <%= @professional.professional_type.name %>
+          <% else %>
+            ----
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <h5 class="card-title">
+          <strong>Recetas </strong><span class="badge badge-secondary"><%= (@professional.outpatient_prescriptions.count + @professional.chronic_prescriptions.count) %></span>
+          <div class="float-right">
+            Pendientes <span class="badge badge-secondary"><%#= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
+            Dispensadas <span class="badge badge-success"><%#= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
+          </div>
+        </h5>
+
+
+            <!-- Panel -->
+        <div class="row mt-3">
+          <div class="col-12">
+            <ul class='nav nav-tabs nav-justified'>
+              <li class='nav-item'>
+                <a class="nav-link active" data-toggle='tab' href='#outpatient-prescriptions' role="tab">
+                  <%= fa_icon "cubes" %> Recetas ambulatorias
+                  <span class="badge badge-secondary"><%= @professional.outpatient_prescriptions.count %></span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link <%= @professional.chronic_prescriptions.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#chronic-prescriptions' role="tab">
+                  <%= fa_icon "paper-plane" %> Recetas crónicas
+                  <span class="badge badge-secondary"><%= @professional.chronic_prescriptions.count %></span>
+                </a>
+              </li>
+              
+            </ul>
           </div>
         </div>
-        <div class="col-md-9">
-          <h5 class="card-title">
-            <strong>Recetas </strong><span class="badge badge-secondary"><%= (@professional.outpatient_prescriptions.count + @professional.chronic_prescriptions.count) %></span>
-            <div class="float-right">
-              Pendientes <span class="badge badge-secondary"><%#= @professional.prescriptions.where(status: Prescription.statuses[:pendiente]).count %></span>
-              Dispensadas <span class="badge badge-success"><%#= @professional.prescriptions.where(status: Prescription.statuses[:dispensada]).count %></span>
-            </div>
-          </h5>
 
-
-          <!-- Panel -->
-    <div class="row mt-3">
-      <div class="col-12">
-        <ul class='nav nav-tabs nav-justified'>
-          <li class='nav-item'>
-            <a class="nav-link active" data-toggle='tab' href='#outpatient-prescripctions' role="tab">
-              <%= fa_icon "cubes" %> Recetas ambulatorias
-              <span class="badge badge-secondary"><%= @professional.outpatient_prescriptions.count %></span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <%= @professional.chronic_prescriptions.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#chronic-prescriptions' role="tab">
-              <%= fa_icon "paper-plane" %> Recetas crónicas
-              <span class="badge badge-secondary"><%= @professional.chronic_prescriptions.count %></span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-    </div>
-
-    <div class="tab-content mt-2">
-      <div id='outpatient-prescriptions' class='tab-pane fade show active'>
-        <!-- Insumos a dispensar -->
-        <div class="card">
-          <table class="table table-hover table-sm">
-            <thead class="thead-light">
-              <tr>
-                <th>Código</th>
-                <th>Paciente</th>
-                <th>Estado</th>
-                <th>Insumos</th>
-                <th>Recetada</th>
-                <th>Dispensada</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @professional.outpatient_prescriptions.each do |outpatient_prescription| %>
-                <tr>
-                  <%# @stock = Stock.where(sector: current_user.sector, product: org_chron_pres_prod.product).first %>
-                  <td class="text-secondary">
-                    <%= outpatient_prescription.remit_code %>
-                  </td>
-                  <td class="text-secondary">
-                    <% if @stock.present? %>
-                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
-                        <%= org_chron_pres_prod.product_name %>
-                      <% end %>
-                    <% else %>
-                      <%= org_chron_pres_prod.product_name %>
-                    <% end %>
-                  </td>
-                  <td>
-                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.name.pluralize(org_chron_pres_prod.request_quantity) %>
-                  </td>
-                  <td>
-                    <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
-                  </td>
-                  <td>
-                    <% progress = (org_chron_pres_prod.total_delivered_quantity * 100 / org_chron_pres_prod.total_request_quantity) %>
-                    <div class="custom-progress progress bg-light position-relative">
-                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
-                      <div class="percentage-text text-black position-absolute font-weight-bold"><%=progress%>%</div>
-                    </div>
-                  </td>
-                  
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="popover" title="Observaciones" data-placement="left" data-trigger="focus" data-content="<%= org_chron_pres_prod.observation %>">
-                      <%= fa_icon "comment-dots", class: "far"%>
-                    </button>
-
-                    <!--button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%#= org_chron_pres_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%#= org_chron_pres_prod.id %>">
-                      Observaciones
-                      <%#= org_chron_pres_prod.order_prod_lot_stocks.count %>
-                    </button-->
-                  </td>
-                
-                </tr>
-                <tr>
-                  <td colspan="7" class="p-0">
-                    <div id="collapse-row-<%= org_chron_pres_prod.id %>" class="collapse in">
-                      <div class="p-3">
-                        <%= org_chron_pres_prod.observation %>
-                      </div>
-                    </div>
-                  </td>
-                </tr> <%# fin Listado de lotes y descripciones %>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id='chronic-prescriptions' class='tab-pane fade'>
-        <!-- Tabla de dispensaciones -->
-        <div class="row">
-          
-          <div class="col-3">
+        <div class="tab-content mt-2">
+          <div id='outpatient-prescriptions' class='tab-pane fade show active'>
+            <!-- Insumos a dispensar -->
             <div class="card">
-
-              <div class="list-group p-1" id="list-tab" role="tablist">
-                <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
-                  <div class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
-                    
-                    <div>
-                      <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
-                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
-                    </div>       
-                    <% if policy(chronic_dispensation).return_dispensation? %> 
-                      <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
-                          class: 'btn btn-sm btn-warning ml-2 return-dispensation-modal', title: 'Rertornar dispensación', data: { toggle: 'tooltip', placement: 'top' } do %>
-                        <%= fa_icon "undo" %>
-                      <% end %>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-9">
-            <div class="card table-sm tab-content" id="nav-tabContent">
-              <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
-                <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
-                  <table class="table table-hover">
-                    <thead class="thead-light">
-                      <tr>
-                        <th>Cód Ins</th>
-                        <th>Insumo</th>
-                        <th>Unidad</th>
-                        <th>Dosis</th>
-                        <th>Lotes</th>
-                        <th>Observaciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                      <% chronic_dispensation.chronic_prescription_products.each do |chronic_prescription_product| %>
-                        <tr>
-                          <td><%= chronic_prescription_product.product_code %></td>
-                          <td><%= chronic_prescription_product.product_name %></td>
-                          <td><%= chronic_prescription_product.product_unity_name %></td>
-                          <td><%= chronic_prescription_product.delivery_quantity %></td>
-                          <td>
-                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
-                              <%= chronic_prescription_product.order_prod_lot_stocks.count %>
-                            </button>
-                          </td>
-                          <td>Observaciones</td>
-                        </tr>
-                        <%= render '/shared/selected_lots', model: chronic_prescription_product %>
-                      <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        </div>        
-      </div> <!-- End last movements tab pane -->
-      
-
-    </div>
-
-
-
-
-          <div class="card">
-            <table class="table table-hover table-sm">
-              <thead>
-                <tr>
-                  <th>Código</th>
-                  <th>Paciente</th>
-                  <th>Estado</th>
-                  <th>Insumos</th>
-                  <th>
-                    Recetada
-                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                  </th>
-                  <th>
-                    Dispensada
-                    <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-                  </th>
-                  <th colspan="3">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="professionals">
-              <%#(@professiona.outpatient_prescriptions.count + @professiona.chronic_prescriptions.count)%>
-                <% @professional.outpatient_prescriptions.each do |prescription| %>
-                  <tr id="prescription_<%= prescription.id %>">
-                    <td><%= prescription.remit_code %></th>
-                    <td class="pres-col-pro"><%= prescription.patient.fullname %></td>
-                    <td>
-                      <span class="label label-<%= prescription.status_label %>">
-                        <%= prescription.status.underscore.humanize %>
-                      </span>
-                    </td>
-                    <td>
-                      <span class="badge">
-                        <%#= prescription.quantity_ord_supply_lots.count %>
-                      </span>
-                    </td>
-                    <td>
-                      <% if false %>
-                      <%# if prescription.prescribed_date.present? %>
-                        <%#= prescription.prescribed_date.strftime("%d/%m/%Y") %>
-                      <% else %>
-                        ------
-                      <% end %>
-                    </td>
-                      <% if prescription.dispensada? %>
-                        <td>
-                        <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
-                      <% else %>
-                        <% if policy(prescription).dispense? %>
-                          <td class="text-center">
-                          <%= link_to dispense_prescription_path(prescription), remote: true,
-                                class: 'btn btn-success btn-sm', title: 'Dispensar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                            <%= fa_icon "paper-plane" %>
-                          <% end %>
-                        <% else %>
-                          <td>
-                          Sin dispensar
-                        <% end  %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if policy(prescription).show? %>
-                        <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm',
-                          title: 'Ver detalles', remote: true, data: { toggle: 'tooltip', placement: 'top' } do %>
-                          <%= fa_icon "eye" %>
-                        <% end %>
-                      <% end %>
-                      <% if policy(prescription).edit? %>
-                        <% unless prescription.dispensada? %>
-                          <%= link_to edit_prescription_path(prescription),
-                                class: 'btn btn-warning btn-sm', title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-                            <%= fa_icon "edit" %>
-                          <% end %>
-                        <% end %>
-                      <% end %>
-                      <% if policy(prescription).delete? %>
-                        <%= link_to delete_prescription_path(prescription), remote: true,
-                              class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-                          <%= fa_icon "trash" %>
-                        <% end %>
-                      <% end %>
-                    </td>
+              <table class="table table-hover table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Código</th>
+                    <th>Paciente</th>
+                    <th>Estado</th>
+                    <th>Insumos</th>
+                    <th>Recetada</th>
+                    <th>Dispensada</th>
+                    <th class="text-center actions-col">Acciones</th>
                   </tr>
-                <% end %>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <% @professional.outpatient_prescriptions.each do |outpatient_prescription| %>
+                    <tr id="outpatient_prescription_<%= outpatient_prescription.id %>">
+                      <td>
+                        <%= outpatient_prescription.remit_code %>
+                      </td>
+                      <td>
+                        <%= outpatient_prescription.patient.fullname.humanize %>
+                      </td>
+                      <td>
+                        <span class="badge badge-<%= outpatient_prescription_status_label(outpatient_prescription) %>">
+                          <%= outpatient_prescription.status.underscore.humanize %>
+                        </span>
+                      </td>
+                      <td>
+                        <%= outpatient_prescription.outpatient_prescription_products.count %>
+                      </td>
+                      <td>
+                        <%= outpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+                      </td>
+                      
+                      <td>
+                        ---
+                      </td>
+                      
+                      <td class="text-left actions-col">
+                        <div class="d-flex">
+                          <% if policy(outpatient_prescription).dispense? %>
+                            <%= link_to dispense_outpatient_prescription_path(outpatient_prescription), :"data-turbolinks" => false,
+                              class: 'btn btn-primary btn-sm mr-1 ml-1',
+                              title: 'Dispensar', 
+                              data: { toggle: 'tooltip', placement: 'top' } do %>
+                              <%= fa_icon "paper-plane" %>
+                            <% end %>
+                          <% end %>
+
+                          <%= render(
+                                partial: 'shared/action_buttons',
+                                locals:{ 
+                                    object: outpatient_prescription, 
+                                    show: {visible: true, target: :_blank},
+                                    edit: {visible: true, target: :_blank},
+                                    destroy: {
+                                      visible: true, 
+                                      title: "Eliminar prescripción",
+                                      body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.patient.fullname.humanize }?",
+                                      path: "/outpatient_prescriptions/#{outpatient_prescription.id}"
+                                    }
+                                    
+                                }
+                            ) 
+                          %>
+                        </div>                 
+                      </td>                
+                    </tr>               
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          <div id='chronic-prescriptions' class='tab-pane fade'>
+            <!-- Tabla de dispensaciones -->
+            <div class="card">
+              
+            <table class="table table-hover table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Código</th>
+                    <th>Paciente</th>
+                    <th>Estado</th>
+                    <th>Insumos</th>
+                    <th>Recetada</th>
+                    <th>Última dispensación</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @professional.chronic_prescriptions.each do |chronic_prescription| %>
+                    <tr id="chronic_prescription_<%= chronic_prescription.id %>">
+                      <td>
+                        <%= chronic_prescription.remit_code %>
+                      </td>
+                      <td>
+                        <%= chronic_prescription.patient.fullname.humanize %>
+                      </td>
+                      <td>
+                        <span class="badge badge-<%= chronic_prescription_status_label(chronic_prescription) %>">
+                          <%= chronic_prescription.status.underscore.humanize %>
+                        </span>
+                      </td>
+                      <td>
+                        <%= chronic_prescription.original_chronic_prescription_products.count %>
+                      </td>
+                      <td>
+                        <%= chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+                      </td>
+                      
+                      <td>
+                        <% if chronic_prescription.chronic_dispensations.last.present? %>
+                          <%= chronic_prescription.chronic_dispensations.last.created_at.strftime("%d/%m/%Y %H:%M") %>
+                        <% else %>
+                          ---
+                        <% end %>
+                      </td>
+                      
+                      <td>
+                        <div class="d-flex">
+                          <% if policy(chronic_prescription).dispense_new? %>
+                            <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
+                              class: 'btn btn-sm btn-primary mr-1 ml-1',
+                              title: t("actions.tooltip.dispense"),
+                              target: :_blank,
+                              data: { toggle: 'tooltip', placement: 'top'} do %> 
+                              <%= fa_icon "paper-plane"%>
+                            <% end %>
+                          <% end %>
+                          <%= render(
+                            partial: 'shared/action_buttons',
+                            locals:{ 
+                                object: chronic_prescription, 
+                                show: {visible: true, target: :_blank},
+                                edit: {visible: true, target: :_blank},
+                                destroy: {
+                                  visible: true, 
+                                  title: "Eliminar prescripción",
+                                  body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.patient.fullname.humanize }?",
+                                  path: "/chronic_prescriptions/#{chronic_prescription.id}"
+                                }
+                                
+                            }
+                          ) 
+                          %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>        
+          </div> <!-- End last movements tab pane -->
         </div>
       </div>
     </div>
+  </div>
 
 
   <div class="card-footer d-flex justify-content-end">

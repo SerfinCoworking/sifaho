@@ -114,7 +114,7 @@
                     <th>Productos</th>
                     <th>Movimientos</th>
                     <th>Recetada</th>
-                    <th class="text-center"></th>
+                    <th class="text-center actions-col">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id=patients>
@@ -140,19 +140,32 @@
                           ------
                         <% end %>
                       <td class="text-left actions-col">
-                        <%= render(
-                                partial: 'shared/action_buttons',
-                                locals:{ 
-                                    object: outpatient_prescription, 
-                                    show: true, 
-                                    edit: true, 
-                                    destroy: true,
-                                    delete_title: "Eliminar prescripción",
-                                    delete_body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.professional.full_name }?",
-                                    destroy_path: "/outpatient_prescriptions/#{outpatient_prescription.id}"
-                                }
+                        <div class="d-flex">
+                          <% if policy(outpatient_prescription).dispense? %>
+                            <%= link_to dispense_outpatient_prescription_path(outpatient_prescription), :"data-turbolinks" => false,
+                              class: 'btn btn-primary btn-sm mr-1 ml-1',
+                              title: 'Dispensar', 
+                              data: { toggle: 'tooltip', placement: 'top' } do %>
+                              <%= fa_icon "paper-plane" %>
+                            <% end %>
+                          <% end %>
+                          <%= render(
+                              partial: 'shared/action_buttons',
+                              locals:{ 
+                                  object: outpatient_prescription, 
+                                  show: {visible: true, target: :_blank},
+                                  edit: {visible: true, target: :_blank},
+                                  destroy: {
+                                    visible: true, 
+                                    title: "Eliminar prescripción",
+                                    body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.professional.full_name }?",
+                                    path: "/outpatient_prescriptions/#{outpatient_prescription.id}"
+                                  }
+                                  
+                              }
                             ) 
-                        %>
+                          %>                        
+                        </div>
                       </td>
                     </tr>
                   <% end %>
@@ -172,7 +185,7 @@
                     <th>Productos</th>
                     <th>Movimientos</th>
                     <th>Recetada</th>
-                    <th class="text-center"></th>
+                    <th class="text-center actions-col">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id=patients>
@@ -198,28 +211,33 @@
                           ------
                         <% end %>
                       <td class="text-left actions-col">
-                        <div class="d-flex align-items-center justify-content-center">
+                        <div class="d-flex">
                           <% if policy(chronic_prescription).dispense_new? %>
                             <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
                               class: 'btn btn-sm btn-primary mr-1 ml-1',
                               title: t("actions.tooltip.dispense"),
+                              target: :_blank,
                               data: { toggle: 'tooltip', placement: 'top'} do %> 
                               <%= fa_icon "paper-plane"%>
                             <% end %>
                           <% end %>
                           <%= render(
-                                  partial: 'shared/action_buttons',
-                                  locals:{ 
-                                      object: chronic_prescription, 
-                                      show: true, 
-                                      edit: true, 
-                                      destroy: true,
-                                      delete_title: "Eliminar prescripción",
-                                      delete_body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.full_name }?",
-                                      destroy_path: "/chronic_prescriptions/#{chronic_prescription.id}"
-                                  }
-                              ) 
+                            partial: 'shared/action_buttons',
+                            locals:{ 
+                                object: chronic_prescription, 
+                                show: {visible: true, target: :_blank},
+                                edit: {visible: true, target: :_blank},
+                                destroy: {
+                                  visible: true, 
+                                  title: "Eliminar prescripción",
+                                  body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.full_name }?",
+                                  path: "/chronic_prescriptions/#{chronic_prescription.id}"
+                                }
+                                
+                            }
+                          ) 
                           %>
+                         
                         </div>
                       </td>
                     </tr>
