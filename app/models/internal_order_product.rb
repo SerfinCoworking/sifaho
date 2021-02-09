@@ -1,7 +1,7 @@
 class InternalOrderProduct < ApplicationRecord
 
   # Relaciones
-  belongs_to :internal_order, inverse_of: 'internal_order_products'
+  belongs_to :internal_order, inverse_of: 'order_products'
   belongs_to :product
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "IntOrdProdLotStock", foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks, inverse_of: 'internal_order_product'
@@ -32,6 +32,8 @@ class InternalOrderProduct < ApplicationRecord
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
     
+  scope :ordered_products, -> { joins(:product).order("products.name DESC") }
+
   # new version
   def is_proveedor_auditoria?
     return self.internal_order.proveedor_auditoria?
@@ -104,7 +106,7 @@ class InternalOrderProduct < ApplicationRecord
 
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
-    (self.internal_order.internal_order_products.uniq - [self]).each do |iop| 
+    (self.internal_order.order_products.uniq - [self]).each do |iop| 
       if iop.product_id == self.product_id
         errors.add(:uniqueness_product_in_the_order, "Este producto ya se encuentra en la orden")      
       end

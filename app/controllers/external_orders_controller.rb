@@ -80,7 +80,7 @@ class ExternalOrdersController < ApplicationController
     @external_order = ExternalOrder.new
     @external_order.order_type = 'solicitud'
     @sectors = []
-    @external_order.external_order_products.build
+    @external_order.order_products.build
   end
   
   # GET /external_orders/new_provider
@@ -89,20 +89,20 @@ class ExternalOrdersController < ApplicationController
     @external_order = ExternalOrder.new
     @external_order.order_type = 'provision'
     @sectors = []
-    @external_order.external_order_products.build
+    @external_order.order_products.build
   end
 
   # GET /external_orders/1/edit
   def edit_provider
     authorize @external_order
-    @external_order.external_order_products || @external_order.external_order_products.build
+    @external_order.order_products || @external_order.order_products.build
     @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
   end
 
   # GET /external_orders/1/edit_applicant
   def edit_applicant
     authorize @external_order
-    @external_order.external_order_products || @external_order.external_order_products.build
+    @external_order.order_products || @external_order.order_products.build
     @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
   end
 
@@ -130,7 +130,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order_products = @external_order.external_order_products.present? ? @external_order.external_order_products : @external_order.external_order_products.build
+        @order_products = @external_order.order_products.present? ? @external_order.order_products : @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
         format.html { render :new_applicant }
       end
@@ -159,8 +159,8 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order.external_order_products || @external_order.external_order_products.build
-        @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
+        @external_order.order_products || @external_order.order_products.build
+        @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :new_provider }
       end
     end
@@ -187,7 +187,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order_products = @external_order.external_order_products.present? ? @external_order.external_order_products : @external_order.external_order_products.build
+        @order_products = @external_order.order_products.present? ? @external_order.order_products : @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
         format.html { render :edit_applicant }
       end
@@ -212,7 +212,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order.external_order_products || @external_order.external_order_products.build
+        @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :edit_provider }
       end
@@ -234,7 +234,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order.external_order_products || @external_order.external_order_products.build
+        @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
         format.html { render :edit_provider }
       end
@@ -255,7 +255,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order.external_order_products || @external_order.external_order_products.build
+        @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :edit_provider }
       end
@@ -359,8 +359,7 @@ class ExternalOrdersController < ApplicationController
   
 
     # Se van agregando los productos
-    external_order.external_order_products.joins(:product).order("name").each do |eop|
-      
+    external_order.order_products.joins(:product).order("name").each do |eop|  
       # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page
@@ -417,10 +416,10 @@ class ExternalOrdersController < ApplicationController
     
     # Agregamos el footer, que solo lo tiene el layout por defecto
     report.list.on_footer_insert do |footer|
-      footer.item(:total_products).value(external_order.external_order_products.count)
-      footer.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
-      footer.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
-      footer.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+      footer.item(:total_products).value(external_order.order_products.count)
+      footer.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
+      footer.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
+      footer.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)    
     end
 
     # En caso de que solo sea 1 hoja, agregamos el mismo contenido del footer pero a nivel row
@@ -436,10 +435,10 @@ class ExternalOrdersController < ApplicationController
           row.item(:border).hide
           row.item(:lot_indicator).hide
 
-          row.item(:total_products).value(external_order.external_order_products.count)
-          row.item(:total_requested).value(external_order.external_order_products.sum(&:request_quantity))
-          row.item(:total_delivered).value(external_order.external_order_products.sum(&:delivery_quantity))
-          row.item(:total_obs).value(external_order.external_order_products.where.not(provider_observation: [nil, ""]).count())
+          row.item(:total_products).value(external_order.order_products.count)
+          row.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
+          row.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
+          row.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)   
         end
       end  
     end
@@ -480,7 +479,7 @@ class ExternalOrdersController < ApplicationController
       :date_received, 
       :observation, 
       :remit_code,
-      external_order_products_attributes: [
+      order_products_attributes: [
         :id, 
         :product_id, 
         :lot_stock_id,

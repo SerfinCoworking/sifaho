@@ -75,7 +75,7 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    @internal_order.internal_order_products.build
+    @internal_order.order_products.build
   end
 
   # GET /internal_orders/new_applicant
@@ -87,7 +87,7 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    @internal_order.internal_order_products.build
+    @internal_order.order_products.build
   end
 
   # GET /internal_orders/1/edit
@@ -97,7 +97,6 @@ class InternalOrdersController < ApplicationController
     .select(:id, :name)
     .with_establishment_id(current_user.sector.establishment_id)
     .where.not(id: current_user.sector_id).as_json
-    @internal_order.internal_order_products.joins(:product).order("name")
   end
 
   # GET /external_orders/1/edit_receipt
@@ -107,7 +106,6 @@ class InternalOrdersController < ApplicationController
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
-    @internal_order.internal_order_products.joins(:product).order("name")
   end
 
   # POST /internal_orders
@@ -144,7 +142,7 @@ class InternalOrdersController < ApplicationController
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
-          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :new_applicant }
       end
     end
@@ -178,7 +176,7 @@ class InternalOrdersController < ApplicationController
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
-        @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :new_provider }
       end
     end
@@ -214,7 +212,7 @@ class InternalOrdersController < ApplicationController
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
-          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :new_applicant }
       end
     end
@@ -248,7 +246,7 @@ class InternalOrdersController < ApplicationController
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
-          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :edit_provider }
       end
     end
@@ -296,7 +294,7 @@ class InternalOrdersController < ApplicationController
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
-          @internal_order_products = @internal_order.internal_order_products.present? ? @internal_order.internal_order_products : @internal_order.internal_order_products.build
+          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :edit_provider }
       end
     end    
@@ -435,7 +433,7 @@ class InternalOrdersController < ApplicationController
       :date_received, 
       :observation, 
       :remit_code,
-      internal_order_products_attributes: [
+      order_products_attributes: [
         :id, 
         :product_id, 
         :lot_stock_id,

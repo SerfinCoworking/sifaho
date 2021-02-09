@@ -1,7 +1,7 @@
 class ExternalOrderProduct < ApplicationRecord
 
   # Relaciones
-  belongs_to :external_order, inverse_of: 'external_order_products'
+  belongs_to :external_order, inverse_of: 'order_products'
   belongs_to :product
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ExtOrdProdLotStock", foreign_key: "external_order_product_id", source: :ext_ord_prod_lot_stocks, inverse_of: 'external_order_product'
@@ -101,7 +101,7 @@ class ExternalOrderProduct < ApplicationRecord
 
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
-    (self.external_order.external_order_products.uniq - [self]).each do |eop|
+    (self.external_order.order_products.uniq - [self]).each do |eop|
       if eop.product_id == self.product_id
         errors.add(:uniqueness_product_in_the_order, "El producto código ya se encuentra en la orden")      
       end

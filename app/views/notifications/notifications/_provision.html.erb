@@ -8,7 +8,7 @@
     <%= notification.action_type %> una 
     <span class="visible-print">provisión</span>
     de 
-    <%= osCount = notification.target.internal_order_products.count %><%= ' insumo'.pluralize(osCount) %>
+    <%= osCount = notification.target.order_products.count %><%= ' insumo'.pluralize(osCount) %>
     para <%= notification.target.applicant_sector.name %>.
   </div>
 <% end %>

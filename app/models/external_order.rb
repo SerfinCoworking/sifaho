@@ -30,11 +30,11 @@ class ExternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :external_order_products, dependent: :destroy, inverse_of: 'external_order'
-  has_many :ext_ord_prod_lot_stocks, through: :external_order_products, inverse_of: 'external_order'
-  has_many :lot_stocks, :through => :external_order_products
+  has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: "external_order_id", inverse_of: 'external_order'
+  has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
+  has_many :lot_stocks, :through => :order_products
   has_many :lots, :through => :lot_stocks
-  has_many :products, :through => :external_order_products  
+  has_many :products, :through => :order_products  
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
@@ -43,12 +43,12 @@ class ExternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates_associated :external_order_products
+  validates_associated :order_products
   validates_uniqueness_of :remit_code
   validate :presence_of_products_into_the_order
 
   # Atributos anidados
-  accepts_nested_attributes_for :external_order_products,
+  accepts_nested_attributes_for :order_products,
     :allow_destroy => true
 
   # Callbacks
@@ -106,7 +106,7 @@ class ExternalOrder < ApplicationRecord
       order("external_orders.order_type #{ direction }")
     when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
-      order("external_order_products.count #{ direction }")
+      order("order_products.count #{ direction }")
     when /^solicitado_/
       # Ordenamiento por la fecha de recepción
       order("external_orders.requested_date #{ direction }") 
@@ -239,7 +239,7 @@ class ExternalOrder < ApplicationRecord
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
-    self.external_order_products.each do |eop|
+    self.order_products.each do |eop|
       eop.decrement_stock
     end
 
@@ -251,7 +251,7 @@ class ExternalOrder < ApplicationRecord
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
-    self.external_order_products.each do |eop|
+    self.order_products.each do |eop|
       eop.increment_lot_stock_to(self.applicant_sector)
     end
 
@@ -354,7 +354,7 @@ class ExternalOrder < ApplicationRecord
   end
 
   def presence_of_products_into_the_order
-    if self.external_order_products.size == 0
+    if self.order_products.size == 0
       errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
     end
   end

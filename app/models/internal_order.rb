@@ -9,11 +9,11 @@ class InternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :internal_order_products, dependent: :destroy, inverse_of: 'internal_order'
-  has_many :int_ord_prod_lot_stocks, through: :internal_order_products
-  has_many :lot_stocks, :through => :internal_order_products
+  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct',  foreign_key: "internal_order_id", inverse_of: 'internal_order'
+  has_many :int_ord_prod_lot_stocks, through: :order_products
+  has_many :lot_stocks, :through => :order_products
   has_many :lots, :through => :lot_stocks  
-  has_many :products, :through => :internal_order_products
+  has_many :products, :through => :order_products
   has_many :movements, class_name: "InternalOrderMovement"
   has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
   # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
@@ -29,12 +29,12 @@ class InternalOrder < ApplicationRecord
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validate :presence_of_products_into_the_order
-  validates_associated :internal_order_products
+  validates_associated :order_products
   validates_uniqueness_of :remit_code
   
 
   # Atributos anidados
-  accepts_nested_attributes_for :internal_order_products,
+  accepts_nested_attributes_for :order_products,
     :allow_destroy => true
   
   # Callbacks
@@ -207,7 +207,7 @@ class InternalOrder < ApplicationRecord
   # Método para retornar pedido a estado anterior
   def return_provider_status_by(a_user)
     if provision_en_camino?
-      self.internal_order_products.each do |iop|
+      self.order_products.each do |iop|
         iop.increment_stock
       end
   
@@ -234,7 +234,7 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
   def receive_order_by(a_user)
-    self.internal_order_products.each do |iop|
+    self.order_products.each do |iop|
       iop.increment_lot_stock_to(self.applicant_sector)
     end
 
@@ -263,7 +263,7 @@ class InternalOrder < ApplicationRecord
 
   # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
   def send_order_by(a_user)
-    self.internal_order_products.each do |iop|
+    self.order_products.each do |iop|
       iop.decrement_stock
     end
 
@@ -337,7 +337,7 @@ class InternalOrder < ApplicationRecord
   end  
 
   def presence_of_products_into_the_order
-    if self.internal_order_products.size == 0
+    if self.order_products.size == 0
       errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
     end
   end

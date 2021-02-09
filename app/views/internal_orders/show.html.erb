@@ -55,7 +55,7 @@
           <li class='nav-item'>
             <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
               <%= fa_icon "cubes" %> Productos
-              <span class="badge badge-secondary"><%= @internal_order.internal_order_products.count %></span>
+              <span class="badge badge-secondary"><%= @internal_order.order_products.count %></span>
             </a>
           </li>
           <li class="nav-item">
@@ -91,7 +91,7 @@
               </tr>
             </thead>
             <tbody>
-              <% @internal_order.internal_order_products.joins(:product).order("name").each do |int_ord_prod| %>
+              <% @internal_order.order_products.joins(:product).order("name").each do |int_ord_prod| %>
                 <tr class="<%= highlight_row(int_ord_prod.product_id) %>">
                   <% @stock = Stock.where(sector: current_user.sector, product: int_ord_prod.product ).first %>
                   <td class="text-secondary">
@@ -312,7 +312,7 @@
           </div>
           <div class="modal-body">
             <p>Esta seguro que ha recibido el pedido código <%= @internal_order.remit_code %>?</p>
-            <p>Contiene <%= pluralize(@internal_order.internal_order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
+            <p>Contiene <%= pluralize(@internal_order.order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
