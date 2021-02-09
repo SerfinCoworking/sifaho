@@ -376,7 +376,6 @@ class ExternalOrdersController < ApplicationController
                 row.values  product_code: eop.product.code,
                   product_name: eop.product.name,
                   requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
-                  delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
                   obs_req: eop.applicant_observation,
                   obs_del: eop.provider_observation
         
@@ -397,7 +396,6 @@ class ExternalOrdersController < ApplicationController
             row.values  product_code: eop.product.code,
             product_name: eop.product.name,
             requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
-            delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
             obs_req: eop.applicant_observation,
             obs_del: eop.provider_observation
             row.item(:border).show
