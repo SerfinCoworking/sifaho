@@ -41,9 +41,9 @@
         </ul>
         <div class="tab-content">
           <!-- Perfil -->
-          <div id='profile' class='tab-pane container active'>
+          <div id='profile' class='tab-pane fade active pt-2'>
+            <h5 class="border-bottom">DATOS BÁSICOS</h5>
             <div class="row">
-              <div class="col-12 pt-3"><h5 class="border-bottom">DATOS BÁSICOS</h5></div>
               <div class="col-4">
                 <h5><strong>DNI</strong></h5>
                 <%= @patient.dni %>
@@ -70,8 +70,8 @@
               </div>
             </div>
             <br>
+            <h5 class="border-bottom">DATOS DE CONTACTO</h5>
             <div class="row">
-              <div class="col-12"><h5 class="border-bottom">DATOS DE CONTACTO</h5></div>
               <div class="col-5">
                 <h5><strong><span class="glyphicon glyphicon-earphone"></span> Teléfonos</strong></h5>
                 <% @patient.patient_phones.each do |phone| %>
@@ -84,9 +84,9 @@
               </div>
             </div>
             <br>
-            <div class="row">
-              <% if @patient.address.present? %>
-                <div class="col-12"><h5 class="border-bottom">DATOS DEL DOMICILIO</h5></div>
+            <% if @patient.address.present? %>
+              <h5 class="border-bottom">DATOS DEL DOMICILIO</h5>
+              <div class="row">
                 <div class="col-3">
                   <p><h5><strong>País</strong></h5><%= @patient.address_country_name %></p>
                 </div>
@@ -99,14 +99,13 @@
                 <div class="col-3">
                   <p><h5><strong>Dirección</strong></h5><%= @patient.address_line %></p>
                 </div>
-              <% end %>
-            </div>
+              </div>
+            <% end %>
           </div>
-          <div id='outpatient_prescriptions' class='tab-pane container fade'>
-            <br>
+          <div id='outpatient_prescriptions' class='tab-pane fade pt-2'>
             <div class="card">
               <table class="table table-hover table-sm">
-                <thead>
+                <thead class="thead-light">
                   <tr>
                     <th>Código</th>
                     <th>Médico</th>
@@ -173,11 +172,10 @@
               </table>
             </div>
           </div>
-          <div id='chronic_prescriptions' class='tab-pane container fade'>
-            <br>
+          <div id='chronic_prescriptions' class='tab-pane fade pt-2'>
             <div class="card">
               <table class="table table-hover table-sm">
-                <thead>
+                <thead class="thead-light">
                   <tr>
                     <th>Código</th>
                     <th>Médico</th>
