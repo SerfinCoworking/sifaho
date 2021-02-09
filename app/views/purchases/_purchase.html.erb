@@ -57,19 +57,22 @@
           <%= fa_icon 'undo'%>
         <% end %>
       <% end %>
-      
+
       <%= render(
         partial: 'shared/action_buttons',
-          locals:{ 
-              object: purchase, 
-              show: true, 
-              edit: true, 
-              destroy: true,
-              delete_title: "Eliminar abastecimiento",
-              delete_body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
-              destroy_path: "/purchases/#{purchase.id}"
-          }
-        ) 
+        locals:{ 
+            object: purchase, 
+            show: {visible: true},
+            edit: {visible: true},
+            destroy: {
+              visible: true, 
+              title: "Eliminar abastecimiento",
+              body: "Esta seguro que desea eliminar el abastecimiento de #{ purchase.code_number }?",
+              path: "/purchases/#{purchase.id}"
+            }
+            
+        }
+      ) 
       %>
     </div>
   </td>
