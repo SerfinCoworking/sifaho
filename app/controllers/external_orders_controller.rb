@@ -341,8 +341,8 @@ class ExternalOrdersController < ApplicationController
   def generate_order_report(external_order)
     report = Thinreports::Report.new
 
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page_despacho.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page_despacho.tlf'), id: :cover_page
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page.tlf'), id: :cover_page
     
     # Comenzamos con la pagina principal
     report.start_new_page layout: :cover_page
@@ -362,56 +362,47 @@ class ExternalOrdersController < ApplicationController
     external_order.external_order_products.joins(:product).order("name").each do |eop|
       
       # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)
+      
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page
       end
-      
       report.list do |list|
-        list.add_row do |row|
-          row.values  product_code: eop.product.code,
-                      product_name: eop.product.name,
-                      requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
-                      delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
-                      obs_req: eop.applicant_observation,
-                      obs_del: eop.provider_observation
-          
-          row.item(:lot_indicator).hide
-        end
-        
-        # Si el producto tiene lotes asignados, los vamos agregando
-        if eop.order_prod_lot_stocks.count > 0
-   
+        if eop.order_prod_lot_stocks.present?
           eop.order_prod_lot_stocks.each_with_index do |opls, index|
-
-            # Si en los lotes, se agrega una nueva pagina, entonces debemos rellenarla con los lotes
-            if report.page_count == 1 && report.list.overflow?
-              report.start_new_page do |page|
-                page.list.add_row do |row|
-                  row.values  lot_code: "L:  #{opls.lot_stock.lot.code}",
-                  lot_name:"LAB: #{ opls.lot_stock.lot.laboratory.name}",
-                  expiry_date:"V: #{ opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'}",
+            if index == 0
+              list.add_row do |row|
+                row.values  lot_code: opls.lot_stock.lot.code,
+                  expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
                   lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
-    
-                    if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
-                      row.item(:border).hide
-                    end
-                  end
+                row.values  product_code: eop.product.code,
+                  product_name: eop.product.name,
+                  requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
+                  delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
+                  obs_req: eop.applicant_observation,
+                  obs_del: eop.provider_observation
+        
+                row.item(:border).show if eop.order_prod_lot_stocks.count == 1
+              end
+            else                
+              list.add_row do |row|
+                row.values  lot_code: opls.lot_stock.lot.code,
+                expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
+                lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
+        
+                row.item(:border).show if eop.order_prod_lot_stocks.last == opls
               end
             end
-            list.add_row do |row|
-              row.values  lot_code: "L:  #{opls.lot_stock.lot.code}",
-              lot_name:"LAB: #{ opls.lot_stock.lot.laboratory.name}",
-              expiry_date:"V: #{ opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '----'}",
-              lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
-
-                if eop.order_prod_lot_stocks.count > 1 && (index + 1) < eop.order_prod_lot_stocks.count
-                  row.item(:border).hide
-                end
-              end
-
           end
-        end # fin lotes       
-       
+        else
+          list.add_row do |row|
+            row.values  product_code: eop.product.code,
+            product_name: eop.product.name,
+            requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
+            delivered_quantity: eop.delivery_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.delivery_quantity),
+            obs_req: eop.applicant_observation,
+            obs_del: eop.provider_observation
+          end
+        end
       end # fin lista      
     end # fin productos
     

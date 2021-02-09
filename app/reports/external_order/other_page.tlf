@@ -9,7 +9,7 @@
       "x": 20,
       "y": 20,
       "width": 555.2,
-      "height": 801.8,
+      "height": 781.1,
       "header": {
         "enabled": true,
         "height": 15.7,
@@ -38,41 +38,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 59,
+            "x": 277,
             "y": 127,
-            "width": 250,
+            "width": 46.1,
             "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 10,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": []
-            },
-            "texts": [
-              "Producto"
-            ]
-          },
-          {
-            "id": "",
-            "type": "text",
-            "display": true,
-            "description": "",
-            "x": 459,
-            "y": 127,
-            "width": 90,
-            "height": 11,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 10,
+              "font-size": 9,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -90,15 +64,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 369,
+            "x": 227,
             "y": 127,
-            "width": 90,
+            "width": 43.3,
             "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 10,
+              "font-size": 9,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -118,13 +92,13 @@
             "description": "",
             "x": 32,
             "y": 127,
-            "width": 27,
+            "width": 18.3,
             "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 10,
+              "font-size": 9,
               "color": "#000000",
               "text-align": "left",
               "vertical-align": "top",
@@ -142,15 +116,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 549,
+            "x": 487,
             "y": 127,
-            "width": 38,
+            "width": 46.5,
             "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 10,
+              "font-size": 9,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -160,7 +134,7 @@
               "font-style": []
             },
             "texts": [
-              "Lotes"
+              "Obs Solic"
             ]
           },
           {
@@ -168,15 +142,15 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 309,
+            "x": 542,
             "y": 127,
-            "width": 60,
+            "width": 38,
             "height": 11,
             "style": {
               "font-family": [
                 "Helvetica"
               ],
-              "font-size": 10,
+              "font-size": 9,
               "color": "#000000",
               "text-align": "center",
               "vertical-align": "top",
@@ -186,13 +160,117 @@
               "font-style": []
             },
             "texts": [
-              "Unidad"
+              "Obs Prov"
+            ]
+          },
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 57,
+            "y": 127,
+            "width": 40,
+            "height": 11,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "Producto"
+            ]
+          },
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 327,
+            "y": 127,
+            "width": 41.9,
+            "height": 11,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "center",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "Cantidad"
+            ]
+          },
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 382,
+            "y": 127,
+            "width": 22.9,
+            "height": 11,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "center",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "Lote"
+            ]
+          },
+          {
+            "id": "",
+            "type": "text",
+            "display": true,
+            "description": "",
+            "x": 452,
+            "y": 127,
+            "width": 29.4,
+            "height": 11,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "center",
+              "vertical-align": "top",
+              "line-height": "",
+              "line-height-ratio": "",
+              "letter-spacing": "",
+              "font-style": []
+            },
+            "texts": [
+              "Venc."
             ]
           }
         ]
       },
       "detail": {
-        "height": 19,
+        "height": 23.2,
         "translate": {
           "x": -12,
           "y": -154.3
@@ -205,40 +283,8 @@
             "description": "",
             "x": 32,
             "y": 190,
-            "width": 27,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "tab",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 32,
-            "y": 190,
-            "width": 27,
-            "height": 18,
+            "width": 21.9,
+            "height": 21.5,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -267,10 +313,10 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 369.2,
+            "x": 217,
             "y": 190,
-            "width": 90,
-            "height": 18,
+            "width": 55,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -283,7 +329,7 @@
               "line-height-ratio": "",
               "letter-spacing": "",
               "font-style": [],
-              "overflow": "truncate",
+              "overflow": "fit",
               "word-wrap": "break-word"
             },
             "reference-id": "",
@@ -299,10 +345,10 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 59,
+            "x": 55.4,
             "y": 190,
-            "width": 250,
-            "height": 18,
+            "width": 158,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -331,10 +377,10 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 459.2,
+            "x": 272,
             "y": 190,
-            "width": 90,
-            "height": 18,
+            "width": 55,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -347,7 +393,7 @@
               "line-height-ratio": "",
               "letter-spacing": "",
               "font-style": [],
-              "overflow": "truncate",
+              "overflow": "fit",
               "word-wrap": "break-word"
             },
             "reference-id": "",
@@ -359,14 +405,14 @@
             }
           },
           {
-            "id": "lot_quantity",
+            "id": "obs_req",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 549.2,
+            "x": 487,
             "y": 190,
-            "width": 38,
-            "height": 18,
+            "width": 50,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -393,7 +439,7 @@
           {
             "id": "border",
             "type": "line",
-            "display": true,
+            "display": false,
             "description": "",
             "style": {
               "border-color": "#a5a5a5",
@@ -401,19 +447,19 @@
               "border-style": "solid"
             },
             "x1": 32,
-            "y1": 208,
+            "y1": 212.9,
             "x2": 587.2,
-            "y2": 208
+            "y2": 212.9
           },
           {
-            "id": "product_unity",
+            "id": "obs_del",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 309.2,
+            "x": 537.2,
             "y": 190,
-            "width": 60,
-            "height": 18,
+            "width": 50,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -424,70 +470,6 @@
               "vertical-align": "middle",
               "line-height": "",
               "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "truncate",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_code",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 59,
-            "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_name",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 195,
-            "y": 190,
-            "width": 245,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
               "letter-spacing": "",
               "font-style": [],
               "overflow": "fit",
@@ -506,10 +488,10 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 440,
+            "x": 452,
             "y": 190,
-            "width": 147.2,
-            "height": 18,
+            "width": 30,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -538,10 +520,10 @@
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 127,
+            "x": 327,
             "y": 190,
-            "width": 68,
-            "height": 18,
+            "width": 55,
+            "height": 22,
             "style": {
               "font-family": [
                 "Helvetica"
@@ -564,164 +546,53 @@
               "base": "",
               "type": ""
             }
-          },
-          {
-            "id": "lot_code_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 59,
-            "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_q_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 127,
-            "y": 190,
-            "width": 68,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_name_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 195,
-            "y": 190,
-            "width": 245,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "expiry_date_title",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 440,
-            "y": 190,
-            "width": 147.2,
-            "height": 18,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": 10.03125,
-              "line-height-ratio": 1,
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
-          },
-          {
-            "id": "lot_indicator",
-            "type": "line",
-            "display": true,
-            "description": "",
-            "style": {
-              "border-color": "#000000",
-              "border-width": 1,
-              "border-style": "dashed"
-            },
-            "x1": 45.5,
-            "y1": 190,
-            "x2": 45.5,
-            "y2": 208
           },
           {
             "id": "lot_border",
             "type": "line",
-            "display": false,
+            "display": true,
             "description": "",
             "style": {
               "border-color": "#a5a5a5",
               "border-width": 1,
               "border-style": "solid"
             },
-            "x1": 59,
-            "y1": 208,
+            "x1": 327.2,
+            "y1": 212.9,
             "x2": 587.2,
-            "y2": 208
+            "y2": 212.9
+          },
+          {
+            "id": "lot_code",
+            "type": "text-block",
+            "display": true,
+            "description": "",
+            "x": 382,
+            "y": 190,
+            "width": 67.4,
+            "height": 22,
+            "style": {
+              "font-family": [
+                "Helvetica"
+              ],
+              "font-size": 9,
+              "color": "#000000",
+              "text-align": "left",
+              "vertical-align": "middle",
+              "line-height": 10.03125,
+              "line-height-ratio": 1,
+              "letter-spacing": "",
+              "font-style": [],
+              "overflow": "fit",
+              "word-wrap": "break-word"
+            },
+            "reference-id": "",
+            "value": "",
+            "multiple-line": true,
+            "format": {
+              "base": "",
+              "type": ""
+            }
           }
         ]
       },
@@ -730,7 +601,7 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -198.3
+          "y": -194.1
         },
         "items": []
       },
@@ -739,7 +610,7 @@
         "height": 18,
         "translate": {
           "x": -12,
-          "y": -245.6
+          "y": -241.4
         },
         "items": [
           {
@@ -999,27 +870,10 @@
               "base": "",
               "type": ""
             }
-          },
-          {
-            "id": "",
-            "type": "rect",
-            "display": true,
-            "description": "",
-            "x": 32,
-            "y": 300.3,
-            "width": 555.2,
-            "height": 18,
-            "style": {
-              "border-color": "#000000",
-              "border-width": 1,
-              "border-style": "dashed",
-              "fill-color": "none"
-            },
-            "border-radius": 0
           }
         ]
       },
-      "content-height": 786.0999999999999,
+      "content-height": 765.4,
       "auto-page-break": true
     },
     {
@@ -1186,7 +1040,7 @@
     "layout-guides": [
       {
         "type": "x",
-        "position": 58.9
+        "position": 9.9
       },
       {
         "type": "y",
