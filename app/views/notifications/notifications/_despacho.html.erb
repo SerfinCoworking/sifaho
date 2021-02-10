@@ -1,0 +1,17 @@
+
+<%if short_message %>
+  <div class="text-nowrap">
+    <%= notification.action_type %> un despacho
+  </div>
+
+<%else %>
+  <div class="">
+    <%= notification.actor.profile.first_name.titleize %> 
+    <%= notification.action_type %> 
+    un 
+    <span class="visible-print">despacho</span>
+    de 
+    <%= osCount = notification.target.external_order_products.count %><%= ' insumo'.pluralize(osCount) %>
+    para <%= notification.target.applicant_sector.name %> de <%= notification.target.applicant_sector.establishment.name %>.
+  </div>
+<% end%>
