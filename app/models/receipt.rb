@@ -93,6 +93,14 @@ class Receipt < ApplicationRecord
     where('received_date <= ?', a_date)
   }
 
+  scope :since_date, lambda { |a_date|
+    where('receipts.created_at >= ?', a_date)
+  }
+
+  scope :to_date, lambda { |a_date|
+    where('receipts.created_at <= ?', a_date)
+  }
+
   # Método para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
