@@ -42,14 +42,14 @@ class FixDuplicatedOrgProductsOnChronicPrescriptions < ActiveRecord::Migration[5
   end
 
   private
-  def update_ocpp_total_delivered_quantity(ocpp, ocpp)
-    ocpp.total_delivered_quantity += ocpp.total_delivered_quantity
+  def update_ocpp_total_delivered_quantity(ocpp, ocpp_to_destroy)
+    ocpp.total_delivered_quantity += ocpp_to_destroy.total_delivered_quantity
     ocpp.save(validate: false)
     puts "Cantidad total entregada actualizada: #{ocpp.total_delivered_quantity}".colorize(background: :green)
   end
   
-  def updcpp_with_occp_relationship(ocpp, ocpp)
-    ocpp.chronic_prescription_products.each do |cpp|
+  def update_with_occp_relationship(ocpp, ocpp_to_destroy)
+    ocpp_to_destroy.chronic_prescription_products.each do |cpp|
       cpp.original_chronic_prescription_product_id = ocpp.id
       cpp.save(validate: false)
       puts "Chronic Prescription Product actualizado: #{cpp.id}".colorize(background: :green)
