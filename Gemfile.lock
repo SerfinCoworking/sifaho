@@ -57,6 +57,9 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.7.6)
       execjs
+    axlsx_styler (1.1.0)
+      activesupport (>= 3.1)
+      caxlsx (>= 2.0.2)
     backport (1.1.2)
     bcrypt (3.1.12)
     bcrypt (3.1.12-java)
@@ -90,6 +93,14 @@ GEM
       xpath (>= 2.0, < 4.0)
     case_transform (0.2)
       activesupport
+    caxlsx (3.0.0)
+      htmlentities (~> 4.3, >= 4.3.4)
+      mimemagic (~> 0.3)
+      nokogiri (~> 1.8, >= 1.8.2)
+      rubyzip (~> 1.2, >= 1.2.1)
+    caxlsx_rails (0.6.2)
+      actionpack (>= 3.1)
+      caxlsx (>= 3.0)
     chartkick (2.3.5)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
@@ -151,6 +162,7 @@ GEM
       tilt
     highcharts-rails (6.0.3)
       railties (>= 3.1)
+    htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -469,6 +481,7 @@ DEPENDENCIES
   active_median
   active_model_serializers
   active_storage_base64
+  axlsx_styler
   better_errors
   binding_of_caller
   bootstrap (~> 4.5.0)
@@ -477,6 +490,8 @@ DEPENDENCIES
   bootstrap4-datetime-picker-rails
   byebug
   capybara (~> 2.13)
+  caxlsx
+  caxlsx_rails
   chartkick
   chosen-rails
   cocoon

@@ -14,7 +14,7 @@ class StockMovementsController < ApplicationController
       persistence_id: false,
     ) or return
 
-    if request.format.xls?
+    if request.format.xlsx?
       @stock_movements = @filterrific.find
     else
       @stock_movements = @filterrific.find.page(params[:page]).per_page(20)
@@ -23,7 +23,7 @@ class StockMovementsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
-      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteFábrica_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
+      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"MovStock_COD#{@stock.product.code}_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 

@@ -181,4 +181,8 @@ class Receipt < ApplicationRecord
   def human_name
     self.class.model_name.human
   end
+
+  def remit_code
+    self.code
+  end
 end

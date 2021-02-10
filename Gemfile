@@ -7,6 +7,10 @@ end
 
 ruby "2.6.5"
 
+# To generate xlsx reports
+gem 'axlsx_styler'
+gem 'caxlsx'
+gem 'caxlsx_rails'
 # To give pretty colors to console
 gem 'colorize', '~> 0.8.1'
 # To call external apis

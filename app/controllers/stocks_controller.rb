@@ -13,17 +13,13 @@ class StocksController < ApplicationController
       },
       persistence_id: false,
     ) or return
-    if request.format.xls?
-      @stocks = @filterrific.find
-    else
-      @areas = Area.all
-      @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
-    end
+
+    @areas = Area.all
+    @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
     
     respond_to do |format|
       format.html
       format.js
-      format.xls { headers["Content-Disposition"] = "attachment; filename=\"ReporteStock_#{DateTime.now.strftime('%d-%m-%Y_%H-%M')}.xls\"" }
     end
   end
 
