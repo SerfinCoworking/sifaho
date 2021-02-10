@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_114239) do
+ActiveRecord::Schema.define(version: 2021_02_10_145141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1135,63 +1135,3 @@ ActiveRecord::Schema.define(version: 2021_02_10_114239) do
     t.index ["user_id"], name: "index_user_sectors_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "username", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.inet "current_sign_in_ip"
-    t.inet "last_sign_in_ip"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "sector_id"
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["sector_id"], name: "index_users_on_sector_id"
-    t.index ["username"], name: "index_users_on_username", unique: true
-  end
-
-  create_table "users_roles", id: false, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "role_id"
-    t.index ["role_id"], name: "index_users_roles_on_role_id"
-    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
-    t.index ["user_id"], name: "index_users_roles_on_user_id"
-  end
-
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "addresses", "cities"
-  add_foreign_key "addresses", "countries"
-  add_foreign_key "addresses", "states"
-  add_foreign_key "cities", "states"
-  add_foreign_key "external_order_comments", "external_orders", column: "order_id"
-  add_foreign_key "external_order_comments", "users"
-  add_foreign_key "lots", "laboratories"
-  add_foreign_key "lots", "products"
-  add_foreign_key "patient_phones", "patients"
-  add_foreign_key "patients", "addresses"
-  add_foreign_key "permission_requests", "users"
-  add_foreign_key "prescriptions", "establishments"
-  add_foreign_key "prescriptions", "patients"
-  add_foreign_key "prescriptions", "professionals"
-  add_foreign_key "products", "areas"
-  add_foreign_key "products", "unities"
-  add_foreign_key "professionals", "professional_types"
-  add_foreign_key "quantity_ord_supply_lots", "laboratories"
-  add_foreign_key "quantity_ord_supply_lots", "supplies"
-  add_foreign_key "quantity_ord_supply_lots", "supply_lots"
-  add_foreign_key "reports", "sectors"
-  add_foreign_key "reports", "supplies"
-  add_foreign_key "reports", "users"
-  add_foreign_key "sectors", "establishments"
-  add_foreign_key "states", "countries"
-  add_foreign_key "stocks", "products"
-  add_foreign_key "stocks", "sectors"
-  add_foreign_key "supplies", "supply_areas"
-  add_foreign_key "supply_lots", "laboratories"
-  add_foreign_key "supply_lots", "supplies"
-  add_foreign_key "users", "sectors"
-end

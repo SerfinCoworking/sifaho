@@ -129,6 +129,14 @@ class ExternalOrder < ApplicationRecord
     where('external_orders.requested_date <= ?', a_date)
   }
 
+  scope :sent_date_since, lambda { |a_date|
+    where('external_orders.sent_date >= ?', a_date)
+  }
+
+  scope :sent_date_to, lambda { |a_date|
+    where('external_orders.sent_date <= ?', a_date)
+  }
+
   scope :with_status, lambda { |a_status|
     where('external_orders.status = ?', a_status)
   }
