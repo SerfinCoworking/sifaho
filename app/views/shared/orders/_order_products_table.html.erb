@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
-      <%= form.simple_fields_for :order_products do |form_product| %>
+      <%= form.simple_fields_for :order_products, sort_order_products(form.object, params[:action]) do |form_product| %>
         <%= render "shared/orders/order_product_fields", f: form_product %>
       <% end %>
     </tbody>
