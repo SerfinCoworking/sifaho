@@ -15,7 +15,7 @@ class FixDuplicatedOrgProductsOnChronicPrescriptions < ActiveRecord::Migration[5
         reapeted_ocpp_ids.uniq.each do |target| 
           # obtenemos el primer original product ordenados por request_quantityuest_quantity (nos quedamos con el que mayor cantidad a dispensar tiene)
           
-          @ocpp = chronic_pres.original_chronic_prescription_products.where(product_id: target).order(:request_quantity).first
+          @ocpp = chronic_pres.original_chronic_prescription_products.where(product_id: target).order(:request_quantity).last
           
           # Buscamos todos los productos, y excluimos a @ocpp
           @ocpp_to_destroy = chronic_pres.original_chronic_prescription_products.where(product_id: target).where.not(id: @ocpp.id)
