@@ -48,7 +48,7 @@ class FixDuplicatedOrgProductsOnChronicPrescriptions < ActiveRecord::Migration[5
     puts "Cantidad total entregada actualizada: #{ocpp.total_delivered_quantity}".colorize(background: :green)
   end
   
-  def update_with_occp_relationship(ocpp, ocpp_to_destroy)
+  def update_cpp_with_occp_relationship(ocpp, ocpp_to_destroy)
     ocpp_to_destroy.chronic_prescription_products.each do |cpp|
       cpp.original_chronic_prescription_product_id = ocpp.id
       cpp.save(validate: false)

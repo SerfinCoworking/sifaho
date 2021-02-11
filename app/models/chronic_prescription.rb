@@ -43,6 +43,7 @@ class ChronicPrescription < ApplicationRecord
       :search_by_patient,
       :sorted_by,
       :date_prescribed_since,
+      :search_by_status
     ]
   )
 
@@ -118,6 +119,16 @@ class ChronicPrescription < ApplicationRecord
     ]
   end
 
+  def self.options_for_status
+    [
+      ['Todos', '', 'default'],
+      ['Pendiente', 0, 'info'],
+      ['Dispensada', 1, 'success'],
+      ['Dispensada parcial', 2, 'warning'],
+      ['Vencida', 3, 'danger']
+    ]
+  end 
+
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
     where('chronic_prescriptions.date_prescribed >= ?', reference_time)
@@ -125,6 +136,10 @@ class ChronicPrescription < ApplicationRecord
 
   scope :with_establishment, lambda { |a_establishment|
     where('chronic_prescriptions.establishment_id = ?', a_establishment)
+  }
+  
+  scope :search_by_status, lambda { |status|
+    where('chronic_prescriptions.status = ?', status)
   }
 
   def create_notification(of_user, action_type)
