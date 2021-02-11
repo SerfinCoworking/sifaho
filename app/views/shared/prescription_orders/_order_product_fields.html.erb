@@ -149,7 +149,7 @@
       <div class="bg-progress bg-info"></div>
       <%= button_tag type: "button", 
         class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
-        "data-select-lot-url" => find_lots_stocks_path,
+        "data-select-lot-url" => find_order_product_lots_outpatient_prescriptions_path(f.object.id),
         "data-template-fill-hidden" => fields do %>
         <% if f.object.lot_stocks.present? %>
           Seleccionados <%= f.object.lot_stocks.count %> 

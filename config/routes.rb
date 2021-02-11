@@ -276,10 +276,14 @@ Rails.application.routes.draw do
     end
   end
 
+  # en row_id debemos agregar el id de OutpatientPrescriptionProduct
   resources :outpatient_prescriptions do
     member do
       get 'return_dispensation'
       get 'dispense'
+    end
+    collection do
+      get "find_lots(/:order_prodcut_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end
   

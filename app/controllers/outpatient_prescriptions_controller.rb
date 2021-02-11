@@ -1,4 +1,7 @@
 class OutpatientPrescriptionsController < ApplicationController
+
+  include FindLots
+  
   before_action :set_outpatient_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_dispensation ]
 
   # GET /outpatient_prescriptions
@@ -224,6 +227,9 @@ class OutpatientPrescriptionsController < ApplicationController
     report.generate
   end
   
+  def set_order_product
+    @order_product = params[:order_prodcut_id].present? ? OutpatientPrescriptionProduct.find(params[:order_prodcut_id]) : OutpatientPrescriptionProduct.new
+  end
   
 
   private
