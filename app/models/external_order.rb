@@ -49,6 +49,7 @@ class ExternalOrder < ApplicationRecord
 
   # Atributos anidados
   accepts_nested_attributes_for :order_products,
+    reject_if: proc { |attributes| attributes['product_id'].blank? },
     :allow_destroy => true
 
   # Callbacks
