@@ -1,4 +1,5 @@
 class ExternalOrdersController < ApplicationController
+  include FindLots
   before_action :set_external_order, only: [:show, :send_provider, :send_applicant, :destroy, :delete, :return_applicant_status, :return_provider_status, :edit_provider, :edit_applicant,
     :update_applicant, :update_provider, :accept_provider, :receive_applicant_confirm, :receive_applicant, :receive_applicant, :nullify, :nullify_confirm ]
   
@@ -451,6 +452,10 @@ class ExternalOrdersController < ApplicationController
       flash[:success] = "#{@external_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to @external_order }
     end
+  end
+
+  def set_order_product
+    @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new
   end
 
   private

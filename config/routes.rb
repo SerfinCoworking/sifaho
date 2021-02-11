@@ -10,9 +10,6 @@ Rails.application.routes.draw do
     member do
       resources :stock_movements, only: :index, path: :movimientos
     end
-    collection do
-      get "find_lots"
-    end
   end
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all
@@ -203,9 +200,11 @@ Rails.application.routes.draw do
       get "applicant_index"
       get "provider_index"
       get "statistics"
+      get "find_lots(/:order_product_id)", to: "internal_orders#find_lots", as: "find_order_product_lots"
       post "create_applicant"
       post "create_provider"
     end
+
   end
 
   resources :internal_order_comments, only: [ :show, :create]
@@ -243,6 +242,7 @@ Rails.application.routes.draw do
       get "applicant_index"
       get "provider_index"
       get "statistics"
+      get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
       post "create_applicant"
       post "create_provider"
     end
@@ -291,6 +291,9 @@ Rails.application.routes.draw do
     resources :chronic_dispensations, only: [:new, :create] do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
+      collection do
+        get "find_lots(/:order_prodcut_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
+      end
     end
   end
   

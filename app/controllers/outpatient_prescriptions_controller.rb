@@ -228,7 +228,7 @@ class OutpatientPrescriptionsController < ApplicationController
   end
   
   def set_order_product
-    @order_product = params[:order_prodcut_id].present? ? OutpatientPrescriptionProduct.find(params[:order_prodcut_id]) : OutpatientPrescriptionProduct.new
+    @order_product = params[:order_product_id].present? ? OutpatientPrescriptionProduct.find(params[:order_product_id]) : OutpatientPrescriptionProduct.new
   end
   
 
