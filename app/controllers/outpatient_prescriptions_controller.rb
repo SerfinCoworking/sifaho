@@ -9,7 +9,8 @@ class OutpatientPrescriptionsController < ApplicationController
       OutpatientPrescription.with_establishment(current_user.establishment),
       params[:filterrific],
       select_options: {
-        sorted_by: OutpatientPrescription.options_for_sorted_by
+        sorted_by: OutpatientPrescription.options_for_sorted_by,
+        search_by_status: OutpatientPrescription.options_for_status
       },
       persistence_id: false
     ) or return
