@@ -155,7 +155,7 @@
                     <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
                   </td>
                   <td>
-                    <% progress = (org_chron_pres_prod.total_delivered_quantity * 100 / org_chron_pres_prod.total_request_quantity) %>
+                    <% progress = org_chron_pres_prod.total_request_quantity > 0 ? (org_chron_pres_prod.total_delivered_quantity * 100 / org_chron_pres_prod.total_request_quantity) : 0 %>
                     <div class="custom-progress progress bg-light position-relative">
                       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
                       <div class="percentage-text text-black position-absolute font-weight-bold"><%=progress%>%</div>
