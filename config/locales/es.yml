@@ -93,6 +93,11 @@ es:
         gln: "GLN"
       receipt:
         provider_sector_id: "Sector proveedor"
+      product:
+        code: "Código"
+        name: "Nombre"
+        unity_id: "Unidad"
+        area_id: "Rubro"
       receipt_product:
         lot_code: "Lote"
         supply_id: "Insumo"

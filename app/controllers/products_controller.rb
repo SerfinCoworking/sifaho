@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
   def show
     authorize @product
 
-    @stock = current_user.sector.stock_product(@product.id).first
+    @stock_quantity = current_user.sector.stock_to(@product.id)
     respond_to do |format|
       format.html
       format.js
@@ -166,7 +166,7 @@ class ProductsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      @product = Product.with_deleted.find(params[:id])
+      @product = Product.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

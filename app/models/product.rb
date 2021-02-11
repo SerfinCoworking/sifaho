@@ -2,13 +2,12 @@ class Product < ApplicationRecord
   include PgSearch
   
   # Relations
-  belongs_to :unity, optional: true
+  belongs_to :unity
   belongs_to :area
   has_many :stocks, dependent: :destroy
   
   # Validations
-  validates_presence_of :name, :code
-  # :area
+  validates_presence_of :name, :code, :area_id, :unity_id
   validates_uniqueness_of :code
 
   # Delegations
