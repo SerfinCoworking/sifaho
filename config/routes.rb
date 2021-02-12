@@ -291,9 +291,9 @@ Rails.application.routes.draw do
     resources :chronic_dispensations, only: [:new, :create] do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
-      collection do
-        get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
-      end
+    end
+    collection do
+      get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
   end
   
