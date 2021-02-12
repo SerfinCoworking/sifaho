@@ -39,6 +39,7 @@ class ExternalOrdersController < ApplicationController
   # GET /external_orders.json
   def applicant_index
     authorize ExternalOrder
+    # asd
     @filterrific = initialize_filterrific(
       ExternalOrder.applicant(current_user.sector),
       params[:filterrific],
@@ -48,7 +49,7 @@ class ExternalOrdersController < ApplicationController
       },
       persistence_id: false
     ) or return
-    @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
+    @applicant_orders = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /external_orders/1
