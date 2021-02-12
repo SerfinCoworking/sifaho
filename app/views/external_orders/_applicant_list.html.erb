@@ -43,21 +43,21 @@
           Recibos <span class="badge badge-secondary"><%= @applicant_orders.count %></span>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 0}), 
+          <%= link_to applicant_index_external_orders_path(filterrific: {:with_status => 0}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver solicitudes en auditoría", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             En auditoría <span class="badge badge-warning"><%= @applicant_orders.solicitud_enviada.count %></span>
           <% end %>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 1}), 
+          <%= link_to applicant_index_external_orders_path(filterrific: {:with_status => 1}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver solicitudes enviadas", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             Enviadas <span class="badge badge-info"><%= @applicant_orders.solicitud_enviada.count %></span>
           <% end %>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 2}), 
+          <%= link_to applicant_index_external_orders_path(filterrific: {:with_status => 2}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver provisiones en camino", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             Provisiones en camino <span class="badge badge-primary"><%= @applicant_orders.proveedor_auditoria.count %></span>
