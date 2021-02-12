@@ -200,12 +200,12 @@ class OutpatientPrescription < ApplicationRecord
 
   # Returns the name of the efetor who deliver the products
   def origin_name
-    self.professional.fullname
+    self.professional.full_info
   end
 
   # Returns the name of the efetor who receive the products
   def destiny_name
-    self.patient.fullname
+    self.patient.dni+" "+self.patient.full_name
   end
 
   # Return the i18n model name

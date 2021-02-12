@@ -65,26 +65,26 @@
       <!-- Extra info -->
       <div class='col-md-6 col-xs-6'>
         <div class='row'>
-          <div class='col-md-3 col-xs-3'>    
+          <div class='col-3 col-xs-3'>    
             <strong>Recetada:</strong><br>
             <%= @chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
           </div>
-          <div class='col-md-3 col-xs-3'>
+          <div class='col-3 col-xs-3'>
             <strong>Vencimiento:</strong><br>
             <%= @chronic_prescription.expiry_date.strftime("%d/%m/%Y") %>
           </div>
-          <div class='col-md-3 col-xs-3'>
+          <div class="col-3">
+            <strong>Meses: </strong><br>
+            <%= (@chronic_prescription.expiry_date - @chronic_prescription.date_prescribed.to_date).to_i / 30%>
+          </div>
+          <div class='col-3 col-xs-3'>
             <strong>Código:</strong>
             <%= @chronic_prescription.remit_code %>
           </div>
         </div>
         <hr>
         <div class='row'>
-          <div class="col-3">
-            <strong>Meses: </strong>
-            <%= (@chronic_prescription.expiry_date - @chronic_prescription.date_prescribed.to_date).to_i / 30%>
-          </div>
-          <div class="col-3">
+          <div class="col-12">
             <strong>Diagnóstico:</strong>
             <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Ninguno' %>
           </div>
