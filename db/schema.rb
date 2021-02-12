@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_173558) do
+ActiveRecord::Schema.define(version: 2021_02_12_181759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -547,6 +547,16 @@ ActiveRecord::Schema.define(version: 2021_02_10_173558) do
     t.string "name"
     t.index ["cuit"], name: "index_laboratories_on_cuit", unique: true
     t.index ["gln"], name: "index_laboratories_on_gln", unique: true
+  end
+
+  create_table "lot_archives", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_stock_id"], name: "index_lot_archives_on_lot_stock_id"
+    t.index ["user_id"], name: "index_lot_archives_on_user_id"
   end
 
   create_table "lot_stocks", force: :cascade do |t|
