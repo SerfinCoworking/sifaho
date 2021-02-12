@@ -65,7 +65,7 @@ class OutpatientPrescriptionProduct < ApplicationRecord
   def lot_stock_sum_quantity
     total_quantity = 0
     self.order_prod_lot_stocks.each do |oppls| 
-      total_quantity += oppls.quantity
+      total_quantity += oppls.quantity unless oppls.marked_for_destruction?
     end
     if self.delivery_quantity.present? && self.delivery_quantity < total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")

@@ -283,7 +283,7 @@ Rails.application.routes.draw do
       get 'dispense'
     end
     collection do
-      get "find_lots(/:order_prodcut_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
+      get "find_lots(/:order_product_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end
   
@@ -292,7 +292,7 @@ Rails.application.routes.draw do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
       collection do
-        get "find_lots(/:order_prodcut_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
+        get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
       end
     end
   end
