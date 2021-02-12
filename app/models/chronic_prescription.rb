@@ -174,7 +174,7 @@ class ChronicPrescription < ApplicationRecord
 
   # Returns the name of the efetor who deliver the products
   def origin_name
-    self.professional.fullinfo
+    self.professional.full_info
   end
 
   # Returns the name of the efetor who receive the products
