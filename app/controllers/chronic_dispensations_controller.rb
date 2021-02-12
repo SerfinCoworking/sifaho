@@ -1,4 +1,6 @@
 class ChronicDispensationsController < ApplicationController
+  include FindLots
+  
   before_action :set_chronic_prescription, only: [:new, :create, :return_dispensation] 
 
   # GET /chronic_dispensations/new
@@ -46,6 +48,10 @@ class ChronicDispensationsController < ApplicationController
       end
       format.html { redirect_to chronic_prescription_path(@chronic_prescription) }
     end
+  end
+
+  def set_order_product
+    @order_product = params[:order_product_id].present? ? OutpatientPrescriptionProduct.find(params[:order_product_id]) : OutpatientPrescriptionProduct.new
   end
 
   private

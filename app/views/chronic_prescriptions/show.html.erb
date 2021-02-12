@@ -79,8 +79,15 @@
           </div>
         </div>
         <hr>
-        <strong>Diagnóstico:</strong>
-        <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Ninguno' %>
+        <div class='row'>
+          <div class="col-3">
+            <strong>Meses: </strong>
+            <%= (@chronic_prescription.expiry_date - @chronic_prescription.date_prescribed.to_date).to_i / 30%>
+          </div>
+          <div class="col-3">
+            <strong>Diagnóstico:</strong>
+            <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Ninguno' %>
+          </div>
       </div><!-- End extra info -->
     </div>
 

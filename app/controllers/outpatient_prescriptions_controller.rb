@@ -1,4 +1,7 @@
 class OutpatientPrescriptionsController < ApplicationController
+
+  include FindLots
+  
   before_action :set_outpatient_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_dispensation ]
 
   # GET /outpatient_prescriptions
@@ -9,7 +12,8 @@ class OutpatientPrescriptionsController < ApplicationController
       OutpatientPrescription.with_establishment(current_user.establishment),
       params[:filterrific],
       select_options: {
-        sorted_by: OutpatientPrescription.options_for_sorted_by
+        sorted_by: OutpatientPrescription.options_for_sorted_by,
+        search_by_status: OutpatientPrescription.options_for_status
       },
       persistence_id: false
     ) or return
@@ -223,6 +227,9 @@ class OutpatientPrescriptionsController < ApplicationController
     report.generate
   end
   
+  def set_order_product
+    @order_product = params[:order_product_id].present? ? OutpatientPrescriptionProduct.find(params[:order_product_id]) : OutpatientPrescriptionProduct.new
+  end
   
 
   private

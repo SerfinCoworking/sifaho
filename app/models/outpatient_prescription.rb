@@ -38,6 +38,7 @@ class OutpatientPrescription < ApplicationRecord
       :sorted_by,
       :with_order_type,
       :date_prescribed_since,
+      :search_by_status
     ]
   )
 
@@ -110,6 +111,15 @@ class OutpatientPrescription < ApplicationRecord
     ]
   end
 
+  def self.options_for_status
+    [
+      ['Todos', '', 'default'],
+      ['Pendiente', 0, 'info'],
+      ['Dispensada', 1, 'success'],
+      ['Vencida', "3", 'danger']
+    ]
+  end 
+
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
     where('outpatient_prescriptions.date_prescribed >= ?', reference_time)
@@ -119,11 +129,14 @@ class OutpatientPrescription < ApplicationRecord
     where('outpatient_prescriptions.order_type = ?', a_order_type)
   }
 
-  scope :for_statuses, ->(values) do
-    return all if values.blank?
+  scope :search_by_status, lambda { |status|
+    where('outpatient_prescriptions.status = ?', status)
+  }
+  # scope :for_statuses, ->(values) do
+  #   return all if values.blank?
 
-    where(status: statuses.values_at(*Array(values)))
-  end
+  #   where(status: statuses.values_at(*Array(values)))
+  # end
 
   scope :with_establishment, lambda { |a_establishment|
     where('outpatient_prescriptions.establishment_id = ?', a_establishment)

@@ -1,4 +1,6 @@
 class InternalOrdersController < ApplicationController
+  include FindLots
+
   before_action :set_internal_order, only: [:show, :edit_provider, :update, :destroy, :delete,
   :edit_applicant, :update_applicant, :update_provider, :send_provider, :receive_applicant_confirm, :receive_applicant, 
   :return_provider_status, :return_applicant_status, :send_applicant, :nullify ]
@@ -414,6 +416,10 @@ class InternalOrdersController < ApplicationController
       flash[:success] = "#{@internal_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to @internal_order }
     end
+  end
+
+  def set_order_product
+    @order_product = params[:order_product_id].present? ? InternalOrderProduct.find(params[:order_product_id]) : InternalOrderProduct.new
   end
 
   private
