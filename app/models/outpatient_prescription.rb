@@ -205,7 +205,7 @@ class OutpatientPrescription < ApplicationRecord
 
   # Returns the name of the efetor who receive the products
   def destiny_name
-    self.patient.dni+" "+self.patient.full_name
+    self.patient.dni.to_s+" "+self.patient.full_name
   end
 
   # Return the i18n model name

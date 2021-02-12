@@ -174,12 +174,12 @@ class ChronicPrescription < ApplicationRecord
 
   # Returns the name of the efetor who deliver the products
   def origin_name
-    self.professional.fullname
+    self.professional.fullinfo
   end
 
   # Returns the name of the efetor who receive the products
   def destiny_name
-    self.patient.fullname
+    self.patient.dni.to_s+" "+self.patient.full_name
   end
 
   # Return the i18n model name
