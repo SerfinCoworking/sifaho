@@ -28,7 +28,7 @@
 //= require Chart.bundle
 //= require turbolinks
 //= require cocoon
-//= require bootstrap-switch
+//= bootstrap-switch-button
 //= require bootstrap
 //= require bootstrap-select
 //= require_tree .

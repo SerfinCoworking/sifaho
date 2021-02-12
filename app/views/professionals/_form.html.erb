@@ -43,8 +43,8 @@
       %>
 
       <%= f.label :is_active, 'Estado' %>
-      <%= f.hidden_field :is_active, id: "is_active", label: 'Estado', value: "#{@professional.is_active unless @professional.new_record?}" %>
-      <input type="checkbox" name="my-checkbox">
+      <%= f.hidden_field :is_active, id: "is_active", label: 'Estado', value: (f.object.is_active.present? ? f.object.is_active : true) %>
+      <input type="checkbox" name="professional-status" data-toggle="switchbutton" <%= (f.object.is_active.present? ? "checked" : true) %> data-onlabel="Activo" data-offlabel="Inactivo" data-onstyle="success" data-offstyle="danger">
     <% end %>
 
   </div>

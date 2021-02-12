@@ -77,7 +77,6 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     bootstrap-select-rails (1.13.8)
-    bootstrap-switch-rails (3.3.4)
     bootstrap4-datetime-picker-rails (0.3.1)
       jquery-rails (~> 4.2, >= 4.2.0)
       moment-timezone-rails (~> 1.0)
@@ -486,7 +485,6 @@ DEPENDENCIES
   binding_of_caller
   bootstrap (~> 4.5.0)
   bootstrap-select-rails
-  bootstrap-switch-rails
   bootstrap4-datetime-picker-rails
   byebug
   capybara (~> 2.13)

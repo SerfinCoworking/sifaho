@@ -1,23 +1,6 @@
 $(document).on('turbolinks:load', function() {
-
-
-  $('input[name="my-checkbox"]').on('init.bootstrapSwitch', function(event, state) {
-    document.getElementById("is_active").value = state;
-  });
-
-  $("[name='my-checkbox']").bootstrapSwitch({
-    onColor: "danger",
-    offColor: "success",
-    onText: "Inactivo",
-    offText: "Activo",
-  });
-
-  $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    if(state){
-      document.getElementById("is_active").value = false;
-    }else{
-      document.getElementById("is_active").value = true;
-    }
+  $('input[name="professional-status"]').change( function(e) {
+    $("input#is_active").val($(this).is(":checked"));
   });
 });
 

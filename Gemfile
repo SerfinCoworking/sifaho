@@ -42,8 +42,6 @@ gem 'bootstrap-select-rails'
 gem 'pg_search'
 # To avoid delete records
 gem "paranoia", "~> 2.2"
-# For bootstrap toggle buttons
-gem "bootstrap-switch-rails"
 # For a lot of jquery functions
 gem 'jquery-ui-rails'
 # To group by date
