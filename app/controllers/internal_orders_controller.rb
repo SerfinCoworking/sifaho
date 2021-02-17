@@ -369,7 +369,7 @@ class InternalOrdersController < ApplicationController
     report.page[:applicant_sector] = internal_order.applicant_sector.name
     report.page[:provider_sector] = internal_order.provider_sector.name
     report.page[:observations] = internal_order.observation
-    report.page[:total_products] = internal_order.order_products.count
+    report.page[:total_products] = internal_order.order_products.count.to_s+" "+"producto".pluralize(internal_order.order_products.size)
   
 
     # Se van agregando los productos
