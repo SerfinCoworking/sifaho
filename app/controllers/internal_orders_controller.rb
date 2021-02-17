@@ -60,7 +60,7 @@ class InternalOrdersController < ApplicationController
       format.html
       format.js
       format.pdf do
-        send_data print_internal_order(@internal_order),
+        send_data generate_order_report(@internal_order),
           filename: 'Pedido_interno_'+@internal_order.remit_code+'.pdf',
           type: 'application/pdf',
           disposition: 'inline'
@@ -353,53 +353,74 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-  def print_internal_order(internal_order)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf')
+  def generate_order_report(internal_order)
+    report = Thinreports::Report.new
 
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page_order.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page_order.tlf'), id: :other_page
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'other_page.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order', 'first_page.tlf'), id: :cover_page
     
-    internal_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl|
-      if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page do |page|
-        end
-      end
-      
-      report.list do |list|
-        list.add_row do |row|
-          row.values  supply_code: qosl.supply_id,
-                      supply_name: qosl.supply.name,
-                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                      lot: qosl.sector_supply_lot_lot_code,
-                      laboratory: qosl.sector_supply_lot_laboratory_name,
-                      expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: internal_order.provision? ? qosl.provider_observation : qosl.applicant_observation
-        end
+    # Comenzamos con la pagina principal
+    report.start_new_page layout: :cover_page
 
-        report.list.on_page_footer_insert do |footer|
-          footer.item(:total_supplies).value(internal_order.quantity_ord_supply_lots.count)
-          footer.item(:total_requested).value(internal_order.quantity_ord_supply_lots.sum(&:requested_quantity))
-          footer.item(:total_delivered).value(internal_order.quantity_ord_supply_lots.sum(&:delivered_quantity))
-          if internal_order.solicitud?
-            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(provider_observation: [nil, ""]).count())
-          else
-            footer.item(:total_obs).value(internal_order.quantity_ord_supply_lots.where.not(applicant_observation: [nil, ""]).count())
+    # Agregamos el encabezado
+    report.page[:title] = 'Reporte de '+internal_order.order_type.humanize.underscore
+    report.page[:remit_code] = internal_order.remit_code
+    report.page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
+    report.page[:applicant_sector] = internal_order.applicant_sector.name
+    report.page[:provider_sector] = internal_order.provider_sector.name
+    report.page[:observations] = internal_order.observation
+    report.page[:total_products] = internal_order.order_products.count
+  
+
+    # Se van agregando los productos
+    internal_order.order_products.joins(:product).order("name").each do |eop|  
+      # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)
+      
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page
+      end
+
+      report.list do |list|
+        if eop.order_prod_lot_stocks.present?
+          eop.order_prod_lot_stocks.each_with_index do |opls, index|
+            if index == 0
+              list.add_row do |row|
+                row.values  lot_code: opls.lot_stock.lot.code,
+                  expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
+                  lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
+                row.values  product_code: eop.product.code,
+                  product_name: eop.product.name,
+                  requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
+                  obs_req: eop.applicant_observation,
+                  obs_del: eop.provider_observation
+        
+                row.item(:border).show if eop.order_prod_lot_stocks.count == 1
+              end
+            else                
+              list.add_row do |row|
+                row.values  lot_code: opls.lot_stock.lot.code,
+                expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
+                lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
+        
+                row.item(:border).show if eop.order_prod_lot_stocks.last == opls
+              end
+            end
+          end
+        else
+          list.add_row do |row|
+            row.values  product_code: eop.product.code,
+            product_name: eop.product.name,
+            requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
+            obs_req: eop.applicant_observation,
+            obs_del: eop.provider_observation
+            row.item(:border).show
           end
         end
-      end
+      end # fin lista      
+    end # fin productos
 
-      if report.page_count == 1
-        report.page[:applicant_sector] = internal_order.applicant_sector.name
-        report.page[:provider_sector] = internal_order.provider_sector.name
-        report.page[:observations] = internal_order.observation
-      end
-    end
-    
+    # A cada pagina le agregamos el pie de pagina
     report.pages.each do |page|
-      page[:title] = 'Pedido de productos para sector'
-      page[:remit_code] = internal_order.remit_code
-      page[:requested_date] = internal_order.requested_date.strftime('%d/%m/%YY')
       page[:page_count] = report.page_count
       page[:sector] = current_user.sector_name
       page[:establishment] = current_user.establishment_name
