@@ -229,7 +229,7 @@ class ExternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @external_order.provision_en_camino!
-        @external_order.create_notification(current_user, "aceptó")
+        @external_order.send_order_by(current_user)        
 
         format.html { redirect_to @external_order, notice: 'La provision se ha enviado correctamente.' }
       rescue ArgumentError => e
@@ -250,7 +250,7 @@ class ExternalOrdersController < ApplicationController
     respond_to do |format|
       begin
         @external_order.proveedor_aceptado!
-        # @external_order.send_order_by(current_user)        
+        @external_order.create_notification(a_user, "aceptó")  
 
         format.html { redirect_to @external_order, notice: 'La provision se ha aceptado correctamente.' }
       rescue ArgumentError => e
