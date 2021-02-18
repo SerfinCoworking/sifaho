@@ -22,53 +22,52 @@
       </div>
       <div class="p-2 flex-fill">
         <h5>Rubros</h5>
-        <%= @stock_quantity_report.supply_areas.map(&:name).join(", ") %>
+        <%= @stock_quantity_report.areas.map(&:name).join(", ") %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Fecha</h5>
         <%= Date.today.strftime("%d/%m/%Y") %>
       </div>
     </div>
-      
-    <%# movement => {["supply_name", "supply_area" ] => "quantity"} %>
-    <% if @movements.present? %>
+
+    <% if @stocks.present? %>
       <div class="card">
         <table class="table table-hover table-sm">
           <thead>
             <tr class="d-flex">
               <th class="col-1">Código</th>
-              <th class="col-5">Producto</th>
+              <th class="col-6">Producto</th>
               <th class="col-3">Rubro</th>
-              <th class="col-3">Cantidad</th>
+              <th class="col-2 text-right">Cantidad</th>
             </tr>
           </thead>
           <tbody>
-            <% @movements.each do |movement|%>
+            <% @stocks.each do |stock|%>
               <tr class="d-flex">
                 <td class="col-1">
-                  <%= movement.first.first %>
+                  <%= stock.product_code %>
                 </td>
-                <td class="col-5">
-                  <%= movement.first.second %>
+                <td class="col-6">
+                  <%= stock.product_name %>
                 </td>
                 <td class="col-3">
-                  <%= movement.first.third %>
+                  <%= stock.product_area_name %>
                 </td>
-                <td class="col-3"><%= movement.second %></td>
+                <td class="col-2 text-right"><%= stock.quantity %></td>
               </tr>
             <% end %>
             <tr class="d-flex">
               <td class="col-1"></td>
-              <td class="col-5"></td>
+              <td class="col-6"></td>
               <td class="col-3 text-right">Total</td>
-              <td class="col-3"><%= @movements.sum(&:second) %></td>
+              <td class="col-2 text-right"><%= @stocks.sum(&:quantity) %></td>
             </tr>
           </tbody>
         </table>
       </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-        <p>No hay stock de rubro <%= @stock_quantity_report.supply_areas.map(&:name).join(", ") %> y <%= @stock_quantity_report.to_date.strftime("%d/%m/%Y") %></p>
+        <p>No hay stock en <%= "rubro".pluralize(stock_quantity_report.areas) %> <%= @stock_quantity_report.areas.map(&:name).join(", ") %></p>
       </div>
     <% end %>
   </div>
@@ -80,11 +79,7 @@
       class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "print" %> Imprimir
     <% end %>
-    <%= link_to reports_stock_quantity_report_path(format: 'csv', id: @stock_quantity_report.id), 
-      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
-      <%= fa_icon "download" %> CSV
-    <% end %>
-    <%= link_to reports_stock_quantity_report_path(format: 'xls', id: @stock_quantity_report.id), 
+    <%= link_to reports_stock_quantity_report_path(format: 'xlsx', id: @stock_quantity_report.id), 
       class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "download" %> Excel
     <% end %>

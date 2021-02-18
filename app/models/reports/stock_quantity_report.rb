@@ -3,4 +3,5 @@ class StockQuantityReport < ApplicationRecord
   belongs_to :sector
   has_many :stock_report_areas
   has_many :supply_areas, through: :stock_report_areas
+  has_many :areas, through: :stock_report_areas
 end

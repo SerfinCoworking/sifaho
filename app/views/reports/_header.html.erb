@@ -1,6 +1,6 @@
 <% content_for :page_header do %>
   <li class="nav-item non-sel" id="page-title">
-    <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')}" do %>
+    <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')} disabled" do %>
       <%= fa_icon "file-alt" %>
       Reportes
     <% end %>
@@ -12,21 +12,21 @@
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
+    <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")} disabled" do %>
       <%= fa_icon "user-injured" %>
-      <span class="hidden-xs"> Producto por pacientes</span>
+      <span class="hidden-xs"> Producto por pacientes (reforma)</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_internal_order_product_reports_path, class: "nav-link #{active_class("reports/internal_order_products")}" do %>
+    <%= link_to reports_internal_order_product_reports_path, class: "nav-link #{active_class("reports/internal_order_products")} disabled" do %>
       <%= fa_icon "bezier-curve" %>
-      <span class="hidden-xs"> Producto por sectores</span>
+      <span class="hidden-xs"> Producto por sectores (reforma)</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_external_order_product_reports_path, class: "nav-link #{active_class("reports/external_order_products")}" do %>
+    <%= link_to reports_external_order_product_reports_path, class: "nav-link #{active_class("reports/external_order_products")} disabled" do %>
       <%= fa_icon "hospital" %>
-      <span class="hidden-xs"> Producto por establecimientos</span>
+      <span class="hidden-xs"> Producto por establecimientos (reforma)</span>
     <% end %>
   </li>
 <% end %>

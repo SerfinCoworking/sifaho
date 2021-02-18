@@ -7,15 +7,15 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 94.4,
+      "y": 45,
       "width": 555.2,
-      "height": 727.4,
+      "height": 776.8,
       "header": {
         "enabled": true,
         "height": 18.5,
         "translate": {
           "x": -12,
-          "y": -32.6
+          "y": -82
         },
         "items": [
           {
@@ -143,7 +143,7 @@
         "height": 18.1,
         "translate": {
           "x": -12,
-          "y": -77.1
+          "y": -126.5
         },
         "items": [
           {
@@ -296,7 +296,7 @@
         "height": 16,
         "translate": {
           "x": -12,
-          "y": -122
+          "y": -171.4
         },
         "items": [
           {
@@ -332,9 +332,9 @@
             }
           },
           {
-            "id": "",
+            "id": "total_label",
             "type": "text",
-            "display": true,
+            "display": false,
             "description": "",
             "x": 482,
             "y": 255,
@@ -364,11 +364,11 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -153.3
+          "y": -202.7
         },
         "items": []
       },
-      "content-height": 708.9,
+      "content-height": 758.3,
       "auto-page-break": true
     },
     {
@@ -547,159 +547,29 @@
       }
     },
     {
-      "id": "establishment",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 75,
-      "y": 825,
-      "width": 325.9,
-      "height": 10,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 9,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": false,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "establishment_name",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 168.8,
-      "y": 41.1,
-      "width": 406.4,
-      "height": 24.6,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": true,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "sector_name",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 25,
-      "y": 41.1,
-      "width": 138.8,
-      "height": 24.6,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": true,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "supply_areas",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 56.6,
-      "y": 67.3,
-      "width": 518.6,
-      "height": 24.5,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "fit",
-        "word-wrap": "none"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": true,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
       "id": "",
       "type": "text",
       "display": true,
       "description": "",
-      "x": 19.6,
-      "y": 65.2,
-      "width": 99.3,
-      "height": 12,
+      "x": 255,
+      "y": 822.6,
+      "width": 103,
+      "height": 20,
       "style": {
         "font-family": [
           "Helvetica"
         ],
-        "font-size": 11,
+        "font-size": 10,
         "color": "#000000",
-        "text-align": "left",
+        "text-align": "center",
         "vertical-align": "top",
         "line-height": "",
         "line-height-ratio": "",
         "letter-spacing": "",
-        "font-style": [
-          "underline"
-        ]
+        "font-style": []
       },
       "texts": [
-        "Rubros"
+        "sifaho.andes.gob.ar"
       ]
     }
   ],

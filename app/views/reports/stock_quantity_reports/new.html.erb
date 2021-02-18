@@ -25,7 +25,7 @@
               <div class="d-flex justify-content-end nested-fields">
                 <!-- Rubros -->
                 <div class="custom-input-group flex-fill p-1">
-                  <%= f.input :supply_area_ids, label: 'Rubros',
+                  <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
                         |area| [area.name, area.id]
@@ -62,7 +62,7 @@
                   <% @last_reports.each do |report|%>
                     <tr>
                       <td>
-                        <%= report.supply_areas.map(&:name).join(", ") %>
+                        <%= report.areas.map(&:name).join(", ") %>
                       </td>
                       <td class="text-left actions-col">
                         <%= link_to reports_stock_quantity_report_path(report), class: 'btn btn-secondary btn-sm',
