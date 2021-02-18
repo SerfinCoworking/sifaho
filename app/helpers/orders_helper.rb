@@ -8,9 +8,9 @@ module OrdersHelper
   def sort_order_products(object, action)
     if ["new"].any? { |string| action.include? string }
       return object.order_products.build
-    elsif ["edit", "update"].any? { |string| action.include? string }
+    elsif ["edit"].any? { |string| action.include? string }
       return object.order_products.joins(:product).order("products.name")
-    elsif ["create"].any? { |string| action.include? string }
+    elsif ["create", "update"].any? { |string| action.include? string }
       return object.order_products
     end
   end
