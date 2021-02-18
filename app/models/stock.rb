@@ -26,7 +26,7 @@ class Stock < ApplicationRecord
     :ignoring => :accents # Ignorar tildes.
 
   filterrific(
-    default_filter_params: { sorted_by: 'nombre_desc' },
+    default_filter_params: { sorted_by: 'nombre_asc' },
     available_filters: [
       :search_product_code,
       :search_product_name,
