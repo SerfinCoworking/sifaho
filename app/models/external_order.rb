@@ -14,19 +14,6 @@ class ExternalOrder < ApplicationRecord
     anulado: 6 
   }
 
-  # Old enum
-  # enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
-  # enum status: {
-  #   solicitud_auditoria: 0,
-  #   solicitud_enviada: 1,
-  #   proveedor_auditoria: 2,
-  #   proveedor_aceptado: 3,
-  #   provision_en_camino: 4, 
-  #   provision_entregada: 5,
-  #   recibo_auditoria: 6,
-  #   recibo_realizado: 7,
-  #   anulado: 8 }
-
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
@@ -39,7 +26,6 @@ class ExternalOrder < ApplicationRecord
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
-  # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
