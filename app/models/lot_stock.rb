@@ -14,6 +14,7 @@ class LotStock < ApplicationRecord
   after_save :stock_refresh_quantity
 
   validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  validates :reserved_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :stock_id
   
   delegate :refresh_quantity, to: :stock, prefix: true

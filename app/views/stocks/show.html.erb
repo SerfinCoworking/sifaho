@@ -14,21 +14,30 @@
     <% end %>
   </div>
   <div class="card-body">
-    <div class="d-flex justify-content-start">
-      <div class="p-1 flex-fill">
-        <h5>Código </h5><%= @stock.product_code %>
+    <div class="row">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-2">
+            <h5>Código </h5><%= @stock.product_code %>
+          </div>
+          <div class="col">
+            <h5>Producto </h5><%= @stock.product_name %>
+          </div>
+          <div class="col-2">
+            <h5>Unidad </h5><%= @stock.product_unity_name %>
+          </div>
+          <div class="col">
+            <h5>Rubro </h5><%= @stock.product_area_name %>
+          </div>
+        </div>
       </div>
-      <div class="p-1 flex-fill">
-        <h5>Producto </h5><%= @stock.product_name %>
-      </div>
-      <div class="p-1 flex-fill">
-        <h5>Cantidad </h5><%= @stock.quantity %>
-      </div>
-      <div class="p-1 flex-fill">
-        <h5>Unidad </h5><%= @stock.product_unity_name %>
-      </div>
-      <div class="p-1 flex-fill">
-        <h5>Área </h5><%= @stock.product_area_name %>
+      <div class="col-4">
+        <div class="row">
+          <div class="col-12 h5 text-center">Cantidades totales</div>
+          <div class="col-4">Disponible: <%= @stock.lot_stocks.sum(:quantity) %></div>
+          <div class="col-4">Reservada: <%= @stock.lot_stocks.sum(:reserved_quantity) %></div>
+          <div class="col-4">Total: <%= @stock.lot_stocks.sum(:quantity) + @stock.lot_stocks.sum(:reserved_quantity) %></div>
+        </div>
       </div>
     </div>
 
@@ -56,7 +65,13 @@
               <th scope="col">Vencimiento</th>
               <th scope="col">Estado</th>
               <th scope="col">Movimientos</th>
-              <th scope="col">Cantidad</th>
+              <th scope="col" class="text-right">Disponible</th>
+              <th scope="col" class="text-right">
+                <span tabindex="0"class="btn btn-link p-0" data-toggle="popover" data-placement="top" data-trigger="hover" title="Cantidad reservada" data-content="Corresponde a las cantidades seleccionadas en los pedidos de establecimientos que se encuentran en estado Aceptado.">
+                  Reservada
+                </span>
+              </th>
+              <th scope="col" class="text-right">Total</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -68,7 +83,9 @@
                 <td><%= lot_stock.lot.expiry_date_string %></td>
                 <td><%= lot_stock.lot.status.humanize %></td>
                 <td><%= lot_stock.movements_count %></td>
-                <td><%= lot_stock.quantity %></td>
+                <td class="table-success text-right"><%= lot_stock.quantity %></td>
+                <td class="table-warning text-right"><%= lot_stock.reserved_quantity %></td>
+                <td class="text-right"><%= lot_stock.quantity + lot_stock.reserved_quantity %></td>
               </tr>
             <% end %>
           </tbody>
