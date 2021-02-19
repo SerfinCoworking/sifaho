@@ -250,9 +250,7 @@ class ExternalOrdersController < ApplicationController
     authorize @external_order
     respond_to do |format|
       begin
-        @external_order.proveedor_aceptado!
-        @external_order.create_notification(current_user, "aceptó")  
-
+        @external_order.accept_order_by(current_user)
         format.html { redirect_to @external_order, notice: 'La provision se ha aceptado correctamente.' }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden

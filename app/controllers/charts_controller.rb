@@ -32,6 +32,6 @@ class ChartsController < ApplicationController
   end
   
   def by_order_type_external_orders_other_orders
-    render json: ExternalOrder.othere_orders(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
+    render json: ExternalOrder.other_orders(current_user.sector).group(:order_type).count.map {|type| [type.first.humanize, type.second] }
   end
 end
