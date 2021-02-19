@@ -88,6 +88,8 @@ class Stock < ApplicationRecord
 
   def refresh_quantity
     self.quantity = self.lot_stocks.sum(:quantity)
+    self.total_quantity = self.lot_stocks.sum(:quantity) + self.lot_stocks.sum(:reserved_quantity)
+    self.reserved_quantity = self.lot_stocks.sum(:reserved_quantity)
     self.save!
   end
 
