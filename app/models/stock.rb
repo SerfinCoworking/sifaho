@@ -78,7 +78,19 @@ class Stock < ApplicationRecord
     joins(:lot_stocks).where("lot_stocks.quantity > ?", 0) 
   }
   
+  scope :with_lot_stocks, lambda { |id|
+    self.find(id).lot_stocks
+  }
+  
   def self.options_for_sorted_by
+    [
+      ['Código (asc)', 'codigo_asc'],
+      ['Nombre (a-z)', 'nombre_asc'],
+      ['Unidad (a-z)', 'unidad_asc']
+    ]
+  end
+  
+  def self.options_for_sorted_by_lots
     [
       ['Código (asc)', 'codigo_asc'],
       ['Nombre (a-z)', 'nombre_asc'],

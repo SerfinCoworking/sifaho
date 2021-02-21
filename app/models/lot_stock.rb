@@ -7,6 +7,8 @@ class LotStock < ApplicationRecord
   has_many :out_pres_prod_lot_stocks
   has_many :chron_pres_prod_lot_stocks
   has_many :receipt_products
+  has_many :lot_archives
+  has_many :movements, class_name: "StockMovement"
 
   has_one :sector, :through => :stock
   has_one :product, :through => :lot
@@ -19,6 +21,29 @@ class LotStock < ApplicationRecord
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, to: :product, prefix: true
   delegate :code, to: :lot, prefix: true
+
+  filterrific(
+    default_filter_params: { sorted_by: 'cantidad_desc' },
+    available_filters: [
+      :sorted_by,
+    ]
+  )
+
+  scope :sorted_by, lambda { |sort_option|
+    # extract the sort direction from the param value.
+    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    case sort_option.to_s
+    when /^modificado_/s
+      # Ordenamiento por fecha de creación en la BD
+      reorder("lot_stocks.updated_at #{ direction }")
+    when /^cantidad_/
+      # Ordenamiento por la cantidad de stock
+      reorder("lot_stocks.quantity #{ direction }")
+    else
+      # Si no existe la opcion de ordenamiento se levanta la excepcion
+      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+    end
+  }
 
   scope :with_product, lambda { |a_product| 
     where('lot_stocks.product_id = ?', a_product.id).joins(:lot)
@@ -34,6 +59,10 @@ class LotStock < ApplicationRecord
   
   scope :lots_for_sector, lambda { |a_sector| 
     where(sector: a_sector)
+  }
+  
+  scope :by_stock, lambda { |stock_id| 
+    where(stock_id: stock_id)
   }
 
   # Método para incrementar la cantidad del lote. 

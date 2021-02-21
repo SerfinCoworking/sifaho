@@ -1,0 +1,19 @@
+// Style modal
+$('.modal-header').addClass('bg-warning text-black');
+
+// Add the dialog title
+$('.modal-title').html("<i class='fas fa-archive'></i>  Archivar");
+
+// Render the new form
+$('.modal-body').html('<%= j render("archived_form") %>');
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
+  "<button type='submit' class='btn btn-warning pull-right' form='new_lot_archive'><i class='fas fa-archive'></i> Archivar</button>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+

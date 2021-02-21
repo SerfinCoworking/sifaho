@@ -9,8 +9,18 @@ Rails.application.routes.draw do
   resources :stocks do
     member do
       resources :stock_movements, only: :index, path: :movimientos
+      resources :lot_stocks, only: [:index, :show], path: :lotes do
+        collection do
+          get ':lot_stock_id/new_archive', action: :new_archive, as: :new_archive
+          post ':lot_stock_id/create_archive', action: :create_archive, as: :create_archive
+        end
+      end
     end
   end
+
+
+
+
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all
   match '/406' => 'errors#not_acceptable', :via => :all

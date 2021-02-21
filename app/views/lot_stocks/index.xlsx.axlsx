@@ -1,0 +1,23 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Movimientos de stock") do |sheet|
+  sheet.add_row ["#", "Fecha", "Lote", "Movimiento", "Código movimiento", "Origen", "Destino", "Estado", 
+    "Recibido", "Entregado" ]
+
+  sheet.add_style 'A1:J1', bg_color: '00407A', fg_color: 'FFFFFF'
+  
+  @stock_movements.each_with_index do |movement, index|
+    sheet.add_row [
+      index + 1,
+      movement.created_at.strftime("%d/%m/%Y"), 
+      movement.lot_stock.lot_code,
+      movement.order.class.model_name.human,
+      movement.order.remit_code,
+      movement.order_origin_name,
+      movement.order_destiny_name,
+      movement.order_status.humanize,
+      movement.adds? ? movement.quantity : 0,
+      movement.adds? ? 0 : movement.quantity,
+    ]
+  end
+  sheet.column_widths 5,10,20,22,18,50,50,19,10,10
+end

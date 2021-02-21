@@ -1,0 +1,17 @@
+<% lot_stocks.each do |lot_stock| %>
+<tr id="lot_stock_<%= lot_stock.id %>">
+  <td><%= lot_stock.lot.code %></td>
+  <td><%= lot_stock.lot.laboratory.name %></td>
+  <td><%= lot_stock.lot.expiry_date.present? ? lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %></td>
+  <td><%= lot_stock.lot.status.humanize %></td>
+  <td><%= lot_stock.movements.count %></td>
+  <td><%= lot_stock.quantity %></td>
+  <td><%= lot_stock.archived_quantity %></td>
+  <td class="action-col text-center">
+    <%= link_to new_archive_lot_stocks_path(stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+      title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= fa_icon 'archive'%>
+    <% end %>
+  </td>
+</tr>
+<% end %>

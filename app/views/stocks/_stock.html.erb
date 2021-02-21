@@ -11,6 +11,12 @@
         <%= fa_icon "eye" %>
       <% end %>
     <% end %>
+    
+    <%= link_to lot_stocks_path(id: stock.id), class: 'btn btn-primary btn-sm',
+      title: 'Lotes', data: { toggle: 'tooltip', placement: 'top' } do %>
+      <%= fa_icon "barcode" %>
+    <% end %>
+    
     <%= link_to stock_movements_path(id: stock.id), class: 'btn btn-secondary btn-sm',
       title: 'Ver movimientos', data: { toggle: 'tooltip', placement: 'top' } do %>
       <%= fa_icon "exchange-alt" %>
