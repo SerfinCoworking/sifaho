@@ -45,6 +45,7 @@ class LotStocksController < ApplicationController
   end
 
   def new_archive
+    @lot_archive = LotArchive.new
     respond_to do |format|
       format.js
     end
@@ -57,13 +58,10 @@ class LotStocksController < ApplicationController
     respond_to do |format|
       if @lot_archive.save
         format.html { redirect_to show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
-        # format.js { render :new_archive }
       else
-        render(:layout => 'new_archive', :formats => [:js])
-        # format.html { render :new_archive }
+        format.js { render :new_archive }
       end
     end
-
   end
 
   def find_lots   

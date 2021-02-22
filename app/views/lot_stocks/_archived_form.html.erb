@@ -1,4 +1,4 @@
-<%= simple_form_for @lot_stock.lot_archives.build, method: :post, url: create_archive_lot_stocks_url(@lot_stock.stock, @lot_stock), html: {class: "", role: 'check-modified'} do |f_lot_archive| %>
+<%= simple_form_for @lot_archive, method: :post, url: create_archive_lot_stocks_url(@lot_stock.stock, @lot_stock), remote: true, html: {role: 'check-modified'} do |f_lot_archive| %>
   <%= f_lot_archive.error_notification %>
 
   <div class="row">
@@ -11,7 +11,7 @@
       <%= f_lot_archive.input :quantity, label: 'Cantidad a archivar', required: true %>
     </div>
     <div class="col-md-12">
-      <%= f_lot_archive.input :observation, label: 'Observación', required: true %>
+      <%= f_lot_archive.input :observation, label: 'Observaciones', required: true %>
     </div>
     <%= f_lot_archive.input :lot_stock_id, as: :hidden, value: @lot_stock.id %>
   </div>
