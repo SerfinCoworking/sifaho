@@ -1,1 +1,115 @@
-Show del lote archivado
+<%#= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center"> 
+      <%= fa_icon 'eye' %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo lote <%= @lot_stock.lot.code %>
+      </h5>
+    </div>
+    <%#= link_to stocks_path, class: 'btn btn-light',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%#= fa_icon 'times' %>
+    <%# end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-start">
+      <div class="p-1 flex-fill">
+        <h5>Código </h5><%= @lot_stock.lot.code %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Producto </h5><%#= @stock.product_name %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Cantidad </h5><%#= @stock.quantity %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Unidad </h5><%#= @stock.product_unity_name %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Área </h5><%#= @stock.product_area_name %>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
+          <%= fa_icon "barcode" %> Lotes archivados <span class="badge badge-secondary"><%= @lot_stock.archived_quantity %></span>
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="movements-tab" data-toggle="tab" href="#movements" role="tab" aria-controls="movements" aria-selected="false">
+          <%= fa_icon "exchange-alt" %> Últimos movimientos
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="lot-archives" role="tabpanel" aria-labelledby="lots-tab">
+        <table class="table table-hover table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Usuario</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Observaciones</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @lot_stock.lot_archives.order(quantity: :desc).each do |lot_archive| %>
+              <tr>
+                <th scope="row"><%= lot_archive.user.fullname.humanize %></th>
+                <td><%= lot_archive.lot.laboratory_name %></td>
+                <td><%= lot_archive.status.humanize %></td>
+                <td><%= lot_archive.quantity %></td>
+                <td><%= lot_archive.observation %></td>
+                <td>
+                  <button class="btn btn-sm btn-warning">
+                    <%= fa_icon 'undo' %>
+                  </button>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
+        <table class="table table-hover table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Lote</th>
+              <th scope="col">Movimiento</th>
+              <th scope="col">Origen</th>
+              <th scope="col">Destino</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
+              <tr>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <th scope="row"><%= movement.lot_stock.lot_code %></th>
+                <td><%= movement.order.class.model_name.human %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
+                <td><%= movement.order_status.humanize %></td>
+                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+                <td><%#= link_to polymorphic_path(movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><%# end %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de acción footer -->
+  <div class="card-footer d-flex justify-content-end">
+    <%#= link_to 'Volver', stocks_path, class: "btn" %>
+  </div>
+</div>

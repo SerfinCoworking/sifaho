@@ -1,6 +1,6 @@
 class LotStocksController < ApplicationController
 
-  before_action :set_lot_stock, only: [:new_archive, :create_archive]
+  before_action :set_lot_stock, only: [:new_archive, :create_archive, :show]
   # GET /stocks
   # GET /stocks.json
   def index
@@ -36,6 +36,7 @@ class LotStocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
+
   end
 
   # GET /stocks/new
