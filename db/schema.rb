@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_150200) do
+ActiveRecord::Schema.define(version: 2021_02_20_021620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -567,6 +567,7 @@ ActiveRecord::Schema.define(version: 2021_02_17_150200) do
     t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "reserved_quantity", default: 0
     t.integer "archived_quantity", default: 0
     t.integer "presentation"
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
@@ -1086,6 +1087,8 @@ ActiveRecord::Schema.define(version: 2021_02_17_150200) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "product_id"
+    t.integer "total_quantity", default: 0
+    t.integer "reserved_quantity", default: 0
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["sector_id"], name: "index_stocks_on_sector_id"
   end
