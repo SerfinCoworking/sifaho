@@ -1,7 +1,7 @@
 class LotStocksController < ApplicationController
 
-  before_action :set_lot_stock, only: [:new_archive, :create_archive, :show, :return_archive_modal]
-  before_action :set_lot_archive, only: [:show_lot_archive]
+  before_action :set_lot_stock, only: [:new_archive, :create_archive, :show]
+  before_action :set_lot_archive, only: [:return_archive_modal, :show_lot_archive, :return_archive]
   # GET /stocks
   # GET /stocks.json
   def index
@@ -94,8 +94,9 @@ class LotStocksController < ApplicationController
   end
 
   def return_archive
+    @lot_archive.return_by(current_user)
     respond_to do |format|
-      format.html { redirect_to show_lot_stocks_url, notice: 'El archivo se retorno correctamente.' }
+      format.html { redirect_to show_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
     end
   end
 

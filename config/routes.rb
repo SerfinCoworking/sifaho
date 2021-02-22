@@ -13,15 +13,15 @@ Rails.application.routes.draw do
         collection do
           get ':lot_stock_id/', action: :show, as: :show
           get ':lot_stock_id/new_archive', action: :new_archive, as: :new_archive
-          get ':lot_stock_id/return_archive_modal', action: :return_archive_modal, as: :return_archive_modal
           post ':lot_stock_id/create_archive', action: :create_archive, as: :create_archive
-          patch ':lot_stock_id/return_archive', action: :return_archive, as: :return_archive
         end
       end
     end
   end
-
+  
+  get ':id/return_archive_modal', to: 'lot_stocks#return_archive_modal', as: :return_archive_modal
   get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
+  patch ':id/return_archive', to: 'lot_stocks#return_archive', as: :return_archive
 
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all

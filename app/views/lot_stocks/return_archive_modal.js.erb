@@ -10,7 +10,7 @@ $('.modal-body').html('Esta seguro de retornar este archivo?, no podrá volver a
 // Add form button
 $('.modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Cancelar</button>" + 
-  "<a class='btn btn-danger btn-sm' data-method='patch' href='<%= return_archive_lot_stocks_path(@lot_stock.stock, @lot_stock).to_s %>'>Confirmar</a>"
+  "<a class='btn btn-danger btn-sm' data-method='patch' href='<%= return_archive_path(@lot_archive) %>'>Confirmar</a>"
 );
 
 // Show the dynamic dialog
