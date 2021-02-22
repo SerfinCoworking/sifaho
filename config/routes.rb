@@ -18,8 +18,10 @@ Rails.application.routes.draw do
       end
     end
   end
-
+  
+  get ':id/return_archive_modal', to: 'lot_stocks#return_archive_modal', as: :return_archive_modal
   get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
+  patch ':id/return_archive', to: 'lot_stocks#return_archive', as: :return_archive
 
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all

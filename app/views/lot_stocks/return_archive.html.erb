@@ -1,0 +1,17 @@
+// Style modal
+$('.modal-header').addClass('bg-warning text-black');
+
+// Add the dialog title
+$('.modal-title').html("<i class='fas fa-undo'></i>  Retornar archivo");
+
+// Render the new form
+$('.modal-body').html('Esta seguro de retornar este archivo?, no podrá volver atras esta acción');
+
+// Add form button
+$('.modal-footer').html(
+  "<button type='button' class='btn' data-dismiss='modal'>Cancelar</button>" + 
+  "<a class='btn btn-danger btn-sm' href='<%= return_archive_lot_stocks_path(@lot_stock.stock, @lot_stock).to_s %>'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
