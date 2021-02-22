@@ -36,12 +36,18 @@
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
-          <%= fa_icon "barcode" %> Lotes archivados <span class="badge badge-secondary"><%= @lot_stock.archived_quantity %></span>
+          <%= fa_icon "barcode" %> Lotes archivados 
+          <span class="badge badge-secondary">
+            <%= @lot_stock.archived_quantity %>
+          </span>
         </a>
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="movements-tab" data-toggle="tab" href="#movements" role="tab" aria-controls="movements" aria-selected="false">
           <%= fa_icon "exchange-alt" %> Últimos movimientos
+          <span class="badge badge-secondary">
+            <%= @lot_stock.movements.count %>
+          </span>
         </a>
       </li>
     </ul>
@@ -79,26 +85,26 @@
           <thead class="thead-light">
             <tr>
               <th scope="col">Fecha</th>
-              <th scope="col">Lote</th>
               <th scope="col">Movimiento</th>
-              <th scope="col">Observaciones</th>
+              <th scope="col">Origen</th>
+              <th scope="col">Destino</th>
               <th scope="col">Estado</th>
               <th scope="col">Cantidad</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
-            <%# @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
+            <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
               <tr>
-                <td><%#= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <th scope="row"><%#= movement.lot_stock.lot_code %></th>
-                <td><%#= movement.class.model_name.human %></td>
-                <td class="text-truncate" style="max-width: 150px;"><%#= movement.destiny_name %></td>
-                <td><%#= movement.status.humanize %></td>
-                <td class="text-<%#= movement.adds? ? 'success' : 'danger' %>"><%#= movement.quantity %></td>
-                <td><%#= link_to polymorphic_path(movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><%# end %></td>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= movement.order.class.model_name.human %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
+                <td><%= movement.order_status.humanize %></td>
+                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+                <td><%= link_to polymorphic_path(movement.order, resaltar: @lot_stock.stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
               </tr>
-            <%# end %>
+            <% end %>
           </tbody>
         </table>
         
