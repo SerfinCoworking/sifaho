@@ -4,8 +4,8 @@ class Reports::PatientProductReportsController < ApplicationController
   end
 
   def generate
-    @movements =  QuantityOrdSupplyLot
-                    .where(quantifiable_type: 'Prescription')
+    @movements =  StockMovement
+                    .where(quantifiable_type: ['OutpatientPrescription', 'ChronicPrescription'])
                     .joins("INNER JOIN prescriptions ON prescriptions.id = quantity_ord_supply_lots.quantifiable_id")
                     .where("prescriptions.establishment_id = ?", current_user.establishment.id)
                     .where(supply_id: params[:supply_id])

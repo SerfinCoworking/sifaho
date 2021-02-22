@@ -26,7 +26,7 @@ class Stock < ApplicationRecord
     :ignoring => :accents # Ignorar tildes.
 
   filterrific(
-    default_filter_params: { sorted_by: 'nombre_desc' },
+    default_filter_params: { sorted_by: 'nombre_asc' },
     available_filters: [
       :search_product_code,
       :search_product_name,
@@ -100,6 +100,8 @@ class Stock < ApplicationRecord
 
   def refresh_quantity
     self.quantity = self.lot_stocks.sum(:quantity)
+    self.total_quantity = self.lot_stocks.sum(:quantity) + self.lot_stocks.sum(:reserved_quantity)
+    self.reserved_quantity = self.lot_stocks.sum(:reserved_quantity)
     self.save!
   end
 

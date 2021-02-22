@@ -108,9 +108,6 @@ class ExternalOrderPolicy < ApplicationPolicy
     if record.solicitud_auditoria? && record.applicant_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
-    # if record.applicant_sector == user.sector
-    #   record.provider_aceptado? && send_order.any? { |role| user.has_role?(role) }
-    # end
   end
   
   def return_provider_status?

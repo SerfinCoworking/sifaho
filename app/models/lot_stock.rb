@@ -16,6 +16,7 @@ class LotStock < ApplicationRecord
   after_save :stock_refresh_quantity
 
   validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  validates :reserved_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :stock_id
   
   delegate :refresh_quantity, to: :stock, prefix: true
@@ -75,10 +76,31 @@ class LotStock < ApplicationRecord
   # Disminuye la cantidad
   def decrement(a_quantity)
     if self.quantity < a_quantity
-      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" insumo "+self.product_name
+      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" producto "+self.product_name
     else
       self.quantity -= a_quantity
       self.save!
     end
+  end
+
+  def decrement_reserved(a_quantity)
+    if self.reserved_quantity < a_quantity
+      raise ArgumentError, "Cantidad en reserva insuficiente del lote "+self.lot_code+" producto "+self.product_name
+    else
+      self.reserved_quantity -= a_quantity
+      self.save!
+    end
+  end
+
+  def enable_reserved(a_quantity)
+    self.increment(a_quantity)
+    self.reserved_quantity -= a_quantity
+    self.save!
+  end
+
+  def reserve(a_quantity)
+    self.decrement(a_quantity)
+    self.reserved_quantity += a_quantity
+    self.save!
   end
 end

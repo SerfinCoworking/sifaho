@@ -221,6 +221,12 @@
         Volver
       <% end %>
 
+      <% if policy(@internal_order).show? %>
+        <%= link_to internal_order_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
+
       <% if policy(@internal_order).edit_provider? %>
         <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
@@ -228,7 +234,8 @@
           <%= fa_icon "pen" %>
           Editar
         <% end %>
-      <% end %> 
+      <% end %>
+      
       <% if policy(@internal_order).edit_applicant? %>
         <%= link_to edit_applicant_internal_order_path(@internal_order),  
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
