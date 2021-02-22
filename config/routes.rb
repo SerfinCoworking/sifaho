@@ -9,14 +9,17 @@ Rails.application.routes.draw do
   resources :stocks do
     member do
       resources :stock_movements, only: :index, path: :movimientos
-      resources :lot_stocks, only: [:index, :show], path: :lotes do
+      resources :lot_stocks, only: [:index], path: :lotes do
         collection do
+          get ':lot_stock_id/', action: :show, as: :show
           get ':lot_stock_id/new_archive', action: :new_archive, as: :new_archive
           post ':lot_stock_id/create_archive', action: :create_archive, as: :create_archive
         end
       end
     end
   end
+
+  get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
 
 
 

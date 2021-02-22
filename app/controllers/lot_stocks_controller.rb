@@ -1,6 +1,7 @@
 class LotStocksController < ApplicationController
 
   before_action :set_lot_stock, only: [:new_archive, :create_archive, :show]
+  before_action :set_lot_archive, only: [:show_lot_archive]
   # GET /stocks
   # GET /stocks.json
   def index
@@ -36,6 +37,12 @@ class LotStocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
+
+  end
+  
+  # GET /stocks/1
+  # GET /stocks/1.json
+  def show_lot_archive
 
   end
 
@@ -149,6 +156,10 @@ class LotStocksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_lot_stock
       @lot_stock = LotStock.find(params[:lot_stock_id])
+    end
+    
+    def set_lot_archive
+      @lot_archive = LotArchive.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

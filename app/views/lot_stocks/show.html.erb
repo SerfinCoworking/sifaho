@@ -19,17 +19,18 @@
         <h5>Código </h5><%= @lot_stock.lot.code %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Producto </h5><%#= @stock.product_name %>
+        <h5>Laboratorio </h5><%= @lot_stock.lot.laboratory.name %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Cantidad </h5><%#= @stock.quantity %>
+        <h5>Fecha expiración </h5><%= @lot_stock.lot.expiry_date.present? ? @lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Unidad </h5><%#= @stock.product_unity_name %>
+        <h5>Cantidad </h5><%= @lot_stock.quantity %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Área </h5><%#= @stock.product_area_name %>
+        <h5>Cantidad Archivada </h5><%= @lot_stock.archived_quantity %>
       </div>
+      
     </div>
 
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
@@ -53,18 +54,17 @@
               <th scope="col">Estado</th>
               <th scope="col">Cantidad</th>
               <th scope="col">Observaciones</th>
-              <th scope="col"></th>
+              <th scope="col" class="actions-col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <% @lot_stock.lot_archives.order(quantity: :desc).each do |lot_archive| %>
               <tr>
-                <th scope="row"><%= lot_archive.user.fullname.humanize %></th>
-                <td><%= lot_archive.lot.laboratory_name %></td>
+                <th scope="row"><%= lot_archive.user.full_name.humanize %></th>
                 <td><%= lot_archive.status.humanize %></td>
                 <td><%= lot_archive.quantity %></td>
                 <td><%= lot_archive.observation %></td>
-                <td>
+                <td class="actions-col">
                   <button class="btn btn-sm btn-warning">
                     <%= fa_icon 'undo' %>
                   </button>
@@ -81,26 +81,24 @@
               <th scope="col">Fecha</th>
               <th scope="col">Lote</th>
               <th scope="col">Movimiento</th>
-              <th scope="col">Origen</th>
-              <th scope="col">Destino</th>
+              <th scope="col">Observaciones</th>
               <th scope="col">Estado</th>
               <th scope="col">Cantidad</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
-            <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
+            <%# @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
               <tr>
-                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <th scope="row"><%= movement.lot_stock.lot_code %></th>
-                <td><%= movement.order.class.model_name.human %></td>
-                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
-                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
-                <td><%= movement.order_status.humanize %></td>
-                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+                <td><%#= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <th scope="row"><%#= movement.lot_stock.lot_code %></th>
+                <td><%#= movement.class.model_name.human %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%#= movement.destiny_name %></td>
+                <td><%#= movement.status.humanize %></td>
+                <td class="text-<%#= movement.adds? ? 'success' : 'danger' %>"><%#= movement.quantity %></td>
                 <td><%#= link_to polymorphic_path(movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><%# end %></td>
               </tr>
-            <% end %>
+            <%# end %>
           </tbody>
         </table>
         

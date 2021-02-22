@@ -11,4 +11,19 @@ class LotArchive < ApplicationRecord
   def create_stock_movement_decrement
     self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false)
   end
+
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.lot_stock.stock.sector.name
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.observation
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
+  end
 end
