@@ -88,9 +88,11 @@
                 <td class="table-warning text-right"><%= lot_stock.reserved_quantity %></td>
                 <td class="text-right"><%= lot_stock.quantity + lot_stock.reserved_quantity %></td>
                 <td class="actions-col">
-                  <%= link_to lot_stocks_path(id: @stock.id), class: 'btn btn-light btn-sm',
-                    title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-                    <%= fa_icon "eye" %>
+                  <% if policy(lot_stock).show? %>
+                    <%= link_to show_lot_stocks_path(@stock, lot_stock), class: 'btn btn-light btn-sm',
+                      title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon "eye" %>
+                    <% end %>
                   <% end %>
                 </td>
               </tr>
@@ -141,6 +143,16 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', stocks_path, class: "btn" %>
+    <%= link_to 'Volver', stocks_path, class: "btn btn-light mr-2" %>
+
+    <%= link_to lot_stocks_path(id: @stock.id), class: 'btn btn-primary mr-2' do %>
+      <%= fa_icon "barcode" %>
+      Ver lotes
+    <% end %>
+    
+    <%= link_to stock_movements_path(id: @stock.id), class: 'btn btn-secondary' do %>
+      <%= fa_icon "exchange-alt" %>
+      Ver movimientos
+    <% end %>
   </div>
 </div>

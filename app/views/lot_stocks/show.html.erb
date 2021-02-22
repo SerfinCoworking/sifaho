@@ -39,7 +39,7 @@
         <a class="nav-link active" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
           <%= fa_icon "archive" %> Archivos
           <span class="badge badge-secondary">
-            <%= @lot_stock.archived_quantity %>
+            <%= @lot_stock.lot_archives.count %>
           </span>
         </a>
       </li>
@@ -67,7 +67,7 @@
           <tbody>
             <% @lot_stock.lot_archives.order(quantity: :desc).each do |lot_archive| %>
               <tr>
-                <th scope="row"><%= lot_archive.user.full_name.humanize %></th>
+                <th scope="row"><%= lot_archive.user.full_name %></th>
                 <td><%= lot_archive.status.humanize %></td>
                 <td><%= lot_archive.quantity %></td>
                 <td><%= lot_archive.observation %></td>
@@ -115,6 +115,10 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', lot_stocks_path(id: @lot_stock.stock.id), class: "btn" %>
+    <%= link_to 'Volver', :back, class: "btn" %>
+    <%= link_to stock_path(@lot_stock.stock), class: 'btn btn-secondary' do %>
+      <%= fa_icon "arrow-left" %>
+      Volver a producto
+    <% end %>
   </div>
 </div>

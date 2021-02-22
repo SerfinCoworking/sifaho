@@ -3,10 +3,16 @@
 
   <div class="row">
     <div class="col-md-12">
-      <%= f_lot_archive.input :quantity, label: 'Cantidad', required: true %>
+      <label class="h5">Cantidad en stock: 
+        <%= @lot_stock.quantity %>
+      </label>
     </div>
     <div class="col-md-12">
-      <%= f_lot_archive.input :observation, label: 'Descripción' %>
+      <%= f_lot_archive.input :quantity, label: 'Cantidad a archivar', required: true %>
     </div>
+    <div class="col-md-12">
+      <%= f_lot_archive.input :observation, label: 'Observación', required: true %>
+    </div>
+    <%= f_lot_archive.input :lot_stock_id, as: :hidden, value: @lot_stock.id %>
   </div>
 <% end %>

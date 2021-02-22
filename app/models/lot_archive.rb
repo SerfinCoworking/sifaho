@@ -5,10 +5,12 @@ class LotArchive < ApplicationRecord
   enum status: { archivado: 0, retornado: 1 }
 
   validates :quantity, :presence => true, :numericality => { :only_integer => true, :greater_than => 0 }
+  validates_presence_of :observation
 
-  after_create :create_stock_movement_decrement
+  after_create :decrement_lot_stock
 
-  def create_stock_movement_decrement
+  def decrement_lot_stock
+    self.lot_stock.decrement_archived(self.quantity)
     self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false)
   end
 

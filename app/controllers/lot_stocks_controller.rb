@@ -37,62 +37,11 @@ class LotStocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
-
   end
   
   # GET /stocks/1
   # GET /stocks/1.json
   def show_lot_archive
-
-  end
-
-  # GET /stocks/new
-  def new
-    @stock = Stock.new
-  end
-
-  # GET /stocks/1/edit
-  def edit
-  end
-
-  # POST /stocks
-  # POST /stocks.json
-  def create
-    @stock = Stock.new(stock_params)
-
-    respond_to do |format|
-      if @stock.save
-        format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
-        format.json { render :show, status: :created, location: @stock }
-      else
-        format.html { render :new }
-        format.json { render json: @stock.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /stocks/1
-  # PATCH/PUT /stocks/1.json
-  def update
-    respond_to do |format|
-      if @stock.update(stock_params)
-        format.html { redirect_to @stock, notice: 'Stock was successfully updated.' }
-        format.json { render :show, status: :ok, location: @stock }
-      else
-        format.html { render :edit }
-        format.json { render json: @stock.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /stocks/1
-  # DELETE /stocks/1.json
-  def destroy
-    @stock.destroy
-    respond_to do |format|
-      format.html { redirect_to stocks_url, notice: 'Stock was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   def new_archive
@@ -102,30 +51,16 @@ class LotStocksController < ApplicationController
   end
   
   def create_archive
+    @lot_archive = LotArchive.new(lot_archive_params)
+    @lot_archive.user_id = current_user.id
     
     respond_to do |format|
-      begin
-        puts "DEBUG =========="
-        puts lot_stock_params[:quantity]
-        # Armamos el lote achivado: [validacion de cantidad mayor a 0]
-        lot_archive = LotArchive.new(lot_stock_params)
-        lot_archive.lot_stock_id = @lot_stock.id
-        lot_archive.user_id = current_user.id
-        
-        # Debemos validar la cantidad a "Archivar":
-        # No debe superar la cantidad que tengo en el lote, es decir que el quantity no debe quedar en negativo
-        # Sumamos la misma cantidad al atributo "cantidad archivada"
-        new_lot_stock_quantity = @lot_stock.quantity - lot_stock_params[:quantity].to_i
-        new_lot_stock_archive_quantity = @lot_stock.archived_quantity + lot_stock_params[:quantity].to_i
-        @lot_stock.update!(quantity: new_lot_stock_quantity, archived_quantity: new_lot_stock_archive_quantity)
-        lot_archive.save!
-
-        format.html { redirect_to @lot_stock, notice: 'Lote archivado correctamente.' }
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        format.html { render :new_archive }
+      if @lot_archive.save
+        format.html { redirect_to show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
+        # format.js { render :new_archive }
+      else
+        render(:layout => 'new_archive', :formats => [:js])
+        # format.html { render :new_archive }
       end
     end
 
@@ -162,9 +97,9 @@ class LotStocksController < ApplicationController
       @lot_archive = LotArchive.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def lot_stock_params
+    def lot_archive_params
       params.require(:lot_archive).permit([
+        :lot_stock_id,
         :quantity,
         :observation
       ])
