@@ -74,4 +74,22 @@ class LotStock < ApplicationRecord
     self.reserved_quantity += a_quantity
     self.save!
   end
+
+  # Return all merged movements relationships
+  def movements
+    return self.int_ord_prod_lot_stocks +
+      self.ext_ord_prod_lot_stocks +
+      self.out_pres_prod_lot_stocks +
+      self.chron_pres_prod_lot_stocks +
+      self.receipt_products
+  end
+
+  # Return count movements
+  def movements_count
+    return self.int_ord_prod_lot_stocks.count +
+      self.ext_ord_prod_lot_stocks.count +
+      self.out_pres_prod_lot_stocks.count +
+      self.chron_pres_prod_lot_stocks.count +
+      self.receipt_products.count
+  end
 end
