@@ -55,6 +55,7 @@ es:
       chronic_prescription: "Receta crónica"
       receipt: "Recibo"
       purchase: "Compra"
+      lot_archive: "Archivo de lote"
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:

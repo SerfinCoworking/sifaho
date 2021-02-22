@@ -14,7 +14,7 @@ class LotArchive < ApplicationRecord
 
   # Returns the name of the efetor who deliver the products
   def origin_name
-    self.lot_stock.stock.sector.name
+    self.lot_stock.stock.sector.name+" "+self.lot_stock.stock.sector.establishment.short_name
   end
 
   # Returns the name of the efetor who receive the products
