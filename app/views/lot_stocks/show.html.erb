@@ -8,10 +8,10 @@
         Viendo lote <%= @lot_stock.lot.code %>
       </h5>
     </div>
-    <%#= link_to stocks_path, class: 'btn btn-light',
+    <%= link_to lot_stocks_path(id: @lot_stock.stock.id), class: 'btn btn-light',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-      <%#= fa_icon 'times' %>
-    <%# end %>
+      <%= fa_icon 'times' %>
+    <% end %>
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-start">
@@ -114,6 +114,6 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%#= link_to 'Volver', stocks_path, class: "btn" %>
+    <%= link_to 'Volver', lot_stocks_path(id: @lot_stock.stock.id), class: "btn" %>
   </div>
 </div>

@@ -3,9 +3,9 @@
 <% if @lot_stocks.present? %>
   <div class="card fixed-custom-card">
     <div class="card-header">
-      <div class="d-flex justify-content-between">
-        <p><%= fa_icon 'exchange-alt' %> Laboratorio <%#= @stock.laboratory.name %></p>
-      </div>
+      <h5 class="card-title mb-0 ml-2">
+        <%= fa_icon 'barcode' %> Lotes del producto <%= @stock.product.name %>
+      </h5>
       <%= render 'filter' %>
     </div>
     <div class="card-body fixed-panel-index">
