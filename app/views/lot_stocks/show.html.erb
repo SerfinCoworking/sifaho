@@ -71,9 +71,10 @@
                 <td><%= lot_archive.quantity %></td>
                 <td><%= lot_archive.observation %></td>
                 <td class="actions-col">
-                  <button class="btn btn-sm btn-warning">
+                  <%= link_to return_archive_modal_lot_stocks_path(@lot_stock.stock, @lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+                    title: 'Retornar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
                     <%= fa_icon 'undo' %>
-                  </button>
+                  <% end %>
                 </td>
               </tr>
             <% end %>

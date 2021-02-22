@@ -1,6 +1,6 @@
 class LotStocksController < ApplicationController
 
-  before_action :set_lot_stock, only: [:new_archive, :create_archive, :show]
+  before_action :set_lot_stock, only: [:new_archive, :create_archive, :show, :return_archive_modal]
   before_action :set_lot_archive, only: [:show_lot_archive]
   # GET /stocks
   # GET /stocks.json
@@ -105,8 +105,6 @@ class LotStocksController < ApplicationController
     
     respond_to do |format|
       begin
-        puts "DEBUG =========="
-        puts lot_stock_params[:quantity]
         # Armamos el lote achivado: [validacion de cantidad mayor a 0]
         lot_archive = LotArchive.new(lot_stock_params)
         lot_archive.lot_stock_id = @lot_stock.id
@@ -125,7 +123,7 @@ class LotStocksController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        format.html { render :new_archive }
+        format.js { render :new_archive }
       end
     end
 
@@ -149,6 +147,18 @@ class LotStocksController < ApplicationController
             } 
           }
         }), status: :ok }
+    end
+  end
+
+  def return_archive_modal
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def return_archive
+    respond_to do |format|
+      format.html { redirect_to show_lot_stocks_url, notice: 'El archivo se retorno correctamente.' }
     end
   end
 

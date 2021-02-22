@@ -13,7 +13,9 @@ Rails.application.routes.draw do
         collection do
           get ':lot_stock_id/', action: :show, as: :show
           get ':lot_stock_id/new_archive', action: :new_archive, as: :new_archive
+          get ':lot_stock_id/return_archive_modal', action: :return_archive_modal, as: :return_archive_modal
           post ':lot_stock_id/create_archive', action: :create_archive, as: :create_archive
+          patch ':lot_stock_id/return_archive', action: :return_archive, as: :return_archive
         end
       end
     end
