@@ -5,9 +5,16 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     authorize Product
-    @products = Product.filter(params.slice(:search_code, :search_name, :with_area_ids))
-      .order(created_at: :desc)
-      .page(params[:page])
+
+    @filterrific = initialize_filterrific(
+      Product,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Product.options_for_sorted_by
+      },
+      persistence_id: false,
+    ) or return
+    @products = @filterrific.find.paginate(page: params[:page], per_page: 20)
     @areas = Area.all
   end
 

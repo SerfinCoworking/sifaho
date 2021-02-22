@@ -14,6 +14,16 @@ class Product < ApplicationRecord
   delegate :name, to: :area, prefix: true
   delegate :name, to: :unity, prefix: true
 
+  filterrific(
+    default_filter_params: { sorted_by: 'nombre_asc' },
+    available_filters: [
+      :search_code,
+      :search_name,
+      :with_area_ids,
+      :sorted_by,
+    ]
+  )
+
   # To filter records by controller params
   # Slice params "search_code, search_name, with_area_ids"
   def self.filter(params)
@@ -56,6 +66,15 @@ class Product < ApplicationRecord
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
   }
+
+  def self.options_for_sorted_by
+    [
+      ['Código (menor primero)', 'codigo_asc'],
+      ['Código (mayor primero)', 'codigo_desc'],
+      ['Nombre (a-z)', 'nombre_asc'],
+      ['Nombre (z-a)', 'nombre_desc']
+    ]
+  end
 
   scope :with_code, lambda { |product_code|
     where('products.code = ?', product_code)

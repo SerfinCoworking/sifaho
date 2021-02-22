@@ -5,7 +5,8 @@
     <div class="d-flex align-items-center"> 
       <%= fa_icon 'eye' %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo lote <%= @lot_stock.lot.code %>
+        Viendo lote <%= fa_icon 'barcode' %> <%= @lot_stock.lot.code %> 
+        del producto <%= fa_icon 'cubes' %> <%= @lot_stock.product_name %>
       </h5>
     </div>
     <%= link_to lot_stocks_path(id: @lot_stock.stock.id), class: 'btn btn-light',
@@ -22,7 +23,7 @@
         <h5>Laboratorio </h5><%= @lot_stock.lot.laboratory.name %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Fecha expiración </h5><%= @lot_stock.lot.expiry_date.present? ? @lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
+        <h5>Vencimiento </h5><%= @lot_stock.lot.expiry_date.present? ? @lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
       </div>
       <div class="p-1 flex-fill">
         <h5>Cantidad </h5><%= @lot_stock.quantity %>
@@ -36,9 +37,9 @@
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
-          <%= fa_icon "barcode" %> Lotes archivados 
+          <%= fa_icon "archive" %> Archivos
           <span class="badge badge-secondary">
-            <%= @lot_stock.archived_quantity %>
+            <%= @lot_stock.lot_archives.count %>
           </span>
         </a>
       </li>
@@ -66,7 +67,7 @@
           <tbody>
             <% @lot_stock.lot_archives.order(quantity: :desc).each do |lot_archive| %>
               <tr>
-                <th scope="row"><%= lot_archive.user.full_name.humanize %></th>
+                <th scope="row"><%= lot_archive.user.full_name %></th>
                 <td><%= lot_archive.status.humanize %></td>
                 <td><%= lot_archive.quantity %></td>
                 <td><%= lot_archive.observation %></td>
@@ -115,6 +116,10 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', lot_stocks_path(id: @lot_stock.stock.id), class: "btn" %>
+    <%= link_to 'Volver', :back, class: "btn" %>
+    <%= link_to stock_path(@lot_stock.stock), class: 'btn btn-secondary' do %>
+      <%= fa_icon "arrow-left" %>
+      Volver a producto
+    <% end %>
   </div>
 </div>

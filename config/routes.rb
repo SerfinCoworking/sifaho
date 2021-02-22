@@ -23,9 +23,6 @@ Rails.application.routes.draw do
 
   get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
 
-
-
-
   # custom error routes
   match '/404' => 'errors#not_found', :via => :all
   match '/406' => 'errors#not_acceptable', :via => :all

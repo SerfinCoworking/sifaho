@@ -1,32 +1,63 @@
-<%= form_tag(products_path, method: "get", remote: true) do %>
-  <div class="d-flex justify-content-end">
-    <div class="p-1 flex-fill">
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to products_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+
+    <%# CÓDIGO DE PRODUCTO %>
+    <div class="col">
       <label>Código</label>
-      <%= number_field_tag :search_code, params[:search_code], placeholder: "Código", class: "form-control" %>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_code,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un código',
+        autocomplete: 'off',
+      ) %>
     </div>
-    <div class="p-1 flex-fill">
+
+    <%# NOMBRE DE PRODUCTO %>
+    <div class="col">
       <label>Nombre</label>
-      <%= text_field_tag :search_name, params[:search_name], id: "search_name", placeholder: "Nombre",
-        class: "form-control", autocomplete: "off" %>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_name,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off',
+      ) %>
     </div>
-    <div class="p-1 flex-fill">
+    
+    <%# ORDENAMIENTO %>
+    <div class="col">
+      <label>Ordernar por</label>
+      <%= f.select(:sorted_by,
+        @filterrific.select_options[:sorted_by].map {
+          |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+
+    <%# RUBROS %>
+    <div class="col">
       <label>Rubros</label>
-      <%= select_tag :with_area_ids,
-        options_from_collection_for_select(@areas, 'id', 'name'), 
-        class: "selectpicker custom-select-pick form-control", 
-        multiple: true,
-        "title"=>"Rubro",
-        "data-live-search"=>true
+      <%= f.select :with_area_ids, 
+        options_for_select(
+          @areas.collect {|cs| [cs.name, cs.id]},
+          selected: params[:filterrific].present? ? params[:filterrific][:by_establishment] : "",
+        ),
+        {include_blank: false, include_hidden: false},
+        {
+          class: "form-control selectpicker-md show-tick custom-select-pick",
+          "title"=>"Seleccionar",
+          multiple: true,
+          "data-live-search"=>true
+        }
       %>
-    </div>
-    <div class="p-1 flex-fill">
-      <%= link_to products_path, class: "btn btn-light" do %>
-        <%= fa_icon "undo" %>
-      <% end %>
-      <%= button_tag type: 'submit', class: "btn btn-info", id: "register-button", title: 'Filtrar', 
-        data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "filter" %>
-      <% end %>
     </div>
   </div>
 <% end %>

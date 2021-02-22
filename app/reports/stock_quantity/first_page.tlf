@@ -9,7 +9,7 @@
       "x": 18.9,
       "y": 94.4,
       "width": 556.3,
-      "height": 685.1,
+      "height": 728.2,
       "header": {
         "enabled": true,
         "height": 18.2,
@@ -332,9 +332,9 @@
             }
           },
           {
-            "id": "",
+            "id": "total_label",
             "type": "text",
-            "display": true,
+            "display": false,
             "description": "",
             "x": 480.9,
             "y": 255,
@@ -368,7 +368,7 @@
         },
         "items": []
       },
-      "content-height": 666.9,
+      "content-height": 710,
       "auto-page-break": true
     },
     {
@@ -451,38 +451,6 @@
       "texts": [
         "/"
       ]
-    },
-    {
-      "id": "establishment",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 75,
-      "y": 825,
-      "width": 325.9,
-      "height": 10,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 9,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": false,
-      "format": {
-        "base": "",
-        "type": ""
-      }
     },
     {
       "id": "",
@@ -639,13 +607,13 @@
       ]
     },
     {
-      "id": "establishment_name",
+      "id": "efector",
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 168.8,
+      "x": 20,
       "y": 41.1,
-      "width": 406.4,
+      "width": 463.6,
       "height": 24.6,
       "style": {
         "font-family": [
@@ -671,36 +639,30 @@
       }
     },
     {
-      "id": "sector_name",
-      "type": "text-block",
+      "id": "",
+      "type": "text",
       "display": true,
       "description": "",
-      "x": 25,
-      "y": 41.1,
-      "width": 138.8,
-      "height": 24.6,
+      "x": 255,
+      "y": 822.6,
+      "width": 103,
+      "height": 20,
       "style": {
         "font-family": [
           "Helvetica"
         ],
         "font-size": 10,
         "color": "#000000",
-        "text-align": "left",
+        "text-align": "center",
         "vertical-align": "top",
         "line-height": "",
         "line-height-ratio": "",
         "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
+        "font-style": []
       },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": true,
-      "format": {
-        "base": "",
-        "type": ""
-      }
+      "texts": [
+        "sifaho.andes.gob.ar"
+      ]
     }
   ],
   "state": {

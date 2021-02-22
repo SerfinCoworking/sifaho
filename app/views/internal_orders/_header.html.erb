@@ -48,8 +48,8 @@
     </li>
   <% end %>
   <% if policy(InternalOrderTemplate).index? %>
-    <li class="nav-item non-sel disabled" id="pedido">
-      <%= link_to internal_order_templates_path, class: "nav-link #{ active_class('internal_order_templates') }" do %>
+    <li class="nav-item non-sel" id="pedido">
+      <%= link_to internal_order_templates_path, class: "nav-link #{ active_class('internal_order_templates') } disabled" do %>
         <%= fa_icon "skiing" %>
         Plantillas (Reforma)
       <% end %>

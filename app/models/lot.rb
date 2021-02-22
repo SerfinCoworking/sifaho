@@ -122,6 +122,10 @@ class Lot < ApplicationRecord
     self.expire? ? self.expiry_date.strftime("%d/%m/%Y") : ''
   end
   
+  def short_expiry_date_string
+    self.expire? ? self.expiry_date.strftime("%m/%y") : ''
+  end
+
   # Métodos privados #----------------------------------------------------------
   private
   
