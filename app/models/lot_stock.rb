@@ -47,28 +47,31 @@ class LotStock < ApplicationRecord
   # Disminuye la cantidad
   def decrement(a_quantity)
     if self.quantity < a_quantity
-      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" insumo "+self.product_name
+      raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" producto "+self.product_name
     else
       self.quantity -= a_quantity
       self.save!
     end
   end
 
-  # Return all merged movements relationships
-  def movements
-    return self.int_ord_prod_lot_stocks +
-      self.ext_ord_prod_lot_stocks +
-      self.out_pres_prod_lot_stocks +
-      self.chron_pres_prod_lot_stocks +
-      self.receipt_products
+  def decrement_reserved(a_quantity)
+    if self.reserved_quantity < a_quantity
+      raise ArgumentError, "Cantidad en reserva insuficiente del lote "+self.lot_code+" producto "+self.product_name
+    else
+      self.reserved_quantity -= a_quantity
+      self.save!
+    end
   end
 
-  # Return count movements
-  def movements_count
-    return self.int_ord_prod_lot_stocks.count +
-      self.ext_ord_prod_lot_stocks.count +
-      self.out_pres_prod_lot_stocks.count +
-      self.chron_pres_prod_lot_stocks.count +
-      self.receipt_products.count
+  def enable_reserved(a_quantity)
+    self.increment(a_quantity)
+    self.reserved_quantity -= a_quantity
+    self.save!
+  end
+
+  def reserve(a_quantity)
+    self.decrement(a_quantity)
+    self.reserved_quantity += a_quantity
+    self.save!
   end
 end

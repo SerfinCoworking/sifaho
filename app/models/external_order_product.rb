@@ -1,4 +1,5 @@
 class ExternalOrderProduct < ApplicationRecord
+  default_scope { joins(:product).order("products.name") }
 
   # Relaciones
   belongs_to :external_order, inverse_of: 'order_products'
@@ -45,11 +46,29 @@ class ExternalOrderProduct < ApplicationRecord
   def is_provision?
     return self.external_order.order_type == 'provision'
   end
+
+  # Se habilita la cantidad que estaba reservada en stock
+  def enable_reserved_stock
+    self.order_prod_lot_stocks.each do |opls|
+      opls.lot_stock.enable_reserved(opls.quantity)
+    end
+  end
+
+  # Se reserva la cantidad del lote en stock
+  def reserve_stock
+    self.order_prod_lot_stocks.each do |opls|
+      opls.lot_stock.reserve(opls.quantity)
+    end
+  end
+
+  def product_name
+    product.name
+  end
   
   # Decrementamos la cantidad de cada lot stock (proveedor)
-  def decrement_stock
+  def decrement_reserved_stock
     self.order_prod_lot_stocks.each do |opls|
-      opls.lot_stock.decrement(opls.quantity)
+      opls.lot_stock.decrement_reserved(opls.quantity)
       opls.lot_stock.stock.create_stock_movement(self.external_order, opls.lot_stock, opls.quantity, false)
     end
   end

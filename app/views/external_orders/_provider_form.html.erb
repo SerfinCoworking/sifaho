@@ -4,7 +4,7 @@
       <%= fa_icon (@external_order.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
         <%= @external_order.new_record? ? 'Nueva' : 'Editando' %> <%= @external_order.order_type %> de establecimiento
-        código <%= @external_order.remit_code if @external_order.persisted? %>
+        código <%= @external_order.remit_code if @external_order.persisted? %> <%= params[:action] %>
       </h5>
     </div>
     <%= link_to :back, class: @external_order.new_record? ? 'btn text-white' : 'btn' do %>

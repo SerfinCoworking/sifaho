@@ -148,14 +148,16 @@ class ExternalOrdersController < ApplicationController
     @external_order.requested_date = DateTime.now
     @external_order.provider_sector = current_user.sector
     @external_order.order_type = "provision"
-    @external_order.status = accepting? ? "proveedor_aceptado" : 'proveedor_auditoria'
         
     respond_to do |format|
       begin
-        @external_order.save!
-        message = accepting? ? 'La provisión se ha creado y aceptado correctamente.' : "La provisión se ha creado y se encuentra en auditoria."
-        notification_type = accepting? ? "creó y aceptó" : "creó"
-        @external_order.create_notification(current_user, notification_type)     
+        if accepting?
+          @external_order.accept_order_by(current_user)
+        else
+          @external_order.proveedor_auditoria!
+          @external_order.create_notification(current_user, "creó")
+        end
+        message = accepting? ? 'La provisión se ha creado y aceptado correctamente.' : "La provisión se ha creado y se encuentra en auditoria."  
 
         format.html { redirect_to @external_order, notice: message }
       rescue ArgumentError => e
@@ -200,15 +202,13 @@ class ExternalOrdersController < ApplicationController
   # PATCH /external_orders
   # PATCH /external_orders.json
   def update_provider
-    authorize @external_order
-    @external_order.status = accepting? ? "proveedor_aceptado" : 'proveedor_auditoria'
-        
+    authorize @external_order        
     respond_to do |format|
       begin
         @external_order.update!(external_order_params)
+        @external_order.accept_order_by(current_user) if accepting?
         message = accepting? ? 'La provisión se ha auditado y aceptado correctamente.' : "La provisión se ha auditado y se encuentra en auditoria."
-        notification_type = accepting? ? "auditó y aceptó" : "auditó"
-        @external_order.create_notification(current_user, notification_type)     
+        @external_order.create_notification(current_user, "auditó") unless accepting?     
 
         format.html { redirect_to @external_order, notice: message }
       rescue ArgumentError => e
@@ -306,11 +306,10 @@ class ExternalOrdersController < ApplicationController
     authorize @external_order
     respond_to do |format|
       begin
-        @external_order.proveedor_auditoria!
+        @external_order.return_to_proveedor_auditoria_by(current_user)
       rescue ArgumentError => e
         flash[:alert] = e.message
       else
-        @external_order.create_notification(current_user, "retornó a un estado anterior")
         flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
       end
       format.html { redirect_to @external_order }
