@@ -1,18 +1,17 @@
 class LotStockPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin)
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
   end
 
   def show?
     index?
   end
 
-  def create?
-    user.has_any_role?(:admin)
+  def new_archive?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia) && record.quantity > 0
   end
-
-  def new?
-    create?
+  
+  def create_archive?
+    new_archive?
   end
-
 end
