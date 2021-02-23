@@ -15,9 +15,11 @@
       <% end %>
     <% end %>
 
-    <%= link_to new_archive_lot_stocks_path(stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
-      title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%= fa_icon 'archive'%>
+    <% if policy(lot_stock).create_archive? %>
+      <%= link_to new_archive_lot_stocks_path(stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+        title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'archive'%>
+      <% end %>
     <% end %>
   </td>
 </tr>

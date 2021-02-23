@@ -5,7 +5,7 @@ class LotStocksController < ApplicationController
   # GET /stocks
   # GET /stocks.json
   def index
-    # authorize StockLot
+    authorize LotStock
     @stock = Stock.find(params[:id])
     @filterrific = initialize_filterrific(
       LotStock.by_stock(params[:id]),
@@ -37,14 +37,17 @@ class LotStocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
+    authorize @lot_stock
   end
   
   # GET /stocks/1
   # GET /stocks/1.json
   def show_lot_archive
+    authorize @lot_archive
   end
-
+  
   def new_archive
+    authorize @lot_stock
     @lot_archive = LotArchive.new
     respond_to do |format|
       format.js
@@ -52,6 +55,7 @@ class LotStocksController < ApplicationController
   end
   
   def create_archive
+    authorize @lot_stock    
     @lot_archive = LotArchive.new(lot_archive_params)
     @lot_archive.user_id = current_user.id
     
@@ -86,12 +90,14 @@ class LotStocksController < ApplicationController
   end
 
   def return_archive_modal
+    authorize @lot_archive
     respond_to do |format|
       format.js
     end
   end
-
+  
   def return_archive
+    authorize @lot_archive
     @lot_archive.return_by(current_user)
     respond_to do |format|
       format.html { redirect_to show_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }

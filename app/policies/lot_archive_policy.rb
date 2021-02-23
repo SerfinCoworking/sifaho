@@ -3,20 +3,20 @@ class LotArchivePolicy < ApplicationPolicy
     user.has_any_role?(:admin)
   end
 
-  def show?
+  def show_lot_archive?
     index?
   end
 
-  def create?
-    user.has_any_role?(:admin)
+  def return_archive?
+    unless record.retornado?      
+      diff_in_hours = (DateTime.now.to_time - record.created_at.to_time) / 1.hours
+      if diff_in_hours < 48
+        user.has_any_role?(:admin)
+      end
+    end
   end
-
-  def new?
-    create?
+  
+  def return_archive_modal?
+    return_archive?
   end
-
-  def restore?
-    create? && record.archivado?
-  end
-
 end

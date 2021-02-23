@@ -72,7 +72,13 @@
                 <td><%= lot_archive.quantity %></td>
                 <td><%= lot_archive.observation %></td>
                 <td class="actions-col">
-                  <% if policy(lot_archive).restore?%>
+                  <% if policy(lot_archive).show_lot_archive? %>
+                    <%= link_to lot_archive_path(lot_archive), class: "btn btn-light btn-sm",
+                      title: 'Ver detalle', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon 'eye' %>
+                    <% end %>
+                  <% end %>
+                  <% if policy(lot_archive).return_archive? %>
                     <%= link_to return_archive_modal_path(lot_archive), class: "btn btn-warning btn-sm", remote: true, 
                       title: 'Retornar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
                       <%= fa_icon 'undo' %>
