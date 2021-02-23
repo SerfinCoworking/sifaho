@@ -177,6 +177,11 @@ $(document).on('turbolinks:load', function() {
     
   });
 
+  // Inicializamos todos los switch buttons
+  $('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, element ) {
+    element.switchButton();
+  });
+
 });
 
 // delete confirm

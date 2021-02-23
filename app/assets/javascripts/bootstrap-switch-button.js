@@ -226,12 +226,12 @@
 	 * Replace all `.switch-button` inputs with "Bootstrap-Switch-Button"
 	 * Executes once page elements have rendered enabling script to be placed in `<head>`
 	 */
-	if (typeof window !== 'undefined')
-		window.onload = function() {
-			document.querySelectorAll('input[type=checkbox][data-toggle="switchbutton"]').forEach(function(ele) {
-				ele.switchButton();
-			});
-		};
+	// if (typeof window !== 'undefined')
+	// 	window.onload = function() {
+	// 		document.querySelectorAll('input[type=checkbox][data-toggle="switchbutton"]').forEach(function(ele) {
+	// 			ele.switchButton();
+	// 		});
+	// 	};
 
 	// Export library if possible
 	if (typeof module !== 'undefined' && module.exports) {
