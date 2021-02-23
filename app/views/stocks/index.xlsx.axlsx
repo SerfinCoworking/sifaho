@@ -1,0 +1,21 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Movimientos de stock") do |sheet|
+  sheet.add_row ["#", "Código", "Producto", "Unidad", "Rubro", "Cantidad disponible", 
+    "Cantidad reservada", "Cantidad total"]
+
+  sheet.add_style 'A1:J1', bg_color: '00407A', fg_color: 'FFFFFF'
+  
+  @stocks.each_with_index do |stock, index|
+    sheet.add_row [
+      index + 1,
+      stock.product_code, 
+      stock.product_name,
+      stock.product_unity_name,
+      stock.product_area_name,
+      stock.quantity,
+      stock.reserved_quantity,
+      stock.total_quantity
+    ]
+  end
+  sheet.column_widths 5,10,20,22,18,50,50,19,10,10
+end
