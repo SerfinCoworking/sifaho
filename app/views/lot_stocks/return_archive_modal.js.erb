@@ -2,10 +2,10 @@
 $('.modal-header').addClass('bg-warning text-black');
 
 // Add the dialog title
-$('.modal-title').html("<i class='fas fa-undo'></i>  Retornar archivo");
+$('.modal-title').html("<i class='fas fa-undo'></i>  Se retornarán <%=@lot_archive.quantity%> unidades al stock");
 
 // Render the new form
-$('.modal-body').html('Esta seguro de retornar este archivo?, no podrá volver atras esta acción');
+$('.modal-body').html('<p>No podrá volver atrás esta acción.</p><h5>Esta seguro de retornar este archivo?</h5>');
 
 // Add form button
 $('.modal-footer').html(

@@ -1,4 +1,4 @@
-<%#= render 'header' %>
+<%= render 'stocks/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex justify-content-between">
@@ -26,7 +26,10 @@
         <h5>Vencimiento </h5><%= @lot_stock.lot.expiry_date.present? ? @lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
       </div>
       <div class="p-1 flex-fill">
-        <h5>Cantidad </h5><%= @lot_stock.quantity %>
+        <h5>Cantidad disponible </h5><%= @lot_stock.quantity %>
+      </div>
+      <div class="p-1 flex-fill">
+        <h5>Cantidad reservada </h5><%= @lot_stock.reserved_quantity %>
       </div>
       <div class="p-1 flex-fill">
         <h5>Cantidad Archivada </h5><%= @lot_stock.archived_quantity %>
@@ -36,7 +39,15 @@
 
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
+        <a class="nav-link active" id="reserved-tab" data-toggle="tab" href="#reserved" role="tab" aria-controls="reserved" aria-selected="true">
+          <%= fa_icon "bookmark" %> Reservado
+          <span class="badge badge-secondary">
+            <%= @lot_stock.reserved_quantity %>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
           <%= fa_icon "archive" %> Archivos
           <span class="badge badge-secondary">
             <%= @lot_stock.lot_archives.count %>
@@ -53,36 +64,85 @@
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="lot-archives" role="tabpanel" aria-labelledby="lots-tab">
-        <table class="table table-hover table-sm">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">Usuario</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col">Observaciones</th>
-              <th scope="col" class="actions-col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @lot_stock.lot_archives.order(quantity: :desc).each do |lot_archive| %>
+      <div class="tab-pane fade show active" id="reserved" role="tabpanel" aria-labelledby="reserved">
+        <% if @reserved_lots.present? %>
+          <table class="table table-hover table-sm">
+            <thead class="thead-light">
               <tr>
-                <th scope="row"><%= lot_archive.user.full_name %></th>
-                <td><%= lot_archive.status.humanize %></td>
-                <td><%= lot_archive.quantity %></td>
-                <td><%= lot_archive.observation %></td>
-                <td class="actions-col">
-                  <% if policy(lot_archive).restore?%>
-                    <%= link_to return_archive_modal_path(lot_archive), class: "btn btn-warning btn-sm", remote: true, 
-                      title: 'Retornar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                      <%= fa_icon 'undo' %>
-                    <% end %>
-                  <% end %>
-                </td>
+                <th scope="col">Fecha</th>
+                <th scope="col">Pedido</th>
+                <th scope="col">Código</th>
+                <th scope="col">Cantidad reservada</th>
+                <th scope="col" class="actions-col">Acciones</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @reserved_lots.each do |lot| %>
+                <tr>
+                  <th scope="row"><%= lot.external_order_product.external_order.updated_at.strftime("%d/%m/%Y") %></th>
+                  <td><%= lot.external_order_product.external_order.human_name %></td>
+                  <td><%= lot.external_order_product.external_order.remit_code %></td>
+                  <td><%= lot.quantity %></td>
+                  <td class="actions-col">
+                    <%= link_to polymorphic_path(lot.external_order_product.external_order, resaltar: lot.product.id), 
+                      target: :_blank, class: "btn btn-sm btn-light" do %>
+                      <%= fa_icon 'external-link-alt' %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="d-flex justify-content-center mt-5">
+            No hay cantidades reservadas en este lote
+          </div>
+        <% end %>
+      </div>
+      <div class="tab-pane fade" id="lot-archives" role="tabpanel" aria-labelledby="lots-tab">
+        <% if @lot_stock.lot_archives.present? %>
+          <table class="table table-hover table-sm">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Observaciones</th>
+                <th scope="col" class="actions-col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @lot_stock.lot_archives.order(created_at: :desc).each do |lot_archive| %>
+                <tr>
+                  <th scope="row"><%= lot_archive.created_at.strftime("%d/%m/%Y") %></th>
+                  <td><%= lot_archive.user.full_name %></td>
+                  <td><%= lot_archive.status.humanize %></td>
+                  <td><%= lot_archive.quantity %></td>
+                  <td><%= lot_archive.observation %></td>
+                  <td class="actions-col">
+                    <% if policy(lot_archive).show_lot_archive? %>
+                      <%= link_to lot_archive_path(lot_archive), class: "btn btn-light btn-sm",
+                        title: 'Ver detalle', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= fa_icon 'eye' %>
+                      <% end %>
+                    <% end %>
+                    <% if policy(lot_archive).return_archive? %>
+                      <%= link_to return_archive_modal_path(lot_archive), class: "btn btn-warning btn-sm", remote: true, 
+                        title: 'Retornar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= fa_icon 'undo' %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="d-flex justify-content-center mt-5">
+            Aún no se ha archivado de este lote
+          </div>
+        <% end %>
       </div>
       <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
         <table class="table table-hover table-sm">
@@ -118,7 +178,7 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', :back, class: "btn" %>
+    <%= link_to 'Volver', :back, class: "btn btn-light mr-2" %>
     <%= link_to stock_path(@lot_stock.stock), class: 'btn btn-secondary' do %>
       <%= fa_icon "arrow-left" %>
       Volver a producto

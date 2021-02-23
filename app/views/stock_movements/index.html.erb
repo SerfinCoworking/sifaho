@@ -5,6 +5,7 @@
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <p><%= fa_icon 'exchange-alt' %> Movimientos <%= @stock.product.name %></p>
+        <p>Código <%= @stock.product.code %></p>
         <p>Rubro <%= @stock.product.area.name %></p>
         <p>En stock <%= @stock.quantity %></p>
       </div>

@@ -132,6 +132,9 @@ es:
         presentation: "Presentación"
         quantity: "Cantidad"
         lot_code: "Código"
+      lot_archive:
+        observation: "Observaciones"
+        quantity: "Cantidad"
 
       
 
