@@ -357,7 +357,8 @@ class ExternalOrdersController < ApplicationController
     report.page[:provider_sector] = external_order.provider_sector.name
     report.page[:provider_establishment] = external_order.provider_establishment.name
     report.page[:observations] = external_order.observation
-  
+    report.page[:products_count].value(external_order.order_products.count)
+    report.page[:observations_count].value("solicitante "+external_order.order_products.where.not(applicant_observation: [nil, ""]).count.to_s+" / proveedor "+external_order.order_products.where.not(provider_observation: [nil, ""]).count.to_s)
 
     # Se van agregando los productos
     external_order.order_products.joins(:product).order("name").each do |eop|  
@@ -404,34 +405,6 @@ class ExternalOrdersController < ApplicationController
         end
       end # fin lista      
     end # fin productos
-    
-    # Agregamos el footer, que solo lo tiene el layout por defecto
-    # report.list.on_footer_insert do |footer|
-    #   footer.item(:total_products).value(external_order.order_products.count)
-    #   footer.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
-    #   footer.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
-    #   footer.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)    
-    # end
-
-    # En caso de que solo sea 1 hoja, agregamos el mismo contenido del footer pero a nivel row
-    if report.page_count == 1
-      report.list do |list|
-        list.add_row do |row|
-          row.item(:total_title).show
-          row.item(:product_title).show
-          row.item(:requested_title).show
-          row.item(:delivered_title).show
-          row.item(:obs_title).show
-          row.item(:total_border).show
-          row.item(:lot_border).hide
-
-          row.item(:total_products).value(external_order.order_products.count)
-          row.item(:total_requested).value(external_order.order_products.sum(&:request_quantity))
-          row.item(:total_delivered).value(external_order.order_products.sum(&:delivery_quantity))
-          row.item(:total_obs).value(external_order.order_products.where.not(provider_observation: [nil, ""]).count)   
-        end
-      end  
-    end
 
     # A cada pagina le agregamos el pie de pagina
     report.pages.each do |page|
