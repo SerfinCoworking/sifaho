@@ -1,11 +1,11 @@
-<%#= render 'header' %>
+<%= render 'stocks/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex justify-content-between">
     <div class="d-flex align-items-center"> 
       <%= fa_icon 'eye' %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo archivo de lote <%= @lot_archive.lot_stock.lot.code %>
+        Viendo archivo de lote <%= fa_icon 'barcode' %> <%= @lot_archive.lot_stock.lot.code %>
       </h5>
     </div>
     <%= link_to stocks_path, class: 'btn btn-light',
@@ -15,38 +15,74 @@
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-start">
-      <div class="p-1 flex-fill">
-        <h5>Lote </h5><%= @lot_archive.lot_stock.lot.code %>
-      </div>
-      
-      <div class="p-1 flex-fill">
-        <h5>Laboratorio </h5><%= @lot_archive.lot_stock.lot.laboratory.name.humanize %>
-      </div>
+        <div class="p-1 flex-fill">
+          <h5>Lote </h5><%= @lot_archive.lot_stock.lot.code %>
+        </div>
+        
+        <div class="p-1 flex-fill">
+          <h5>Laboratorio </h5><%= @lot_archive.lot_stock.lot.laboratory.name.humanize %>
+        </div>
 
-      <div class="p-1 flex-fill">
-        <h5>Fecha vencimiento </h5><%= @lot_archive.lot_stock.lot.expiry_date.present? ? @lot_archive.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
-      </div>
-      <div class="p-1 flex-fill">
-        <h5>Cantidad </h5><%= @lot_archive.quantity %>
-      </div>
-      <div class="p-1 flex-fill">
-        <h5>Estado </h5>
-        <span class="badge badge-<%= @lot_archive.archivado? ? 'success' : 'primary' %>">
-          <%= @lot_archive.status.humanize %>
-        </span>
-      </div>
-      
-      <div class="p-1 flex-fill">
-        <h5>Observaciones </h5>
+        <div class="p-1 flex-fill">
+          <h5>Vencimiento </h5>
+          <%= @lot_archive.lot_stock.lot.expiry_date.present? ? @lot_archive.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %>
+        </div>
+
+        <div class="p-1 flex-fill">
+          <h5>Cantidad archivada</h5>
+          <%= @lot_archive.quantity %>
+        </div>
+        
+        <div class="p-1 flex-fill">
+          <h5>Estado </h5>
+          <span class="badge badge-<%= @lot_archive.archivado? ? 'success' : 'primary' %>">
+            <%= @lot_archive.status.humanize %>
+          </span>
+        </div>
+        
+        <div class="p-1 flex-fill">
+          <h5>Observaciones </h5>
           <%= @lot_archive.observation %>
+        </div>
+    </div>
+
+    <hr>
+    <h5>Producto</h5>
+    <div class="d-flex justify-content-start">
+      <div class="p1 flex-fill">
+        <h5>Código</h5>
+        <%= @lot_archive.lot_stock.product_code %>
       </div>
-      
+      <div class="p1 flex-fill">
+        <h5>Nombre</h5>
+        <%= @lot_archive.lot_stock.product_name %>
+      </div>
+      <div class="p1 flex-fill">
+        <h5>Rubro</h5>
+        <%= @lot_archive.lot_stock.product.area.name %>
+      </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-start">
+      <div class="p1 flex-fill">
+        <h5>Archivado el <%= @lot_archive.created_at.strftime("%d/%m/%Y") %> por</h5>
+        <%= image_tag user_avatar(@lot_archive.user, 35), class:"rounded-circle img-profile-nav" %>
+        <%= @lot_archive.user.full_name.titleize %>
+      </div>
+      <% if @lot_archive.returned_by.present? %>
+        <div class="p1 flex-fill">
+          <h5>Retornado por</h5>
+          <%= image_tag user_avatar(@lot_archive.returned_by, 35), class:"rounded-circle img-profile-nav" %>
+          <%= @lot_archive.returned_by.full_name.titleize %>
+        </div>
+      <% end %>
     </div>
 
   </div>
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', stocks_path, class: "btn" %>
+    <%= link_to 'Volver', stocks_path, class: "btn btn-light" %>
   </div>
 </div>

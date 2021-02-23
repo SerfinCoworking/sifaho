@@ -20,7 +20,7 @@ class LotStock < ApplicationRecord
   validates_presence_of :stock_id
   
   delegate :refresh_quantity, to: :stock, prefix: true
-  delegate :name, to: :product, prefix: true
+  delegate :name, :code, to: :product, prefix: true
   delegate :code, to: :lot, prefix: true
 
   filterrific(

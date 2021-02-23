@@ -13,6 +13,6 @@
     <div class="col-md-12">
       <%= f_lot_archive.input :observation, label: 'Observaciones', required: true %>
     </div>
-    <%= f_lot_archive.input :lot_stock_id, as: :hidden, value: @lot_stock.id %>
+    <%= f_lot_archive.input :lot_stock_id, as: :hidden, input_html: { value: @lot_stock.id } %>
   </div>
 <% end %>

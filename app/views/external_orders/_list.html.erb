@@ -56,6 +56,13 @@
             En auditoría <span class="badge badge-warning"><%= @external_orders.proveedor_auditoria.count %></span>
           <% end %>
         </div>
+        <div>
+          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 3}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver pedidos aceptados", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            Aceptados <span class="badge badge-primary"><%= @external_orders.proveedor_aceptado.count %></span>
+          <% end %>
+        </div>
       </div>
       <div class="col-2 d-flex justify-content-end align-items-center">
       </div>
