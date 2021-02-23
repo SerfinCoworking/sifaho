@@ -98,6 +98,12 @@ class LotStock < ApplicationRecord
     self.save!
   end
 
+  # Decrementa la cantidad reservada sin modificar otras cantidades
+  def decrement_reserved(a_quantity)
+    self.reserved_quantity -= a_quantity
+    self.save!
+  end
+
   # Habilita la cantidad reservada nuevamente en stock
   def enable_reserved(a_quantity)
     self.increment(a_quantity)
