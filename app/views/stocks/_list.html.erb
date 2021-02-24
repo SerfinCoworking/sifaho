@@ -16,7 +16,25 @@
       </tbody>
     </table>
   </div>
-  <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-    <%= will_paginate @stocks, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  <div class="row d-flex align-items-center" style="height: 50px">
+    <div class="col-3">
+      <%= will_paginate @stocks, list_classes: %w(pagination mb-0), 
+        previous_label: '<i class="fa fa-angle-left"></i>',
+        next_label: '<i class="fa fa-angle-right"></i>', 
+        renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+    <div class="col-6 d-flex justify-content-around align-items-center">
+      <div>
+        Productos <span class="badge badge-secondary"><%= @stocks.count %></span>
+      </div>
+    </div>
+    <div class="col-3 d-flex justify-content-end align-items-center">
+      <%= link_to stocks_path(format: 'xlsx'),
+        class: "btn btn-success", target: :_blank,
+        title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "file-excel" %>
+        Excel
+      <% end %>
+    </div>
   </div>
 </div>

@@ -23,6 +23,7 @@ class Receipt < ApplicationRecord
 
   # Atributos anidados
   accepts_nested_attributes_for :receipt_products,
+    reject_if: proc { |attributes| attributes['product_id'].blank? },
     :allow_destroy => true
   
   filterrific(
