@@ -1,7 +1,7 @@
 class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
   def up
     # Buscamos todos los recibos del establecimiento SMA sector deposito
-    ExternalOrderBak.recibo.where(applicant_sector_id: 8).recibo_realizado.each do |receipt|
+    ExternalOrderBak.recibo.recibo_realizado.each do |receipt|
       new_receipt = Receipt.find_by_code(receipt.remit_code)
       new_receipt.receipt_products.destroy_all
       puts "Recibo: #{new_receipt.id} - Code: #{new_receipt.code} - estado: #{new_receipt.status} - cantidad productos: #{receipt.quantity_ord_supply_lots.count}"
@@ -59,10 +59,10 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
         end
       end
     end
-    puts "Se migraron #{ExternalOrderBak.recibo.where(applicant_sector_id: 8).recibo_realizado.count.to_s} de #{Receipt.count.to_s} recibos".colorize(background: :green)
+    puts "Se migraron #{ExternalOrderBak.recibo.recibo_realizado.count.to_s} de #{Receipt.count.to_s} recibos".colorize(background: :green)
   end
 
   def down
-    
+
   end
 end
