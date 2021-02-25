@@ -7,6 +7,7 @@ class ChronicDispensationsController < ApplicationController
   def new
     @chronic_dispensation = ChronicDispensation.new
     @chronic_dispensation.chronic_prescription = @chronic_prescription
+    @chronic_dispensation.dispensation_types.build
     authorize @chronic_dispensation
   end
 
@@ -24,6 +25,8 @@ class ChronicDispensationsController < ApplicationController
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @chronic_dispensation.chronic_prescription = @chronic_prescription
+        @chronic_dispensation.dispensation_types.build
         format.html { render :new }
       end
     end
@@ -67,22 +70,27 @@ class ChronicDispensationsController < ApplicationController
         :observation,
         :status,
         :_destroy,
-        chronic_prescription_products_attributes: [
-          :id, 
+        dispensation_types_attributes: [
+          :quantity,
+          :quantity_type,
           :original_chronic_prescription_product_id,
-          :product_id, 
-          :lot_stock_id,
-          :request_quantity,
-          :delivery_quantity,
-          :observation,
-          :_destroy,
-          order_prod_lot_stocks_attributes: [
-            :id,
-            :quantity,
+          chronic_prescription_products_attributes: [
+            :id, 
+            :original_chronic_prescription_product_id,
+            :product_id, 
             :lot_stock_id,
-            :_destroy
+            :request_quantity,
+            :delivery_quantity,
+            :observation,
+            :_destroy,
+            order_prod_lot_stocks_attributes: [
+              :id,
+              :quantity,
+              :lot_stock_id,
+              :_destroy
+            ]
           ]
-        ]
+        ],
       )
     end
 

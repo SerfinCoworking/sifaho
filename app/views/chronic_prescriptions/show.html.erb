@@ -241,20 +241,22 @@
                     </thead>
                     <tbody>
                       
-                      <% chronic_dispensation.chronic_prescription_products.each do |chronic_prescription_product| %>
-                        <tr>
-                          <td><%= chronic_prescription_product.product_code %></td>
-                          <td><%= chronic_prescription_product.product_name %></td>
-                          <td><%= chronic_prescription_product.product_unity_name %></td>
-                          <td><%= chronic_prescription_product.delivery_quantity %></td>
-                          <td>
-                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
-                              <%= chronic_prescription_product.order_prod_lot_stocks.count %>
-                            </button>
-                          </td>
-                          <td>Observaciones</td>
-                        </tr>
-                        <%= render '/shared/selected_lots', model: chronic_prescription_product %>
+                      <% chronic_dispensation.dispensation_types.each do |dispensation_type| %>
+                        <% dispensation_type.chronic_prescription_products.each do |chronic_prescription_product| %>
+                          <tr>
+                            <td><%= chronic_prescription_product.product_code %></td>
+                            <td><%= chronic_prescription_product.product_name %></td>
+                            <td><%= chronic_prescription_product.product_unity_name %></td>
+                            <td><%= chronic_prescription_product.delivery_quantity %></td>
+                            <td>
+                              <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
+                                <%= chronic_prescription_product.order_prod_lot_stocks.count %>
+                              </button>
+                            </td>
+                            <td>Observaciones</td>
+                          </tr>
+                          <%= render '/shared/selected_lots', model: chronic_prescription_product %>
+                        <% end %>
                       <% end %>
                     </tbody>
                   </table>
