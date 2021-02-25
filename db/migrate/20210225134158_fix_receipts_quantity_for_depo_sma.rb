@@ -3,6 +3,7 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
     # Buscamos todos los recibos del establecimiento SMA sector deposito
     ExternalOrderBak.recibo.recibo_realizado.each do |receipt|
       new_receipt = Receipt.find_by_code(receipt.remit_code)
+      StockMovement.where(order_type: "Receipt", order_id: new_receipt.id).destroy_all
       new_receipt.receipt_products.destroy_all
       puts "Recibo: #{new_receipt.id} - Code: #{new_receipt.code} - estado: #{new_receipt.status} - cantidad productos: #{receipt.quantity_ord_supply_lots.count}"
       receipt.quantity_ord_supply_lots.each do |qosl|
@@ -28,6 +29,7 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
             receipt_prod.updated_at = qosl.updated_at
             receipt_prod.lot_stock_id = lot_stock_received.id
           else
+
             puts "No se encontró el lot_stock para qosl id: #{qosl.id}"
           end
         end
@@ -40,12 +42,12 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
         # controlamos que exista el lot_stock
         if receipt_product.lot_stock.present?
           
-          stock_movement = StockMovement.where(order_type: "Receipt", order_id: new_receipt.id, lot_stock_id: receipt_product.lot_stock.id).first
-          if stock_movement.present?
-            stock_movement.update_attributes!(  quantity: receipt_product.quantity, created_at: new_receipt.received_date, updated_at: receipt_product.updated_at)
-            puts "StockMovement id actualizado: #{stock_movement.id}".colorize(background: :blue)
-          else
-            puts "StockMovement se crea #{receipt_product.lot_stock_id}".colorize(background: :green)
+          # stock_movement = StockMovement.where(order_type: "Receipt", order_id: new_receipt.id, lot_stock_id: receipt_product.lot_stock.id).first
+          # if stock_movement.present?
+          #   stock_movement.update_attributes!(  quantity: receipt_product.quantity, created_at: new_receipt.received_date, updated_at: receipt_product.updated_at)
+          #   puts "StockMovement id actualizado: #{stock_movement.id}".colorize(background: :blue)
+          # else
+            # puts "StockMovement se crea #{receipt_product.lot_stock_id}".colorize(background: :green)
             StockMovement.create!(
               stock: receipt_product.lot_stock.stock, 
               order: new_receipt, 
@@ -55,7 +57,7 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
               created_at: new_receipt.received_date,
               updated_at: receipt_product.updated_at
             )
-          end
+          # end
         end
       end
     end
