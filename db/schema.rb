@@ -181,9 +181,7 @@ ActiveRecord::Schema.define(version: 2021_02_25_134158) do
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "dispensation_type_id"
     t.index ["chronic_dispensation_id"], name: "index_chronic_prescription_products_on_chronic_dispensation_id"
-    t.index ["dispensation_type_id"], name: "index_chronic_prescription_products_on_dispensation_type_id"
     t.index ["original_chronic_prescription_product_id"], name: "unique_org_chronic_prescription_product_cpp"
     t.index ["product_id"], name: "index_chronic_prescription_products_on_product_id"
   end
@@ -225,17 +223,6 @@ ActiveRecord::Schema.define(version: 2021_02_25_134158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["prescription_id"], name: "index_cronic_dispensations_on_prescription_id"
-  end
-
-  create_table "dispensation_types", force: :cascade do |t|
-    t.bigint "chronic_dispensation_id"
-    t.bigint "original_chronic_prescription_product_id"
-    t.integer "quantity_type", default: 0
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["chronic_dispensation_id"], name: "index_dispensation_types_on_chronic_dispensation_id"
-    t.index ["original_chronic_prescription_product_id"], name: "unique_org_chron_pres_on_dispensation_types"
   end
 
   create_table "establishments", force: :cascade do |t|
@@ -582,9 +569,9 @@ ActiveRecord::Schema.define(version: 2021_02_25_134158) do
     t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "reserved_quantity", default: 0
     t.integer "archived_quantity", default: 0
     t.integer "presentation"
-    t.integer "reserved_quantity", default: 0
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
     t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
   end
