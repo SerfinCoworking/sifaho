@@ -39,25 +39,17 @@ class FixReceiptsQuantityForDepoSma < ActiveRecord::Migration[5.2]
       # Iterate through the persisted receipt products and create stock movements
       new_receipt.receipt_products.each do |receipt_product|
         puts "Recibo: #{new_receipt.id} - Lot-stock: #{receipt_product.lot_stock.present? ? receipt_product.lot_stock.id : 'sin lote'} - Receipt Product id: #{receipt_product.id}"
-        # controlamos que exista el lot_stock
+        # controlamos que exista el lot_stock y creamos el movimiento
         if receipt_product.lot_stock.present?
-          
-          # stock_movement = StockMovement.where(order_type: "Receipt", order_id: new_receipt.id, lot_stock_id: receipt_product.lot_stock.id).first
-          # if stock_movement.present?
-          #   stock_movement.update_attributes!(  quantity: receipt_product.quantity, created_at: new_receipt.received_date, updated_at: receipt_product.updated_at)
-          #   puts "StockMovement id actualizado: #{stock_movement.id}".colorize(background: :blue)
-          # else
-            # puts "StockMovement se crea #{receipt_product.lot_stock_id}".colorize(background: :green)
-            StockMovement.create!(
-              stock: receipt_product.lot_stock.stock, 
-              order: new_receipt, 
-              lot_stock: receipt_product.lot_stock, 
-              quantity: receipt_product.quantity,
-              adds: true,
-              created_at: new_receipt.received_date,
-              updated_at: receipt_product.updated_at
-            )
-          # end
+          StockMovement.create!(
+            stock: receipt_product.lot_stock.stock, 
+            order: new_receipt, 
+            lot_stock: receipt_product.lot_stock, 
+            quantity: receipt_product.quantity,
+            adds: true,
+            created_at: new_receipt.received_date,
+            updated_at: receipt_product.updated_at
+          )
         end
       end
     end
