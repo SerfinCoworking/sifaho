@@ -14,12 +14,18 @@ class StocksController < ApplicationController
       persistence_id: false,
     ) or return
     @areas = Area.all
-    if request.format.xlsx?
+    if request.format.xlsx? || request.format.pdf?
       @stocks = @filterrific.find
     else
       @stocks = @filterrific.find.paginate(page: params[:page], per_page: 20)
     end
     respond_to do |format|
+      format.pdf do
+        send_data generate_order_report(@stocks),
+          filename: 'reporte_stock_'+DateTime.now.strftime("%d/%m/%Y")+'.pdf',
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
       format.html
       format.js
       format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteListadoStock_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
@@ -100,6 +106,52 @@ class StocksController < ApplicationController
         }), status: :ok }
     end
   end
+
+  def generate_order_report(external_order)
+    report = Thinreports::Report.new
+
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'stock', 'other_page.tlf'), :default => true
+    report.use_layout File.join(Rails.root, 'app', 'reports', 'stock', 'first_page.tlf'), id: :cover_page
+    
+    # Comenzamos con la pagina principal
+    report.start_new_page layout: :cover_page
+
+    # Agregamos el encabezado
+    report.page[:title] = 'Reporte de stock'
+    report.page[:requested_date] = DateTime.now.strftime('%d/%m/%YY')
+    report.page[:efector] = current_user.sector_name+" "+current_user.establishment_name
+    report.page[:products_count].value(@stocks.count)
+
+    # Se van agregando los productos
+    @stocks.each do |stock|  
+      # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)      
+      if report.page_count == 1 && report.list.overflow?
+        report.start_new_page
+      end
+      report.list do |list|
+        list.add_row do |row|
+          row.values  product_code: stock.product_code,
+            product_name: stock.product_name,
+            unity: stock.product_unity_name,
+            area: stock.product_area_name,
+            lot_count: stock.lot_stocks.count,
+            available_quantity: stock.quantity,
+            reserved_quantity: stock.reserved_quantity,
+            total_quantity: stock.total_quantity
+        end
+      end
+    end
+
+    # A cada pagina le agregamos el pie de pagina
+    report.pages.each do |page|
+      page[:page_count] = report.page_count
+      page[:sector] = current_user.sector_name
+      page[:establishment] = current_user.establishment_name
+    end
+
+    report.generate
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

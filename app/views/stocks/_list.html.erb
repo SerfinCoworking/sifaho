@@ -29,6 +29,11 @@
       </div>
     </div>
     <div class="col-3 d-flex justify-content-end align-items-center">
+      <% if policy(Stock).index? %>
+        <%= link_to stocks_path(format: 'pdf'), class: 'btn btn-info mr-2', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
       <%= link_to stocks_path(format: 'xlsx'),
         class: "btn btn-success", target: :_blank,
         title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
