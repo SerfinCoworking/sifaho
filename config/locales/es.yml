@@ -135,8 +135,10 @@ es:
       lot_archive:
         observation: "Observaciones"
         quantity: "Cantidad"
-
-      
+      patient_product_state_report:
+        product_id: "Producto"
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
 
   date:
     abbr_day_names:

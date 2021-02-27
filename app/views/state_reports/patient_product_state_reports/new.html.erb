@@ -1,0 +1,100 @@
+<%= render 'state_reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card fixed-custom-card">
+      <div class="card-header bg-primary text-white d-flex justify-content-between">
+        <div class="d-flex align-items-center ml-2">
+          <%= fa_icon "plus" %>
+          <h5 class="card-title mb-0 ml-2">
+            Nuevo reporte de producto entregado por paciente entre dos fechas
+          </h5>
+        </div>
+        <%= link_to :back, class: "btn text-white" do %>
+          <%= fa_icon "times" %>
+        <% end %>   
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <%=  simple_form_for @patient_product_state_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= f.error_notification message: f.object.errors[:patient_product_state_report].to_sentence if f.object.errors[:patient_product_state_report].present? %>
+              <div class="d-flex justify-content-end nested-fields">
+                <!-- Código de producto -->
+                <div class="custom-input-group flex-fill p-1">
+                  <%= f.input :product, as: :string,
+                    placeholder: 'Código',
+                    label: 'Código',
+                    required: true,
+                    :input_html => {
+                      class: "report-product-code select-change input-sm",
+                      data: { autocomplete_source: search_by_code_products_path },
+                      size: 4,
+                      autocomplete: 'off',
+                      value: "#{if f.object.product.present?; f.object.product_code; end }"
+                    }
+                  %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  </div>
+                </div>
+
+                <!-- Nombre de producto  -->
+                <div class="custom-input-group flex-fill p-1">
+                  <%= f.input :product, as: :string,
+                    label: 'Producto',
+                    placeholder: 'Nombre',
+                    required: true,
+                    :input_html => {
+                      class: "report-product-name select-change input-sm",
+                      data: { autocomplete_source: search_by_name_products_path },
+                      size: 35,
+                      value: "#{if f.object.product.present?; f.object.product_name; end }"
+                    } 
+                  %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  </div>
+                  <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
+                </div>
+                <div class="p-1 flex-fill">
+                  <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
+                    :input_html => {
+                      id: "since_date",
+                      required: true,
+                      class: "form-control since-date",
+                      autocomplete: "off",
+                      value: f.object.since_date.present? ? f.object.since_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
+                </div>
+                <div class="p-1 flex-fill">
+                  <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
+                    :input_html => {
+                      id: "to_date",
+                      required: true,
+                      class: "form-control to-date",
+                      autocomplete: "off",
+                      value: f.object.to_date.present? ? f.object.to_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div> 
+      <div class="card-footer text-right">
+        <%= link_to :back, class: "btn btn-light mr-2" do %>
+          Volver
+        <% end %>
+        <button type='submit' name='commit' class='btn btn-success' form='report-form'>
+          <%= fa_icon "check" %> Generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

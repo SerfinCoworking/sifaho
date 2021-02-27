@@ -14,8 +14,8 @@ $(document).on('turbolinks:load', function() {
   });
 });
 
-// Función para autocompletar y buscar el insumo por código
-$(document).on("focus",".report-supply-code", function() {
+// Función para autocompletar y buscar el producto por código
+$(document).on("focus",".report-product-code", function() {
   var _this = $(this);
   jQuery(function() {
 
@@ -24,23 +24,26 @@ $(document).on("focus",".report-supply-code", function() {
       autoFocus: true,
       minLength: 1,
       focus: function( event, ui ) {
-      $(".report-supply-code").val(ui.item.value);
-      $(".report-supply-id").val(ui.item.value);
-      $(".report-supply-name").val(ui.item.name);
-      return false;
-    },
-      select:
-      function (event, ui) {
-      var nested_form = _this.parents(".nested-fields");
-      nested_form.find(".report-supply-id").val(ui.item.value);
-      nested_form.find(".supply-name").val(ui.item.name);
-      if (event.keyCode == 9) {
-        nested_form.find(".supply-name").focus();
-      }
+        $(".report-product-code").val(ui.item.value);
+        $(".report-product-id").val(ui.item.id);
+        $(".report-product-name").val(ui.item.name);
+        return false;
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+      },
+      select: function (event, ui) {
+        var nested_form = _this.parents(".nested-fields");
+        nested_form.find(".report-product-id").val(ui.item.id);
+        nested_form.find(".product-name").val(ui.item.name);
+        if (event.keyCode == 9) {
+          nested_form.find(".product-name").focus();
+        }
       },
       response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró el insumo" };
+            var noResult = { value:"",label:"No se encontró el producto" };
             ui.content.push(noResult);
         }
       }
@@ -48,8 +51,8 @@ $(document).on("focus",".report-supply-code", function() {
   });
 });
 
-// Función para autocompletar y buscar el insumo por código
-$(document).on("focus",".report-supply-name", function() {
+// Función para autocompletar y buscar el producto por nombre
+$(document).on("focus",".report-product-name", function() {
   var _this = $(this);
   jQuery(function() {
 
@@ -59,17 +62,21 @@ $(document).on("focus",".report-supply-name", function() {
       noResults: 'myKewlMessage',
       minLength: 1,
       focus: function( event, ui ) {
-        $(".report-supply-code").val(ui.item.id);
+        $(".report-product-code").val(ui.item.id);
         return false;
+      },
+      search: function( event, ui ) {
+        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
       },
       select:
       function (event, ui) {
-        $(".report-supply-id").val(ui.item.id);
-        $(".report-supply-name").val(ui.item.value);
+        $(".report-product-id").val(ui.item.id);
+        $(".report-product-name").val(ui.item.value);
       },
       response: function(event, ui) {
+        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         if (!ui.content.length) {
-            var noResult = { value:"",label:"No se encontró el insumo" };
+            var noResult = { value:"",label:"No se encontró el producto" };
             ui.content.push(noResult);
         }
       }

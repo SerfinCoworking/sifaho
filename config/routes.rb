@@ -416,4 +416,18 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # State reports
+  namespace :state_reports, path: 'reportes_provincia' do
+    resources :patient_product_state_reports,
+      only: [:show], 
+      controller: 'patient_product_state_reports',
+      model: 'patient_product_state_report',
+      path: 'entrega_por_paciente' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+  end
 end
