@@ -1,0 +1,83 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "user-injured" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por pacientes</h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+  
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Producto</h5>
+        <%= @patient_product_state_report.product_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Desde</h5>
+        <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %>
+      </div>    
+      <div class="p-2 flex-fill">
+        <h5>Hasta</h5>
+        <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+      
+    <% if @movements.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>DNI</th>
+              <th>Paciente</th>
+              <th>Establecimiento</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
+              <tr>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= movement.order.patient_dni %></td>
+                <td><%= movement.order.patient_fullname %></td>
+                <td><%= movement.order.establishment.name %></td>
+                <td><%= movement.quantity %></td>
+              </tr>
+            <% end %>
+            <tr class="table-info">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right">Total</td>
+              <td><%= @movements.sum(:quantity) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay movimientos entre el <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to state_reports_patient_product_state_report_path(format: 'xlsx', id: @patient_product_state_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> Excel
+    <% end %>
+    <%= link_to state_reports_patient_product_state_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>

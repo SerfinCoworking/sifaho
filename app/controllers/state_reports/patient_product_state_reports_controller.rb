@@ -3,21 +3,10 @@ class StateReports::PatientProductStateReportsController < ApplicationController
 
   def show
     authorize @patient_product_state_report
-    # @movements =  QuantityOrdSupplyLot
-    #                 .where(quantifiable_type: 'InternalOrder')
-    #                 .joins("INNER JOIN internal_orders ON internal_orders.id = quantity_ord_supply_lots.quantifiable_id")
-    #                 .where("internal_orders.provider_sector_id = ?", @patient_product_state_report.sector_id)
-    #                 .where(supply_id: @patient_product_state_report.supply_id)
-    #                 .entregado
-    #                 .dispensed_since(@patient_product_state_report.since_date)
-    #                 .dispensed_to(@patient_product_state_report.to_date)
-    #                 .joins("JOIN sectors ON sectors.id = internal_orders.applicant_sector_id")
-    #                 .order("sectors.name DESC")
-    #                 .group("sectors.name")
-    #                 .sum(:delivered_quantity)
 
-    @movements = StockMovement
-      .with_product_ids(@patient_product_state_report.product_id)
+    @movements = Stock
+      .find_by_product(@patient_product_state_report.product_id)
+      .stock_movements
       .since_date(@patient_product_state_report.since_date.strftime("%d/%m/%Y"))
       .to_date(@patient_product_state_report.to_date.strftime("%d/%m/%Y"))
       .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])

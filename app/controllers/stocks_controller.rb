@@ -123,7 +123,7 @@ class StocksController < ApplicationController
     report.page[:products_count].value(@stocks.count)
 
     # Se van agregando los productos
-    @stocks.each do |stock|  
+    @stocks.each do |stock|
       # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)      
       if report.page_count == 1 && report.list.overflow?
         report.start_new_page
