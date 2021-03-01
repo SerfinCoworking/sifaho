@@ -93,7 +93,7 @@
           
 
         
-          <% @chronic_dispensation.chronic_prescription.original_chronic_prescription_products.each do |ocpp| %>
+          <% @chronic_dispensation.chronic_prescription.original_chronic_prescription_products.each_with_index do |ocpp, index| %>
             <%= form_chronic_dispensation.simple_fields_for :dispensation_types do |dis_type| %>
             <tr class="bg-ocpp-light-blue">
               <td>
@@ -112,14 +112,8 @@
                 <%= ocpp.total_request_quantity - ocpp.total_delivered_quantity %>
               </td>
               <td>
-                  <input type="checkbox" data-toggle="switchbutton" checked data-onstyle="outline-primary" data-offstyle="outline-secondary" checked data-onlabel="Dosis" data-offlabel="Unidad">
-                  <%= dis_type.input :quantity, input_html: {
-                    value: ocpp.request_quantity
-                  } %> 
-                  <%= dis_type.input :quantity_type %> 
-                  <%= dis_type.input :original_chronic_prescription_product_id, input_html: {
-                    value: ocpp.id
-                  } %> 
+                  <input name="chronic_dispensation[dispensation_types_attributes][<%= index %>][quantity]" value="<%= ocpp.request_quantity %>" type="number">
+                  <input name="chronic_dispensation[dispensation_types_attributes][<%= index %>][original_chronic_prescription_product_id]" value="<%= ocpp.id %>" type="number">
               </td>
               <td class="text-center">
                 <% if (ocpp.total_request_quantity - ocpp.total_delivered_quantity) > 0 %>

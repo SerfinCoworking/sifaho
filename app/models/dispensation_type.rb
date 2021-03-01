@@ -1,5 +1,5 @@
 class DispensationType < ApplicationRecord
-  belongs_to :chronic_dispensation
+  belongs_to :chronic_dispensation, inverse_of: 'dispensation_types'
   belongs_to :original_chronic_prescription_product
   has_many :chronic_prescription_products, inverse_of: 'dispensation_type'
 
@@ -8,6 +8,7 @@ class DispensationType < ApplicationRecord
   validates_associated :chronic_prescription_products
 
   accepts_nested_attributes_for :chronic_prescription_products,
+  reject_if: proc { |attributes| attributes['product_id'].blank? },
   :allow_destroy => true
 
 end
