@@ -5,8 +5,8 @@ class Reports::PatientProductReportsController < ApplicationController
     authorize @patient_product_report
 
     @movements = Stock
-      .to_sector(current_user.sector)
-      .stock_movements
+      .where(sector: current_user.sector, product_id: @patient_product_report.product_id).first
+      .movements
       .with_product_ids(@patient_product_report.product_id)
       .since_date(@patient_product_report.since_date.strftime("%d/%m/%Y"))
       .to_date(@patient_product_report.to_date.strftime("%d/%m/%Y"))
@@ -27,21 +27,21 @@ class Reports::PatientProductReportsController < ApplicationController
   end
 
   def new
-    authorize PatientProductStateReport
-    @patient_product_report = PatientProductStateReport.new
-    @last_reports = PatientProductStateReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
+    authorize PatientProductReport
+    @patient_product_report = PatientProductReport.new
+    @last_reports = PatientProductReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
   end
 
   def create
-    @patient_product_report = PatientProductStateReport.new(patient_product_report_params)
+    @patient_product_report = PatientProductReport.new(patient_product_report_params)
     @patient_product_report.created_by = current_user
     authorize @patient_product_report
 
     respond_to do |format|
       if @patient_product_report.save
-        format.html { redirect_to state_reports_patient_product_report_path(@patient_product_report), notice: 'El reporte se ha creado correctamente.' }
+        format.html { redirect_to reports_patient_product_report_path(@patient_product_report), notice: 'El reporte se ha creado correctamente.' }
       else
-        @last_reports = PatientProductStateReport.limit(10)
+        @last_reports = PatientProductReport.limit(10)
         format.html { render :new }
       end
     end
@@ -50,7 +50,7 @@ class Reports::PatientProductReportsController < ApplicationController
   private
   
     def set_patient_product_report
-      @patient_product_report = PatientProductStateReport.find(params[:id])
+      @patient_product_report = PatientProductReport.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

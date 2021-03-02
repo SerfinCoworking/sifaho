@@ -18,15 +18,15 @@
     <div class="d-flex justify-content-between">
       <div class="p-2 flex-fill">
         <h5>Producto</h5>
-        <%= @patient_product_state_report.product_name %>
+        <%= @patient_product_report.product_name %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Desde</h5>
-        <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %>
+        <%= @patient_product_report.since_date.strftime("%d/%m/%Y") %>
       </div>    
       <div class="p-2 flex-fill">
         <h5>Hasta</h5>
-        <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %>
+        <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %>
       </div>
     </div>
       
@@ -64,7 +64,7 @@
       </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-        <p>No hay movimientos entre el <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %></p>
+        <p>No hay recetas entre el <%= @patient_product_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %></p>
       </div>
     <% end %>
   </div>
@@ -72,11 +72,11 @@
     <%= link_to :back, class: 'btn btn-light mr-2' do %>
       Volver
     <% end %>
-    <%= link_to state_reports_patient_product_state_report_path(format: 'xlsx', id: @patient_product_state_report.id), 
+    <%= link_to reports_patient_product_report_path(format: 'xlsx', id: @patient_product_report.id), 
       class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "download" %> Excel
     <% end %>
-    <%= link_to state_reports_patient_product_state_reports_path, class: "btn btn-primary" do %>
+    <%= link_to reports_patient_product_reports_path, class: "btn btn-primary" do %>
       <%= fa_icon "plus" %> Nuevo reporte
     <% end %>
   </div>
