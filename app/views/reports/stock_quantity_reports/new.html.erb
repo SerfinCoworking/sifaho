@@ -28,7 +28,11 @@
                   <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
-                        |area| [area.name, area.id]
+                        |area| [area.name, area.id, 
+                          data: {
+                            'content': area.name+" <span class='badge badge-secondary'>"+Stock.to_sector(current_user.sector).with_area_ids(area.id).count.to_s+"</span>"
+                          }
+                        ]
                       },
                     :input_html => {
                       multiple: true,
