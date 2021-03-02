@@ -13,7 +13,7 @@ class StocksController < ApplicationController
       },
       persistence_id: false,
     ) or return
-    @areas = Area.all
+    @areas = Area.where(id: current_user.sector.stocks.joins(product: :area).pluck("areas.id").uniq)
     if request.format.xlsx? || request.format.pdf?
       @stocks = @filterrific.find
     else

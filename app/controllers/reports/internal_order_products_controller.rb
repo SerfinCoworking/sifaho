@@ -3,19 +3,15 @@ class Reports::InternalOrderProductsController < ApplicationController
 
   def show
     authorize @internal_order_product_report
-    @movements =  QuantityOrdSupplyLot
-                    .where(quantifiable_type: 'InternalOrder')
-                    .joins("INNER JOIN internal_orders ON internal_orders.id = quantity_ord_supply_lots.quantifiable_id")
-                    .where("internal_orders.provider_sector_id = ?", @internal_order_product_report.sector_id)
-                    .where(supply_id: @internal_order_product_report.supply_id)
-                    .entregado
-                    .dispensed_since(@internal_order_product_report.since_date)
-                    .dispensed_to(@internal_order_product_report.to_date)
-                    .joins("JOIN sectors ON sectors.id = internal_orders.applicant_sector_id")
-                    .order("sectors.name DESC")
-                    .group("sectors.name")
-                    .sum(:delivered_quantity)
-
+    @movements =  Stock
+      .where(sector: current_user.sector, product_id: @internal_order_product_report.product_id).first
+      .movements
+      .with_product_ids(@internal_order_product_report.product_id)
+      .since_date(@internal_order_product_report.since_date.strftime("%d/%m/%Y"))
+      .to_date(@internal_order_product_report.to_date.strftime("%d/%m/%Y"))
+      .where(order_type: 'InternalOrder')
+      .order(created_at: :desc)
+    
     respond_to do |format|
       format.html
       format.pdf do
@@ -24,8 +20,7 @@ class Reports::InternalOrderProductsController < ApplicationController
           type: 'application/pdf',
           disposition: 'inline'
       end
-      format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
-      format.xls
+      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteProductoPorSector_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 
@@ -68,7 +63,7 @@ class Reports::InternalOrderProductsController < ApplicationController
       report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf'), :default => true
       report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'other_page.tlf'), id: :other_page
     
-      movements.each do |movement|
+      movements.each_with_index do |movement, index|
         if report.page_count == 1 && report.list.overflow?
           report.start_new_page layout: :other_page do |page|
           end
@@ -77,8 +72,10 @@ class Reports::InternalOrderProductsController < ApplicationController
         # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  sector_name: movement.first,
-                        quantity: movement.second
+            row.values  line_index: index,
+                        date: movement.created_at.strftime("%d/%m/%Y"),
+                        sector_name: movement.order_destiny_name,
+                        quantity: movement.quantity
           end
         end
       end

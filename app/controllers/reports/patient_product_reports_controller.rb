@@ -22,7 +22,7 @@ class Reports::PatientProductReportsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
-      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteProductoPorPacienteProvincia_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
+      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteProductoPorPaciente_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 
@@ -70,10 +70,10 @@ class Reports::PatientProductReportsController < ApplicationController
           end
         end
         
-        # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  sector_name: movement.first,
+            row.values  line_index: index,
+                        sector_name: movement.first,
                         quantity: movement.second
           end
         end
@@ -92,18 +92,5 @@ class Reports::PatientProductReportsController < ApplicationController
       end
   
       report.generate
-    end
-
-    def movements_to_csv(movements, options = {})
-      CSV.generate(header: true) do |csv|
-        csv << ["Sector", "Cantidad", "Producto"]
-        movements.each do |movement|
-          csv << [
-            movement.first,
-            movement.second,
-            @patient_product_report.supply_name
-          ]
-        end
-      end
     end
 end

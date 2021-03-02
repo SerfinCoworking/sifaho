@@ -15,7 +15,7 @@
   </div>
   <div class="card-body">
   
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between pb-1">
       <div class="p-2 flex-fill">
         <h5>Producto</h5>
         <%= @internal_order_product_report.supply_name %>
@@ -29,29 +29,30 @@
         <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %>
       </div>
     </div>
-      
-    <%# movement => {["name"] => "delivered_quantity"} %>
     <% if @movements.present? %>
       <div class="card">
         <table class="table table-hover table-sm">
-          <thead>
-            <tr class="d-flex">
-              <th class="col-6">Sector</th>
-              <th class="col-6">Cantidad</th>
+          <thead class="thead-light">
+            <tr>
+              <th>Fecha</th>
+              <th>Sector</th>
+              <th>Cantidad</th>
             </tr>
           </thead>
           <tbody>
             <% @movements.each do |movement|%>
-              <tr class="d-flex">
-                <td class="col-6">
-                  <%= movement.first %>
+              <tr>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <td>
+                  <%= movement.order_destiny_name %>
                 </td>
-                <td class="col-6"><%= movement.second %></td>
+                <td><%= movement.quantity %></td>
               </tr>
             <% end %>
-            <tr class="d-flex">
-              <td class="col-6 text-right">Total</td>
-              <td class="col-6"><%= @movements.sum(&:second) %></td>
+            <tr>
+              <td></td>
+              <td class="text-right">Total</td>
+              <td><%= @movements.sum(&:quantity) %></td>
             </tr>
           </tbody>
         </table>
@@ -70,11 +71,7 @@
       class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "print" %> Imprimir
     <% end %>
-    <%= link_to reports_internal_order_product_report_path(format: 'csv', id: @internal_order_product_report.id), 
-      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
-      <%= fa_icon "download" %> CSV
-    <% end %>
-    <%= link_to reports_internal_order_product_report_path(format: 'xls', id: @internal_order_product_report.id), 
+    <%= link_to reports_internal_order_product_report_path(format: 'xlsx', id: @internal_order_product_report.id), 
       class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "download" %> Excel
     <% end %>
