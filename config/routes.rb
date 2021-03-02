@@ -370,15 +370,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Routes for reports
-  namespace :reports do
-    resources :patient_product_reports, only: [:new] do
-      collection do
-        get "generate"
-      end
-    end
-  end
-
   # Reports
   namespace :reports, path: 'reportes' do
     resources :index_reports, only: [:index], path: '/'
@@ -410,6 +401,17 @@ Rails.application.routes.draw do
       controller: 'stock_quantity_reports',
       model: 'stock_quantity_reports',
       path: 'stock_por_rubros' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+
+    resources :patient_product_reports,
+      only: [:show],
+      controller: 'patient_product_reports',
+      model: 'patient_product_reports',
+      path: 'entregado_por_paciente' do
       collection do
         get :new, path: :nuevo
         post :create, path: :crear

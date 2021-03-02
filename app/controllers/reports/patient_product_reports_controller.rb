@@ -1,29 +1,20 @@
 class Reports::PatientProductReportsController < ApplicationController
+  before_action :set_patient_product_report, only: [:show]
 
-  def new
-  end
+  def show
+    authorize @patient_product_report
 
-  def generate
-    @movements =  StockMovement
-                    .where(quantifiable_type: ['OutpatientPrescription', 'ChronicPrescription'])
-                    .joins("INNER JOIN prescriptions ON prescriptions.id = quantity_ord_supply_lots.quantifiable_id")
-                    .where("prescriptions.establishment_id = ?", current_user.establishment.id)
-                    .where(supply_id: params[:supply_id])
-                    .entregado
-                    .dispensed_since(params[:since_date])
-                    .dispensed_to(params[:to_date])
-                    .joins("JOIN patients ON patients.id = prescriptions.patient_id")
-                    .order(dispensed_at: :desc)
-                    .group("patients.last_name", "patients.first_name", "patients.dni", "quantity_ord_supply_lots.dispensed_at")
-                    .sum(:delivered_quantity)
+    @movements = Stock
+      .where(sector: current_user.sector, product_id: @patient_product_report.product_id).first
+      .movements
+      .with_product_ids(@patient_product_report.product_id)
+      .since_date(@patient_product_report.since_date.strftime("%d/%m/%Y"))
+      .to_date(@patient_product_report.to_date.strftime("%d/%m/%Y"))
+      .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
+      .order(created_at: :desc)
 
-    @params = params.slice(:supply_id, :since_date, :to_date)
-
-    @supply = Supply.find(params[:supply_id])
-    
     respond_to do |format|
       format.html
-      format.js
       format.pdf do
         send_data generate_report(@movements, @params),
           filename: 'reporte_producto_por_paciente.pdf',
@@ -31,18 +22,47 @@ class Reports::PatientProductReportsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "reporte-prodcto-paciente-#{Date.today.strftime("%d-%m-%y")}.csv" }
-      format.xls
+      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteProductoPorPacienteProvincia_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 
+  def new
+    authorize PatientProductReport
+    @patient_product_report = PatientProductReport.new
+    @last_reports = PatientProductReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
+  end
+
+  def create
+    @patient_product_report = PatientProductReport.new(patient_product_report_params)
+    @patient_product_report.created_by = current_user
+    authorize @patient_product_report
+
+    respond_to do |format|
+      if @patient_product_report.save
+        format.html { redirect_to reports_patient_product_report_path(@patient_product_report), notice: 'El reporte se ha creado correctamente.' }
+      else
+        @last_reports = PatientProductReport.limit(10)
+        format.html { render :new }
+      end
+    end
+  end
   
   private
+  
+    def set_patient_product_report
+      @patient_product_report = PatientProductReport.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def patient_product_report_params
+      params.require(:patient_product_report).permit(:product_id, :since_date, :to_date)
+    end
 
     def generate_report(movements, params)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf')
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf')
       
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'first_page.tlf'), :default => true
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'patient_product', 'other_page.tlf'), id: :other_page
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf'), :default => true
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'other_page.tlf'), id: :other_page
     
       movements.each do |movement|
         if report.page_count == 1 && report.list.overflow?
@@ -53,41 +73,35 @@ class Reports::PatientProductReportsController < ApplicationController
         # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  patient_name: movement.first.first+" "+movement.first.second,
-                        dni: movement.first.third,
-                        delivery_date: movement.first.fourth.strftime("%d/%m/%Y %H:%M"),
+            row.values  sector_name: movement.first,
                         quantity: movement.second
           end
         end
-        
       end
       
   
       report.pages.each do |page|
-        page[:product_name] = Supply.find(params[:supply_id]).name
-        page[:title] = 'Reporte producto entregado por paciente'
+        page[:product_name] = @patient_product_report.supply_name
+        page[:title] = 'Reporte producto entregado por sectores'
         page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
-        page[:since_date] = params[:since_date]
-        page[:to_date] = params[:to_date]
+        page[:since_date] = @patient_product_report.since_date.strftime("%d/%m/%Y")
+        page[:to_date] = @patient_product_report.to_date.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
-        page[:establishment_name] = current_user.establishment_name
-        page[:establishment] = current_user.establishment_name
+        page[:establishment_name] = @patient_product_report.establishment_name
+        page[:establishment] = @patient_product_report.establishment_name
       end
   
       report.generate
     end
 
-    def movements_to_csv(movements)
-      CSV.generate(headers: true) do |csv|
-        csv << ["Apellido", "Nombre", "DNI", "Fecha", "Cantidad", "Producto"]
+    def movements_to_csv(movements, options = {})
+      CSV.generate(header: true) do |csv|
+        csv << ["Sector", "Cantidad", "Producto"]
         movements.each do |movement|
           csv << [
-            movement.first.first,
-            movement.first.second,
-            movement.first.third,
-            movement.first.fourth.strftime("%d/%m/%Y %H:%M"),
+            movement.first,
             movement.second,
-            Supply.find(params[:supply_id]).name
+            @patient_product_report.supply_name
           ]
         end
       end
