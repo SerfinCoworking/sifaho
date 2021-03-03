@@ -22,9 +22,9 @@
             <%=  simple_form_for @patient_product_state_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
               <%= f.error_notification message: f.object.errors[:patient_product_state_report].to_sentence if f.object.errors[:patient_product_state_report].present? %>
-              <div class="d-flex justify-content-end nested-fields">
+              <div class="row nested-fields">
                 <!-- Código de producto -->
-                <div class="custom-input-group flex-fill p-1">
+                <div class="custom-input-group col-3">
                   <%= f.input :product, as: :string,
                     placeholder: 'Código',
                     label: 'Código',
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Nombre de producto  -->
-                <div class="custom-input-group flex-fill p-1">
+                <div class="custom-input-group col-9">
                   <%= f.input :product, as: :string,
                     label: 'Producto',
                     placeholder: 'Nombre',
@@ -60,7 +60,7 @@
                   </div>
                   <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
                 </div>
-                <div class="p-1 flex-fill">
+                <div class="col-6">
                   <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
                     :input_html => {
                       id: "since_date",
@@ -71,7 +71,7 @@
                     }
                   %>
                 </div>
-                <div class="p-1 flex-fill">
+                <div class="col-6">
                   <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
                     :input_html => {
                       id: "to_date",

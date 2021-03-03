@@ -569,9 +569,9 @@ ActiveRecord::Schema.define(version: 2021_03_03_141651) do
     t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "reserved_quantity", default: 0
     t.integer "archived_quantity", default: 0
     t.integer "presentation"
-    t.integer "reserved_quantity", default: 0
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
     t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
   end
