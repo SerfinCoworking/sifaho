@@ -26,12 +26,7 @@ class ChronicPrescription < ApplicationRecord
   accepts_nested_attributes_for :original_chronic_prescription_products,
   :allow_destroy => true
   
-  accepts_nested_attributes_for :chronic_dispensations,
-  :allow_destroy => true
   
-  accepts_nested_attributes_for :chronic_prescription_products,
-  :allow_destroy => true
-
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 

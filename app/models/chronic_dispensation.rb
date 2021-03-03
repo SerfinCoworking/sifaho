@@ -1,20 +1,34 @@
 class ChronicDispensation < ApplicationRecord
-  belongs_to :chronic_prescription, inverse_of: 'chronic_dispensations'
-  has_many :dispensation_types, inverse_of: 'chronic_dispensation'
+  belongs_to :chronic_prescription
+  has_many :dispensation_types, dependent: :destroy, class_name: 'DispensationType'
+  has_many :chronic_prescription_products, through: :dispensation_types
 
   enum status: { pendiente: 0, dispensada: 1}
 
-  accepts_nested_attributes_for :dispensation_types,
-  :allow_destroy => true
+  validate :presence_of_products_into_dispensation
+  validates_associated :dispensation_types
+  accepts_nested_attributes_for :dispensation_types, reject_if: :dispensation_type_rejectable?
 
   after_create :decrement_stock, :dispense_prescription
   
+  def dispensation_type_rejectable?(att)
+    !att["chronic_prescription_products_attributes"].present?
+  end
+
   def decrement_stock
     self.dispensation_types.each do |dp|
        dp.chronic_prescription_products.each do |cpp|
         cpp.decrement_stock
       end
     end
+  end
+
+  def presence_of_products_into_dispensation
+    @products = 0
+    self.dispensation_types.each do |dt|
+      @products += dt.chronic_prescription_products.size
+    end
+    errors.add(:presence_of_products_into_dispensation, "Debe dispensar almenos 1 insumo") unless @products > 0
   end
   
   # Incremnta la cantidad total dispensada:

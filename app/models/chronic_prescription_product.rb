@@ -1,10 +1,8 @@
 class ChronicPrescriptionProduct < ApplicationRecord
   # Relaciones
-  # belongs_to :chronic_dispensation, inverse_of: 'chronic_prescription_products'
-  # has_one :chronic_prescription, through: :chronic_dispensation
   belongs_to :original_chronic_prescription_product, inverse_of: 'chronic_prescription_products', optional: true
   belongs_to :product
-  belongs_to :dispensation_type, inverse_of: 'chronic_prescription_products'
+  belongs_to :dispensation_type
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ChronPresProdLotStock", foreign_key: "chronic_prescription_product_id", source: :chron_pres_prod_lot_stocks, inverse_of: 'chronic_prescription_product'
   has_many :lot_stocks, :through => :order_prod_lot_stocks

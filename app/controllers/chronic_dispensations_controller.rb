@@ -25,6 +25,7 @@ class ChronicDispensationsController < ApplicationController
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @chronic_dispensation.dispensation_types.build unless @chronic_dispensation.dispensation_types.present?
         format.html { render :new }
       end
     end

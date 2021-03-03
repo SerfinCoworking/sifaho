@@ -14,9 +14,7 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
     :allow_destroy => true
 
   # Delegaciones
-  delegate :unity, to: :product
-  delegate :name, to: :product, prefix: :product
-  delegate :code, to: :product, prefix: :product
+  delegate :unity_name, :name, :code, to: :product, prefix: :product
 
    # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_original_product_in_the_order

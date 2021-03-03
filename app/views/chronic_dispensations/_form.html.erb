@@ -14,7 +14,7 @@
   
   <div class="card-body">
     <%= simple_form_for @chronic_dispensation, :url => chronic_prescription_chronic_dispensations_path(@chronic_dispensation.chronic_prescription), html: { role: 'check-modified'} do |form_chronic_dispensation| %>
-
+      <%= form_chronic_dispensation.error_notification %>
       <%= form_chronic_dispensation.hidden_field :status, value: "pendiente" %>
       <%= form_chronic_dispensation.hidden_field :chronic_prescription_id, value: @chronic_dispensation.chronic_prescription.id %>
       <div class="row">
@@ -80,18 +80,20 @@
           <div id="pat-os-body"></div>
         </div>
       </div>
-
+      <% if form_chronic_dispensation.object.errors[:presence_of_products_into_dispensation].any? %>
+        <div class="invalid-feedback d-block">
+          <%= form_chronic_dispensation.object.errors[:presence_of_products_into_dispensation].first %>
+        </div>
+      <% end %>
       <table class="table table-bordered m-0">
         <tr>
           <th>Productos recetados</th>
           <th width="200"></th>
           <th class="text-center">dosis / mes</th>
           <th class="text-center">resto</th>
-          <th class="text-center">Entrega</th>
+          <th class="text-center" width="100">A entregar</th>
           <th></th>
         </tr>
-          
-
         
           <% @chronic_dispensation.chronic_prescription.original_chronic_prescription_products.each_with_index do |ocpp, index| %>
             <%= form_chronic_dispensation.simple_fields_for :dispensation_types do |dis_type| %>
@@ -112,8 +114,10 @@
                 <%= ocpp.total_request_quantity - ocpp.total_delivered_quantity %>
               </td>
               <td>
-                  <input name="chronic_dispensation[dispensation_types_attributes][<%= index %>][quantity]" value="<%= ocpp.request_quantity %>" type="number">
-                  <input name="chronic_dispensation[dispensation_types_attributes][<%= index %>][original_chronic_prescription_product_id]" value="<%= ocpp.id %>" type="number">
+                  <div class="form-group integer optional chronic_dispensation_dispensation_types_chronic_prescription_products_delivery_quantity">
+                    <input class="form-control numeric integer optional has-tip deliver-quantity input-sm" name="chronic_dispensation[dispensation_types_attributes][<%= index %>][quantity]" value="<%= ocpp.request_quantity %>" type="number">
+                  </div>
+                  <input name="chronic_dispensation[dispensation_types_attributes][<%= index %>][original_chronic_prescription_product_id]" value="<%= ocpp.id %>" type="hidden">
               </td>
               <td class="text-center">
                 <% if (ocpp.total_request_quantity - ocpp.total_delivered_quantity) > 0 %>
@@ -131,7 +135,7 @@
               </td>
             </tr>
             <tr>
-              <td colspan="5" class="pt-0 pb-0 pr-0">
+              <td colspan="6" class="pt-0 pb-0 pr-0">
                 <% if ocpp.observation.present? %>
                   <div>
                     <label class="font-weight-bold"> Observaciones: </label>

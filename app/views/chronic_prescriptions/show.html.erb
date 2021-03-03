@@ -157,7 +157,7 @@
                     <% end %>
                   </td>
                   <td>
-                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.name.pluralize(org_chron_pres_prod.request_quantity) %>
+                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.product_unity_name.pluralize(org_chron_pres_prod.request_quantity) %>
                   </td>
                   <td>
                     <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
@@ -234,29 +234,32 @@
                         <th>Cód Ins</th>
                         <th>Insumo</th>
                         <th>Unidad</th>
-                        <th>Dosis</th>
-                        <th>Lotes</th>
+                        <th>Entregado</th>
+                        <th>Productos</th>
                         <th>Observaciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       
                       <% chronic_dispensation.dispensation_types.each do |dispensation_type| %>
-                        <% dispensation_type.chronic_prescription_products.each do |chronic_prescription_product| %>
-                          <tr>
-                            <td><%= chronic_prescription_product.product_code %></td>
-                            <td><%= chronic_prescription_product.product_name %></td>
-                            <td><%= chronic_prescription_product.product_unity_name %></td>
-                            <td><%= chronic_prescription_product.delivery_quantity %></td>
-                            <td>
-                              <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
-                                <%= chronic_prescription_product.order_prod_lot_stocks.count %>
-                              </button>
-                            </td>
-                            <td>Observaciones</td>
-                          </tr>
-                          <%= render '/shared/selected_lots', model: chronic_prescription_product %>
-                        <% end %>
+
+                        <tr>
+                          <td><%= dispensation_type.original_chronic_prescription_product.product_code %></td>
+                          <td><%= dispensation_type.original_chronic_prescription_product.product_name %></td>
+                          <td><%= dispensation_type.original_chronic_prescription_product.product_unity_name %></td>
+                          <td><%= dispensation_type.quantity %></td>
+                          <td>
+
+                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= dispensation_type.original_chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= dispensation_type.original_chronic_prescription_product.id %>">
+                              <%= dispensation_type.chronic_prescription_products.count %>
+                            </button>
+                            
+                          </td>
+                          <td>
+                            <%= dispensation_type.original_chronic_prescription_product.observation.presence || '---' %>
+                          </td>
+                        </tr>
+                          
                       <% end %>
                     </tbody>
                   </table>
