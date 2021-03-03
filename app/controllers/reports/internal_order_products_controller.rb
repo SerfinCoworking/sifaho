@@ -3,14 +3,17 @@ class Reports::InternalOrderProductsController < ApplicationController
 
   def show
     authorize @internal_order_product_report
-    @movements =  Stock
-      .where(sector: current_user.sector, product_id: @internal_order_product_report.product_id).first
-      .movements
-      .with_product_ids(@internal_order_product_report.product_id)
-      .since_date(@internal_order_product_report.since_date.strftime("%d/%m/%Y"))
-      .to_date(@internal_order_product_report.to_date.strftime("%d/%m/%Y"))
-      .where(order_type: 'InternalOrder')
-      .order(created_at: :desc)
+    @stock = Stock.where(sector: current_user.sector, product_id: @internal_order_product_report.product_id).first
+    if @stock.present?
+      @movements =
+        @stock
+        .movements
+        .with_product_ids(@internal_order_product_report.product_id)
+        .since_date(@internal_order_product_report.since_date.strftime("%d/%m/%Y"))
+        .to_date(@internal_order_product_report.to_date.strftime("%d/%m/%Y"))
+        .where(order_type: 'InternalOrder')
+        .order(created_at: :desc)
+    end
     
     respond_to do |format|
       format.html
@@ -54,7 +57,7 @@ class Reports::InternalOrderProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_product_report_params
-      params.require(:internal_order_product_report).permit(:supply_id, :since_date, :to_date)
+      params.require(:internal_order_product_report).permit(:product_id, :since_date, :to_date)
     end
 
     def generate_report(movements, params)

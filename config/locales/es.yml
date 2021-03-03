@@ -139,6 +139,14 @@ es:
         product_id: "Producto"
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
+      internal_order_product_report:
+        product: "Producto"
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
+      patient_product_report:
+        product: "Producto"
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
 
   date:
     abbr_day_names:

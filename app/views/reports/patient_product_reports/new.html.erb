@@ -18,13 +18,13 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-12">
+          <div class="col-7 border-right">
             <%=  simple_form_for @patient_product_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
               <%= f.error_notification message: f.object.errors[:patient_product_report].to_sentence if f.object.errors[:patient_product_report].present? %>
-              <div class="d-flex justify-content-end nested-fields">
+              <div class="row nested-fields">
                 <!-- Código de producto -->
-                <div class="custom-input-group flex-fill p-1">
+                <div class="custom-input-group col-3">
                   <%= f.input :product, as: :string,
                     placeholder: 'Código',
                     label: 'Código',
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Nombre de producto  -->
-                <div class="custom-input-group flex-fill p-1">
+                <div class="custom-input-group col-9">
                   <%= f.input :product, as: :string,
                     label: 'Producto',
                     placeholder: 'Nombre',
@@ -60,7 +60,7 @@
                   </div>
                   <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
                 </div>
-                <div class="p-1 flex-fill">
+                <div class="col-6">
                   <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
                     :input_html => {
                       id: "since_date",
@@ -71,7 +71,7 @@
                     }
                   %>
                 </div>
-                <div class="p-1 flex-fill">
+                <div class="col-6">
                   <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
                     :input_html => {
                       id: "to_date",
@@ -84,6 +84,35 @@
                 </div>
               </div>
             <% end %>
+          </div>
+          <div class="col-5">
+            <h5>Últimos reportes generados</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Desde</th>
+                  <th>Hasta</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @last_reports.each do |report|%>
+                  <tr>
+                    <td><%= report.product_name %></td>
+                    <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
+                    <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
+                    <td>
+                      <%= link_to reports_internal_order_product_report_path(report), class: 'btn btn-light btn-sm',
+                        title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
+                        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+                        <%= fa_icon "eye" %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
         </div>
       </div> 
