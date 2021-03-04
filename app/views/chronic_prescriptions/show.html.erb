@@ -237,7 +237,7 @@
                         <th>Unidad</th>
                         <th>Entregado</th>
                         <th class="text-center">Productos</th>
-                        <th>Observaciones</th>
+                        <th class="observations-col">Observaciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -255,8 +255,12 @@
                           <td class="text-center org-product">
                             <%= dispensation_type.chronic_prescription_products.count %>
                           </td>
-                          <td class="org-product">
-                            <%= dispensation_type.original_chronic_prescription_product.observation.presence || '---' %>
+                          <td class="org-product observations-col">
+                            <div class="<%= dispensation_type.original_chronic_prescription_product.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= dispensation_type.original_chronic_prescription_product.observation.presence %>">
+                              <div class="text-truncate"  style="max-width: 13.66rem;">
+                                <%= dispensation_type.original_chronic_prescription_product.observation.presence || '---' %>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                         <%= render 'chronic_prescriptions/partials/products_group_by_dispensation_type', dispensation_type: dispensation_type %>

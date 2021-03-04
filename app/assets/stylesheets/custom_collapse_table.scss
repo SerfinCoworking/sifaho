@@ -23,6 +23,9 @@
       transform: rotate(0);
       transition: transform .3s ease-out;
     }
+    &:hover{
+      background-color: #bee5eb;
+    }
     &.active{
       background-color: #bee5eb;
       td .fa-icon-container{
@@ -32,6 +35,8 @@
     &.sub-active{
       background-color: rgba(190, 229, 235, 0.4);
     }
-
+    .observations-col{
+      width: 13.66rem;
+    }
   }
 }

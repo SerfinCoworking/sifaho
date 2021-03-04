@@ -1,4 +1,9 @@
 $(document).on('turbolinks:load', function() {
+
+  $(".toggle-popover").popover({
+    title: "Observaciones"
+  });
+
   $('.toggle-collapse-row td.org-product').on('click', (e) => {
     e.stopPropagation();
 
