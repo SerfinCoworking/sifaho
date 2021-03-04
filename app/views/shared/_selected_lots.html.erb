@@ -1,6 +1,6 @@
 <tr>
   <td colspan="7" class="p-0">
-    <div id="collapse-row-<%= model.id %>" class="collapse in">
+    <div id="collapse-row-<%= model.id %>" class="collapse in <%= show ? 'show' : '' %>">
       <div class="p-3">
         <% if model.order_prod_lot_stocks.present? %>
           <table class="w-100">

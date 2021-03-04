@@ -1,0 +1,26 @@
+<tr>
+  <td colspan="7" class="p-0">
+    <div id="collapse-row-<%= dispensation_type.id %>" class="products-collapse collapse in">
+      <div class="container">
+        <% dispensation_type.chronic_prescription_products.each do |product| %>
+          <div class="row border-bottom">
+            <div class="col-6 p-3 border-right">
+              <%= product.product_code %>
+              <%= product.product_name %>
+              <%= product.product_unity_name %>
+              <%= product.delivery_quantity %>
+              <%= product.observation %>
+          </div>
+          <div class="col-6">
+            <table class="w-100">
+              </tbody>
+                <%= render '/shared/selected_lots', model: product, show: true %>
+              </tbody>
+            </table>
+          </div>
+        </div><!-- /.row-->
+        <% end %>
+      </div>
+    </div>
+  </td>
+</tr>
