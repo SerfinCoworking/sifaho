@@ -233,10 +233,18 @@ class ExternalOrder < ApplicationRecord
   # Valida las cantidades en stock
   # Reserva las cantidades y finalmente cambia el estado a aceptado
   def accept_order_by(a_user)
-    self.proveedor_aceptado! # Cuando se asigna este estado, activa las validaciones correspondientes.
+    asd
+    self.order_products.each do |eop|
+      unless eop.valid_reservation?
+        eop.errors.add(:base, 'Cantidad insuficiente de '+self.product_name)
+        @failed = true
+      end
+    end
+    raise ArgumentError, "No es posible aceptar el despacho" if @failed
     self.order_products.each do |eop|
       eop.reserve_stock
     end
+    self.proveedor_aceptado! # Cuando se asigna este estado, activa las validaciones correspondientes.
     self.create_notification(a_user, "aceptó")
   end
 

@@ -28,9 +28,7 @@ class ExtOrdProdLotStock < ApplicationRecord
     return self.external_order_product.external_order.order_type == 'solicitud'
   end
 
-  # private
-
-  # def reserve_stock_quantity
-  #   if self.lot_stock_quantity < self.quantity
-  # end
+  def valid_reservation?
+    self.lot_stock_quantity >= self.quantity
+  end
 end 
