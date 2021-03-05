@@ -205,11 +205,11 @@
             <div class="card">
 
               <div class="list-group p-1" id="list-tab" role="tablist">
-                <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
-                  <div class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
+                <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
+                  <div role="button" class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
                     
                     <div>
-                      <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
+                      <span class="badge badge-secondary"><%= (@chronic_prescription.chronic_dispensations.count - index) %>°</span> &nbsp;
                       <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
                     </div>       
                     <% if policy(chronic_dispensation).return_dispensation? %> 
