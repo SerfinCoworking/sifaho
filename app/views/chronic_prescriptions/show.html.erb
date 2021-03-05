@@ -123,7 +123,7 @@
       <div id='supplies' class='tab-pane fade show active'>
         <!-- Insumos a dispensar -->
         <div class="card">
-          <table class="table table-hover table-sm">
+          <table class="table table-hover table-sm mb-0">
             <thead class="thead-light">
               <tr>
                 <th>Cód Ins</th>
@@ -171,14 +171,11 @@
                   </td>
                   
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="popover" title="Observaciones" data-placement="left" data-trigger="focus" data-content="<%= org_chron_pres_prod.observation %>">
-                      <%= fa_icon "comment-dots", class: "far"%>
-                    </button>
-
-                    <!--button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%#= org_chron_pres_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%#= org_chron_pres_prod.id %>">
-                      Observaciones
-                      <%#= org_chron_pres_prod.order_prod_lot_stocks.count %>
-                    </button-->
+                    <div class="<%= org_chron_pres_prod.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= org_chron_pres_prod.observation.presence %>">
+                      <div class="text-truncate"  style="max-width: 13.66rem;">
+                        <%= org_chron_pres_prod.observation.presence || '---' %>
+                      </div>
+                    </div>
                   </td>
                 
                 </tr>
