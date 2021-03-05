@@ -1,6 +1,6 @@
 class UpdateChronicDispensationWithDispensationTypes < ActiveRecord::Migration[5.2]
   def up
-    ChronicPrescription.all.limit(10).each do |cp|
+    ChronicPrescription.all.each do |cp|
       cp.chronic_dispensations.each do |cd|
         # Buscamos los id de los productos recetados (puede que esten repetidos)
         all_ocpp_ids = ChronicPrescriptionProduct.where(chronic_dispensation_id: cd.id).pluck(:original_chronic_prescription_product_id)
@@ -32,7 +32,7 @@ class UpdateChronicDispensationWithDispensationTypes < ActiveRecord::Migration[5
       end
     end
 
-    puts "Se actualizaron #{ChronicPrescription.all.limit(10).count} prescripciones cronicas".colorize(background: :blue)
+    puts "Se actualizaron #{ChronicPrescription.all.count} prescripciones cronicas".colorize(background: :blue)
   end
 
   def down
