@@ -183,13 +183,15 @@ $(document).on('turbolinks:load', function(e){
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
-      const selectedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
-      selectedQuantity.map((index, option) => {
-        // option
-        totalQuantitySelected += ($(option).val() * 1);
+      let selectedQuantity = 0;
+      const lotStocks = $(tr).find('.lot-stocks-hidden .lots');
+      lotStocks.map((index, option) => {
+        if($(option).find('input._destroy').first().val() === 'false'){
+          selectedQuantity++;
+          totalQuantitySelected += ($(option).find('.lot_stock_quantity_ref').first().val() * 1);
+        }
       });
-
-      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
+      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity)
     });
   }
 
@@ -236,7 +238,7 @@ $(document).on('turbolinks:load', function(e){
     const templateHidden = $(e.target).attr('data-template-hidden');
     const trIndex = $(e.target).attr('data-index-row');
     const tr = $(".chronic-product-cocoon-container").find(".nested-fields")[trIndex];
-    const toDelivery = $(e.target).attr('data-to-delivery');
+    // const toDelivery = $(e.target).attr('data-to-delivery');
     const hiddenTarget = $(tr).find(".lot-stocks-hidden").first();
     // handle selected options
     const selectedOptions = $(e.target).find('tbody tr.selected-row');
@@ -270,9 +272,8 @@ $(document).on('turbolinks:load', function(e){
         $(lot).find('input[type="hidden"]._destroy').first().val(true);
       }
     });
-
-    setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
     $(tr).find("input.deliver-quantity").first().val(totalQuantitySelected).trigger("change");
+    // setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
   }); 
 
   $('#dialog').on('hidden.bs.modal', function () {
