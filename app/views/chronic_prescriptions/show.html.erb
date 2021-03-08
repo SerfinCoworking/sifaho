@@ -223,7 +223,7 @@
 
           <div class="col-9">
             <div class="card table-sm tab-content" id="nav-tabContent">
-              <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
+              <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
                 <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
                   <table class="table mb-0 custom-table-products-collapsable">
                     <thead class="thead-light">
