@@ -66,7 +66,7 @@ $(document).on('turbolinks:load', function(e){
       select: function (event, ui) { 
         onSelectAutoCSupplyName(event.target, ui.item);
         const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.request-quantity").focus(); // changes focus to quantity input
+        tr.find("input.request-quantity").first().focus(); // changes focus to quantity input
       },
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
@@ -158,6 +158,11 @@ $(document).on('turbolinks:load', function(e){
         $('#lot-selection').attr('data-hidden-target', hiddenTarget);
         $('#lot-selection').attr('data-index-row', trIndex);
         $('#lot-selection').attr('data-to-delivery', toDelivery);
+
+        $('#lot-selection table').find('input.lot-quantity').on('click', function(){
+          this.select();
+        });
+
         getCurrentSelectedQuantity();
         // Show the dynamic dialog
         $('#lot-selection').modal("show");
@@ -191,6 +196,7 @@ $(document).on('turbolinks:load', function(e){
           totalQuantitySelected += ($(option).find('.lot_stock_quantity_ref').first().val() * 1);
         }
       });
+      
       setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity)
     });
   }
@@ -198,8 +204,8 @@ $(document).on('turbolinks:load', function(e){
   
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
-    const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
-    
+
+    const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 
 
