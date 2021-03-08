@@ -80,7 +80,7 @@
           :title=>"Cantidad entregada",
           "data-placement"=>"right",
           min: '0', step:'any', :style => 'width: 100px',
-          value: @original_product.request_quantity
+          value: f.object.delivery_quantity.present? ? f.object.delivery_quantity : @original_product.request_quantity
         } 
       %>
 

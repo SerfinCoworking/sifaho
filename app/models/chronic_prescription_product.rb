@@ -1,9 +1,8 @@
 class ChronicPrescriptionProduct < ApplicationRecord
   # Relaciones
-  belongs_to :chronic_dispensation, inverse_of: 'chronic_prescription_products'
-  has_one :chronic_prescription, through: :chronic_dispensation
   belongs_to :original_chronic_prescription_product, inverse_of: 'chronic_prescription_products', optional: true
   belongs_to :product
+  belongs_to :dispensation_type
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ChronPresProdLotStock", foreign_key: "chronic_prescription_product_id", source: :chron_pres_prod_lot_stocks, inverse_of: 'chronic_prescription_product'
   has_many :lot_stocks, :through => :order_prod_lot_stocks
@@ -30,11 +29,11 @@ class ChronicPrescriptionProduct < ApplicationRecord
   
   # custom validations
   def is_dispensation?
-    return self.chronic_dispensation.present? && self.chronic_dispensation.pendiente?
+    return self.dispensation_type.chronic_dispensation.present? && self.dispensation_type.chronic_dispensation.pendiente?
   end
   
   def is_not_dispensation?
-    return !self.chronic_dispensation.present?
+    return !self.dispensation_type.chronic_dispensation.present?
   end
 
   # Validacion: la cantidad no debe ser mayor o menor a la cantidad a entregar
@@ -54,7 +53,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
 
   # Validacion: evitar el envio de una orden si no tiene stock para enviar
   def out_of_stock
-    total_stock = self.chronic_dispensation.chronic_prescription.provider_sector.stocks.where(product_id: self.product_id).sum(:quantity)
+    total_stock = self.dispensation_type.chronic_dispensation.chronic_prescription.provider_sector.stocks.where(product_id: self.product_id).sum(:quantity)
     if self.delivery_quantity.present? && total_stock < self.delivery_quantity
       errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
     end
@@ -63,7 +62,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
   
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
-    (self.chronic_dispensation.chronic_prescription_products.uniq - [self]).each do |iop| 
+    (self.dispensation_type.chronic_prescription_products.uniq - [self]).each do |iop| 
       if iop.product_id == self.product_id
         errors.add(:uniqueness_product_in_the_order, "Este producto ya se encuentra en la orden")      
       end
@@ -74,14 +73,14 @@ class ChronicPrescriptionProduct < ApplicationRecord
   def decrement_stock
     self.order_prod_lot_stocks.each do |cpp|
       cpp.lot_stock.decrement(cpp.quantity)
-      cpp.lot_stock.stock.create_stock_movement(self.chronic_prescription, cpp.lot_stock, cpp.quantity, false)
+      cpp.lot_stock.stock.create_stock_movement(self.dispensation_type.chronic_dispensation.chronic_prescription, cpp.lot_stock, cpp.quantity, false)
     end
   end
 
   def increment_stock
     self.order_prod_lot_stocks.each do |cpp|
       cpp.lot_stock.increment(cpp.quantity)
-      cpp.lot_stock.stock.create_stock_movement(self.chronic_prescription, cpp.lot_stock, cpp.quantity, true)
+      cpp.lot_stock.stock.create_stock_movement(self.dispensation_type.chronic_dispensation.chronic_prescription, cpp.lot_stock, cpp.quantity, true)
     end
   end
 end

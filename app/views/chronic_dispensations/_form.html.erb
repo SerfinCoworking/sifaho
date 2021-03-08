@@ -14,7 +14,7 @@
   
   <div class="card-body">
     <%= simple_form_for @chronic_dispensation, :url => chronic_prescription_chronic_dispensations_path(@chronic_dispensation.chronic_prescription), html: { role: 'check-modified'} do |form_chronic_dispensation| %>
-
+      <%= form_chronic_dispensation.error_notification %>
       <%= form_chronic_dispensation.hidden_field :status, value: "pendiente" %>
       <%= form_chronic_dispensation.hidden_field :chronic_prescription_id, value: @chronic_dispensation.chronic_prescription.id %>
       <div class="row">
@@ -80,56 +80,68 @@
           <div id="pat-os-body"></div>
         </div>
       </div>
-
+      <% if form_chronic_dispensation.object.errors[:presence_of_products_into_dispensation].any? %>
+        <div class="invalid-feedback d-block">
+          <%= form_chronic_dispensation.object.errors[:presence_of_products_into_dispensation].first %>
+        </div>
+      <% end %>
       <table class="table table-bordered m-0">
         <tr>
           <th>Productos recetados</th>
           <th width="200"></th>
           <th class="text-center">dosis / mes</th>
           <th class="text-center">resto</th>
+          <th class="text-center" width="100">A entregar</th>
           <th></th>
         </tr>
-        <% @chronic_dispensation.chronic_prescription.original_chronic_prescription_products.each do |ocpp| %>
+        
+        <%= form_chronic_dispensation.simple_fields_for :dispensation_types do |dis_type| %>
           <tr class="bg-ocpp-light-blue">
             <td>
-              <%= ocpp.product.name %>
+              <%= dis_type.object.original_chronic_prescription_product.product.name %>
             </td>
             <td>
               <div class="custom-progress progress bg-light position-relative">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-total-request="<%= ocpp.total_request_quantity%>" data-total-delivered="<%= ocpp.total_delivered_quantity%>"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-total-request="<%= dis_type.object.original_chronic_prescription_product.total_request_quantity%>" data-total-delivered="<%= dis_type.object.original_chronic_prescription_product.total_delivered_quantity%>"></div>
                 <div class="percentage-text text-black position-absolute font-weight-bold">0%</div>
               </div>
             </td>
             <td class="text-center">
-              <%= ocpp.request_quantity %>
+              <%= dis_type.object.original_chronic_prescription_product.request_quantity %>
             </td>
             <td class="text-center">
-              <%= ocpp.total_request_quantity - ocpp.total_delivered_quantity %>
+              <%= dis_type.object.original_chronic_prescription_product.total_request_quantity - dis_type.object.original_chronic_prescription_product.total_delivered_quantity %>
+            </td>
+            <td>
+                <div class="form-group integer optional chronic_dispensation_dispensation_types_chronic_prescription_products_delivery_quantity">
+                    <%= dis_type.input :quantity, label: false, :input_html => { class: 'deliver-quantity input-sm', value: dis_type.object.quantity.present? ? dis_type.object.quantity : dis_type.object.original_chronic_prescription_product.request_quantity } %>
+                </div>
+                <%= dis_type.input :original_chronic_prescription_product_id, :as => :hidden, :error => false, :input_html =>  { value: dis_type.object.original_chronic_prescription_product_id } %>
             </td>
             <td class="text-center">
-              <% if (ocpp.total_request_quantity - ocpp.total_delivered_quantity) > 0 %>
-                <%= link_to_add_association form_chronic_dispensation, 
+              <% if (dis_type.object.original_chronic_prescription_product.total_request_quantity - dis_type.object.original_chronic_prescription_product.total_delivered_quantity) > 0 %>
+                <%= link_to_add_association dis_type, 
                   :chronic_prescription_products, 
                   class: 'btn btn-primary btn-sm',
                   partial: "chronic_dispensations/partials/order_products_fields", 
                   data: {
-                    "association-insertion-node" => "tbody#chronic-product-cocoon-container#{ocpp.id}",
+                    "association-insertion-node" => "tbody#chronic-product-cocoon-container#{dis_type.object.original_chronic_prescription_product.id}",
                     "association-insertion-method" => "append"},
-                  render_options: {locals: { ocpp_id: ocpp.id, original_product_code: ocpp.product.code, original_product_name: ocpp.product.name, original_product_id: ocpp.product.id }} do %>
+                  render_options: {locals: { ocpp_id: dis_type.object.original_chronic_prescription_product.id, original_product_code: dis_type.object.original_chronic_prescription_product.product.code, original_product_name: dis_type.object.original_chronic_prescription_product.product.name, original_product_id: dis_type.object.original_chronic_prescription_product.product.id }} do %>
                   <%= fa_icon "plus" %>
                 <% end %>
               <% end %>
             </td>
           </tr>
           <tr>
-            <td colspan="5" class="pt-0 pb-0 pr-0">
-              <% if ocpp.observation.present? %>
+            <td colspan="6" class="pt-0 pb-0 pr-0">
+              <% if dis_type.object.original_chronic_prescription_product.observation.present? %>
                 <div>
                   <label class="font-weight-bold"> Observaciones: </label>
-                  <%= ocpp.observation %>
+                  <%= dis_type.object.original_chronic_prescription_product.observation %>
                 </div>
               <% end %>
-              <%= render 'chronic_dispensations/partials/order_products_table', form: form_chronic_dispensation, :relation => :chronic_prescription_products, :ocpp_id => ocpp.id %>
+              <%= render 'chronic_dispensations/partials/order_products_table', form: dis_type, :relation => :chronic_prescription_products, :ocpp_id => dis_type.object.original_chronic_prescription_product.id %>
             </td>
           </tr>
         <%end%>

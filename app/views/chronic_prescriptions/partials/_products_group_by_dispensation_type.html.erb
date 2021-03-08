@@ -1,0 +1,66 @@
+<tr>
+  <td colspan="7" class="p-0">
+    <div id="collapse-row-<%= dispensation_type.id %>" class="products-collapse collapse in">
+      <div class="container">
+        <% dispensation_type.chronic_prescription_products.each do |product| %>
+          <div class="row border-bottom">
+            <div class="col-6 border-right">
+              <div class="w-100 <%= product.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= product.observation %>" data-placement="left">
+                <div>
+                  <%= product.product_code %>
+                  <%= product.product_name %>
+                  <%= product.product_unity_name %>
+                  <%= product.delivery_quantity %>
+                </div>
+                <div class="text-truncate"  style="max-width: 33rem">
+                  <%= product.observation %>  
+                </div>
+              </div>
+            </div>
+          <div class="col-6" >
+            <% if product.order_prod_lot_stocks.present? %>
+            <div style="margin: 0px -15px;">
+              <table class="w-100" >
+                <thead>
+                  <tr>
+                    <th> Cantidad </th>
+                    <th> Lote </th>
+                    <th> Laboratorio </th>
+                    <th> Venc. </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% product.order_prod_lot_stocks.each do |opls| %>
+                  <tr>
+
+                    <td>
+                      <%= opls.quantity %>
+                    </td>
+                    
+                    <td>
+                      <%= opls.lot_stock.lot.code %>
+                    </td>
+                    
+                    <td>
+                      <%= opls.lot_stock.lot.laboratory.name %>
+                    </td>
+                    
+                    <td>
+                      <%= opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                    </td>
+                  </tr>
+
+                  <% end %>
+                </tbody>
+              </table>
+              </div>
+            <% else %>
+                No tiene lotes asignados
+            <% end %>
+          </div><!-- /.col-->
+        </div><!-- /.row-->
+        <% end %>
+      </div>
+    </div>
+  </td>
+</tr>

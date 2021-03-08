@@ -123,7 +123,7 @@
       <div id='supplies' class='tab-pane fade show active'>
         <!-- Insumos a dispensar -->
         <div class="card">
-          <table class="table table-hover table-sm">
+          <table class="table table-hover table-sm mb-0">
             <thead class="thead-light">
               <tr>
                 <th>Cód Ins</th>
@@ -157,7 +157,7 @@
                     <% end %>
                   </td>
                   <td>
-                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.unity.name.pluralize(org_chron_pres_prod.request_quantity) %>
+                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.product_unity_name.pluralize(org_chron_pres_prod.request_quantity) %>
                   </td>
                   <td>
                     <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
@@ -171,14 +171,11 @@
                   </td>
                   
                   <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="popover" title="Observaciones" data-placement="left" data-trigger="focus" data-content="<%= org_chron_pres_prod.observation %>">
-                      <%= fa_icon "comment-dots", class: "far"%>
-                    </button>
-
-                    <!--button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%#= org_chron_pres_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%#= org_chron_pres_prod.id %>">
-                      Observaciones
-                      <%#= org_chron_pres_prod.order_prod_lot_stocks.count %>
-                    </button-->
+                    <div class="<%= org_chron_pres_prod.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= org_chron_pres_prod.observation.presence %>">
+                      <div class="text-truncate"  style="max-width: 13.66rem;">
+                        <%= org_chron_pres_prod.observation.presence || '---' %>
+                      </div>
+                    </div>
                   </td>
                 
                 </tr>
@@ -205,11 +202,11 @@
             <div class="card">
 
               <div class="list-group p-1" id="list-tab" role="tablist">
-                <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
-                  <div class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
+                <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
+                  <div role="button" class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
                     
                     <div>
-                      <span class="badge badge-secondary"><%= (index + 1) %>°</span> &nbsp;
+                      <span class="badge badge-secondary"><%= (@chronic_prescription.chronic_dispensations.count - index) %>°</span> &nbsp;
                       <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
                     </div>       
                     <% if policy(chronic_dispensation).return_dispensation? %> 
@@ -226,35 +223,44 @@
 
           <div class="col-9">
             <div class="card table-sm tab-content" id="nav-tabContent">
-              <% @chronic_prescription.chronic_dispensations.each_with_index do |chronic_dispensation, index| %>
+              <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
                 <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
-                  <table class="table table-hover">
+                  <table class="table mb-0 custom-table-products-collapsable">
                     <thead class="thead-light">
                       <tr>
+                        <th></th>
                         <th>Cód Ins</th>
                         <th>Insumo</th>
                         <th>Unidad</th>
-                        <th>Dosis</th>
-                        <th>Lotes</th>
-                        <th>Observaciones</th>
+                        <th>Entregado</th>
+                        <th class="text-center">Productos</th>
+                        <th class="observations-col">Observaciones</th>
                       </tr>
                     </thead>
                     <tbody>
-                      
-                      <% chronic_dispensation.chronic_prescription_products.each do |chronic_prescription_product| %>
-                        <tr>
-                          <td><%= chronic_prescription_product.product_code %></td>
-                          <td><%= chronic_prescription_product.product_name %></td>
-                          <td><%= chronic_prescription_product.product_unity_name %></td>
-                          <td><%= chronic_prescription_product.delivery_quantity %></td>
-                          <td>
-                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= chronic_prescription_product.id %>" aria-expanded="false" aria-controls="collapse-row-<%= chronic_prescription_product.id %>">
-                              <%= chronic_prescription_product.order_prod_lot_stocks.count %>
-                            </button>
+                      <% chronic_dispensation.dispensation_types.each do |dispensation_type| %>
+                        <tr class="toggle-collapse-row" data-target="#collapse-row-<%= dispensation_type.id %>">
+                          <td class="org-product">
+                            <div class="fa-icon-container">
+                              <%= fa_icon 'angle-right'%>
+                            </div>
                           </td>
-                          <td>Observaciones</td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_code %></td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_name %></td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_unity_name %></td>
+                          <td class="org-product"><%= dispensation_type.quantity %></td>
+                          <td class="text-center org-product">
+                            <%= dispensation_type.chronic_prescription_products.count %>
+                          </td>
+                          <td class="org-product observations-col">
+                            <div class="<%= dispensation_type.original_chronic_prescription_product.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= dispensation_type.original_chronic_prescription_product.observation.presence %>">
+                              <div class="text-truncate"  style="max-width: 13.66rem;">
+                                <%= dispensation_type.original_chronic_prescription_product.observation.presence || '---' %>
+                              </div>
+                            </div>
+                          </td>
                         </tr>
-                        <%= render '/shared/selected_lots', model: chronic_prescription_product %>
+                        <%= render 'chronic_prescriptions/partials/products_group_by_dispensation_type', dispensation_type: dispensation_type %>
                       <% end %>
                     </tbody>
                   </table>

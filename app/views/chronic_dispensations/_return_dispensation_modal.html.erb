@@ -24,13 +24,15 @@
               </tr>
             </thead>
             <tbody>
-              <% @chronic_dispensation.chronic_prescription_products.each do |cpp| %>
-                <tr>
-                  <td> <%= cpp.product.code %> </td>
-                  <td> <%= cpp.product.name %> </td>
-                  <td> <%= cpp.product.unity.name %> </td>
-                  <td> <%= cpp.delivery_quantity %> </td>
-                </tr>
+              <% @chronic_dispensation.dispensation_types.each do |dt| %>
+                <% dt.chronic_prescription_products.each do |cpp| %>
+                  <tr>
+                    <td> <%= cpp.product.code %> </td>
+                    <td> <%= cpp.product.name %> </td>
+                    <td> <%= cpp.product.unity.name %> </td>
+                    <td> <%= cpp.delivery_quantity %> </td>
+                  </tr>
+                <% end %>
               <% end %>
             </tbody>
           </table>
