@@ -6,6 +6,7 @@ class StockMovement < ApplicationRecord
   belongs_to :stock
   belongs_to :lot_stock
   has_one :lot, through: :lot_stock
+  has_one :product, through: :lot_stock
 
   # Delegations
   delegate :destiny_name, :origin_name, :status, :human_name, to: :order, prefix: :order
@@ -65,4 +66,6 @@ class StockMovement < ApplicationRecord
   scope :to_date, lambda { |a_date| where('stock_movements.created_at <= ?', DateTime.strptime(a_date, '%d/%m/%Y').end_of_day) }
 
   scope :to_stock_id, lambda { |an_id| where(stock_id: an_id) }
+
+  scope :with_product_ids, ->(product_ids) { joins(:product).where('products.id': product_ids) }
 end

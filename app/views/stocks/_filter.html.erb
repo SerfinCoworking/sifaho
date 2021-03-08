@@ -30,7 +30,12 @@
       <label>Rubros</label>
       <%= f.select :with_area_ids, 
         options_for_select(
-          @areas.collect {|cs| [cs.name, cs.id]},
+          @areas.map {
+            |area| [area.name, area.id, 
+              data: {
+                'content': area.name+" <span class='badge badge-secondary'>"+Stock.to_sector(current_user.sector).with_area_ids(area.id).count.to_s+"</span>"
+              }
+          ]},
           selected: params[:filterrific].present? ? params[:filterrific][:by_establishment] : "",
         ),
         {include_blank: false, include_hidden: false},

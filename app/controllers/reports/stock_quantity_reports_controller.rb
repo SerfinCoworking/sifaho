@@ -24,7 +24,7 @@ class Reports::StockQuantityReportsController < ApplicationController
   def new
     authorize StockQuantityReport
     @stock_quantity_report = StockQuantityReport.new
-    @areas = Area.all
+    @areas = Area.where(id: current_user.sector.stocks.joins(product: :area).pluck("areas.id").uniq)
     @last_reports = StockQuantityReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
   end
 

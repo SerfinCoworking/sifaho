@@ -6,8 +6,8 @@
 <div class="card fixed-custom-card">
   <div class="card-header bg-secondary text-white d-flex justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon "bezier-curve" %>
-      <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por sectores</h5>
+      <%= fa_icon "user-injured" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por pacientes</h5>
     </div>
     <%= link_to :back, class: "btn text-white" do %>
       <%= fa_icon "times" %>
@@ -15,27 +15,30 @@
   </div>
   <div class="card-body">
   
-    <div class="d-flex justify-content-between pb-1">
+    <div class="d-flex justify-content-between">
       <div class="p-2 flex-fill">
         <h5>Producto</h5>
-        <%= @internal_order_product_report.product_name %>
+        <%= @patient_product_report.product_name %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Desde</h5>
-        <%= @internal_order_product_report.since_date.strftime("%d/%m/%Y") %>
+        <%= @patient_product_report.since_date.strftime("%d/%m/%Y") %>
       </div>    
       <div class="p-2 flex-fill">
         <h5>Hasta</h5>
-        <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %>
+        <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %>
       </div>
     </div>
+      
     <% if @movements.present? %>
       <div class="card">
         <table class="table table-hover table-sm">
-          <thead class="thead-light">
+          <thead>
             <tr>
               <th>Fecha</th>
-              <th>Sector</th>
+              <th>DNI</th>
+              <th>Paciente</th>
+              <th>Establecimiento</th>
               <th>Cantidad</th>
             </tr>
           </thead>
@@ -43,23 +46,25 @@
             <% @movements.each do |movement|%>
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <td>
-                  <%= movement.order_destiny_name %>
-                </td>
+                <td><%= movement.order.patient_dni %></td>
+                <td><%= movement.order.patient_fullname %></td>
+                <td><%= movement.order.establishment.name %></td>
                 <td><%= movement.quantity %></td>
               </tr>
             <% end %>
-            <tr>
+            <tr class="table-info">
+              <td></td>
+              <td></td>
               <td></td>
               <td class="text-right">Total</td>
-              <td><%= @movements.sum(&:quantity) %></td>
+              <td><%= @movements.sum(:quantity) %></td>
             </tr>
           </tbody>
         </table>
       </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-        <p>No hay movimientos entre el <%= @internal_order_product_report.since_date.strftime("%d/%m/%Y") %> y <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %></p>
+        <p>No hay recetas entre el <%= @patient_product_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %></p>
       </div>
     <% end %>
   </div>
@@ -67,15 +72,11 @@
     <%= link_to :back, class: 'btn btn-light mr-2' do %>
       Volver
     <% end %>
-    <%= link_to reports_internal_order_product_report_path(format: 'pdf', id: @internal_order_product_report.id), 
-      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
-      <%= fa_icon "print" %> Imprimir
-    <% end %>
-    <%= link_to reports_internal_order_product_report_path(format: 'xlsx', id: @internal_order_product_report.id), 
+    <%= link_to reports_patient_product_report_path(format: 'xlsx', id: @patient_product_report.id), 
       class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
       <%= fa_icon "download" %> Excel
     <% end %>
-    <%= link_to reports_internal_order_product_reports_path, class: "btn btn-primary" do %>
+    <%= link_to reports_patient_product_reports_path, class: "btn btn-primary" do %>
       <%= fa_icon "plus" %> Nuevo reporte
     <% end %>
   </div>

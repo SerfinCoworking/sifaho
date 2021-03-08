@@ -144,5 +144,14 @@
         <span class="ml-2 sb-title"> Reportes</span>
       <% end %>
     <% end %>
+
+    <% if policy(PatientProductStateReport).index? %>
+      <%= link_to main_app.state_reports_patient_product_state_reports_path, class: "list-group-item list-group-item-action list-custom #{active_class("state_reports/patient_product_state_reports")}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "file-alt" %>
+        </span>
+        <span class="ml-2 sb-title"> Reportes provincia</span>
+      <% end %>
+    <% end %>
   </div>
 </div>

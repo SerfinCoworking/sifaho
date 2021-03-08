@@ -1,62 +1,118 @@
 <%= render 'reports/header' %>
 
+<% content_for :container do %>-fluid<% end %>
+
 <div class="row">
   <div class="col-12">
     <div class="card fixed-custom-card">
-      <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+      <div class="card-header bg-primary text-white d-flex justify-content-between">
         <div class="d-flex align-items-center ml-2">
-        <%= fa_icon "plus" %>
-        <h5 class="card-title mb-0 ml-2">
-          Nuevo reporte de cantidad de producto entregado por pacientes
-        </h5> 
+          <%= fa_icon "plus" %>
+          <h5 class="card-title mb-0 ml-2">
+            Nuevo reporte de producto entregado por paciente entre dos fechas
+          </h5>
         </div>
-        <%= link_to :back, class: 'btn text-white' do %>
+        <%= link_to :back, class: "btn text-white" do %>
           <%= fa_icon "times" %>
         <% end %>
       </div>
-      <div class="card-body" id="panel-body-new">
+      <div class="card-body">
         <div class="row">
-          <div class="col-3">
-            <h5>Establecimiento</h5>
-            <%= current_user.establishment_name %>
-          </div>
-          <div class="col-9">
-            <%= form_tag(generate_reports_patient_product_reports_path, method: :get, remote: true, id: "show-report") do %>
-              <div class="d-flex justify-content-end nested-fields">
-                <!-- Nombre del producto -->
-                <div class="p-1 w-50 flex-fill">
-                  <label>Producto</label>
-                  <div class="custom-input-group">
-                    <%= text_field_tag :supply_id, params[:supply_id], id: "supply_id", 
-                      placeholder: "Nombre",
-                      class: "supply-name form-control",
-                      autocomplete: "off",
-                      required: true,
-                      value: @supply.present? ? @supply.name : "",
-                      data: { autocomplete_source: search_by_name_supplies_path } %>
-                    <div class="with-loading">
-                      <%= fa_icon 'spinner', class: "fa-spin" %>
-                    </div>
+          <div class="col-7 border-right">
+            <%=  simple_form_for @patient_product_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= f.error_notification message: f.object.errors[:patient_product_report].to_sentence if f.object.errors[:patient_product_report].present? %>
+              <div class="row nested-fields">
+                <!-- Código de producto -->
+                <div class="custom-input-group col-3">
+                  <%= f.input :product, as: :string,
+                    placeholder: 'Código',
+                    label: 'Código',
+                    required: true,
+                    :input_html => {
+                      class: "report-product-code select-change input-sm",
+                      data: { autocomplete_source: search_by_code_products_path },
+                      size: 4,
+                      autocomplete: 'off',
+                      value: "#{if f.object.product.present?; f.object.product_code; end }"
+                    }
+                  %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
                   </div>
                 </div>
-                <%= hidden_field_tag :supply_id, params[:supply_id], class: "supply-id" %>
-                <div class="p-1 flex-fill">
-                  <label>Desde</label>
-                  <%= text_field_tag :since_date, params[:since_date], placeholder: "Una fecha",
-                    class: "form-control since-date", autocomplete: "off", required: true %>
+
+                <!-- Nombre de producto  -->
+                <div class="custom-input-group col-9">
+                  <%= f.input :product, as: :string,
+                    label: 'Producto',
+                    placeholder: 'Nombre',
+                    required: true,
+                    :input_html => {
+                      class: "report-product-name select-change input-sm",
+                      data: { autocomplete_source: search_by_name_products_path },
+                      size: 35,
+                      value: "#{if f.object.product.present?; f.object.product_name; end }"
+                    }
+                  %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  </div>
+                  <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
                 </div>
-                <div class="p-1 flex-fill">
-                  <label>Hasta</label>
-                  <%= text_field_tag :to_date, params[:to_date], placeholder: "Otra fecha",
-                    class: "form-control to-date", autocomplete: "off", required: true %>
+                <div class="col-6">
+                  <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
+                    :input_html => {
+                      id: "since_date",
+                      required: true,
+                      class: "form-control since-date",
+                      autocomplete: "off",
+                      value: f.object.since_date.present? ? f.object.since_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
+                </div>
+                <div class="col-6">
+                  <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
+                    :input_html => {
+                      id: "to_date",
+                      required: true,
+                      class: "form-control to-date",
+                      autocomplete: "off",
+                      value: f.object.to_date.present? ? f.object.to_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
                 </div>
               </div>
             <% end %>
           </div>
-        </div>
-        <div class="row">
-          <div class="card col-10 mx-auto text-center" id="report-results">
-            <h4>Resultado</h4>
+          <div class="col-5">
+            <h5>Últimos reportes generados</h5>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Desde</th>
+                  <th>Hasta</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @last_reports.each do |report|%>
+                  <tr>
+                    <td><%= report.product_name %></td>
+                    <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
+                    <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
+                    <td>
+                      <%= link_to reports_internal_order_product_report_path(report), class: 'btn btn-light btn-sm',
+                        title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
+                        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+                        <%= fa_icon "eye" %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
         </div>
       </div> 
@@ -64,11 +120,9 @@
         <%= link_to :back, class: "btn btn-light mr-2" do %>
           Volver
         <% end %>
-        <%= button_tag form: "show-report", class: 'btn btn-success',
-          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Generando".html_safe do %>
-          <%= fa_icon 'check' %>
-          Generar
-        <% end %>
+        <button type='submit' name='commit' class='btn btn-success' form='report-form'>
+          <%= fa_icon "check" %> Generar
+        </button>
       </div>
     </div>
   </div>

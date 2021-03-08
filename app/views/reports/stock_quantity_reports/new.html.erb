@@ -18,24 +18,28 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-12">
+          <div class="col-7 border-right">
             <%=  simple_form_for @stock_quantity_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
               <%= f.error_notification message: f.object.errors[:stock_quantity_report].to_sentence if f.object.errors[:stock_quantity_report].present? %>
-              <div class="d-flex justify-content-end nested-fields">
+              <div class="row nested-fields">
                 <!-- Rubros -->
-                <div class="custom-input-group flex-fill p-1">
+                <div class="custom-input-group col-12">
                   <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
-                        |area| [area.name, area.id]
+                        |area| [area.name, area.id, 
+                          data: {
+                            'content': area.name+" <span class='badge badge-secondary'>"+Stock.to_sector(current_user.sector).with_area_ids(area.id).count.to_s+"</span>"
+                          }
+                        ]
                       },
                     :input_html => {
                       multiple: true,
                       required: true,
                       include_blank: false,
-                      class: 'selectpicker custom-select-pick',
-                      "data-width"=>"100%",
+                      class: 'selectpicker custom-select-pick large-bootstrap-select',
+                
                       "data-size"=>"10",
                       "title"=>"Seleccionar areas",
                       "data-live-search"=>true,
@@ -46,9 +50,7 @@
               </div>
             <% end %>
           </div>
-        </div>
-        <div class="row mt-3 d-flex justify-content-center align-items-center">
-          <div class="col-8">
+          <div class="col-5">
             <h5>Últimos reportes generados</h5>
             <div class="card">
               <table class="table">

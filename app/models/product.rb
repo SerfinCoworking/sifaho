@@ -6,6 +6,7 @@ class Product < ApplicationRecord
   belongs_to :area
   has_many :stocks, dependent: :destroy
   has_many :external_order_product
+  has_many :patient_product_state_reports
   
   # Validations
   validates_presence_of :name, :code, :area_id, :unity_id

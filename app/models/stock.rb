@@ -71,8 +71,7 @@ class Stock < ApplicationRecord
     joins(:product).where('products.code': product_code)
   }
   
-  scope :with_area_ids, ->(area_ids) { joins(:product).where('products.area_id': area_ids) }
-  
+  scope :with_area_ids, ->(area_ids) { joins(:product).where('products.area_id': area_ids) } 
   
   scope :with_available_quantity, lambda {
     joins(:lot_stocks).where("lot_stocks.quantity > ?", 0) 
