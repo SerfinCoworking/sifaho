@@ -95,6 +95,8 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input  
       tr.find("input.request-quantity").focus();
+      tr.find('div.lot-stocks-hidden').html('');
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -105,6 +107,8 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-unity").val(item.unity); // update product unity input
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input
+      tr.find('div.lot-stocks-hidden').html('');
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -147,7 +151,6 @@ $(document).on('turbolinks:load', function(e){
         $('#lot-selection').attr('data-index-row', trIndex);
         $('#lot-selection').attr('data-to-delivery', toDelivery);
         getCurrentSelectedQuantity();
-        console.log($('#lot-selection'));
         // Show the dynamic dialog
         $('#lot-selection').modal("show");
 
@@ -162,12 +165,6 @@ $(document).on('turbolinks:load', function(e){
       const tr = $(e.target).closest(".nested-fields");
       const toDelivery = tr.find("input.deliver-quantity").val();
       
-      // only if the origin is a "provision" can be triggered the change to request-quantity
-      // if($(tr).closest('tbody').attr('data-order-status') === 'provision'){
-      //   const quantity = $(e.target).val();
-      //   tr.find("input.request-quantity").val(quantity);
-      // }
-        
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
@@ -260,6 +257,7 @@ $(document).on('turbolinks:load', function(e){
     });
 
     setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
+    $(tr).find("input.deliver-quantity").first().val(totalQuantitySelected).trigger("change");
   }); 
 
   $('#dialog').on('hidden.bs.modal', function () {

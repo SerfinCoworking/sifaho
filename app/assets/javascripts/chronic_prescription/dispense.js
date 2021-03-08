@@ -104,7 +104,7 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-id").val(item.id); // update product id input  
       tr.find("input.deliver-quantity").first().focus();
       tr.find('div.lot-stocks-hidden').html('');
-      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0)
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -116,6 +116,7 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input
       tr.find('div.lot-stocks-hidden').html('');
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -271,6 +272,7 @@ $(document).on('turbolinks:load', function(e){
     });
 
     setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
+    $(tr).find("input.deliver-quantity").first().val(totalQuantitySelected).trigger("change");
   }); 
 
   $('#dialog').on('hidden.bs.modal', function () {
