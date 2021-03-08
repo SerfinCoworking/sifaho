@@ -311,7 +311,6 @@ $(document).on('turbolinks:load', function(e){
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
     const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
-    const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
     
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 
