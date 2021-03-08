@@ -4,6 +4,7 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
   belongs_to :chronic_prescription, inverse_of: 'original_chronic_prescription_products'
   has_many :chronic_prescription_products, inverse_of: 'original_chronic_prescription_product'
   belongs_to :product
+  has_many :dispensation_types
 
   # Validaciones
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
@@ -16,6 +17,10 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
   # Delegaciones
   delegate :unity_name, :name, :code, to: :product, prefix: :product
 
+  scope :excluding_ids, lambda { |ids|
+    where(['id NOT IN (?)', ids]) if ids.any?
+  }
+  
    # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_original_product_in_the_order
     (self.chronic_prescription.original_chronic_prescription_products.uniq - [self]).each do |iop| 

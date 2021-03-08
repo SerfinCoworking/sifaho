@@ -7,7 +7,9 @@ class ChronicDispensationsController < ApplicationController
   def new
     @chronic_dispensation = ChronicDispensation.new
     @chronic_dispensation.chronic_prescription = @chronic_prescription
-    @chronic_dispensation.dispensation_types.build
+    @chronic_prescription.original_chronic_prescription_products.each do |ocpp|
+      @chronic_dispensation.dispensation_types.build(original_chronic_prescription_product_id: ocpp.id)
+    end
     authorize @chronic_dispensation
   end
 
@@ -25,7 +27,9 @@ class ChronicDispensationsController < ApplicationController
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @chronic_dispensation.dispensation_types.build unless @chronic_dispensation.dispensation_types.present?
+        @chronic_prescription.original_chronic_prescription_products.excluding_ids(@chronic_dispensation.dispensation_types.map(&:original_chronic_prescription_product_id)).each do |ocpp|
+          @chronic_dispensation.dispensation_types.build(original_chronic_prescription_product_id: ocpp.id)
+        end
         format.html { render :new }
       end
     end
