@@ -2,17 +2,17 @@
 $('#dialog h4').html("<i class=' glyphicon glyphicon-pencil'></i>  Editando lote de insumos");
 
 // Render the edit form
-$('.modal-body').html('<%= j render("form") %>');
+$('#dialog .modal-body').html('<%= j render("form") %>');
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
   "<button type='submit' class='btn btn-primary pull-right' form='edit_supply_lot_<%=@new_supply_lot.id%>' value='Guardar cambios'>Guardar cambios</button>"
 );
 
 
 // Se quita los botones del form
-$('.modal-body').find(".td-btn").html('');
+$('#dialog .modal-dialog').find(".td-btn").html('');
 
 // Show the dynamic dialog
 $('#dialog').modal("show");

@@ -1,14 +1,14 @@
 // Style modal
-$('.modal-header').addClass('bg-primary text-white');
+$('#dialog .modal-header').addClass('bg-primary text-white');
 
 // Add the dialog title
-$('.modal-title').html("<i class='fa fa-street-view'></i>  Cambiar ubicación");
+$('#dialog .modal-title').html("<i class='fa fa-street-view'></i>  Cambiar ubicación");
 
 // Render the new form
-$('.modal-body').html('<%= j render("change_form") %>');
+$('#dialog .modal-body').html('<%= j render("change_form") %>');
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
   "<button type='submit' name='commit' class='btn btn-success pull-right' form='change_form'><i class='fa fa-exchange-alt'></i> Cambiar</button>"
 );
@@ -23,7 +23,7 @@ $('#dialog').on('shown.bs.modal', function () {
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-header').removeClass('bg-primary text-white');
+  $('#dialog .modal-header').removeClass('bg-primary text-white');
 });
 
 $('.selectpicker').selectpicker(); // Se inicializa selectpicker
