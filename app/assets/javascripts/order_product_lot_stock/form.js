@@ -150,6 +150,10 @@ $(document).on('turbolinks:load', function(e){
         $('#lot-selection').attr('data-hidden-target', hiddenTarget);
         $('#lot-selection').attr('data-index-row', trIndex);
         $('#lot-selection').attr('data-to-delivery', toDelivery);
+
+        $('#lot-selection table').find('input.lot-quantity').on('click', function(){
+          this.select();
+        });
         getCurrentSelectedQuantity();
         // Show the dynamic dialog
         $('#lot-selection').modal("show");
@@ -184,7 +188,7 @@ $(document).on('turbolinks:load', function(e){
   
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
-    const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
+    const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
     
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 

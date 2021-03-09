@@ -30,7 +30,7 @@ function drawLotTable(value, selectedLots, toDelivery){
     tdCheck.append(inputCheck);
 
     const thQuantity = $('<td onclick="event.stopPropagation();"></td>');
-    const inputQuantity = $('<input type="number" min="0" max="100" class="form-control" aria-label="lot-quantity" name="lot-quantity['+index+']">');
+    const inputQuantity = $('<input type="number" min="0" max="100" class="form-control lot-quantity" aria-label="lot-quantity" name="lot-quantity['+index+']">');
     
     // input focus event
     inputQuantity.on('focus', (e) => {

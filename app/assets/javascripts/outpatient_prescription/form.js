@@ -209,7 +209,9 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-unity").val(item.unity); // update product unity input      
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input  
-      tr.find("input.deliver-quantity").focus();
+      tr.find("input.deliver-quantity").first().focus();
+      tr.find('div.lot-stocks-hidden').html('');
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -220,6 +222,8 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-unity").val(item.unity); // update product unity input
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input
+      tr.find('div.lot-stocks-hidden').html('');
+      setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
     }
   }
 
@@ -261,8 +265,12 @@ $(document).on('turbolinks:load', function(e){
         $('#lot-selection').attr('data-hidden-target', hiddenTarget);
         $('#lot-selection').attr('data-index-row', trIndex);
         $('#lot-selection').attr('data-to-delivery', toDelivery);
+
+        $('#lot-selection table').find('input.lot-quantity').on('click', function(){
+          this.select();
+        });
+
         getCurrentSelectedQuantity();
-        console.log($('#lot-selection'));
         // Show the dynamic dialog
         $('#lot-selection').modal("show");
 
@@ -284,29 +292,25 @@ $(document).on('turbolinks:load', function(e){
       const tr = $(e.target).closest(".nested-fields");
       const toDelivery = tr.find("input.deliver-quantity").val();
       
-      // only if the origin is a "provision" can be triggered the change to request-quantity
-      // if($(tr).closest('tbody').attr('data-order-status') === 'provision'){
-        // const quantity = $(e.target).val();
-        // tr.find("input.request-quantity").val(quantity);
-      // }
-        
       $(tr).find('button.select-lot-btn').siblings().first().css({'width': (!($(e.target).val() > 0) ? '100%' : '0%')});
 
       totalQuantitySelected = 0;
-      const selectedQuantity = $(tr).find('.lot-stocks-hidden .lot_stock_quantity_ref');
-      selectedQuantity.map((index, option) => {
-        // option
-        totalQuantitySelected += ($(option).val() * 1);
+      let selectedQuantity = 0;
+      const lotStocks = $(tr).find('.lot-stocks-hidden .lots');
+      lotStocks.map((index, option) => {
+        if($(option).find('input._destroy').first().val() === 'false'){
+          selectedQuantity++;
+          totalQuantitySelected += ($(option).find('.lot_stock_quantity_ref').first().val() * 1);
+        }
       });
-
-      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity.length)
+      setProgress(tr, totalQuantitySelected, toDelivery, selectedQuantity)
     });
   }
 
   
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
-    const quantityPercent = totalQuantitySelected * 100 / toDelivery; //calc width percentage progress
+    const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
     
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 
@@ -381,7 +385,7 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
-    setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
+    $(tr).find("input.deliver-quantity").first().val(totalQuantitySelected).trigger("change");
   }); 
 
   $('#dialog').on('hidden.bs.modal', function () {
