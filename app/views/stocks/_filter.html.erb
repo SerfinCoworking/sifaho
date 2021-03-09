@@ -1,7 +1,6 @@
 <%= form_for_filterrific @filterrific do |f| %>
   <div class="row d-flex justify-content-end">
-    <div class="col d-flex justify-content-between align-items-center">
-      <p><%= fa_icon "cubes" %> Stock</p>
+    <div class="col-1 d-flex justify-content-between align-items-center">
       <%= render_filterrific_spinner %>
       <%= link_to stocks_path(reset: true), class: 'btn btn-secondary ml-2',
          title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>

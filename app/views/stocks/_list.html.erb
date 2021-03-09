@@ -1,45 +1,52 @@
-<div id="filter_results">
-  <div class="card fixed-panel-list">
-    <table class="table table-hover table-striped table-sm">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Cantidad</th>
-          <th>Unidad</th>
-          <th>Rubro</th>
-          <th class="text-center">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="stocks">
-        <%= render @stocks %>
-      </tbody>
-    </table>
-  </div>
-  <div class="row d-flex align-items-center" style="height: 50px">
-    <div class="col-3">
-      <%= will_paginate @stocks, list_classes: %w(pagination mb-0), 
-        previous_label: '<i class="fa fa-angle-left"></i>',
-        next_label: '<i class="fa fa-angle-right"></i>', 
-        renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+<% if @stocks.present? %>
+  <div id="filter_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+            <th>Rubro</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="stocks">
+          <%= render @stocks %>
+        </tbody>
+      </table>
     </div>
-    <div class="col-6 d-flex justify-content-around align-items-center">
-      <div>
-        Productos <span class="badge badge-secondary"><%= @stocks.count %></span>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-3">
+        <%= will_paginate @stocks, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-6 d-flex justify-content-around align-items-center">
+        <div>
+          Productos <span class="badge badge-secondary"><%= @stocks.count %></span>
+        </div>
+      </div>
+      <div class="col-3 d-flex justify-content-end align-items-center">
+        <% if policy(Stock).index? %>
+          <%= link_to stocks_path(format: 'pdf'), class: 'btn btn-info mr-2', target: :_blank do %>
+            <%= fa_icon "print" %> Imprimir
+          <% end %>
+        <% end %>
+        <%= link_to stocks_path(format: 'xlsx'),
+          class: "btn btn-success", target: :_blank,
+          title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "file-excel" %>
+          Excel
+        <% end %>
       </div>
     </div>
-    <div class="col-3 d-flex justify-content-end align-items-center">
-      <% if policy(Stock).index? %>
-        <%= link_to stocks_path(format: 'pdf'), class: 'btn btn-info mr-2', target: :_blank do %>
-          <%= fa_icon "print" %> Imprimir
-        <% end %>
-      <% end %>
-      <%= link_to stocks_path(format: 'xlsx'),
-        class: "btn btn-success", target: :_blank,
-        title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "file-excel" %>
-        Excel
-      <% end %>
-    </div>
   </div>
-</div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'stock' }
+  ) %>
+<% end %>

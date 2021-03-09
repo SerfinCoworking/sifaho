@@ -9,16 +9,8 @@ class LotsController < ApplicationController
       Lot,
       params[:filterrific],
       persistence_id: false,
-      default_filter_params: {sorted_by: 'creado_asc'},
-      available_filters: [
-        :sorted_by,        
-        :search_lot_code,
-        :search_product_code,
-        :search_product,
-        :with_laboratory,
-      ],
     ) or return
-    @lots = @filterrific.find.page(params[:page]).per_page(15)
+    @lots = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /lots/1

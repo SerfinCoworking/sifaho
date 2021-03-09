@@ -5,7 +5,7 @@
   <td><%= lot.laboratory_name %></td>
   <td class="text-left actions-col">
     <% if policy(lot).show? %>
-      <%= link_to lot_path(lot), class: 'btn btn-default btn-sm',
+      <%= link_to lot_path(lot), class: 'btn btn-secondary btn-sm',
             title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "eye" %>
       <% end %>

@@ -1,88 +1,81 @@
 <%= render 'prescriptions/header' %>
 
-<% if @chronic_prescriptions.present? %>
-  <div class="card fixed-custom-card">
-    <div class="card-header">
-      <%= form_for_filterrific @filterrific do |f| %>
-        <div class="row justify-content-between">
-          <div class="col d-flex justify-content-end align-items-center">
-            <%= render_filterrific_spinner %>
-            <%= link_to chronic_prescriptions_path(reset: true), class: 'btn btn-secondary ml-2',
-              title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon 'redo' %>
-            <% end %>
-          </div>
-          <div class="col-2">
-            <label>Código</label>
-            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-            <%= f.text_field(
-              :search_by_remit_code,
-              class: 'filterrific-periodically-observed form-control input-sm',
-              placeholder: 'Un código',
-              autocomplete: 'off',
-            ) %>
-          </div>
-          <div class="col-2">
-            <label>Profesional</label>
-            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-            <%= f.text_field(
-              :search_by_professional,
-              class: 'filterrific-periodically-observed form-control input-sm',
-              placeholder: 'Nombre o apellido',
-              autocomplete: 'off',
-            ) %>
-          </div>
-          <div class="col-2">
-            <label>Paciente</label>
-            <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
-            <%= f.text_field(
-              :search_by_patient,
-              class: 'filterrific-periodically-observed form-control input-sm',
-              placeholder: 'Nombre/Apellido/DNI',
-              autocomplete: 'off',
-            ) %>
-          </div>
-          <div class="col-2">
-              <label>Recetado desde</label>
-              <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
-                class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
-                placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
-          </div>
-          <div class="col">
-            <label>Estado</label>
-            <%= f.select(:search_by_status,
-              @filterrific.select_options[:search_by_status].map {
-                |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
-              },{},
-              { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
-          </div>
-          <div class="col">
-            <label>Ordernar por</label>
-            <%= f.select(:sorted_by,
-              @filterrific.select_options[:sorted_by].map {
-                |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
-              },{},
-              { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
-          </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-md btn-reset",
-            :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
-          <% end %>
-          <!-- Spinner para la carga -->
+<div class="card fixed-custom-card">
+  <div class="card-header">
+    <%= form_for_filterrific @filterrific do |f| %>
+      <div class="row justify-content-between">
+        <div class="col d-flex justify-content-end align-items-center">
           <%= render_filterrific_spinner %>
+          <%= link_to chronic_prescriptions_path(reset: true), class: 'btn btn-secondary ml-2',
+            title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon 'redo' %>
+          <% end %>
         </div>
-      <% end %>
-    </div>
-    <div class="card-body fixed-panel-index">
-      <%= render(
-        partial: 'chronic_prescriptions/list',
-        locals: { chronic_prescriptions: @chronic_prescriptions }
-      ) %>
-    </div>
+        <div class="col-2">
+          <label>Código</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_by_remit_code,
+            class: 'filterrific-periodically-observed form-control input-sm',
+            placeholder: 'Un código',
+            autocomplete: 'off',
+          ) %>
+        </div>
+        <div class="col-2">
+          <label>Profesional</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_by_professional,
+            class: 'filterrific-periodically-observed form-control input-sm',
+            placeholder: 'Nombre o apellido',
+            autocomplete: 'off',
+          ) %>
+        </div>
+        <div class="col-2">
+          <label>Paciente</label>
+          <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+          <%= f.text_field(
+            :search_by_patient,
+            class: 'filterrific-periodically-observed form-control input-sm',
+            placeholder: 'Nombre/Apellido/DNI',
+            autocomplete: 'off',
+          ) %>
+        </div>
+        <div class="col-2">
+            <label>Recetado desde</label>
+            <%= f.text_field(:date_prescribed_since, autocomplete: 'off',
+              class: 'datetimepicker form-control filterrific-periodically-observed input-sm',
+              placeholder: "Una fecha", data: { date_format: 'DD/MM/YYYY'}) %>
+        </div>
+        <div class="col">
+          <label>Estado</label>
+          <%= f.select(:search_by_status,
+            @filterrific.select_options[:search_by_status].map {
+              |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
+            },{},
+            { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        </div>
+        <div class="col">
+          <label>Ordernar por</label>
+          <%= f.select(:sorted_by,
+            @filterrific.select_options[:sorted_by].map {
+              |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
+            },{},
+            { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        </div>
+        <%= link_to reset_filterrific_url, class: "btn btn-md btn-reset",
+          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-refresh') %>
+        <% end %>
+        <!-- Spinner para la carga -->
+        <%= render_filterrific_spinner %>
+      </div>
+    <% end %>
   </div>
-<% else %>
-  <%= render(
-    partial: 'shared/not_found',
-    locals: { object_name: 'recetas' }
-  ) %>
-<% end %>
+  <div class="card-body fixed-panel-index">
+    <%= render(
+      partial: 'chronic_prescriptions/list',
+      locals: { chronic_prescriptions: @chronic_prescriptions }
+    ) %>
+  </div>
+</div>

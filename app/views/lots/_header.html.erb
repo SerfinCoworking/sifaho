@@ -1,23 +1,17 @@
+<% content_for :title, "Lotes provincia" %>
+
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel">
-    <%= link_to lots_path, class: 'nav-link' do %>
+  <li class="nav-item">
+    <%= link_to lots_path, class: "nav-link #{active_action('index')}" do %>
       <%= fa_icon "barcode" %>
       Lotes
     <% end %>
   </li>
   <% if policy(Lot).new? %>
-    <li class="nav-item <%= active_action('new') %> non-sel">
-      <%= link_to new_lot_path, class: 'nav-link text-primary' do %>
+    <li class="nav-item">
+      <%= link_to new_lot_path, class: "nav-link #{active_action('new')}" do %>
         <%= fa_icon "plus" %>
         Nuevo
-      <% end %>
-    </li>
-  <% end %>
-  <% if policy(Lot).trash_index? %>
-    <li class="nav-item <%= active_action('trash_index') %> non-sel">
-      <%= link_to trash_index_lots_path, class: 'nav-link' do %>
-        <%= fa_icon "trash" %>
-        Papelera
       <% end %>
     </li>
   <% end %>

@@ -74,7 +74,7 @@
     <% end %>
 
     <% if policy(SupplyLot).index? %>
-      <%= link_to main_app.supply_lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('supply_lots')}"  do %>
+      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('lots')}"  do %>
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>

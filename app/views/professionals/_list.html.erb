@@ -1,13 +1,14 @@
-<div id="filterrific_results">
-  <% if @professionals.present? %>
+
+<% if @professionals.present? %>
+  <div id="filterrific_results">
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :nombre) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :apellido) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :matricula) %></th>
-            <th>Prescripciones</th>
+            <th>Recetas</th>
             <th>Estado</th>
             <th>DNI</th>
             <th><%= filterrific_sorting_link(@filterrific, :especialidad) %></th>
@@ -22,10 +23,10 @@
     <div class="d-flex align-items-center justify-content-center" style="height: 50px">
       <%= will_paginate @professionals, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
     </div>
-  <% else %>
-    <%= render(
-      partial: 'shared/not_found_filter',
-      locals: { object_name: 'profesionales' }
-    ) %>
-  <% end %>
-</div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'médicos' }
+  ) %>
+<% end %>
