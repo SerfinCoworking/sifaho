@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Movimientos de stock sector") do |sheet|
+  sheet.add_row ["#", "Fecha", "Establecimiento", "Producto", "Cantidad" ]
+
+  sheet.add_style 'A1:E1', bg_color: '00407A', fg_color: 'FFFFFF'
+  
+  @movements.each_with_index do |movement, index|
+    sheet.add_row [
+      index + 1,
+      movement.created_at,
+      movement.order_destiny_name,
+      movement.lot_stock.product_name,
+      movement.quantity,
+    ]
+  end
+  sheet.column_widths 5,10,30,50,15
+end

@@ -3,19 +3,30 @@ class Reports::ExternalOrderProductsController < ApplicationController
 
   def show
     authorize @external_order_product_report
-    @movements =  QuantityOrdSupplyLot
-                    .where(quantifiable_type: 'ExternalOrder')
-                    .joins("INNER JOIN external_orders ON external_orders.id = quantity_ord_supply_lots.quantifiable_id")
-                    .where("external_orders.provider_sector_id = ?", @external_order_product_report.sector_id)
-                    .where(supply_id: @external_order_product_report.supply_id)
-                    .entregado
-                    .dispensed_since(@external_order_product_report.since_date)
-                    .dispensed_to(@external_order_product_report.to_date)
-                    .joins("JOIN sectors ON sectors.id = external_orders.applicant_sector_id")
-                    .joins("JOIN establishments ON establishments.id = sectors.establishment_id")
-                    .order("establishments.name DESC")
-                    .group("establishments.name", "sectors.name")
-                    .sum(:delivered_quantity)
+    # @movements =  QuantityOrdSupplyLot
+    #                 .where(quantifiable_type: 'ExternalOrder')
+    #                 .joins("INNER JOIN external_orders ON external_orders.id = quantity_ord_supply_lots.quantifiable_id")
+    #                 .where("external_orders.provider_sector_id = ?", @external_order_product_report.sector_id)
+    #                 .where(supply_id: @external_order_product_report.supply_id)
+    #                 .entregado
+    #                 .dispensed_since(@external_order_product_report.since_date)
+    #                 .dispensed_to(@external_order_product_report.to_date)
+    #                 .joins("JOIN sectors ON sectors.id = external_orders.applicant_sector_id")
+    #                 .joins("JOIN establishments ON establishments.id = sectors.establishment_id")
+    #                 .order("establishments.name DESC")
+    #                 .group("establishments.name", "sectors.name")
+    #                 .sum(:delivered_quantity)
+    @stock = Stock.where(sector: current_user.sector, product_id: @external_order_product_report.product_id).first
+    if @stock.present?
+      @movements =
+        @stock
+        .movements
+        .with_product_ids(@external_order_product_report.product_id)
+        .since_date(@external_order_product_report.since_date.strftime("%d/%m/%Y"))
+        .to_date(@external_order_product_report.to_date.strftime("%d/%m/%Y"))
+        .where(order_type: 'ExternalOrder')
+        .order(created_at: :desc)
+    end
 
     respond_to do |format|
       format.html
@@ -26,7 +37,7 @@ class Reports::ExternalOrderProductsController < ApplicationController
           disposition: 'inline'
       end
       format.csv { send_data movements_to_csv(@movements), filename: "Reporte-#{@external_order_product_report.since_date.strftime('%d/%m/%Y')}-#{@external_order_product_report.to_date.strftime('%d/%m/%Y')}.csv" }
-      format.xls
+      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteProductoPorEstablecimiento_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 
@@ -60,7 +71,7 @@ class Reports::ExternalOrderProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def external_order_product_report_params
-      params.require(:external_order_product_report).permit(:supply_id, :since_date, :to_date)
+      params.require(:external_order_product_report).permit(:product_id, :since_date, :to_date)
     end
 
     def generate_report(movements, params)
@@ -78,41 +89,26 @@ class Reports::ExternalOrderProductsController < ApplicationController
         # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
         report.list do |list|
           list.add_row do |row|
-            row.values  establishment_name: movement.first.first,
-                        sector_name: movement.first.second,
-                        quantity: movement.second
+            row.values  establishment_name: movement.order_destiny_name,
+                        quantity: movement.quantity
           end
         end
       end
       
       report.pages.each do |page|
-        page[:product_name] = @external_order_product_report.supply_name
-        page[:title] = 'Reporte producto entregado por sectores'
+        page[:product_name] = @external_order_product_report.product_name
+        page[:title] = 'Reporte producto entregado por establecimiento'
         page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
         page[:since_date] = @external_order_product_report.since_date.strftime("%d/%m/%Y")
         page[:to_date] = @external_order_product_report.to_date.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
-        page[:establishment_name] = @external_order_product_report.establishment_name
+        page[:establishment_name] = @external_order_product_report.sector.sector_and_establishment
         page[:establishment] = @external_order_product_report.establishment_name
         report.list.on_page_footer_insert do |footer|
-          footer.item(:total_quantity).value(movements.values.sum)
+          footer.item(:total_quantity).value(movements.sum(:quantity))
         end
       end
   
       report.generate
-    end
-
-    def movements_to_csv(movements)
-      CSV.generate(headers: true) do |csv|
-        csv << ["Establecimiento", "Sector", "Cantidad", "Producto"]
-        movements.each do |movement|
-          csv << [
-            movement.first.first,
-            movement.first.second,
-            movement.second,
-            @external_order_product_report.supply_name
-          ]
-        end
-      end
     end
 end
