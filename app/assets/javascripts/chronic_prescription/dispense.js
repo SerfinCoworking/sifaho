@@ -105,6 +105,14 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.deliver-quantity").first().focus();
       tr.find('div.lot-stocks-hidden').html('');
       setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
+      // Deshabilitamos boton de seleccion de lotes si no tiene stock
+      if(item.stock == 0){
+        tr.find('button.select-lot-btn').first().html('Sin stock');
+        tr.find('button.select-lot-btn').first().attr('disabled', true);
+      }else{
+        tr.find('button.select-lot-btn').first().html('Seleccionados 0');
+        tr.find('button.select-lot-btn').first().removeAttr('disabled');
+      }
     }
   }
 
@@ -117,6 +125,14 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-id").val(item.id); // update product id input
       tr.find('div.lot-stocks-hidden').html('');
       setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
+      // Deshabilitamos boton de seleccion de lotes si no tiene stock
+      if(item.stock == 0){
+        tr.find('button.select-lot-btn').first().html('Sin stock');
+        tr.find('button.select-lot-btn').first().attr('disabled', true);
+      }else{
+        tr.find('button.select-lot-btn').first().html('Seleccionados 0');
+        tr.find('button.select-lot-btn').first().removeAttr('disabled');
+      }
     }
   }
 
