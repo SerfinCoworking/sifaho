@@ -215,6 +215,7 @@ class ExternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @external_order.status = "proveedor_auditoria"
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :edit_provider }
