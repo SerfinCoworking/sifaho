@@ -1,11 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :receipts do
-    member do
-      get "delete"
-    end
-  end
-  
   resources :stocks do
     member do
       resources :stock_movements, only: :index, path: :movimientos
@@ -29,20 +23,25 @@ Rails.application.routes.draw do
   match '/422' => 'errors#unprocessable_entity', :via => :all
   match '/500' => 'errors#internal_server_error', :via => :all
   
-  # Lotes
-  resources :lots do
+  # Recibos
+  resources :receipts, path: :recibos do
     member do
       get "delete"
-      get "restore"; get "restore_confirm"
+    end
+  end
+
+  # Lotes
+  resources :lots, path: :lotes_provincia do
+    member do
+      get "delete"
     end
     collection do
-      get "trash_index"
       get "search_by_code"
     end
   end
 
   # Products
-  resources :products do
+  resources :products, path: :productos do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
@@ -57,13 +56,13 @@ Rails.application.routes.draw do
   end
 
   # Areas
-  resources :areas do
+  resources :areas, path: :rubros do
     member do
       get :fill_products_card
     end
   end
 
-  resources :permission_requests do
+  resources :permission_requests, path: :solicitudes_permisos do
     member do
       get "end"
     end
@@ -91,7 +90,7 @@ Rails.application.routes.draw do
     put 'users' => 'devise/registrations#update', :as => 'user_registration'
   end
 
-  resources :users_admin, :controller => 'users', only: [:index, :update, :show] do
+  resources :users_admin, path: :usuarios, :controller => 'users', only: [:index, :update, :show] do
     member do
       get "change_sector"
       get "edit_permissions"
@@ -109,9 +108,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
 
-  resources :profiles, only: [ :edit, :update, :show ]
+  resources :profiles, path: :perfiles, only: [ :edit, :update, :show ]
 
-  resources :bed_orders do
+  resources :bed_orders, path: :internacion do
     member do
       get "delete"
     end
@@ -122,7 +121,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :laboratories do
+  resources :laboratories, path: :laboratorios do
     member do
       get "delete"
     end
@@ -131,21 +130,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :supply_lots do
-    member do
-      get "delete"
-      get "restore"; get "restore_confirm"
-      get "purge"; get "purge_confirm"
-    end
-    collection do
-      get "trash_index"
-      get "search_by_code"
-      get "search_by_lot_code"
-      get "search_by_name"
-    end
-  end
-
-  resources :establishments do
+  resources :establishments, path: :establecimientos do
     member do
       get "delete"
     end
@@ -154,7 +139,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :purchases do 
+  resources :purchases, path: :abastecimientos do 
     member do
       get "set_products"
       patch "set_products", to: "purchases#save_products"
@@ -164,7 +149,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :sectors do
+  resources :sectors, path: :sectores do
     member do
       get "delete"
     end
@@ -192,7 +177,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :internal_orders, only: [:show, :destroy] do
+  resources :internal_orders, path: :pedidos_sectores, only: [:show, :destroy] do
     member do
       get "delete"
       get "send_provider"
@@ -200,21 +185,21 @@ Rails.application.routes.draw do
       get "return_provider_status"
       get "return_applicant_status"
       get "receive_applicant"
-      get "edit_applicant"
-      get "edit_provider"
+      get :edit_applicant, path: :editar_solicitante 
+      get :edit_provider, path: :editar_proveedor
       get "nullify"
       patch "update_applicant"
       patch "update_provider"
     end
     collection do
-      get "new_applicant"
-      get "new_provider"
-      get "applicant_index"
-      get "provider_index"
-      get "statistics"
+      get :new_applicant, path: :solicitar
+      get :new_provider, path: :entregar
+      get :applicant_index, path: :recibos
+      get :provider_index, path: :entregas
+      get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "internal_orders#find_lots", as: "find_order_product_lots"
-      post "create_applicant"
-      post "create_provider"
+      post :create_applicant
+      post :create_provider
     end
 
   end
@@ -233,7 +218,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :external_orders, only: [:show, :destroy] do
+  resources :external_orders, path: :pedidos_establecimientos, only: [:show, :destroy] do
     member do
       get "delete"
       get "send_provider"
@@ -242,18 +227,18 @@ Rails.application.routes.draw do
       get "return_applicant_status"
       get "accept_provider"
       get "receive_applicant"
-      get "edit_applicant"
-      get "edit_provider"
+      get :edit_applicant, path: :editar_solicitante
+      get :edit_provider, path: :editar_proveedor
       get "nullify"
       patch "update_applicant"
       patch "update_provider"
     end
     collection do
-      get "new_applicant"
-      get "new_provider"
-      get "applicant_index"
-      get "provider_index"
-      get "statistics"
+      get :new_applicant, path: :solicitar
+      get :new_provider, path: :despachar
+      get :applicant_index, path: :recibos
+      get :provider_index, path: :despachos
+      get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
       post "create_applicant"
       post "create_provider"
@@ -276,20 +261,8 @@ Rails.application.routes.draw do
 
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
 
-  resources :supplies do
-    member do
-      get "delete"
-      get "restore"; get "restore_confirm"
-    end
-    collection do
-      get "trash_index"
-      get "search_by_id"
-      get "search_by_name"
-    end
-  end
-
   # en row_id debemos agregar el id de OutpatientPrescriptionProduct
-  resources :outpatient_prescriptions do
+  resources :outpatient_prescriptions, path: :recetas_ambulatorias do
     member do
       get 'return_dispensation'
       get 'dispense'
@@ -299,7 +272,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :chronic_prescriptions do 
+  resources :chronic_prescriptions, path: :recetas_cronicas do 
     resources :chronic_dispensations, only: [:new, :create] do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
@@ -310,7 +283,7 @@ Rails.application.routes.draw do
   end
   
     
-  resources :prescriptions do
+  resources :prescriptions, path: :recetas do
     member do
       get 'delete'
       get 'restore'; get 'restore_confirm'
@@ -326,7 +299,7 @@ Rails.application.routes.draw do
   end
   get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
 
-  resources :patients do
+  resources :patients, path: :pacientes do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
@@ -339,7 +312,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :professionals do
+  resources :professionals, path: :medicos do
     member do
       get "delete"
       get "restore"; get "restore_confirm"
@@ -361,13 +334,6 @@ Rails.application.routes.draw do
   end
 
   resources :reports, only: [:show, :index] do
-    collection do
-      get "new_delivered_by_order"
-      post "create_delivered_by_order"
-
-      get "new_delivered_by_establishment"
-      post "create_delivered_by_establishment"
-    end
   end
 
   # Reports
