@@ -21,7 +21,7 @@ class LotArchive < ApplicationRecord
     self.returned_by = a_user
     self.lot_stock.decrement_archived(self.quantity)
     self.retornado!
-    self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false)
+    self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, true)
   end
 
   def lot_stock_quantity
