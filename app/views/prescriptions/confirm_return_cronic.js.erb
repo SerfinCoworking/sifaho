@@ -1,9 +1,9 @@
 // Add the dialog title
-$('.modal-header').addClass('bg-danger text-white');
-$('.modal-title').html("<i class='fa fa-redo'></i>  Retornar dispensación");
+$('#dialog .modal-header').addClass('bg-danger text-white');
+$('#dialog .modal-title').html("<i class='fa fa-redo'></i>  Retornar dispensación");
 
 // Render the edit form
-$('.modal-body').html(
+$('#dialog .modal-body').html(
   "<p>"+
     "Seguro que desea retornar la <%= @prescription.cronic_dispensations.to_set.count %>° dispensación realizada el "+ 
     "<%= @prescription.cronic_dispensations.newest_first.first.created_at.strftime('%d/%m/%Y %H:%M') %>?"+
@@ -11,7 +11,7 @@ $('.modal-body').html(
 );
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
   "<a data-method='patch' href='/prescriptions/<%= @prescription.id %>/return_cronic_dispensation' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
@@ -26,5 +26,5 @@ $('#dialog').on('shown.bs.modal', function () {
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-header').removeClass('bg-danger text-white');
+  $('#dialog .modal-header').removeClass('bg-danger text-white');
 });

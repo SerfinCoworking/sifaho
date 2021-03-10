@@ -17,6 +17,7 @@ class ExternalOrderProduct < ApplicationRecord
   validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_proveedor_aceptado_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
   validate :uniqueness_product_in_the_order
+  validate :order_prod_lot_stocks_any_without_stock
   
   accepts_nested_attributes_for :product,
     :allow_destroy => true
@@ -124,6 +125,17 @@ class ExternalOrderProduct < ApplicationRecord
       if eop.product_id == self.product_id
         errors.add(:uniqueness_product_in_the_order, "El producto código ya se encuentra en la orden")      
       end
+    end
+  end
+  
+  # Validacion: algun lote que se este seleccionando una cantidad superior a la persistente
+  def order_prod_lot_stocks_any_without_stock
+    any_insufficient_lot_stock = self.order_prod_lot_stocks.any? do |opls|
+      opls.errors[:quantity].any?
+    end
+
+    if any_insufficient_lot_stock
+      errors.add(:order_prod_lot_stocks_any_without_stock, "Revisar las cantidades seleccionadas")      
     end
   end
   

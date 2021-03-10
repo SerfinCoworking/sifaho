@@ -1,12 +1,12 @@
 // Add the dialog title
-$('#dialog h4').html("<i class='glyphicon glyphicon-eye-open'></i>  Viendo lote <%= @sector_supply_lot.lot_code %>");
+$('#dialog .modal-title').html("<i class='fas fa-eye'></i>  Viendo insumo");
 
 // Render the edit form
 $('#dialog .modal-body').html('<%= j render("show") %>');
 
 // Add form button
 $('#dialog .modal-footer').html(
-  "<button type='button' class='btn btn-default' data-dismiss='modal'>Volver</button>"
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
 );
 
 // Show the dynamic dialog

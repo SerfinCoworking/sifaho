@@ -1,14 +1,14 @@
 // Style modal
-$('.modal-header').addClass('bg-primary text-white');
+$('#dialog .modal-header').addClass('bg-primary text-white');
 
 // Add the dialog title
-$('.modal-title').html("<i class='fa fa-plus'></i>  Nuevo médico");
+$('#dialog .modal-title').html("<i class='fa fa-plus'></i>  Nuevo médico");
 
 // Render the new form
-$('.modal-body').html('<%= j render("form_remote") %>');
+$('#dialog .modal-body').html('<%= j render("form_remote") %>');
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
   "<button type='submit' class='btn btn-success pull-right' form='new_professional'><i class='fa fa-plus'></i> Cargar médico</button>"
 );
@@ -23,6 +23,6 @@ $('#dialog').on('shown.bs.modal', function () {
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-header').removeClass('bg-primary text-white');
+  $('#dialog .modal-header').removeClass('bg-primary text-white');
 });
 

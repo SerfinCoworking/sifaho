@@ -132,6 +132,8 @@
 
     <!-- Cantidad entregada -->
     <td>
+          <%#= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> 
+          <%#= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? ) ) %>
       <%= f.input :delivery_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
@@ -155,11 +157,9 @@
     <td>
         
       <div class="lot-stocks-hidden">
-        <% lot_stock_error = '' %>      
         <% if f.object.order_prod_lot_stocks.present?  %>
           <%= f.simple_fields_for :order_prod_lot_stocks do |iopls| %>
-            <%= render "shared/orders/order_product_lot_stocks_fields", f: iopls %>      
-            <% lot_stock_error = iopls.object.errors[:quantity].first %>      
+            <%= render "shared/orders/order_product_lot_stocks_fields", f: iopls %>
           <% end %>
         <% end %>
       </div>
@@ -191,8 +191,8 @@
       <div class="invalid-feedback d-block">
         <% if f.object.errors[:quantity_lot_stock_sum].any? %>
           <%= f.object.errors[:quantity_lot_stock_sum].first %>
-        <% elsif lot_stock_error.present? %>
-          Revisar las cantidades seleccionadas
+        <% elsif f.object.errors[:order_prod_lot_stocks_any_without_stock].present? %>
+          <%= f.object.errors[:order_prod_lot_stocks_any_without_stock].first %>
         <% elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
           <%= f.object.errors[:int_ord_prod_lot_stocks].first %>
         <% end %>

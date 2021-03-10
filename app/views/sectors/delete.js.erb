@@ -1,14 +1,14 @@
 // Add the dialog title
-$('.modal-header').addClass('bg-danger text-white');
-$('.modal-title').html("<i class='fa fa-trash'></i> Eliminar sector");
+$('#dialog .modal-header').addClass('bg-danger text-white');
+$('#dialog .modal-title').html("<i class='fa fa-trash'></i> Eliminar sector");
 
 // Render the edit form
-$('.modal-body').html(
+$('#dialog .modal-body').html(
   'Esta seguro que desea eliminar el siguiente sector?'
 );
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
   "<a data-remote='true' data-method='delete' href='/sectors/<%= @sector.id %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
@@ -18,5 +18,5 @@ $('#dialog').modal("show");
 
 // Remove style
 $('#dialog').on('hidden.bs.modal', function () {
-  $('.modal-header').removeClass('bg-danger text-white');
+  $('#dialog .modal-header').removeClass('bg-danger text-white');
 });

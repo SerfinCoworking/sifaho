@@ -1,14 +1,14 @@
 // Style modal
-$('.modal-header').addClass('bg-warning text-black');
+$('#dialog .modal-header').addClass('bg-warning text-black');
 
 // Add the dialog title
-$('.modal-title').html("<i class='fas fa-undo'></i>  Se retornarán <%=@lot_archive.quantity%> unidades al stock");
+$('#dialog .modal-title').html("<i class='fas fa-undo'></i>  Se retornarán <%=@lot_archive.quantity%> unidades al stock");
 
 // Render the new form
-$('.modal-body').html('<p>No podrá volver atrás esta acción.</p><h5>Esta seguro de retornar este archivo?</h5>');
+$('#dialog .modal-body').html('<p>No podrá volver atrás esta acción.</p><h5>Esta seguro de retornar este archivo?</h5>');
 
 // Add form button
-$('.modal-footer').html(
+$('#dialog .modal-footer').html(
   "<button type='button' class='btn' data-dismiss='modal'>Cancelar</button>" + 
   "<a class='btn btn-danger btn-sm' data-method='patch' href='<%= return_archive_path(@lot_archive) %>'>Confirmar</a>"
 );
