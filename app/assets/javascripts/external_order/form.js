@@ -21,7 +21,7 @@ $(document).on('turbolinks:load', function(e){
     const select = $("#effector-sector");
     select.prop("disabled", false);
     $.ajax({
-      url: "/sectors/with_establishment_id", // Ruta del controlador
+      url: "/sectores/with_establishment_id", // Ruta del controlador
       type: 'GET',
       data: {
         term: establishmentId

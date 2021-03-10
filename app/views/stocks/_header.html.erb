@@ -1,14 +1,10 @@
+<% content_for :title, "Stock" %>
+
 <% content_for :page_header do %>
   <li class="nav-item">
     <%= link_to stocks_path, class: "nav-link #{active_action_and_controller('index', 'stocks')}" do %>
       <%= fa_icon "cubes" %>
       Stock
-    <% end %>
-  </li>
-  <li class="nav-item">
-    <%= link_to sector_supply_lots_path, class: "nav-link #{ active_action_and_controller('index', 'sector_supply_lots') }" do %>
-      <%= fa_icon "barcode" %>
-      Lotes
     <% end %>
   </li>
   <li class="nav-item dropdown">

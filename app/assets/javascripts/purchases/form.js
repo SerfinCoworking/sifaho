@@ -49,7 +49,7 @@ $(document).on('turbolinks:load', function(e){
   function getSectors(establishmentId){
     if(typeof establishmentId !== 'undefined'){ 
       $.ajax({
-        url: "/sectors/with_establishment_id", // Ruta del controlador
+        url: "/sectores/with_establishment_id", // Ruta del controlador
         method: "GET",
         dataType: "JSON",
         data: { term: establishmentId}
