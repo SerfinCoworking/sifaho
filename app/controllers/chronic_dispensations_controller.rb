@@ -15,6 +15,7 @@ class ChronicDispensationsController < ApplicationController
 
   def create
     @chronic_dispensation = ChronicDispensation.new(chronic_prescription_dispensation_params)
+    @chronic_dispensation.provider_sector = current_user.sector
     authorize @chronic_dispensation
     
     respond_to do |format|

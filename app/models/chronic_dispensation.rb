@@ -2,6 +2,9 @@ class ChronicDispensation < ApplicationRecord
   belongs_to :chronic_prescription
   has_many :dispensation_types, dependent: :destroy, class_name: 'DispensationType'
   has_many :chronic_prescription_products, through: :dispensation_types
+  has_many :order_prod_lot_stocks, through: :chronic_prescription_products
+  has_many :lot_stocks, :through => :order_prod_lot_stocks
+  belongs_to :provider_sector, class_name: 'Sector'
 
   enum status: { pendiente: 0, dispensada: 1}
 
