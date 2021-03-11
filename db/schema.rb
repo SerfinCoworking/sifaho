@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_110947) do
+ActiveRecord::Schema.define(version: 2021_03_10_144821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -148,7 +148,9 @@ ActiveRecord::Schema.define(version: 2021_03_10_110947) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "provider_sector_id"
     t.index ["chronic_prescription_id"], name: "index_chronic_dispensations_on_chronic_prescription_id"
+    t.index ["provider_sector_id"], name: "index_chronic_dispensations_on_provider_sector_id"
   end
 
   create_table "chronic_prescription_comments", force: :cascade do |t|

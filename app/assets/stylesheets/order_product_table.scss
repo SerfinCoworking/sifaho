@@ -1,0 +1,13 @@
+/*Estilos que se aplican a la tabla de una orden con productos:
+  [ExternalOrder: proveedor]
+  [InternalOrder: proveedor]
+  [OutpatientPrescription: dispense]
+  [ChronicPrescriptionProduct: dispense]
+*/
+@import 'variables';
+
+table.table{
+  tr.nested-fields.has-error{
+    background-color: $red-light-color;
+  }
+}

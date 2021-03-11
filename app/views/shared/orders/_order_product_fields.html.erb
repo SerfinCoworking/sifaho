@@ -1,4 +1,4 @@
-<tr class="nested-fields">
+<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
   <!-- Código del producto -->
   <td>
     <div class="custom-input-group">
@@ -109,31 +109,9 @@
     </td>
 
   <% else %>
-    <!-- Cantidad solicitada -->
-    <!--td style="width: 100px"-->
-      <%#= f.input :request_quantity_fake,
-        disabled: true,
-        label: false, 
-        placeholder: 'Cant', 
-        required: false,
-        input_html: {
-          "data-tooltip"=>true,
-          :class=>"request-quantity input-sm",
-          :title=>"Cantidad solicitada",
-          "data-placement"=>"right",
-          min: '1',
-          step:'any',
-          :style => 'width: 100px',
-          value: "#{ f.object.request_quantity.present? ? f.object.request_quantity : 0 }"
-        }
-      %>
-      <%#= f.hidden_field :request_quantity, :class => "request-quantity" %>
-    <!--/td-->
 
     <!-- Cantidad entregada -->
     <td>
-          <%#= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> 
-          <%#= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? ) ) %>
       <%= f.input :delivery_quantity, label: false, placeholder: 'Cant', required: false,
         input_html: {
           "data-tooltip"=>true,
@@ -154,8 +132,7 @@
     
     <!-- Lotes -->
     
-    <td>
-        
+    <td>        
       <div class="lot-stocks-hidden">
         <% if f.object.order_prod_lot_stocks.present?  %>
           <%= f.simple_fields_for :order_prod_lot_stocks do |iopls| %>

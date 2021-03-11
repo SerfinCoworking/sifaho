@@ -1,4 +1,4 @@
-<tr class="nested-fields">
+<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
   <!-- Presentacion -->
   <td>
     <%= f.input :position, :as => :hidden, :error => false, :input_html =>  { class: "purchase-prod-lot-stock-position" },
@@ -32,8 +32,6 @@
           autocomplete: 'off',
         }
       %>
-          <%#%"data-product-code" => "#{f.object.product.present? ? f.object.product.id : ""}",
-          value: "#{if f.object.lot_code.present?; f.object.lot_code; end }",%>
       <div class="with-loading">
         <%= fa_icon 'spinner', class: "fa-spin"%>
       </div>

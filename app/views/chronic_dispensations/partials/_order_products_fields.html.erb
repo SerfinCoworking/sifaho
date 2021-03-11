@@ -1,9 +1,10 @@
-<tr class="nested-fields">
+<% @ocpp_id = defined?(ocpp_id) ? ocpp_id : f.object.original_chronic_prescription_product_id %>
+<% unless f.object.product.present?; @original_product = OriginalChronicPrescriptionProduct.find(@ocpp_id); end %>
+
+<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>" data-available-stock="<%= f.object.product.present? ? current_user.sector.stock_to(f.object.product) : current_user.sector.stock_to(@original_product.product)  %>">
   <!-- Código del producto -->
-  <td>
-    <% @ocpp_id = defined?(ocpp_id) ? ocpp_id : f.object.original_chronic_prescription_product_id %>
+  <td>    
     <%= f.hidden_field :original_chronic_prescription_product_id, value: "#{ @ocpp_id }" %>
-    <% unless f.object.product.present?; @original_product = OriginalChronicPrescriptionProduct.find(@ocpp_id); end %>
     <div class="custom-input-group">
       <div class="form-group fake optional products_product_id_fake">
         <input type="text" 

@@ -36,7 +36,7 @@
 @import 'jquery-ui/tabs';
 @import 'jquery-ui/tooltip';
 
-@import 'variables';
+@import "variables";
 @import "bootstrap-select";
 @import "bootstrap";
 @import "chosen";
@@ -57,6 +57,7 @@
 @import 'errors';
 @import 'custom_collapse_table';
 @import 'news';
+@import 'order_product_table';
 
 
 html {
