@@ -15,8 +15,9 @@ $(document).on('turbolinks:load', function(e){
   });
 
   // cocoon init
-  $('#order-product-cocoon-container').on('cocoon:after-insert', function(e) {
+  $('#order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
+    $(inserted_item).find('input.product-code').first().focus();
   });
   
   // set expiry date calendar format
