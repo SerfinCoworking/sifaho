@@ -1,37 +1,69 @@
 <%= render 'header' %>
 
-<div class="row">
-  <div class="col-md-7 col-md-offset-2">
-    <div class="panel panel-default">
-      <div class="panel-heading hidden-print">
-        <h3 class="panel-title">
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo lote
-          <%= link_to lots_path, class: 'btn pull-right close-btn',
-            :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
-            <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
-          <% end %>
-        </h3>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo lote <%= @lot.code %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to :back, class: 'btn btn-light', :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <h4 class="border-bottom">Producto</h4>
+    <div class="row">
+      <div class="col-2">
+        <h5>Código</h5>
+        <%= @lot.product_code %>
       </div>
-      <div class="panel-body" id="panel-body-new">
-        
-        <div class="row">
-          <div class="col-md-12">
-            <h5><strong>Código: </strong><%= @lot.code%></h5>
-            
-            <h5><strong>Código producto: </strong><%= @lot.product_code %></h5>
-
-            <h5><strong>Producto: </strong><%= @lot.product_name %></h5>
-
-            <h5><strong>Laboratorio: </strong><%= @lot.laboratory_name %></h5>
-          </div>
-        </div>
+      <div class="col-5">
+        <h5>Nombre</h5>
+        <%= @lot.product_name %>
       </div>
+      <div class="col-2">
+        <h5>Unidad</h5>
+        <%= @lot.product_unity_name %>
+      </div>
+      <div class="col-3">
+        <h5>Rubro</h5>
+        <%= @lot.product_area_name %>
+      </div>
+    </div>
 
-      <!-- Botones de acción footer -->
-      <div class="panel-footer text-right hidden-print">
-        <%= link_to 'Volver', lots_path, class: "btn" %>
+    <h4 class="border-bottom mt-2">Lote</h4>
+    <div class="row">
+      <div class='col-2'>
+        <h5>Código</h5>
+        <%= @lot.code %>
+      </div>
+      <div class="col-2">
+        <h5>Laboratorio</h5>
+        <%= @lot.laboratory.name %>
+      </div>
+      <div class='col-3'>
+        <h5>Vencimiento</h5>
+        <%= @lot.expiry_date_string %>
       </div>
     </div>
   </div>
-</div>
 
+  <div class="card-footer d-flex justify-content-between">
+    <div class="text-right w-100">
+      <%= link_to :back, class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>    
+
+      <%= link_to edit_lot_path(@lot), class: 'btn btn-warning btn-md mr-1' do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    </div>
+  </div>
+</div>
+  

@@ -1,27 +1,88 @@
-<%= simple_form_for @lot, html: { role: 'check-modified'} do |f| %>
-  <%= f.error_notification %>
-  <div class="row">
-    <div class="col-md-12">
-      <%# Code %>
-      <%= f.input :code, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
-      
-      <%# Name %>
-      <%= f.input :product_id, label: 'Nombre de producto', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
-          required: true, size: 50, autocomplete: 'off' %>
-      
-      <%# Unity %>
-      <%= f.input :laboratory_id, label: 'Unidad', include_blank: true,
-        collection: @unities,
-        :value_method => :id,
-        :input_html => {
-          required: true,
-          class: 'selectpicker-md',
-          "data-width"=>"100%",
-          "data-live-search"=>true,
-          title: "Seleccionar unidad",
-          "data-size"=>"15",
-        } 
-      %>
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @lot.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@lot.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @lot.new_record? ? "Agregar nuevo lote" : "Editando lote" %>
+      </h5>
     </div>
+    <%= link_to :back, class: @lot.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
   </div>
-<% end %>
+  <div class="card-body">
+    <%= simple_form_for @lot, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <h4 class="border-bottom">Producto</h4>
+      <div class="row nested-fields">
+        <div class="custom-input-group col-2">
+          <!-- Código de producto -->
+          <%= f.input :product, as: :string,
+            placeholder: 'Código',
+            label: 'Código',
+            required: true,
+            :input_html => {
+              class: "report-product-code select-change input-sm",
+              data: { autocomplete_source: search_by_code_products_path },
+              size: 4,
+              autocomplete: 'off',
+              value: "#{if f.object.product.present?; f.object.product.code; end }"
+            }
+          %>
+          <div class="with-loading">
+            <%= fa_icon 'spinner', class: "fa-spin"%>
+          </div>
+        </div>
+
+        <!-- Nombre de producto  -->
+        <div class="custom-input-group col-10">
+          <%= f.input :product, as: :string, id: "nom_ins", class: "form-control",
+            label: 'Nombre',
+            placeholder: 'Nombre',
+            required: true,
+            :input_html => {
+              class: "report-product-name select-change input-sm",
+              data: { autocomplete_source: search_by_name_products_path },
+              size: 35,
+              value: "#{if f.object.product.present?; f.object.product_name; end }"
+            } 
+          %>
+          <div class="with-loading">
+            <%= fa_icon 'spinner', class: "fa-spin"%>
+          </div>
+          <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
+        </div>
+      </div>
+      <h4 class="border-bottom">Lote</h4>
+      <div class="row">
+        <%# Code %>
+        <div class="col-2">
+          <%= f.input :code, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
+        </div>
+
+        <%# Unity %>
+        <div class="col-8">
+          <%= f.input :laboratory_id, label: 'Laboratorio', include_blank: true,
+            collection: @laboratories,
+            :value_method => :id,
+            :input_html => {
+              required: true,
+              class: 'selectpicker-md',
+              "data-width"=>"100%",
+              "data-live-search"=>true,
+              title: "Seleccionar unidad",
+              "data-size"=>"15",
+            } 
+          %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', lots_path, class: 'btn btn-light mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @lot.new_record? ? 'new_lot' : 'edit_lot_' + @lot.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>

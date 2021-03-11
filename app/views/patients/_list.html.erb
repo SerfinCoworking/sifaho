@@ -2,7 +2,7 @@
   <% if @patients.present? %>
     <div class="card">
       <table class="table table-hover table-striped table-sm">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th><%= filterrific_sorting_link(@filterrific, :dni) %></th>
             <th><%= filterrific_sorting_link(@filterrific, :apellido_y_nombre) %></th>

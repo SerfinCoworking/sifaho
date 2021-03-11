@@ -2,7 +2,9 @@
   <td><%= lot.code %></td>
   <td><%= lot.product_code %></td>
   <td><%= lot.product_name %></td>
+  <td><span class="badge badge-<%= lot_status_label(lot) %>"><%= lot.status.humanize %></td>
   <td><%= lot.laboratory_name %></td>
+  <td><%= lot.expiry_date_string %></td>
   <td class="text-left actions-col">
     <% if policy(lot).show? %>
       <%= link_to lot_path(lot), class: 'btn btn-secondary btn-sm',
@@ -14,12 +16,6 @@
       <%= link_to edit_lot_path(lot), class: 'btn btn-warning btn-sm',
             title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "edit" %>
-      <% end %>
-    <% end %>
-    <% if policy(lot).delete? %>
-      <%= link_to delete_lot_path(lot), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
   </td>

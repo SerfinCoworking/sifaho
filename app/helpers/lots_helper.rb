@@ -6,4 +6,11 @@ module LotsHelper
       return "primary"
     end
   end
+
+  def lot_status_label(lot)
+    if lot.vigente?; return 'success'
+    elsif lot.por_vencer?; return 'warning'
+    elsif lot.vencido?; return 'danger'
+    end
+  end
 end

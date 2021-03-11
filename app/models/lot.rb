@@ -32,7 +32,7 @@ class Lot < ApplicationRecord
   }
 
   # Delegations
-  delegate :name, :code, to: :product, prefix: true
+  delegate :name, :code, :area_name, :unity_name, to: :product, prefix: true
   delegate :name, to: :laboratory, prefix: true
 
    filterrific(
@@ -87,19 +87,25 @@ class Lot < ApplicationRecord
     case sort_option.to_s
     when /^codigo_lote_/
       # Order by lot code
-      order("lots.code::integer #{ direction }")
+      reorder("lots.code::integer #{ direction }")
     when /^codigo_producto_/
       # Order by product code
-      order("products.code::integer #{ direction }")
+      reorder("products.code::integer #{ direction }")
+    when /^estado_/
+      # Order by product name
+      reorder("lots.status #{ direction }")
     when /^producto_/
       # Order by product name
-      order("LOWER(products.name) #{ direction }")
+      reorder("LOWER(products.name) #{ direction }")
     when /^laboratorio_/
       # Order by laboratory name
-      order("LOWER(laboratories.name) #{ direction }").joins(:laboratory)
+      reorder("LOWER(laboratories.name) #{ direction }").joins(:laboratory)
+    when /^vencimiento_/s
+      # Order by lot created date
+      reorder("lots.created_at #{ direction }")
     when /^creado_/s
       # Order by lot created date
-      order("lots.created_at #{ direction }")
+      reorder("lots.created_at #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")

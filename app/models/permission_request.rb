@@ -4,19 +4,21 @@ class PermissionRequest < ApplicationRecord
   enum status: { nueva: 0, terminada: 1, rechazada: 2 }
 
   belongs_to :user
+  has_one :profile, through: :user
 
   validates_presence_of :user, :establishment, :sector, :role
 
   filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
+    default_filter_params: { sorted_by: 'fecha_desc' },
     available_filters: [
       :search_name,
-      :sorted_by
+      :sorted_by,
+      :for_statuses
     ]
   )
 
   pg_search_scope :search_name,
-    :associated_against => { :user => :first_name },
+    :associated_against => { profile: [:first_name, :last_name] },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
@@ -24,15 +26,18 @@ class PermissionRequest < ApplicationRecord
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
-    when /^created_at_/s
+    when /^fecha_/s
       # Ordenamiento por fecha de creación en la BD
-      order("permission_requests.created_at #{ direction }")
-    when /^nombre_/
-      # Ordenamiento por nombre de insumo
-      order("LOWER(users.name) #{ direction }").joins(:user)
-    when /^unidad_/
+      reorder("permission_requests.created_at #{ direction }")
+    when /^sector_/
+      # Ordenamiento por nombre de sector
+      reorder("LOWER(permission_requests.sector) #{ direction }")
+    when /^establecimiento_/
+      # Ordenamiento por nombre de establecimiento
+      reorder("LOWER(permission_requests.establishment) #{ direction }")
+    when /^estados_/
       # Ordenamiento por la unidad
-      order("LOWER(unities.name) #{ direction }").joins(:unity)
+      reorder("permission_requests.status #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
@@ -43,6 +48,19 @@ class PermissionRequest < ApplicationRecord
     [
       ['Creación (desc)', 'created_at_desc'],
     ]
+  end
+
+  def self.options_for_status
+    [
+      ['Nueva', 'nueva', 'info'],
+      ['Terminada', 'terminada', 'success'],
+      ['Rechazada', 'rechazada', 'danger'],
+    ]
+  end
+
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+    where(status: statuses.values_at(*Array(values)))
   end
 
 end

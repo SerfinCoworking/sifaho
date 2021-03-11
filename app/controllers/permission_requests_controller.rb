@@ -9,16 +9,12 @@ class PermissionRequestsController < ApplicationController
       PermissionRequest.order(created_at: :desc),
       params[:filterrific],
       select_options: {
-        sorted_by: PermissionRequest.options_for_sorted_by
+        sorted_by: PermissionRequest.options_for_sorted_by,
+        for_statuses: PermissionRequest.options_for_status
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :sorted_by,
-        :search_name,
-      ],
     ) or return
-    @permission_requests = @filterrific.find.page(params[:page]).per_page(15)
+    @permission_requests = @filterrific.find.paginate(page: params[:page], per_page: 21)
   end
 
   # GET /permission_requests/1

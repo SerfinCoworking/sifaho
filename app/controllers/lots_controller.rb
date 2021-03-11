@@ -21,10 +21,12 @@ class LotsController < ApplicationController
   # GET /lots/new
   def new
     @lot = Lot.new
+    @laboratories = Laboratory.all
   end
 
   # GET /lots/1/edit
   def edit
+    @laboratories = Laboratory.all
   end
 
   # POST /lots
