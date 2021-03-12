@@ -171,7 +171,7 @@ class StocksController < ApplicationController
             lot: lot_stock.lot_code,
             laboratory: lot_stock.lot_laboratory_name,
             expiry_date: lot_stock.lot_expiry_date_string,
-            status: lot_stock.lot_status,
+            status: lot_stock.lot_status.humanize,
             quantity: lot_stock.quantity,
             reserved_quantity: lot_stock.reserved_quantity,
             total_quantity: lot_stock.total_quantity 
