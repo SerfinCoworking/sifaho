@@ -63,8 +63,12 @@ class LotStock < ApplicationRecord
     where(sector: a_sector)
   }
   
-  scope :by_stock, lambda { |stock_id| 
+  scope :by_stock, lambda { |stock_id|
     where(stock_id: stock_id)
+  }
+
+  scope :greater_than_zero, lambda {
+    where("lot_stocks.quantity > 0 AND lot_stocks.reserved_quantity > 0")
   }
 
   # Método para incrementar la cantidad del lote. 
