@@ -8,7 +8,7 @@ wb.add_worksheet(name: "Movimientos de stock") do |sheet|
   @stock_movements.each_with_index do |movement, index|
     sheet.add_row [
       index + 1,
-      movement.created_at.strftime("%d/%m/%Y"), 
+      movement.created_at.strftime("%d/%m/%Y"),
       movement.lot_stock.lot_code,
       movement.order.class.model_name.human,
       movement.order.remit_code,

@@ -4,7 +4,7 @@ class StockPolicy < ApplicationPolicy
   end
 
   def show?
-    index?
+    record.sector == user.sector && index?
   end
 
   def create?
