@@ -73,8 +73,9 @@ $(document).on('turbolinks:load', function(e){
   }
 
   // cocoon init
-  $('#receipt-cocoon-container').on('cocoon:after-insert', function(e) {
+  $('#receipt-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initExpiryDateCalendar();
+    $(inserted_item).find('input.receipt-product-code').first().focus();
   });
   
   // set expiry date calendar format
