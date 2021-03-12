@@ -28,6 +28,8 @@ $(document).on('turbolinks:load', function(e){
     e.stopPropagation();
     $(added_task).find('td input.purchase-prod-lot-stock-position').first().val(lastPosition);    
     initLotStockFields();
+    $(added_task).find('input.purchase-presentation').first().focus();
+    
   }).on('cocoon:before-remove', function(e, lotSelectionTr) {
     e.stopPropagation();
     // allow some time for the animation to complete
@@ -93,6 +95,8 @@ $(document).on('turbolinks:load', function(e){
       e.stopPropagation();
       $(added_task).find('td input.purchase-prod-lot-stock-position').first().val(lastPosition);    
       initLotStockFields();
+      $(added_task).find('input.purchase-presentation').first().focus();
+      
     }).on('cocoon:before-remove', function(e, lotSelectionTr) {
       e.stopPropagation();
       // allow some time for the animation to complete
@@ -100,6 +104,7 @@ $(document).on('turbolinks:load', function(e){
       $(lotSelectionTr).fadeOut(500);
     });
 
+    $(added_task).find('input.purchase-product-code').first().focus();
     
   });
   
