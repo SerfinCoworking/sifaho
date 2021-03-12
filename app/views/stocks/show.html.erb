@@ -79,8 +79,8 @@
           <tbody>
             <% @stock.lot_stocks.greater_than_zero.order(quantity: :desc).each do |lot_stock| %>
               <tr>
-                <th scope="row"><%= lot_stock.lot.code %></th>
-                <td><%= lot_stock.lot.laboratory_name %></td>
+                <th scope="row"><%= lot_stock.code %></th>
+                <td><%= lot_stock.laboratory_name %></td>
                 <td><%= lot_stock.lot.short_expiry_date_string %></td>
                 <td><%= lot_stock.lot.status.humanize %></td>
                 <td><%= lot_stock.movements.count %></td>
@@ -144,6 +144,10 @@
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', stocks_path, class: "btn btn-light mr-2" %>
+
+    <%= link_to stock_path(id: @stock.id,format: 'pdf'), class: 'btn btn-info mr-2', target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
 
     <%= link_to lot_stocks_path(id: @stock.id), class: 'btn btn-primary mr-2' do %>
       <%= fa_icon "barcode" %>

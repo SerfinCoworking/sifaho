@@ -22,7 +22,7 @@ class LotStock < ApplicationRecord
   
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, :code, to: :product, prefix: true
-  delegate :code, to: :lot, prefix: true
+  delegate :code, :laboratory_name, :expiry_date_string, :status, to: :lot, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'cantidad_desc' },
@@ -68,7 +68,7 @@ class LotStock < ApplicationRecord
   }
 
   scope :greater_than_zero, lambda {
-    where("lot_stocks.quantity > 0 AND lot_stocks.reserved_quantity > 0")
+    where("lot_stocks.quantity > 0 OR lot_stocks.reserved_quantity > 0")
   }
 
   # Método para incrementar la cantidad del lote. 
@@ -120,5 +120,9 @@ class LotStock < ApplicationRecord
     self.decrement(a_quantity)
     self.reserved_quantity += a_quantity
     self.save!
+  end
+
+  def total_quantity
+    self.quantity + self.reserved_quantity
   end
 end
