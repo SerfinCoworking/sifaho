@@ -67,7 +67,7 @@
       </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-        <p>No hay stock en <%= "rubro".pluralize(stock_quantity_report.areas) %> <%= @stock_quantity_report.areas.map(&:name).join(", ") %></p>
+        <p>No hay stock en <%= "rubro".pluralize(@stock_quantity_report.areas) %> <%= @stock_quantity_report.areas.map(&:name).join(", ") %></p>
       </div>
     <% end %>
   </div>
