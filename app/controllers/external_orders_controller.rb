@@ -81,9 +81,9 @@ class ExternalOrdersController < ApplicationController
   def new_applicant
     authorize ExternalOrder
     begin      
-      new_from_template(params[:template])
+      new_from_template(params[:template], 'solicitud')
     rescue
-      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @external_order = ExternalOrder.new
       @external_order.order_type = 'solicitud'
       @sectors = []
@@ -95,9 +95,9 @@ class ExternalOrdersController < ApplicationController
   def new_provider
     authorize ExternalOrder
     begin
-      new_from_template(params[:template])
+      new_from_template(params[:template], 'provision')
     rescue
-      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @external_order = ExternalOrder.new
       @external_order.order_type = 'provision'
       @sectors = []
@@ -475,9 +475,9 @@ class ExternalOrdersController < ApplicationController
       ])
     end
 
-    def new_from_template(template_id)
+    def new_from_template(template_id, order_type)
       # Buscamos el template
-      @external_order_template = ExternalOrderTemplate.find(params[:template])
+      @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
       @external_order = ExternalOrder.new
       @external_order.order_type = @external_order_template.order_type
       
