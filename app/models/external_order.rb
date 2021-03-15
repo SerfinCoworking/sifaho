@@ -63,12 +63,12 @@ class ExternalOrder < ApplicationRecord
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-    :associated_against => { applicant_sector: :name, applicant_establishment: :short_name },
+    :associated_against => { applicant_sector: :name, applicant_establishment: :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-    :associated_against => { provider_sector: :name, provider_establishment: :short_name },
+    :associated_against => { provider_sector: :name, provider_establishment: :name },
     :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
