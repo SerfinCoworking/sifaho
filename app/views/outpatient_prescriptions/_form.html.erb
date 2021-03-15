@@ -64,7 +64,7 @@
                 readonly: f.object.new_record? ? "" : true,
                 :input_html => {
                   id: 'patient-dni',
-                  data: { autocomplete_source: get_by_dni_patients_path },
+                  data: { autocomplete_source: get_by_dni_patients_path, insurance_url: api_v1_get_insurance_path },
                   value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
                 }
               %>
@@ -81,7 +81,7 @@
                 readonly: f.object.new_record? ? "" : true,
                 :input_html => {
                   id: 'patient-fullname',
-                  data: { autocomplete_source: get_by_fullname_patients_path },
+                  data: { autocomplete_source: get_by_fullname_patients_path, insurance_url: api_v1_get_insurance_path },
                   value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
                 }
               %>

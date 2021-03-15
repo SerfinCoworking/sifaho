@@ -5,7 +5,6 @@
       <%= fa_icon (@chronic_prescription.new_record? ?  "plus" : "pen")%>
       <h5 class="card-title mb-0 ml-2">
         <%= @chronic_prescription.new_record? ? 'Agregar receta crónica' : 'Editando receta crónica' %>
-        
       </h5>
     </div>
     <%= link_to :back, class: @chronic_prescription.new_record? ? 'btn text-white' : 'btn' do %>
