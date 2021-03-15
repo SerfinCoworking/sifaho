@@ -80,19 +80,29 @@ class ExternalOrdersController < ApplicationController
   # GET /external_orders/new_applicant
   def new_applicant
     authorize ExternalOrder
-    @external_order = ExternalOrder.new
-    @external_order.order_type = 'solicitud'
-    @sectors = []
-    @external_order.order_products.build
+    begin      
+      new_from_template(params[:template])
+    rescue
+      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      @external_order = ExternalOrder.new
+      @external_order.order_type = 'solicitud'
+      @sectors = []
+      @external_order.order_products.build
+    end
   end
   
   # GET /external_orders/new_provider
   def new_provider
     authorize ExternalOrder
-    @external_order = ExternalOrder.new
-    @external_order.order_type = 'provision'
-    @sectors = []
-    @external_order.order_products.build
+    begin
+      new_from_template(params[:template])
+    rescue
+      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      @external_order = ExternalOrder.new
+      @external_order.order_type = 'provision'
+      @sectors = []
+      @external_order.order_products.build
+    end
   end
 
   # GET /external_orders/1/edit
@@ -463,6 +473,29 @@ class ExternalOrdersController < ApplicationController
           :_destroy
         ]
       ])
+    end
+
+    def new_from_template(template_id)
+      # Buscamos el template
+      @external_order_template = ExternalOrderTemplate.find(params[:template])
+      @external_order = ExternalOrder.new
+      @external_order.order_type = @external_order_template.order_type
+      
+      if @external_order.provision?
+        @external_order.applicant_sector = @external_order_template.destination_sector
+      else
+        @external_order.provider_sector = @external_order_template.destination_sector
+      end
+      
+      # Seteamos los productos a la orden
+      @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
+        @external_order.order_products.build(product_id: iots.product_id)
+      end
+      # Establecemos la opciones del selector de sector
+      @sectors = Sector
+        .select(:id, :name)
+        .with_establishment_id(@external_order_template.destination_establishment_id)
+        .where.not(id: current_user.sector_id)
     end
 
     def accepting?

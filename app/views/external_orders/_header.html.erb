@@ -57,9 +57,9 @@
 
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item non-sel" id="pedido">
-      <%= link_to external_order_templates_path, class: "nav-link #{ active_class('external_order_templates') } disabled" do %>
-        <%= fa_icon "skiing" %>
-        Plantillas (Reforma)
+      <%= link_to external_order_templates_path, class: "nav-link #{ active_class('external_order_templates') }" do %>
+        <%= fa_icon "file-alt" %>
+        Plantillas
       <% end %>
     </li>
   <% end %>
