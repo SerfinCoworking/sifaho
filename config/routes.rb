@@ -373,6 +373,17 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :monthly_consumption_reports,
+      only: [:show],
+      controller: 'monthly_consumption_reports',
+      model: 'monthly_consumption_reports',
+      path: 'consumo_por_mes' do
+      collection do
+        get :new, path: :nuevo
+        post :create, path: :crear
+      end
+    end
+
     resources :patient_product_reports,
       only: [:show],
       controller: 'patient_product_reports',

@@ -28,7 +28,7 @@
                   <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
-                        |area| [area.name, area.id, 
+                        |area| [area.name, area.id,
                           data: {
                             'content': area.name+" <span class='badge badge-secondary'>"+Stock.to_sector(current_user.sector).with_area_ids(area.id).count.to_s+"</span>"
                           }
@@ -39,11 +39,10 @@
                       required: true,
                       include_blank: false,
                       class: 'selectpicker custom-select-pick large-bootstrap-select',
-                
                       "data-size"=>"10",
-                      "title"=>"Seleccionar areas",
+                      "title"=>"Seleccionar rubros",
                       "data-live-search"=>true,
-                      "data-none-results-text" => "No se encontró el rol"
+                      "data-none-results-text" => "No se encontró el rubro"
                     }
                   %>
                 </div>

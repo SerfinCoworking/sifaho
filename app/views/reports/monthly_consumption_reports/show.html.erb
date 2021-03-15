@@ -1,0 +1,90 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pills" %>
+      <h5 class="card-title mb-0 ml-2">Viendo reporte de consumo por mes / punto crítico</h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Ubicación</h5>
+        <strong><%= @monthly_consumption_report.sector.name %></strong>
+        <%= @monthly_consumption_report.sector.establishment_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Rubros</h5>
+        <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha</h5>
+        <%= Date.today.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+
+    <% if @stocks.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr class="d-flex">
+              <th class="col-1">Código</th>
+              <th class="col-6">Producto</th>
+              <th class="col-3">Rubro</th>
+              <th class="col-2 text-right">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @stocks.each do |stock|%>
+              <tr class="d-flex">
+                <td class="col-1">
+                  <%= stock.product_code %>
+                </td>
+                <td class="col-6">
+                  <%= stock.product_name %>
+                </td>
+                <td class="col-3">
+                  <%= stock.product_area_name %>
+                </td>
+                <td class="col-2 text-right"><%= stock.quantity %></td>
+              </tr>
+            <% end %>
+            <tr class="d-flex">
+              <td class="col-1"></td>
+              <td class="col-6"></td>
+              <td class="col-3 text-right">Total</td>
+              <td class="col-2 text-right"><%= @stocks.sum(&:quantity) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay stock en <%= "rubro".pluralize(@monthly_consumption_report.areas) %> <%= @monthly_consumption_report.areas.map(&:name).join(", ") %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to reports_monthly_consumption_report_path(format: 'pdf', id: @monthly_consumption_report.id), 
+      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
+    <%= link_to reports_monthly_consumption_report_path(format: 'xlsx', id: @monthly_consumption_report.id), 
+      class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "download" %> Excel
+    <% end %>
+    <%= link_to reports_monthly_consumption_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>
