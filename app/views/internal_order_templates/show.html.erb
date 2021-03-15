@@ -52,17 +52,15 @@
                 <th>Código</th>
                 <th>Producto</th>
                 <th>Unidad</th>
-                <th>Rubro</th>
                 <th></th>
               </tr>
             </thead>
-            <tbody class="internal_order_template_supplies">
-              <% @internal_order_template.internal_order_template_supplies.joins(:supply).order("name").each do |iots| %>
+            <tbody class="internal_order_product_templates">
+              <% @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots| %>
                 <tr>
-                  <td><%= iots.supply_id %></td>
-                  <td><%= iots.supply_name %></td>
-                  <td><%= iots.unity %></td>
-                  <td><%= iots.supply.supply_area.name %></td>
+                  <td><%= iots.product_id %></td>
+                  <td><%= iots.product_name %></td>
+                  <td><%= iots.unity.name %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -97,15 +95,13 @@
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).use_applicant? %>
-        <%= link_to use_applicant_internal_order_template_path(@internal_order_template), class: "btn btn-primary mr-2",
-          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
+        <%= link_to new_applicant_internal_orders_path(template: @internal_order_template), class: "btn btn-primary mr-2", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear solicitud
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).use_provider? %>
-        <%= link_to use_provider_internal_order_template_path(@internal_order_template), class: "btn btn-primary", 
-          'data-disable-with' => "<span class='glyphicon glyphicon-refresh glyphicon-spin'></span> Creando".html_safe do %>
+        <%= link_to new_provider_internal_orders_path(template: @internal_order_template), class: "btn btn-primary", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear provisión
         <% end %>

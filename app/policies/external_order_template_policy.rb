@@ -30,7 +30,7 @@ class ExternalOrderTemplatePolicy < ApplicationPolicy
   end
 
   def edit_provider?
-    update? && record.despacho?
+    update? && record.provision?
   end
 
   def destroy?
@@ -50,7 +50,7 @@ class ExternalOrderTemplatePolicy < ApplicationPolicy
   end
 
   def use_provider?
-    if record.despacho? && record.owner_sector == user.sector
+    if record.provision? && record.owner_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end

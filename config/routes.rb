@@ -212,8 +212,6 @@ Rails.application.routes.draw do
     end
     member do
       get "delete"
-      get "use_applicant"
-      get "use_provider"
       get "edit_provider"
     end
   end
@@ -253,8 +251,6 @@ Rails.application.routes.draw do
     end
     member do
       get "delete"
-      get "use_applicant"
-      get "use_provider"
       get "edit_provider"
     end
   end

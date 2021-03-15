@@ -18,7 +18,7 @@
       <div class="row">
         <div class='col-3'>
           <%= f.input :applicant_sector_id, label: 'Sector solicitante',
-            collection: @applicant_sectors.map {|s| [ s['name'], s['id'] ] },
+            collection: @sectors.map {|s| [ s['name'], s['id'] ] },
             selected: "#{ f.object.applicant_sector.present? ? f.object.applicant_sector.id : "" }",
             :input_html => {
               id: 'applicant-sector',

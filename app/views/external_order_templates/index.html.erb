@@ -43,7 +43,7 @@
                       <td><%= app_template.name %></td>
                       <td><%= app_template.destination_establishment.name %></td>
                       <td><%= app_template.destination_sector.name %></td>
-                      <td><span class="badge badge-secondary"><%= app_template.supplies.count %></span></td>
+                      <td><span class="badge badge-secondary"><%= app_template.products.count %></span></td>
                     </tr>
                   <% end %>
                 </tbody>
@@ -85,7 +85,7 @@
                       <td><%= prv_template.name %></td>
                       <td><%= prv_template.destination_establishment.name %></td>
                       <td><%= prv_template.destination_sector.name %></td>
-                      <td><span class="badge"><%= prv_template.supplies.count %></span></td>
+                      <td><span class="badge badge-secondary"><%= prv_template.products.count %></span></td>
                     </tr>
                   <% end %>
                 </tbody>

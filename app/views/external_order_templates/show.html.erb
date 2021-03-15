@@ -52,17 +52,14 @@
                 <th>Código</th>
                 <th>Producto</th>
                 <th>Unidad</th>
-                <th>Rubro</th>
-                <th></th>
               </tr>
             </thead>
             <tbody class="external_order_template_supplies">
-              <% @external_order_template.external_order_template_supplies.joins(:supply).order("name").each do |iots| %>
+              <% @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots| %>
                 <tr>
-                  <td><%= iots.supply_id %></td>
-                  <td><%= iots.supply_name %></td>
-                  <td><%= iots.unity %></td>
-                  <td><%= iots.supply.supply_area.name %></td>
+                  <td><%= iots.product_id %></td>
+                  <td><%= iots.product_name %></td>
+                  <td><%= iots.unity.name %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -97,15 +94,13 @@
         <% end %>
       <% end %>
       <% if policy(@external_order_template).use_applicant? %>
-        <%= link_to use_applicant_external_order_template_path(@external_order_template), class: "btn btn-primary",
-          'data-disable-with' => "<i class='fa fa-spinner'></i> Creando".html_safe do %>
+        <%= link_to new_applicant_external_orders_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear solicitud
         <% end %>
       <% end %>
       <% if policy(@external_order_template).use_provider? %>
-        <%= link_to use_provider_external_order_template_path(@external_order_template), class: "btn btn-primary",
-          'data-disable-with' => "<i class='fa fa-spinner'></i> Creando".html_safe do %>
+        <%= link_to new_provider_external_orders_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear despacho
         <% end %>

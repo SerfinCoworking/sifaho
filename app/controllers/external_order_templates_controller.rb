@@ -6,7 +6,7 @@ class ExternalOrderTemplatesController < ApplicationController
   def index
     authorize ExternalOrderTemplate
     @applicant_templates = ExternalOrderTemplate.where(owner_sector: current_user.sector).solicitud
-    @provider_templates = ExternalOrderTemplate.where(owner_sector: current_user.sector).despacho
+    @provider_templates = ExternalOrderTemplate.where(owner_sector: current_user.sector).provision
   end
 
   # GET /external_order_templates/1
@@ -18,31 +18,27 @@ class ExternalOrderTemplatesController < ApplicationController
   # GET /external_order_templates/new
   def new
     authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new
-    @order_type = 'solicitud'
-    @destination_sectors = current_user.establishment.sectors
+    @external_order_template = ExternalOrderTemplate.new(order_type: 'solicitud')
+    @sectors = []
   end
 
   # GET /external_order_templates/new_provider
   def new_provider
     authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new
-    @order_type = 'despacho'
-    @destination_sectors = current_user.establishment.sectors
+    @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
+    @sectors = []
   end
 
   # GET /external_order_templates/1/edit
   def edit
     authorize @external_order_template
-    @order_type = 'solicitud'
-    @destination_sectors = Sector.with_establishment_id(@external_order_template.destination_sector.establishment_id)
+    @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
-
+  
   # GET /external_order_templates/1/edit_provider
   def edit_provider
     authorize @external_order_template
-    @order_type = 'despacho'
-    @destination_sectors = Sector.with_establishment_id(@external_order_template.destination_sector.establishment_id)
+    @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
 
   # POST /external_order_templates
@@ -53,68 +49,38 @@ class ExternalOrderTemplatesController < ApplicationController
     @external_order_template.owner_sector = current_user.sector
     @external_order_template.created_by = current_user
 
+    
     respond_to do |format|
-      if @external_order_template.save
+      begin
+        @external_order_template.save!
         format.html { redirect_to @external_order_template, notice: 'La plantilla se ha creado correctamente.' }
-        format.json { render :show, status: :created, location: @external_order_template }
-      else
-        @destination_sectors = current_user.establishment.sectors
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
         format.html { render :new }
-        format.json { render json: @external_order_template.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /external_order_templates/1
   # PATCH/PUT /external_order_templates/1.json
   def update
     authorize @external_order_template
+    
     respond_to do |format|
-      if @external_order_template.update(external_order_template_params)
+      begin
+        @external_order_template.update!(external_order_template_params)
         format.html { redirect_to @external_order_template, notice: 'La plantilla se ha editado correctamente.' }
-        format.json { render :show, status: :ok, location: @external_order_template }
-      else
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
         format.html { render :edit }
-        format.json { render json: @external_order_template.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # GET /external_order_templates/:id/use_applicant(.:format) 
-  def use_applicant
-    authorize @external_order_template
-    @external_order = ExternalOrder.new
-    @external_order.provider_sector = @external_order_template.destination_sector
-    @external_order_template.external_order_template_supplies.joins(:supply).order("name").each do |iots|
-      @external_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
-    end
-    @order_type = 'solicitud_abastecimiento'
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(@external_order_template.destination_establishment_id)
-      .where.not(id: current_user.sector_id)
-    respond_to do |format|
-      flash[:notice] = "La plantilla se ha utilizado correctamente."
-      format.html { render "external_orders/new_applicant" }
-    end
-  end
-
-  # GET /external_order_templates/:id/use_provider(.:format) 
-  def use_provider
-    authorize @external_order_template
-    @external_order = ExternalOrder.new
-    @external_order.applicant_sector = @external_order_template.destination_sector
-    @external_order_template.external_order_template_supplies.joins(:supply).order("name").each do |iots|
-      @external_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
-    end
-    @order_type = 'despacho'
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(@external_order_template.destination_establishment_id)
-      .where.not(id: current_user.sector_id)
-    respond_to do |format|
-      flash[:notice] = "La plantilla se ha utilizado correctamente."
-      format.html { render "external_orders/new" }
     end
   end
 
@@ -145,8 +111,19 @@ class ExternalOrderTemplatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def external_order_template_params
-      params.require(:external_order_template).permit(:name, :owner_sector_id, :destination_sector_id, :destination_establishment_id, :observation, :order_type,
-        external_order_template_supplies_attributes: [ :id, :supply_id, :_destroy ]
+      params.require(:external_order_template).permit(
+        :name,
+        :owner_sector_id,
+        :destination_sector_id,
+        :destination_establishment_id,
+        :observation, 
+        :order_type,
+        external_order_product_templates_attributes:
+        [ 
+          :id,
+          :product_id,
+          :_destroy 
+        ]
       )
     end
 end

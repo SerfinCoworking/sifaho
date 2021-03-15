@@ -18,31 +18,27 @@ class InternalOrderTemplatesController < ApplicationController
   # GET /internal_order_templates/new
   def new
     authorize InternalOrderTemplate
-    @internal_order_template = InternalOrderTemplate.new
-    @order_type = 'solicitud'
-    @destination_sectors = current_user.establishment.sectors
+    @internal_order_template = InternalOrderTemplate.new(order_type: 'solicitud')
+    @sectors = current_user.establishment.sectors
   end
 
   # GET /internal_order_templates/new_provider
   def new_provider
     authorize InternalOrderTemplate
-    @internal_order_template = InternalOrderTemplate.new
-    @order_type = 'provision'
-    @destination_sectors = current_user.establishment.sectors
+    @internal_order_template = InternalOrderTemplate.new(order_type: 'provision')
+    @sectors = current_user.establishment.sectors
   end
 
   # GET /internal_order_templates/1/edit
   def edit
     authorize @internal_order_template
-    @order_type = 'solicitud'
-    @destination_sectors = current_user.establishment.sectors
+    @sectors = current_user.establishment.sectors
   end
 
   # GET /internal_order_templates/1/edit_provider
   def edit_provider
     authorize @internal_order_template
-    @order_type = 'provision'
-    @destination_sectors = current_user.establishment.sectors
+    @sectors = current_user.establishment.sectors
   end
 
   # POST /internal_order_templates
@@ -54,13 +50,15 @@ class InternalOrderTemplatesController < ApplicationController
     @internal_order_template.created_by = current_user
 
     respond_to do |format|
-      if @internal_order_template.save
+      @internal_order_template.save!
+      begin
         format.html { redirect_to @internal_order_template, notice: 'La plantilla se ha creado correctamente.' }
-        format.json { render :show, status: :created, location: @internal_order_template }
-      else
-        @destination_sectors = current_user.establishment.sectors
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @sectors = current_user.establishment.sectors
         format.html { render :new }
-        format.json { render json: @internal_order_template.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -77,46 +75,6 @@ class InternalOrderTemplatesController < ApplicationController
         format.html { render :edit }
         format.json { render json: @internal_order_template.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # GET /internal_order_templates/:id/use_applicant(.:format) 
-  def use_applicant
-    authorize @internal_order_template
-    @internal_order = InternalOrder.new
-    @internal_order.provider_sector = @internal_order_template.destination_sector
-    @internal_order_template.internal_order_template_supplies.joins(:supply).order("name").each do |iots|
-      @internal_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
-    end
-    @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
-    @order_type = 'solicitud'
-    @provider_sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id).as_json
-    respond_to do |format|
-      flash[:notice] = "La plantilla se ha utilizado correctamente."
-      format.html { render "internal_orders/new_applicant" }
-    end
-  end
-
-  # GET /internal_order_templates/:id/use_provider(.:format) 
-  def use_provider
-    authorize @internal_order_template
-    @internal_order = InternalOrder.new
-    @internal_order.applicant_sector = @internal_order_template.destination_sector
-    @internal_order_template.internal_order_template_supplies.joins(:supply).order("name").each do |iots|
-      @internal_order.quantity_ord_supply_lots.build(supply_id: iots.supply_id)
-    end
-    @internal_order.quantity_ord_supply_lots.joins(:supply).order("name")
-    @order_type = 'provision'
-    @applicant_sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id).as_json
-    respond_to do |format|
-      flash[:notice] = "La plantilla se ha utilizado correctamente."
-      format.html { render "internal_orders/new_provider" }
     end
   end
 
@@ -147,8 +105,16 @@ class InternalOrderTemplatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_template_params
-      params.require(:internal_order_template).permit(:name, :owner_sector_id, :destination_sector_id, :observation, :order_type,
-        internal_order_template_supplies_attributes: [ :id, :supply_id, :_destroy ]
+      params.require(:internal_order_template).permit(:name,
+        :owner_sector_id,
+        :destination_sector_id,
+        :observation,
+        :order_type,
+        internal_order_product_templates_attributes: [ 
+          :id,
+          :product_id,
+          :_destroy 
+        ]
       )
     end
 end
