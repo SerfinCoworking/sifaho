@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_115421) do
+ActiveRecord::Schema.define(version: 2021_03_15_155521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -492,6 +492,15 @@ ActiveRecord::Schema.define(version: 2021_03_15_115421) do
     t.index ["product_id"], name: "index_internal_order_product_reports_on_product_id"
     t.index ["sector_id"], name: "index_internal_order_product_reports_on_sector_id"
     t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
+  end
+
+  create_table "internal_order_product_templates", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "internal_order_template_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_template_id"], name: "unique_int_ord_prod_tem_on_int_ord_tem"
+    t.index ["product_id"], name: "index_internal_order_product_templates_on_product_id"
   end
 
   create_table "internal_order_products", force: :cascade do |t|

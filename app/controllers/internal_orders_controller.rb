@@ -71,31 +71,41 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/new_deliver
   def new_provider
     authorize InternalOrder
-    @internal_order = InternalOrder.new
-    @internal_order.order_type = 'provision'
-    @applicant_sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id).as_json
-    @internal_order.order_products.build
+    begin      
+      new_from_template(params[:template])
+    rescue
+      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      @internal_order = InternalOrder.new
+      @internal_order.order_type = 'provision'
+      @sectors = Sector
+        .select(:id, :name)
+        .with_establishment_id(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id).as_json
+      @internal_order.order_products.build
+    end   
   end
 
   # GET /internal_orders/new_applicant
   def new_applicant
     authorize InternalOrder
-    @internal_order = InternalOrder.new
-    @internal_order.order_type = 'solicitud'
-    @provider_sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id).as_json
-    @internal_order.order_products.build
+    begin      
+      new_from_template(params[:template])
+    rescue
+      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      @internal_order = InternalOrder.new
+      @internal_order.order_type = 'solicitud'
+      @sectors = Sector
+        .select(:id, :name)
+        .with_establishment_id(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id).as_json
+      @internal_order.order_products.build
+    end   
   end
 
   # GET /internal_orders/1/edit
   def edit_provider
     authorize @internal_order
-    @applicant_sectors = Sector
+    @sectors = Sector
     .select(:id, :name)
     .with_establishment_id(current_user.sector.establishment_id)
     .where.not(id: current_user.sector_id).as_json
@@ -104,7 +114,7 @@ class InternalOrdersController < ApplicationController
   # GET /external_orders/1/edit_receipt
   def edit_applicant
     authorize @internal_order
-    @provider_sectors = Sector
+    @sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
       .where.not(id: current_user.sector_id).as_json
@@ -140,7 +150,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @provider_sectors = Sector
+        @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
@@ -174,7 +184,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure  
-        @applicant_sectors = Sector
+        @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
@@ -210,7 +220,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @provider_sectors = Sector
+        @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
@@ -244,7 +254,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @applicant_sectors = Sector
+        @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
@@ -292,7 +302,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @applicant_sectors = Sector
+        @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
@@ -477,6 +487,31 @@ class InternalOrdersController < ApplicationController
         ]
       ]
     )
+  end
+
+  def new_from_template(template_id)
+    # Buscamos el template
+    @internal_order_template = InternalOrderTemplate.find(template_id)
+    @internal_order = InternalOrder.new
+    @internal_order.order_type = @internal_order_template.order_type
+    
+    if @internal_order.provision?
+      @internal_order.applicant_sector = @internal_order_template.destination_sector
+    else
+      @internal_order.provider_sector = @internal_order_template.destination_sector
+    end
+    
+    # Seteamos los productos a la orden
+    @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots|
+      @internal_order.order_products.build(product_id: iots.product_id)
+    end
+
+    # Establecemos la opciones del selector de sector
+    @sectors = Sector
+    .select(:id, :name)
+    .with_establishment_id(@internal_order_template.destination_sector.establishment.id)
+    .where.not(id: current_user.sector_id)
+    
   end
 
   # Se verifica si el value del submit del form es para enviar

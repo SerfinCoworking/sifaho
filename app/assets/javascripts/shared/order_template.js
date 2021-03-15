@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(_PAGE.controller === 'external_order_templates' && (['new', 'edit', 'create', 'update', 'new_provider', 'edit_provider'].includes(_PAGE.action))) ) return false;
+  if(!(['external_order_templates', 'internal_order_templates'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'new_provider', 'edit_provider'].includes(_PAGE.action))) ) return false;
   // Función para autocompletar y buscar el insumo por código
   initEvents();
   
@@ -56,7 +56,7 @@ $(document).on('turbolinks:load', function(e){
   }
 
   // cocoon init
-  $('#external_order_product_templates').on('cocoon:after-insert', function(e, inserted_item) {
+  $('#external_order_product_templates, #internal_order_product_templates').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
     $(inserted_item).find('input.product-code').first().focus();
   });
