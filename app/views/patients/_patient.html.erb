@@ -15,24 +15,22 @@
     <td><%= patient.outpatient_prescriptions.count %></td>
     <td><%= patient.chronic_prescriptions.count %></td>
     <td class="text-left actions-col">
-      <% if policy(patient).show? %>
-        <%= link_to patient_path(patient), class: 'btn btn-secondary btn-sm',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "eye" %>
-        <% end %>
-      <% end %>
-      <% if policy(patient).edit? %>
-        <%= link_to edit_patient_path(patient), class: 'btn btn-warning btn-sm',
-              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "edit" %>
-        <% end %>
-      <% end %>
-      <% if policy(patient).destroy? %>
-        <%= link_to delete_patient_path(patient), remote: true,
-              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "trash" %>
-        <% end %>
-      <% end %>
+      <%= render(
+        partial: 'shared/action_buttons',
+        locals:{ 
+            object: patient, 
+            show: {visible: true},
+            edit: {visible: true},
+            destroy: {
+              visible: true, 
+              title: "Eliminar paciente",
+              body: "Esta seguro que desea eliminar al paciente #{ patient.fullname }?",
+              path: "/pacientes/#{patient.id}"
+            }
+        }
+      ) 
+      %>
+
     </td>
   </div>
 </tr>
