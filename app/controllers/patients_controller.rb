@@ -109,7 +109,24 @@ class PatientsController < ApplicationController
 
   def get_by_dni
     @patients = Patient.search_dni(params[:term])
-    render json: @patients.map{ |pat| { id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, fullname: pat.fullname }  }
+    if @patients.present?
+      render json: @patients.map{ |pat| { label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, fullname: pat.fullname}  }
+    else
+      dni = params[:term]
+      token = ENV['ANDES_TOKEN']
+      url = ENV['ANDES_MPI_URL']
+      andes_patients = RestClient::Request.execute(method: :get, url: "#{url}/",
+        timeout: 30, headers: {
+          "Authorization" => "JWT #{token}",
+          params: {'documento': dni}
+        }
+      )
+      if JSON.parse(andes_patients).count > 0
+        render json: JSON.parse(andes_patients).map{ |pat| { create: true, label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], dni: pat['documento'], fullname: pat['apellido']+" "+pat['nombre'], data: pat  }  }
+      else
+        render json: [0].map{ |pat| { create: true, dni: params[:term], label: "Agregar paciente" }}
+      end
+    end
   end
 
   def get_by_fullname
