@@ -1,12 +1,12 @@
 // Style modal
-$('#dialog .modal-content').addClass('panel-danger');
+$('#dialog .modal-header').addClass('bg-danger text-white');
 
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Eliminar la plantilla <%= @external_order_template.name %>");
+$('#dialog .modal-title').html("<i class=' glyphicon glyphicon-trash'></i>  Eliminar la plantilla <%= @external_order_template.name %>");
 
 // Render the edit form
 $('#dialog .modal-body').html(
-  'Desea eliminar esta plantilla de <%= @external_order_template.external_order_template_supplies.count %> insumos?');
+  'Desea eliminar esta plantilla de <%= @external_order_template.products.count %> productos?');
 
 // Add form button
 $('#dialog .modal-footer').html(

@@ -6,7 +6,7 @@ $('#dialog .modal-title').html("<i class=' glyphicon glyphicon-trash'></i>  Elim
 
 // Render the edit form
 $('#dialog .modal-body').html(
-  'Desea eliminar esta plantilla de <%= @internal_order_template.internal_order_template_supplies.count %> insumos?');
+  'Desea eliminar esta plantilla de <%= @internal_order_template.products.count %> productos?');
 
 // Add form button
 $('#dialog .modal-footer').html(
