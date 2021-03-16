@@ -52,19 +52,8 @@
                 </tr>
               </thead>
               <tbody id="internal_order_product_templates" class="internal_order_product_templates">
-                <% if ["edit", "edit_provider"].include?(params[:action]) %>
-                  <%= f.simple_fields_for :internal_order_product_templates, @internal_order_template.internal_order_product_templates.joins(:product).order("name") do |form_quantity| %>
-                    <%= render "internal_order_product_template_fields", f: form_quantity %>
-                  <% end %>
-                <% elsif params[:action] == "create" %>
-                  <%= f.simple_fields_for :internal_order_product_templates do |form_quantity| %>
-                    <%= render "internal_order_product_template_fields", f: form_quantity %>
-                  <% end %>
-                <% else %>
-                  <% @internal_order_template.internal_order_product_templates.build %>
-                  <%= f.simple_fields_for :internal_order_product_templates do |form_quantity| %>
-                    <%= render "internal_order_product_template_fields", f: form_quantity %>
-                  <% end %>
+                <%= f.simple_fields_for :internal_order_product_templates do |form_quantity| %>
+                  <%= render "internal_order_product_template_fields", f: form_quantity %>
                 <% end %>
               </tbody>
             </table>

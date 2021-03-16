@@ -20,6 +20,7 @@ class InternalOrderTemplatesController < ApplicationController
     authorize InternalOrderTemplate
     @internal_order_template = InternalOrderTemplate.new(order_type: 'solicitud')
     @sectors = current_user.establishment.sectors
+    @internal_order_template.internal_order_product_templates.build
   end
 
   # GET /internal_order_templates/new_provider
@@ -27,6 +28,7 @@ class InternalOrderTemplatesController < ApplicationController
     authorize InternalOrderTemplate
     @internal_order_template = InternalOrderTemplate.new(order_type: 'provision')
     @sectors = current_user.establishment.sectors
+    @internal_order_template.internal_order_product_templates.build
   end
 
   # GET /internal_order_templates/1/edit
@@ -72,6 +74,7 @@ class InternalOrderTemplatesController < ApplicationController
         format.html { redirect_to @internal_order_template, notice: 'La plantilla se ha editado correctamente.' }
         format.json { render :show, status: :ok, location: @internal_order_template }
       else
+        @sectors = current_user.establishment.sectors
         format.html { render :edit }
         format.json { render json: @internal_order_template.errors, status: :unprocessable_entity }
       end
@@ -113,7 +116,7 @@ class InternalOrderTemplatesController < ApplicationController
         internal_order_product_templates_attributes: [ 
           :id,
           :product_id,
-          :_destroy 
+          :_destroy
         ]
       )
     end

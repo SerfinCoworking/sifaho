@@ -18,5 +18,5 @@ class ExternalOrderTemplate < ApplicationRecord
 
   accepts_nested_attributes_for :external_order_product_templates,
     reject_if: ->(eopt){ eopt['product_id'].blank? },
-    :allow_destroy => true
+    allow_destroy: true
 end

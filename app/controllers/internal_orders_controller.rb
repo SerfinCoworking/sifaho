@@ -72,9 +72,9 @@ class InternalOrdersController < ApplicationController
   def new_provider
     authorize InternalOrder
     begin      
-      new_from_template(params[:template])
+      new_from_template(params[:template], 'provision')
     rescue
-      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'provision'
       @sectors = Sector
@@ -89,9 +89,9 @@ class InternalOrdersController < ApplicationController
   def new_applicant
     authorize InternalOrder
     begin      
-      new_from_template(params[:template])
+      new_from_template(params[:template], 'solicitud')
     rescue
-      flash[:error] = 'No se encontró la plantilla' if params[:template].present?
+      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'solicitud'
       @sectors = Sector
@@ -489,9 +489,9 @@ class InternalOrdersController < ApplicationController
     )
   end
 
-  def new_from_template(template_id)
+  def new_from_template(template_id, order_type)
     # Buscamos el template
-    @internal_order_template = InternalOrderTemplate.find(template_id)
+    @external_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
     @internal_order = InternalOrder.new
     @internal_order.order_type = @internal_order_template.order_type
     

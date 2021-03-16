@@ -19,6 +19,7 @@ class ExternalOrderTemplatesController < ApplicationController
   def new
     authorize ExternalOrderTemplate
     @external_order_template = ExternalOrderTemplate.new(order_type: 'solicitud')
+    @external_order_template.external_order_product_templates.build
     @sectors = []
   end
 
@@ -26,6 +27,7 @@ class ExternalOrderTemplatesController < ApplicationController
   def new_provider
     authorize ExternalOrderTemplate
     @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
+    @external_order_template.external_order_product_templates.build
     @sectors = []
   end
 
