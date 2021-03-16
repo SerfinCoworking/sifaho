@@ -21,11 +21,11 @@
       </div>
       <div class="col-md-3">
         <% if @external_order_template.solicitud? %>
-          <h5>Sector proveedor</h5>
+          <h5>Efector proveedor</h5>
         <% else %>
-          <h5>Sector solicitante</h5>
+          <h5>Efector solicitante</h5>
         <% end %>
-        <%= @external_order_template.destination_sector.name %>
+        <%= @external_order_template.destination_sector.sector_and_establishment %>
       </div>
       <% if @external_order_template.observation.present? %>
         <div class="col-md-3">
@@ -57,7 +57,7 @@
             <tbody class="external_order_template_supplies">
               <% @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots| %>
                 <tr>
-                  <td><%= iots.product_id %></td>
+                  <td><%= iots.product_code %></td>
                   <td><%= iots.product_name %></td>
                   <td><%= iots.unity.name %></td>
                 </tr>

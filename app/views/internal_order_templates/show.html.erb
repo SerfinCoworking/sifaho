@@ -58,7 +58,7 @@
             <tbody class="internal_order_product_templates">
               <% @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots| %>
                 <tr>
-                  <td><%= iots.product_id %></td>
+                  <td><%= iots.product_code %></td>
                   <td><%= iots.product_name %></td>
                   <td><%= iots.unity.name %></td>
                 </tr>

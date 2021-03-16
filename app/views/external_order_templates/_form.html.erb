@@ -71,19 +71,8 @@
                 </tr>
               </thead>
               <tbody id="external_order_product_templates" class="external_order_product_templates">
-                <% if ['edit', 'edit_provider'].include?(params[:action]) %>
-                  <%= f.simple_fields_for :external_order_product_templates, @external_order_template.external_order_product_templates.joins(:product).order("name") do |form_quantity| %>
-                    <%= render "external_order_product_template_fields", f: form_quantity %>
-                  <% end %>
-                <% elsif params[:action] == "create" %>
-                  <%= f.simple_fields_for :external_order_product_templates do |form_quantity| %>
-                    <%= render "external_order_product_template_fields", f: form_quantity %>
-                  <% end %>
-                <% else %>
-                  <% @external_order_template.external_order_product_templates.build %>
-                  <%= f.simple_fields_for :external_order_product_templates do |form_quantity| %>
-                    <%= render "external_order_product_template_fields", f: form_quantity %>
-                  <% end %>
+                <%= f.simple_fields_for :external_order_product_templates do |form_quantity| %>
+                  <%= render "external_order_product_template_fields", f: form_quantity %>
                 <% end %>
               </tbody>
             </table>

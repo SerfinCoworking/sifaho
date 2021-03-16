@@ -622,6 +622,29 @@ ActiveRecord::Schema.define(version: 2021_03_15_155521) do
     t.index ["product_id"], name: "index_lots_on_product_id"
   end
 
+  create_table "monthly_consumption_areas", force: :cascade do |t|
+    t.bigint "monthly_consumption_report_id"
+    t.bigint "area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_monthly_consumption_areas_on_area_id"
+    t.index ["monthly_consumption_report_id"], name: "monthly_consumption_area"
+  end
+
+  create_table "monthly_consumption_reports", force: :cascade do |t|
+    t.integer "report_type", default: 0
+    t.bigint "product_id"
+    t.bigint "created_by_id"
+    t.bigint "sector_id"
+    t.datetime "since_date"
+    t.datetime "to_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_monthly_consumption_reports_on_created_by_id"
+    t.index ["product_id"], name: "index_monthly_consumption_reports_on_product_id"
+    t.index ["sector_id"], name: "index_monthly_consumption_reports_on_sector_id"
+  end
+
   create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "actor_id"
