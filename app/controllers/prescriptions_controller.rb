@@ -33,9 +33,9 @@ class PrescriptionsController < ApplicationController
 
   # GET /prescriptions/new
   def new
-    authorize Prescription
-    @prescription = Prescription.new
-    @prescription.quantity_ord_supply_lots.build
+    # authorize Prescription
+    # @prescription = Prescription.new
+    # @prescription.quantity_ord_supply_lots.build
   end
 
 

@@ -1,4 +1,143 @@
 <%= render 'header' %>
 
-<%= render 'form', prescription: @prescription %>
+<div class="row">
+
+  <!-- paciente -->
+  <div class="col-4 pr-0">
+
+    <div class="card">
+      <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between p-2">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "signature" %> 
+          <h5 class="card-title mb-0 ml-2">Paciente</h5>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="form-group row">
+          <label for="patient-dni" class="col-3 col-form-label">DNI:</label>
+          <div class="col-9">
+            <div class="custom-input-group">
+              <div class="form-group string required chronic_prescription_patient">
+                <input class="form-control string required ui-autocomplete-input" id="patient-dni" data-autocomplete-source="<%= get_by_dni_patients_path %>" data-insurance-url="<%= api_v1_get_insurance_path %>" value="" required="" aria-required="true" placeholder="DNI" type="text" autocomplete="off">
+              </div>
+              <div class="with-loading">
+                <%= fa_icon 'spinner', class: "fa-spin"%>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group row">
+          <label for="patient-lastname" class="col-3 col-form-label">Apellido:</label>
+              
+          <div class="col-9">
+            <div class="form-group string required">
+              <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-lastname" required aria-required="true" placeholder="Apellido" type="text" autocomplete="off">
+            </div>
+          </div>
+          
+        </div>
+        
+        <div class="form-group row">
+          <label for="patient-firstname" class="col-3 col-form-label">Nombre:</label>
+              
+          <div class="col-9">
+            <div class="form-group string required">
+              <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-firstname" required aria-required="true" placeholder="Nombre" type="text" autocomplete="off">
+            </div>
+          </div>
+                      
+        </div>
+
+        <div class="form-group row">
+          <label for="patient-sex" class="col-3 col-form-label">Sexo:</label>
+              
+          <div class="col-9">
+            <div class="form-group string required chronic_prescription_patient">
+              <select name="sex" id="patient-sex" class="selectpicker custom-select-pick patient-form-selector">
+                <% Patient.sexes.each do |sex| %>
+                <option value="<%= sex[0] %>"><%= sex[0] %></option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-end">
+
+        <button class="btn btn-success text-nowrap" id="new-chronic" style="display: none;">Nueva crónica</button>
+        <button class="btn btn-success text-nowrap ml-1" id="new-outpatient" style="display: none;">Nueva ambulatoria</button>
+        <button id="patient-submit" class="btn btn-success text-nowrap ml-1" disabled>Guardar paciente</button>
+      </div>
+    </div>
+
+
+
+  </div> <!-- ./ col-2 de recetas -->
+  
+  <div class="col-8">
+
+    <div class="card">
+      <div class="card-header bg-secondary text-white d-flex align-items-center justify-content-between p-2">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "signature" %> 
+          <h5 class="card-title mb-0 ml-2">Obra social</h5>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="col-6">
+            <div id="pat-os-body"></div>
+          </div>
+      </div>
+    </div>
+          
+
+
+  </div><!-- ./col-8 de obra social / ultima receta dispensada / dispensada parcial-->
+  
+  <div class="col-12 mt-3">
+     <div class="card">
+      <div class="card-header bg-secondary text-white d-flex align-items-center justify-content-between p-2">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "signature" %> 
+          <h5 class="card-title mb-0 ml-2">Recetas</h5>
+        </div>
+      </div>
+      
+      <div class="card-body">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#chronic-prescriptions" role="tab" aria-controls="home" aria-selected="true">Recetas crónicas</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#outpatient-prescriptions" role="tab" aria-controls="profile" aria-selected="false">Recetas ambulatorias</a>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="chronic-prescriptions" role="tabpanel" aria-labelledby="home-tab">
+            Lorem ipsum crónica
+          </div>
+          <div class="tab-pane fade" id="outpatient-prescriptions" role="tabpanel" aria-labelledby="profile-tab">
+            Lorem ipsum ambulatorias
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div> <!-- ./col-12 recetas cronicas / ambulatorias--->
+</div>
+
+
+
+
+
+
+
+
+
+
  

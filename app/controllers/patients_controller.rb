@@ -110,7 +110,7 @@ class PatientsController < ApplicationController
   def get_by_dni
     @patients = Patient.search_dni(params[:term])
     if @patients.present?
-      render json: @patients.map{ |pat| { label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, fullname: pat.fullname}  }
+      render json: @patients.map{ |pat| { label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, lastname: pat.last_name, firstname: pat.first_name, fullname: pat.fullname, sex: pat.sex}  }
     else
       dni = params[:term]
       token = ENV['ANDES_TOKEN']
@@ -122,7 +122,7 @@ class PatientsController < ApplicationController
         }
       )
       if JSON.parse(andes_patients).count > 0
-        render json: JSON.parse(andes_patients).map{ |pat| { create: true, label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], dni: pat['documento'], fullname: pat['apellido']+" "+pat['nombre'], data: pat  }  }
+        render json: JSON.parse(andes_patients).map{ |pat| { create: true, label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], dni: pat['documento'], lastname: pat['apellido'], firstname: pat['nombre'], fullname: pat['apellido']+" "+pat['nombre'], sex: pat["genero"], data: pat  }  }
       else
         render json: [0].map{ |pat| { create: true, dni: params[:term], label: "Agregar paciente" }}
       end
