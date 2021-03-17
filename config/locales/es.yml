@@ -152,6 +152,7 @@ es:
         product_id: "Producto"
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
+        report_type: "Tipo de reporte"
 
   date:
     abbr_day_names:

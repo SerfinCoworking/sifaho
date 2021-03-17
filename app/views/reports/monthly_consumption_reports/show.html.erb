@@ -7,7 +7,10 @@
   <div class="card-header bg-secondary text-white d-flex justify-content-between">
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon "pills" %>
-      <h5 class="card-title mb-0 ml-2">Viendo reporte de consumo por mes / punto crítico</h5>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo reporte de consumo por mes / punto crítico
+        por <%= @monthly_consumption_report.report_type %>
+      </h5>
     </div>
     <%= link_to :back, class: "btn text-white" do %>
       <%= fa_icon "times" %>
@@ -21,8 +24,13 @@
         <%= @monthly_consumption_report.sector.establishment_name %>
       </div>
       <div class="p-2 flex-fill">
-        <h5>Rubros</h5>
-        <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
+        <% if @monthly_consumption_report.rubro? %>
+          <h5>Rubros</h5>
+          <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
+        <% else %>
+          <h5>Producto</h5>
+          <%= @monthly_consumption_report.product_code %> | <%= @monthly_consumption_report.product_name %>
+        <% end %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Fecha</h5>
@@ -30,7 +38,7 @@
       </div>
     </div>
 
-    <% if @stocks.present? %>
+    <% if @movements.present? %>
       <div class="card">
         <table class="table table-hover table-sm">
           <thead>
@@ -42,32 +50,37 @@
             </tr>
           </thead>
           <tbody>
-            <% @stocks.each do |stock|%>
+            <% @movements.each do |movement|%>
               <tr class="d-flex">
                 <td class="col-1">
-                  <%= stock.product_code %>
+                  <%= movement.product.code %>
                 </td>
                 <td class="col-6">
-                  <%= stock.product_name %>
+                  <%= movement.product.name %>
                 </td>
                 <td class="col-3">
-                  <%= stock.product_area_name %>
+                  <%= movement.product.area_name %>
                 </td>
-                <td class="col-2 text-right"><%= stock.quantity %></td>
+                <td class="col-2 text-right"><%= movement.quantity %></td>
               </tr>
             <% end %>
             <tr class="d-flex">
               <td class="col-1"></td>
               <td class="col-6"></td>
               <td class="col-3 text-right">Total</td>
-              <td class="col-2 text-right"><%= @stocks.sum(&:quantity) %></td>
+              <td class="col-2 text-right"><%= @movements.sum(&:quantity) %></td>
             </tr>
           </tbody>
         </table>
       </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-        <p>No hay stock en <%= "rubro".pluralize(@monthly_consumption_report.areas) %> <%= @monthly_consumption_report.areas.map(&:name).join(", ") %></p>
+        <p>No hay movimientos
+        <% if @monthly_consumption_report.rubro? %>
+          en <%= "rubro".pluralize(@monthly_consumption_report.areas) %> <%= @monthly_consumption_report.areas.map(&:name).join(", ") %></p>
+        <% else %>
+          de este producto.
+        <% end %>
       </div>
     <% end %>
   </div>

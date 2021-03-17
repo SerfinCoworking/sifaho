@@ -4,10 +4,21 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
   def show
     authorize @monthly_consumption_report
 
-    @stocks = Stock
-      .with_area_ids(@monthly_consumption_report.areas.ids)
-      .reorder("products.name ASC")
-      .joins(:product)
+    if @monthly_consumption_report.rubro?
+      @stocks = Stock
+        .with_area_ids(@monthly_consumption_report.areas.ids)
+        .reorder("products.name ASC")
+        .joins(:product)
+    else
+      stock = Stock.find_by(sector: current_user.sector, product_id: @monthly_consumption_report.product_id)
+      if stock.present?
+        @movements = stock
+          .movements
+          .since_date(@monthly_consumption_report.since_date.strftime("%d/%m/%Y"))
+          .to_date(@monthly_consumption_report.to_date.strftime("%d/%m/%Y"))
+          .order(created_at: :desc)
+      end
+    end
       
     respond_to do |format|
       format.html
@@ -39,7 +50,7 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
         format.html { redirect_to reports_monthly_consumption_report_path(@monthly_consumption_report), notice: 'El reporte se ha creado correctamente.' }
       else
         @areas = Area.where(id: current_user.sector.stocks.joins(product: :area).pluck("areas.id").uniq)
-        @last_reports = MonthlyConsumptionReport.limit(10)
+        @last_reports = MonthlyConsumptionReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
         format.html { render :new }
       end
     end

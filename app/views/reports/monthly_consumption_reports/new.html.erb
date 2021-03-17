@@ -31,14 +31,15 @@
                     :input_html => {
                       title: 'Seleccionar',
                       required: true,
-                      class: 'selectpicker supply custom-select-pick',
+                      id: "report-consumption-select",
+                      class: "selectpicker custom-select-pick",
                       "data-width"=>"100%",
                       "data-size"=>"10"
                     }
                   %>
                 </div>
                 <!-- Rubros -->
-                <div class="custom-input-group col-12">
+                <div class="custom-input-group col-12 <%= f.object.rubro? ? 'show' : ''%> fade report-area">
                   <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
@@ -60,41 +61,45 @@
                     }
                   %>
                 </div>
-                <div class="custom-input-group col-3">
-                  <%= f.input :product, as: :string,
-                    placeholder: 'Código',
-                    label: 'Código',
-                    required: true,
-                    :input_html => {
-                      class: "report-product-code select-change input-sm",
-                      data: { autocomplete_source: search_by_code_products_path },
-                      size: 4,
-                      autocomplete: 'off',
-                      value: "#{if f.object.product.present?; f.object.product_code; end }"
-                    }
-                  %>
-                  <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
-                  </div>
-                </div>
+                <div class="col-12 <%= f.object.producto? ? 'show' : ''%> fade report-product">
+                  <div class="row">
+                    <div class="custom-input-group col-3">
+                      <%= f.input :product, as: :string,
+                        placeholder: 'Código',
+                        label: 'Código',
+                        required: true,
+                        :input_html => {
+                          class: "report-product-code select-change input-sm",
+                          data: { autocomplete_source: search_by_code_products_path },
+                          size: 4,
+                          autocomplete: 'off',
+                          value: "#{if f.object.product.present?; f.object.product_code; end }"
+                        }
+                      %>
+                      <div class="with-loading">
+                        <%= fa_icon 'spinner', class: "fa-spin"%>
+                      </div>
+                    </div>
 
-                <!-- Nombre de producto  -->
-                <div class="custom-input-group col-9">
-                  <%= f.input :product, as: :string,
-                    label: 'Producto',
-                    placeholder: 'Nombre',
-                    required: true,
-                    :input_html => {
-                      class: "report-product-name select-change input-sm",
-                      data: { autocomplete_source: search_by_name_products_path },
-                      size: 35,
-                      value: "#{if f.object.product.present?; f.object.product_name; end }"
-                    }
-                  %>
-                  <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                    <!-- Nombre de producto  -->
+                    <div class="custom-input-group col-9">
+                      <%= f.input :product, as: :string,
+                        label: 'Producto',
+                        placeholder: 'Nombre',
+                        required: true,
+                        :input_html => {
+                          class: "report-product-name select-change input-sm",
+                          data: { autocomplete_source: search_by_name_products_path },
+                          size: 35,
+                          value: "#{if f.object.product.present?; f.object.product_name; end }"
+                        }
+                      %>
+                      <div class="with-loading">
+                        <%= fa_icon 'spinner', class: "fa-spin"%>
+                      </div>
+                      <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
+                    </div>
                   </div>
-                  <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
                 </div>
                 <div class="col-6">
                   <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
