@@ -147,6 +147,12 @@ es:
         product: "Producto"
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
+      monthly_consumption_report:
+        product: "Producto"
+        product_id: "Producto"
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
+        report_type: "Tipo de reporte"
 
   date:
     abbr_day_names:
@@ -182,6 +188,7 @@ es:
       default: "%-d/%-m/%Y"
       long: "%-d de %B de %Y"
       short: "%-d de %b"
+      month_and_year: "%B %Y"
     month_names:
     -
     - Enero

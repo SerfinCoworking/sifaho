@@ -1,7 +1,6 @@
 $(document).on('turbolinks:load', function() {
   $(document).on('change', '#report-select', function(e){
     var showInput = $('option:selected', this).attr("data-show"); 
-    console.log("cambió");
     console.log("Data attribute: "+showInput);
     jQuery(function() {
       if ( showInput == "establishment" ){
@@ -12,6 +11,18 @@ $(document).on('turbolinks:load', function() {
       }
     });
   });
+
+  // mostramos selector test realizado, si el valor seleccionado no es "sospechoso"
+  $("#report-consumption-select").on('change', function(e){     
+    if($(this).val() === 'rubro'){
+      $(this).closest('.nested-fields').first().find('.report-area').first().addClass("show");
+      $(this).closest('.nested-fields').first().find('.report-product').first().removeClass("show");
+    }else{
+      $(this).closest('.nested-fields').first().find('.report-product').first().addClass("show");
+      $(this).closest('.nested-fields').first().find('.report-area').first().removeClass("show");
+    }
+  });
+
 });
 
 // Función para autocompletar y buscar el producto por código

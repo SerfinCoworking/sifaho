@@ -1,0 +1,160 @@
+<%= render 'reports/header' %>
+
+<% content_for :container do %>-fluid<% end %>
+
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pills" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo reporte de consumo por mes / punto crítico
+        por <%= @monthly_consumption_report.report_type %>
+      </h5>
+    </div>
+    <%= link_to :back, class: "btn text-white" do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div class="p-2 flex-fill">
+        <h5>Ubicación</h5>
+        <strong><%= @monthly_consumption_report.sector.name %></strong>
+        <%= @monthly_consumption_report.sector.establishment_name %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha desde</h5>
+        <%= @monthly_consumption_report.since_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha hasta</h5>
+        <%= @monthly_consumption_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="p-2 flex-fill">
+        <h5>Fecha consulta</h5>
+        <%= Date.today.strftime("%d/%m/%Y") %>
+      </div>
+    </div>
+    <div class="row">
+      <% if @monthly_consumption_report.rubro? %>
+        <div class="col-12 p-2 flex-fill">
+          <h5>Rubros</h5>
+          <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
+        </div>
+      <% else %>
+        <div class="col-6">
+          <h5>Producto</h5>
+          <%= @monthly_consumption_report.product_code %> | <%= @monthly_consumption_report.product_name %>
+        </div>
+        <div class="col-6">
+          <h5>Rubro</h5>
+          <%= @monthly_consumption_report.product_area_name %>
+        </div>
+      <% end %>
+    </div>
+
+    <hr>
+
+    <% if @month_average.present? && @monthly_consumption_report.producto? %>
+      <div class="row">
+        <div class="col">
+          <h5>Stock actual</h5>
+          <%= @stock_quantity %>
+        </div>
+        <div class="col">
+          <h5>Promedio consumo mensual</h5>
+          <%= number_to_currency(@month_average.round, 
+            unit: @monthly_consumption_report.product.unity.name.pluralize(@month_average), 
+            format: "%n %u",
+            precision: 0) %>
+        </div>
+        <div class="col">
+          <h5>Punto de pedido</h5>
+          <%= number_to_currency((@month_average * 1.2).round, 
+            unit: @monthly_consumption_report.product.unity.name.pluralize(@month_average), 
+            format: "%n %u",
+            precision: 0) %>
+        </div>
+        <div class="col">
+          <h5>Punto crítico</h5>
+          <%= number_to_currency(( (@month_average / 4) * 1.2).round, 
+            unit: @monthly_consumption_report.product.unity.name.pluralize(@month_average), 
+            format: "%n %u",
+            precision: 0) %>
+        </div>
+        <div class="col-12 border-top mt-2 pt-2">
+          <h5>Meses contemplados</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @movements_average.each do |movement| %>
+                <tr>
+                  <td><%= l movement[0], format: :month_and_year %></td>
+                  <td><%= movement[1].round %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% elsif @movements.present? && @monthly_consumption_report.rubro?%>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr class="d-flex">
+              <th class="col-1">Código</th>
+              <th class="col-6">Producto</th>
+              <th class="col-3">Rubro</th>
+              <th class="col-2 text-right">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
+              <tr class="d-flex">
+                <td class="col-1">
+                  <%= movement.product.code %>
+                </td>
+                <td class="col-6">
+                  <%= movement.product.name %>
+                </td>
+                <td class="col-3">
+                  <%= movement.product.area_name %>
+                </td>
+                <td class="col-2 text-right"><%= movement.quantity %></td>
+              </tr>
+            <% end %>
+            <tr class="d-flex">
+              <td class="col-1"></td>
+              <td class="col-6"></td>
+              <td class="col-3 text-right">Total</td>
+              <td class="col-2 text-right"><%= @movements.sum(&:quantity) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="d-flex align-items-center justify-content-center mt-5">
+        <p>No hay movimientos
+        <% if @monthly_consumption_report.rubro? %>
+          en <%= "rubro".pluralize(@monthly_consumption_report.areas) %> <%= @monthly_consumption_report.areas.map(&:name).join(", ") %></p>
+        <% else %>
+          de este producto.
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+      Volver
+    <% end %>
+    <%= link_to reports_monthly_consumption_reports_path, class: "btn btn-primary" do %>
+      <%= fa_icon "plus" %> Nuevo reporte
+    <% end %>
+  </div>
+</div>
