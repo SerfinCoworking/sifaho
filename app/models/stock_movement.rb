@@ -68,4 +68,24 @@ class StockMovement < ApplicationRecord
   scope :to_stock_id, lambda { |an_id| where(stock_id: an_id) }
 
   scope :with_product_ids, ->(product_ids) { joins(:product).where('products.id': product_ids) }
+
+  def order_human_name_string
+    self.order.present? ? self.order.human_name : 'Se eliminó'
+  end
+
+  def order_remit_code_string
+    self.order.remit_code if self.order.present?
+  end
+
+  def order_origin_name_string
+    self.order_origin_name if self.order.present?
+  end
+  
+  def order_destiny_name_string
+    self.order_destiny_name if self.order.present?
+  end
+  
+  def order_status_string
+    self.order_status if self.order.present?
+  end
 end
