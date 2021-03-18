@@ -188,6 +188,7 @@ es:
       default: "%-d/%-m/%Y"
       long: "%-d de %B de %Y"
       short: "%-d de %b"
+      month_and_year: "%B %Y"
     month_names:
     -
     - Enero

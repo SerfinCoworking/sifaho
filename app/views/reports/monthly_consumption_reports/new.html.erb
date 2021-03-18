@@ -132,7 +132,9 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Rubros</th>
+                    <th>Tipo</th>
+                    <th>Desde</th>
+                    <th>Hasta</th>
                     <th class="text-center"></th>
                   </tr>
                 </thead>
@@ -140,7 +142,13 @@
                   <% @last_reports.each do |report|%>
                     <tr>
                       <td>
-                        <%= report.areas.map(&:name).join(", ") %>
+                        <%= report.report_type.humanize %>
+                      </td>
+                      <td>
+                        <%= report.since_date.strftime("%d/%m/%Y") %>
+                      </td>
+                      <td>
+                        <%= report.to_date.strftime("%d/%m/%Y") %>
                       </td>
                       <td class="text-left actions-col">
                         <%= link_to reports_monthly_consumption_report_path(report), class: 'btn btn-secondary btn-sm',

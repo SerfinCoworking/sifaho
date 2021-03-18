@@ -10,5 +10,5 @@ class MonthlyConsumptionReport < ApplicationRecord
   validates_presence_of :product_id, :product, if: Proc.new { |report| report.producto? }
   validates :areas, presence: true, if: Proc.new { |report| report.rubro? }
 
-  delegate :code, :name, to: :product, prefix: true
+  delegate :code, :name, :area_name, to: :product, prefix: true
 end

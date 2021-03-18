@@ -10,13 +10,16 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
         .reorder("products.name ASC")
         .joins(:product)
     else
+      @stock_quantity = current_user.sector.stock_to(@monthly_consumption_report.product_id)
       stock = Stock.find_by(sector: current_user.sector, product_id: @monthly_consumption_report.product_id)
       if stock.present?
-        @movements = stock
+        @movements_average = stock
           .movements
           .since_date(@monthly_consumption_report.since_date.strftime("%d/%m/%Y"))
           .to_date(@monthly_consumption_report.to_date.strftime("%d/%m/%Y"))
-          .order(created_at: :desc)
+          .group_by_month("stock_movements.created_at")
+          .sum(:quantity)
+        @month_average = @movements_average.sum { |x| x[1] } / @movements_average.size
       end
     end
       
@@ -28,7 +31,6 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
           type: 'application/pdf',
           disposition: 'inline'
       end
-      format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"ReporteStockPorRubro_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
     end
   end
 
