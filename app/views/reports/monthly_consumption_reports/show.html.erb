@@ -38,7 +38,7 @@
     </div>
     <div class="row">
       <% if @monthly_consumption_report.rubro? %>
-        <div class="col-12 p-2 flex-fill">
+        <div class="col-12 pl-4">
           <h5>Rubros</h5>
           <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
         </div>
@@ -103,38 +103,72 @@
           </table>
         </div>
       </div>
-    <% elsif @movements.present? && @monthly_consumption_report.rubro?%>
+    <% elsif @stocks.present? && @monthly_consumption_report.rubro?%>
       <div class="card">
         <table class="table table-hover table-sm">
           <thead>
-            <tr class="d-flex">
-              <th class="col-1">Código</th>
-              <th class="col-6">Producto</th>
-              <th class="col-3">Rubro</th>
-              <th class="col-2 text-right">Cantidad</th>
+            <tr>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Consumo promedio / mes</th>
+              <th>Punto de pedido</th>
+              <th>Punto crítico</th>
+              <th>Stock actual</th>
             </tr>
           </thead>
           <tbody>
-            <% @movements.each do |movement|%>
-              <tr class="d-flex">
-                <td class="col-1">
-                  <%= movement.product.code %>
+            <% @stocks.each do |stock|%>
+              <% movements_average = stock
+                .movements
+                .where(adds: false)
+                .since_date(@monthly_consumption_report.since_date.strftime("%d/%m/%Y"))
+                .to_date(@monthly_consumption_report.to_date.strftime("%d/%m/%Y"))
+                .group_by_month("stock_movements.created_at")
+                .sum(:quantity)
+              %>
+              <% if movements_average.size > 0 %>
+                <% month_average = movements_average.sum { |x| x[1] } / movements_average.size %>
+              <% end %>
+              <tr>
+                <td>
+                  <%= stock.product_code %>
                 </td>
-                <td class="col-6">
-                  <%= movement.product.name %>
+                <td>
+                  <%= stock.product_name %>
                 </td>
-                <td class="col-3">
-                  <%= movement.product.area_name %>
+                <td>
+                  <% if month_average.present? %>
+                    <%= number_to_currency(month_average.round, 
+                      unit: stock.product_unity_name.pluralize(month_average),
+                      format: "%n %u",
+                      precision: 0) %>
+                  <% else %>
+                    0
+                  <% end %>
                 </td>
-                <td class="col-2 text-right"><%= movement.quantity %></td>
+                <td>
+                  <% if month_average.present? %>
+                  <%= number_to_currency((month_average * 1.2).round, 
+                    unit: stock.product_unity_name.pluralize(month_average), 
+                    format: "%n %u",
+                    precision: 0) %>
+                  <% else %>
+                    0
+                  <% end %>
+                </td>
+                <td>
+                  <% if month_average.present? %>
+                    <%= number_to_currency(( (month_average / 4) * 1.2).round, 
+                      unit: stock.product_unity_name.pluralize(month_average), 
+                      format: "%n %u",
+                      precision: 0) %>
+                  <% else %>
+                    0
+                  <% end %>
+                </td>
+                <td><%= stock.quantity %></td>
               </tr>
             <% end %>
-            <tr class="d-flex">
-              <td class="col-1"></td>
-              <td class="col-6"></td>
-              <td class="col-3 text-right">Total</td>
-              <td class="col-2 text-right"><%= @movements.sum(&:quantity) %></td>
-            </tr>
           </tbody>
         </table>
       </div>
