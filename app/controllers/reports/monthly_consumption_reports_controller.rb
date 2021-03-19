@@ -15,6 +15,7 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
       if stock.present?
         @movements_average = stock
           .movements
+          .where(adds: false)
           .since_date(@monthly_consumption_report.since_date.strftime("%d/%m/%Y"))
           .to_date(@monthly_consumption_report.to_date.strftime("%d/%m/%Y"))
           .group_by_month("stock_movements.created_at")
