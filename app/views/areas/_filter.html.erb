@@ -1,16 +1,23 @@
-<%= form_tag(areas_path, method: "get", remote: true) do %>
-  <div class="d-flex justify-content-end">
-    <div class="p-1 flex-fill">
-      <%= number_field_tag :name, params[:name], placeholder: "Nombre", class: "form-control" %>
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to areas_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
     </div>
-    <div class="p-1 flex-fill">
-      <%= link_to areas_path, class: "btn btn-light" do %>
-        <%= fa_icon "undo" %>
-      <% end %>
-      <%= button_tag type: 'submit', class: "btn btn-info", id: "register-button", title: 'Filtrar', 
-        data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "filter" %>
-      <% end %>
+
+    <%# CÓDIGO DE PEDIDO %>
+    <div class="col">
+      <label>Nombre</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off',
+      ) %>
     </div>
   </div>
 <% end %>

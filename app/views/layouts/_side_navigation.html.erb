@@ -92,7 +92,7 @@
     <% end %>
 
     <% if policy(Area).index? %>
-      <%= link_to main_app.areas_path, class: "list-group-item list-group-item-action list-custom #{active_class('areas')}" do %>
+      <%= link_to main_app.tree_view_areas_path, class: "list-group-item list-group-item-action list-custom #{active_class('areas')}" do %>
         <span class="sb-icon">
           <%= fa_icon "sitemap" %>
         </span>

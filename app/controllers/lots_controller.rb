@@ -16,16 +16,19 @@ class LotsController < ApplicationController
   # GET /lots/1
   # GET /lots/1.json
   def show
+    authorize @lot
   end
 
   # GET /lots/new
   def new
+    authorize Lot
     @lot = Lot.new
     @laboratories = Laboratory.all
   end
 
   # GET /lots/1/edit
   def edit
+    authorize @lot
     @laboratories = Laboratory.all
   end
 
@@ -48,6 +51,8 @@ class LotsController < ApplicationController
   # PATCH/PUT /lots/1
   # PATCH/PUT /lots/1.json
   def update
+    authorize @lot
+
     respond_to do |format|
       if @lot.update(lot_params)
         format.html { redirect_to @lot, notice: 'Lot was successfully updated.' }
@@ -62,6 +67,7 @@ class LotsController < ApplicationController
   # DELETE /lots/1
   # DELETE /lots/1.json
   def destroy
+    authorize @lot
     @lot.destroy
     respond_to do |format|
       format.html { redirect_to lots_url, notice: 'Lot was successfully destroyed.' }

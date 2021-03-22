@@ -1,14 +1,22 @@
 <% content_for :title, "Rubros" %>
 
 <% content_for :page_header do %>
-  <li class="nav-item non-sel" id="page-title">
-    <%= link_to areas_path, class: "nav-link #{ active_action('index') }" do %>
+  <li class="nav-item" id="page-title">
+    <%= link_to tree_view_areas_path, class: "nav-link #{ active_action('tree_view') }" do %>
       <%= fa_icon "sitemap" %>
       Rubros
     <% end %>
   </li>
   <% if policy(Area).new? %>
-    <li class="nav-item non-sel">
+    <li class="nav-item">
+      <%= link_to areas_path, class: "nav-link #{ active_action('index') }" do %>
+        <%= fa_icon "list" %>
+        Listado
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(Area).new? %>
+    <li class="nav-item">
       <%= link_to new_area_path, class: "nav-link #{ active_action('new') }" do %>
         <%= fa_icon "plus" %>
         Agregar rubro

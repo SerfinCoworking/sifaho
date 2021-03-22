@@ -1,46 +1,39 @@
-<% if @bed_orders.present? %>
+<% if @areas.present? %>
   <div id="filterrific_results">
-    <div class="panel panel-default">
-      <table class="table table-hover table-striped table-condensed">
-        <thead>
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead class="thead-light">
           <tr>
-            <th><%= filterrific_sorting_link(@filterrific, :cod) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :cama) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :habitacion) %></th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-              <%= filterrific_sorting_link(@filterrific, :ins) %></th>
-            </th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
-              <%= filterrific_sorting_link(@filterrific, :mov) %>
-            </th>
-            <th>
-              <%= filterrific_sorting_link(@filterrific, :solicitado) %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-            </th>
-            <th>
-              <%= filterrific_sorting_link(@filterrific, :entregado) %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-            </th>
+            <th>Nombre</th>
+            <th>Rubro padre</th>
+            <th>Subrubros</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody id=bed_orders>
-          <%= render @bed_orders %>
+        <tbody id="areas">
+          <%= render @areas %>
         </tbody>
       </table>
     </div>
-    <div id="page_links">
-      <%= paginate @bed_order %>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-3">
+        <%= will_paginate @areas, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-6 d-flex justify-content-around align-items-center">
+        <div>
+          Productos <span class="badge badge-secondary"><%= @areas.count %></span>
+        </div>
+      </div>
+      <div class="col-3 d-flex justify-content-end align-items-center">
+      </div>
     </div>
   </div>
 <% else %>
   <%= render(
     partial: 'shared/not_found_filter',
-    locals: { object_name: 'entregas' }
+    locals: { object_name: 'area' }
   ) %>
 <% end %>
-

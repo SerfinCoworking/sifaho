@@ -60,6 +60,9 @@ Rails.application.routes.draw do
     member do
       get :fill_products_card
     end
+    collection do
+      get :tree_view
+    end
   end
 
   resources :permission_requests, path: :solicitudes_permisos do

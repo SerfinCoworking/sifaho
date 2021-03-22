@@ -5,6 +5,19 @@ class AreasController < ApplicationController
   # GET /areas.json
   def index
     authorize Area
+    @filterrific = initialize_filterrific(
+      Area,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Area.options_for_sorted_by,
+      },
+      persistence_id: false
+    ) or return
+    @areas = @filterrific.find.paginate(page: params[:page], per_page: 15)
+  end
+
+  def tree_view
+    authorize Area
     @areas = Area.filter(params.slice(:name))
       .order(name: :asc)
       .page(params[:page])

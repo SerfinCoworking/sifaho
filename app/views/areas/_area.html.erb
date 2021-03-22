@@ -1,47 +1,24 @@
 <tr id="area_<%= area.id %>">
   <td><%= area.name %></td>
   <td><%= area.parent_name %></td>
-  <td>
-    <span class="label label-<%= area_status_label(area) %>">
-      <%= area.status.underscore.humanize %>
-    </span>
-  </td>
-  <td><%= area.bed.name %></td>
-  <td><%= area.bedroom_name %></td>
-  <td>
-    <span class="badge"><%= area.quantity_ord_supply_lots.count %></span>
-  </td>
-  <td>
-    <span class="badge"><%= area.movements.count %></span>
-  </td>
-  <td>
-    <%= area.created_at.strftime("%d/%m/%Y") %>
-  </td>
-    <% if area.entregada? %>
-      <td>
-      <%= area.date_received.strftime("%d/%m/%y %H:%M") %>
-    <% else %>
-      <td>
-      ----
-    <% end %>
-  </td>
+  <td><span class="badge badge-pill badge-secondary"><%= area.subareas.count %></span></td>
   <td class="text-left actions-col">
     <% if policy(area).show? %>
-      <%= link_to area_path(area), class: 'btn btn-default btn-xs', 
+      <%= link_to area_path(area), class: 'btn btn-secondary', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %>
+        <%= fa_icon "eye" %>
       <% end %>
     <% end %>
     <% if policy(area).edit? %>
-      <%= link_to edit_area_path(area), :"data-turbolinks" => false, class: 'btn btn-warning btn-xs', 
+      <%= link_to edit_area_path(area), :"data-turbolinks" => false, class: 'btn btn-warning', 
         title: 'Auditar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-edit') %>
+        <%= fa_icon "pen" %>
       <% end %>
     <% end %>
     <% if policy(area).destroy? %>
       <%= link_to delete_area_path(area), remote: true,
-            class: 'btn btn-danger btn-xs', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= content_tag(:span, '', class: 'glyphicon glyphicon-trash') %>
+            class: 'btn btn-danger', title: 'Papelera', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash" %>
       <% end %>
     <% end %>
   </td>
