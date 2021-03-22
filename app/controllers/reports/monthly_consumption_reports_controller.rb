@@ -6,6 +6,7 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
 
     if @monthly_consumption_report.rubro?
       @stocks = Stock
+        .to_sector(current_user.sector)
         .with_area_ids(@monthly_consumption_report.areas.ids)
         .reorder("products.name ASC")
         .joins(:product)
