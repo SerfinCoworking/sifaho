@@ -287,6 +287,7 @@ Rails.application.routes.draw do
     
   # end
   get "prescriptions", to: "prescriptions#new", as: "new_prescription"
+  get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions"
 
   resources :patients, path: :pacientes do
     member do

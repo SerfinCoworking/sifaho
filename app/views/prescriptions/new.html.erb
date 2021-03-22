@@ -12,63 +12,89 @@
           <h5 class="card-title mb-0 ml-2">Paciente</h5>
         </div>
       </div>
-      
+
       <div class="card-body">
-        <div class="form-group row">
-          <label for="patient-dni" class="col-3 col-form-label">DNI:</label>
-          <div class="col-9">
-            <div class="custom-input-group">
-              <div class="form-group string required chronic_prescription_patient">
-                <input class="form-control string required ui-autocomplete-input" id="patient-dni" data-autocomplete-source="<%= get_by_dni_patients_path %>" data-insurance-url="<%= api_v1_get_insurance_path %>" value="" required="" aria-required="true" placeholder="DNI" type="text" autocomplete="off">
+        <%= simple_form_for @patient, remote: true, html: { role: 'check-modified' } do |f| %>
+          <div class="form-group row">
+            <label for="patient-dni" class="col-3 col-form-label">DNI:</label>
+            <div class="col-9">
+              <div class="custom-input-group">
+                <div class="form-group string required chronic_prescription_patient">
+                  <input class="form-control string required ui-autocomplete-input" 
+                    id="patient-dni" 
+                    data-autocomplete-source="<%= get_by_dni_patients_path %>" 
+                    data-insurance-url="<%= api_v1_get_insurance_path %>" 
+                    name="patient[dni]"
+                    value="" 
+                    required="" 
+                    aria-required="true" 
+                    placeholder="DNI" 
+                    type="text" 
+                    autocomplete="off"
+                    data-prescriptions-url="<%= get_prescriptions_url %>">
+                </div>
+                <div class="with-loading">
+                  <%= fa_icon 'spinner', class: "fa-spin"%>
+                </div>
               </div>
-              <div class="with-loading">
-                <%= fa_icon 'spinner', class: "fa-spin"%>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="form-group row">
-          <label for="patient-lastname" class="col-3 col-form-label">Apellido:</label>
-              
-          <div class="col-9">
-            <div class="form-group string required">
-              <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-lastname" required aria-required="true" placeholder="Apellido" type="text" autocomplete="off">
             </div>
           </div>
           
-        </div>
-        
-        <div class="form-group row">
-          <label for="patient-firstname" class="col-3 col-form-label">Nombre:</label>
-              
-          <div class="col-9">
-            <div class="form-group string required">
-              <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-firstname" required aria-required="true" placeholder="Nombre" type="text" autocomplete="off">
+          <div class="form-group row">
+            <label for="patient-lastname" class="col-3 col-form-label">Apellido:</label>
+                
+            <div class="col-9">
+              <div class="form-group string required">
+                <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-lastname" required aria-required="true" placeholder="Apellido" type="text" autocomplete="off" name="patient[last_name]">
+              </div>
             </div>
+            
           </div>
-                      
-        </div>
+          
+          <div class="form-group row">
+            <label for="patient-firstname" class="col-3 col-form-label">Nombre:</label>
+                
+            <div class="col-9">
+              <div class="form-group string required">
+                <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-firstname" required aria-required="true" placeholder="Nombre" type="text" autocomplete="off" name="patient[first_name]">
+              </div>
+            </div>
+                        
+          </div>
 
-        <div class="form-group row">
-          <label for="patient-sex" class="col-3 col-form-label">Sexo:</label>
-              
-          <div class="col-9">
-            <div class="form-group string required chronic_prescription_patient">
-              <select name="sex" id="patient-sex" class="selectpicker custom-select-pick patient-form-selector">
-                <% Patient.sexes.each do |sex| %>
-                <option value="<%= sex[0] %>"><%= sex[0] %></option>
-                <% end %>
-              </select>
+          <div class="form-group row">
+            <label for="patient-sex" class="col-3 col-form-label">Sexo:</label>
+                
+            <div class="col-9">
+              <div class="form-group string required chronic_prescription_patient">
+                <select name="patient[sex]" id="patient-sex" class="selectpicker custom-select-pick patient-form-selector">
+                  <% Patient.sexes.each do |sex| %>
+                  <option value="<%= sex[0] %>"><%= sex[0] %></option>
+                  <% end %>
+                </select>
+                <input class="form-control string patient-form-input d-none" id="patient-sex-fake"  type="text" autocomplete="off" name="patient-sex-fake">
+              </div>
             </div>
           </div>
-        </div>
+          <input id="patient-status" name="patient[status]" type="hidden">
+          <%# campos de paciente con datos de Andes %>
+          <input id="patient-birthdate" class="andes-input" name="patient[birthdate]" type="hidden">
+          <input id="patient-marital-status" class="andes-input" name="patient[marital_status]" type="hidden">
+          
+          <div id="patient-phones"></div>
+
+          <input id="patient-email" class="andes-input" name="patient[email]" type="hidden">
+          <input id="patient-postal-code" class="andes-input" name="patient[address][postal_code]" type="hidden">
+          <input id="patient-line" class="andes-input" name="patient[address][line]" type="hidden">
+          <input id="patient-city-name" class="andes-input" name="patient[address][city_name]" type="hidden">
+          <input id="patient-state-name" class="andes-input" name="patient[address][state_name]" type="hidden">
+          <input id="patient-country-name" class="andes-input" name="patient[address][country_name]" type="hidden">
+          <input id="patient-andes-id" class="andes-input" name="patient[andes_id]" type="hidden">
+        <% end %>
       </div>
       <div class="card-footer d-flex justify-content-end">
-
-        <button class="btn btn-success text-nowrap" id="new-chronic" style="display: none;">Nueva crónica</button>
-        <button class="btn btn-success text-nowrap ml-1" id="new-outpatient" style="display: none;">Nueva ambulatoria</button>
-        <button id="patient-submit" class="btn btn-success text-nowrap ml-1" disabled>Guardar paciente</button>
+        <div id="new-receipt-buttons"></div>
+        <button id="patient-submit" class="btn btn-success text-nowrap ml-1" type="submit" form="new_patient" disabled>Guardar paciente</button>
       </div>
     </div>
 
@@ -110,19 +136,23 @@
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#chronic-prescriptions" role="tab" aria-controls="home" aria-selected="true">Recetas crónicas</a>
+            <a class="nav-link active" id="chronic-tab" data-toggle="tab" href="#chronic-prescriptions" role="tab" aria-controls="home" aria-selected="true">
+              Recetas crónicas
+              <span class="badge badge-secondary">0</span>
+            </a>
           </li>
           <li class="nav-item" role="presentation">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#outpatient-prescriptions" role="tab" aria-controls="profile" aria-selected="false">Recetas ambulatorias</a>
+            <a class="nav-link" id="outpatient-tab" data-toggle="tab" href="#outpatient-prescriptions" role="tab" aria-controls="profile" aria-selected="false">
+              Recetas ambulatorias
+              <span class="badge badge-secondary">0</span>
+            </a>
           </li>
         </ul>
 
-        <div class="tab-content" id="myTabContent">
+        <div class="tab-content" id="prescriptions-tab">
           <div class="tab-pane fade show active" id="chronic-prescriptions" role="tabpanel" aria-labelledby="home-tab">
-            Lorem ipsum crónica
           </div>
           <div class="tab-pane fade" id="outpatient-prescriptions" role="tabpanel" aria-labelledby="profile-tab">
-            Lorem ipsum ambulatorias
           </div>
         </div>
 

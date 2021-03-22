@@ -47,18 +47,23 @@ class PatientsController < ApplicationController
   # POST /patients
   # POST /patients.json
   def create
+    
     @patient = Patient.new(patient_params)
+    unless params[:patient][:address].present?
+      @address = set_address(params[:patient][:address])
+      @patient.address = @address
+    end
 
     respond_to do |format|
-      if @patient.save
-        if remote?
-          format.js
-        else
-          flash.now[:success] = @patient.full_info+" se ha creado correctamente."
-          format.html { redirect_to @patient }
-        end
-      else
-        flash[:error] = "El paciente no se ha podido crear."
+      begin
+        @patient.save!
+        flash.now[:success] = @patient.full_info+" se ha creado correctamente."
+        format.html { redirect_to @patient }
+        format.js
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
         format.html { render :new }
         format.js { render layout: false, content_type: 'text/javascript' }
       end
@@ -110,7 +115,7 @@ class PatientsController < ApplicationController
   def get_by_dni
     @patients = Patient.search_dni(params[:term])
     if @patients.present?
-      render json: @patients.map{ |pat| { label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, lastname: pat.last_name, firstname: pat.first_name, fullname: pat.fullname, sex: pat.sex}  }
+      render json: @patients.map{ |pat| {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, lastname: pat.last_name, firstname: pat.first_name, fullname: pat.fullname, sex: pat.sex, status: pat.status}  }
     else
       dni = params[:term]
       token = ENV['ANDES_TOKEN']
@@ -135,6 +140,26 @@ class PatientsController < ApplicationController
   end
 
   private
+
+    def set_address(address_param)
+      # Creamos buscamos o creamos (sino existe) pais / provincia / ciudad
+      @country = Country.find_by(name: address_param[:country_name])
+      @country = Country.create(name: address_param[:country_name]) unless @country.present?
+
+      @state = State.find_by(name: address_param[:state_name], country_id: @country.id)
+      @state = State.create(name: address_param[:state_name], country_id: @country.id) unless @state.present?
+      
+      @city = City.find_by(name: address_param[:city_name], state_id: @state.id)
+      @city = City.create(name: address_param[:city_name], state_id: @state.id) unless @city.present?
+
+      @address = Address.create(postal_code: address_param[:postal_code], 
+        line: address_param[:line], 
+        city_id: @city.id, 
+        country_id: @country.id, 
+        state_id: @state.id)
+
+      return @address
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_patient
       @patient = Patient.find(params[:id])
@@ -142,9 +167,23 @@ class PatientsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def patient_params
-      params.require(:patient).permit(:first_name, :last_name, :dni,
-        :email, :birthdate, :sex, :marital_status,
-        patient_phones_attributes: [:id, :phone_type, :number, :_destroy])
+      params.require(:patient).permit(
+        :first_name,
+        :last_name,
+        :dni,
+        :email,
+        :birthdate,
+        :sex,
+        :marital_status,
+        :status,
+        :address,
+        :andes_id,
+        patient_phones_attributes: [
+          :id, 
+          :phone_type, 
+          :number, 
+          :_destroy
+        ])
     end
 
     def remote?

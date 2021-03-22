@@ -1,45 +1,28 @@
-<% if @prescriptions.present? %>
-  <div id="filterrific_results">
+<% if prescriptions.present? %>
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
-        <thead>
+        <thead class="thead-light">
           <tr>
             <th>Código</th>
-            <th>Tipo</th>
-            <th><%= filterrific_sorting_link(@filterrific, :profesional) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-barcode') %>
-              <%= filterrific_sorting_link(@filterrific, :ins) %>
-            </th>
-            <th>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-transfer') %>
-              <%= filterrific_sorting_link(@filterrific, :mov) %>
-            </th>
-            <th>
-              <%= filterrific_sorting_link(@filterrific, :recetada) %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>
-            </th>
-            <th>
-              <%= filterrific_sorting_link(@filterrific, :dispensada) %>
-              <%= content_tag(:span, '', class: 'glyphicon glyphicon-calendar') %>  
-            </th>
+            <th>Médico</th>
+            <th>Paciente</th>
+            <th>Estado</th>
+            <th>Productos</th>
+            <th>Movimientos</th>
+            <th>Recetada</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody id=prescriptions>
-          <%= render @prescriptions %>
+        <tbody>
+          <%= render prescriptions %>
         </tbody>
       </table>
     </div>
-    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
-      <%= will_paginate @prescription, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-    </div>
-  </div>
+   
 <% else %>
   <%= render(
     partial: 'shared/not_found_filter',
     locals: { object_name: 'recetas' }
   ) %>
 <% end %>
+

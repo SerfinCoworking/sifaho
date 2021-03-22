@@ -13,7 +13,7 @@ class Patient < ApplicationRecord
   has_many :chronic_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar
   has_many :patient_phones, :dependent => :destroy
-    accepts_nested_attributes_for :patient_phones, :allow_destroy => true
+  accepts_nested_attributes_for :patient_phones, :allow_destroy => true
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :dni
@@ -21,6 +21,11 @@ class Patient < ApplicationRecord
 
   delegate :country_name, :state_name, :city_name, :line, to: :address, prefix: :address
   delegate :name, to: :patient_type, prefix: :patient_type
+
+  # Atributos anidados
+  accepts_nested_attributes_for :patient_phones,
+    reject_if: proc { |attributes| attributes['number'].blank? },
+    :allow_destroy => true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

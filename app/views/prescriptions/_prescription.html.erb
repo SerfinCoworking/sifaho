@@ -1,6 +1,5 @@
 <tr id="prescription_<%= prescription.id %>">
   <td><%= prescription.remit_code %></th>
-  <td><%= prescription.order_type.humanize %></th>
   <td class="pres-col-pro"><%= prescription.professional.full_name %></td>
   <td class="pres-col-pat"><%= prescription.patient.full_info %></td>
   <td>
@@ -9,50 +8,38 @@
     </span>
   </td>
   <td>
-    <% if prescription.ambulatoria? %>
-      <%= prescription.quantity_ord_supply_lots.count %>
-    <% else %>
-      <%= prescription.quantity_ord_supply_lots.sin_entregar.count %>
-    <% end %>
+    <%= prescription.original_prescription_products.count %>
   </td>
   <td>
     <%= prescription.movements.count %>
   </td>
   <td>
-    <% if prescription.prescribed_date.present? %>
-      <%= prescription.prescribed_date.strftime("%d/%m/%Y") %>
+    <% if prescription.date_prescribed.present? %>
+      <%= prescription.date_prescribed.strftime("%d/%m/%Y") %>
     <% else %>
       ------
     <% end %>
-  </td>
-    <% if prescription.dispensed_at.present? %>
-      <td>
-      <%= prescription.dispensed_at.strftime("%d/%m/%y %H:%M") %>
-    <% else %>
-      <td class="text-center">
-      ----
-    <% end %>
-  </td>
   <td class="text-left actions-col">
-    <% if policy(prescription).show? %>
-      <%= link_to prescription_path(prescription), class: 'btn btn-secondary btn-sm', 
-        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "eye" %>
-      <% end %>
-    <% end %>
-    <% if policy(prescription).edit? %>
-      <% unless prescription.dispensada? %>
-        <%= link_to edit_prescription_path(prescription), 
-              class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "pen" %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <% if policy(prescription).delete? %>
-      <%= link_to delete_prescription_path(prescription), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
-      <% end %>
-    <% end %>
+    <div class="d-flex">
+      
+
+      <%= render(
+        partial: 'shared/action_buttons',
+        locals:{ 
+            object: prescription, 
+            show: {visible: true, target: :_blank},
+            edit: {visible: true},
+            destroy: {
+              visible: true, 
+              title: "Eliminar prescripción",
+              body: "Esta seguro que desea eliminar la prescripción de #{ prescription.professional.full_name }?",
+              path: prescription.class_name == 'ChronicPrescription' ? "/recetas_cronicas/#{prescription.id}" : "/recetas_ambulatorias/#{prescription.id}"
+            }
+            
+        }
+      ) 
+      %>
+     
+    </div>
   </td>
 </tr>
