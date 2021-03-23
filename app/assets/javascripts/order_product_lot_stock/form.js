@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
   if(!(['external_orders', 'internal_orders'].includes(_PAGE.controller) && (['new_applicant', 'edit_applicant','new_provider', 'edit_provider', 'accept_provider', 'create_applicant', 'update_applicant', 'create_provider', 'update_provider', 'send_provider'].includes(_PAGE.action))) ) return false;
-
+  console.log("entró edit");
   initEvents();
   
   // button submit
@@ -24,7 +24,7 @@ $(document).on('turbolinks:load', function(e){
   function initEvents(){
     // autocomplete establishment input
     $('.product-code').autocomplete({
-      source: $('.product-code').attr('data-autocomplete-source'),
+      source: $('.product-code').last().attr('data-autocomplete-source'),
       minLength: 1,
       autoFocus: true,
       messages: {
@@ -123,12 +123,12 @@ $(document).on('turbolinks:load', function(e){
       
       const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
       const url = $(e.target).attr('data-select-lot-url');
-      const productCode = tr.find("input.product-code").val(); // get product code
+      const productId = tr.find("input.product-id").val(); // get product id
       const toDelivery = tr.find("input.deliver-quantity").val(); // get delivery quanitty
       const hiddenTarget = tr.find(".lot-stocks-hidden").first();
       const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
       
-      if(!productCode){
+      if(!productId){
         $('#dialog .modal-header').addClass('bg-warning');
         $('#dialog .modal-title').html("<i class='fa fa-exclamation-triangle'></i>  Elegir un producto");
         $('#dialog .modal-body').html("<p>No se ha seleccionado ningún producto</p><p>Por favor seleccione uno</p>");
@@ -143,7 +143,7 @@ $(document).on('turbolinks:load', function(e){
         method: 'GET',
         dataType: "JSON",
         data: {
-          product_code: productCode
+          product_id: productId
       }}).done(function(response){
         const table_body = drawLotTable(response, selectedLots, toDelivery);
         $('#lot-selection').find('.modal-body tbody').first().remove();

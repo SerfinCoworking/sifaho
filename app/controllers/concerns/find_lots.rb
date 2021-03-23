@@ -7,7 +7,7 @@ module FindLots
     @lot_stocks = LotStock.joins(:stock)
       .joins(:product)
       .where("stocks.sector_id = ?", current_user.sector.id)
-      .where("products.code like ?", params[:product_code])
+      .where("products.id = ?", params[:product_id])
       .where("lot_stocks.quantity > ? OR lot_stocks.id IN (?)", 0, @selected_lot_stocks)
       
     respond_to do |format|
