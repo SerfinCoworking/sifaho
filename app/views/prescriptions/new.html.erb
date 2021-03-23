@@ -23,7 +23,7 @@
                   <input class="form-control string required ui-autocomplete-input" 
                     id="patient-dni" 
                     data-autocomplete-source="<%= get_by_dni_patients_path %>" 
-                    data-insurance-url="<%= api_v1_get_insurance_path %>" 
+                    data-insurance-url="<%= get_insurance_path %>" 
                     name="patient[dni]"
                     value="" 
                     required="" 
@@ -93,7 +93,7 @@
         <% end %>
       </div>
       <div class="card-footer d-flex justify-content-end">
-        <div id="new-receipt-buttons"></div>
+        <div id="new-receipt-buttons" style="display: none;"></div>
         <button id="patient-submit" class="btn btn-success text-nowrap ml-1" type="submit" form="new_patient" disabled>Guardar paciente</button>
       </div>
     </div>
@@ -108,14 +108,15 @@
       <div class="card-header bg-secondary text-white d-flex align-items-center justify-content-between p-2">
         <div class="d-flex align-items-center">
           <%= fa_icon "signature" %> 
-          <h5 class="card-title mb-0 ml-2">Obra social</h5>
+          <h5 class="card-title mb-0 ml-2">Más información</h5>
         </div>
       </div>
       
       <div class="card-body">
-        <div class="col-6">
-            <div id="pat-os-body"></div>
-          </div>
+        <div id="pat-os-body"></div>
+        <div id="last-prescription-info">
+          Lorem ipsum
+        </div>
       </div>
     </div>
           

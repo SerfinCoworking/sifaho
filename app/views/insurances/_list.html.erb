@@ -1,0 +1,33 @@
+<h5>Obra social</h5>
+<table class="table w-100">
+  <thead>
+    <tr>
+      <th>
+        Padrón
+      </th>
+      <th>
+        Código
+      </th>
+      <th>
+        Fecha de verificación
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @insurances.each do |insurance| %>
+      <tr>
+        <td>
+          <%= insurance['financiador'] %>
+        </td>
+        
+        <td>
+          <%= insurance['codigoFinanciador'] %>
+        </td>
+        
+        <td>
+          <%= insurance['version'].to_datetime.strftime("%d/%m/%Y") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

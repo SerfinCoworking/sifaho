@@ -49,7 +49,7 @@ class PatientsController < ApplicationController
   def create
     
     @patient = Patient.new(patient_params)
-    unless params[:patient][:address].present?
+    if params[:patient][:address].present?
       @address = set_address(params[:patient][:address])
       @patient.address = @address
     end
@@ -65,7 +65,7 @@ class PatientsController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         format.html { render :new }
-        format.js { render layout: false, content_type: 'text/javascript' }
+        format.js
       end
     end
   end

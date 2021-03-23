@@ -4,15 +4,20 @@ $("#chronic-tab").find('span.badge-secondary').first().html('<%= @chronic_prescr
 $("#outpatient-tab").find('span.badge-secondary').first().html('<%= @outpatient_prescriptions.count %>');
 
 // Mostramos los botones de crear recetas ambulatoria / cronicas
-$("#new-receipt-buttons").html(<%= j render("new_receipt_buttons", patient: @patient) %>);
+if(<%= @patient.present? %>){
+  $("#new-receipt-buttons").html('<%= j render("new_receipt_buttons", patient: @patient) %>').fadeIn(300);
+}
 
 //si no hay cronicas y hay ambulatorias, dirigimos el foco al listado de ambulatorias
 $("#myTab a.nav-link").removeClass('active');
 $("#prescriptions-tab div.tab-pane").removeClass('show active');
 if(<%= @chronic_prescriptions.count %> === 0 && <%= @outpatient_prescriptions.count %> > 0){
   $("#outpatient-tab").addClass('active');
-   $("#outpatient-prescriptions").addClass('show active');
+  $("#outpatient-prescriptions").addClass('show active');
 }else{
   $("#chronic-tab").addClass('active');
   $("#chronic-prescriptions").addClass('show active');
 }
+
+// Mostramos la ultima receta actualizada 
+$("#last-prescription-info").html('<%= j render("last_prescription_info") %>');

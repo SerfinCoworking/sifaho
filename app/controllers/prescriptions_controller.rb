@@ -15,10 +15,10 @@ class PrescriptionsController < ApplicationController
   end
 
   def get_prescriptions
-    puts "DEBUG ==========================".colorize(background: :red)
-    puts params[:patient_id]
-    @chronic_prescriptions = ChronicPrescription.where(patient_id: params[:patient_id]).limit(10)
-    @outpatient_prescriptions = OutpatientPrescription.where(patient_id: params[:patient_id]).limit(10)
+    @patient = Patient.find(params[:patient_id])
+    @chronic_prescriptions = ChronicPrescription.where(patient_id: params[:patient_id]).order(updated_at: :desc).limit(10)
+    @outpatient_prescriptions = OutpatientPrescription.where(patient_id: params[:patient_id]).order(updated_at: :desc).limit(10)
+    @last_prescription = (@chronic_prescriptions + @outpatient_prescriptions).sort_by(&:updated_at).last
   end
 
   # GET /prescriptions/1

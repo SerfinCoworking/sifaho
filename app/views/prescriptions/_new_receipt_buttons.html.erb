@@ -1,9 +1,9 @@
-<%= link_to new_outpatient_prescription_path, style: 'display: none', class: "btn btn-success text-nowrap", id: 'new-outpatient' do %>
+<%= link_to new_outpatient_prescription_path(patient_id: @patient.id), class: "btn btn-primary text-nowrap", id: 'new-outpatient' do %>
   <%= fa_icon "plus" %>
   Ambulatoria
 <% end %>
 
-<%= link_to new_chronic_prescription_path, style: 'display: none', class: "btn btn-success text-nowrap ml-1", id: 'new-chronic' do %>
+<%= link_to new_chronic_prescription_path(patient_id: @patient.id), class: "btn btn-primary text-nowrap ml-1", id: 'new-chronic' do %>
   <%= fa_icon "plus" %>
   Crónica
 <% end %>

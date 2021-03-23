@@ -1,0 +1,28 @@
+<% if @last_prescription.present? %>
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th>Código</th>
+            <th>Médico</th>
+            <th>Paciente</th>
+            <th>Estado</th>
+            <th>Productos</th>
+            <th>Movimientos</th>
+            <th>Recetada</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render @last_prescription %>
+        </tbody>
+      </table>
+    </div>
+   
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>
+

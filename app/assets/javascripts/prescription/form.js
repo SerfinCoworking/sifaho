@@ -1,5 +1,4 @@
 $(document).on('turbolinks:load', function(e){
-
   if(!(['prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
 
   
@@ -39,7 +38,6 @@ $(document).on('turbolinks:load', function(e){
       $(".andes-input").attr('disabled', true);
 
       if(ui.item.dni != '' && typeof ui.item.lastname !== 'undefined' && typeof ui.item.firstname !== 'undefined'){
-        console.log(ui.item);
         $("#patient-dni").val(ui.item.dni);
         $("#patient-lastname").val(ui.item.lastname).attr('readonly', true);
         $("#patient-firstname").val(ui.item.firstname).attr('readonly', true);
@@ -104,68 +102,61 @@ $(document).on('turbolinks:load', function(e){
   });
   /* =================================================FUNCIONES========================================================================= */
   
-  /* Se obtienen las prescripciones */
-  function getPrescriptionsTo(patientId){
-    const prescriptionsUrl = $("#patient-dni").attr("data-prescriptions-url");
-    $.ajax({
-      url: prescriptionsUrl + "/" + patientId,
-      dataType: "script"
-    });
-  }
-  
   /* Reseteamos el formulario */
   function resetForm(){
     $("#patient-status").val("Temporal");
     $("#patient-lastname").val("").removeAttr('readonly');
     $("#patient-firstname").val("").removeAttr('readonly');
     setPatientSex();
-    /* $('#patient-sex-fake').val("").addClass('d-none');
-    $("#patient-sex").val("Otro").removeClass('d-none');
-    $("#patient-sex").selectpicker('refresh'); */
+    $("#new-receipt-buttons").fadeOut(300).html('');
   }
   
-  /* Seteamos las prescripciones del paciente */
+  /* Si el paciente existe en DB, seteamos las prescripciones del paciente */
   function setPatientPrescriptions(isCreate, patientId){
     if(isCreate){
       resetPatientPrescriptions();
       $("#patient-submit").attr('disabled', false);
+      $("#new-receipt-buttons").fadeOut(300).html('');
     }else{
-      $("#new-receipt-buttons").fadeIn(300);
-      // $("#new-chronic").fadeIn(300);
-      // $("#new-outpatient").fadeIn(300);
-      $("#patient-submit").attr('disabled', true);
-      
+      $("#patient-submit").attr('disabled', true);      
       getPrescriptionsTo(patientId);
     }
   }
 
   /* Reset de prescripciones[tabs] */
   function resetPatientPrescriptions(){
-    /* $("#new-chronic").fadeOut(300);
-    $("#new-outpatient").fadeOut(300); */
-    $("#new-receipt-buttons").fadeOut(300);
     $("div#chronic-prescriptions").html('');
     $("div#outpatient-prescriptions").html('');
     $("#chronic-tab").find('span.badge-secondary').first().html('0');
     $("#outpatient-tab").find('span.badge-secondary').first().html('0');
   }
 
-  /* Seteamos el sexo del paciente */
-  function setPatientSex(sex){
-    if(typeof sex !== 'undefined'){
-      // precargamos el sexo del paciente
-      $("#patient-sex option").each((index, item) => {
-        const sexMatch = new RegExp(sex, 'i');
-        if($(item).val() && $(item).val().match(sexMatch)){
-          $('#patient-sex-fake').val($(item).val()).attr('readonly', true).removeClass('d-none');
-          $("#patient-sex").val($(item).val()).addClass('d-none');
-          $("#patient-sex").selectpicker('refresh');
-        }
-      });
-    }else{
-      $('#patient-sex-fake').val("").addClass('d-none');
-      $(".patient-form-selector").val("Otro").removeClass('d-none');
-      $(".patient-form-selector").selectpicker('refresh');
-    }
-  }
 });
+
+/* Seteamos el sexo del paciente */
+function setPatientSex(sex){
+  if(typeof sex !== 'undefined'){
+    // precargamos el sexo del paciente
+    $("#patient-sex option").each((index, item) => {
+      const sexMatch = new RegExp(sex, 'i');
+      if($(item).val() && $(item).val().match(sexMatch)){
+        $('#patient-sex-fake').val($(item).val()).attr('readonly', true).removeClass('d-none');
+        $("#patient-sex").val($(item).val()).addClass('d-none');
+        $("#patient-sex").selectpicker('refresh');
+      }
+    });
+  }else{
+    $('#patient-sex-fake').val("").addClass('d-none');
+    $(".patient-form-selector").val("Otro").removeClass('d-none');
+    $(".patient-form-selector").selectpicker('refresh');
+  }
+}
+
+/* Se obtienen las prescripciones */
+function getPrescriptionsTo(patientId){
+  const prescriptionsUrl = $("#patient-dni").attr("data-prescriptions-url");
+  $.ajax({
+    url: prescriptionsUrl + "/" + patientId,
+    dataType: "script"
+  });
+}

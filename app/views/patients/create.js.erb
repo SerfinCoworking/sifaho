@@ -1,5 +1,6 @@
-// Mostramos los botones de crear receta
-$("#new-chronic").removeAttr('disabled').fadeIn(300);
-$("#new-outpatient").removeAttr('disabled').fadeIn(300);
-
-console.log("Id del paciente ========> <%= @patient.id %>");
+<%= render 'shared/flash_message' %>
+// Obtenemos las recetas
+$("#patient-lastname").val('<%= @patient.last_name %>').attr('readonly', true);
+$("#patient-firstname").val('<%= @patient.last_name %>').attr('readonly', true);
+setPatientSex('<%= @patient.sex %>');
+getPrescriptionsTo(<%= @patient.id %>);
