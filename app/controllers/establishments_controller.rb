@@ -4,6 +4,7 @@ class EstablishmentsController < ApplicationController
   # GET /establishments
   # GET /establishments.json
   def index
+    authorize Establishment
     @filterrific = initialize_filterrific(
       Establishment,
       params[:filterrific],
@@ -19,6 +20,7 @@ class EstablishmentsController < ApplicationController
   # GET /establishments/1
   # GET /establishments/1.json
   def show
+    authorize @establishment
     respond_to do |format|
       format.html
       format.js
@@ -27,18 +29,20 @@ class EstablishmentsController < ApplicationController
 
   # GET /establishments/new
   def new
+    authorize Establishment
     @establishment = Establishment.new
   end
 
   # GET /establishments/1/edit
   def edit
+    authorize @establishment
   end
 
   # POST /establishments
   # POST /establishments.json
   def create
     @establishment = Establishment.new(establishment_params)
-
+    authorize @establishment
     respond_to do |format|
       if @establishment.save
         flash.now[:success] = @establishment.name + " se ha creado correctamente."
@@ -55,6 +59,7 @@ class EstablishmentsController < ApplicationController
   # PATCH/PUT /establishments/1
   # PATCH/PUT /establishments/1.json
   def update
+    authorize @establishment
     respond_to do |format|
       if @establishment.update(establishment_params)
         flash.now[:success] = @establishment.name + " se ha modificado correctamente."
@@ -71,6 +76,7 @@ class EstablishmentsController < ApplicationController
   # DELETE /establishments/1
   # DELETE /establishments/1.json
   def destroy
+    authorize @establishment
     establishment_name = @establishment.name
     @establishment.destroy
     respond_to do |format|
@@ -81,6 +87,7 @@ class EstablishmentsController < ApplicationController
 
   # GET /establishment/1/delete
   def delete
+    authorize @establishment
     respond_to do |format|
       format.js
     end
