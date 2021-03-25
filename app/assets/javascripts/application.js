@@ -45,7 +45,10 @@ $('[data-toggle="tooltip"]').tooltip({
   'container':'body'
 });
 
-
+$.fn.selectpicker.defaults = {
+  selectAllText: 'Todos',
+  deselectAllText: 'Ninguno'
+};
 
 $('#filterrific_filter').on(
   "change",

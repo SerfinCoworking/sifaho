@@ -42,7 +42,8 @@
                       "data-size"=>"10",
                       "title"=>"Seleccionar rubros",
                       "data-live-search"=>true,
-                      "data-none-results-text" => "No se encontró el rubro"
+                      "data-none-results-text" => "No se encontró el rubro",
+                      "data-actions-box"=> true
                     }
                   %>
                 </div>
@@ -62,7 +63,7 @@
                 <tbody>
                   <% @last_reports.each do |report|%>
                     <tr>
-                      <td>
+                      <td class="text-truncate align-middle" style="max-width: 120px;">
                         <%= report.areas.map(&:name).join(", ") %>
                       </td>
                       <td class="text-left actions-col">
@@ -84,9 +85,10 @@
         <%= link_to :back, class: "btn btn-light mr-2" do %>
           Volver
         <% end %>
-        <button type='submit' name='commit' class='btn btn-success' form='report-form'>
-          <%= fa_icon "check" %> Generar
-        </button>
+        <%= button_tag(type: 'submit', class: "btn btn-success", form:'report-form', 'data-disable-with' => "<i class='fa fa-circle-notch fa-spin'></i> Generando".html_safe) do %> 
+          <%= fa_icon "check" %>
+          Generar
+        <% end %>
       </div>
     </div>
   </div>

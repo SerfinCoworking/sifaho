@@ -39,7 +39,7 @@
                   %>
                 </div>
                 <!-- Rubros -->
-                <div class="custom-input-group col-12 <%= f.object.rubro? ? 'show' : ''%> fade report-area">
+                <div class="custom-input-group col-12 <%= f.object.por_rubro? ? 'show' : ''%> fade report-area">
                   <%= f.input :area_ids, label: 'Rubros',
                     collection:
                       @areas.map {
@@ -57,11 +57,12 @@
                       "data-size"=>"10",
                       "title"=>"Seleccionar rubros",
                       "data-live-search"=>true,
-                      "data-none-results-text" => "No se encontró el rubro"
+                      "data-none-results-text" => "No se encontró el rubro",
+                      "data-actions-box"=> true
                     }
                   %>
                 </div>
-                <div class="col-12 <%= f.object.producto? ? 'show' : ''%> fade report-product">
+                <div class="col-12 <%= f.object.un_producto? ? 'show' : ''%> fade report-product">
                   <div class="row">
                     <div class="custom-input-group col-3">
                       <%= f.input :product, as: :string,
@@ -169,9 +170,10 @@
         <%= link_to :back, class: "btn btn-light mr-2" do %>
           Volver
         <% end %>
-        <button type='submit' name='commit' class='btn btn-success' form='report-form'>
-          <%= fa_icon "check" %> Generar
-        </button>
+        <%= button_tag(type: 'submit', class: "btn btn-success", form:'report-form', 'data-disable-with' => "<i class='fa fa-circle-notch fa-spin'></i> Generando".html_safe) do %> 
+          <%= fa_icon "check" %>
+          Generar
+        <% end %>
       </div>
     </div>
   </div>

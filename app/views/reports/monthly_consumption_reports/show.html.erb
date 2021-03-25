@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="row">
-      <% if @monthly_consumption_report.rubro? %>
+      <% if @monthly_consumption_report.por_rubro? %>
         <div class="col-12 pl-4">
           <h5>Rubros</h5>
           <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
@@ -56,7 +56,7 @@
 
     <hr>
 
-    <% if @month_average.present? && @monthly_consumption_report.producto? %>
+    <% if @month_average.present? && @monthly_consumption_report.un_producto? %>
       <div class="row">
         <div class="col">
           <h5>Stock actual</h5>
@@ -103,7 +103,7 @@
           </table>
         </div>
       </div>
-    <% elsif @stocks.present? && @monthly_consumption_report.rubro?%>
+    <% elsif @stocks.present? && @monthly_consumption_report.por_rubro?%>
       <div class="card">
         <table class="table table-hover table-sm">
           <thead>
@@ -175,7 +175,7 @@
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
         <p>No hay movimientos
-        <% if @monthly_consumption_report.rubro? %>
+        <% if @monthly_consumption_report.por_rubro? %>
           en <%= "rubro".pluralize(@monthly_consumption_report.areas) %> <%= @monthly_consumption_report.areas.map(&:name).join(", ") %></p>
         <% else %>
           de este producto.

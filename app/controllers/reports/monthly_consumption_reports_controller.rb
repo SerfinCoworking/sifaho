@@ -4,13 +4,13 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
   def show
     authorize @monthly_consumption_report
 
-    if @monthly_consumption_report.rubro?
+    if @monthly_consumption_report.por_rubro?
       @stocks = Stock
         .to_sector(current_user.sector)
         .with_area_ids(@monthly_consumption_report.areas.ids)
         .reorder("products.name ASC")
         .joins(:product)
-    else
+    elsif @monthly_consumption_report.un_producto?
       @stock_quantity = current_user.sector.stock_to(@monthly_consumption_report.product_id)
       stock = Stock.find_by(sector: current_user.sector, product_id: @monthly_consumption_report.product_id)
       if stock.present?

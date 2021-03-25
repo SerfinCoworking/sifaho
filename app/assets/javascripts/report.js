@@ -4,7 +4,6 @@ $(document).on('turbolinks:load', function() {
     console.log("Data attribute: "+showInput);
     jQuery(function() {
       if ( showInput == "establishment" ){
-        console.log("Entró");
         $(document).find(".establishment").css('display', 'block');
       }else{
         $(document).find(".establishment").css('display', 'none');
@@ -14,7 +13,7 @@ $(document).on('turbolinks:load', function() {
 
   // mostramos selector test realizado, si el valor seleccionado no es "sospechoso"
   $("#report-consumption-select").on('change', function(e){     
-    if($(this).val() === 'rubro'){
+    if($(this).val() === 'por_rubro'){
       $(this).closest('.nested-fields').first().find('.report-area').first().addClass("show");
       $(this).closest('.nested-fields').first().find('.report-product').first().removeClass("show");
     }else{
