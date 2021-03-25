@@ -132,12 +132,12 @@ $(document).on('turbolinks:load', function(e){
       
       const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
       const url = $(e.target).attr('data-select-lot-url');
-      const productCode = tr.find("input.product-code").val(); // get product code
+      const productId = tr.find("input.product-id").val(); // get product code
       const toDelivery = tr.find("input.deliver-quantity").val(); // get delivery quanitty
       const hiddenTarget = tr.find(".lot-stocks-hidden").first();
       const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
       
-      if(!productCode){
+      if(!productId){
         $('#dialog .modal-header').addClass('bg-warning');
         $('#dialog .modal-title').html("<i class='fa fa-exclamation-triangle'></i>  Elegir un producto");
         $('#dialog .modal-body').html("<p>No se ha seleccionado ningún producto</p><p>Por favor seleccione uno</p>");
@@ -152,7 +152,7 @@ $(document).on('turbolinks:load', function(e){
         method: 'GET',
         dataType: "JSON",
         data: {
-          product_code: productCode
+          product_id: productId
       }}).done(function(response){
         const table_body = drawLotTable(response, selectedLots, toDelivery);
         $('#lot-selection').find('.modal-body tbody').first().remove();
