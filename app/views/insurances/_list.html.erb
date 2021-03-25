@@ -1,33 +1,39 @@
 <h5>Obra social</h5>
-<table class="table w-100">
-  <thead>
-    <tr>
-      <th>
-        Padrón
-      </th>
-      <th>
-        Código
-      </th>
-      <th>
-        Fecha de verificación
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @insurances.each do |insurance| %>
+<% if @insurances.present? %>
+  <table class="table w-100">
+    <thead>
       <tr>
-        <td>
-          <%= insurance['financiador'] %>
-        </td>
-        
-        <td>
-          <%= insurance['codigoFinanciador'] %>
-        </td>
-        
-        <td>
-          <%= insurance['version'].to_datetime.strftime("%d/%m/%Y") %>
-        </td>
+        <th>
+          Padrón
+        </th>
+        <th>
+          Código
+        </th>
+        <th>
+          Fecha de verificación
+        </th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @insurances.each do |insurance| %>
+        <tr>
+          <td>
+            <%= insurance['financiador'] %>
+          </td>
+          
+          <td>
+            <%= insurance['codigoFinanciador'] %>
+          </td>
+          
+          <td>
+            <%= insurance['version'].to_datetime.strftime("%d/%m/%Y") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="border w-100 text-center p-2">
+    No se encontró obra social
+  </div>
+<% end %>

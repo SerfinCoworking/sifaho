@@ -70,11 +70,11 @@ $(document).on('turbolinks:load', function(e){
             }
           };
 
-          $("#patient-postal-code").val(ui.item.data.direccion[0].codigoPostal);
-          $("#patient-line").val(ui.item.data.direccion[0].valor);
-          $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad.nombre);
-          $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
-          $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais.nombre);
+          $("#patient-postal-code").val(ui.item.data.direccion[0]?.codigoPostal);
+          $("#patient-line").val(ui.item.data.direccion[0]?.valor);
+          $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad?.nombre);
+          $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia?.nombre);
+          $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais?.nombre);
           $("#patient-andes-id").val(ui.item.data.id);
         }else{
           $("#patient-status").val(ui.item.status);
@@ -127,6 +127,8 @@ $(document).on('turbolinks:load', function(e){
   function resetPatientPrescriptions(){
     $("div#chronic-prescriptions").html('');
     $("div#outpatient-prescriptions").html('');
+    $("div#last-prescription-info").html('');
+    $("div#pat-os-body").html('');
     $("#chronic-tab").find('span.badge-secondary').first().html('0');
     $("#outpatient-tab").find('span.badge-secondary').first().html('0');
   }

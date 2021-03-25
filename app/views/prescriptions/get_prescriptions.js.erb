@@ -20,4 +20,6 @@ if(<%= @chronic_prescriptions.count %> === 0 && <%= @outpatient_prescriptions.co
 }
 
 // Mostramos la ultima receta actualizada 
-$("#last-prescription-info").html('<%= j render("last_prescription_info") %>');
+if(<%= @last_prescription.present? %>){
+  $("#last-prescription-info").html('<%= j render("list", prescriptions: @last_prescription) %>');
+}
