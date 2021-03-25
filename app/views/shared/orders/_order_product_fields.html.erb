@@ -219,7 +219,8 @@
 
   <td>
     <!-- Mostrar botón de quitar  -->
-    <% if f.object.is_provision? || f.object.new_record? %>
+    <%# if f.object.is_provision? || f.object.new_record? %>
+    <% if policy(f.object).remove_association? %>
       <!-- Botón quitar -->
       <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
