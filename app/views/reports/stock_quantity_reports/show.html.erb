@@ -22,7 +22,7 @@
       </div>
       <div class="p-2 flex-fill">
         <h5>Rubros</h5>
-        <%= @stock_quantity_report.areas.map(&:name).join(", ") %>
+        <%= @stock_quantity_report.areas.count > 5 ? @stock_quantity_report.areas.count.to_s+' rubros' : @stock_quantity_report.areas.map(&:name).join(", ") %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Fecha</h5>

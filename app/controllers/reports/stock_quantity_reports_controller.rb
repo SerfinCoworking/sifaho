@@ -56,15 +56,18 @@ class Reports::StockQuantityReportsController < ApplicationController
     end
 
     def generate_report(stocks, params)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'first_page.tlf')
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'stock', 'quantity_first_page.tlf')
       
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'first_page.tlf'), :default => true
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'other_page.tlf'), id: :other_page
+      # report.use_layout File.join(Rails.root, 'app', 'reports', 'stock', 'quantity_first_page.tlf'), :default => true
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'stock', 'quantity_second_page.tlf'), id: :other_page
       
+      # Comenzamos con la pagina principal
       report.start_new_page
 
-      report.page[:supply_areas] = @stock_quantity_report.areas.map(&:name).join(", ")
       report.page[:efector] = @stock_quantity_report.sector.sector_and_establishment
+      report.page[:areas_count] = @stock_quantity_report.areas.count > 5 ? @stock_quantity_report.areas.count.to_s+' rubros' : @stock_quantity_report.areas.map(&:name).join(", ")
+      report.page[:products_count] = stocks.count
+      report.page[:username].value("DNI: "+current_user.dni.to_s+", "+current_user.full_name)
 
       stocks.each do |stock|
         if report.page_count == 1 && report.list.overflow?
@@ -76,7 +79,7 @@ class Reports::StockQuantityReportsController < ApplicationController
           list.add_row do |row|
             row.values  product_code: stock.product_code,
                         product_name: stock.product_name,
-                        supply_area: stock.product_area_name,
+                        area: stock.product_area_name,
                         quantity: stock.quantity
           end
         end
@@ -84,7 +87,7 @@ class Reports::StockQuantityReportsController < ApplicationController
       
       report.pages.each do |page|
         page[:title] = 'Reporte de stock disponible por rubros'
-        page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
+        page[:requested_date] = DateTime.now.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
       end
 
