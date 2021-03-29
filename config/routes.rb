@@ -270,16 +270,19 @@ Rails.application.routes.draw do
       get 'dispense'
     end
     collection do
+      get "new/:patient_id", to: "outpatient_prescriptions#new", as: "new"
       get "find_lots(/:order_product_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end
   
-  resources :chronic_prescriptions, path: :recetas_cronicas do 
+  resources :chronic_prescriptions, except: [:new, :create], path: :recetas_cronicas do 
     resources :chronic_dispensations, only: [:new, :create] do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
     end
     collection do
+      get "new/:patient_id", to: "chronic_prescriptions#new", as: "new"
+      post ":patient_id", to: "chronic_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
   end

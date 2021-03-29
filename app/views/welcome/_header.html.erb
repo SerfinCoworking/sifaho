@@ -28,12 +28,12 @@
               Ambulatoria
             <% end %>
           <% end %>
-          <% if policy(Prescription).new_cronic? %>
-            <%= link_to new_chronic_prescription_path, class: "dropdown-item" do %>
-              <%= fa_icon "plus" %>
-              Crónica
-            <% end %>
-          <% end %>
+          <%# if policy(Prescription).new_cronic? %>
+            <%#= link_to new_chronic_prescription_path, class: "dropdown-item" do %>
+              <%#= fa_icon "plus" %>
+              <%# Crónica %>
+            <%# end %>
+          <%# end %>
         </div>
       </li>
     <% end %>

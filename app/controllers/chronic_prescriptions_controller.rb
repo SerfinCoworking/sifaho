@@ -1,5 +1,6 @@
 class ChronicPrescriptionsController < ApplicationController
   before_action :set_chronic_prescription, except: [:index, :new, :create ]
+  before_action :set_patient_to_chronic_prescription, only: [ :new, :create ]
 
   # GET /chronic_prescriptions
   # GET /chronic_prescriptions.json
@@ -37,7 +38,6 @@ class ChronicPrescriptionsController < ApplicationController
   # GET /chronic_prescriptions/new
   def new
     authorize ChronicPrescription
-    @chronic_prescription = ChronicPrescription.new
     @chronic_prescription.original_chronic_prescription_products.build
   end
 
@@ -49,7 +49,6 @@ class ChronicPrescriptionsController < ApplicationController
   # POST /chronic_prescriptions
   # POST /chronic_prescriptions.json
   def create
-    @chronic_prescription = ChronicPrescription.new(chronic_prescription_params)
     authorize @chronic_prescription
     @chronic_prescription.provider_sector = current_user.sector
     @chronic_prescription.establishment = current_user.sector.establishment
@@ -58,8 +57,8 @@ class ChronicPrescriptionsController < ApplicationController
 
     respond_to do |format|
         # Si se entrega la receta
-      begin
         @chronic_prescription.save!
+      begin
         message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = "creó"
         
@@ -75,6 +74,7 @@ class ChronicPrescriptionsController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @chronic_prescription_products = @chronic_prescription.original_chronic_prescription_products.present? ? @chronic_prescription.original_chronic_prescription_products : @chronic_prescription.original_chronic_prescription_products.build
+        @chronic_prescription.patient = Patient.find(params[:patient_id])
         format.html { render :new }
       end
     end
@@ -203,6 +203,13 @@ class ChronicPrescriptionsController < ApplicationController
   
 
   private
+    # Set prescription and patient to prescription
+    def set_patient_to_chronic_prescription
+      @chronic_prescription = params[:chronic_prescription].present? ? ChronicPrescription.create(chronic_prescription_params) : ChronicPrescription.new
+      @patient = Patient.find(params[:patient_id])
+      @chronic_prescription.patient_id =  @patient.id
+    end
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_chronic_prescription
       @chronic_prescription = ChronicPrescription.find(params[:id])
@@ -211,7 +218,6 @@ class ChronicPrescriptionsController < ApplicationController
     def chronic_prescription_params
       params.require(:chronic_prescription).permit(
         :professional_id,
-        :patient_id,
         :diagnostic,        
         :date_prescribed,
         :expiry_date,

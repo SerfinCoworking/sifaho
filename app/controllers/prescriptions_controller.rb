@@ -19,10 +19,6 @@ class PrescriptionsController < ApplicationController
     @chronic_prescriptions = ChronicPrescription.where(patient_id: params[:patient_id]).order(updated_at: :desc).limit(10)
     @outpatient_prescriptions = OutpatientPrescription.where(patient_id: params[:patient_id]).order(updated_at: :desc).limit(10)
     @last_prescription = (@chronic_prescriptions + @outpatient_prescriptions).sort_by(&:updated_at).last
-    puts "================================ DEBUG".colorize(background: :red)
-    puts @last_prescription.present?
-    puts @last_prescription.nil?
-    puts "================================ DEBUG".colorize(background: :red)
   end
 
   # GET /prescriptions/1
