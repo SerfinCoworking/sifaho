@@ -264,13 +264,14 @@ Rails.application.routes.draw do
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
 
   # en row_id debemos agregar el id de OutpatientPrescriptionProduct
-  resources :outpatient_prescriptions, path: :recetas_ambulatorias do
+  resources :outpatient_prescriptions, except: [:new, :create], path: :recetas_ambulatorias do
     member do
       get 'return_dispensation'
       get 'dispense'
     end
     collection do
       get "new/:patient_id", to: "outpatient_prescriptions#new", as: "new"
+      post ":patient_id", to: "outpatient_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end

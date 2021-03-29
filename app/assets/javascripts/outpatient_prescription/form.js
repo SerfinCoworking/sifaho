@@ -34,7 +34,6 @@ $(document).on('turbolinks:load', function(e){
     maxDate: moment().format("DD/MM/YYYY")
   });
 
-  setExpirydate($('.date-prescribed').first().val());
 
   $('.date-prescribed').on('change', function(e) {
     setExpirydate(e.target.value);
@@ -98,7 +97,7 @@ $(document).on('turbolinks:load', function(e){
       $("#patient-dni").val(ui.item.dni);
       $("#patient-fullname").val(ui.item.fullname);
       const url = $('#patient-dni').attr('data-insurance-url');
-      getInsurances(url, ui.item.dni);
+      // getInsurances(url, ui.item.dni);
     }
   });
 
@@ -131,7 +130,7 @@ $(document).on('turbolinks:load', function(e){
         $("#patient-dni").val(ui.item.dni);
         $("#patient-fullname").val(ui.item.fullname);
         const url = $('#patient-dni').attr('data-insurance-url');
-        getInsurances(url, ui.item.dni);
+        // getInsurances(url, ui.item.dni);
       }
   });
   

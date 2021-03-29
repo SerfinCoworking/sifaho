@@ -56,9 +56,9 @@ class ChronicPrescriptionsController < ApplicationController
     @chronic_prescription.status = 'pendiente'
 
     respond_to do |format|
-        # Si se entrega la receta
-        @chronic_prescription.save!
+      # Si se entrega la receta
       begin
+        @chronic_prescription.save!
         message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = "creó"
         
