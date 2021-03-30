@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_144821) do
+ActiveRecord::Schema.define(version: 2021_03_30_132253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -332,6 +332,15 @@ ActiveRecord::Schema.define(version: 2021_03_10_144821) do
     t.index ["supply_id"], name: "index_external_order_product_reports_on_supply_id"
   end
 
+  create_table "external_order_product_templates", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "external_order_template_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_order_template_id"], name: "unique_ext_ord_prod_tem_on_ext_ord_tem"
+    t.index ["product_id"], name: "index_external_order_product_templates_on_product_id"
+  end
+
   create_table "external_order_products", force: :cascade do |t|
     t.bigint "external_order_id"
     t.bigint "product_id"
@@ -483,6 +492,15 @@ ActiveRecord::Schema.define(version: 2021_03_10_144821) do
     t.index ["product_id"], name: "index_internal_order_product_reports_on_product_id"
     t.index ["sector_id"], name: "index_internal_order_product_reports_on_sector_id"
     t.index ["supply_id"], name: "index_internal_order_product_reports_on_supply_id"
+  end
+
+  create_table "internal_order_product_templates", force: :cascade do |t|
+    t.bigint "product_id"
+    t.bigint "internal_order_template_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_order_template_id"], name: "unique_int_ord_prod_tem_on_int_ord_tem"
+    t.index ["product_id"], name: "index_internal_order_product_templates_on_product_id"
   end
 
   create_table "internal_order_products", force: :cascade do |t|
@@ -721,7 +739,6 @@ ActiveRecord::Schema.define(version: 2021_03_10_144821) do
     t.bigint "patient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["number", "patient_id"], name: "index_patient_phones_on_number_and_patient_id", unique: true
     t.index ["patient_id"], name: "index_patient_phones_on_patient_id"
   end
 

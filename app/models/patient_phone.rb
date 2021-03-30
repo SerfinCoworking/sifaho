@@ -3,5 +3,4 @@ class PatientPhone < ApplicationRecord
 
   belongs_to :patient
 
-  validates_uniqueness_of :number, scope: [:patient_id]
 end
