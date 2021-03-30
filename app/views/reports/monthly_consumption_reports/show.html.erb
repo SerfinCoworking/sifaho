@@ -9,7 +9,7 @@
       <%= fa_icon "pills" %>
       <h5 class="card-title mb-0 ml-2">
         Viendo reporte de consumo por mes / punto crítico
-        por <%= @monthly_consumption_report.report_type %>
+        por <%= @monthly_consumption_report.report_type.humanize %>
       </h5>
     </div>
     <%= link_to :back, class: "btn text-white" do %>
@@ -40,7 +40,7 @@
       <% if @monthly_consumption_report.por_rubro? %>
         <div class="col-12 pl-4">
           <h5>Rubros</h5>
-          <%= @monthly_consumption_report.areas.map(&:name).join(", ") %>
+          <%= @monthly_consumption_report.areas.count > 5 ? @monthly_consumption_report.areas.count.to_s+' rubros' : @monthly_consumption_report.areas.map(&:name).join(", ") %>
         </div>
       <% else %>
         <div class="col-6">
@@ -133,7 +133,7 @@
                 <td>
                   <%= stock.product_code %>
                 </td>
-                <td>
+                <td class="text-truncate align-middle" style="max-width: 500px;">
                   <%= stock.product_name %>
                 </td>
                 <td>
@@ -187,8 +187,14 @@
     <%= link_to :back, class: 'btn btn-light mr-2' do %>
       Volver
     <% end %>
-    <%= link_to reports_monthly_consumption_reports_path, class: "btn btn-primary" do %>
-      <%= fa_icon "plus" %> Nuevo reporte
+    <%= link_to reports_monthly_consumption_report_path(format: 'pdf', id: @monthly_consumption_report.id), 
+      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
+      <%= fa_icon "print" %> Imprimir
+    <% end %>
+    <% if policy(MonthlyConsumptionReport).new? %>
+      <%= link_to reports_monthly_consumption_reports_path, class: "btn btn-primary" do %>
+        <%= fa_icon "plus" %> Nuevo reporte
+      <% end %>
     <% end %>
   </div>
 </div>

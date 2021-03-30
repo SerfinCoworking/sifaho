@@ -28,7 +28,7 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        send_data generate_report(@stocks, @params),
+        send_data generate_report(),
           filename: 'reporte_stock_por_rubro.pdf',
           type: 'application/pdf',
           disposition: 'inline'
@@ -71,36 +71,77 @@ class Reports::MonthlyConsumptionReportsController < ApplicationController
       params.require(:monthly_consumption_report).permit(:since_date, :to_date, :report_type, :product_id, area_ids: [])
     end
 
-    def generate_report(stocks, params)
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'first_page.tlf')
+    def generate_report()
+      if @monthly_consumption_report.por_rubro?
+        report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'monthly_consumption', 'first_page_consumption_area.tlf')
+        report.use_layout File.join(Rails.root, 'app', 'reports', 'monthly_consumption', 'second_page_consumption_area.tlf'), id: :other_page
+      else
+        report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'monthly_consumption', 'month_consumption_product.tlf')
+      end
       
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'first_page.tlf'), :default => true
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'stock_quantity', 'other_page.tlf'), id: :other_page
-      
+      # Comenzamos con la pagina principal
       report.start_new_page
 
-      report.page[:supply_areas] = @monthly_consumption_report.areas.map(&:name).join(", ")
       report.page[:efector] = @monthly_consumption_report.sector.sector_and_establishment
+      report.page[:since_date] = @monthly_consumption_report.since_date.strftime("%d/%m/%Y")
+      report.page[:to_date] = @monthly_consumption_report.to_date.strftime("%d/%m/%Y")
+      report.page[:username].value("DNI: "+current_user.dni.to_s+", "+current_user.full_name)
+      
+      if @monthly_consumption_report.por_rubro?
 
-      stocks.each do |stock|
-        if report.page_count == 1 && report.list.overflow?
-          report.start_new_page layout: :other_page do |page|
+        report.page[:areas_count] = @monthly_consumption_report.areas.count > 5 ? @monthly_consumption_report.areas.count.to_s+' rubros' : @monthly_consumption_report.areas.map(&:name).join(", ")
+        @stocks.each do |stock|
+          movements_average = stock
+            .movements
+            .where(adds: false)
+            .since_date(@monthly_consumption_report.since_date.strftime("%d/%m/%Y"))
+            .to_date(@monthly_consumption_report.to_date.strftime("%d/%m/%Y"))
+            .group_by_month("stock_movements.created_at")
+            .sum(:quantity)
+          if movements_average.size > 0
+            month_average = movements_average.sum { |x| x[1] } / movements_average.size
+          end
+          if report.page_count == 1 && report.list.overflow?
+            report.start_new_page layout: :other_page do |page|
+            end
+          end
+          
+          report.list do |list|
+            list.add_row do |row|
+              row.item(:product_code).value(stock.product_code)
+              row.item(:product_name).value(stock.product_name)
+              row.item(:stock_quantity).value(stock.quantity)
+              row.item(:monthly_average).value( month_average.present? ? month_average.round : 0)
+              row.item(:order_point_quantity).value( month_average.present? ? (month_average * 1.2).round : 0)
+              row.item(:critic_quantity).value( month_average.present? ? ((month_average / 4) * 1.2).round : 0)
+              row.item(:stock_quantity).value(stock.quantity)
+            end
           end
         end
-        
-        report.list do |list|
-          list.add_row do |row|
-            row.values  product_code: stock.product_code,
-                        product_name: stock.product_name,
-                        supply_area: stock.product_area_name,
-                        quantity: stock.quantity
+      else
+        report.page[:product] = @monthly_consumption_report.product_name
+        report.page[:area_name] = @monthly_consumption_report.product.area_name
+        report.page[:unity_name] = @monthly_consumption_report.product.unity_name
+        report.page[:stock_quantity] = @stock_quantity
+        report.page[:monthly_average] = @month_average.present? ? @month_average.round : 0
+        report.page[:order_point_quantity] = @month_average.present? ? (@month_average * 1.2).round : 0
+        report.page[:critic_quantity] = @month_average.present? ? ((@month_average / 4) * 1.2).round : 0
+
+        if @month_average.present?
+          @movements_average.each do |movement|
+            report.list do |list|
+              list.add_row do |row|
+                row.item(:month).value(l movement[0], format: :month_and_year)
+                row.item(:quantity).value(movement[1].round)
+              end
+            end
           end
         end
       end
       
       report.pages.each do |page|
-        page[:title] = 'Reporte de stock disponible por rubros'
-        page[:date_now] = DateTime.now.strftime("%d/%m/%Y")
+        page[:title] = 'Reporte de consumo mensual'
+        page[:requested_date] = DateTime.now.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
       end
 
