@@ -48,7 +48,7 @@ $(document).on('turbolinks:load', function(e){
           
           // Datos del paciente rellenados con Andes
           $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
-          $("#patient-marital-status").val(ui.item.data.estadoCivil);
+          $("#patient-marital-status").val(capitalize(ui.item.data.estadoCivil));
 
           for(let index = 0; ui.item.data.contacto.length > index; index++){
             if(['celular', 'fijo'].includes(ui.item.data.contacto[index].tipo)){
@@ -75,7 +75,15 @@ $(document).on('turbolinks:load', function(e){
           $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad?.nombre);
           $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia?.nombre);
           $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais?.nombre);
-          $("#patient-andes-id").val(ui.item.data.id);
+          $("#patient-andes-id").val(ui.item.data._id);
+          $("#patient-andes-photo").val(ui.item.data.fotoId);
+          
+          //Mostramos la imagen
+          const image = new Image();
+          image.src = "data:image/jpg;base64,"+ui.item.avatar.toString();
+          $(image).addClass("patient-avatar");
+          $("#patient-avatar").html(image);
+          
         }else{
           $("#patient-status").val(ui.item.status);
         }
@@ -107,6 +115,7 @@ $(document).on('turbolinks:load', function(e){
     $("#patient-status").val("Temporal");
     $("#patient-lastname").val("").removeAttr('readonly');
     $("#patient-firstname").val("").removeAttr('readonly');
+    $("div#patient-avatar").html('');
     setPatientSex();
     $("#new-receipt-buttons").fadeOut(300).html('');
   }
@@ -161,4 +170,9 @@ function getPrescriptionsTo(patientId){
     url: prescriptionsUrl + "/" + patientId,
     dataType: "script"
   });
+}
+
+function capitalize(s){
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
 }

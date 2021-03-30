@@ -307,3 +307,21 @@ a {
 .bg-ocpp-light-blue{
   background-color: $light-blue;
 }
+
+#pat-container{
+
+  #patient-avatar{
+    width: 5rem;
+    padding: 0 0.8rem;
+    box-sizing: content-box;
+    text-align: center;
+    img.patient-avatar{
+      max-width: 5rem;
+      max-height: 5rem;
+    }
+  }
+  .pat-os-container{
+    width: calc(100% - 5rem);
+    padding: 0 0.8rem;
+  }
+}

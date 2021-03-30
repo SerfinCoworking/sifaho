@@ -90,6 +90,9 @@
           <input id="patient-state-name" class="andes-input" name="patient[address][state_name]" type="hidden">
           <input id="patient-country-name" class="andes-input" name="patient[address][country_name]" type="hidden">
           <input id="patient-andes-id" class="andes-input" name="patient[andes_id]" type="hidden">
+          <input id="patient-andes-photo" class="andes-input" name="patient[photo_andes_id]" type="hidden">
+
+
         <% end %>
       </div>
       <div class="card-footer d-flex justify-content-end">
@@ -113,7 +116,10 @@
       </div>
       
       <div class="card-body">
-        <div id="pat-os-body" class="mb-2"></div>
+        <div id="pat-container" class="d-flex">
+          <div class="border-right" id="patient-avatar"></div>
+          <div class="pat-os-container" id="pat-os-body" class="mb-2"></div>
+        </div>
         <h5>Última recetada</h5>
         <div id="last-prescription-info"></div>
       </div>
