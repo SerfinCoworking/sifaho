@@ -36,6 +36,13 @@ $(document).on('turbolinks:load', function(e){
       $(".andes-input").val("");
       $("#patient-phones").html("");
       $(".andes-input").attr('disabled', true);
+      //Mostramos la imagen [local]
+      if(ui.item.avatar_url){
+          const image = new Image();
+          image.src = ui.item.avatar_url;
+          $(image).addClass("patient-avatar");
+          $("#patient-avatar").html(image);
+      }
 
       if(ui.item.dni != '' && typeof ui.item.lastname !== 'undefined' && typeof ui.item.firstname !== 'undefined'){
         $("#patient-dni").val(ui.item.dni);
@@ -78,7 +85,7 @@ $(document).on('turbolinks:load', function(e){
           $("#patient-andes-id").val(ui.item.data._id);
           $("#patient-andes-photo").val(ui.item.data.fotoId);
           
-          //Mostramos la imagen
+          //Mostramos la imagen [andes]
           const image = new Image();
           image.src = "data:image/jpg;base64,"+ui.item.avatar.toString();
           $(image).addClass("patient-avatar");

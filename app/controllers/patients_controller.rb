@@ -53,10 +53,22 @@ class PatientsController < ApplicationController
       @address = set_address(params[:patient][:address])
       @patient.address = @address
     end
-
+    
+    patient_photo_res = get_patient_photo_from_andes(params[:patient][:andes_id], params[:patient][:photo_andes_id])
+      
     respond_to do |format|
       begin
+        file = Tempfile.new(['avatar', '.jpg'], Rails.root.join('tmp'))
+        file.binmode
+        file.write(patient_photo_res) 
+        file.rewind
+        @patient.avatar.attach(io: file, filename: "#{params[:patient][:photo_andes_id]}.jpg")
+        file.close
         @patient.save!
+
+        # Eliminamos el archivo temporal
+        File.delete(file.path) if File.exist?(file.path)
+
         flash.now[:success] = @patient.full_info+" se ha creado correctamente."
         format.html { redirect_to @patient }
         format.js
@@ -115,19 +127,42 @@ class PatientsController < ApplicationController
   def get_by_dni
     @patients = Patient.search_dni(params[:term])
     if @patients.present?
-      render json: @patients.map{ |pat| {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name, dni: pat.dni, lastname: pat.last_name, firstname: pat.first_name, fullname: pat.fullname, sex: pat.sex, status: pat.status}  }
+      render json: @patients.map{ |pat| {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name,
+        dni: pat.dni,
+        lastname: pat.last_name,
+        firstname: pat.first_name,
+        fullname: pat.fullname,
+        sex: pat.sex,
+        status: pat.status,
+        avatar_url: url_for(pat.avatar)
+        }  }
     else
       dni = params[:term]
       token = ENV['ANDES_TOKEN']
       url = ENV['ANDES_MPI_URL']
-      andes_patients = RestClient::Request.execute(method: :get, url: "#{url}/",
+      andes_patients = RestClient::Request.execute(method: :get, url: "#{url}/search",
         timeout: 30, headers: {
           "Authorization" => "JWT #{token}",
           params: {'documento': dni}
         }
       )
       if JSON.parse(andes_patients).count > 0
-        render json: JSON.parse(andes_patients).map{ |pat| { create: true, label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], dni: pat['documento'], lastname: pat['apellido'], firstname: pat['nombre'], fullname: pat['apellido']+" "+pat['nombre'], sex: pat["genero"], data: pat  }  }
+        render json: JSON.parse(andes_patients).map{ |pat| 
+          patient_photo_res = get_patient_photo_from_andes(pat["_id"], pat["fotoId"])          
+          patient_photo = Base64.strict_encode64(patient_photo_res)
+          
+          patient = { 
+            create: true, 
+            label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], 
+            dni: pat['documento'], 
+            lastname: pat['apellido'], 
+            firstname: pat['nombre'], 
+            fullname: pat['apellido']+" "+pat['nombre'], 
+            sex: pat["genero"], 
+            avatar: patient_photo,
+            data: pat  
+          }
+        }
       else
         render json: [0].map{ |pat| { create: true, dni: params[:term], label: "Agregar paciente" }}
       end
@@ -188,5 +223,15 @@ class PatientsController < ApplicationController
 
     def remote?
       return params[:commit] == "remote"
+    end
+
+    def get_patient_photo_from_andes(patient_id, patient_photo_id)
+      token = ENV['ANDES_TOKEN']
+      url = ENV['ANDES_MPI_URL']
+      RestClient::Request.execute(method: :get, url: "#{url}/#{patient_id}/foto/#{patient_photo_id}",
+        timeout: 30, headers: {
+          "Authorization" => "JWT #{token}",
+        }
+      )
     end
 end
