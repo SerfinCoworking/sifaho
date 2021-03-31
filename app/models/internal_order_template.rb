@@ -18,5 +18,4 @@ class InternalOrderTemplate < ApplicationRecord
   accepts_nested_attributes_for :internal_order_product_templates,
     reject_if: ->(eopt){ eopt['product_id'].blank? },
     allow_destroy: true
-
 end

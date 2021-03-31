@@ -13,6 +13,15 @@ class InternalOrderTemplatesController < ApplicationController
   # GET /internal_order_templates/1.json
   def show
     authorize @internal_order_template
+    respond_to do |format|
+      format.html
+      format.pdf do
+        send_data generate_report(),
+          filename: "plantilla_#{@internal_order_template.order_type}_sector.pdf",
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   # GET /internal_order_templates/new
@@ -104,6 +113,40 @@ class InternalOrderTemplatesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_internal_order_template
       @internal_order_template = InternalOrderTemplate.find(params[:id])
+    end
+
+    def generate_report()
+      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order_template', 'first_page.tlf')
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_template', 'second_page.tlf'), id: :other_page
+      
+      # Comenzamos con la pagina principal
+      report.start_new_page
+
+      report.page[:template_name] = @internal_order_template.name
+      report.page[:efector] = @internal_order_template.destination_sector.sector_and_establishment
+      report.page[:username].value("DNI: "+current_user.dni.to_s+", "+current_user.full_name)
+      
+      @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots|
+        if report.page_count == 1 && report.list.overflow?
+          report.start_new_page layout: :other_page
+        end
+
+        report.list do |list|
+          list.add_row do |row|
+            row.item(:product_code).value(iots.product_code)
+            row.item(:product_name).value(iots.product_name)
+            row.item(:unity_name).value(iots.product.unity_name)
+          end
+        end
+      end
+      
+      report.pages.each do |page|
+        page[:title] = "Plantilla de #{@internal_order_template.order_type} de sector"
+        page[:requested_date] = DateTime.now.strftime("%d/%m/%Y")
+        page[:page_count] = report.page_count
+      end
+  
+      report.generate
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -79,23 +79,28 @@
       <% end %>
     </div>
     <div>
-      <%= link_to 'Volver', internal_order_templates_path, class: "btn btn-light mr-2" %>
+      <%= link_to 'Volver', internal_order_templates_path, class: "btn btn-light mr-1" %>
+      <% if policy(@internal_order_template).show? %>
+        <%= link_to internal_order_template_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
       <% if policy(@internal_order_template).edit? %>
         <%= link_to edit_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-2" do %>
+          class: "btn btn-warning mr-1" do %>
           <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).edit_provider? %>
         <%= link_to edit_provider_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-2" do %>
+          class: "btn btn-warning mr-1" do %>
           <%= fa_icon "pen" %>
           Editar
         <% end %>
       <% end %>
       <% if policy(@internal_order_template).use_applicant? %>
-        <%= link_to new_applicant_internal_orders_path(template: @internal_order_template), class: "btn btn-primary mr-2", target: :_blank do %>
+        <%= link_to new_applicant_internal_orders_path(template: @internal_order_template), class: "btn btn-primary mr-1", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear solicitud
         <% end %>
