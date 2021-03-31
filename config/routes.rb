@@ -209,7 +209,7 @@ Rails.application.routes.draw do
 
   resources :internal_order_comments, only: [ :show, :create]
 
-  resources :internal_order_templates do
+  resources :internal_order_templates, path: :plantillas_pedidos_sectores do
     collection do
       get "new_provider"
     end
@@ -248,7 +248,7 @@ Rails.application.routes.draw do
 
   resources :external_order_comments, only: [ :show, :create]
 
-  resources :external_order_templates do
+  resources :external_order_templates, path: :plantillas_pedidos_establecimientos do
     collection do
       get "new_provider"
     end

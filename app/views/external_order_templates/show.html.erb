@@ -79,6 +79,11 @@
     </div>
     <div>
       <%= link_to 'Volver', external_order_templates_path, class: "btn btn-light mr-2" %>
+      <% if policy(@external_order_template).show? %>
+        <%= link_to external_order_template_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
       <% if policy(@external_order_template).edit? %>
         <%= link_to edit_external_order_template_path(@external_order_template), :"data-turbolinks" => false,
           class: "btn btn-warning mr-2" do %>
