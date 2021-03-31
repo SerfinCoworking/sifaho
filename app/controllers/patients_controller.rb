@@ -54,17 +54,22 @@ class PatientsController < ApplicationController
       @patient.address = @address
     end
     
-    patient_photo_res = get_patient_photo_from_andes(params[:patient][:andes_id], params[:patient][:photo_andes_id])
+    file = Tempfile.new(['avatar', '.jpg'], Rails.root.join('tmp'))
+    
+    if params[:patient][:andes_id].present? && params[:patient][:photo_andes_id].present?
+      patient_photo_res = get_patient_photo_from_andes(params[:patient][:andes_id], params[:patient][:photo_andes_id])
+      file.binmode
+      file.write(patient_photo_res) 
+      file.rewind
+      @patient.avatar.attach(io: file, filename: "#{params[:patient][:photo_andes_id]}.jpg")
+    end
+
+    file.close
       
     respond_to do |format|
       begin
-        file = Tempfile.new(['avatar', '.jpg'], Rails.root.join('tmp'))
-        file.binmode
-        file.write(patient_photo_res) 
-        file.rewind
-        @patient.avatar.attach(io: file, filename: "#{params[:patient][:photo_andes_id]}.jpg")
-        file.close
         @patient.save!
+
 
         # Eliminamos el archivo temporal
         File.delete(file.path) if File.exist?(file.path)

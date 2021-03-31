@@ -4,3 +4,5 @@ $("#patient-lastname").val('<%= @patient.last_name %>').attr('readonly', true);
 $("#patient-firstname").val('<%= @patient.last_name %>').attr('readonly', true);
 setPatientSex('<%= @patient.sex %>');
 getPrescriptionsTo(<%= @patient.id %>);
+$("#container-more-info").addClass("show");
+$("#container-receipts-list").addClass("show");

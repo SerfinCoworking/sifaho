@@ -37,10 +37,10 @@ $(document).on('turbolinks:load', function(e){
       $(".andes-input").attr('disabled', true);
       //Mostramos la imagen [local]
       if(ui.item.avatar_url){
-          const image = new Image();
-          image.src = ui.item.avatar_url;
-          $(image).addClass("patient-avatar");
-          $("#patient-avatar").html(image);
+        const image = new Image();
+        image.src = ui.item.avatar_url;
+        $(image).addClass("patient-avatar");
+        $("#patient-avatar").html(image);
       }
 
       if(ui.item.dni != '' && typeof ui.item.lastname !== 'undefined' && typeof ui.item.firstname !== 'undefined'){
@@ -93,22 +93,23 @@ $(document).on('turbolinks:load', function(e){
         }else{
           $("#patient-status").val(ui.item.status);
         }
+        setPatientSex(ui.item.sex);      
+        $("#container-more-info").addClass("show");
+        $("#container-receipts-list").addClass("show");
       }else{
         resetForm();
+        $("#container-more-info").removeClass("show");
+        $("#container-receipts-list").removeClass("show");
       }
-
-      setPatientSex(ui.item.sex);      
-      setPatientPrescriptions(ui.item.create, ui.item.id);      
       const url = $('#patient-dni').attr('data-insurance-url');
       getInsurances(url, ui.item.dni);
-      $("#container-more-info").addClass("show");
-      $("#container-receipts-list").addClass("show");
+      setPatientPrescriptions(ui.item.create, ui.item.id);
     }
   });
   
   $('#patient-dni').on('keyup', function(e) {
     if($(e.target).val().length < 6){
-      resetForm();
+      resetForm(true);
       resetPatientPrescriptions();
       $("#patient-submit").attr('disabled', true);
       $("#container-more-info").removeClass("show");
@@ -119,12 +120,12 @@ $(document).on('turbolinks:load', function(e){
   /* =================================================FUNCIONES========================================================================= */
   
   /* Reseteamos el formulario */
-  function resetForm(){
+  function resetForm(readOnly = false){
     $("#patient-status").val("Temporal");
-    $("#patient-lastname").val("").removeAttr('readonly');
-    $("#patient-firstname").val("").removeAttr('readonly');
+    $("#patient-lastname").val("").attr('readonly', readOnly);
+    $("#patient-firstname").val("").attr('readonly', readOnly);
     $("div#patient-avatar").html('');
-    setPatientSex();
+    setPatientSex("", readOnly);
     $("#new-receipt-buttons").fadeOut(300).html('');
   }
   
@@ -153,8 +154,8 @@ $(document).on('turbolinks:load', function(e){
 });
 
 /* Seteamos el sexo del paciente */
-function setPatientSex(sex){
-  if(typeof sex !== 'undefined'){
+function setPatientSex(sex, readOnly){
+  if(typeof sex !== 'undefined' && sex !== ''){
     // precargamos el sexo del paciente
     $("#patient-sex option").each((index, item) => {
       const sexMatch = new RegExp(sex, 'i');
@@ -164,6 +165,10 @@ function setPatientSex(sex){
         $("#patient-sex").selectpicker('refresh');
       }
     });
+  }else if(readOnly){
+    $('#patient-sex-fake').val("Otro").removeClass('d-none');
+    $(".patient-form-selector").val("Otro").addClass('d-none');
+    $(".patient-form-selector").selectpicker('refresh');
   }else{
     $('#patient-sex-fake').val("").addClass('d-none');
     $(".patient-form-selector").val("Otro").removeClass('d-none');

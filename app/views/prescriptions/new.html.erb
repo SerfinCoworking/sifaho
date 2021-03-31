@@ -31,7 +31,8 @@
                       placeholder="DNI" 
                       type="text" 
                       autocomplete="off"
-                      data-prescriptions-url="<%= get_prescriptions_url %>">
+                      data-prescriptions-url="<%= get_prescriptions_url %>"
+                      autofocus>
                   </div>
                   <div class="with-loading">
                     <%= fa_icon 'spinner', class: "fa-spin"%>
@@ -45,7 +46,7 @@
                   
               <div class="col-9">
                 <div class="form-group string required">
-                  <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-lastname" required aria-required="true" placeholder="Apellido" type="text" autocomplete="off" name="patient[last_name]">
+                  <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-lastname" required aria-required="true" placeholder="Apellido" type="text" autocomplete="off" name="patient[last_name]" readonly="readonly">
                 </div>
               </div>
               
@@ -56,7 +57,7 @@
                   
               <div class="col-9">
                 <div class="form-group string required">
-                  <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-firstname" required aria-required="true" placeholder="Nombre" type="text" autocomplete="off" name="patient[first_name]">
+                  <input class="form-control string required ui-autocomplete-input patient-form-input" id="patient-firstname" required aria-required="true" placeholder="Nombre" type="text" autocomplete="off" name="patient[first_name]" readonly="readonly">
                 </div>
               </div>
                           
@@ -67,12 +68,12 @@
                   
               <div class="col-9">
                 <div class="form-group string required chronic_prescription_patient">
-                  <select name="patient[sex]" id="patient-sex" class="selectpicker custom-select-pick patient-form-selector">
+                  <select name="patient[sex]" id="patient-sex" class="selectpicker custom-select-pick patient-form-selector d-none">
                     <% Patient.sexes.each do |sex| %>
                     <option value="<%= sex[0] %>"><%= sex[0] %></option>
                     <% end %>
                   </select>
-                  <input class="form-control string patient-form-input d-none" id="patient-sex-fake"  type="text" autocomplete="off" name="patient-sex-fake">
+                  <input class="form-control string patient-form-input" id="patient-sex-fake"  type="text" autocomplete="off" name="patient-sex-fake" readonly="readonly" value="Otro">
                 </div>
               </div>
             </div>
