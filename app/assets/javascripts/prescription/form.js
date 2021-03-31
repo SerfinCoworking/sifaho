@@ -76,11 +76,27 @@ $(document).on('turbolinks:load', function(e){
             }
           };
 
-          $("#patient-postal-code").val(ui.item.data.direccion[0]?.codigoPostal);
-          $("#patient-line").val(ui.item.data.direccion[0]?.valor);
-          $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad?.nombre);
-          $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia?.nombre);
-          $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais?.nombre);
+          // viene direccion
+          if(ui.item.data.direccion.length){
+            $("#patient-postal-code").val(ui.item.data.direccion[0].codigoPostal);
+            $("#patient-line").val(ui.item.data.direccion[0].valor);
+            // viene ubicacion
+            if(ui.item.data.direccion[0].ubicacion){
+              // viene localidad
+              if(ui.item.data.direccion[0].ubicacion.localidad){  
+                $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad.nombre);
+              }
+              // viene provincia
+              if(ui.item.data.direccion[0].ubicacion.provincia){
+                $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
+              }
+              // viene pais
+              if(ui.item.data.direccion[0].ubicacion.pais){
+                $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
+                $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais.nombre);
+              }
+            }
+          }
           $("#patient-andes-id").val(ui.item.data._id);
           $("#patient-andes-photo").val(ui.item.data.fotoId);
           
