@@ -1,48 +1,48 @@
-#patient_type_id_chosen{
-  width: 200px !important;
-}
+.cards-container{
+  height: calc(100% - 2rem);
+  .patient-form-and-info{
+    height: 24.9166rem;
+  }
+  .patient-receipt{
+    height: calc(100% - (24.9166rem + 1rem));
+    .card-body{
+      height: calc(100% - 25.8333333333rem);
+      #prescriptions-tab{
+        height: calc(100% - 32px);
+        overflow-x: scroll;
+      }
+    }
+  }
+  #pat-container{
 
-.pres-col-pro{
-  max-width: 130px; /* Customise it accordingly */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    #patient-avatar{
+      width: 7rem;
+      padding: 0 0.8rem;
+      box-sizing: content-box;
+      text-align: center;
+      img.patient-avatar{
+        max-width: 7rem;
+        max-height: 8rem;
+      }
+    }
+    .pat-os-container{
+      width: calc(100% - 5rem);
+      padding: 0 0.8rem;
+      max-height: 113px;
+      overflow-y: scroll;
+      table.table-insurance{
+        thead th{
+          position: sticky;
+          top: 0;
+          background-color: #fff;
+        }
+      }
+    }
+  }
 
-.pres-col-pat{
-  max-width: 130px; /* Customise it accordingly */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.pres-col-sup{
-  max-width: 250px; /* Customise it accordingly */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.daily-dose-label > p{
-  display: inline-table;
-}
-
-.quantity-label > p{
-  display: inline-table;
-}
-
-.btn-add-pres{
-  position: absolute;
-  z-index: 4;
-  margin-top: -2em;
-  margin-left: 10em;
-  display: none;
-}
-
-#pedidos-li:hover .btn-add-pres {
-   display: table; /* On :hover of div show button */
-}
-
-.btn-reset{
-  position: absolute !important;
+  #last-prescription-info{
+    table.table{
+      margin-bottom: 0!important;
+    }
+  }
 }

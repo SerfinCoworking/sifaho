@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(_PAGE.controller === 'outpatient_prescriptions' && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
+  if(!(['outpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   
@@ -34,7 +34,6 @@ $(document).on('turbolinks:load', function(e){
     maxDate: moment().format("DD/MM/YYYY")
   });
 
-  setExpirydate($('.date-prescribed').first().val());
 
   $('.date-prescribed').on('change', function(e) {
     setExpirydate(e.target.value);
@@ -45,6 +44,7 @@ $(document).on('turbolinks:load', function(e){
     const datePrescribed = moment(value, "DD/MM/YYYY");
     const expiryDate = datePrescribed.add(3, 'month');
     $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
+    $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
   }
 
 
@@ -98,7 +98,7 @@ $(document).on('turbolinks:load', function(e){
       $("#patient-dni").val(ui.item.dni);
       $("#patient-fullname").val(ui.item.fullname);
       const url = $('#patient-dni').attr('data-insurance-url');
-      getInsurances(url, ui.item.dni);
+      // getInsurances(url, ui.item.dni);
     }
   });
 
@@ -131,7 +131,7 @@ $(document).on('turbolinks:load', function(e){
         $("#patient-dni").val(ui.item.dni);
         $("#patient-fullname").val(ui.item.fullname);
         const url = $('#patient-dni').attr('data-insurance-url');
-        getInsurances(url, ui.item.dni);
+        // getInsurances(url, ui.item.dni);
       }
   });
   

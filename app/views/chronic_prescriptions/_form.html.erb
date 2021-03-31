@@ -13,148 +13,132 @@
   </div>
   
   <div class="card-body">
-    <%= simple_form_for @chronic_prescription, html: { role: 'check-modified'} do |f| %>
-    <%= f.error_notification %>
-    <div class="row">
-      <div class="col-6">
-        <%# Medico %>
-        <div>
-          <%= f.label :professional_id do %>
-            Médico
-            <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
-              title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "plus" %>
-            <% end %>
-          <% end %>
-          <div class="custom-input-group">
-            <%= f.input :professional, as: :string,
-              label: false,
-              placeholder: 'Matrícula | Apellido | Nombre',
-              required: true,
-              autocomplete: false,
-              :input_html => {
-                id: "professional",
-                data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
-                size: 30
-              }
-            %>
-            <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
-            <div class="with-loading">
-              <%= fa_icon 'spinner', class: "fa-spin"%>
-            </div>  
-          </div>
-        </div>
-        <%# Paciente %>
-        <div>
-          <%= f.label :patient_id do %>
-            Paciente
-            <%= link_to new_patient_path, class: "btn btn-primary btn-sm", remote: 'true',
-              title: 'Nuevo paciente', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-              <%= fa_icon "plus" %>
-            <% end %>
-          <% end %>
+    <%= simple_form_for @chronic_prescription, 
+      url: @chronic_prescription.new_record? ? create_chronic_prescriptions_path(@chronic_prescription.patient) : @chronic_prescription, 
+      html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class="row">
+        <div class="col-6">
           <div class="row">
+            <div class="col-6 border-right">
+              <div class="d-flex">
+                <div class="w-25">
+                  <%= image_tag patient_avatar(@chronic_prescription.patient), class:"img-thumbnail" %>
+                </div>
+                <div class="w-75">
+                  <h5 id="patient-name" data-insurance-url="<%= get_insurance_path %>" data-patient-dni="<%= @chronic_prescription.patient.dni %>">
+                    <strong><%= @chronic_prescription.patient.last_name %>,</strong> 
+                    <%= @chronic_prescription.patient.first_name %>
+                  </h5>
+                </div>
+              </div>
+                
+              <h5 class="mt-3">
+                <%= @chronic_prescription.patient.dni %>
+                <span class="badge badge-<%= @chronic_prescription.patient.Temporal? ? "warning" : "success" %>">
+                  <%= @chronic_prescription.patient.status %>
+                </span>
+              </h5>
+
+              <h5> <%= @chronic_prescription.patient.email %> </h5>
+
+              <% if @chronic_prescription.patient.birthdate.present? %>
+                <p class="mb-0 mt-3"><strong>Fecha de nacimiento</strong></p>
+                <p><%= @chronic_prescription.patient.birthdate.strftime("%d/%m/%Y")%> | <%= @chronic_prescription.patient.age_string %></h5>
+              <% end %>
+
+              <%# <div id="pat-os-body"></div> %>
+            </div>
+            <div class="col-6 border-right">              
+              <%# Medico %>
+              <div>
+                <%= f.label :professional_id do %>
+                  Médico
+                  <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                    <%= fa_icon "plus" %>
+                  <% end %>
+                <% end %>
+                <div class="custom-input-group">
+                  <%= f.input :professional, as: :string,
+                    label: false,
+                    placeholder: 'Matrícula | Apellido | Nombre',
+                    required: true,
+                    autocomplete: false,
+                    :input_html => {
+                      id: "professional",
+                      data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                      value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
+                      size: 30
+                    }
+                  %>
+                  <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+
+        <!--------------------------inputs receta---------------------------------->
+          <div class="row">
+            <%# fecha recetada %>
             <div class="col-4">
-              <div class="custom-input-group">
-                <%= f.input :patient, as: :string, class: 'form-control',
-                  label: false,
-                  placeholder: 'DNI',
-                  required: true,
-                  autocomplete: false,
-                  readonly: f.object.new_record? ? "" : true,
-                  :input_html => {
-                    id: 'patient-dni',
-                    data: { autocomplete_source: get_by_dni_patients_path, insurance_url: api_v1_get_insurance_path },
-                    value: "#{if f.object.patient.present?; f.object.patient.dni; end }",
-                  }
-                %>
-                <div class="with-loading">
-                  <%= fa_icon 'spinner', class: "fa-spin"%>
-                </div>
-              </div>
+              <%= f.input :date_prescribed, label: 'Fecha recetada',
+                  as: :string,
+                  :placeholder => "Seleccionar fecha",
+                  input_html: {
+                    tabindex: "-1",
+                    class: "form-control pull-right date-prescribed",
+                    required: true,
+                    autocomplete: 'off',
+                    value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
+                  },
+              html5: false %>
             </div>
-            <div class="col-8">
-              <div class="custom-input-group">
-                <%= f.input :patient, as: :string, class: 'form-control',
-                  label: false,
-                  placeholder: 'Apellido y nombre',
-                  required: true,
-                  readonly: f.object.new_record? ? "" : true,
-                  :input_html => {
-                    id: 'patient-fullname',
-                    data: { autocomplete_source: get_by_fullname_patients_path, insurance_url: api_v1_get_insurance_path },
-                    value: "#{if f.object.patient.present?; f.object.patient.fullname; end }",
-                  }
-                %>
-                <div class="with-loading">
-                  <%= fa_icon 'spinner', class: "fa-spin"%>
+            <%# duración de tratamiento %>
+            <div class="col-4">
+              <%= f.label :patient_id do %>
+                Duración de tratamiento
+              <%end%>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" name="duration-treatment" value="<%=f.object.date_prescribed.present? && f.object.expiry_date.present? ? ((f.object.expiry_date.year * 12 + f.object.expiry_date.month) - (f.object.date_prescribed.year * 12 + f.object.date_prescribed.month)) : 6%>" aria-describedby="meses-addon">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="meses-addon">Meses</span>
+                  </div>
                 </div>
-              </div>
-              <%= f.hidden_field :patient_id, id: "patient_id", value: "#{if f.object.patient.present?; f.object.patient.id; end }" %>
             </div>
-          </div><!-- End row -->
-        </div>
 
-        <div class="row">
-          <%# fecha recetada %>
-          <div class="col-4">
-            <%= f.input :date_prescribed, label: 'Fecha recetada',
-                as: :string,
-                :placeholder => "Seleccionar fecha",
-                input_html: {
-                  tabindex: "-1",
-                  class: "form-control pull-right date-prescribed",
-                  required: true,
-                  autocomplete: 'off',
-                  value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
-                },
-            html5: false %>
-          </div>
-          <%# duración de tratamiento %>
-          <div class="col-4">
-            <%= f.label :patient_id do %>
-              Duración de tratamiento
-            <%end%>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" name="duration-treatment" value="<%=f.object.date_prescribed.present? && f.object.expiry_date.present? ? ((f.object.expiry_date.year * 12 + f.object.expiry_date.month) - (f.object.date_prescribed.year * 12 + f.object.date_prescribed.month)) : 6%>" aria-describedby="meses-addon">
-                <div class="input-group-append">
-                  <span class="input-group-text" id="meses-addon">Meses</span>
-                </div>
+            <%# fecha de vencimiento %>
+            <div class="col-4">
+              <%= f.label :patient_id do %>
+                Fechas de vencimiento
+              <%end%>
+              <div id="expiry-date">
+                <%= "#{if f.object.expiry_date.present?; f.object.expiry_date.strftime("%d/%m/%Y"); end }" %>
               </div>
+              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{if f.object.expiry_date.present?; f.object.expiry_date; end }" %>
+            </div>
           </div>
 
-          <%# fecha de vencimiento %>
-          <div class="col-4">
-            <%= f.label :patient_id do %>
-              Fechas de vencimiento
-            <%end%>
-            <div id="expiry-date">
-              <%= "#{if f.object.expiry_date.present?; f.object.expiry_date.strftime("%d/%m/%Y"); end }" %>
-            </div>
-            <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{if f.object.expiry_date.present?; f.object.expiry_date; end }" %>
+          <%# diagnostico %>
+          <div>
+            <%= f.input :diagnostic, label: 'Diagnóstico', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
           </div>
         </div>
-
-        <%# diagnostico %>
-        <div>
-          <%= f.input :diagnostic, label: 'Diagnóstico', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
-        </div>
-      </div>
-      
-      
-      <!-- Aqui se carga la obra social -->
-      <div class="col-6">
-        <div id="pat-os-body"></div>
-      </div>
-    </div>
+      </div><!--  /.row -->
+    
 
 
-    <%# carga de productos originales %>
-    <%= render 'chronic_prescriptions/partials/original_order_products_table', form: f, :relation => :original_chronic_prescription_products %>
-      
-    <input name="commit" id="submit-type" type="hidden">
-  <%end%>
+      <%# carga de productos originales %>
+      <%= render 'chronic_prescriptions/partials/original_order_products_table', form: f, :relation => :original_chronic_prescription_products %>
+        
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %> <%# fin formulario %>
 
   </div><!-- /fin .card-body -->
 

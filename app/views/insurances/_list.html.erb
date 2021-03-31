@@ -1,0 +1,38 @@
+<% if @insurances.present? %>
+  <table class="table w-100 table-insurance">
+    <thead>
+      <tr>
+        <th>
+          Obra social
+        </th>
+        <th>
+          Código
+        </th>
+        <th>
+          Verificación
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @insurances.each do |insurance| %>
+        <tr>
+          <td>
+            <%= insurance['financiador'] %>
+          </td>
+          
+          <td>
+            <%= insurance['codigoFinanciador'] %>
+          </td>
+          
+          <td>
+            <%= insurance['version'].to_datetime.strftime("%d/%m/%Y") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="border w-100 text-center p-2">
+    No se encontró obra social
+  </div>
+<% end %>

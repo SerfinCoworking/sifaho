@@ -3,6 +3,7 @@ class OutpatientPrescriptionsController < ApplicationController
   include FindLots
   
   before_action :set_outpatient_prescription, only: [:show, :edit, :update, :destroy, :dispense, :delete, :return_dispensation ]
+  before_action :set_patient_to_outpatient_prescription, only: [ :new, :create ]
 
   # GET /outpatient_prescriptions
   # GET /outpatient_prescriptions.json
@@ -40,7 +41,6 @@ class OutpatientPrescriptionsController < ApplicationController
   # GET /outpatient_prescriptions/new
   def new
     authorize OutpatientPrescription
-    @outpatient_prescription = OutpatientPrescription.new
     @outpatient_prescription.outpatient_prescription_products.build
   end
 
@@ -52,13 +52,11 @@ class OutpatientPrescriptionsController < ApplicationController
   # POST /outpatient_prescriptions
   # POST /outpatient_prescriptions.json
   def create
-    @outpatient_prescription = OutpatientPrescription.new(outpatient_prescription_params)
     authorize @outpatient_prescription
     @outpatient_prescription.provider_sector = current_user.sector
     @outpatient_prescription.establishment = current_user.sector.establishment
     @outpatient_prescription.remit_code = "AM"+DateTime.now.to_s(:number)
     
-    @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
     @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
 
@@ -91,7 +89,6 @@ class OutpatientPrescriptionsController < ApplicationController
 
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
     @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
-    @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
 
     respond_to do |format|
       begin
@@ -233,6 +230,14 @@ class OutpatientPrescriptionsController < ApplicationController
   
 
   private
+
+    # Set prescription and patient to prescription
+    def set_patient_to_outpatient_prescription
+      @outpatient_prescription = params[:outpatient_prescription].present? ? OutpatientPrescription.create(outpatient_prescription_params) : OutpatientPrescription.new
+      @patient = Patient.find(params[:patient_id])
+      @outpatient_prescription.patient_id =  @patient.id
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_outpatient_prescription
       @outpatient_prescription = OutpatientPrescription.find(params[:id])

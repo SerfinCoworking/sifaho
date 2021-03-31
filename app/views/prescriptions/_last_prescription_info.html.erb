@@ -1,10 +1,11 @@
-<% if prescriptions.present? %>
+<% if @last_prescription.present? %>
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
         <thead class="thead-light">
           <tr>
             <th>Código</th>
             <th>Médico</th>
+            <th>Paciente</th>
             <th>Estado</th>
             <th>Productos</th>
             <th>Movimientos</th>
@@ -13,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-          <%= render prescriptions, hide_patient: true %>
+          <%= render @last_prescription %>
         </tbody>
       </table>
     </div>

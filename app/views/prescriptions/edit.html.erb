@@ -1,6 +1,0 @@
-<%= render 'header' %>
-<% if @prescription.ambulatoria? %>
-  <%= render 'form', prescription: @prescription %>
-<% else %>
-  <%= render 'form_cronic', prescription: @prescription %>
-<% end %>

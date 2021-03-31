@@ -1,6 +1,8 @@
 $(document).on('turbolinks:load', function(e){
   if(!(_PAGE.controller === 'chronic_prescriptions' && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   
+  showInsurances();
+
   initEvents();
   // button submit
   $("button[type='submit']").on('click', function(e){
@@ -77,66 +79,7 @@ $(document).on('turbolinks:load', function(e){
       $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
     }
   });
-  $('#patient-dni').autocomplete({
-    source: $('#patient-dni').data('autocomplete-source'),
-    autoFocus: true,
-    minLength: 7,
-    messages: {
-      noResults: function() {
-        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
-      }
-    },
-    search: function( event, ui ) {
-      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-    },
-    response: function (event, ui) {
-      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-    },
-    select:
-    function (event, ui) {
-      event.preventDefault();
-      $("#patient").tooltip('hide');
-      $("#patient_id").val(ui.item.id);
-      $("#patient-dni").val(ui.item.dni);
-      $("#patient-fullname").val(ui.item.fullname);
-      const url = $('#patient-dni').attr('data-insurance-url');
-      getInsurances(url, ui.item.dni);
-    }
-  });
-
-  // Función para autocompletar por nombre o apellido de paciente
-  $('#patient-fullname').autocomplete({
-    source: $('#patient-fullname').data('autocomplete-source'),
-    autoFocus: true,
-    minLength: 3,
-    messages: {
-      noResults: function() {
-        $(".ui-menu-item-wrapper").html("No se encontró el paciente");
-      }
-    },
-    search: function( event, ui ) {
-      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-    },
-    response: function (event, ui) {
-      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      if (!ui.content.length) {
-        $("#patient").tooltip({
-          placement: 'bottom', trigger: 'manual', title: 'No se encontró el paciente'
-        }).tooltip('show');
-      }
-    },
-    select:
-      function (event, ui) {
-        event.preventDefault();
-        $("#patient").tooltip('hide');
-        $("#patient_id").val(ui.item.id);
-        $("#patient-dni").val(ui.item.dni);
-        $("#patient-fullname").val(ui.item.fullname);
-        const url = $('#patient-dni').attr('data-insurance-url');
-        getInsurances(url, ui.item.dni);
-      }
-  });
-
+ 
   // cocoon init
   $('#original-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
@@ -197,7 +140,6 @@ $(document).on('turbolinks:load', function(e){
       $(tr).find("input.total-quantity-fake").first().val(treatmentDuration * reqByMonth);
       $(tr).find("input[type='hidden'].total-request-quantity").first().val(treatmentDuration * reqByMonth);
     });
-  
   }// initEvents function
 
   function onChangeOnSelectAutoCProductCode(target, item){
@@ -219,6 +161,12 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input
     }
+  }
+
+  function showInsurances(){
+    const url = $("#patient-name").attr('data-insurance-url');
+    const dni = $("#patient-name").attr('data-patient-dni');
+    getInsurances(url, dni);
   }
 
 });

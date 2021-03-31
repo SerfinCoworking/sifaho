@@ -1,13 +1,8 @@
 <%= render 'shared/flash_message' %>
-
-$('#dialog').modal('toggle');
-
-$('#patients').prepend('<%= j render (@patient) %>')
-
-// Efecto de ingreso
-$('#patient_<%= @patient.id %>').hide().fadeIn(500);
-
-// Se rellena la prescripción
-$('#patient-fullname').val('<%= @patient.fullname %>');
-$('#patient-dni').val('<%= @patient.dni %>');
-$('#patient_id').val('<%= @patient.id %>');
+// Obtenemos las recetas
+$("#patient-lastname").val('<%= @patient.last_name %>').attr('readonly', true);
+$("#patient-firstname").val('<%= @patient.last_name %>').attr('readonly', true);
+setPatientSex('<%= @patient.sex %>');
+getPrescriptionsTo(<%= @patient.id %>);
+$("#container-more-info").addClass("show");
+$("#container-receipts-list").addClass("show");

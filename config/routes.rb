@@ -104,9 +104,11 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :patients
-      get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
+      # get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
     end
   end
+  
+  get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
@@ -261,42 +263,36 @@ Rails.application.routes.draw do
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
 
   # en row_id debemos agregar el id de OutpatientPrescriptionProduct
-  resources :outpatient_prescriptions, path: :recetas_ambulatorias do
+  resources :outpatient_prescriptions, except: [:new, :create], path: :recetas_ambulatorias do
     member do
       get 'return_dispensation'
       get 'dispense'
     end
     collection do
+      get "nueva/:patient_id", to: "outpatient_prescriptions#new", as: "new"
+      post "nueva/:patient_id", to: "outpatient_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end
   
-  resources :chronic_prescriptions, path: :recetas_cronicas do 
+  resources :chronic_prescriptions, except: [:new, :create], path: :recetas_cronicas do 
     resources :chronic_dispensations, only: [:new, :create] do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
     end
     collection do
+      get "nueva/:patient_id", to: "chronic_prescriptions#new", as: "new"
+      post "nueva/:patient_id", to: "chronic_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
   end
   
     
-  resources :prescriptions, path: :recetas do
-    member do
-      get 'delete'
-      get 'restore'; get 'restore_confirm'
-      get 'confirm_return_ambulatory'
-      patch 'return_ambulatory_dispensation'
-      get 'confirm_return_cronic'
-    end
-    collection do
-      get 'new_cronic'
-      get 'get_by_patient_id'
-      get 'get_cronic_prescriptions'
-    end
-  end
-  get "prescription/:id", to: "prescriptions#dispense", as: "dispense_prescription"
+  # resources :prescriptions, path: :recetas do
+    
+  # end
+  get "recetas", to: "prescriptions#new", as: "new_prescription"
+  get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions" #ajax para obtener recetas [cronicas / ambulatorias]
 
   resources :patients, path: :pacientes do
     member do
