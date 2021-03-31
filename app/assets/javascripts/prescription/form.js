@@ -157,7 +157,7 @@ $(document).on('turbolinks:load', function(e){
 function setPatientSex(sex, readOnly){
   if(typeof sex !== 'undefined' && sex !== ''){
     // precargamos el sexo del paciente
-    $("#patient-sex option").each((index, item) => {
+    $("#patient-sex option").each(function(index, item){
       const sexMatch = new RegExp(sex, 'i');
       if($(item).val() && $(item).val().match(sexMatch)){
         $('#patient-sex-fake').val($(item).val()).attr('readonly', true).removeClass('d-none');
