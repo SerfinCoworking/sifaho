@@ -270,8 +270,8 @@ Rails.application.routes.draw do
       get 'dispense'
     end
     collection do
-      get "new/:patient_id", to: "outpatient_prescriptions#new", as: "new"
-      post ":patient_id", to: "outpatient_prescriptions#create", as: "create"
+      get "nueva/:patient_id", to: "outpatient_prescriptions#new", as: "new"
+      post "nueva/:patient_id", to: "outpatient_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "outpatient_prescriptions#find_lots", as: "find_order_product_lots"
     end
   end
@@ -282,8 +282,8 @@ Rails.application.routes.draw do
       patch 'return_dispensation'
     end
     collection do
-      get "new/:patient_id", to: "chronic_prescriptions#new", as: "new"
-      post ":patient_id", to: "chronic_prescriptions#create", as: "create"
+      get "nueva/:patient_id", to: "chronic_prescriptions#new", as: "new"
+      post "nueva/:patient_id", to: "chronic_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
   end
@@ -292,8 +292,8 @@ Rails.application.routes.draw do
   # resources :prescriptions, path: :recetas do
     
   # end
-  get "prescriptions", to: "prescriptions#new", as: "new_prescription"
-  get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions"
+  get "recetas", to: "prescriptions#new", as: "new_prescription"
+  get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions" #ajax para obtener recetas [cronicas / ambulatorias]
 
   resources :patients, path: :pacientes do
     member do

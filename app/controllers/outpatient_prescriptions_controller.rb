@@ -57,7 +57,6 @@ class OutpatientPrescriptionsController < ApplicationController
     @outpatient_prescription.establishment = current_user.sector.establishment
     @outpatient_prescription.remit_code = "AM"+DateTime.now.to_s(:number)
     
-    @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
     @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
 
@@ -90,7 +89,6 @@ class OutpatientPrescriptionsController < ApplicationController
 
     @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
     @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
-    @outpatient_prescription.expiry_date = DateTime.strptime(outpatient_prescription_params[:date_prescribed], "%d/%m/%Y") + 3.month
 
     respond_to do |format|
       begin

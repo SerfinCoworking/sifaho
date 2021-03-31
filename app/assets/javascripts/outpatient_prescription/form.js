@@ -44,6 +44,7 @@ $(document).on('turbolinks:load', function(e){
     const datePrescribed = moment(value, "DD/MM/YYYY");
     const expiryDate = datePrescribed.add(3, 'month');
     $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
+    $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
   }
 
 
