@@ -13,11 +13,10 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
-
   $('#patient-dni').autocomplete({
     source: $('#patient-dni').data('autocomplete-source'),
     autoFocus: true,
-    minLength: 7,
+    minLength: 6,
     messages: {
       noResults: function() {
         $(".ui-menu-item-wrapper").html("No se encontró el paciente");
@@ -102,17 +101,19 @@ $(document).on('turbolinks:load', function(e){
       setPatientPrescriptions(ui.item.create, ui.item.id);      
       const url = $('#patient-dni').attr('data-insurance-url');
       getInsurances(url, ui.item.dni);
-      
+      $("#container-more-info").addClass("show");
+      $("#container-receipts-list").addClass("show");
     }
   });
   
   $('#patient-dni').on('keyup', function(e) {
-    if($(e.target).val().length < 7){
-      
+    if($(e.target).val().length < 6){
       resetForm();
       resetPatientPrescriptions();
       $("#patient-submit").attr('disabled', true);
-      
+      $("#container-more-info").removeClass("show");
+      $("#container-receipts-list").removeClass("show");
+      $("#last-receipt-title").removeClass('show');      
     }
   });
   /* =================================================FUNCIONES========================================================================= */

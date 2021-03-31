@@ -125,7 +125,7 @@ class PatientsController < ApplicationController
   end
 
   def get_by_dni
-    @patients = Patient.search_dni(params[:term])
+    @patients = Patient.search_dni(params[:term]).order(:dni).limit(15)
     if @patients.present?
       render json: @patients.map{ |pat| {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name,
         dni: pat.dni,
@@ -134,7 +134,7 @@ class PatientsController < ApplicationController
         fullname: pat.fullname,
         sex: pat.sex,
         status: pat.status,
-        avatar_url: url_for(pat.avatar)
+        avatar_url: (url_for(pat.avatar) if pat.avatar.attached?)
         }  }
     else
       dni = params[:term]
