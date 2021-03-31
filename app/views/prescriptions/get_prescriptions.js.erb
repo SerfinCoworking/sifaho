@@ -24,3 +24,8 @@ if(<%= @last_prescription.present? %>){
   $("#last-receipt-title").addClass('show');
   $("#last-prescription-info").html('<%= j render("list", prescriptions: @last_prescription) %>');
 }
+
+$('[data-toggle="tooltip"]').tooltip({
+  'selector': '',
+  'container':'body'
+});
