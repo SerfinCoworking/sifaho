@@ -26,6 +26,8 @@ class PatientsController < ApplicationController
   # GET /patients/1
   # GET /patients/1.json
   def show
+    @chronic_prescription_count = @patient.chronic_prescriptions.count
+    @outpatient_prescription_count = @patient.outpatient_prescriptions.count
     respond_to do |format|
       format.html
       format.js

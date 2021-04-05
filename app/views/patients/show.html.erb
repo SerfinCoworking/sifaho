@@ -25,17 +25,17 @@
             </a>
           </li>
           <li class='nav-item'>
-            <a class="nav-link" data-toggle='<%= @patient.outpatient_prescriptions.count > 0 ? 'tab' : '' %>' href='#outpatient_prescriptions'>
+            <a class="nav-link <%= @outpatient_prescription_count > 0 ? '' : 'disabled' %>" data-toggle='<%= @outpatient_prescription_count > 0 ? 'tab' : '' %>' href='#outpatient_prescriptions'>
               <%= fa_icon "signature" %>
               Recetas ambulatorias
-              <span class="badge badge-secondary"><%= @patient.outpatient_prescriptions.count %></span>
+              <span class="badge badge-secondary"><%= @outpatient_prescription_count %></span>
             </a>
           </li>
           <li class='nav-item'>
-            <a class="nav-link" data-toggle='<%= @patient.chronic_prescriptions.count > 0 ? 'tab' : '' %>' href='#chronic_prescriptions'>
+            <a class="nav-link <%= @chronic_prescription_count > 0 ? '' : 'disabled' %>" data-toggle='<%= @chronic_prescription_count > 0 ? 'tab' : '' %>' href='#chronic_prescriptions'>
               <%= fa_icon "signature" %>
               Recetas crónicas
-              <span class="badge badge-secondary"><%= @patient.chronic_prescriptions.count %></span>
+              <span class="badge badge-secondary"><%= @chronic_prescription_count %></span>
             </a>
           </li>
         </ul>
@@ -56,15 +56,15 @@
                 <h5><strong>Fecha nacimiento</strong></h5>
                 <%= @patient.birthdate.present? ? @patient.birthdate.strftime("%d/%m/%Y") : "----" %>
               </div>
-              <div class="col-4">
+              <div class="col-4 mt-2">
                 <h5><strong>Apellido</strong></h5>
                 <%= @patient.last_name %>
               </div>
-              <div class="col-4">
+              <div class="col-4 mt-2">
                 <h5><strong>Nombre</strong></h5>
                 <%= @patient.first_name %>
               </div>
-              <div class="col-4">
+              <div class="col-4 mt-2">
                 <h5><strong>Estado civil</strong></h5>
                 <%= @patient.marital_status %>
               </div>
