@@ -10,7 +10,7 @@ $('#dialog .modal-body').html('Eliminar recibo de <%= @receipt.applicant_sector.
 // Add form button
 $('#dialog .modal-footer').html(
   "<a class='btn' data-dismiss='modal'>Cancelar</a>"+
-  "<a data-remote='true' data-method='delete' href='/receipts/<%= @receipt.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='/receipts/<%= @receipt.id %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

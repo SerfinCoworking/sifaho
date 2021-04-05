@@ -28,25 +28,20 @@
     <% end %>
   </td>
   <td class="text-left actions-col">
-    <% if policy(receipt).show? %>
-      <%= link_to receipt_path(receipt),
-        class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "eye" %>
-      <% end %>
-    <% end %>
- 
-    <% if policy(receipt).edit? %>
-      <%= link_to edit_receipt_path(receipt), :"data-turbolinks" => false,
-        class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
-        <%= fa_icon "pen" %>
-      <% end %>
-    <% end %>
- 
-    <% if policy(receipt).delete? %>
-      <%= link_to delete_receipt_path(receipt), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
-      <% end %>
-    <% end %>
+    <%= render(
+      partial: 'shared/action_buttons',
+      locals:{ 
+          object: receipt, 
+          show: {visible: true},
+          edit: {visible: true},
+          destroy: {
+            visible: true, 
+            title: "Eliminar recibo",
+            body: "Esta seguro que desea eliminar el recibo de #{ receipt.provider_sector.establishment_name }?",
+            path: "#{receipt_path(receipt)}"
+          }
+      }
+    )
+    %>
   </td>
 </tr>
