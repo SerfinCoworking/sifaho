@@ -16,7 +16,13 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
   end  
   
   def edit?
-    if record.pendiente?
+    if (record.pendiente? || record.dispensada_parcial?) && (DateTime.now.to_time < record.expiry_date)
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+    end
+  end
+  
+  def edit_dispense?
+    if record.dispensada_parcial?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end

@@ -35,25 +35,48 @@ $(document).on('turbolinks:load', function(e){
   });
 
   $('.date-prescribed').on('change', function(e) {
-    const datePrescribed = moment(e.target.value, "DD/MM/YYYY");
-    const duration = $("input[name='duration-treatment']").val();
-    const expiryDate = datePrescribed.add(duration, 'month');
+
+    // Dia prescripto
+    const datePrescribed = e.target.value;
+    const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
+
+    const today = moment().startOf('month');
+    const treatmentDuration = $("input[name='duration-treatment']").val();
+        
+    // Seteamos la fecha de expiracion
+    const expiryDate = moment(momentDatePrescribed).add(treatmentDuration, 'month');
     $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
     $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
-  });
-
-  $("input[name='duration-treatment']").on('change', function(e){
-    const duration = $(e.target).val();
-    const datePrescribed = moment($('#chronic_prescription_date_prescribed').val(), "DD/MM/YYYY");
-    const expiryDate = datePrescribed.add(duration, 'month');
-    $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
-    $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
-
+    
+    const remaining_treatment = treatmentDuration - parseInt(today.diff(momentDatePrescribed, 'months')) || 0;
     /* actualiza todos los totales de dosis cargados por cada producto */
     $("#original-order-product-cocoon-container tr").each((index, tr) => {
       const reqByMonth = $(tr).find('.request-quantity').first().val();
-      $(tr).find("input.total-quantity-fake").first().val(duration * reqByMonth);
-      $(tr).find("input[type='hidden'].total-request-quantity").first().val(duration * reqByMonth);
+      $(tr).find("input.total-quantity-fake").first().val(remaining_treatment * reqByMonth);
+      $(tr).find("input[type='hidden'].total-request-quantity").first().val(remaining_treatment * reqByMonth);
+    });
+
+  });
+
+  $("input[name='duration-treatment']").on('change', function(e){
+    // Dia prescripto
+    const datePrescribed = $("input.date-prescribed").first().val();
+    const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
+
+    const today = moment().startOf('month');
+    const treatmentDuration = $(e.target).val();
+        
+    // Seteamos la fecha de expiracion
+    const expiryDate = moment(momentDatePrescribed).add(treatmentDuration, 'month');
+    $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
+    $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
+    
+    const remaining_treatment = treatmentDuration - parseInt(today.diff(momentDatePrescribed, 'months')) || 0;
+    /* actualiza todos los totales de dosis cargados por cada producto */
+    $("#original-order-product-cocoon-container tr").each((index, tr) => {
+      const reqByMonth = $(tr).find('.request-quantity').first().val();
+      $(tr).find("input.total-quantity-fake").first().val(remaining_treatment * reqByMonth);
+      $(tr).find("input[type='hidden'].total-request-quantity").first().val(remaining_treatment * reqByMonth);
     });
 
   });
@@ -134,11 +157,15 @@ $(document).on('turbolinks:load', function(e){
 
     /* actualizamos el total de dosis que el tratamiento requiere */
     $(".request-quantity").on("change", function(e){
+      const datePrescribed =  $("#chronic_prescription_date_prescribed").val();
+      const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
+      const today = moment().startOf('month');
       const treatmentDuration = $("input[name='duration-treatment']").val();
+      const remaining_treatment = treatmentDuration - parseInt(today.diff(momentDatePrescribed, 'months')) || 0;
       const tr = $(e.target).closest("tr");
       const reqByMonth = $(e.target).val();
-      $(tr).find("input.total-quantity-fake").first().val(treatmentDuration * reqByMonth);
-      $(tr).find("input[type='hidden'].total-request-quantity").first().val(treatmentDuration * reqByMonth);
+      $(tr).find("input.total-quantity-fake").first().val(remaining_treatment * reqByMonth);
+      $(tr).find("input[type='hidden'].total-request-quantity").first().val(remaining_treatment * reqByMonth);
     });
   }// initEvents function
 

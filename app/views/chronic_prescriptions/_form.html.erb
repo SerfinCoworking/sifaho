@@ -52,31 +52,40 @@
             <div class="col-6 border-right">              
               <%# Medico %>
               <div>
-                <%= f.label :professional_id do %>
-                  Médico
-                  <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
-                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-                    <%= fa_icon "plus" %>
+                <% if !policy(chronic_prescription).edit_dispense? %>
+                  <%= f.label :professional_id do %>
+                    Médico
+                    <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+                      title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon "plus" %>
+                    <% end %>
                   <% end %>
-                <% end %>
-                <div class="custom-input-group">
-                  <%= f.input :professional, as: :string,
-                    label: false,
-                    placeholder: 'Matrícula | Apellido | Nombre',
-                    required: true,
-                    autocomplete: false,
-                    :input_html => {
-                      id: "professional",
-                      data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
-                      value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
-                      size: 30
-                    }
-                  %>
-                  <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
-                  <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  <div class="custom-input-group">
+                    <%= f.input :professional, as: :string,
+                      label: false,
+                      placeholder: 'Matrícula | Apellido | Nombre',
+                      required: true,
+                      autocomplete: false,
+                      :input_html => {
+                        id: "professional",
+                        data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                        value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
+                        size: 30
+                      }
+                    %>
+                    <%= f.hidden_field :professional_id, id: "professional_id", value: "#{if f.object.professional.present?; f.object.professional.id; end }" %>
+                    <div class="with-loading">
+                      <%= fa_icon 'spinner', class: "fa-spin"%>
+                    </div>
                   </div>
-                </div>
+                <% else %>
+                  <label for="professional_fake">
+                    Médico
+                  </label>
+                  <div class="form-group">
+                    <input class="form-control" name="professional_fake" value="<%= f.object.professional.full_info %>" readonly="'readonly'">
+                  </div>
+                <% end %>
               </div>
               
             </div>
@@ -93,9 +102,10 @@
                   :placeholder => "Seleccionar fecha",
                   input_html: {
                     tabindex: "-1",
-                    class: "form-control pull-right date-prescribed",
+                    class: "form-control pull-right #{"date-prescribed" if !policy(chronic_prescription).edit_dispense? }",
                     required: true,
                     autocomplete: 'off',
+                    readonly: policy(chronic_prescription).edit_dispense?,
                     value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
                   },
               html5: false %>
@@ -106,7 +116,7 @@
                 Duración de tratamiento
               <%end%>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="duration-treatment" value="<%=f.object.date_prescribed.present? && f.object.expiry_date.present? ? ((f.object.expiry_date.year * 12 + f.object.expiry_date.month) - (f.object.date_prescribed.year * 12 + f.object.date_prescribed.month)) : 6%>" aria-describedby="meses-addon">
+                  <input type="text" class="form-control" name="duration-treatment" value="<%=f.object.date_prescribed.present? && f.object.expiry_date.present? ? ((f.object.expiry_date.year * 12 + f.object.expiry_date.month) - (f.object.date_prescribed.year * 12 + f.object.date_prescribed.month)) : 6%>" aria-describedby="meses-addon" <%= "readonly='readonly'" if policy(chronic_prescription).edit_dispense?%>>
                   <div class="input-group-append">
                     <span class="input-group-text" id="meses-addon">Meses</span>
                   </div>
@@ -127,7 +137,7 @@
 
           <%# diagnostico %>
           <div>
-            <%= f.input :diagnostic, label: 'Diagnóstico', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
+            <%= f.input :diagnostic, label: 'Diagnóstico', as: :text, :input_html => { :cols => 30  , :rows => 1, readonly: policy(chronic_prescription).edit_dispense? } %>
           </div>
         </div>
       </div><!--  /.row -->
