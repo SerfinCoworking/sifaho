@@ -56,6 +56,7 @@ es:
       receipt: "Recibo"
       purchase: "Compra"
       lot_archive: "Archivo de lote"
+      establishment: "Establecimiento"
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
@@ -153,6 +154,8 @@ es:
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
         report_type: "Tipo de reporte"
+      establishment:
+        sanitary_zone_id: "Zona sanitaria"
 
   date:
     abbr_day_names:

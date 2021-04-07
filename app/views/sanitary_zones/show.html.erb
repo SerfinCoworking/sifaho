@@ -1,0 +1,58 @@
+<%= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo zona sanitaria <%= @sanitary_zone.name %>
+      </h5>
+    </div>
+    <%= link_to sanitary_zones_path, class: 'btn' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+
+
+  <div class="card-body">
+    <h4>Ciudades</h4>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Ciudad</th>
+          <th scope="col" class="text-danger">Casos activos</th>
+          <th scope="col" class="text-success">Total recuperados</th>
+          <th scope="col" class="text-danger">Nuevos positivos</th>
+          <th scope="col" class="text-success">Nuevos recuperados</th>
+          <th scope="col" class="text-info">Nuevos negativos</th>
+          <th scope="col" class="text-warning">Contactos estrechos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sanitary_zone.cities.each do |city| %>
+          <tr>
+            <td><%= city.name %></td>
+            <td class="counter"><%= CaseStatus.total_positives_to_city(city) %></td>
+            <td class="counter"><%= CaseStatus.total_recovered_to_city(city) %></td>
+            <td class="counter"><%= EpidemicSheet.total_new_positives_to_city(city) %></td>
+            <td class="counter"><%= CaseDefinition.total_new_recovered_to_city(city) %></td>
+            <td class="counter"><%= CaseDefinition.total_new_negatives_to_city(city) %></td>
+            <td class="counter"><%= EpidemicSheet.total_close_contacts_to_city(city) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to :back, class: "btn btn-light mr-2" do %>
+      Volver
+    <% end %>
+    <% if policy(@sanitary_zone).edit? %>
+      <%= link_to edit_sanitary_zone_path(@sanitary_zone), :"data-turbolinks" => false, class: "btn btn-warning" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+  </div>
+</div>

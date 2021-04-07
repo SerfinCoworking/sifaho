@@ -1,0 +1,28 @@
+<% if @sanitary_zones.present? %>
+  <div id="filterrific_results">
+    <div class="card">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Ciudades</th>
+            <th>Establecimientos</th>
+            <th>Usuarios</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="sanitary_zones">
+          <%= render @sanitary_zones %>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 50px">
+      <%= will_paginate @sanitary_zones, list_classes: %w(pagination mb-0), renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'zonas sanitarias' }
+  ) %>
+<% end %>

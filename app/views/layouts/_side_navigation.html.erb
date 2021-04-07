@@ -64,6 +64,15 @@
       <% end %>
     <% end %>
 
+    <% if policy(SanitaryZone).index? %>
+      <%= link_to main_app.sanitary_zones_path, class: "list-group-item list-group-item-action list-custom #{active_class('sanitary_zones')} #{active_class('external_orders')} #{active_class('external_order_templates')}" do %>
+        <span class="sb-icon">
+          <%= fa_icon "map"%>
+        </span>
+        <span class="ml-2 sb-title">Zonas sanitarias</span>
+      <% end %>
+    <% end %>
+
     <% if policy(Stock).index? %>
       <%= link_to main_app.stocks_path, class: "list-group-item list-group-item-action list-custom #{active_class('stocks')} #{active_class('stock_movements')} #{active_class('receipts')} #{active_class('lot_stocks')}" do %>
         <span class="sb-icon">

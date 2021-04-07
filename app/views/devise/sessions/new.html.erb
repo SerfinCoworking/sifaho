@@ -28,7 +28,12 @@
 
     <div class="col-3 ml-auto">
       <div class="jumbotron ml-auto pb-4 pt-5">
-        <p class="text-center pb-4"><%= image_tag("sifaho-brand.png", size: "180x55", align: "center", alt: "Logo Sifaho") %></p>
+        <p class="text-center pb-4">
+          <%= image_tag("sifaho-brand.png", size: "180x55", align: "center", alt: "Logo Sifaho") %>
+          <% if ENV['DEMO_RIBBON'] %>
+            <span class="badge badge-warning badge-demo"><strong>DEMO</strong></span>
+          <% end %>
+        </p>
         <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form'}) do |f| %>
           <%= devise_error_messages! %>
           <div class="form-group">

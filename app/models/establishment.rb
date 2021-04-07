@@ -5,9 +5,14 @@ class Establishment < ApplicationRecord
   has_many :sectors
   has_many :users, :through => :sectors
   has_many :prescriptions
+  belongs_to :city, optional: true
+  belongs_to :sanitary_zone
 
   # Validations
-  validates_presence_of :name
+  validates :name, presence: true
+  validates :short_name, presence: true
+  validates :sanitary_zone_id, presence: true
+  validates :code, presence: true, length: { is: 6 }
   
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,

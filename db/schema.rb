@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2021_03_15_144006) do
-=======
-ActiveRecord::Schema.define(version: 2021_03_30_132253) do
->>>>>>> mpi_conection
+ActiveRecord::Schema.define(version: 2021_04_07_115133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -215,6 +211,8 @@ ActiveRecord::Schema.define(version: 2021_03_30_132253) do
   create_table "cities", force: :cascade do |t|
     t.bigint "state_id"
     t.string "name"
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_cities_on_department_id"
     t.index ["state_id"], name: "index_cities_on_state_id"
   end
 
@@ -233,6 +231,16 @@ ActiveRecord::Schema.define(version: 2021_03_30_132253) do
     t.index ["prescription_id"], name: "index_cronic_dispensations_on_prescription_id"
   end
 
+  create_table "departments", force: :cascade do |t|
+    t.string "name"
+    t.bigint "state_id"
+    t.bigint "sanitary_zone_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sanitary_zone_id"], name: "index_departments_on_sanitary_zone_id"
+    t.index ["state_id"], name: "index_departments_on_state_id"
+  end
+
   create_table "dispensation_types", force: :cascade do |t|
     t.bigint "chronic_dispensation_id"
     t.bigint "original_chronic_prescription_product_id"
@@ -241,6 +249,12 @@ ActiveRecord::Schema.define(version: 2021_03_30_132253) do
     t.datetime "updated_at", null: false
     t.index ["chronic_dispensation_id"], name: "index_dispensation_types_on_chronic_dispensation_id"
     t.index ["original_chronic_prescription_product_id"], name: "unique_org_chron_pres_on_dispensation_types"
+  end
+
+  create_table "establishment_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "establishments", force: :cascade do |t|
@@ -254,6 +268,12 @@ ActiveRecord::Schema.define(version: 2021_03_30_132253) do
     t.datetime "updated_at"
     t.integer "sectors_count", default: 0
     t.string "short_name"
+    t.bigint "city_id"
+    t.bigint "sanitary_zone_id"
+    t.bigint "establishment_type_id"
+    t.index ["city_id"], name: "index_establishments_on_city_id"
+    t.index ["establishment_type_id"], name: "index_establishments_on_establishment_type_id"
+    t.index ["sanitary_zone_id"], name: "index_establishments_on_sanitary_zone_id"
   end
 
   create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
@@ -1100,6 +1120,14 @@ ActiveRecord::Schema.define(version: 2021_03_30_132253) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "sanitary_zones", force: :cascade do |t|
+    t.string "name"
+    t.bigint "state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["state_id"], name: "index_sanitary_zones_on_state_id"
   end
 
   create_table "sector_supply_lots", force: :cascade do |t|

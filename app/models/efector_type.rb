@@ -1,0 +1,2 @@
+class EfectorType < ApplicationRecord
+end

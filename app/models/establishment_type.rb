@@ -1,0 +1,2 @@
+class EstablishmentType < ApplicationRecord
+end

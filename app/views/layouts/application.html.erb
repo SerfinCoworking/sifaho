@@ -12,10 +12,6 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <% if ENV['DEMO_RIBBON'] %>
-      <div class="corner-ribbon bottom-right sticky green shadow"><strong>DEMO</strong></div>
-    <% end %>
-
     <div id="wrapper">
       <% if user_signed_in? %>
         <!-- General Navbar -->
