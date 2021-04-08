@@ -123,6 +123,10 @@ class ChronicPrescription < ApplicationRecord
     ]
   end 
 
+  def self.last_week
+    where("date_prescribed >= :last_week", { last_week: 1.weeks.ago.midnight })
+  end
+
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
     where('chronic_prescriptions.date_prescribed >= ?', reference_time)

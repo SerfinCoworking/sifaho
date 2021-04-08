@@ -219,19 +219,19 @@ class OutpatientPrescription < ApplicationRecord
   }
 
   def self.current_day
-    where("prescribed_date >= :today", { today: DateTime.now.beginning_of_day })
+    where("date_prescribed >= :today", { today: DateTime.now.beginning_of_day })
   end
 
   def self.last_week
-    where("prescribed_date >= :last_week", { last_week: 1.weeks.ago.midnight })
+    where("date_prescribed >= :last_week", { last_week: 1.weeks.ago.midnight })
   end
 
   def self.current_year
-    where("prescribed_date >= :year", { year: DateTime.now.beginning_of_year })
+    where("date_prescribed >= :year", { year: DateTime.now.beginning_of_year })
   end
 
   def self.current_month
-    where("prescribed_date >= :month", { month: DateTime.now.beginning_of_month })
+    where("date_prescribed >= :month", { month: DateTime.now.beginning_of_month })
   end
 
   def create_notification(of_user, action_type)

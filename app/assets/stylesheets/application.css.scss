@@ -309,3 +309,13 @@ a {
   background-color: $light-blue;
 }
 
+.highcharts-credits{
+  display: none;
+}
+
+.highcharts-container{
+  width: 100%!important;
+  svg{
+    width: 100%!important;
+  }
+}
