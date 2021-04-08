@@ -3,8 +3,8 @@ class WelcomeController < ApplicationController
   def index
     if current_user.sector.present?
       _helper = ActiveSupport::NumberHelper
-      _prescriptions_today = Prescription.with_establishment(current_user.establishment).current_day
-      _prescriptions_month = Prescription.with_establishment(current_user.establishment).current_month
+      # _prescriptions_today = Prescription.with_establishment(current_user.establishment).current_day
+      # _prescriptions_month = Prescription.with_establishment(current_user.establishment).current_month
       
       # Ultimos 13 días más el día actual
       @outpatient_prescriptions_query_by_days = OutpatientPrescription.with_establishment(current_user.establishment).group_by_day(:date_prescribed, range: 13.days.ago..DateTime.now).count
@@ -24,17 +24,17 @@ class WelcomeController < ApplicationController
       @last_chronic_prescriptions = ChronicPrescription.with_establishment(current_user.establishment).order(created_at: :desc).limit(5)
 
       # @prescriptions = (@chronic_prescriptions + @outpatient_prescriptions)
-      @count_prescriptions_today = _prescriptions_today.count
-      @count_prescriptions_month = _prescriptions_month.count
-      @count_pend_pres = _prescriptions_today.pendiente.count
-      @count_disp_pres = _prescriptions_today.dispensada.count
-      @count_pend_pres_month = _prescriptions_month.pendiente.count
-      @count_disp_pres_month = _prescriptions_month.dispensada.count
+      # @count_prescriptions_today = _prescriptions_today.count
+      # @count_prescriptions_month = _prescriptions_month.count
+      # @count_pend_pres = _prescriptions_today.pendiente.count
+      # @count_disp_pres = _prescriptions_today.dispensada.count
+      # @count_pend_pres_month = _prescriptions_month.pendiente.count
+      # @count_disp_pres_month = _prescriptions_month.dispensada.count
 
-      @percent_pendient_prescriptions = _helper.number_to_percentage((@count_pend_pres.to_f / @count_prescriptions_today  * 100), precision: 0) unless @count_pend_pres == 0
-      @percent_dispensed_prescriptions = _helper.number_to_percentage((@count_disp_pres.to_f / @count_prescriptions_today * 100), precision: 0) unless @count_disp_pres == 0
-      @percent_pend_pres_month = _helper.number_to_percentage((@count_pend_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_pend_pres_month == 0
-      @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
+      # @percent_pendient_prescriptions = _helper.number_to_percentage((@count_pend_pres.to_f / @count_prescriptions_today  * 100), precision: 0) unless @count_pend_pres == 0
+      # @percent_dispensed_prescriptions = _helper.number_to_percentage((@count_disp_pres.to_f / @count_prescriptions_today * 100), precision: 0) unless @count_disp_pres == 0
+      # @percent_pend_pres_month = _helper.number_to_percentage((@count_pend_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_pend_pres_month == 0
+      # @percent_disp_pres_month = _helper.number_to_percentage((@count_disp_pres_month.to_f / @count_prescriptions_month  * 100), precision: 0) unless @count_disp_pres_month == 0
       # @last_prescriptions = @prescriptions.sort_by(&:date_prescribed).last(5)
       
       @lot_stocks = LotStock.joins("INNER JOIN stocks ON lot_stocks.stock_id = stocks.id").where("stocks.sector_id = #{current_user.sector.id} AND stocks.quantity > 0")
