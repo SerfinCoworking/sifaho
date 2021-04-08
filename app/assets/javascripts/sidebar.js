@@ -42,15 +42,17 @@ $(document).on('turbolinks:load', function() {
             dataLabels: {
                 enabled: true
             },
-            enableMouseTracking: false
+            enableMouseTracking: false,
         }
     },
     series: [{
         name: 'Ambulatorias',
-        data: outpatientPrescriptionsCountByDay
+        data: outpatientPrescriptionsCountByDay,
+        color: "#709fb0"
     }, {
         name: 'Crónicas',
-        data: chronicPrescriptionsCountByDay
+        data: chronicPrescriptionsCountByDay,
+        color: "#413c69"
     }]
   });
   
@@ -86,10 +88,12 @@ $(document).on('turbolinks:load', function() {
     },
     series: [{
         name: 'Ambulatorias',
-        data: outpatientPrescriptionsCountByMonth
+        data: outpatientPrescriptionsCountByMonth,
+        color: "#709fb0"
     }, {
         name: 'Crónicas',
-        data: chronicPrescriptionsCountByMonth
+        data: chronicPrescriptionsCountByMonth,
+        color: "#413c69"
     }]
   });
 
