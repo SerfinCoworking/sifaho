@@ -12,7 +12,11 @@ class Establishment < ApplicationRecord
   validates :name, presence: true
   validates :short_name, presence: true
   validates :sanitary_zone_id, presence: true
-  validates :code, presence: true, length: { is: 6 }
+  validates :cuie, presence: true, length: { is: 6 }, uniqueness: true
+  validates :establishment_type_id, presence: true
+  validates :siisa, 
+    length: { is: 13 },
+    format: { with: /\A\d+\z/, message: "debe tener solo números." }
   
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_name,

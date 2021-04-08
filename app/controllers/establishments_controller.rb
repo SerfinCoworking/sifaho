@@ -108,6 +108,9 @@ class EstablishmentsController < ApplicationController
   def establishment_params
     params.require(:establishment).permit(
       :sanitary_zone_id,
+      :establishment_type_id,
+      :cuie,
+      :siisa,
       :code,
       :name,
       :short_name,

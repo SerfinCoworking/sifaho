@@ -65,7 +65,7 @@
     <% end %>
 
     <% if policy(SanitaryZone).index? %>
-      <%= link_to main_app.sanitary_zones_path, class: "list-group-item list-group-item-action list-custom #{active_class('sanitary_zones')} #{active_class('external_orders')} #{active_class('external_order_templates')}" do %>
+      <%= link_to main_app.sanitary_zones_path, class: "list-group-item list-group-item-action list-custom #{active_class('sanitary_zones')}" do %>
         <span class="sb-icon">
           <%= fa_icon "map"%>
         </span>

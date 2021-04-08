@@ -1,8 +1,7 @@
 <tr id="establishment_<%= establishment.id %>">
   <div class="js-fade fade-in is-paused">
+    <td><%= establishment.cuie %></td>
     <td><%= establishment.name %></td>
-    <td><%= establishment.email %></td>
-    <td><%= establishment.phone %></td>
     <td><%= establishment.domicile %></td>
     <td class="text-left actions-col">
       <% if policy(establishment).show? %>

@@ -156,6 +156,8 @@ es:
         report_type: "Tipo de reporte"
       establishment:
         sanitary_zone_id: "Zona sanitaria"
+        establishment_type_id: "Tipo de establecimiento"
+        siisa: 'Código SIISA'
 
   date:
     abbr_day_names:

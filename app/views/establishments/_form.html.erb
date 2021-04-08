@@ -19,45 +19,60 @@
         <div class="col-4 text-center pt-2">
           <%= image_tag('hospital-solid.svg', width: '200px', class: 'text-light') %>
         </div>
-        <div class="col-4">
-          <%= f.input :name, label: 'Nombre completo' %>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6">
+              <%= f.input :name, label: 'Nombre completo' %>
 
-          <%= f.input :code, label: 'CUIE' %>
-          
-          <%# Sanitary zone %>
-          <%= f.input :sanitary_zone_id, label: 'Zona sanitaria', include_blank: false,
-            collection: SanitaryZone.all,
-            :input_html => {
-              required: true,
-              include_blank: false,
-              title: 'Seleccionar',
-              id: 'client-select',
-              class: 'selectpicker-md supply custom-select-pick',
-              "data-width"=>"100%",
-              "data-size"=>"10",
-            }
-          %>
+              <%# Sanitary zone %>
+              <%= f.input :sanitary_zone_id, label: 'Zona sanitaria', include_blank: false,
+                collection: SanitaryZone.all,
+                :input_html => {
+                  required: true,
+                  include_blank: false,
+                  title: 'Seleccionar',
+                  id: 'client-select',
+                  class: 'selectpicker-md supply custom-select-pick',
+                  "data-width"=>"100%",
+                  "data-size"=>"10",
+                }
+              %>
 
-          <!-- Establishment type -->
-          <%= f.input :establishment_type_id, label: 'Tipo de establecimiento', include_blank: false,
-            collection: EstablishmentType.all,
-            :input_html => {
-              required: true,
-              include_blank: false,
-              title: 'Seleccionar',
-              id: 'client-select',
-              class: 'selectpicker-md supply custom-select-pick',
-              "data-width"=>"100%",
-              "data-size"=>"10",
-            }
-          %>
-        </div>
-        <div class="col-md-4">
-          <%= f.input :short_name, label: 'Nombre abreviado' %>
-          <%= f.input :cuit, label: 'Cuit (opcional)' %>
-          <%= f.input :domicile, label: 'Domicilio (opcional)' %>
-          <%= f.input :phone, label: 'Teléfono (opcional)' %>
-          <%= f.input :email, label: 'Email (opcional)' %>
+              <%= f.input :cuie, label: 'CUIE' %>
+            </div>
+            <div class="col-6">
+              <!-- Short name -->
+              <%= f.input :short_name, label: 'Nombre abreviado' %>
+
+              <!-- Establishment type -->
+              <%= f.input :establishment_type_id, label: 'Tipo de establecimiento', include_blank: false,
+                collection: EstablishmentType.all,
+                :input_html => {
+                  required: true,
+                  include_blank: false,
+                  title: 'Seleccionar',
+                  id: 'client-select',
+                  class: 'selectpicker-md supply custom-select-pick',
+                  "data-width"=>"100%",
+                  "data-size"=>"10",
+                }
+              %>
+
+              <%# Código SIISA %>
+              <%= f.input :siisa, label: 'SIISA' %>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-6">
+              <%= f.input :cuit, label: 'Cuit (opcional)' %>
+              <%= f.input :domicile, label: 'Domicilio (opcional)' %>
+            </div>
+            <div class="col-6">
+              <%= f.input :phone, label: 'Teléfono (opcional)' %>
+              <%= f.input :email, label: 'Email (opcional)' %>
+            </div>
+          </div>
         </div>
 
       </div>
