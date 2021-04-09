@@ -89,7 +89,7 @@
                 <td class="text-right"><%= lot_stock.quantity + lot_stock.reserved_quantity %></td>
                 <td class="actions-col">
                   <% if policy(lot_stock).show? %>
-                    <%= link_to show_lot_stocks_path(@stock, lot_stock), class: 'btn btn-light btn-sm',
+                    <%= link_to show_stock_lot_stocks_path(@stock, lot_stock), class: 'btn btn-light btn-sm',
                       title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
                       <%= fa_icon "eye" %>
                     <% end %>
@@ -149,7 +149,7 @@
       <%= fa_icon "print" %> Imprimir
     <% end %>
 
-    <%= link_to lot_stocks_path(id: @stock.id), class: 'btn btn-primary mr-2' do %>
+    <%= link_to stock_lot_stocks_by_stock_path(@stock), class: 'btn btn-primary mr-2' do %>
       <%= fa_icon "barcode" %>
       Ver lotes
     <% end %>

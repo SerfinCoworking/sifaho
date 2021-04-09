@@ -13,7 +13,7 @@
     <% end %>
     
     <% if policy(LotStock).index? %>
-      <%= link_to lot_stocks_path(id: stock.id), class: 'btn btn-primary btn-sm',
+      <%= link_to stock_lot_stocks_by_stock_path(stock), class: 'btn btn-primary btn-sm',
         title: 'Ver lotes', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "barcode" %>
       <% end %>

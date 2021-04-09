@@ -6,9 +6,35 @@ class LotStocksController < ApplicationController
   # GET /stocks.json
   def index
     authorize LotStock
-    @stock = Stock.find(params[:id])
     @filterrific = initialize_filterrific(
       LotStock.by_stock(params[:id]),
+      params[:filterrific],
+      select_options: {
+        sorted_by: Stock.options_for_sorted_by_lots
+      },
+      persistence_id: false,
+    ) or return
+
+    if request.format.xlsx?
+      @lot_stocks = @filterrific.find
+    else
+      @lot_stocks = @filterrific.find.page(params[:page]).per_page(20)
+    end
+    
+    respond_to do |format|
+      format.html
+      format.js
+      # format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"MovStock_COD#{@stock.product.code}_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
+    end
+  end
+
+  # GET /stocks
+  # GET /stocks.json
+  def lot_stocks_by_stock
+    authorize LotStock
+    @stock = Stock.find(params[:stock_id])
+    @filterrific = initialize_filterrific(
+      LotStock.by_stock(@stock.id),
       params[:filterrific],
       select_options: {
         sorted_by: Stock.options_for_sorted_by_lots
@@ -63,7 +89,7 @@ class LotStocksController < ApplicationController
     
     respond_to do |format|
       if @lot_archive.save
-        format.html { redirect_to show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
+        format.html { redirect_to show_stock_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
       else
         format.js { render :new_archive }
       end
@@ -102,7 +128,7 @@ class LotStocksController < ApplicationController
     authorize @lot_archive
     @lot_archive.return_by(current_user)
     respond_to do |format|
-      format.html { redirect_to show_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
+      format.html { redirect_to show_stock_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
     end
   end
 
