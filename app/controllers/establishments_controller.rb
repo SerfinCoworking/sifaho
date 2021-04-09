@@ -13,7 +13,7 @@ class EstablishmentsController < ApplicationController
       },
       persistence_id: false,
     ) or return
-    @establishments = @filterrific.find.page(params[:page]).per_page(15)
+    @establishments = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /establishments/1
