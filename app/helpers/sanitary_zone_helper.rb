@@ -1,0 +1,2 @@
+module SanitaryZoneHelper
+end

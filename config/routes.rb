@@ -404,4 +404,11 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Sanitary zones
+  resources :sanitary_zones, path: 'zonas_sanitarias' do
+    member do
+      get :delete
+    end
+  end
 end

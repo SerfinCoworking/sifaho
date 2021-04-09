@@ -1,0 +1,21 @@
+<% content_for :title, "Zonas sanitarias" %>
+
+<% content_for :page_header do %>
+  <% if policy(SanitaryZone).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to sectors_path, class: "nav-link #{active_action_and_controller('index', 'sectors')}" do %>
+        <%= fa_icon "map" %>
+        Zonas sanitarias
+      <% end %>
+    </li>
+  <% end %>
+
+  <% if policy(SanitaryZone).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_sanitary_zone_path, class: "nav-link #{active_action('new')}" do %>
+        <%= fa_icon "plus" %>
+        Crear zona
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

@@ -8,13 +8,12 @@ class EstablishmentsController < ApplicationController
     @filterrific = initialize_filterrific(
       Establishment,
       params[:filterrific],
+      select_options: {
+        sorted_by: Establishment.options_for_sorted_by
+      },
       persistence_id: false,
-      available_filters: [
-        :sorted_by,
-        :search_name,
-      ],
     ) or return
-    @establishments = @filterrific.find.page(params[:page]).per_page(15)
+    @establishments = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /establishments/1
@@ -107,13 +106,18 @@ class EstablishmentsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def establishment_params
     params.require(:establishment).permit(
+      :sanitary_zone_id,
+      :establishment_type_id,
+      :cuie,
+      :siisa,
       :code,
       :name,
       :short_name,
       :cuit,
       :email,
       :domicile,
-      :phone
+      :phone,
+      :image
     )
   end
 end

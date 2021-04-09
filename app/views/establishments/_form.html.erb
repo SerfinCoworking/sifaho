@@ -16,35 +16,77 @@
       <%= f.error_notification %>
 
       <div class="row">
-        <div class="col-md-4">
-          <%= f.input :code, label: 'Código' %>
+        <div class="col-4 text-center pt-2">
+          <% if f.object.image.attached? %>
+            <%= image_tag f.object.image.variant(resize: "200x200^", gravity: "center",crop: "200x200+0+0"), class:"img-thumbnail" %>
+          <% else %>
+            <%= image_tag('hospital-solid.svg', width: '200px', class: 'text-light') %>
+          <% end %>  
+          <%= f.input :image, label: false, input_html: { class: 'mt-2' } %>
         </div>
-        <div class="col-md-4">
-          <%= f.input :name, required: true, label: 'Nombre completo' %>
-        </div>
-        <div class="col-md-4">
-          <%= f.input :short_name, label: 'Nombre abreviado' %>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6">
+              <%= f.input :name, label: 'Nombre completo' %>
+
+              <%# Sanitary zone %>
+              <%= f.input :sanitary_zone_id, label: 'Zona sanitaria', include_blank: false,
+                collection: SanitaryZone.all,
+                :input_html => {
+                  required: true,
+                  include_blank: false,
+                  title: 'Seleccionar',
+                  id: 'client-select',
+                  class: 'selectpicker-md supply custom-select-pick',
+                  "data-width"=>"100%",
+                  "data-size"=>"10",
+                }
+              %>
+
+              <%= f.input :cuie, label: 'CUIE' %>
+            </div>
+            <div class="col-6">
+              <!-- Short name -->
+              <%= f.input :short_name, label: 'Nombre abreviado' %>
+
+              <!-- Establishment type -->
+              <%= f.input :establishment_type_id, label: 'Tipo de establecimiento', include_blank: false,
+                collection: EstablishmentType.all,
+                :input_html => {
+                  required: true,
+                  include_blank: false,
+                  title: 'Seleccionar',
+                  id: 'client-select',
+                  class: 'selectpicker-md supply custom-select-pick',
+                  "data-width"=>"100%",
+                  "data-size"=>"10",
+                }
+              %>
+
+              <%# Código SIISA %>
+              <%= f.input :siisa, label: 'SIISA' %>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-6">
+              <%= f.input :cuit, label: 'Cuit (opcional)' %>
+              <%= f.input :domicile, label: 'Domicilio (opcional)' %>
+            </div>
+            <div class="col-6">
+              <%= f.input :phone, label: 'Teléfono (opcional)' %>
+              <%= f.input :email, label: 'Email (opcional)' %>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-4">
-          <%= f.input :cuit, label: 'Cuit' %>
-        </div>
-        <div class="col-md-4">
-          <%= f.input :domicile, label: 'Domicilio' %>
-        </div>
-        <div class="col-md-4">
-          <%= f.input :phone, label: 'Teléfono' %>
-        </div>
-        <div class="col-md-4">
-          <%= f.input :email, label: 'Email' %>
-        </div>
       </div>
     <% end %>
 
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', establishments_path, class: 'btn mr-2' %>
+    <%= link_to 'Volver', establishments_path, class: 'btn btn-light mr-2' %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @establishment.new_record? ? 'new_establishment' : 'edit_establishment_' + @establishment.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>

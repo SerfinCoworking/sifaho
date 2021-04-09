@@ -1,0 +1,65 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="d-flex align-items-center">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to establishments_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+
+    <%# CUIE %>
+    <div class="col">
+      <label>CUIE</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_cuie,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un CUIE',
+        autocomplete: 'off',
+      ) %>
+    </div>
+
+    <%# NOMBRE DE ESTABLECIMIENTO %>
+    <div class="col">
+      <label>Nombre</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_name,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off',
+      ) %>
+    </div>
+
+    <%# TIPO DE ESTABLECIMIENTO %>
+    <div class="col">
+      <label>Tipo</label>
+      <%= f.select(:by_establishment_type,
+        EstablishmentType.all.map {
+          |type| [type.name, type.id]
+        },{include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick",
+          multiple: true,
+          allow_blank: false,
+          title: 'Seleccionar',
+          "data-width"=>"100%"
+        }
+      ) %>
+    </div>
+
+    <%# ORDENAR POR %>
+    <div class="col">
+      <label>Ordenar por</label>
+      <div class="input-group">
+        <%= f.select(:sorted_by,
+          @filterrific.select_options[:sorted_by].map {
+            |status| [status.first, status.second]
+          },{},
+          { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+      </div>
+    </div>
+
+  </div>
+<% end %>
