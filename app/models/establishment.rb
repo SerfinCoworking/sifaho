@@ -18,7 +18,7 @@ class Establishment < ApplicationRecord
   validates :cuie, presence: true, length: { is: 6 }, uniqueness: true
   validates :establishment_type_id, presence: true
   validates :siisa, 
-    length: { is: 13 },
+    length: { is: 22 },
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
   
   # SCOPES #--------------------------------------------------------------------
