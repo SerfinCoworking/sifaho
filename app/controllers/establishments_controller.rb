@@ -8,11 +8,10 @@ class EstablishmentsController < ApplicationController
     @filterrific = initialize_filterrific(
       Establishment,
       params[:filterrific],
+      select_options: {
+        sorted_by: Establishment.options_for_sorted_by
+      },
       persistence_id: false,
-      available_filters: [
-        :sorted_by,
-        :search_name,
-      ],
     ) or return
     @establishments = @filterrific.find.page(params[:page]).per_page(15)
   end
