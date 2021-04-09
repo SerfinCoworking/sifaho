@@ -7,25 +7,36 @@ class LotStocksController < ApplicationController
   def index
     authorize LotStock
     @filterrific = initialize_filterrific(
-      LotStock.by_stock(params[:id]),
+      LotStock.all,
       params[:filterrific],
       select_options: {
         sorted_by: Stock.options_for_sorted_by_lots
       },
       persistence_id: false,
     ) or return
+    @stocks = ''
+    @lot_stocks = @filterrific.find.paginate(page: params[:page], per_page: 15)
 
-    if request.format.xlsx?
-      @lot_stocks = @filterrific.find
-    else
-      @lot_stocks = @filterrific.find.page(params[:page]).per_page(20)
-    end
+    # @filterrific = initialize_filterrific(
+    #   LotStock.by_stock(params[:id]),
+    #   params[:filterrific],
+    #   select_options: {
+    #     sorted_by: Stock.options_for_sorted_by_lots
+    #   },
+    #   persistence_id: false,
+    # ) or return
+
+    # if request.format.xlsx?
+    #   @lot_stocks = @filterrific.find
+    # else
+    #   @lot_stocks = @filterrific.find.page(params[:page]).per_page(20)
+    # end
     
-    respond_to do |format|
-      format.html
-      format.js
-      # format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"MovStock_COD#{@stock.product.code}_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
-    end
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    #   # format.xlsx { headers["Content-Disposition"] = "attachment; filename=\"MovStock_COD#{@stock.product.code}_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
+    # end
   end
 
   # GET /stocks

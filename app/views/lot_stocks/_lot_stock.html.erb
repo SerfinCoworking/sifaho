@@ -9,14 +9,14 @@
     <td><%= lot_stock.archived_quantity %></td>
     <td class="action-col text-center">
       <% if policy(lot_stock).show? %>
-        <%= link_to stock_show_lote_stocks_path(stock, lot_stock), class: 'btn btn-light btn-sm',
+        <%= link_to stock_show_lote_stocks_path(lot_stock.stock, lot_stock), class: 'btn btn-light btn-sm',
           title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "eye" %>
         <% end %>
       <% end %>
 
       <% if policy(lot_stock).create_archive? %>
-        <%= link_to stock_new_archive_path(stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+        <%= link_to stock_new_archive_path(lot_stock.stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
           title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon 'archive'%>
         <% end %>

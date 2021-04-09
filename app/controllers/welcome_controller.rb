@@ -22,12 +22,15 @@ class WelcomeController < ApplicationController
       @last_chronic_prescriptions = ChronicPrescription.with_establishment(current_user.establishment).order(created_at: :desc).limit(5)
 
       @lot_stocks = LotStock.joins("INNER JOIN stocks ON lot_stocks.stock_id = stocks.id").where("stocks.sector_id = #{current_user.sector.id} AND stocks.quantity > 0")
-      @expired_lot_stocks = @lot_stocks.with_status(2)
-      @near_expiry_lots = @lot_stocks.with_status(1)
+      @expired_lot_stocks = @lot_stocks.with_status(2).limit(10)
+      @near_expiry_lots = @lot_stocks.with_status(1).limit(10)
+      
+      @expired_lot_stocks_all = @lot_stocks.with_status(2)
+      @near_expiry_lots_all = @lot_stocks.with_status(1)
 
       @count_total_lots = @lot_stocks.count
-      @count_expired_lots = @expired_lot_stocks.count
-      @count_near_expiry_lots = @near_expiry_lots.count
+      @count_expired_lots = @expired_lot_stocks_all.count
+      @count_near_expiry_lots = @near_expiry_lots_all.count
       @count_good_lots = @lot_stocks.with_status(0).count
 
       # Tomamos los estados de los lotes

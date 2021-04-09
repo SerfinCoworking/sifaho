@@ -39,7 +39,6 @@
     <div class="tab-content">
       <div id="status" class="tab-pane fade show active" data-good-lots="<%=@percent_good_supply_lots%>" data-near-expiry-lots="<%= @percent_near_expiry_lots%>" data-expired-lots="<%=@percent_expired_lots%>">
         <%# Grafico de cantidades segun estado del lote %>
-        <%#= pie_chart @lots, colors: @colors, label: 'Cantidad de lotes', adapter: "highcharts" %>
       </div>
       <div id="expired" class="tab-pane fade pb-0">
         <div class="card">
@@ -47,7 +46,7 @@
             <thead>
               <tr class="danger">
                 <th>Lote</th>
-                <th>Insumo</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Vencimiento</th>
               </tr>
