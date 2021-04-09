@@ -8,6 +8,8 @@ class Establishment < ApplicationRecord
   belongs_to :city, optional: true
   belongs_to :sanitary_zone
 
+  has_one_attached :image
+
   # Validations
   validates :name, presence: true
   validates :short_name, presence: true

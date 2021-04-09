@@ -17,7 +17,12 @@
 
       <div class="row">
         <div class="col-4 text-center pt-2">
-          <%= image_tag('hospital-solid.svg', width: '200px', class: 'text-light') %>
+          <% if f.object.image.attached? %>
+            <%= image_tag f.object.image.variant(resize: "200x200^", gravity: "center",crop: "200x200+0+0"), class:"img-thumbnail" %>
+          <% else %>
+            <%= image_tag('hospital-solid.svg', width: '200px', class: 'text-light') %>
+          <% end %>  
+          <%= f.input :image, label: false, input_html: { class: 'mt-2' } %>
         </div>
         <div class="col-8">
           <div class="row">
