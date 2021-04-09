@@ -16,7 +16,7 @@ class EstablishmentPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:admin)
+    user.has_any_role?(:admin, :modificar_establecimientos)
   end
 
   def edit?
