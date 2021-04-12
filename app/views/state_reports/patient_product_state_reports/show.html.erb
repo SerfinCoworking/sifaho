@@ -30,49 +30,43 @@
       </div>
     </div>
       
-    <% if @stock.present? %>
-      <% if @movements.present? %>
-        <div class="card">
-          <table class="table table-hover table-sm">
-            <thead>
+    <% if @movements.present? %>
+      <div class="card">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>DNI</th>
+              <th>Paciente</th>
+              <th>Establecimiento</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @movements.each do |movement|%>
               <tr>
-                <th>Fecha</th>
-                <th>DNI</th>
-                <th>Paciente</th>
-                <th>Establecimiento</th>
-                <th>Cantidad</th>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= movement.order.patient_dni %></td>
+                <td><%= movement.order.patient_fullname %></td>
+                <td><%= movement.order.establishment.name %></td>
+                <td><%= movement.quantity %></td>
               </tr>
-            </thead>
-            <tbody>
-              <% @movements.each do |movement|%>
-                <tr>
-                  <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                  <td><%= movement.order.patient_dni %></td>
-                  <td><%= movement.order.patient_fullname %></td>
-                  <td><%= movement.order.establishment.name %></td>
-                  <td><%= movement.quantity %></td>
-                </tr>
-              <% end %>
-              <tr class="table-info">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right">Total</td>
-                <td><%= @movements.sum(:quantity) %></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <div class="d-flex align-items-center justify-content-center mt-5">
-          <p>
-            No hay recetas entre el <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %>
-          </p>
-        </div>
-      <% end %>
+            <% end %>
+            <tr class="table-info">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right">Total</td>
+              <td><%= @movements.sum(:quantity) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     <% else %>
       <div class="d-flex align-items-center justify-content-center mt-5">
-          <p>No se han encontrado existencias en stock provincial del producto <%= @patient_product_state_report.product_name %>!</p>
+        <p>
+          No hay recetas entre el <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %> y <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %>
+        </p>
       </div>
     <% end %>
   </div>

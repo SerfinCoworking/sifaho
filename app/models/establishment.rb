@@ -17,7 +17,7 @@ class Establishment < ApplicationRecord
   validates :sanitary_zone_id, presence: true
   validates :cuie, presence: true, length: { is: 6 }, uniqueness: true
   validates :establishment_type_id, presence: true
-  validates :siisa, 
+  validates :siisa,
     length: { is: 14 },
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
   

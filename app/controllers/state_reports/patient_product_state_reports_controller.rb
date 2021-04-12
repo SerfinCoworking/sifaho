@@ -4,17 +4,12 @@ class StateReports::PatientProductStateReportsController < ApplicationController
   def show
     authorize @patient_product_state_report
 
-    @stock = Stock.find_by_product_id(@patient_product_state_report.product_id)
-    
-    if @stock.present?
-      @movements = 
-        @stock
-        .movements
-        .since_date(@patient_product_state_report.since_date.strftime("%d/%m/%Y"))
-        .to_date(@patient_product_state_report.to_date.strftime("%d/%m/%Y"))
-        .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
-        .order(created_at: :desc)
-    end
+    @movements = StockMovement.where("stocks.product_id = ?", @patient_product_state_report.product_id)
+      .joins(:stock)
+      .since_date(@patient_product_state_report.since_date.strftime("%d/%m/%Y"))
+      .to_date(@patient_product_state_report.to_date.strftime("%d/%m/%Y"))
+      .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
+      .order(created_at: :desc)
 
     respond_to do |format|
       format.html
