@@ -38,6 +38,7 @@
               <th>Fecha</th>
               <th>DNI</th>
               <th>Paciente</th>
+              <th>CUIE</th>
               <th>Establecimiento</th>
               <th>Cantidad</th>
             </tr>
@@ -48,6 +49,7 @@
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
                 <td><%= movement.order.patient_dni %></td>
                 <td><%= movement.order.patient_fullname %></td>
+                <td><%= movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---' %></td>
                 <td><%= movement.order.establishment.name %></td>
                 <td><%= movement.quantity %></td>
               </tr>
