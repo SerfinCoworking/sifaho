@@ -400,6 +400,7 @@ Rails.application.routes.draw do
       path: 'entrega_por_paciente' do
       collection do
         get :new, path: :nuevo
+        get :load_more, path: :mostrar_mas
         post :create, path: :crear
       end
     end

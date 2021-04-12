@@ -1,0 +1,12 @@
+<tr>
+  <td><%= patient_product_state_report.product_name %></td>
+  <td><%= patient_product_state_report.since_date.strftime("%d/%m/%Y") %></td>
+  <td><%= patient_product_state_report.to_date.strftime("%d/%m/%Y") %></td>
+  <td>
+    <%= link_to state_reports_patient_product_state_report_path(patient_product_state_report), class: 'btn btn-light btn-sm',
+      title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
+      'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+      <%= fa_icon "eye" %>
+    <% end %>
+  </td>
+</tr>

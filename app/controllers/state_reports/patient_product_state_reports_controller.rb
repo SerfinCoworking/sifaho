@@ -27,7 +27,7 @@ class StateReports::PatientProductStateReportsController < ApplicationController
   def new
     authorize PatientProductStateReport
     @patient_product_state_report = PatientProductStateReport.new
-    @last_reports = PatientProductStateReport.limit(10).order(created_at: :desc)
+    @last_reports = PatientProductStateReport.limit(5).order(created_at: :desc)
   end
 
   def create
@@ -39,9 +39,17 @@ class StateReports::PatientProductStateReportsController < ApplicationController
       if @patient_product_state_report.save
         format.html { redirect_to state_reports_patient_product_state_report_path(@patient_product_state_report), notice: 'El reporte se ha creado correctamente.' }
       else
-        @last_reports = PatientProductStateReport.limit(10)
+        @last_reports = PatientProductStateReport.limit(5).order(created_at: :desc)
         format.html { render :new }
       end
+    end
+  end
+
+  def load_more
+    @next_offset = PatientProductStateReport.offset(params[:offset]).count > 5 ? params[:offset].to_i + 5 : 0 
+    @last_reports = PatientProductStateReport.offset(params[:offset]).limit(5).order(created_at: :desc)
+    respond_to do |format|
+      format.js
     end
   end
   

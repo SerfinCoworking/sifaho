@@ -1,0 +1,8 @@
+<% if @last_reports.present? %>
+  $('#last-reports').append('<%= escape_javascript render(@last_reports) %>');
+<% end %>
+<% if @next_offset > 0 %>
+  $('#load-more-btn').html('<%= link_to 'Mostrar más', load_more_state_reports_patient_product_state_reports_path(offset: @next_offset), remote: true, class: 'btn btn-light' %>');
+<% else %>
+  $('#load-more-btn').html('');
+<% end %>

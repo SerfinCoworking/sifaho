@@ -62,17 +62,10 @@ class Establishment < ApplicationRecord
       reorder("establishment_types.name #{ direction }").joins(:establishment_type)
     when /^nombre_/s
       # Ordenamiento por fecha de creación en la BD
-      order("establishments.name #{ direction }")
+      reorder("establishments.name #{ direction }")
     when /^sectores_/s
-      # Ordenamiento por fecha de creación en la BD 
-      left_joins(:sectors)
-      .group(:id)
-      .order("COUNT(sectors.id) #{ direction }")
-    when /^usuarios_/s
-      # Ordenamiento por fecha de creación en la BD 
-      left_joins(:users)
-      .group(:id)
-      .order("COUNT(users.id) #{ direction }")
+      # Ordenamiento por fecha de creación en la BD
+      reorder("establishments.sectors_count #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")

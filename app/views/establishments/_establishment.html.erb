@@ -4,7 +4,7 @@
     <td><%= establishment.name %></td>
     <td><%= establishment.establishment_type.present? ? establishment.establishment_type.name : '---' %></td>
     <td><%= establishment.sectors.count %></td>
-    <td><%= establishment.users.count %></td>
+    <td><%= establishment.users.to_set.count %></td>
     <td class="text-left actions-col">
       <% if policy(establishment).show? %>
         <%= link_to establishment_path(establishment), class: 'btn btn-secondary btn-sm',

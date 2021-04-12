@@ -23,6 +23,28 @@
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
               <%= f.error_notification message: f.object.errors[:patient_product_state_report].to_sentence if f.object.errors[:patient_product_state_report].present? %>
               <div class="row nested-fields">
+                <div class="col-6">
+                  <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
+                    :input_html => {
+                      id: "since_date",
+                      required: true,
+                      class: "form-control since-date",
+                      autocomplete: "off",
+                      value: f.object.since_date.present? ? f.object.since_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
+                </div>
+                <div class="col-6">
+                  <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
+                    :input_html => {
+                      id: "to_date",
+                      required: true,
+                      class: "form-control to-date",
+                      autocomplete: "off",
+                      value: f.object.to_date.present? ? f.object.to_date.strftime("%d/%m/%Y") : '',
+                    }
+                  %>
+                </div>
                 <!-- Código de producto -->
                 <div class="custom-input-group col-3">
                   <%= f.input :product, as: :string,
@@ -60,28 +82,6 @@
                   </div>
                   <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
                 </div>
-                <div class="col-6">
-                  <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
-                    :input_html => {
-                      id: "since_date",
-                      required: true,
-                      class: "form-control since-date",
-                      autocomplete: "off",
-                      value: f.object.since_date.present? ? f.object.since_date.strftime("%d/%m/%Y") : '',
-                    }
-                  %>
-                </div>
-                <div class="col-6">
-                  <%= f.input :to_date, as: :string, label: "Hasta", html5: true, required: true,
-                    :input_html => {
-                      id: "to_date",
-                      required: true,
-                      class: "form-control to-date",
-                      autocomplete: "off",
-                      value: f.object.to_date.present? ? f.object.to_date.strftime("%d/%m/%Y") : '',
-                    }
-                  %>
-                </div>
               </div>
             <% end %>
           </div>
@@ -96,7 +96,7 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="last-reports">
                 <% @last_reports.each do |report|%>
                   <tr>
                     <td><%= report.product_name %></td>
@@ -113,6 +113,12 @@
                 <% end %>
               </tbody>
             </table>
+            <div class="text-center" id="load-more-btn">
+              <%= link_to load_more_state_reports_patient_product_state_reports_path(offset: @last_reports.count), 
+                remote: true, class: 'btn btn-light' do %>
+                Mostrar más
+              <% end %>
+            </div>
           </div>
         </div>
       </div> 
