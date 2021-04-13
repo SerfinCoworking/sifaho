@@ -42,30 +42,11 @@
       </div>
       <div id="expired" class="tab-pane fade pb-0">
         <div class="card">
-          <table class="table table-hover table-striped table-sm">
-            <thead>
-              <tr class="danger">
-                <th>Lote</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Vencimiento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @expired_lot_stocks.each do |expired_lot|%>
-                <tr>
-                  <td><%= expired_lot.lot.code %></td>
-                  <td class="ins-col-alert"><%= expired_lot.product_name %></td>
-                  <td><span class="label label-default"><%= expired_lot.quantity %></span></td>
-                  <td><%= expired_lot.lot.expiry_date.strftime("%d/%m/%y") %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <%= render 'lot_stocks/list', lot_stocks: @expired_lot_stocks, showInDashboard: false %>      
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
-            <%= link_to sector_supply_lots_url(filterrific: {:with_status => 2}), class: 'btn btn-secondary btn-sm' do %>
+            <%= link_to lot_stocks_index_stocks_url(filterrific: {:search_by_status => 2, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
               Ver todos
             <% end %>
           </div>
@@ -73,30 +54,11 @@
       </div>
       <div id="near_expire" class="tab-pane fade">
         <div class="card">
-          <table class="table table-hover table-striped table-sm">
-            <thead>
-              <tr class="warning">
-                <th>Lote</th>
-                <th>Insumo</th>
-                <th>Cantidad</th>
-                <th>Vencimiento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @near_expiry_lots.each do |nesl|%>
-                <tr>
-                  <td><%= nesl.lot.code %></td>
-                  <td><%= nesl.product_name %></td>
-                  <td><span class="label label-default"><%= nesl.quantity %></span></td>
-                  <td><%= nesl.lot.expiry_date.present? ? nesl.lot.expiry_date.strftime("%d/%m/%y") : "---" %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <%= render 'lot_stocks/list', lot_stocks: @near_expiry_lots, showInDashboard: false %>
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
-            <%= link_to sector_supply_lots_url(filterrific: {:with_status => 1}), class: 'btn btn-secondary btn-sm' do %>
+            <%= link_to lot_stocks_index_stocks_url(filterrific: {:search_by_status => 1, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
               Ver todos
             <% end %>
           </div>

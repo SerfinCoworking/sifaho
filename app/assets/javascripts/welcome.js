@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function() {
-
+  if(!(_PAGE.controller === 'welcome' && (['index'].includes(_PAGE.action)))) return false;
   const expiredLotsPercentage = parseFloat($("#status").attr("data-expired-lots").replace(',', '.'));
   const nearExpiredLotsPercentage = parseFloat($("#status").attr("data-near-expiry-lots").replace(',', '.'));
   const goodLotsPercentage = parseFloat($("#status").attr("data-good-lots").replace(',', '.'));

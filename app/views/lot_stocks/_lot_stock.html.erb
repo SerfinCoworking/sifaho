@@ -1,26 +1,29 @@
 <% lot_stocks.each do |lot_stock| %>
   <tr id="lot_stock_<%= lot_stock.id %>">
     <td><%= lot_stock.lot.code %></td>
-    <td><%= lot_stock.lot.laboratory.name %></td>
+    <td><%= lot_stock.product.name %></td>
     <td><%= lot_stock.lot.expiry_date.present? ? lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %></td>
-    <td><%= lot_stock.lot.status.humanize %></td>
-    <td><%= lot_stock.movements.count %></td>
+    <% if showInDashboard %>
+      <td><%= lot_stock.lot.status.humanize %></td>
+    <% end %>
     <td><%= lot_stock.quantity %></td>
-    <td><%= lot_stock.archived_quantity %></td>
-    <td class="action-col text-center">
-      <% if policy(lot_stock).show? %>
-        <%= link_to stock_show_lote_stocks_path(lot_stock.stock, lot_stock), class: 'btn btn-light btn-sm',
-          title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "eye" %>
+    <% if showInDashboard %>
+      <td><%= lot_stock.archived_quantity %></td>
+      <td class="action-col text-center">
+        <% if policy(lot_stock).show? %>
+          <%= link_to stock_show_lote_stocks_path(lot_stock.stock, lot_stock), class: 'btn btn-light btn-sm',
+            title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "eye" %>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <% if policy(lot_stock).create_archive? %>
-        <%= link_to stock_new_archive_path(lot_stock.stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
-          title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon 'archive'%>
+        <% if policy(lot_stock).create_archive? %>
+          <%= link_to stock_new_archive_path(lot_stock.stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+            title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon 'archive'%>
+          <% end %>
         <% end %>
-      <% end %>
-    </td>
+      </td>
+    <% end %>
   </tr>
 <% end %>

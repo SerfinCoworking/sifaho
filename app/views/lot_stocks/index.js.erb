@@ -1,5 +1,5 @@
 <% js = escape_javascript(
-  render(partial: 'stock_movements/list', locals: { stock_movements: @stock_movements })
+  render(partial: 'lot_stocks/list', locals: { lot_stocks: @lot_stocks })
 ) %>
 
 $("#filter_results").html("<%= js %>");

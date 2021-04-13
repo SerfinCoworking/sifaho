@@ -31,12 +31,12 @@ class ApplicationController < ActionController::Base
     # luego de haber realizado otra accion como lo es agregar / editar
     def keep_params
       # visita de cualquier ruta
-      session[:my_url_controller] ||= ''    # inicializamos el la variable del controlador
+      session[:my_url_controller] ||= ''    # inicializamos la variable del controlador
       ignore_action = ["search_by_last_name", "search_by_first_name", "search_by_name"]   # definimos cuales acciones queremos ignorar
-      # reiniciamos varaibels segun control:
+      # reiniciamos variables segun control:
       # si el controlador cambio (en cada request)
       # y si el request no se encuentra en la variable ignore_action
-      if session[:my_url_controller] != params[:controller] && !ignore_action.include?(params[:action])
+      if session[:my_url_controller] != params[:controller] && !ignore_action.include?(params[:action]) && (!defined?(params[:keep_params]) || (defined?(params[:keep_params]) && !params[:keep_params]))
         session[:my_url_controller] = params[:controller]
         session[:filterrific] = nil
         session[:page] = nil
@@ -55,8 +55,13 @@ class ApplicationController < ActionController::Base
           # solo pisamos el valor de :page, con su nuevo valor (si viene params[:page]) o con su valor de session
           session[:page] = params[:page].present? ? params[:page] : session[:page]
         end
+      elsif params[:filterrific].present? && (params[:filterrific] != session[:filterrific]) && (defined?(params[:keep_params]) && params[:keep_params])
+        session[:my_url_controller] = params[:controller] # debemos setear el controlador para que la próxima llamada (filtros) pueda filtrar
+        session[:filterrific] = params[:filterrific]
+        session[:page] = nil        # debemos tener en cuenta que si se filtra hay que reiniciar el valor de :page
       end
-  
+
+      
       # por ultimo igualamos los valores de params con los de session
       # igualamos el valor :filterrific de params con el de session
       if params[:reset] == "true"
