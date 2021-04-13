@@ -117,7 +117,9 @@ class EstablishmentsController < ApplicationController
       :email,
       :domicile,
       :phone,
-      :image
+      :image,
+      :latitude,
+      :longitude
     )
   end
 end

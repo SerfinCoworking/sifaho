@@ -20,6 +20,8 @@ class Establishment < ApplicationRecord
   validates :siisa,
     length: { is: 14 },
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
+  validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
+  validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
   
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_cuie,
