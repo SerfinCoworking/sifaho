@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_153609) do
+ActiveRecord::Schema.define(version: 2021_04_13_112339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -273,6 +273,8 @@ ActiveRecord::Schema.define(version: 2021_04_08_153609) do
     t.bigint "establishment_type_id"
     t.string "cuie"
     t.string "siisa", default: "0000000000000"
+    t.string "latitude", default: "0"
+    t.string "longitude", default: "0"
     t.index ["city_id"], name: "index_establishments_on_city_id"
     t.index ["establishment_type_id"], name: "index_establishments_on_establishment_type_id"
     t.index ["sanitary_zone_id"], name: "index_establishments_on_sanitary_zone_id"
