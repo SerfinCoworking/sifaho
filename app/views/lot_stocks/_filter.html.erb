@@ -2,7 +2,7 @@
   <div class="row justify-content-between">
     <div class="col d-flex justify-content-end align-items-center">
       <%= render_filterrific_spinner %>
-      <%= link_to outpatient_prescriptions_path(reset: true), class: 'btn btn-secondary ml-2',
+      <%= link_to lot_stocks_index_stocks_path(reset: true), class: 'btn btn-secondary ml-2',
         title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon 'redo' %>
       <% end %>
@@ -14,7 +14,7 @@
         @filterrific.select_options[:search_by_status].map {
           |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
         },{},
-        { class: "show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
     </div>
     
     <div class="col">
@@ -23,7 +23,7 @@
         @filterrific.select_options[:search_by_quantity].map {
           |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
         },{},
-        { class: "show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
     </div>
     
     <div class="col">
@@ -32,7 +32,7 @@
         @filterrific.select_options[:sorted_by].map {
           |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
         },{},
-        { class: "show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
     </div>
     
   </div>

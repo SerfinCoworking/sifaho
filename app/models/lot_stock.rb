@@ -26,7 +26,7 @@ class LotStock < ApplicationRecord
     :short_expiry_date_string, to: :lot, prefix: true
 
   filterrific(
-    default_filter_params: { sorted_by: 'expiry_asc' },
+    default_filter_params: { sorted_by: 'expiry_desc' },
     available_filters: [
       :sorted_by,
       :search_by_status,
@@ -118,8 +118,8 @@ class LotStock < ApplicationRecord
   
   def self.options_for_sort
     [
-      ['Fecha vencimiento (nueva primero)', 'expiry_asc', 'warning'],
-      ['Fecha vencimiento (antigua primero)', 'expiry_desc', 'success'],
+      ['Fecha vencimiento (nueva primero)', 'expiry_desc', 'warning'],
+      ['Fecha vencimiento (antigua primero)', 'expiry_asc', 'success'],
     ]
   end
 
