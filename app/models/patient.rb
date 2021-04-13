@@ -107,5 +107,9 @@ class Patient < ApplicationRecord
     else
       "----"
     end
-  end  
+  end
+
+  def birthdate_string
+    self.birthdate.present? ? self.birthdate.strftime("%d/%m/%Y") : '---'
+  end
 end
