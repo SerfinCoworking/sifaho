@@ -8,10 +8,11 @@ $(document).on('turbolinks:load', function() {
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
-        type: 'pie'
+        type: 'pie',
+        height: 300
     },
     title: {
-        text: ''
+        text: 'Porcentaje de estado de vencimiento por lote'
     },
     tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -29,7 +30,8 @@ $(document).on('turbolinks:load', function() {
             dataLabels: {
                 enabled: true,
                 format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            }
+            },
+            size: 160
         }
     },
     series: [{

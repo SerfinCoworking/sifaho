@@ -22,8 +22,8 @@ class WelcomeController < ApplicationController
       @last_chronic_prescriptions = ChronicPrescription.with_establishment(current_user.establishment).order(created_at: :desc).limit(5)
 
       @lot_stocks = LotStock.joins("INNER JOIN stocks ON lot_stocks.stock_id = stocks.id").where("stocks.sector_id = #{current_user.sector.id} AND lot_stocks.quantity > 0")
-      @expired_lot_stocks = @lot_stocks.joins("INNER JOIN lots ON lot_stocks.lot_id = lots.id").with_status(2).order('lots.expiry_date desc').limit(10)
-      @near_expiry_lots = @lot_stocks.joins("INNER JOIN lots ON lot_stocks.lot_id = lots.id").with_status(1).order('lots.expiry_date desc').limit(10)
+      @expired_lot_stocks = @lot_stocks.joins("INNER JOIN lots ON lot_stocks.lot_id = lots.id").with_status(2).order('lots.expiry_date desc').limit(9)
+      @near_expiry_lots = @lot_stocks.joins("INNER JOIN lots ON lot_stocks.lot_id = lots.id").with_status(1).order('lots.expiry_date desc').limit(9)
       
       @expired_lot_stocks_all = @lot_stocks.with_status(2)
       @near_expiry_lots_all = @lot_stocks.with_status(1)

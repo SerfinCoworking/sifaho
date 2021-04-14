@@ -66,6 +66,7 @@ class ApplicationController < ActionController::Base
       # igualamos el valor :filterrific de params con el de session
       if params[:reset] == "true"
         params[:filterrific] = nil
+        session[:filterrific] = nil
       else
         params[:filterrific] = session[:filterrific]
       end

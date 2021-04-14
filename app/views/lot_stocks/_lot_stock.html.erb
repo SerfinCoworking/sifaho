@@ -1,7 +1,7 @@
 <% lot_stocks.each do |lot_stock| %>
   <tr id="lot_stock_<%= lot_stock.id %>">
     <td><%= lot_stock.lot.code %></td>
-    <td><%= lot_stock.product.name %></td>
+    <td class="text-truncate" style="width: 270px;"><%= lot_stock.product.name %></td>
     <td><%= lot_stock.lot.expiry_date.present? ? lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %></td>
     <% if showInDashboard %>
       <td><%= lot_stock.lot.status.humanize %></td>

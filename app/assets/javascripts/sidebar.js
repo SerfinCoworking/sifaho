@@ -23,7 +23,8 @@ $(document).on('turbolinks:load', function() {
       
       const weekChart = Highcharts.chart('week', {
           chart: {
-              type: 'line'
+              type: 'line',
+              height: 300
             },
             title: {
                 text: 'Recetadas en los últimos 14 días'
@@ -44,7 +45,7 @@ $(document).on('turbolinks:load', function() {
                     dataLabels: {
                         enabled: true
                     },
-                    enableMouseTracking: false,
+                    enableMouseTracking: false
                 }
             },
             series: [{
@@ -64,7 +65,8 @@ $(document).on('turbolinks:load', function() {
         
         const yearChart = Highcharts.chart('year', {
             chart: {
-                type: 'line'
+                type: 'line',
+                height: 300
             },
             title: {
                 text: 'Recetadas en los últimos 12 meses'
