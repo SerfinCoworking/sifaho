@@ -186,7 +186,7 @@ Rails.application.routes.draw do
   resources :internal_orders, path: :pedidos_sectores, only: [:show, :destroy] do
     member do
       get "delete"
-      get "send_provider"
+      get :send_provider, path: :editar_proveedor
       get "send_applicant"
       get "return_provider_status"
       get "return_applicant_status"
@@ -195,7 +195,7 @@ Rails.application.routes.draw do
       get :edit_provider, path: :editar_proveedor
       get "nullify"
       patch "update_applicant"
-      patch "update_provider"
+      patch :update_provider, path: :editar_proveedor
     end
     collection do
       get :new_applicant, path: :solicitar
