@@ -9,7 +9,7 @@
         del producto <%= fa_icon 'cubes' %> <%= @lot_stock.product_name %>
       </h5>
     </div>
-    <%= link_to stock_show_lote_stocks_path(stock_id: @lot_stock.stock.id, lot_stock_id: @lot_stock.id), class: 'btn btn-light',
+    <%= link_to stock_show_lot_stocks_path(stock_id: @lot_stock.stock.id, lot_stock_id: @lot_stock.id), class: 'btn btn-light',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
       <%= fa_icon 'times' %>
     <% end %>

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       get '/lotes', to: 'lot_stocks#index', as: :lot_stocks_index
     end
     get '/lotes', to: 'lot_stocks#lot_stocks_by_stock', as: :lot_stocks_by_stock
-    get '/lotes/:lot_stock_id/', to: 'lot_stocks#show', as: :show_lote_stocks
+    get '/lotes/:lot_stock_id/', to: 'lot_stocks#show', as: :show_lot_stocks
     get '/lotes/:lot_stock_id/new_archive', to: 'lot_stocks#new_archive', as: :new_archive
     post '/lotes/:lot_stock_id/create_archive', to: 'lot_stocks#create_archive', as: :create_archive
     

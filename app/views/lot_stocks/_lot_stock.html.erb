@@ -8,7 +8,7 @@
     <td><%= lot_stock.archived_quantity %></td>
     <td class="action-col text-center">
       <% if policy(lot_stock).show? %>
-        <%= link_to stock_show_lote_stocks_path(lot_stock.stock, lot_stock), class: 'btn btn-light btn-sm',
+        <%= link_to stock_show_lot_stocks_path(lot_stock.stock, lot_stock), class: 'btn btn-light btn-sm',
           title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "eye" %>
         <% end %>
