@@ -7,45 +7,37 @@
           <th scope="col">Lote</th>
           <th scope="col">Producto</th>
           <th scope="col">Vencimiento</th>
-          <% if (defined?(showInDashboard) && showInDashboard) || !defined?(showInDashboard) %>
-            <th scope="col">Estado</th>
-          <% end %>
-          
-          <th scope="col"><%= (defined?(showInDashboard) && showInDashboard) || !defined?(showInDashboard) ? "Cantidad en stock" : "Cantidad"%></th>
-
-          <% if (defined?(showInDashboard) && showInDashboard) || !defined?(showInDashboard) %>
-            <th scope="col">Cantidad en archivado</th>
-            <th scope="col" class="action-col text-center">Acciones</th>
-          <% end %>
+          <th scope="col">Estado</th>
+          <th scope="col">Cantidad en stock</th>
+          <th scope="col">Cantidad en archivado</th>
+          <th scope="col" class="action-col text-center">Acciones</th>
         </tr>
       </thead>
       <tbody id="lot_stocks">
-        <%= render(partial: 'lot_stocks/lot_stock', locals: { lot_stocks: lot_stocks, showInDashboard: (defined?(showInDashboard) && showInDashboard) || !defined?(showInDashboard) }) %>
+        <%= render(partial: 'lot_stocks/lot_stock', locals: { lot_stocks: lot_stocks }) %>
       </tbody>
     </table>
   </div>
-  <% if (defined?(showInDashboard) && showInDashboard) || !defined?(showInDashboard) %>
-    <div class="row d-flex align-items-center" style="height: 50px">
-      <div class="col-3">
-        <%= will_paginate lot_stocks, list_classes: %w(pagination mb-0), 
-          previous_label: '<i class="fa fa-angle-left"></i>',
-          next_label: '<i class="fa fa-angle-right"></i>', 
-          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-      </div>
-      <div class="col-6 d-flex justify-content-around align-items-center">
-        <div>
-          Movimientos <span class="badge badge-secondary"><%= lot_stocks.count %></span>
-        </div>
-      </div>
-      <div class="col-3 d-flex justify-content-end align-items-center">
-        <%= link_to 'Volver', :back, class: "btn btn-light mr-2" %>
-        <%#= link_to lot_stocks_path(format: 'xlsx'),
-          class: "btn btn-success", target: :_blank,
-          title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%#= fa_icon "file-excel" %>
-          <!-- Excel -->
-        <%# end %>
+  <div class="row d-flex align-items-center" style="height: 50px">
+    <div class="col-3">
+      <%= will_paginate lot_stocks, list_classes: %w(pagination mb-0), 
+        previous_label: '<i class="fa fa-angle-left"></i>',
+        next_label: '<i class="fa fa-angle-right"></i>', 
+        renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    </div>
+    <div class="col-6 d-flex justify-content-around align-items-center">
+      <div>
+        Movimientos <span class="badge badge-secondary"><%= lot_stocks.count %></span>
       </div>
     </div>
-  <% end %>
+    <div class="col-3 d-flex justify-content-end align-items-center">
+      <%= link_to 'Volver', :back, class: "btn btn-light mr-2" %>
+      <%#= link_to lot_stocks_path(format: 'xlsx'),
+        class: "btn btn-success", target: :_blank,
+        title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%#= fa_icon "file-excel" %>
+        <!-- Excel -->
+      <%# end %>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,12 @@
+<% lot_stocks.each do |lot_stock| %>
+  <tr id="lot_stock_<%= lot_stock.id %>">
+    <td><%= lot_stock.lot.code %></td>
+    <td>
+      <div style="width: 200px;" class="text-truncate">
+        <%= lot_stock.product.name %>
+      </div>
+    </td>
+    <td><%= lot_stock.lot.expiry_date.present? ? lot_stock.lot.expiry_date.strftime("%d/%m/%Y") : '---' %></td>
+    <td><%= lot_stock.quantity %></td>
+  </tr>
+<% end %>

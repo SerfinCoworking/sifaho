@@ -1,7 +1,7 @@
 // on turbolinks load 
 $(document).on('turbolinks:load', function() {
   initMenu();
-
+  let weekChart, yearChart;
   // init sessionStorage
   function initMenu(){
     if(sessionStorage.getItem('menu_display') === null){
@@ -21,7 +21,7 @@ $(document).on('turbolinks:load', function() {
       const chronicPrescriptionsCountByDay = JSON.parse($("#week").attr("data-chronic-prescriptions"));
       const chronicPrescriptionsCountByDayName = JSON.parse($("#week").attr("data-chronic-prescriptions-days"));
       
-      const weekChart = Highcharts.chart('week', {
+      weekChart = Highcharts.chart('week', {
           chart: {
               type: 'line',
               height: 300
@@ -63,7 +63,7 @@ $(document).on('turbolinks:load', function() {
         const chronicPrescriptionsCountByMonth = JSON.parse($("#year").attr("data-chronic-prescriptions"));
         const chronicPrescriptionsCountByMonthName = JSON.parse($("#year").attr("data-chronic-prescriptions-months"));
         
-        const yearChart = Highcharts.chart('year', {
+        yearChart = Highcharts.chart('year', {
             chart: {
                 type: 'line',
                 height: 300

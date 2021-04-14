@@ -42,7 +42,7 @@
       </div>
       <div id="expired" class="tab-pane fade pb-0">
         <div class="card">
-          <%= render 'lot_stocks/list', lot_stocks: @expired_lot_stocks, showInDashboard: false %>      
+          <%= render 'welcome/lot_stock/list', lot_stocks: @expired_lot_stocks %>      
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
@@ -54,7 +54,7 @@
       </div>
       <div id="near_expire" class="tab-pane fade">
         <div class="card">
-          <%= render 'lot_stocks/list', lot_stocks: @near_expiry_lots, showInDashboard: false %>
+          <%= render 'welcome/lot_stock/list', lot_stocks: @near_expiry_lots %>
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
