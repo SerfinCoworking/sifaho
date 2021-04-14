@@ -6,9 +6,27 @@ class LotStocksController < ApplicationController
   # GET /stocks.json
   def index
     authorize LotStock
-    @stock = Stock.find(params[:id])
     @filterrific = initialize_filterrific(
-      LotStock.by_stock(params[:id]),
+      LotStock.joins(:stock).where("stocks.sector_id = #{current_user.sector.id}"),
+      params[:filterrific],
+      select_options: {
+        sorted_by: LotStock.options_for_sort,
+        search_by_status: LotStock.options_for_status,
+        search_by_quantity: LotStock.options_for_quantity
+      },
+      persistence_id: false,
+    ) or return
+    @stocks = ''
+    @lot_stocks = @filterrific.find.paginate(page: params[:page], per_page: 15)
+  end
+
+  # GET /stocks
+  # GET /stocks.json
+  def lot_stocks_by_stock
+    authorize LotStock
+    @stock = Stock.find(params[:stock_id])
+    @filterrific = initialize_filterrific(
+      LotStock.by_stock(@stock.id),
       params[:filterrific],
       select_options: {
         sorted_by: Stock.options_for_sorted_by_lots
@@ -63,7 +81,7 @@ class LotStocksController < ApplicationController
     
     respond_to do |format|
       if @lot_archive.save
-        format.html { redirect_to show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
+        format.html { redirect_to show_stock_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
       else
         format.js { render :new_archive }
       end
@@ -102,7 +120,7 @@ class LotStocksController < ApplicationController
     authorize @lot_archive
     @lot_archive.return_by(current_user)
     respond_to do |format|
-      format.html { redirect_to show_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
+      format.html { redirect_to show_stock_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
     end
   end
 

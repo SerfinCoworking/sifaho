@@ -1,16 +1,17 @@
 <% render 'stocks/header' %>
+
 <% if @lot_stocks.present? %>
   <div class="card fixed-custom-card">
     <div class="card-header">
       <h5 class="card-title mb-0 ml-2">
-        <%= fa_icon 'barcode' %> Lotes
+        <%= fa_icon 'barcode' %> Lotes del producto <%= @stock.product.name %>
       </h5>
       <%= render 'filter' %>
     </div>
     <div class="card-body fixed-panel-index">
       <%= render(
         partial: 'lot_stocks/list',
-        locals: { lot_stocks: @lot_stocks }
+        locals: { stock: @stock, lot_stocks: @lot_stocks }
       ) %>
     </div>
   </div>

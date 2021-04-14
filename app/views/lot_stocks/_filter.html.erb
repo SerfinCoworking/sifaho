@@ -1,3 +1,39 @@
 <%= form_for_filterrific @filterrific do |f| %>
-  
+  <div class="row justify-content-between">
+    <div class="col d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to lot_stocks_index_stocks_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+    
+    <div class="col">
+      <label>Estado</label>
+      <%= f.select(:search_by_status,
+        @filterrific.select_options[:search_by_status].map {
+          |status| [status.first, status.second, data: {'content': "<span class='badge badge-"+status.third+"'>"+status.first+"</span>"}]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+    
+    <div class="col">
+      <label>Cantidad</label>
+      <%= f.select(:search_by_quantity,
+        @filterrific.select_options[:search_by_quantity].map {
+          |status| [status.first, status.second]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+    
+    <div class="col">
+      <label>Ordenar por</label>
+      <%= f.select(:sorted_by,
+        @filterrific.select_options[:sorted_by].map {
+          |status| [status.first, status.second]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+    
+  </div>
 <% end %>

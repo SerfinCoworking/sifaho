@@ -58,7 +58,7 @@ class Establishment < ApplicationRecord
     case sort_option.to_s
     when /^creado_/s
       # Ordenamiento por fecha de creación en la BD
-      order("establishments.created_at #{ direction }")
+      reorder("establishments.created_at #{ direction }")
     when /^tipo_/s
       # Ordenamiento por fecha de creación en la BD
       reorder("establishment_types.name #{ direction }").joins(:establishment_type)

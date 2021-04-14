@@ -317,3 +317,14 @@ a {
 .badge-demo{
   font-size: large;
 }
+
+.highcharts-credits{
+  display: none;
+}
+
+.highcharts-container{
+  width: 100%!important;
+  svg{
+    width: 100%!important;
+  }
+}
