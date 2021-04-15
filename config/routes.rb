@@ -187,14 +187,14 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get :send_provider, path: :editar_proveedor
-      get "send_applicant"
+      get :send_applicant, :editar_solicitante 
       get "return_provider_status"
       get "return_applicant_status"
       get "receive_applicant"
       get :edit_applicant, path: :editar_solicitante 
       get :edit_provider, path: :editar_proveedor
       get "nullify"
-      patch "update_applicant"
+      patch :update_applicant, :editar_solicitante 
       patch :update_provider, path: :editar_proveedor
     end
     collection do
@@ -204,8 +204,8 @@ Rails.application.routes.draw do
       get :provider_index, path: :entregas
       get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "internal_orders#find_lots", as: "find_order_product_lots"
-      post :create_applicant
-      post :create_provider
+      post :create_applicant, path: :solicitar
+      post :create_provider, path: :entregar
     end
 
   end
