@@ -78,7 +78,7 @@
                 loading="lazy"
                 allowfullscreen
                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAC45udxXu_GFnHefBcBLJcRHdHGFDIru4
-                  &q=-40.158738,-71.356328">
+                  &q=<%= @establishment.latitude %>,<%= @establishment.longitude %>">
               </iframe>
             <% else %>
               Sin ubicación
@@ -101,7 +101,7 @@
             loading="lazy"
             allowfullscreen
             src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyAC45udxXu_GFnHefBcBLJcRHdHGFDIru4
-              &location=-40.158738,-71.356328 &heading=210&pitch=10&fov=35">
+              &location=<%= @establishment.latitude %>,<%= @establishment.longitude %> &heading=210&pitch=10&fov=35">
           </iframe>
         <% elsif @establishment.image.attached? %>
           <%= image_tag @establishment.image.variant(resize: "x500", gravity: "center"), class:"img-thumbnail" %>
