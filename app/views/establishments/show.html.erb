@@ -15,41 +15,101 @@
 
   <div class="card-body">
     <div class="row">
-      <div class="col-3">
-        <% if @establishment.image.attached? %>
+      <div class="col-9">
+        <ul class='nav nav-tabs'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#profile'>
+              <%= fa_icon "user-injured" %>
+              Información
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class="nav-link" data-toggle='tab' href='#location'>
+              <%= fa_icon "map-marker-alt" %>
+              Ubicación
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class="nav-link" data-toggle='tab' href='#sectors'>
+              <%= fa_icon "bezier-curve" %>
+              Sectores
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class="nav-link" data-toggle='tab' href='#users'>
+              <%= fa_icon "users" %>
+              Usuarios
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+
+          <!-- Perfil -->
+          <div id='profile' class='tab-pane fade show active pt-2'>
+            <div class="row">
+              <div class="col-4">
+                <h5><strong>CUIE</strong></h5><p><%= @establishment.cuie %></p>
+              </div>
+              <div class="col-4">
+                <h5><strong>Email</strong></h5><p><%= @establishment.email %></p>
+              </div>
+              <div class="col-4">
+                <h5><strong>Teléfono</strong></h5><p><%= @establishment.phone %></p>
+              </div>
+              <div class="col-4">
+                <h5><strong>Domicilio</strong></h5><p><%= @establishment.domicile %></p>
+              </div>
+              <div class="col-4">
+                <h5><strong>Cuit</strong></h5><p><%= @establishment.cuit %></p>
+              </div>
+              <div class="col-4">
+                <h5><strong>SISA</strong></h5><p><%= @establishment.siisa %></p>
+              </div>
+            </div>
+          </div>
+
+          <%# Ubicación %>
+          <div id='location' class='tab-pane fade pt-2'>
+            <% if @establishment.latitude.present? && @establishment.longitude.present? %>
+              <iframe
+                width="1140"
+                height="630"
+                style="border:0"
+                loading="lazy"
+                allowfullscreen
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAC45udxXu_GFnHefBcBLJcRHdHGFDIru4
+                  &q=-40.158738,-71.356328">
+              </iframe>
+            <% else %>
+              Sin ubicación
+            <% end %>
+          </div>
+          <div id='sectors' class='tab-pane fade pt-2'>
+            <%= render 'shared/sectors_table', sectors: @establishment.sectors, title: 'Sectores' %>
+          </div>
+          <div id='users' class='tab-pane fade pt-2'>
+            <%= render 'shared/users_table', users: @establishment.users.to_set %>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 border-left">
+        <% if @establishment.latitude.present? && @establishment.longitude.present? %>
+          <iframe
+            width="372"
+            height="400"
+            style="border:0"
+            loading="lazy"
+            allowfullscreen
+            src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyAC45udxXu_GFnHefBcBLJcRHdHGFDIru4
+              &location=-40.158738,-71.356328 &heading=210&pitch=10&fov=35">
+          </iframe>
+        <% elsif @establishment.image.attached? %>
           <%= image_tag @establishment.image.variant(resize: "x500", gravity: "center"), class:"img-thumbnail" %>
         <% else %>
           <%= image_tag('hospital-solid.svg', width: '180px', class: 'text-light') %>
         <% end %>
-      </div>
-      <div class="col-9">
-        <div class="mb-4">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><span class="font-weight-bold">Code:</span><%= @establishment.code %></li>
-            <li class="list-group-item"><span class="font-weight-bold">CUIE:</span><%= @establishment.cuie %></li>
-            <li class="list-group-item"><span class="font-weight-bold">Email:</span><%= @establishment.email %></li>
-            <li class="list-group-item"><span class="font-weight-bold">Teléfono:</span> <%= @establishment.phone %></li>
-            <li class="list-group-item"><span class="font-weight-bold">Domicilio:</span> <%= @establishment.domicile %> </li>
-            <li class="list-group-item"><span class="font-weight-bold">Cuit:</span> <%= @establishment.cuit %> </li>
-            <li class="list-group-item"><span class="font-weight-bold">Código:</span> <%= @establishment.code %> </li>
-            <li class="list-group-item"><span class="font-weight-bold">SIISA:</span> <%= @establishment.siisa %> </li>
-            <li class="list-group-item">
-              <span class="font-weight-bold">Ubicación:</span> 
-              <span class="font-weight-bold">latitud:</span><%= @establishment.latitude %>
-              <span class="font-weight-bold">longitud:</span><%= @establishment.longitude %> 
-            </li>
-            <li class="list-group-item"><span class="font-weight-bold">SIISA:</span> <%= @establishment.siisa %> </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <%# sectores de un establecimiento %>
-    <div class="row h-row-custom">
-      <div class="col-4 mh-col-custom">
-        <%= render 'shared/sectors_table', sectors: @establishment.sectors, title: 'Sectores' %>
-      </div>
-      <div class="col-8 mh-col-custom">
-        <%= render 'shared/users_table', users: @establishment.users.to_set %>
+
+        <%= @establishment.name %>
       </div>
     </div>
   </div>
