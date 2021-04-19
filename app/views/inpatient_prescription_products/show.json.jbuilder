@@ -1,0 +1,1 @@
+json.partial! "inpatient_prescription_products/inpatient_prescription_product", inpatient_prescription_product: @inpatient_prescription_product

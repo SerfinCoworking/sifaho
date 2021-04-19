@@ -1,0 +1,2 @@
+module InpatientPrescriptionsHelper
+end
