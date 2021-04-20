@@ -9,6 +9,7 @@ module FindLots
       .where("stocks.sector_id = ?", current_user.sector.id)
       .where("products.id = ?", params[:product_id])
       .where("lot_stocks.quantity > ? OR lot_stocks.id IN (?)", 0, @selected_lot_stocks)
+      .order("lots.expiry_date")
       
     respond_to do |format|
       format.json { render json: @lot_stocks.to_json(

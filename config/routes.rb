@@ -186,16 +186,16 @@ Rails.application.routes.draw do
   resources :internal_orders, path: :pedidos_sectores, only: [:show, :destroy] do
     member do
       get "delete"
-      get "send_provider"
-      get "send_applicant"
       get "return_provider_status"
       get "return_applicant_status"
       get "receive_applicant"
       get :edit_applicant, path: :editar_solicitante 
       get :edit_provider, path: :editar_proveedor
+      patch :send_provider, path: :editar_proveedor
+      patch :send_applicant, :editar_solicitante 
       get "nullify"
-      patch "update_applicant"
-      patch "update_provider"
+      put :update_applicant, :editar_solicitante 
+      put :update_provider, path: :editar_proveedor
     end
     collection do
       get :new_applicant, path: :solicitar
@@ -204,8 +204,8 @@ Rails.application.routes.draw do
       get :provider_index, path: :entregas
       get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "internal_orders#find_lots", as: "find_order_product_lots"
-      post :create_applicant
-      post :create_provider
+      post :create_applicant, path: :solicitar
+      post :create_provider, path: :entregar
     end
 
   end

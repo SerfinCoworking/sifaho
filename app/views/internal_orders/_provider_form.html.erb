@@ -13,7 +13,8 @@
   <div class="card-body">
     
     <%= simple_form_for @internal_order, :url => (@internal_order.new_record? ? create_provider_internal_orders_path : update_provider_internal_order_path(@internal_order)),
-     html: { role: 'check-modified'} do |f| %>
+      method: (@internal_order.new_record? ? :post : :put),
+      html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
         <div class='col-3'>

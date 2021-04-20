@@ -249,11 +249,11 @@ class InternalOrdersController < ApplicationController
         format.html { redirect_to @internal_order, notice: message }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden
-        @internal_order.status = previous_status
-        @internal_order.save!
+        # @internal_order.save!
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @internal_order.status = previous_status
         @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
@@ -288,7 +288,7 @@ class InternalOrdersController < ApplicationController
   # GET /internal_order/1/send_provider
   def send_provider
     authorize @internal_order
-
+    previous_status = @internal_order.status
     respond_to do |format|
       begin
         @internal_order.status = "provision_en_camino"
@@ -302,6 +302,7 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
+        @internal_order.status = previous_status
         @sectors = Sector
           .select(:id, :name)
           .with_establishment_id(current_user.sector.establishment_id)
