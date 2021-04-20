@@ -18,7 +18,6 @@ class Establishment < ApplicationRecord
   validates :cuie, presence: true, length: { is: 6 }, uniqueness: true
   validates :establishment_type_id, presence: true
   validates :siisa,
-    length: { is: 14 },
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
   validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
