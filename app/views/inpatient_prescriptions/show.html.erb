@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Patient:</strong>
+  <%= @inpatient_prescription.patient %>
+</p>
+
+<p>
+  <strong>Professional:</strong>
+  <%= @inpatient_prescription.professional %>
+</p>
+
+<p>
+  <strong>Bed:</strong>
+  <%= @inpatient_prescription.bed %>
+</p>
+
+<p>
+  <strong>Remit code:</strong>
+  <%= @inpatient_prescription.remit_code %>
+</p>
+
+<p>
+  <strong>Observation:</strong>
+  <%= @inpatient_prescription.observation %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @inpatient_prescription.status %>
+</p>
+
+<p>
+  <strong>Date prescribed:</strong>
+  <%= @inpatient_prescription.date_prescribed %>
+</p>
+
+<%= link_to 'Edit', edit_inpatient_prescription_path(@inpatient_prescription) %> |
+<%= link_to 'Back', inpatient_prescriptions_path %>

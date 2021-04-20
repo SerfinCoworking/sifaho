@@ -116,17 +116,6 @@ Rails.application.routes.draw do
 
   resources :profiles, path: :perfiles, only: [ :edit, :update, :show ]
 
-  resources :bed_orders, path: :internacion do
-    member do
-      get "delete"
-    end
-    collection do
-      get "bed_map"
-      get "new_bed"
-      post "create_bed"
-    end
-  end
-
   resources :laboratories, path: :laboratorios do
     member do
       get "delete"
@@ -286,6 +275,12 @@ Rails.application.routes.draw do
       post "nueva/:patient_id", to: "chronic_prescriptions#create", as: "create"
       get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
+  end
+
+  resources :inpatient_prescriptions, path: :internacion do
+    resources :inpatient_prescription_products
+    resources :in_pre_prod_lot_stocks
+    resources :beds, path: :camas
   end
   
     
