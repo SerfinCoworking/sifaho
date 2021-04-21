@@ -21,7 +21,6 @@
 //= require moment
 //= require moment/es.js
 //= require moment-timezone-with-data
-//= require tempusdominus-bootstrap-4.js
 //= require filterrific/filterrific-jquery
 //= require highcharts
 //= require chartkick
@@ -32,6 +31,8 @@
 //= require bootstrap
 //= require bootstrap-select
 //= require_tree .
+//= require bootstrap_datepicker_1_9_0/js/bootstrap-datepicker.min
+//= require bootstrap_datepicker_1_9_0/locales/bootstrap-datepicker.es.min
 
 // Se oculta el flash message
 window.setTimeout(function() {
@@ -78,7 +79,11 @@ $(document).on('turbolinks:load', function() {
     }
   );
 
-  $('.since-date, .to-date, .requested-date, .prescribed-date, .datetimepicker').datepicker({
+  $('.datepicker').datepicker({
+    format: "dd/mm/yyyy",
+    language: "es"
+  });
+/*   $('.since-date, .to-date, .requested-date, .prescribed-date, .datetimepicker').datepicker({
     closeText: 'Cerrar',
     prevText: '<Ant',
     nextText: 'Sig>',
@@ -94,7 +99,7 @@ $(document).on('turbolinks:load', function() {
     isRTL: false,
     showMonthAfterYear: false,
     yearSuffix: ''
-  });
+  }); */
 
   $('.quantity_ord_supply_lots').on('cocoon:after-insert', function(e, insertedItem) {
     $('.selectpicker').selectpicker({style: 'btn-sm btn-default'}); // Se inicializa selectpicker luego de agregar form
@@ -115,10 +120,10 @@ $(document).on('turbolinks:load', function() {
   //   locale: 'es'
   // });
 
-  $('#since-datepicker').datetimepicker({
+  /* $('#since-datepicker').datetimepicker({
     format: 'DD/MM/YYYY',
     locale: 'es'
-  });
+  }); */
 
   $(".required").prop('required', true);
 
@@ -155,13 +160,13 @@ $(document).on('turbolinks:load', function() {
 
 $(document).on('turbolinks:load', function() {
 
-  $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
+  /* $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
     format: 'DD/MM/YYYY',
     locale: 'es',
     icons: {
       time: "far fa-clock",
     }
-  });
+  }); */
 
   
   /* new version */

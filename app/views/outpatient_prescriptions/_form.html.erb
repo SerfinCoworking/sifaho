@@ -95,7 +95,7 @@
                   :placeholder => "Seleccionar fecha",
                   input_html: {
                     tabindex: "-1",
-                    class: "form-control pull-right date-prescribed",
+                    class: "form-control pull-right datepicker prescribed-date",
                     required: true,
                     autocomplete: 'off',
                     value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
