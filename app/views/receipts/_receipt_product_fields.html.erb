@@ -59,7 +59,7 @@
           placeholder: "Unidad",
           value: "#{
             if f.object.product.present?
-              f.object.product.unity
+              f.object.product.unity.name
             end
           }"
         }
@@ -127,25 +127,16 @@
 
     <!-- Vencimiento -->
     <td>
-      <%= f.input :expiry_date_fake, 
-        as: :tempus_dominus, 
-        label: false,
-        input_html: {
-          placeholder: "MM/AA",
-          required: false,
-          autocomplete: 'off',
-          value: "#{
-            if f.object.expiry_date.present?
-              f.object.expiry_date.strftime("%m/%y")
-            else
-              'n/a'
-            end
-          }"
-        },
-        html5: false
-      %>
-      <%= f.input :expiry_date, :as => :hidden, 
-      :input_html =>  { class: "receipt-expiry-date" }, 
+    <div class="input-group mb-3">
+      <input type="text" class="form-control string optional receipt-expiry-date-fake" placeholder="Vencimiento" aria-label="Vencimiento" aria-describedby="exp-date" value="<%= f.object.expiry_date.present? ? f.object.expiry_date.strftime("%m/%Y") : 'n/a' %>">
+      <div class="input-group-append">
+        <span class="input-group-text bg-primary" id="exp-date">
+          <%= fa_icon 'calendar-alt' %>
+        </span>
+      </div>
+    </div>
+      <%= f.input :expiry_date, as: :hidden,
+      :input_html => { class: "receipt-expiry-date" }, 
       value: "#{ if f.object.expiry_date.present?; f.object.expiry_date.strftime("%m/%y"); end }"%>
     </td>
 
