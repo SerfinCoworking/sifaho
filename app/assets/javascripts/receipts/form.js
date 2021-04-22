@@ -83,7 +83,8 @@ $(document).on('turbolinks:load', function(e){
     $('.receipt-expiry-date-fake').datepicker({
       format: "mm/yyyy",
       language: 'es',
-      minViewMode: 1,      
+      minViewMode: 1,
+      autoclose: true
     });
     
     // date input change 
