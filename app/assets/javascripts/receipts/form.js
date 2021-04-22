@@ -163,7 +163,7 @@ $(document).on('turbolinks:load', function(e){
             tr.find("input.receipt-laboratory-id").val(ui.item.lab_id).trigger('change'); // update product name input
             if(ui.item.expiry_date){
               const expiry_date = moment(ui.item.expiry_date);
-              tr.find("input.datetimepicker-input").val(expiry_date.format('MM/YY')); // update product name input
+              tr.find("input.receipt-expiry-date-fake").val(expiry_date.format('MM/YY')); // update product name input
               tr.find("input.receipt-expiry-date").val(expiry_date.endOf('month').format("YYYY-MM-DD")); // update product name input
             }
           },
