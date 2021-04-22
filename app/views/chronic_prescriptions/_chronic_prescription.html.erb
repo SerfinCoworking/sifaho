@@ -28,6 +28,7 @@
         <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
           class: 'btn btn-sm btn-primary mr-1 ml-1',
           title: t("actions.tooltip.dispense"),
+          target: (dispense_target if defined?(dispense_target)),
           data: { toggle: 'tooltip', placement: 'top'} do %> 
           <%= fa_icon "paper-plane"%>
         <% end %>
@@ -37,8 +38,8 @@
         partial: 'shared/action_buttons',
         locals:{ 
             object: chronic_prescription, 
-            show: {visible: true},
-            edit: {visible: true},
+            show: {visible: true, target: (show_target if defined?(show_target) )},
+            edit: {visible: true, target: (edit_target if defined?(edit_target) )},
             destroy: {
               visible: true, 
               title: "Eliminar prescripción",
