@@ -15,6 +15,6 @@ $(document).on('turbolinks:load', function() {
 $(document).on('turbolinks:load', function() { 
   const $pickerInput = $('.date_time_picker input.date_time_picker');
   const initialValue = $pickerInput.val();
-  $('.date_time_picker > .input-group.date').datetimepicker({ format: 'DD/MM/YYYY' });
+  // $('.date_time_picker > .input-group.date').datetimepicker({ format: 'DD/MM/YYYY' });
   return $pickerInput.val(initialValue);
 });

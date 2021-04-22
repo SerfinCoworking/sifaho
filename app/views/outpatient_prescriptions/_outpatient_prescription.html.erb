@@ -28,6 +28,7 @@
         <%= link_to dispense_outpatient_prescription_path(outpatient_prescription), :"data-turbolinks" => false,
           class: 'btn btn-primary btn-sm mr-1 ml-1',
           title: 'Dispensar', 
+          target: (dispense_target if defined?(dispense_target)),
           data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "paper-plane" %>
         <% end %>
@@ -37,8 +38,8 @@
         partial: 'shared/action_buttons',
         locals:{ 
             object: outpatient_prescription, 
-            show: {visible: true},
-            edit: {visible: true},
+            show: {visible: true, target: (show_target if defined?(show_target) )},
+            edit: {visible: true, target: (edit_target if defined?(edit_target) )},
             destroy: {
               visible: true, 
               title: "Eliminar prescripción",

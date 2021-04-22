@@ -74,12 +74,20 @@
       <label>Solicitado</label>
       <div class="row d-flex">
         <div class="col-6 p-0 pr-1">
-          <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :requested_date_since,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Desde",
+            autocomplete: "off",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
         <div class="col-6 p-0 pr-1">
-          <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :requested_date_to,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Hasta",
+            autocomplete: "off",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
       </div>
     </div>
@@ -94,12 +102,20 @@
 
       <div class="row d-flex">
         <div class="col-6 p-0 pr-1">
-          <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :date_received_since,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Desde",
+            autocomplete: "off",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
         <div class="col-6 p-0 pr-1">
-          <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :date_received_to,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Hasta",
+            autocomplete: "off",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
       </div>
     </div>

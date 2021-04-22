@@ -15,52 +15,43 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
-  $('.date-prescribed').datepicker({
-    closeText: 'Cerrar',
-    prevText: '<Ant',
-    nextText: 'Sig>',
-    currentText: 'Hoy',
-    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
-    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
-    weekHeader: 'Sm',
-    dateFormat: 'dd/mm/yy',
-    firstDay: 1,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: '',
-    maxDate: moment().format("DD/MM/YYYY")
+  $('.datepicker').datepicker({
+    format: "dd/mm/yyyy",
+    language: "es",
+    autoclose: true,
+    endDate: new Date(),
   });
 
-  $('.date-prescribed').on('change', function(e) {
-
+  $('.prescribed-date').on('change', function(e) {
     // Dia prescripto
-    const datePrescribed = e.target.value;
-    const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
+    if(e.target.value !== 'undefined' && e.target.value !== ''){
+      const datePrescribed = e.target.value;
+      const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
 
-    const today = moment().startOf('month');
-    const treatmentDuration = $("input[name='duration-treatment']").val();
-        
-    // Seteamos la fecha de expiracion
-    const expiryDate = moment(momentDatePrescribed).add(treatmentDuration, 'month');
-    $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
-    $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
-    
-    const remaining_treatment = treatmentDuration - parseInt(today.diff(momentDatePrescribed, 'months')) || 0;
-    /* actualiza todos los totales de dosis cargados por cada producto */
-    $("#original-order-product-cocoon-container tr").each((index, tr) => {
-      const reqByMonth = $(tr).find('.request-quantity').first().val();
-      $(tr).find("input.total-quantity-fake").first().val(remaining_treatment * reqByMonth);
-      $(tr).find("input[type='hidden'].total-request-quantity").first().val(remaining_treatment * reqByMonth);
-    });
-
+      const today = moment().startOf('month');
+      const treatmentDuration = $("input[name='duration-treatment']").val();
+          
+      // Seteamos la fecha de expiracion
+      const expiryDate = moment(momentDatePrescribed).add(treatmentDuration, 'month');
+      $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
+      $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
+      
+      const remaining_treatment = treatmentDuration - parseInt(today.diff(momentDatePrescribed, 'months')) || 0;
+      /* actualiza todos los totales de dosis cargados por cada producto */
+      $("#original-order-product-cocoon-container tr").each((index, tr) => {
+        const reqByMonth = $(tr).find('.request-quantity').first().val();
+        $(tr).find("input.total-quantity-fake").first().val(remaining_treatment * reqByMonth);
+        $(tr).find("input[type='hidden'].total-request-quantity").first().val(remaining_treatment * reqByMonth);
+      });
+    }else{
+      $('#expiry-date').text("");
+      $('input[type="hidden"]#expiry_date').val("");
+    }
   });
 
   $("input[name='duration-treatment']").on('change', function(e){
     // Dia prescripto
-    const datePrescribed = $("input.date-prescribed").first().val();
+    const datePrescribed = $("input.prescribed-date").first().val();
     const momentDatePrescribed = moment(datePrescribed, "DD/MM/YYYY").endOf('month');
 
     const today = moment().startOf('month');

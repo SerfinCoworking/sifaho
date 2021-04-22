@@ -1,7 +1,6 @@
 $(document).on('turbolinks:load', function(e){
   
-  if( _PAGE.controller !== 'receipts' && (_PAGE.action !== 'new' || _PAGE.action !== 'edit') ) return false;
-
+  if(!(_PAGE.controller === 'receipts' && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   initExpiryDateCalendar();
   
   // button submit
@@ -80,23 +79,19 @@ $(document).on('turbolinks:load', function(e){
   
   // set expiry date calendar format
   function initExpiryDateCalendar(){
-    // date input change 
-    $('input.datetimepicker-input').on('change', function(e){
-      setExpiryDate(e.target);    
-    });
     // aqui se define el formato para el datepicker de la fecha de vencimiento en "solicitar cargar stock"
-    $('.receipt_receipt_products_expiry_date_fake .input-group.date').datetimepicker({
-      format: 'MM/YY',
-      viewMode: 'months',
-      locale: 'es',
-      useCurrent: false,
+    $('.receipt-expiry-date-fake').datepicker({
+      format: "mm/yyyy",
+      language: 'es',
+      minViewMode: 1,
+      autoclose: true
     });
     
-    $('.receipt_receipt_products_expiry_date_fake .input-group.date').on('change.datetimepicker', function(e){
-      const target = $(e.target).find('input.datetimepicker-input').first();
-      setExpiryDate(target);
+    // date input change 
+    $('.receipt-expiry-date-fake').on('change', function(e){
+      setExpiryDate(e.target);    
     });
-
+    
     // autocomplete product code input
     $('.receipt-product-code').autocomplete({
       source: $('.receipt-product-code').attr('data-autocomplete-source'),
@@ -168,7 +163,7 @@ $(document).on('turbolinks:load', function(e){
             tr.find("input.receipt-laboratory-id").val(ui.item.lab_id).trigger('change'); // update product name input
             if(ui.item.expiry_date){
               const expiry_date = moment(ui.item.expiry_date);
-              tr.find("input.datetimepicker-input").val(expiry_date.format('MM/YY')); // update product name input
+              tr.find("input.receipt-expiry-date-fake").val(expiry_date.format('MM/YY')); // update product name input
               tr.find("input.receipt-expiry-date").val(expiry_date.endOf('month').format("YYYY-MM-DD")); // update product name input
             }
           },
@@ -201,10 +196,10 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
-  }
+  } // end initial function
 
   function setExpiryDate(target){
-    const expireDate = moment($(target).val(), "MM/YY");
+    const expireDate = moment($(target).val(), "MM/YYYY").endOf('month');
     const inputHidden = $(target).closest("td").find('.hidden.receipt_receipt_products_expiry_date input[type="hidden"]');
     $(inputHidden).val(expireDate.endOf('month').format("YYYY-MM-DD")); 
   }  
