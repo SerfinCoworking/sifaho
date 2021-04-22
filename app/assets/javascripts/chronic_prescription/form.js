@@ -15,6 +15,13 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
+  $('.datepicker').datepicker({
+    format: "dd/mm/yyyy",
+    language: "es",
+    autoclose: true,
+    endDate: new Date(),
+  });
+
   $('.prescribed-date').on('change', function(e) {
     // Dia prescripto
     if(e.target.value !== 'undefined' && e.target.value !== ''){
