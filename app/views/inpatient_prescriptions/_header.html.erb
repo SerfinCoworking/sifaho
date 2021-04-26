@@ -1,0 +1,8 @@
+<% content_for :page_header do %>
+  <li class="nav-item non-sel">
+    <%= link_to new_inpatient_prescription_path, class: "nav-link #{ active_action('new') }" do %>
+      <%= fa_icon "plus" %>
+      Nueva 
+    <% end %>
+  </li>
+<% end %>

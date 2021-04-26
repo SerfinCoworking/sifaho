@@ -1,0 +1,49 @@
+<% if @inpatient_prescriptions.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th>Código</th>
+            <th><%= filterrific_sorting_link(@filterrific, :medico) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :productos) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :movimientos) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :recetada) %></th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="outpatient_prescriptions">
+          <%= render @inpatient_prescriptions %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-5">
+        <%= will_paginate @inpatient_prescriptions, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-5 d-flex justify-content-around align-items-center">
+        <div>
+          Recetas <span class="badge badge-secondary"><%#= @inpatient_prescriptions.count %></span>
+        </div>
+        <div>
+          Pendientes <span class="badge badge-secondary"><%#= @inpatient_prescriptions.pendiente.count %></span>
+        </div>
+        <div>
+          Dispensadas <span class="badge badge-success"><%#= @inpatient_prescriptions.dispensada.count %></span>
+        </div>
+      </div>
+      <div class="col-2 d-flex justify-content-end align-items-center">
+      </div>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>

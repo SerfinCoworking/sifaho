@@ -472,8 +472,10 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
   create_table "inpatient_prescription_products", force: :cascade do |t|
     t.bigint "inpatient_prescription_id"
     t.bigint "product_id"
-    t.integer "dose_quantiity"
+    t.integer "dose_quantity"
     t.integer "interval"
+    t.integer "dose_total"
+    t.integer "status"
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -683,9 +685,9 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "reserved_quantity", default: 0
     t.integer "archived_quantity", default: 0
     t.integer "presentation"
+    t.integer "reserved_quantity", default: 0
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
     t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
   end
@@ -869,15 +871,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_patient_product_state_reports_on_created_by_id"
     t.index ["product_id"], name: "index_patient_product_state_reports_on_product_id"
-  end
-
-  create_table "patient_state_report_products", force: :cascade do |t|
-    t.bigint "product_id"
-    t.bigint "report_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_patient_state_report_products_on_product_id"
-    t.index ["report_id"], name: "index_patient_state_report_products_on_report_id"
   end
 
   create_table "patient_types", force: :cascade do |t|

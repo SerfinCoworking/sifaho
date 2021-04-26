@@ -1,4 +1,11 @@
 class InpatientPrescriptionProduct < ApplicationRecord
+
+  enum status: { 
+    activo: 0,
+    terminado: 1,
+    suspendido: 2
+  }
+
   default_scope { joins(:product).order("products.name") }
 
   # Relaciones
@@ -10,8 +17,8 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Validaciones
   validates :dose_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :product_id
-  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_proveedor_aceptado_and_quantity_greater_than_0?
-  validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
+  # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_proveedor_aceptado_and_quantity_greater_than_0?
+  # validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
   validate :uniqueness_product_in_the_order
 
   
