@@ -106,7 +106,8 @@ class SectorsController < ApplicationController
     params.require(:sector).permit(
       :name,
       :establishment_id,
-      :description
+      :description,
+      :provide_hospitalization,
     )
   end
 end

@@ -280,7 +280,10 @@ Rails.application.routes.draw do
   resources :inpatient_prescriptions, path: :internacion do
     resources :inpatient_prescription_products
     resources :in_pre_prod_lot_stocks
-    resources :beds, path: :camas
+    collection do
+      resources :beds, path: :camas
+      resources :bedrooms, path: :habitaciones
+    end
   end
   
     

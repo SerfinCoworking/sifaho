@@ -8,6 +8,7 @@ class Patient < ApplicationRecord
   # Relaciones
   belongs_to :patient_type
   belongs_to :address, optional: true
+  belongs_to :bed, optional: true
   has_many :outpatient_prescriptions, dependent: :destroy
   has_many :chronic_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar

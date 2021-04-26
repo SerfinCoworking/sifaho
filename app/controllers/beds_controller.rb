@@ -1,4 +1,4 @@
-class BedController < ApplicationController
+class BedsController < ApplicationController
   before_action :set_bed, only: [:show, :edit, :update, :destroy]
 
   # GET /beds
@@ -9,19 +9,10 @@ class BedController < ApplicationController
       Bed.establishment(current_user.sector.establishment),
       params[:filterrific],
       select_options: {
-        with_status: Bed.options_for_status
+        with_status: Bed.options_for_status,
+        sorted_by: Bed.options_for_sorted_by
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :search_patient,
-        :search_bed,
-        :with_order_type,
-        :with_status,
-        :requested_date_since,
-        :requested_date_to,
-        :sorted_by
-      ],
     ) or return
     @beds = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -37,6 +28,14 @@ class BedController < ApplicationController
     authorize Bed
     @bed = Bed.new
     @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
+    @bedrooms = Bedroom
+      .select(:id, :name)
+      .establishment(current_user.sector.establishment_id)
+      .where.not(id: current_user.sector_id)
+    @services = Sector
+      .select(:id, :name)
+      .with_establishment_id(current_user.sector.establishment_id)
+      .where.not(id: current_user.sector_id)
   end
 
   # GET /beds/1/edit
@@ -48,6 +47,7 @@ class BedController < ApplicationController
   # POST /beds.json
   def create
     @bed = Bed.new(bed_params)
+    @bed.establishment_id = current_user.sectoor.establishment_id
     authorize @bed
 
     respond_to do |format|

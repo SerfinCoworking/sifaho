@@ -1,0 +1,28 @@
+<% content_for :title, "Internación" %>
+
+<% content_for :page_header do %>
+  <li class="nav-item" id="page-title">
+    <%= link_to inpatient_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'inpatient_prescriptions') }" do %>
+      <%= fa_icon "procedures" %>
+      Internación
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to beds_path, class: "nav-link #{ active_action_and_controller('index', 'beds') }" do %>
+      <%= fa_icon "map" %>
+      Mapa de camas
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to new_bed_path, class: "nav-link #{ active_action_and_controller('new', 'beds') }" do %>
+      <%= fa_icon "plus" %>
+      Agregar cama
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to new_bedroom_path, class: "nav-link #{ active_action_and_controller('new', 'bedrooms') }" do %>
+      <%= fa_icon "plus" %>
+      Agregar habitación
+    <% end %>
+  </li>
+<% end %>

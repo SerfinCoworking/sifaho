@@ -46,6 +46,16 @@
           <%= f.input :description, label: 'Descripción', :input_html => { "rows" => 1 } %>
         </div>
 
+
+      </div>
+        <hr>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="custom-control custom-switch">
+            <%= f.check_box :provide_hospitalization, class: "custom-control-input", id: "provide-hosp" %>
+            <label class="custom-control-label" for="provide-hosp">Brinda internación</label>
+          </div>
+        </div>
       </div>
     <% end %>
 

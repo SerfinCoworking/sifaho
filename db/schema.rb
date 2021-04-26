@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_144422) do
+ActiveRecord::Schema.define(version: 2021_04_23_160746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -109,10 +109,10 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
 
   create_table "bedrooms", force: :cascade do |t|
     t.string "name"
-    t.bigint "sector_id"
+    t.bigint "location_sector_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sector_id"], name: "index_bedrooms_on_sector_id"
+    t.index ["location_sector_id"], name: "index_bedrooms_on_location_sector_id"
   end
 
   create_table "beds", force: :cascade do |t|
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "service_id"
+    t.integer "status", default: 0
     t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
@@ -902,7 +903,9 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.string "andes_id"
     t.string "cuil"
     t.bigint "patient_type_id", default: 1
+    t.bigint "bed_id"
     t.index ["address_id"], name: "index_patients_on_address_id"
+    t.index ["bed_id"], name: "index_patients_on_bed_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
@@ -1217,6 +1220,7 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.datetime "updated_at", null: false
     t.bigint "establishment_id"
     t.integer "user_sectors_count", default: 0
+    t.boolean "provide_hospitalization", default: false
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
