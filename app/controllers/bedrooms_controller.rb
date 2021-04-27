@@ -4,17 +4,16 @@ class BedroomsController < ApplicationController
   # GET /beds
   # GET /beds.json
   def index
-    authorize BedRoom
+    authorize Bedroom
     @filterrific = initialize_filterrific(
-      Bed.establishment(current_user.sector.establishment),
+      Bedroom.establishment(current_user.sector.establishment),
       params[:filterrific],
       select_options: {
-        with_status: Bed.options_for_status,
-        sorted_by: Bed.options_for_sorted_by
+        sorted_by: Bedroom.options_for_sorted_by
       },
       persistence_id: false,
     ) or return
-    @bedrooms = @filterrific.find.page(params[:page]).per_page(15)
+    @bedrooms = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
     
   # GET /beds/1
@@ -41,19 +40,18 @@ class BedroomsController < ApplicationController
   # POST /beds
   # POST /beds.json
   def create
-    @bedroom = Bed.new(bed_params)
-    @bedroom.establishment_id = current_user.sectoor.establishment_id
+    @bedroom = Bedroom.new(bedroom_params)
     authorize @bedroom
 
     respond_to do |format|
       if @bedroom.save
-        @bedroom.create_notification(current_user, "creó")
-        format.html { redirect_to @bedroom, notice: 'El pedido de internación se ha creado correctamente.' }
-        format.json { render :show, status: :created, location: @bedroom }
+        format.html { redirect_to @bedroom, notice: 'La habitación se ha creado correctamente.' }
       else
-        @bedrooms = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
+        @sectors = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id)
         format.html { render :new }
-        format.json { render json: @bedroom.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -63,12 +61,10 @@ class BedroomsController < ApplicationController
   def update
     authorize @bedroom
     respond_to do |format|
-      if @bedroom.update(bed_params)
-        format.html { redirect_to @bedroom, notice: 'El pedido de internación se ha modificado correctamente.' }
-        format.json { render :show, status: :ok, location: @bedroom }
+      if @bedroom.update(bedroom_params)
+        format.html { redirect_to @bedroom, notice: 'La habitación se ha modificado correctamente.' }
       else
         format.html { render :edit }
-        format.json { render json: @bedroom.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -79,7 +75,7 @@ class BedroomsController < ApplicationController
     authorize @bedroom
     @bedroom.destroy
     respond_to do |format|
-      format.html { redirect_to beds_url, notice: 'El pedido de internación se ha enviado a la papelera correctamente.' }
+      format.html { redirect_to beds_url, notice: 'La habitación se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
     end
   end
@@ -96,7 +92,7 @@ class BedroomsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def bed_params
-      params.require(:bed).permit(:name, :sector)
+    def bedroom_params
+      params.require(:bedroom).permit(:name, :location_sector_id)
     end
 end

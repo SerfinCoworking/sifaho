@@ -281,7 +281,11 @@ Rails.application.routes.draw do
     resources :inpatient_prescription_products
     resources :in_pre_prod_lot_stocks
     collection do
-      resources :beds, path: :camas
+      resources :beds, path: :camas do
+        member do
+          get :delete
+        end
+      end
       resources :bedrooms, path: :habitaciones
     end
   end

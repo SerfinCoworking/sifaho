@@ -6,6 +6,7 @@ class BedPolicy < ApplicationPolicy
   def bed_map?
     user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
+
   def show?
     index?
   end
@@ -29,22 +30,12 @@ class BedPolicy < ApplicationPolicy
   end
 
   def edit?
-    if record.borrador?
-      user.has_any_role?(:admin, :farmaceutico, :enfermero)
-    elsif record.pendiente?
-      user.has_any_role?(:admin, :farmaceutico)
-    end
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
 
   def destroy?
-    if record.solicitud? 
-      if record.solicitud_auditoria? && record.applicant_sector == user.sector
-        user.has_any_role?(:admin, :enfermero)
-      end
-    elsif record.provision? 
-      if record.proveedor_auditoria? && record.provider_sector == user.sector
-        user.has_any_role?(:admin, :enfermero)
-      end
+    unless record.patient.present?
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
 

@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-md-4">
-            <%= f.input :location_sector_id, label: 'Sector',
+            <%= f.input :location_sector_id, label: t('.location_sector'),
               collection: @sectors.map {|sector|  [sector.name, sector.id ]},
               :input_html => {
                 required: true,

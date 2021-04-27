@@ -2,14 +2,20 @@ class Bed < ApplicationRecord
   include PgSearch
   enum status: { disponible: 0, ocupada: 1, inactiva: 2 } 
 
+  # Relations
   belongs_to :bedroom
   belongs_to :service, class_name: 'Sector'
   has_one :establishment, through: :bedroom
   has_many :bed_orders
   has_one :patient
 
+  # Validations
   validates :name, presence: true, uniqueness: true
   validates :bedroom, presence: true
+
+  # Delegations
+  delegate :name, to: :bedroom, prefix: :bedroom
+  delegate :name, to: :service, prefix: :service
 
   scope :establishment, -> (establishment_id) {joins(:establishment).where("establishments.id=?", establishment_id)}
 
@@ -24,9 +30,9 @@ class Bed < ApplicationRecord
   )
 
   pg_search_scope :search_name,
-    against: :name,
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: :name,
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.

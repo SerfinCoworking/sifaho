@@ -47,16 +47,21 @@ class BedsController < ApplicationController
   # POST /beds.json
   def create
     @bed = Bed.new(bed_params)
-    @bed.establishment_id = current_user.sectoor.establishment_id
     authorize @bed
 
     respond_to do |format|
       if @bed.save
-        @bed.create_notification(current_user, "creó")
         format.html { redirect_to @bed, notice: 'El pedido de internación se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @bed }
       else
-        @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
+        @bedrooms = Bedroom
+          .select(:id, :name)
+          .establishment(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id)
+        @services = Sector
+          .select(:id, :name)
+          .with_establishment_id(current_user.sector.establishment_id)
+          .where.not(id: current_user.sector_id)
         format.html { render :new }
         format.json { render json: @bed.errors, status: :unprocessable_entity }
       end
@@ -102,11 +107,6 @@ class BedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bed_params
-      params.require(:bed).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, :sent_request_by_id_id, 
-        :order_type, :bed_id, :requested_date, :observation, :sent_date, :deleted_at, :date_received, :patient_id, :establishment_id,
-        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
-        :provider_observation, :_destroy]
-      )
+      params.require(:bed).permit(:name, :bedroom_id, :service_id)
     end
 end
