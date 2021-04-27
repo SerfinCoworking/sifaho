@@ -255,7 +255,7 @@ class OutpatientPrescription < ApplicationRecord
   def date_prescribed_in_range
     # validamos que la fecha de la prescripcion se encuentre en un rango de menor igual a HOY
     # y HOY - 1 MES atras.
-    unless self.date_prescribed >= (1.month.ago - 1.day) && self.date_prescribed <= Date.today
+    unless self.date_prescribed >= (Date.today.months_ago(1)) && self.date_prescribed <= Date.today
       errors.add(:date_prescribed_in_range, "Debe seleccionar una fecha válida ")   
     end
   end
