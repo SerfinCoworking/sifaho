@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_112339) do
+ActiveRecord::Schema.define(version: 2021_04_19_144422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -443,6 +443,62 @@ ActiveRecord::Schema.define(version: 2021_04_13_112339) do
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
   end
 
+  create_table "in_pre_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "inpatient_prescription_product_id"
+    t.bigint "lot_stock_id"
+    t.bigint "dispensed_by_id"
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dispensed_by_id"], name: "index_in_pre_prod_lot_stocks_on_dispensed_by_id"
+    t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
+    t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
+  end
+
+  create_table "inpatient_prescription_movements", force: :cascade do |t|
+    t.bigint "order_id"
+    t.bigint "order_product_id"
+    t.bigint "user_id"
+    t.bigint "sector_id"
+    t.string "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_inpatient_prescription_movements_on_order_id"
+    t.index ["order_product_id"], name: "index_inpatient_prescription_movements_on_order_product_id"
+    t.index ["sector_id"], name: "index_inpatient_prescription_movements_on_sector_id"
+    t.index ["user_id"], name: "index_inpatient_prescription_movements_on_user_id"
+  end
+
+  create_table "inpatient_prescription_products", force: :cascade do |t|
+    t.bigint "inpatient_prescription_id"
+    t.bigint "product_id"
+    t.integer "dose_quantity"
+    t.integer "interval"
+    t.integer "dose_total"
+    t.integer "status"
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inpatient_prescription_id", "product_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
+    t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
+    t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
+  end
+
+  create_table "inpatient_prescriptions", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.bigint "professional_id"
+    t.bigint "bed_id"
+    t.string "remit_code"
+    t.text "observation"
+    t.integer "status", default: 0
+    t.date "date_prescribed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bed_id"], name: "index_inpatient_prescriptions_on_bed_id"
+    t.index ["patient_id"], name: "index_inpatient_prescriptions_on_patient_id"
+    t.index ["professional_id"], name: "index_inpatient_prescriptions_on_professional_id"
+  end
+
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
     t.bigint "internal_order_product_id"
     t.bigint "lot_stock_id"
@@ -629,9 +685,9 @@ ActiveRecord::Schema.define(version: 2021_04_13_112339) do
     t.integer "quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "reserved_quantity", default: 0
     t.integer "archived_quantity", default: 0
     t.integer "presentation"
+    t.integer "reserved_quantity", default: 0
     t.index ["lot_id"], name: "index_lot_stocks_on_lot_id"
     t.index ["stock_id"], name: "index_lot_stocks_on_stock_id"
   end
