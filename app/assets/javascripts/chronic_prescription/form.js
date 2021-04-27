@@ -19,7 +19,7 @@ $(document).on('turbolinks:load', function(e){
     format: "dd/mm/yyyy",
     language: "es",
     autoclose: true,
-    endDate: new Date(),
+    endDate: new Date()
   });
 
   $('.prescribed-date').on('change', function(e) {
