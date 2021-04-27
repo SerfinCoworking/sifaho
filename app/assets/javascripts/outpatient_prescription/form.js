@@ -15,11 +15,14 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
+  const today = new Date();
+  const startDate = today.setMonth(today.getMonth() - 1);
   $('.datepicker').datepicker({
     format: "dd/mm/yyyy",
     language: "es",
     autoclose: true,
     endDate: new Date(),
+    startDate: new Date(startDate)
   });
 
   $('.prescribed-date').on('change', function(e) {
@@ -30,7 +33,7 @@ $(document).on('turbolinks:load', function(e){
   function setExpirydate(value){
     if(value !== 'undefined' && value !== ''){
       const datePrescribed = moment(value, "DD/MM/YYYY");
-      const expiryDate = datePrescribed.add(3, 'month');
+      const expiryDate = datePrescribed.add(1, 'month');
       $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
       $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
     }else{

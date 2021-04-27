@@ -21,6 +21,7 @@ class OutpatientPrescription < ApplicationRecord
   validates_associated :outpatient_prescription_products
   validates_uniqueness_of :remit_code
   validate :presence_of_products_into_the_order
+  validate :date_prescribed_in_range
 
   # Atributos anidados
   accepts_nested_attributes_for :outpatient_prescription_products,
@@ -248,6 +249,14 @@ class OutpatientPrescription < ApplicationRecord
   def presence_of_products_into_the_order
     if self.outpatient_prescription_products.size == 0
       errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+    end
+  end
+  
+  def date_prescribed_in_range
+    # validamos que la fecha de la prescripcion se encuentre en un rango de menor igual a HOY
+    # y HOY - 1 MES atras.
+    unless self.date_prescribed >= (1.month.ago - 1.day) && self.date_prescribed <= Date.today
+      errors.add(:date_prescribed_in_range, "Debe seleccionar una fecha válida ")   
     end
   end
 end
