@@ -98,7 +98,7 @@
                     class: "form-control pull-right datepicker prescribed-date #{("is-invalid" if f.object.errors[:date_prescribed_in_range].any? )} #{("is-valid" if f.object.date_prescribed.present? && !f.object.errors[:date_prescribed_in_range].any? ) }",
                     required: true,
                     autocomplete: 'off',
-                    value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
+                    value: "#{f.object.date_prescribed.present? ? f.object.date_prescribed.strftime("%d/%m/%Y") : Date.today.strftime("%d/%m/%Y")}"
                   },
               html5: false %>
 
@@ -117,9 +117,9 @@
                 Fechas de vencimiento
               <%end%>
               <div id="expiry-date">
-                <%= "#{if f.object.expiry_date.present?; f.object.expiry_date.strftime("%d/%m/%Y"); end }" %>
+                <%= "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 1.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
               </div>
-              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{if f.object.expiry_date.present?; f.object.expiry_date; end }" %>
+              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 1.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
             </div>
           </div>
 

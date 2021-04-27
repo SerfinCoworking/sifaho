@@ -129,9 +129,9 @@
                 Fechas de vencimiento
               <%end%>
               <div id="expiry-date">
-                <%= "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 6.months.since.end_of_month.strftime("%d/%m/%Y") }" %>
+                <%= "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 6.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
               </div>
-              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{if f.object.expiry_date.present?; f.object.expiry_date; end }" %>
+              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 6.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
             </div>
           </div>
 
