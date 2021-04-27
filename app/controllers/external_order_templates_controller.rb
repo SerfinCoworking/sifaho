@@ -13,6 +13,15 @@ class ExternalOrderTemplatesController < ApplicationController
   # GET /external_order_templates/1.json
   def show
     authorize @external_order_template
+    respond_to do |format|
+      format.html
+      format.pdf do
+        send_data generate_report(),
+          filename: "plantilla_#{@external_order_template.order_type}_establecimiento.pdf",
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
   end
 
   # GET /external_order_templates/new
@@ -137,7 +146,7 @@ class ExternalOrderTemplatesController < ApplicationController
       end
       
       report.pages.each do |page|
-        page[:title] = "Plantilla de #{@external_order_template.order_type} de sector"
+        page[:title] = "Plantilla de #{@external_order_template.order_type} de establecimiento"
         page[:requested_date] = DateTime.now.strftime("%d/%m/%Y")
         page[:page_count] = report.page_count
       end
