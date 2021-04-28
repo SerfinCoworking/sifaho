@@ -1,6 +1,8 @@
 class BedsController < ApplicationController
   before_action :set_bed, only: [:show, :edit, :update, :destroy]
 
+  before_action :assign_records, only: [:index, :new, :create, :edit, :update]
+
   # GET /beds
   # GET /beds.json
   def index
@@ -28,14 +30,6 @@ class BedsController < ApplicationController
     authorize Bed
     @bed = Bed.new
     @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
-    @bedrooms = Bedroom
-      .select(:id, :name)
-      .establishment(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id)
-    @services = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id)
   end
 
   # GET /beds/1/edit
@@ -51,17 +45,9 @@ class BedsController < ApplicationController
 
     respond_to do |format|
       if @bed.save
-        format.html { redirect_to @bed, notice: 'El pedido de internación se ha creado correctamente.' }
+        format.html { redirect_to @bed, notice: 'La cama de internación se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @bed }
       else
-        @bedrooms = Bedroom
-          .select(:id, :name)
-          .establishment(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id)
-        @services = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id)
         format.html { render :new }
         format.json { render json: @bed.errors, status: :unprocessable_entity }
       end
@@ -74,7 +60,7 @@ class BedsController < ApplicationController
     authorize @bed
     respond_to do |format|
       if @bed.update(bed_params)
-        format.html { redirect_to @bed, notice: 'El pedido de internación se ha modificado correctamente.' }
+        format.html { redirect_to @bed, notice: 'La cama de internación se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @bed }
       else
         format.html { render :edit }
@@ -89,7 +75,7 @@ class BedsController < ApplicationController
     authorize @bed
     @bed.destroy
     respond_to do |format|
-      format.html { redirect_to beds_url, notice: 'El pedido de internación se ha enviado a la papelera correctamente.' }
+      format.html { redirect_to beds_url, notice: 'La cama de internación se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
     end
   end
@@ -108,5 +94,16 @@ class BedsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def bed_params
       params.require(:bed).permit(:name, :bedroom_id, :service_id)
+    end
+
+    def assign_records
+      @bedrooms = Bedroom
+        .select(:id, :name)
+        .establishment(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id)
+      @services = Sector
+        .select(:id, :name)
+        .with_establishment_id(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id)
     end
 end

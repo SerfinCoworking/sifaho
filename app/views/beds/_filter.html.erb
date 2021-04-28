@@ -21,15 +21,39 @@
       ) %>
     </div>
 
+    <div class="col">
+      <label>Habitación</label>
+      <%= f.select(:by_bedroom,
+        @bedrooms.collect {|br| [br.name, br.id]},
+        {include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick", 
+          multiple: true,
+          allow_blank: false,
+          title: 'Habitación',
+          "data-width"=>"100%",
+          "data-actions-box"=>true
+        }
+      ) %>
+    </div>
+
     <%# ESTADO %>
     <div class="col">
        <label>Estado</label>
-      <%= f.select(:with_status,
+      <%= f.select(:for_statuses,
         @filterrific.select_options[:with_status].map {
-          |status| [status.first, status.second, data: {'content': "<span class='label label-"+status.third+"'>"+status.first+"</span>"}]
-        },{},
-        { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%"}) %>
+          |status| [status.first, status.second, data: {'content': "<span class='badge badge-"+status.third+"'>"+status.first+"</span>"}]
+        },{include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick", 
+          multiple: true,
+          allow_blank: false,
+          title: 'Estado',
+          "data-width"=>"100%"
+        }
+      ) %>
     </div>
+
     
     <%# ORDENAMIENTO %>
     <div class="col">

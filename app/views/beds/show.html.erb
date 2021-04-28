@@ -6,6 +6,9 @@
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
         Viendo cama
+        <span class="badge badge-<%= bed_status_label(@bed) %>">
+          <%= @bed.status.underscore.humanize %>
+        </span>
       </h5>
     </div>
     <div>
@@ -21,6 +24,42 @@
   </div>
 
   <div class="card-body">
+    <div class="row">
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'bed', size: '4x' %>
+          <h4 class="pl-2">
+              Cama
+            <span class="badge badge-secondary">
+              <%= @bed.name %>
+            </span>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'door-closed', size: '4x' %>
+          <h4 class="pl-2">
+            Habitación
+            <span class="badge badge-secondary">
+              <%= @bed.bedroom_name %>
+            </span>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'stethoscope', size: '4x' %>
+          <h4 class="pl-2">
+            Servicio
+            <span class="badge badge-info">
+              <%= @bed.service_name %>
+            </span>
+          </h4>
+        </div>
+      </div>  
+    </div>
+    <h5>
   </div>
   <div class="card-footer d-flex justify-content-between">
     <div class="text-right w-100">

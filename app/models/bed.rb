@@ -10,8 +10,8 @@ class Bed < ApplicationRecord
   has_one :patient
 
   # Validations
-  validates :name, presence: true, uniqueness: true
-  validates :bedroom, presence: true
+  validates :name, :bedroom, presence: true
+  validates :name, presence: true, uniqueness: { scope: :bedroom, case_sensitive: false, message: "existente en la habicación" }
 
   # Delegations
   delegate :name, to: :bedroom, prefix: :bedroom
@@ -25,7 +25,8 @@ class Bed < ApplicationRecord
       :search_name,
       :search_sector,
       :sorted_by,
-      :with_status
+      :for_statuses,
+      :by_bedroom
     ]
   )
 
@@ -66,13 +67,16 @@ class Bed < ApplicationRecord
 
   def self.options_for_status
     [
-      ['Todas', '', 'default'],
-      ['Disponible', 0, 'success'],
-      ['Ocupada', 1, 'warning'],
-      ['Inactiva', 2, 'secondary'],
+      ['Disponible', 'disponible', 'success'],
+      ['Ocupada', 'ocupada', 'warning'],
+      ['Inactiva', 'inactiva', 'secondary'],
     ]
   end
 
-  scope :with_status, ->(a_status) { where('beds.status = ?', a_status) }
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+    where(status: statuses.values_at(*Array(values)))
+  end
 
+  scope :by_bedroom, ->(ids_ary) { where(bedroom_id: ids_ary) }
 end
