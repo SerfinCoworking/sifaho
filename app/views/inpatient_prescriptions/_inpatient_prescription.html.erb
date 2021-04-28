@@ -1,1 +1,57 @@
-asd
+<tr id="inpatient_prescription_<%= inpatient_prescription.id %>">
+  <td><%= inpatient_prescription.remit_code %></th>
+  <td class="pres-col-pro"><%= inpatient_prescription.professional.full_name %></td>
+  <%# Si esta definida la variable y esta en true debemos ocultar el campo%>
+  <% if !defined?(hide_patient) || (defined?(hide_patient) && !hide_patient) %>
+    <td class="pres-col-pat"><%= inpatient_prescription.patient.full_info %></td>
+  <% end %>
+  <td>
+    <span class="badge badge-<%#= inpatient_prescription_status_label(inpatient_prescription) %>">
+      <%= inpatient_prescription.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%= inpatient_prescription.order_products.count %>
+  </td>
+  <td>
+    <%= inpatient_prescription.movements.count %>
+  </td>
+  <td>
+    <% if inpatient_prescription.date_prescribed.present? %>
+      <%= inpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+    <% else %>
+      ------
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    <div class="d-flex">
+      <%# if policy(inpatient_prescription).dispense_new? %>
+        <%#= link_to new_inpatient_prescription_chronic_dispensation_path(inpatient_prescription),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: t("actions.tooltip.dispense"),
+          target: (dispense_target if defined?(dispense_target)),
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%#= fa_icon "paper-plane"%>
+        <%# end %>
+      <%# end %>
+
+      <%= render(
+        partial: 'shared/action_buttons',
+        locals:{ 
+            object: inpatient_prescription, 
+            show: {visible: true, target: (show_target if defined?(show_target) )},
+            edit: {visible: true, target: (edit_target if defined?(edit_target) )},
+            destroy: {
+              visible: true, 
+              title: "Eliminar prescripción",
+              body: "Esta seguro que desea eliminar la prescripción de #{ inpatient_prescription.professional.full_name }?",
+              path: "/recetas_internacion/#{inpatient_prescription.id}"
+            }
+            
+        }
+      ) 
+      %>
+     
+    </div>
+  </td>
+</tr>

@@ -21,6 +21,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
   validate :uniqueness_product_in_the_order
 
+  delegate :code, :name, to: :product, prefix: :product
   
   def get_order
     return self.inpatient_prescription

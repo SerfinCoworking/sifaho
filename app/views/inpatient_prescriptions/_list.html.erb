@@ -5,12 +5,12 @@
         <thead class="thead-light">
           <tr>
             <th>Código</th>
-            <th><%= filterrific_sorting_link(@filterrific, :medico) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :productos) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :movimientos) %></th>
-            <th><%= filterrific_sorting_link(@filterrific, :recetada) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :medico) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :paciente) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :estado) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :productos) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :movimientos) %></th>
+            <th><%#= filterrific_sorting_link(@filterrific, :recetada) %></th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -21,7 +21,7 @@
     </div>
     <div class="row d-flex align-items-center" style="height: 50px">
       <div class="col-5">
-        <%= will_paginate @inpatient_prescriptions, list_classes: %w(pagination mb-0), 
+        <%#= will_paginate @inpatient_prescriptions, list_classes: %w(pagination mb-0), 
           previous_label: '<i class="fa fa-angle-left"></i>',
           next_label: '<i class="fa fa-angle-right"></i>', 
           renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>

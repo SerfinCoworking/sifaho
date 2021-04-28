@@ -74,13 +74,23 @@
     <% end %>
   </td>
 
+  <!-- Stock -->
+  <td>
+    <%= f.input :stock_fake, label: false, disabled: true, required: false, 
+      input_html: {
+        class: 'product-stock input-sm stock-quantity',
+        size: 10,
+        value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
+      } 
+    %> 
+  </td>
+  
   <!-- Unidad -->
   <td>
     <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
       input_html: {
         class: 'product-unity input-sm',
         size: 10,
-        placeholder: "Unidad",
         value: "#{
           if f.object.product.present?
             f.object.product.unity.name
