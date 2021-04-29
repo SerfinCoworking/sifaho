@@ -1,5 +1,7 @@
 class InpatientPrescriptionsController < ApplicationController
-  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy]
+  
+  include FindLots
+  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery]
 
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
@@ -69,11 +71,23 @@ class InpatientPrescriptionsController < ApplicationController
   # DELETE /inpatient_prescriptions/1
   # DELETE /inpatient_prescriptions/1.json
   def destroy
+    authorize @inpatient_prescription
+    @professional_fullname = @inpatient_prescription.professional.fullname
     @inpatient_prescription.destroy
     respond_to do |format|
-      format.html { redirect_to inpatient_prescriptions_url, notice: 'Inpatient prescription was successfully destroyed.' }
-      format.json { head :no_content }
+      flash.now[:success] = "La receta de "+@professional_fullname+" se ha eliminado correctamente."
+      format.js
     end
+  end
+  
+  
+  # DELIVERY /inpatient_prescriptions/1
+  # DELIVERY /inpatient_prescriptions/1.json
+  def delivery
+  end
+
+  def set_order_product
+    @order_product = params[:order_product_id].present? ? InpatientPrescriptionProduct.find(params[:order_product_id]) : InpatientPrescriptionProduct.new
   end
 
   private
@@ -97,7 +111,7 @@ class InpatientPrescriptionsController < ApplicationController
           :product_id,
           :dose_quantity,
           :interval,
-          :total_quantity,
+          :dose_total,
           :status,
           :observation,
           :_destroy

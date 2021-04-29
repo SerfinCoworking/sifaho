@@ -1,0 +1,39 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Stock</th>
+        <th>Unidad</th>
+        <th>Dosis total</th>
+        <th>Lote</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody id="inpatient-order-product-cocoon-container">
+      <%= inpatient_form.simple_fields_for :order_products do |form_products| %>
+        <%= render "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", f: form_products %>
+      <% end %>
+    </tbody>
+    
+  </table>
+
+  <%#= link_to_add_association inpatient_form, 
+    :order_products, 
+    class: 'btn btn-primary btn-sm',
+    partial: "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", 
+    data: {
+      "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container",
+      "association-insertion-method" => "append"} do %>
+    <%#= fa_icon "plus" %>
+    <%# Agregar insumo %>
+  <%# end %>
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if inpatient_form.object.errors[:presence_of_products_into_the_order].any? %>
+    <div class="invalid-feedback d-block">
+      <%= inpatient_form.object.errors[:presence_of_products_into_the_order].first %>
+    </div>
+  <% end %>
+  
+</div>

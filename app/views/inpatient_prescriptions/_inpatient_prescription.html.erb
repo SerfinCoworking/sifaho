@@ -26,13 +26,13 @@
   <td class="text-left actions-col">
     <div class="d-flex">
       <%# if policy(inpatient_prescription).dispense_new? %>
-        <%#= link_to new_inpatient_prescription_chronic_dispensation_path(inpatient_prescription),
+        <%= link_to delivery_inpatient_prescriptions_path(inpatient_prescription),
           class: 'btn btn-sm btn-primary mr-1 ml-1',
-          title: t("actions.tooltip.dispense"),
+          title: t("actions.tooltip.delivery"),
           target: (dispense_target if defined?(dispense_target)),
           data: { toggle: 'tooltip', placement: 'top'} do %> 
-          <%#= fa_icon "paper-plane"%>
-        <%# end %>
+          <%= fa_icon "paper-plane"%>
+        <% end %>
       <%# end %>
 
       <%= render(
@@ -45,7 +45,7 @@
               visible: true, 
               title: "Eliminar prescripción",
               body: "Esta seguro que desea eliminar la prescripción de #{ inpatient_prescription.professional.full_name }?",
-              path: "/recetas_internacion/#{inpatient_prescription.id}"
+              path: "/internacion/#{inpatient_prescription.id}"
             }
             
         }

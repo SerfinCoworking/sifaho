@@ -22,6 +22,12 @@ class InpatientPrescriptionProduct < ApplicationRecord
   validate :uniqueness_product_in_the_order
 
   delegate :code, :name, to: :product, prefix: :product
+
+  accepts_nested_attributes_for :product,
+    :allow_destroy => true
+
+  accepts_nested_attributes_for :order_prod_lot_stocks,
+    :allow_destroy => true
   
   def get_order
     return self.inpatient_prescription

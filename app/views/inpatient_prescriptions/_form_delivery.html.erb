@@ -1,0 +1,75 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-warning d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pen" %>
+      <h5 class="card-title mb-0 ml-2">
+        Entregar a receta internación
+      </h5>
+    </div>
+    <%= link_to :back, class: 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+
+  <div class="card-body">
+    
+    <div class="row">
+      <div class="col-3 border-right">
+        <%= @inpatient_prescription.patient.fullname.humanize %>
+        Mostrar más infor paciente
+      </div>
+      <div class="col-3 border-right">              
+        <%# Medico %>
+        <%= @inpatient_prescription.professional.fullname.humanize %>
+      </div>
+
+        
+      <div class="col-6">
+        <%= @inpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+        <%= @inpatient_prescription.observation %>
+      </div>
+    </div><!-- /.row-->
+    
+    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
+      <%= inpatient_form.error_notification %>
+      <%# carga de productos originales %>
+      <%= render 'inpatient_prescriptions/partials/inpatient_prescription_products_delivery_table', inpatient_form: inpatient_form %>
+        
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %> <%# fin formulario %>
+
+  </div><!-- /fin .card-body -->
+  
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', :back, class: 'btn mr-1' %>
+  
+    <button type='submit' class='btn btn-success mr-2' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+
+    </button>
+
+    <button type='submit' class='btn btn-primary' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>" data-value='dispensing'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Guardar y dispensar
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>

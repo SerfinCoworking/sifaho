@@ -276,11 +276,16 @@ Rails.application.routes.draw do
       get "find_lots(/:order_product_id)", to: "chronic_dispensations#find_lots", as: "find_order_product_lots"
     end
   end
-
+  
   resources :inpatient_prescriptions, path: :internacion do
     resources :inpatient_prescription_products
     resources :in_pre_prod_lot_stocks
     resources :beds, path: :camas
+    collection do
+      get ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
+      get "find_lots(/:order_product_id)", to: "inpatient_prescriptions#find_lots", as: "find_order_product_lots"
+      # patch ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
+    end
   end
   
     

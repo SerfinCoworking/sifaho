@@ -1,0 +1,123 @@
+<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
+  <!-- Código del producto -->
+  <td>
+    <%= f.input :product_code_fake, label: false, disabled: true,
+      input_html: {
+        value: "#{ f.object.product.code }",
+        class: "product-code",
+        size: 8,
+      }
+    %>
+    <%# Hidden product_id %>
+    <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
+      value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+  </td>
+
+  <!-- Nombre de Producto -->
+  <td>
+    <%= f.input :product_name_fake, label: false, disabled: true,
+      input_html: {
+        value: "#{ f.object.product.name }",
+        size: 30,
+      }
+    %>
+  </td>
+
+  <!-- Stock -->
+  <td>
+    <%= f.input :stock_fake, label: false, disabled: true, required: false, 
+      input_html: {
+        class: 'product-stock input-sm stock-quantity',
+        size: 10,
+        value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
+      } 
+    %> 
+  </td>
+  
+  <!-- Unidad -->
+  <td>
+    <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
+      input_html: {
+        class: 'product-unity input-sm',
+        size: 10,
+        value: "#{
+          if f.object.product.present?
+            f.object.product.unity.name
+          end
+        }"
+      } 
+    %> 
+  </td>
+    
+  <td>
+    <%= f.input :dose_total_fake, 
+      label: false,
+      disabled: true,
+      placeholder: 'Dosis total',
+      input_html: { 
+        class: 'input-sm total-dose',
+        value: f.object.dose_total.present? ? f.object.dose_total : 0
+      }
+    %>
+  </td>
+
+  <td>        
+    <div class="lot-stocks-hidden">
+      <% if f.object.order_prod_lot_stocks.present?  %>
+        <%= f.simple_fields_for :order_prod_lot_stocks do |iopls| %>
+          <%= render "shared/orders/order_product_lot_stocks_fields", f: iopls %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%
+      # template input hidden lot selection
+      new_iopls = f.object.order_prod_lot_stocks.build
+      fields = f.fields_for(:order_prod_lot_stocks, 
+      new_iopls, 
+      :child_index => "id_placeholder") do |fb|
+        render "shared/orders/order_product_lot_stocks_fields", f: fb
+      end
+    %>
+
+    <div class="btn-progress">
+      <div class="bg-progress bg-info"></div>
+      <%= button_tag type: "button", 
+        class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
+        "data-select-lot-url" => polymorphic_url([:find_order_product_lots, f.object.get_order.class], order_product_id: f.object.id),
+        "data-template-fill-hidden" => fields do %>
+        <% if f.object.lot_stocks.present? %>
+          Seleccionados <%= f.object.lot_stocks.count %> 
+        <% else %>
+          <%= fa_icon "barcode" %> Seleccionar lote
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="invalid-feedback d-block">
+      <% if f.object.errors[:quantity_lot_stock_sum].any? %>
+        <%= f.object.errors[:quantity_lot_stock_sum].first %>
+      <% elsif f.object.errors[:order_prod_lot_stocks_any_without_stock].present? %>
+        <%= f.object.errors[:order_prod_lot_stocks_any_without_stock].first %>
+      <% elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
+        <%= f.object.errors[:int_ord_prod_lot_stocks].first %>
+      <% end %>
+    </div>
+  </td>
+
+  <td>
+    <%= f.input :observation, label: false, as: :text,
+      :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+  </td>
+  
+  <%# <td> %>
+    <!-- Mostrar botón de quitar  -->
+    <%# if policy(f.object).remove_association? %>
+      <!-- Botón quitar -->
+      <%#= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%#= fa_icon "minus" %>
+      <%# end %>
+    <%# end %>
+  <%# </td> %>
+</tr>

@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
+  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   
@@ -15,113 +15,20 @@ $(document).on('turbolinks:load', function(e){
     $('form#'+$(e.target).attr('form')).submit();
   });
 
-  $('.datepicker').datepicker({
-    format: "dd/mm/yyyy",
-    language: "es",
-    autoclose: true,
-    endDate: new Date(),
-  });
-
-  $('.prescribed-date').on('change', function(e) {
-    setExpirydate(e.target.value);
-  });
-
-  // Calculamos el valor de vencimiento de la receta
-  function setExpirydate(value){
-    if(value !== 'undefined' && value !== ''){
-      const datePrescribed = moment(value, "DD/MM/YYYY");
-      const expiryDate = datePrescribed.add(3, 'month');
-      $('#expiry-date').text(expiryDate.format("DD/MM/YYYY"));
-      $('input[type="hidden"]#expiry_date').val(expiryDate.format("YYYY-MM-DD"));
-    }else{
-      $('#expiry-date').text("");
-      $('input[type="hidden"]#expiry_date').val("");
-    }      
-  }
-
   // cocoon init
   $('#inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
-    $(inserted_item).find('input.product-code').first().focus();
   });
-
-  // Función para autocompletar nombre y apellido del doctor
-  $('#professional').autocomplete({
-    source: $('#professional').data('autocomplete-source'),
-    minLength: 2,
-    autoFocus:true,
-    messages: {
-      noResults: function(count) {
-        $(".ui-menu-item-wrapper").html("No se encontró al médico");
-      }
-    },
-    search: function( event, ui ) {
-      $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-    },
-    select:
-    function (event, ui) {
-      $("#professional_id").val(ui.item.id);
-    },
-    response: function(event, ui) {
-      $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-    }
-  });
-
-
+  
   
   // set expiry date calendar format
   function initEvents(){
-    // autocomplete codigo de producto
-    $('.product-code').autocomplete({
-      source: $('.product-code').attr('data-autocomplete-source'),
-      minLength: 1,
-      autoFocus: true,
-      messages: {
-        noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró el código de insumo");
-        }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      select: function (event, ui) { 
-        onChangeOnSelectAutoCProductCode(event.target, ui.item);
-      },
-      response: function(event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      }
-    });
-
-    // Función para autocompletar y buscar el insumo
-    $('.product-name').autocomplete({
-      source: $('.product-name').attr('data-autocomplete-source'),
-      minLength: 1,
-      autoFocus: true,
-      messages: {
-        noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró el noombre del insumo");
-        }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      select: function (event, ui) { 
-        onSelectAutoCSupplyName(event.target, ui.item);
-        const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.request-quantity").focus(); // changes focus to quantity input
-      },
-      response: function(event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      }
-    });
-    
-    calcTotalDoseEvent();
 
     lotsQuantitySelection();
     
     const trs = $('#inpatient-order-product-cocoon-container').find('tr.nested-fields');
     trs.map((index, tr) => {
-      const toDelivery = $(tr).find("input.deliver-quantity").val(); // get delivery quanitty
+      const toDelivery = $(tr).find("input.total-dose").first().val(); // get delivery quanitty
       let totalQuantitySelected = 0;
       const lotStockHidden = $(tr).find('.lots').has('input._destroy[value="false"]');// filter values with _destroy=true
       let selectedQuantity;
@@ -137,31 +44,6 @@ $(document).on('turbolinks:load', function(e){
 
   }// initEvents function
 
-  function onChangeOnSelectAutoCProductCode(target, item){
-    if(item){
-      const tr = $(target).closest(".nested-fields");
-      tr.find("input.product-name").val(item.name); // update product name input
-      tr.find("input.product-unity").val(item.unity); // update product unity input      
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input
-      tr.find("input.product-id").val(item.id); // update product id input  
-      tr.find("input.deliver-quantity").first().focus();
-      tr.find('div.lot-stocks-hidden').html('');
-      // setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
-    }
-  }
-
-  function onSelectAutoCSupplyName(target, item){
-    if(item){
-      const tr = $(target).closest(".nested-fields");
-      tr.find("input.product-code").val(item.code); // update product name input
-      tr.find("input.product-unity").val(item.unity); // update product unity input
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input
-      tr.find("input.product-id").val(item.id); // update product id input
-      tr.find('div.lot-stocks-hidden').html('');
-      // setProgress(tr, 0, tr.find("input.deliver-quantity").first().val(), 0);
-    }
-  }
-
   function lotsQuantitySelection(){
     // Select del lote
     $(".select-lot-btn").on('click', function(e){
@@ -172,7 +54,7 @@ $(document).on('turbolinks:load', function(e){
       const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
       const url = $(e.target).attr('data-select-lot-url');
       const productId = tr.find("input.product-id").val(); // get product code
-      const toDelivery = tr.find("input.deliver-quantity").val(); // get delivery quanitty
+      const toDelivery = tr.find("input.total-dose").val(); // get delivery quanitty
       const hiddenTarget = tr.find(".lot-stocks-hidden").first();
       const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
       
@@ -213,24 +95,6 @@ $(document).on('turbolinks:load', function(e){
 
     });// End lot selection button click action
   }
-
-  // On change delivery quantity
-  function calcTotalDoseEvent(){
-    /* Request Dose and Interval dose */
-    $('input.request-quantity , input.interval-dose').on('change', function(e){
-      const tr = $(e.target).closest(".nested-fields");
-      calcTotalDose(tr);
-    });
-
-
-  }
-
-  function calcTotalDose(row){
-    const totalRequestDose = $(row).find('input.request-quantity').first().val() || 0;
-    const totalIntervalDose = $(row).find('input.interval-dose').first().val() || 0;
-    const total = totalRequestDose * totalIntervalDose;
-    $(row).find('input.total-dose').first().val(total);
-  }
   
   // set progress bg, with quantity selected
   function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
@@ -241,7 +105,7 @@ $(document).on('turbolinks:load', function(e){
     }else{
       $(targetRow).find('button.select-lot-btn').first().removeAttr('disabled');
       const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
-      
+      console.log(quantityPercent, "<======================================================DEBUG");
       if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 
 
@@ -281,7 +145,8 @@ $(document).on('turbolinks:load', function(e){
     const templateHidden = $(e.target).attr('data-template-hidden');
     const trIndex = $(e.target).attr('data-index-row');
     const tr = $("#inpatient-order-product-cocoon-container").find(".nested-fields")[trIndex];
-    const toDelivery = $(e.target).attr('data-to-delivery');
+    // const toDelivery = $(e.target).attr('data-to-delivery');
+    const toDelivery = $(tr).find("input.total-dose").val(); // get delivery quanitty
     const hiddenTarget = $(tr).find(".lot-stocks-hidden").first();
     // handle selected options
     const selectedOptions = $(e.target).find('tbody tr.selected-row');
@@ -315,7 +180,7 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
-    $(tr).find("input.deliver-quantity").first().val(totalQuantitySelected).trigger("change");
+    setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
   });
 
   $('#dialog').on('hidden.bs.modal', function () {

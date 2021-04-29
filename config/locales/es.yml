@@ -47,6 +47,7 @@ es:
       delete: Eliminar
       filter: Filtrar
       dispense: Dispensar
+      delivery: Entregar
   activerecord:
     models:
       external_order: "Pedido de establecimiento"
