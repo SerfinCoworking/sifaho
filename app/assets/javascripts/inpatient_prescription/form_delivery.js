@@ -105,7 +105,6 @@ $(document).on('turbolinks:load', function(e){
     }else{
       $(targetRow).find('button.select-lot-btn').first().removeAttr('disabled');
       const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
-      console.log(quantityPercent, "<======================================================DEBUG");
       if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
 
 

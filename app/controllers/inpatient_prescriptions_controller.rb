@@ -23,6 +23,7 @@ class InpatientPrescriptionsController < ApplicationController
 
   # GET /inpatient_prescriptions/1/edit
   def edit
+    @inpatients = Patient.all.limit(10)
   end
 
   # POST /inpatient_prescriptions
@@ -59,7 +60,7 @@ class InpatientPrescriptionsController < ApplicationController
   def update
     respond_to do |format|
       if @inpatient_prescription.update(inpatient_prescription_params)
-        format.html { redirect_to @inpatient_prescription, notice: 'Inpatient prescription was successfully updated.' }
+        format.html { redirect_to delivery_inpatient_prescriptions_path(@inpatient_prescription), notice: 'Inpatient prescription was successfully updated.' }
         format.json { render :show, status: :ok, location: @inpatient_prescription }
       else
         format.html { render :edit }
