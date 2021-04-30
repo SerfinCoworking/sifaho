@@ -731,7 +731,7 @@
       }
     ]
   },
-  "title": "Reporte pedido abastecimiento",
+  "title": "Pedido de establecimiento",
   "report": {
     "paper-type": "A4",
     "orientation": "portrait",

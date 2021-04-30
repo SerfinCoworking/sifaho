@@ -360,13 +360,13 @@ class ExternalOrdersController < ApplicationController
     report.start_new_page layout: :cover_page
 
     # Agregamos el encabezado
-    report.page[:title] = 'Reporte de '+external_order.order_type.humanize.underscore
+    report.page[:title] = 'Pedido de establecimiento'
     report.page[:remit_code] = external_order.remit_code
     report.page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
-    report.page[:applicant_sector] = external_order.applicant_sector.name
-    report.page[:applicant_establishment] = external_order.applicant_establishment.name
-    report.page[:provider_sector] = external_order.provider_sector.name
-    report.page[:provider_establishment] = external_order.provider_establishment.name
+    report.page[:applicant_efector] = external_order.applicant_sector.sector_and_establishment
+    report.page[:applicant_user] = external_order.sent_request_by_user_fullname 
+    report.page[:provider_efector] = external_order.provider_sector.sector_and_establishment
+    report.page[:provider_user] = external_order.sent_provision_by_user_fullname
     report.page[:observations] = external_order.observation
     report.page[:products_count].value(external_order.order_products.count)
     report.page[:observations_count].value("solicitante "+external_order.order_products.where.not(applicant_observation: [nil, ""]).count.to_s+" / proveedor "+external_order.order_products.where.not(provider_observation: [nil, ""]).count.to_s)

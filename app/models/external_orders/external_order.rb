@@ -21,7 +21,7 @@ class ExternalOrder < ApplicationRecord
   has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
   has_many :lot_stocks, :through => :order_products
   has_many :lots, :through => :lot_stocks
-  has_many :products, :through => :order_products  
+  has_many :products, :through => :order_products 
   has_many :movements, class_name: "ExternalOrderMovement"
   has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
@@ -343,6 +343,19 @@ class ExternalOrder < ApplicationRecord
   # Return the i18n model name
   def human_name
     self.class.model_name.human
+  end
+
+  def sent_request_by_user_fullname
+    
+    if self.solicitud? 
+      movements.search_action('envio').first.user.full_name if movements.search_action('envio').first.present?
+    else
+      return ''
+    end
+  end
+
+  def sent_provision_by_user_fullname
+    movements.search_action('envio').last.user.full_name if movements.search_action('envio').last.present?
   end
 
   private

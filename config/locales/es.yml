@@ -261,6 +261,7 @@ es:
       year: Año
   errors:
     format: "%{attribute} %{message}"
+    content_type: no es un formato de archivo válido
     messages:
       accepted: debe ser aceptado
       blank: no puede estar en blanco

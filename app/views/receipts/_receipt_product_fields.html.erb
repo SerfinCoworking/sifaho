@@ -128,7 +128,7 @@
     <!-- Vencimiento -->
     <td>
     <div class="input-group mb-3">
-      <input type="text" class="form-control string optional receipt-expiry-date-fake" placeholder="Vencimiento" aria-label="Vencimiento" aria-describedby="exp-date" value="<%= f.object.expiry_date.present? ? f.object.expiry_date.strftime("%m/%Y") : 'n/a' %>">
+      <input type="text" class="form-control string optional receipt-expiry-date-fake" placeholder="MM/AA" aria-label="Vencimiento" aria-describedby="exp-date" value="<%= f.object.expiry_date.present? ? f.object.expiry_date.strftime("%m/%Y") : '' %>">
       <div class="input-group-append">
         <span class="input-group-text bg-primary" id="exp-date">
           <%= fa_icon 'calendar-alt' %>

@@ -4,10 +4,11 @@ class Reports::StockQuantityReportsController < ApplicationController
   def show
     authorize @stock_quantity_report
 
-    @stocks = Stock
-      .with_area_ids(@stock_quantity_report.areas.ids)
-      .reorder("products.name ASC")
-      .joins(:product)
+      @stocks = Stock
+        .with_area_ids(@stock_quantity_report.areas.ids)
+        .reorder("products.name ASC")
+        .joins(:product)
+        .uniq { |p| p.product_id }
       
     respond_to do |format|
       format.html

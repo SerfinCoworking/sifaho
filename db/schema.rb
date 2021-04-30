@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_144422) do
+ActiveRecord::Schema.define(version: 2021_04_27_151324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -828,7 +828,7 @@ ActiveRecord::Schema.define(version: 2021_04_19_144422) do
     t.bigint "establishment_id"
     t.string "remit_code"
     t.text "observation"
-    t.datetime "date_prescribed"
+    t.date "date_prescribed"
     t.date "expiry_date"
     t.integer "status"
     t.datetime "created_at", null: false
