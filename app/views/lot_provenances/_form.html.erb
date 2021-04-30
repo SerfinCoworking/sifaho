@@ -1,0 +1,8 @@
+<%= simple_form_for @lot_provenance, remote: true, html: { role: 'check-modified'} do |f| %>
+  <%= f.error_notification %>
+
+    <%# Name %>
+    <div>
+      <%= f.input :name, label: 'Nombre', required: true %>
+    </div>
+<% end %>
