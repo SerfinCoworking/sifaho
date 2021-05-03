@@ -125,9 +125,6 @@ class Lot < ApplicationRecord
     self.expire? ? self.expiry_date.strftime("%m/%y") : ''
   end
 
-  # Métodos privados #----------------------------------------------------------
-  private
-  
   # Se actualiza el estado de expiración sin guardar
   def update_status
     unless self.vencido?
@@ -145,4 +142,8 @@ class Lot < ApplicationRecord
       end
     end
   end
+
+  # Métodos privados #----------------------------------------------------------
+  private
+  
 end
