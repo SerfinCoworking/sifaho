@@ -17,7 +17,7 @@
               <td><%= mov.created_at.strftime("%d/%m/%y %H:%M") %></td>
               <td><%= mov.action.humanize %></td>
               <td>
-                <% if mov.user.profile.present? %><span><%= image_tag user_avatar(mov.user, 25), class:"img-circle img-profile-nav" %></span><% end %>
+                <% if mov.user.profile.present? %><span><%= image_tag user_avatar(mov.user, 25), size: '25', class:"rounded" %></span><% end %>
                 <%= mov.user.full_name %>
               </td>
               <td><%= mov.sector.name %></td>
