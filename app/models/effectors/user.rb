@@ -35,7 +35,9 @@ class User < ApplicationRecord
     last_name = Devise::LDAP::Adapter.get_ldap_param(self.username, "sn").first.encode("Windows-1252", invalid: :replace, undef: :replace)
     email = Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").present? ? Devise::LDAP::Adapter.get_ldap_param(self.username, "mail").first : "Sin email"
     dni = Devise::LDAP::Adapter.get_ldap_param(self.username, "uid").present? ? Devise::LDAP::Adapter.get_ldap_param(self.username, "uid").first : "Sin DNI"
-    Profile.create(user: self, first_name: first_name, last_name: last_name, email: email, dni: dni)
+    profile = Profile.new(user: self, first_name: first_name, last_name: last_name, email: email, dni: dni)
+    profile.avatar.attach(io: File.open(Rails.root.join("app", "assets", "images", "profile-placeholder.jpg")), filename: 'profile-placeholder.jpg' , content_type: "image/jpg")
+    profile.save!
   end
 
   after_save :verify_profile
