@@ -10,30 +10,23 @@ class Lot < ApplicationRecord
   # Relations
   belongs_to :product
   belongs_to :laboratory
+  belongs_to :provenance, class_name: 'LotProvenance', counter_cache: :lots_count
   has_many :lot_stocks
 
   # Validations
-  # validates_presence_of :product, :laboratory, :code
-
-  # validates :product, 
-  #   uniqueness: { :scope => [:laboratory_id, :code],
-  #   unless: :expire?,
-  #   message: ->(object, data) do
-  #     "El lote #{object.code}!, ya existe con ese laboratorio! Intenta con otro!"
-  #   end
-  # }
-
   validates :product,
-    uniqueness: { :scope => [:laboratory_id, :code, :expiry_date], 
+    uniqueness: { :scope => [:provenance_id, :laboratory_id, :code, :expiry_date], 
     if: :expire?,
     message: ->(object, data) do
-      "El lote #{object.code} ya existe con ese laboratorio y fecha de vencimiento! Intenta con otro!"
+      "El lote #{object.code} ya existe con esa procedencia, laboratorio y fecha de vencimiento! Intenta con otro!"
     end
   }
+  validates :provenance_id, presence: true
 
   # Delegations
   delegate :name, :code, :area_name, :unity_name, to: :product, prefix: true
   delegate :name, to: :laboratory, prefix: true
+  delegate :name, to: :provenance, prefix: true
 
    filterrific(
     default_filter_params: { sorted_by: 'creado_asc' },

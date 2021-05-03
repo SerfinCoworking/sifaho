@@ -4,17 +4,21 @@ class ReceiptProduct < ApplicationRecord
   belongs_to :laboratory, optional: true
   belongs_to :lot_stock, optional: true
   belongs_to :lot, optional: true
+  belongs_to :provenance, class_name: 'LotProvenance'
   
   # Validaciones
   validates_presence_of :receipt, :product_id, :lot_code, :laboratory_id
   validates_presence_of :lot_stock_id, if: :is_recibido? 
+  validates :provenance_id, presence: true
 
   delegate :code, to: :product, prefix: true
   delegate :name, to: :product, prefix: true
   delegate :destiny_name, :origin_name, :status, to: :receipt
+  delegate :name, to: :provenance, prefix: true
 
   def increment_new_lot_to(a_sector)
     @lot = Lot.where(
+      provenance_id: self.provenance_id,
       product_id: self.product_id,
       code: self.lot_code,
       laboratory_id: self.laboratory_id,

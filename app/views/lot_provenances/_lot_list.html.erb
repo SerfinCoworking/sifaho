@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+<p>Seleccione un lote para el insumo <strong><%= @sector_supply_lots.first.supply_name %></strong></p>
+<div class="card">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Vencimiento</th>
+        <th>Laboratorio</th>
+      </tr>
+    </thead>
+    <!-- Atributo para luego en la función de selección, autocomplete el hidden input con el id del sector supply lot-->
+    <tbody data-hidden-input-id="<%= @input_id %>">
+      <% @sector_supply_lots.each do |lot| %>
+        <!-- La clase modal-clickable-lot activa la función para cerrar el modal y rellenar el hidden input id -->
+        <tr class="<%= lot.id.to_s == @selected_lot_id ? "table-info" : "modal-clickable-lot" %>"
+          data-lot-id="<%= lot.id %>"
+          data-lot-code="<%= lot.lot_code%>"
+          data-lot-quantity="<%= lot.quantity %>">
+          <td><%= lot.lot_code %></td>
+          <td><%= lot.quantity %></td>
+          <td>
+            <span class="badge badge-<%= lot.status_label %>">
+              <%= lot.status.underscore.humanize %>
+            </span>
+          </td>
+          <td><%= lot.expiry_date.present? ? lot.expiry_date.strftime("%d/%m/%Y") : "No vence" %></td>
+          <td><%= lot.laboratory %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
