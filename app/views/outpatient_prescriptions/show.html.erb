@@ -43,7 +43,7 @@
         <div class="media">
           <div class="mr-3">
             <%= link_to patient_path(@outpatient_prescription.patient), class: "link" do %>
-              <%= image_tag patient_avatar(@outpatient_prescription.patient, 83, 102), class:"img-thumbnail media-object" %>
+              <%= image_tag patient_avatar(@outpatient_prescription.patient, 83, 102), size: '83x102', class:"img-thumbnail media-object" %>
             <% end %>
           </div>
           <div class="media-body">
