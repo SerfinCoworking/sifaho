@@ -31,7 +31,7 @@
             <label>Ordenar por</label>
             <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by],{}, {class: 'form-control input-sm'}) %>
           </div>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right" do %>
+          <%= link_to reset_filterrific_url, class: "btn btn-sm pull-right", 'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
             <%= fa_icon "redo" %>
           <% end %>
           <!-- Spinner para la carga -->

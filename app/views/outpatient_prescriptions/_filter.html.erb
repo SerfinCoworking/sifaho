@@ -3,7 +3,8 @@
     <div class="col d-flex justify-content-end align-items-center">
       <%= render_filterrific_spinner %>
       <%= link_to outpatient_prescriptions_path(reset: true), class: 'btn btn-secondary ml-2',
-        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
         <%= fa_icon 'redo' %>
       <% end %>
     </div>

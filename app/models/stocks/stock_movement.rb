@@ -19,6 +19,7 @@ class StockMovement < ApplicationRecord
       :since_date,
       :to_date,
       :sorted_by,
+      :for_movement_types
     ]
   )
 
@@ -59,6 +60,16 @@ class StockMovement < ApplicationRecord
     ]
   end
 
+  def self.options_for_movement_types
+    [
+      ['Receta ambulatoria', 'OutpatientPrescription'],
+      ['Receta crónica', 'ChronicPrescription'],
+      ['Pedido de sector', 'InternalOrder'],
+      ['Pedido de establecimiento', 'ExternalOrder'],
+      ['Recibo', 'Receipt'],
+    ]
+  end
+
   scope :since_date, lambda { 
     |a_date| where('stock_movements.created_at >= ?', DateTime.strptime(a_date, '%d/%m/%Y').beginning_of_day) 
   }
@@ -68,6 +79,8 @@ class StockMovement < ApplicationRecord
   scope :to_stock_id, lambda { |an_id| where(stock_id: an_id) }
 
   scope :with_product_ids, ->(product_ids) { joins(:product).where('products.id': product_ids) }
+
+  scope :for_movement_types, ->(movement_types){ where(order_type: movement_types) }
 
   def order_human_name_string
     self.order.present? ? self.order.human_name : 'Se eliminó'
