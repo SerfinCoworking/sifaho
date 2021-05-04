@@ -25,3 +25,6 @@ every 5.hours do
   rake 'batch:update_lot_status'
 end
 
+every 15.hours do
+  rake 'batch:update_outpatient_prescription_status'
+end
