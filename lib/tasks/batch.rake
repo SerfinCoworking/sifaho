@@ -12,7 +12,7 @@ namespace :batch do
   desc 'Update outpatient prescription status'
   task update_outpatient_prescription_status: :environment do
     Rails.logger.info 'Start update outpatient prescription status. Pendientes: '+OutpatientPrescription.pendiente.count.to_s+' Dispensadas: '+OutpatientPrescription.dispensada.count.to_s+' Vencidas: '+OutpatientPrescription.vencida.count.to_s
-    OutpatientPrescription.pendiente.find_each do |prescription| 
+    OutpatientPrescription.find_each do |prescription| 
       prescription.update_status
       prescription.save(validate: false)
     end

@@ -246,8 +246,10 @@ class OutpatientPrescription < ApplicationRecord
   end
 
   def update_status
-    if self.pendiente? && self.date_prescribed < Date.today
+    if self.pendiente? && self.date_prescribed < Date.today.months_ago(1)
       self.status = 'vencida'
+    elsif self.vencida? && self.date_prescribed >= Date.today.months_ago(1)
+      self.status = 'pendiente'
     end
   end
 
