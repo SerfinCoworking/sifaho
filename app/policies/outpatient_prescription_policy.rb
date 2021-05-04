@@ -35,7 +35,7 @@ class OutpatientPrescriptionPolicy < ApplicationPolicy
 
   def destroy?
     unless record.dispensada?
-      user.has_any_role?(:admin, :farmaceutico)
+      user.has_any_role?(:admin)
     end
   end
 
