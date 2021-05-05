@@ -26,6 +26,7 @@ $(document).on('turbolinks:load', function(e){
 
     lotsQuantitySelection();
     
+    
     const trs = $('#inpatient-order-product-cocoon-container').find('tr.nested-fields');
     trs.map((index, tr) => {
       const toDelivery = $(tr).find("input.total-dose").first().val(); // get delivery quanitty

@@ -2,6 +2,7 @@
 <% js = escape_javascript(
   render(partial: 'product_lot_stock/find_lot_stock', locals: { lot_stocks: @lot_stocks })
 ) %>
+$("button[type='submit']").removeAttr('disabled');
 $("#lot-selection .modal-body").html('<%= js %>');
 $('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, element ) {
   element.switchButton();

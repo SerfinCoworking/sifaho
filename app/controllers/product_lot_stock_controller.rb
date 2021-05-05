@@ -12,29 +12,24 @@ class ProductLotStockController < ApplicationController
       .where("lot_stocks.quantity > ? OR lot_stocks.id IN (?)", 0, @selected_lot_stocks)
       .order("lots.expiry_date")
 
-    # @order_product.order_prod_lot_stocks || 
-    # @order_product.order_prod_lot_stocks.build
     respond_to do |format|
-      # format.json { render json: @lot_stocks.to_json(
-      #   :include => { 
-      #     :lot => {
-      #       :only => [:code, :expiry_date, :status], 
-      #       :include => {
-      #         :laboratory => {:only => [:name]}
-      #       } 
-      #     }
-      #   }), status: :ok }
       format.js
     end
   end
   
   def update_lot_stock_selection
-    respond_to do |format|
-      @order_product.update!(lot_stock_params)
-      begin
+    respond_to do |format|      
+      if @order_product.update(lot_stock_params)
         format.js
-      ensure
-        format.html { render :find_lot_stock }
+      else
+        @selected_lot_stocks = @order_product.order_prod_lot_stocks.pluck(:lot_stock_id)
+        @lot_stocks = LotStock.joins(:stock)
+          .joins(:product)
+          .where("stocks.sector_id = ?", current_user.sector.id)
+          .where("products.id = ?", @order_product.product.id)
+          .where("lot_stocks.quantity > ? OR lot_stocks.id IN (?)", 0, @selected_lot_stocks)
+          .order("lots.expiry_date")
+        format.js { render :find_lots }
       end
     end
   end
