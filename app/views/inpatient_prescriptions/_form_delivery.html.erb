@@ -32,7 +32,7 @@
       </div>
     </div><!-- /.row-->
     
-    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
+    <%= simple_form_for @inpatient_prescription, url: update_with_delivery_inpatient_prescriptions_path(@inpatient_prescription), method: :patch, html: { role: 'check-modified'} do |inpatient_form| %>
       <%= inpatient_form.error_notification %>
       <%# carga de productos originales %>
       <%= render 'inpatient_prescriptions/partials/inpatient_prescription_products_delivery_table', inpatient_form: inpatient_form %>

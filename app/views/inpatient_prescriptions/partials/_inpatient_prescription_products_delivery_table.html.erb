@@ -7,13 +7,14 @@
         <th>Stock</th>
         <th>Unidad</th>
         <th>Dosis total</th>
+        <th>A entregar</th>
         <th>Lote</th>
         <th>Observaciones</th>
       </tr>
     </thead>
     <tbody id="inpatient-order-product-cocoon-container">
       <%= inpatient_form.simple_fields_for :order_products do |form_products| %>
-        <%= render "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", f: form_products %>
+        <%= render "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", order: inpatient_form.object, f: form_products %>
       <% end %>
     </tbody>
     

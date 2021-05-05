@@ -1,0 +1,38 @@
+
+<% js = escape_javascript(
+  render(partial: 'product_lot_stock/find_lot_stock', locals: { lot_stocks: @lot_stocks })
+) %>
+$("#lot-selection .modal-body").html('<%= js %>');
+$('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, element ) {
+  element.switchButton();
+});
+
+$('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
+  const targetHidden = $(e.target).closest('tr').find('input.hidden-lot-stock').first();
+  const targetHiddenDestroy = $(e.target).closest('tr').find('input.hidden-destroy-lot-stock').first();
+  if($(e.target).is(':checked')){
+    $(targetHidden).val($(e.target).attr("data-value"));
+    $(targetHiddenDestroy).val(0);
+  }else{
+    //$(targetHidden).val("");
+    $(targetHiddenDestroy).val(true);// destroy associate
+  }
+});
+
+
+$("input.available-quantity").on("change", function(e){ 
+  const targetSwitchButton = document.getElementById($(e.target).attr('data-target'));
+  const targetHidden = $(e.target).closest('tr').find('input.hidden-lot-stock').first();
+  const targetHiddenDestroy = $(e.target).closest('tr').find('input.hidden-destroy-lot-stock').first();
+  if($(e.target).val() > 0){
+    targetSwitchButton.switchButton("on");
+    $(targetHidden).val($(targetSwitchButton).attr("data-value"));
+    $(targetHiddenDestroy).val(0);
+  }else{
+    targetSwitchButton.switchButton("off");
+    //$(targetHidden).val('');
+    $(targetHiddenDestroy).val(true);// destroy associate
+  }
+});
+
+$('#lot-selection').modal('show');

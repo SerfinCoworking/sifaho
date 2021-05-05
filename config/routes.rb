@@ -283,15 +283,15 @@ Rails.application.routes.draw do
     resources :beds, path: :camas
     collection do
       get ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
-      get "find_lots(/:order_product_id)", to: "inpatient_prescriptions#find_lots", as: "find_order_product_lots"
-      # patch ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
+      # get "find_lots(/:order_product_id)", to: "inpatient_prescriptions#find_lots", as: "find_order_product_lots"
+      patch ":id/entregar", to: "inpatient_prescriptions#update_with_delivery", as: "update_with_delivery"
     end
   end
   
-    
-  # resources :prescriptions, path: :recetas do
-    
-  # end
+  
+  get "find_lots", to: "product_lot_stock#find_lots", as: "find_order_product_lots"
+  patch "update_lot_stock_selection/:order_product_id", to: "product_lot_stock#update_lot_stock_selection", as: "update_lot_stock_selection" #ajax para guardar los lotes seleccionados
+  
   get "recetas", to: "prescriptions#new", as: "new_prescription"
   get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions" #ajax para obtener recetas [cronicas / ambulatorias]
 

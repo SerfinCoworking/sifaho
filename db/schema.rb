@@ -446,13 +446,13 @@ ActiveRecord::Schema.define(version: 2021_04_27_151324) do
   create_table "in_pre_prod_lot_stocks", force: :cascade do |t|
     t.bigint "inpatient_prescription_product_id"
     t.bigint "lot_stock_id"
-    t.bigint "dispensed_by_id"
-    t.integer "quantity"
+    t.bigint "supplied_by_sector_id"
+    t.integer "available_quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dispensed_by_id"], name: "index_in_pre_prod_lot_stocks_on_dispensed_by_id"
     t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
     t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
+    t.index ["supplied_by_sector_id"], name: "index_in_pre_prod_lot_stocks_on_supplied_by_sector_id"
   end
 
   create_table "inpatient_prescription_movements", force: :cascade do |t|

@@ -1,0 +1,93 @@
+<div class="mb-2">
+  <h5> Cantidad seleccionada:
+    <span id="qv-ref"></span> 
+    de 
+    <span class="badge badge-primary" id="tdelivery-ref"></span>
+  </h5>
+</div>
+
+<%= simple_form_for @order_product, :url => update_lot_stock_selection_path(@order_product), method: :patch, remote: true, as: "order_products", html: { id: "order-prod-lot-stock-form", role: 'check-modified'} do |f| %>
+    <input type="hidden" name="order_type" value="<%=@order_product.order.model_name.name%>">
+    <input type="hidden" name="order_id" value="<%=@order_product.order.id%>">
+    <input type="hidden" name="order_product_id" value="<%=@order_product.id%>">
+    
+    
+
+    <table class="table table-hover" id="table-lot-selection">
+      <thead>
+        <tr>
+          <th width="5%"></th>
+          <th>Cantidad</th>
+          <th>Código</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Vencimiento</th>
+          <th width="35%">Laboratorio</th>
+        </tr>
+      </thead>
+      <tbody>
+
+  <%#= f.simple_fields_for :order_prod_lot_stocks do |ord_prod_lot_stock| %> 
+        <% lot_stocks.each_with_index do |lot_stock, index| %> 
+          <% opls = f.object.order_prod_lot_stocks.find_by(lot_stock_id: lot_stock.id ) %>
+        <%# @order_product.order_prod_lot_stocks.build %>
+          <tr>
+            <td>
+              <div class="custom-control custom-switch">
+                <input type="checkbox" id="lot-stock-<%=lot_stock.id%>" 
+                  <%= opls.present? ? 'checked' : ''%>
+                  data-toggle="switchbutton" 
+                  data-offlabel='<%= fa_icon 'times'%>'
+                  data-onlabel='<%= fa_icon 'check'%>'
+                  data-onstyle="success"
+                  data-offstyle="secondary"
+                  data-size="sm"
+                  data-value="<%= lot_stock.id %>">
+              </div>
+
+                <input type="hidden" name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][id]" value="<%= opls.present? ? opls.id : '' %>">
+                <input type="hidden" name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][lot_stock_id]" value="<%= opls.present? ? opls.lot_stock_id : '' %>" class="hidden-lot-stock">
+                <input type="hidden" name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][_destroy]" value="false" class="hidden-destroy-lot-stock">
+                <%#= ord_prod_lot_stock.check_box :lot_stock_id, 
+                   %>
+              <%#= ord_prod_lot_stock.hidden_field :lot_stock_id, value: lot_stock.id %>
+            </td>
+            <td>
+              <%#= ord_prod_lot_stock.input :available_quantity, label: false, placeholder: '0', 
+                input_html: {
+                  class: "available-quantity",
+                  "data-target": "lot-stock-#{lot_stock.id}"
+                }
+              %>
+              <div class="form-group integer">
+              <!--input  data-tooltip="true" title="Cantidad solicitada" data-placement="right" min="1" step="any" style="width: 100px" value="0" placeholder="Cant" type="number" name="internal_order[order_products_attributes][0][request_quantity]" id="internal_order_order_products_attributes_0_request_quantity"-->
+                <input type="number" class="form-control numeric integer optional available-quantity input-sm"
+                name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][available_quantity]"
+                value="<%= opls.present? ? opls.available_quantity : 0%>"
+                data-target="lot-stock-<%=lot_stock.id%>">
+              </div>
+              
+            </td>
+            <td>
+              <%= lot_stock.quantity %>
+            </td>
+            <td>
+              <%= lot_stock.lot.code %>
+            </td>
+            <td>
+              <span class="badge badge-<%= lot_status_label(lot_stock.lot) %> ">
+                <%= lot_stock.lot.status %>
+              </span>
+            </td>
+            <td>
+              <%= lot_stock.lot.expiry_date.strftime("%d/%m/%Y") %>
+            </td>
+            <td>
+              <%= lot_stock.lot.laboratory.name %>
+            </td>
+          </tr>
+  <%# end %>
+        <% end %>
+      </tbody>
+    </table>
+<% end %>

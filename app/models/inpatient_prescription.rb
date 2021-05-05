@@ -14,7 +14,7 @@ class InpatientPrescription < ApplicationRecord
   # belongs_to :bed
   # belongs_to :prescribed_by, class_name: 'User'
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: "order_id"
-  has_many :order_products, dependent: :destroy, class_name: 'InpatientPrescriptionProduct', foreign_key: "inpatient_prescription_id", inverse_of: 'inpatient_prescription'
+  has_many :order_products, dependent: :destroy, class_name: 'InpatientPrescriptionProduct', foreign_key: "inpatient_prescription_id", inverse_of: 'order'
   # has_many :in_pre_prod_lot_stocks, through: :order_products, inverse_of: 'inpatient_prescription'
   # has_many :lot_stocks, :through => :order_products
   # has_many :lots, :through => :lot_stocks
@@ -35,6 +35,7 @@ class InpatientPrescription < ApplicationRecord
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
+  before_save :stock_deliver, :if => :available_quantity_changed?
 
   def create_notification(of_user, action_type, order_product = nil)
     InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product, action: action_type, sector: of_user.sector)
@@ -47,8 +48,14 @@ class InpatientPrescription < ApplicationRecord
   end
 
   private 
+  def stock_deliver
+    self.order_products.each do |op|
+      op.decrement_stock
+    end
+  end
 
-  # def is_the_prescriptor?
-  #   self.professional_id == self.prescribed_by.professional_id 
-  # end
+  def available_quantity_changed?
+    any_new_record = self.order_products.any? {|op| op.order_prod_lot_stocks.any? {|opls| opls.new_record? }}
+    asd
+  end
 end

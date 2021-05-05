@@ -1,7 +1,7 @@
 class InpatientPrescriptionsController < ApplicationController
   
   include FindLots
-  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery]
+  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery, :update_with_delivery]
 
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
@@ -34,11 +34,11 @@ class InpatientPrescriptionsController < ApplicationController
     @inpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
 
     respond_to do |format|
-      @inpatient_prescription.save!
       begin
+        @inpatient_prescription.save!
         # if(dispensing?); @inpatient_prescription.dispense_by(current_user); end
 
-        message = dispensing? ? "La receta d einternación de "+@inpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha creado correctamente."
+        message = dispensing? ? "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = dispensing? ? "creó y dispensó" : "creó"
         
         @inpatient_prescription.create_notification(current_user, notification_type)
@@ -86,6 +86,27 @@ class InpatientPrescriptionsController < ApplicationController
   # DELIVERY /inpatient_prescriptions/1.json
   def delivery
   end
+  
+  
+  # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1
+  # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
+  def update_with_delivery
+    begin
+      
+      @inpatient_prescription.update!(inpatient_prescription_lots_params)
+
+      message = "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha entregado correctamente."
+      notification_type = "entregó"
+      
+      @inpatient_prescription.create_notification(current_user, notification_type)
+      format.html { redirect_to @inpatient_prescription, notice: message }
+    rescue ArgumentError => e
+      flash[:error] = e.message
+    rescue ActiveRecord::RecordInvalid
+    ensure
+      format.html { render :delivery }
+    end      
+  end
 
   def set_order_product
     @order_product = params[:order_product_id].present? ? InpatientPrescriptionProduct.find(params[:order_product_id]) : InpatientPrescriptionProduct.new
@@ -116,6 +137,20 @@ class InpatientPrescriptionsController < ApplicationController
           :status,
           :observation,
           :_destroy
+        ]
+      )
+    end
+    
+    def inpatient_prescription_lots_params
+      params.require(:inpatient_prescription).permit(
+        order_products_attributes: [
+          :id,
+          :observation,
+          order_prod_lot_stocks_attributes: [
+            :lot_stock_id,
+            :available_quantity,
+            :_destroy
+          ]
         ]
       )
     end

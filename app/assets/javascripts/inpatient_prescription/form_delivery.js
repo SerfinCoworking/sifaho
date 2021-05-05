@@ -46,54 +46,54 @@ $(document).on('turbolinks:load', function(e){
 
   function lotsQuantitySelection(){
     // Select del lote
-    $(".select-lot-btn").on('click', function(e){
-      const templateHidden = $(e.target).attr("data-template-fill-hidden");
-      const tr = $(e.target).closest(".nested-fields");
-      const rows = $('#inpatient-order-product-cocoon-container').find('tr.nested-fields');
+    // $(".select-lot-btn").on('click', function(e){
+    //   const templateHidden = $(e.target).attr("data-template-fill-hidden");
+    //   const tr = $(e.target).closest(".nested-fields");
+    //   const rows = $('#inpatient-order-product-cocoon-container').find('tr.nested-fields');
       
-      const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
-      const url = $(e.target).attr('data-select-lot-url');
-      const productId = tr.find("input.product-id").val(); // get product code
-      const toDelivery = tr.find("input.total-dose").val(); // get delivery quanitty
-      const hiddenTarget = tr.find(".lot-stocks-hidden").first();
-      const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
+    //   const trIndex = $(rows).index(tr); // get the row index for manipulate lot hiddens fields value
+    //   const url = $(e.target).attr('data-select-lot-url');
+    //   const productId = tr.find("input.product-id").val(); // get product code
+    //   const toDelivery = tr.find("input.total-dose").val(); // get delivery quanitty
+    //   const hiddenTarget = tr.find(".lot-stocks-hidden").first();
+    //   const selectedLots = $(hiddenTarget).find('.lots').has('input._destroy[value="false"]');
       
-      if(!productId){
-        $('#dialog .modal-header').addClass('bg-warning');
-        $('#dialog .modal-title').html("<i class='fa fa-exclamation-triangle'></i>  Elegir un producto");
-        $('#dialog .modal-body').html("<p>No se ha seleccionado ningún producto</p><p>Por favor seleccione uno</p>");
-        $('#dialog .modal-footer').html(
-          "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
-          );
-          $('#dialog').modal("show");
-          return;
-        }
-      $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: "JSON",
-        data: {
-          product_id: productId
-      }}).done(function(response){
-        const table_body = drawLotTable(response, selectedLots, toDelivery);
-        $('#lot-selection').find('.modal-body tbody').first().remove();
-        $('#lot-selection table').append(table_body);
-        $('#lot-selection').attr('data-template-hidden', templateHidden);
-        $('#lot-selection').attr('data-hidden-target', hiddenTarget);
-        $('#lot-selection').attr('data-index-row', trIndex);
-        $('#lot-selection').attr('data-to-delivery', toDelivery);
+    //   if(!productId){
+    //     $('#dialog .modal-header').addClass('bg-warning');
+    //     $('#dialog .modal-title').html("<i class='fa fa-exclamation-triangle'></i>  Elegir un producto");
+    //     $('#dialog .modal-body').html("<p>No se ha seleccionado ningún producto</p><p>Por favor seleccione uno</p>");
+    //     $('#dialog .modal-footer').html(
+    //       "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
+    //       );
+    //       $('#dialog').modal("show");
+    //       return;
+    //     }
+    //   $.ajax({
+    //     url: url,
+    //     method: 'GET',
+    //     dataType: "JSON",
+    //     data: {
+    //       product_id: productId
+    //   }}).done(function(response){
+    //     const table_body = drawLotTable(response, selectedLots, toDelivery);
+    //     $('#lot-selection').find('.modal-body tbody').first().remove();
+    //     $('#lot-selection table').append(table_body);
+    //     $('#lot-selection').attr('data-template-hidden', templateHidden);
+    //     $('#lot-selection').attr('data-hidden-target', hiddenTarget);
+    //     $('#lot-selection').attr('data-index-row', trIndex);
+    //     $('#lot-selection').attr('data-to-delivery', toDelivery);
 
-        $('#lot-selection table').find('input.lot-quantity').on('click', function(){
-          this.select();
-        });
+    //     $('#lot-selection table').find('input.lot-quantity').on('click', function(){
+    //       this.select();
+    //     });
 
-        getCurrentSelectedQuantity();
-        // Show the dynamic dialog
-        $('#lot-selection').modal("show");
+    //     getCurrentSelectedQuantity();
+    //     // Show the dynamic dialog
+    //     $('#lot-selection').modal("show");
 
-      });// End 
+    //   });// End 
 
-    });// End lot selection button click action
+    // });// End lot selection button click action
   }
   
   // set progress bg, with quantity selected
@@ -179,6 +179,7 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
+    $(tr).find("input.to-delivery").first().val(totalQuantitySelected).trigger("change");
     setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
   });
 

@@ -74,40 +74,47 @@
   </td>
 
   <td>        
-    
+    <div class="lot-stocks-hidden">
+      <% if f.object.order_prod_lot_stocks.present?  %>
+        <%= f.simple_fields_for :order_prod_lot_stocks do |opls| %>
+          <%= render "inpatient_prescriptions/partials/order_product_lot_stocks_fields", f: opls %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%
+      # template input hidden lot selection
+      new_iopls = f.object.order_prod_lot_stocks.build
+      fields = f.fields_for(:order_prod_lot_stocks, 
+      new_iopls, 
+      :child_index => "id_placeholder") do |fb|
+        render "inpatient_prescriptions/partials/order_product_lot_stocks_fields", f: fb
+      end
+    %>
 
     <div class="btn-progress">
       <div class="bg-progress bg-info"></div>
       <%= button_tag type: "button", 
-        class: "btn select-lot-btn text-nowrap w-100 is-invalid",
-        "data-select-lot-url" => find_order_product_lots_url,
-        "data-order-name" => order.model_name.name,
-        "data-order-id" => order.id,
-        "data-order-product-id" => f.object.id do %>
-          Seleccionar lote
-      <% end %>
-      
-      <%#= button_tag type: "button", 
         class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
         "data-select-lot-url" => polymorphic_url([:find_order_product_lots, f.object.get_order.class], order_product_id: f.object.id),
         "data-template-fill-hidden" => fields do %>
-        <%# if f.object.lot_stocks.present? %>
-          <!---Seleccionados--> <%#= f.object.lot_stocks.count %> 
-        <%# else %>
-          <%#= fa_icon "barcode" %> <!---Seleccionar lote-->
-        <%# end %>
-      <%# end %>
+        <% if f.object.lot_stocks.present? %>
+          Seleccionados <%= f.object.lot_stocks.count %> 
+        <% else %>
+          <%= fa_icon "barcode" %> Seleccionar lote
+        <% end %>
+      <% end %>
     </div>
 
-    <!--div class="invalid-feedback d-block"-->
-      <%# if f.object.errors[:quantity_lot_stock_sum].any? %>
-        <%#= f.object.errors[:quantity_lot_stock_sum].first %>
-      <%# elsif f.object.errors[:order_prod_lot_stocks_any_without_stock].present? %>
-        <%#= f.object.errors[:order_prod_lot_stocks_any_without_stock].first %>
-      <%# elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
-        <%#= f.object.errors[:int_ord_prod_lot_stocks].first %>
-      <%# end %>
-    <!--/div-->
+    <div class="invalid-feedback d-block">
+      <% if f.object.errors[:quantity_lot_stock_sum].any? %>
+        <%= f.object.errors[:quantity_lot_stock_sum].first %>
+      <% elsif f.object.errors[:order_prod_lot_stocks_any_without_stock].present? %>
+        <%= f.object.errors[:order_prod_lot_stocks_any_without_stock].first %>
+      <% elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
+        <%= f.object.errors[:int_ord_prod_lot_stocks].first %>
+      <% end %>
+    </div>
   </td>
 
   <td>
