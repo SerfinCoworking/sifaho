@@ -448,6 +448,7 @@ ActiveRecord::Schema.define(version: 2021_04_27_151324) do
     t.bigint "lot_stock_id"
     t.bigint "supplied_by_sector_id"
     t.integer "available_quantity"
+    t.integer "reserved_quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"

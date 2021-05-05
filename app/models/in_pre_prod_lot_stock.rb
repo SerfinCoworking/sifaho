@@ -20,7 +20,8 @@ class InPreProdLotStock < ApplicationRecord
     reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
     :allow_destroy => true
 
-  # :after_create :reserve
+  before_create :reserve_quantity
+  before_update :update_reserved_quantity
 
   def lot_stock_quantity
     return self.lot_stock.quantity
@@ -28,10 +29,16 @@ class InPreProdLotStock < ApplicationRecord
 
   private
 
-  def reserve
+  def reserve_quantity
     self.lot_stock.reserve(self.available_quantity)
+    self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
   end
   
+  def update_reserved_quantity
+    quantity = self.reserved_quantity - self.available_quantity
+    quantity > 0 ? self.lot_stock.reserve(quantity) : self.lot_stock.enable_reserved(quantity)
+    self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
+  end
   
   def qunatity_greater_than_0
     errors.add(:available_quantity, :greater_than, message: "Debes ser mayor a 0") unless self.available_quantity > 0 

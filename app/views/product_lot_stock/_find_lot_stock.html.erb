@@ -23,6 +23,7 @@
           <th>Estado</th>
           <th>Vencimiento</th>
           <th width="35%">Laboratorio</th>
+          <th>Reservado</th>
         </tr>
       </thead>
       <tbody>
@@ -78,8 +79,10 @@
             <td>
               <%= lot_stock.lot.laboratory.name %>
             </td>
+            <td>
+              <%= opls.present? ? opls.reserved_quantity : '-' %>
+            </td>
           </tr>
-          
         <% end %>
       </tbody>
     </table>
