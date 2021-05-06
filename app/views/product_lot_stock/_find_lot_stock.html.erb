@@ -1,8 +1,10 @@
 <div class="mb-2">
   <h5> Cantidad seleccionada:
-    <span id="qv-ref"></span> 
+    <span id="qv-ref">
+       <%= @order_product.order_prod_lot_stocks.count %>
+    </span> 
     de 
-    <span class="badge badge-primary" id="tdelivery-ref"></span>
+    <span class="badge badge-primary" id="tdelivery-ref"><%= lot_stocks.count %></span>
   </h5>
 </div>
 

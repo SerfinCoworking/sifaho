@@ -9,8 +9,11 @@ $('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, elem
 });
 
 $('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
-  const targetHidden = $(e.target).closest('tr').find('input.hidden-lot-stock').first();
-  const targetHiddenDestroy = $(e.target).closest('tr').find('input.hidden-destroy-lot-stock').first();
+  const tr = $(e.target).closest('tr');
+  const selectedLots = $(tr).closest('tbody').find('input[type=checkbox]:checked').length;
+  console.log(selectedLots);
+  const targetHidden = $(tr).find('input.hidden-lot-stock').first();
+  const targetHiddenDestroy = $(tr).find('input.hidden-destroy-lot-stock').first();
   if($(e.target).is(':checked')){
     $(targetHidden).val($(e.target).attr("data-value"));
     $(targetHiddenDestroy).val(0);
@@ -18,6 +21,7 @@ $('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
     //$(targetHidden).val("");
     $(targetHiddenDestroy).val(true);// destroy associate
   }
+  $("#qv-ref").text(selectedLots)
 });
 
 
