@@ -1,9 +1,11 @@
 class InpatientPrescriptionProduct < ApplicationRecord
 
   enum status: { 
-    activo: 0,
-    terminado: 1,
-    suspendido: 2
+    sin_proveer: 0,
+    provista: 1,
+    parcialmente_suministrada: 2,
+    suministrada: 3,
+    terminada: 4
   }
 
   default_scope { joins(:product).order("products.name") }

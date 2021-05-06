@@ -1,7 +1,7 @@
 class InpatientPrescriptionProductPolicy < ApplicationPolicy
   
   def edit_product?
-    unless record.activo?
+    unless record.sin_proveer?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
     end
   end
@@ -12,7 +12,7 @@ class InpatientPrescriptionProductPolicy < ApplicationPolicy
 
 
   def destroy?
-    if record.activo?
+    if record.sin_proveer?
       user.has_any_role?(:admin, :farmaceutico)
     end
   end
