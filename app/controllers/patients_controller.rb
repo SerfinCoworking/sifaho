@@ -156,7 +156,7 @@ class PatientsController < ApplicationController
       if JSON.parse(andes_patients).count > 0
         render json: JSON.parse(andes_patients).map{ |pat| 
           patient_photo_res = get_patient_photo_from_andes(pat["_id"], pat["fotoId"])          
-          patient_photo = Base64.strict_encode64(patient_photo_res)
+          patient_photo = (Base64.strict_encode64(patient_photo_res) if patient_photo_res.present?)
           
           patient = { 
             create: true, 
@@ -233,12 +233,14 @@ class PatientsController < ApplicationController
     end
 
     def get_patient_photo_from_andes(patient_id, patient_photo_id)
-      token = ENV['ANDES_TOKEN']
-      url = ENV['ANDES_MPI_URL']
-      RestClient::Request.execute(method: :get, url: "#{url}/#{patient_id}/foto/#{patient_photo_id}",
-        timeout: 30, headers: {
-          "Authorization" => "JWT #{token}",
-        }
-      )
+      if patient_photo_id
+        token = ENV['ANDES_TOKEN']
+        url = ENV['ANDES_MPI_URL']
+        RestClient::Request.execute(method: :get, url: "#{url}/#{patient_id}/foto/#{patient_photo_id}",
+          timeout: 30, headers: {
+            "Authorization" => "JWT #{token}",
+          }
+        )
+      end
     end
 end
