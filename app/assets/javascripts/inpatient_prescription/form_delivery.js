@@ -5,15 +5,15 @@ $(document).on('turbolinks:load', function(e){
   initEvents();
   
   // button submit
-  $("button[type='submit']").on('click', function(e){
-    e.preventDefault();
-    $(e.target).attr('disabled', true);
-    $(e.target).siblings('button, a').attr('disabled', true);
-    $(e.target).find("div.c-msg").css({"display": "none"});
-    $(e.target).find('div.d-none').toggleClass('d-none');
-    $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
-    $('form#'+$(e.target).attr('form')).submit();
-  });
+  // $("button[type='submit']").on('click', function(e){
+  //   e.preventDefault();
+  //   $(e.target).attr('disabled', true);
+  //   $(e.target).siblings('button, a').attr('disabled', true);
+  //   $(e.target).find("div.c-msg").css({"display": "none"});
+  //   $(e.target).find('div.d-none').toggleClass('d-none');
+  //   $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
+  //   $('form#'+$(e.target).attr('form')).submit();
+  // });
 
   // cocoon init
   $('#inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
