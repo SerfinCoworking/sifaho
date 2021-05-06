@@ -1,4 +1,4 @@
-<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
+<tr class="nested-fields order-product-<%= f.object.id %> <%= f.object.errors.any? ? 'has-error' : '' %>">
   <!-- Código del producto -->
   <td>
     <%= f.input :product_code_fake, label: false, disabled: true,
@@ -68,14 +68,13 @@
       placeholder: 'A entregar',
       input_html: { 
         class: 'input-sm to-delivery',
-        value: 0
+        value: (f.object.order_prod_lot_stocks.present? ? f.object.order_prod_lot_stocks.sum(:reserved_quantity) : 0)
       }
     %>
   </td>
 
   <td>        
-    
-
+   
     <div class="btn-progress">
       <div class="bg-progress bg-info"></div>
       <%= button_tag type: "button", 
@@ -84,7 +83,11 @@
         "data-order-name" => order.model_name.name,
         "data-order-id" => order.id,
         "data-order-product-id" => f.object.id do %>
-          Seleccionar lote
+        <% if f.object.order_prod_lot_stocks.present? %>
+            Seleccionados <%= f.object.order_prod_lot_stocks.count %> 
+        <% else %>
+          <%= fa_icon "barcode" %> Seleccionar lote
+        <% end %>
       <% end %>
       
       <%#= button_tag type: "button", 

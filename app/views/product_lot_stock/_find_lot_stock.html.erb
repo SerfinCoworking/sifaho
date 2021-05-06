@@ -1,10 +1,10 @@
 <div class="mb-2">
   <h5> Cantidad seleccionada:
     <span id="qv-ref">
-       <%= @order_product.order_prod_lot_stocks.count %>
+       <%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>
     </span> 
     de 
-    <span class="badge badge-primary" id="tdelivery-ref"><%= lot_stocks.count %></span>
+    <span class="badge badge-primary" id="tdelivery-ref"><%= @order_product.dose_total %></span>
   </h5>
 </div>
 

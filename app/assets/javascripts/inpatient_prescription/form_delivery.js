@@ -29,9 +29,10 @@ $(document).on('turbolinks:load', function(e){
     
     const trs = $('#inpatient-order-product-cocoon-container').find('tr.nested-fields');
     trs.map((index, tr) => {
-      const toDelivery = $(tr).find("input.total-dose").first().val(); // get delivery quanitty
-      let totalQuantitySelected = 0;
-      const lotStockHidden = $(tr).find('.lots').has('input._destroy[value="false"]');// filter values with _destroy=true
+      const toDose = $(tr).find("input.total-dose").first().val(); // get delivery quanitty
+      const toDelivery = $(tr).find("input.to-delivery").first().val(); // get delivery quanitty
+      // let totalQuantitySelected = 0;
+      /* const lotStockHidden = $(tr).find('.lots').has('input._destroy[value="false"]');// filter values with _destroy=true
       let selectedQuantity;
       if(lotStockHidden.length){
         selectedQuantity = $(lotStockHidden).find('.lot_stock_quantity_ref');
@@ -39,8 +40,8 @@ $(document).on('turbolinks:load', function(e){
           // option
           totalQuantitySelected += ($(option).val() * 1);
         });
-      }
-      setProgress(tr, totalQuantitySelected, toDelivery, (typeof(selectedQuantity) !== 'undefined' ? selectedQuantity.length : 0));
+      } */
+      setLotSelectionProgress(tr, toDose, toDelivery);
     });
 
   }// initEvents function
@@ -98,47 +99,7 @@ $(document).on('turbolinks:load', function(e){
   }
   
   // set progress bg, with quantity selected
-  function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptionsCount){
-    if($(targetRow).find("input.stock-quantity").val() == 0){
-      $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': '0%'});
-      $(targetRow).find('button.select-lot-btn').first().html('Sin stock');
-      $(targetRow).find('button.select-lot-btn').first().attr('disabled', true);
-    }else{
-      $(targetRow).find('button.select-lot-btn').first().removeAttr('disabled');
-      const quantityPercent = (totalQuantitySelected == 0 || toDelivery == 0) ? 0 : (totalQuantitySelected * 100 / toDelivery); //calc width percentage progress
-      if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
-
-
-      $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': (quantityPercent + '%')});
-      $(targetRow).find('button.select-lot-btn').first().html("Seleccionados " + selectedOptionsCount);
-      
-      if(quantityPercent === 100){
-        // add success class
-        $(targetRow).find('button.select-lot-btn').siblings().first().addClass('complete-progress');
-        $(targetRow).find('button.select-lot-btn').first().addClass('complete-progress');
-
-        // remove danger class
-        $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('fail-progress');
-        $(targetRow).find('button.select-lot-btn').first().removeClass('fail-progress');
-      }else if(quantityPercent < 100 ){
-        // remove success class
-        $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('complete-progress');
-        $(targetRow).find('button.select-lot-btn').first().removeClass('complete-progress');
-
-        // remove danger class
-        $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('fail-progress');
-        $(targetRow).find('button.select-lot-btn').first().removeClass('fail-progress');
-      }else {
-        // remove success class
-        $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('complete-progress');
-        $(targetRow).find('button.select-lot-btn').first().removeClass('complete-progress');
-        
-        // add danger class
-        $(targetRow).find('button.select-lot-btn').siblings().first().addClass('fail-progress');
-        $(targetRow).find('button.select-lot-btn').first().addClass('fail-progress');
-      }
-    }
-  } 
+  
 
   // Remove style
   $('#lot-selection').on('hidden.bs.modal', function (e) {
@@ -181,10 +142,51 @@ $(document).on('turbolinks:load', function(e){
     });
 
     $(tr).find("input.to-delivery").first().val(totalQuantitySelected).trigger("change");
-    setProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
+    setLotSelectionProgress(tr, totalQuantitySelected, toDelivery, selectedOptions.length);
   });
 
   $('#dialog').on('hidden.bs.modal', function () {
     $('#dialog .modal-header').removeClass('bg-warning');
   });
 });
+
+function setLotSelectionProgress(targetRow, totalDose, toDelivery){
+  if($(targetRow).find("input.stock-quantity").val() == 0){
+    $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': '0%'});
+    $(targetRow).find('button.select-lot-btn').first().html('Sin stock');
+    $(targetRow).find('button.select-lot-btn').first().attr('disabled', true);
+  }else{
+    $(targetRow).find('button.select-lot-btn').first().removeAttr('disabled');
+    const quantityPercent = (totalDose == 0 || toDelivery == 0) ? 0 : (toDelivery * 100 / totalDose); //calc width percentage progress
+    if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
+
+
+    $(targetRow).find('button.select-lot-btn').siblings().first().css({'width': (quantityPercent + '%')});
+    
+    if(quantityPercent === 100){
+      // add success class
+      $(targetRow).find('button.select-lot-btn').siblings().first().addClass('complete-progress');
+      $(targetRow).find('button.select-lot-btn').first().addClass('complete-progress');
+
+      // remove danger class
+      $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('fail-progress');
+      $(targetRow).find('button.select-lot-btn').first().removeClass('fail-progress');
+    }else if(quantityPercent < 100 ){
+      // remove success class
+      $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('complete-progress');
+      $(targetRow).find('button.select-lot-btn').first().removeClass('complete-progress');
+
+      // remove danger class
+      $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('fail-progress');
+      $(targetRow).find('button.select-lot-btn').first().removeClass('fail-progress');
+    }else {
+      // remove success class
+      $(targetRow).find('button.select-lot-btn').siblings().first().removeClass('complete-progress');
+      $(targetRow).find('button.select-lot-btn').first().removeClass('complete-progress');
+      
+      // add danger class
+      $(targetRow).find('button.select-lot-btn').siblings().first().addClass('fail-progress');
+      $(targetRow).find('button.select-lot-btn').first().addClass('fail-progress');
+    }
+  }
+} 

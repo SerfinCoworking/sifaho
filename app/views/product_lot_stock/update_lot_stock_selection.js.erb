@@ -1,2 +1,9 @@
+const tr = $('tr.order-product-<%= @order_product.id %>').first();
+const toDose = $(tr).first().find("input.total-dose").first().val(); // get delivery quantity
+const toDelivery = parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>");
+$(tr).first().find("input.to-delivery").first().val(toDelivery); // set delivery quantity
+$(tr).first().find("button.btn.select-lot-btn").first().text("Seleccionados <%= @order_product.order_prod_lot_stocks.count %>"); // set selected count
 
 $('#lot-selection').modal('hide');
+
+setLotSelectionProgress(tr, toDose, toDelivery);
