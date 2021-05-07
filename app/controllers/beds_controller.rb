@@ -85,6 +85,12 @@ class BedsController < ApplicationController
     @bed = Bed.new
   end
 
+  def admit_patient
+    authorize Bed
+
+    
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bed

@@ -40,4 +40,8 @@ class BedPolicy < ApplicationPolicy
   def delete?
     destroy?
   end
+
+  def admit_patient?
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_160746) do
+ActiveRecord::Schema.define(version: 2021_05_07_115202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -456,6 +456,26 @@ ActiveRecord::Schema.define(version: 2021_04_23_160746) do
     t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
   end
 
+  create_table "inpatient_movement_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "inpatient_movements", force: :cascade do |t|
+    t.bigint "bed_id"
+    t.bigint "patient_id"
+    t.bigint "movement_type_id"
+    t.bigint "user_id"
+    t.text "observations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bed_id"], name: "index_inpatient_movements_on_bed_id"
+    t.index ["movement_type_id"], name: "index_inpatient_movements_on_movement_type_id"
+    t.index ["patient_id"], name: "index_inpatient_movements_on_patient_id"
+    t.index ["user_id"], name: "index_inpatient_movements_on_user_id"
+  end
+
   create_table "inpatient_prescription_movements", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "order_product_id"
@@ -678,6 +698,13 @@ ActiveRecord::Schema.define(version: 2021_04_23_160746) do
     t.index ["user_id"], name: "index_lot_archives_on_user_id"
   end
 
+  create_table "lot_provenances", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "lots_count", default: 0
+  end
+
   create_table "lot_stocks", force: :cascade do |t|
     t.bigint "lot_id"
     t.bigint "stock_id"
@@ -700,9 +727,11 @@ ActiveRecord::Schema.define(version: 2021_04_23_160746) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.integer "status", default: 0
+    t.bigint "provenance_id", default: 1
     t.index ["deleted_at"], name: "index_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_lots_on_laboratory_id"
     t.index ["product_id"], name: "index_lots_on_product_id"
+    t.index ["provenance_id"], name: "index_lots_on_provenance_id"
   end
 
   create_table "monthly_consumption_areas", force: :cascade do |t|
@@ -827,7 +856,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_160746) do
     t.bigint "establishment_id"
     t.string "remit_code"
     t.text "observation"
-    t.datetime "date_prescribed"
+    t.date "date_prescribed"
     t.date "expiry_date"
     t.integer "status"
     t.datetime "created_at", null: false
@@ -1143,9 +1172,11 @@ ActiveRecord::Schema.define(version: 2021_04_23_160746) do
     t.date "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "provenance_id", default: 1
     t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
     t.index ["lot_stock_id"], name: "index_receipt_products_on_lot_stock_id"
     t.index ["product_id"], name: "index_receipt_products_on_product_id"
+    t.index ["provenance_id"], name: "index_receipt_products_on_provenance_id"
     t.index ["receipt_id"], name: "index_receipt_products_on_receipt_id"
   end
 

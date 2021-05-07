@@ -14,6 +14,7 @@ class Patient < ApplicationRecord
   has_one_base64_attached :avatar
   has_one_attached :file
   has_many :patient_phones, :dependent => :destroy
+  has_many :inpatient_movements
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :dni

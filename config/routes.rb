@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :inpatient_movements
   resources :stocks do
     collection do
       get '/lotes', to: 'lot_stocks#index', as: :lot_stocks_index
@@ -281,6 +282,8 @@ Rails.application.routes.draw do
     resources :inpatient_prescription_products
     resources :in_pre_prod_lot_stocks
     collection do
+      get "ingresar_paciente(/:bed_id)", to: 'beds#admit_patient', as: 'admit_patient'
+      
       resources :beds, path: :camas do
         member do
           get :delete

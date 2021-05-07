@@ -1,0 +1,2 @@
+module InpatientMovementsHelper
+end
