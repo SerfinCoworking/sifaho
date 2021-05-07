@@ -39,7 +39,7 @@ class OutpatientPrescription < ApplicationRecord
       :sorted_by,
       :with_order_type,
       :date_prescribed_since,
-      :search_by_status
+      :for_statuses
     ]
   )
 
@@ -114,10 +114,9 @@ class OutpatientPrescription < ApplicationRecord
 
   def self.options_for_status
     [
-      ['Todos', '', 'default'],
-      ['Pendiente', 0, 'info'],
-      ['Dispensada', 1, 'success'],
-      ['Vencida', "3", 'danger']
+      ['Pendiente', 'pendiente', 'secondary'],
+      ['Dispensada', 'dispensada', 'success'],
+      ['Vencida', 'vencida', 'danger']
     ]
   end 
 
@@ -133,11 +132,12 @@ class OutpatientPrescription < ApplicationRecord
   scope :search_by_status, lambda { |status|
     where('outpatient_prescriptions.status = ?', status)
   }
-  # scope :for_statuses, ->(values) do
-  #   return all if values.blank?
 
-  #   where(status: statuses.values_at(*Array(values)))
-  # end
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
+  end
 
   scope :with_establishment, lambda { |a_establishment|
     where('outpatient_prescriptions.establishment_id = ?', a_establishment)
@@ -242,6 +242,12 @@ class OutpatientPrescription < ApplicationRecord
       @not.updated_at = DateTime.now
       @not.read_at = nil
       @not.save
+    end
+  end
+
+  def update_status
+    if self.pendiente? && self.date_prescribed < Date.today.months_ago(1)
+      self.status = 'vencida'
     end
   end
 

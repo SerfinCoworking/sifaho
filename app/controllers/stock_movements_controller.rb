@@ -9,7 +9,8 @@ class StockMovementsController < ApplicationController
       StockMovement.to_stock_id(@stock.id),
       params[:filterrific],
       select_options: {
-        sorted_by: StockMovement.options_for_sorted_by
+        sorted_by: StockMovement.options_for_sorted_by,
+        movement_types: StockMovement.options_for_movement_types
       },
       persistence_id: false,
     ) or return
@@ -17,7 +18,7 @@ class StockMovementsController < ApplicationController
     if request.format.xlsx?
       @stock_movements = @filterrific.find
     else
-      @stock_movements = @filterrific.find.page(params[:page]).per_page(20)
+      @stock_movements = @filterrific.find.paginate(page: params[:page], per_page: 20)
     end
     
     respond_to do |format|

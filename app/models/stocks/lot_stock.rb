@@ -22,7 +22,7 @@ class LotStock < ApplicationRecord
   
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, :code, to: :product, prefix: true
-  delegate :code, :laboratory_name, :expiry_date_string, :status, 
+  delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name, 
     :short_expiry_date_string, to: :lot, prefix: true
 
   filterrific(

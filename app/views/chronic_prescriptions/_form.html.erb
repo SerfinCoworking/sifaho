@@ -23,11 +23,11 @@
             <div class="col-6 border-right">
               <div class="d-flex">
                 <div class="w-25">
-                  <%= image_tag patient_avatar(@chronic_prescription.patient), class:"img-thumbnail" %>
+                  <%= image_tag patient_avatar(@chronic_prescription.patient), size: '162x200', class:"img-thumbnail" %>
                 </div>
                 <div class="w-75">
                   <h5 id="patient-name" data-insurance-url="<%= get_insurance_path %>" data-patient-dni="<%= @chronic_prescription.patient.dni %>">
-                    <strong><%= @chronic_prescription.patient.last_name %>,</strong> 
+                    <strong><%= @chronic_prescription.patient.last_name %>,</strong>
                     <%= @chronic_prescription.patient.first_name %>
                   </h5>
                 </div>

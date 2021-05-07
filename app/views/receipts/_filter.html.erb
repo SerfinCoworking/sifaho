@@ -24,7 +24,8 @@
           <%= current_page?(action: 'index') ? 'Recibido' : 'Entregado' %>
         </label>
         <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
-          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip',
+          'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
           <%= fa_icon "redo" %>
         <% end %>
       </div>

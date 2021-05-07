@@ -85,6 +85,7 @@
                     <th>Código</th>
                     <th>Producto</th>
                     <th>Recibido</th>
+                    <th>Procedencia</th>
                     <th>Lote</th>
                     <th>Laboratorio</th>
                     <th>Vencimiento</th>
@@ -114,6 +115,9 @@
                       </td>
                       <td>
                         <%= r_product.quantity %>
+                      </td>
+                      <td>
+                        <%= r_product.provenance_name %>
                       </td>
                       <td>
                         <%= r_product.lot_code.present? ? r_product.lot_code : 'n/a' %>

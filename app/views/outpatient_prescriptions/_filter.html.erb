@@ -3,7 +3,8 @@
     <div class="col d-flex justify-content-end align-items-center">
       <%= render_filterrific_spinner %>
       <%= link_to outpatient_prescriptions_path(reset: true), class: 'btn btn-secondary ml-2',
-        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
         <%= fa_icon 'redo' %>
       <% end %>
     </div>
@@ -45,17 +46,24 @@
     </div>
     <div class="col">
       <label>Estado</label>
-      <%= f.select(:search_by_status,
-        @filterrific.select_options[:search_by_status].map {
-          |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
-        },{},
-        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+        <%= f.select(:for_statuses,
+          @filterrific.select_options[:for_statuses].map {
+            |status| [status.first, status.second, data: {'content': "<span class='badge badge-"+status.third+"'>"+status.first+"</span>"}]
+          },{ include_blank: false, include_hidden: false },
+          {
+            class: "selectpicker-md show-tick custom-select-pick", 
+            multiple: true,
+            allow_blank: false,
+            title: 'Estado',
+            "data-width"=>"100%"
+          }
+        ) %>
     </div>
     <div class="col">
       <label>Ordernar por</label>
       <%= f.select(:sorted_by,
         @filterrific.select_options[:sorted_by].map {
-          |status| [status.first, status.second, data: {'content': "<span class='badge'>"+status.first+"</span>"}]
+          |status| [status.first, status.second]
         },{},
         { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
     </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_27_151324) do
+ActiveRecord::Schema.define(version: 2021_04_30_162552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -680,6 +680,13 @@ ActiveRecord::Schema.define(version: 2021_04_27_151324) do
     t.index ["user_id"], name: "index_lot_archives_on_user_id"
   end
 
+  create_table "lot_provenances", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "lots_count", default: 0
+  end
+
   create_table "lot_stocks", force: :cascade do |t|
     t.bigint "lot_id"
     t.bigint "stock_id"
@@ -702,9 +709,11 @@ ActiveRecord::Schema.define(version: 2021_04_27_151324) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.integer "status", default: 0
+    t.bigint "provenance_id", default: 1
     t.index ["deleted_at"], name: "index_lots_on_deleted_at"
     t.index ["laboratory_id"], name: "index_lots_on_laboratory_id"
     t.index ["product_id"], name: "index_lots_on_product_id"
+    t.index ["provenance_id"], name: "index_lots_on_provenance_id"
   end
 
   create_table "monthly_consumption_areas", force: :cascade do |t|
@@ -1134,9 +1143,11 @@ ActiveRecord::Schema.define(version: 2021_04_27_151324) do
     t.date "expiry_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "provenance_id", default: 1
     t.index ["laboratory_id"], name: "index_receipt_products_on_laboratory_id"
     t.index ["lot_stock_id"], name: "index_receipt_products_on_lot_stock_id"
     t.index ["product_id"], name: "index_receipt_products_on_product_id"
+    t.index ["provenance_id"], name: "index_receipt_products_on_provenance_id"
     t.index ["receipt_id"], name: "index_receipt_products_on_receipt_id"
   end
 

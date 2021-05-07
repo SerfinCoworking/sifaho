@@ -73,6 +73,23 @@
       %>
     </td>
 
+    <td>
+      <%= f.input :provenance_id, palceholder: 'Pocedencia',
+        label: false,
+        collection: @provenances,
+        required: true,
+        :input_html => {
+          id: 'provider-sector',
+          class: 'selectpicker-md custom-select-pick show-tick',
+          "data-width"=>"auto",
+          "title"=>"Seleccionar sector",
+          "data-width"=> "100%",
+          "data-live-search"=>true,
+          disabled: false,
+        }
+      %>
+    </td>
+
     <!-- Lote -->
     <td>
       <div class="custom-input-group">

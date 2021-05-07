@@ -22,11 +22,13 @@ class ReceiptsController < ApplicationController
   # GET /receipts/new
   def new
     authorize Receipt
+    @provenances = LotProvenance.all
   end
 
   # GET /receipts/1/edit
   def edit
     authorize @receipt
+    @provenances = LotProvenance.all
   end
 
   # POST /receipts
@@ -59,6 +61,7 @@ class ReceiptsController < ApplicationController
       ensure
         @sectors = @receipt.provider_sector.present? ? @receipt.provider_sector.establishment.sectors : []
         @receipt_products = @receipt.receipt_products.present? ? @receipt.receipt_products : @receipt.receipt_products.build
+        @provenances = LotProvenance.all
         
         format.html { render :new }
         format.json { render json: @receipt.errors, status: :unprocessable_entity }
@@ -138,6 +141,7 @@ class ReceiptsController < ApplicationController
           :receipt_id,
           :expiry_date, 
           :quantity,
+          :provenance_id,
           :lot_code,
           :laboratory_id,
           :lot_id,

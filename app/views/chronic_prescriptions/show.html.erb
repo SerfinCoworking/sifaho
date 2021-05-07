@@ -26,7 +26,7 @@
         <div class="media">
           <div class="mr-3">
             <%= link_to professional_path(@chronic_prescription.professional), class: "link" do %>
-              <%= image_tag professional_avatar(@chronic_prescription.professional, 83), class:"img-thumbnail media-object" %>
+              <%= image_tag professional_avatar(@chronic_prescription.professional, 83), size: '83x102', class:"img-thumbnail media-object" %>
             <% end %>
           </div>
           <div class="media-body">
@@ -46,7 +46,7 @@
         <div class="media">
           <div class="mr-3">
             <%= link_to patient_path(@chronic_prescription.patient), class: "link" do %>
-              <%= image_tag patient_avatar(@chronic_prescription.patient, 83, 102), class:"img-thumbnail media-object" %>
+              <%= image_tag patient_avatar(@chronic_prescription.patient, 83, 102), size: '83x102', class:"img-thumbnail media-object" %>
             <% end %>
           </div>
           <div class="media-body">

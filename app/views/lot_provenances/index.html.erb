@@ -1,0 +1,27 @@
+<% render 'header' %>
+
+<div class="row">
+  <div class="col-3">
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="card-title d-flex mb-0">
+          <%= fa_icon "tags" %>
+          Procedencias
+        </h5>
+        <%= link_to new_lot_provenance_path(), class: 'btn btn-primary btn-sm', remote: true do %>
+          <%= fa_icon 'plus' %>
+        <% end %> 
+      </div>
+      <div class="card-body">
+        <ul class="list-group">
+          <% @lot_provenances.each do |lot_provenance| %>
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <%= lot_provenance.name %>
+              <span class="badge badge-pill badge-secondary"><%= lot_provenance.lots_count %></span>
+            </a>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

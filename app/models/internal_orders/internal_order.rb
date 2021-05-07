@@ -2,20 +2,19 @@ class InternalOrder < ApplicationRecord
   include PgSearch
 
   enum order_type: { provision: 0, solicitud: 1 }
-  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3, 
-  provision_entregada: 4, anulado: 5 }
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3,
+                 provision_entregada: 4, anulado: 5 }
 
-  
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct',  foreign_key: "internal_order_id", inverse_of: 'internal_order'
+  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'internal_order_id', inverse_of: 'internal_order'
   has_many :int_ord_prod_lot_stocks, through: :order_products
-  has_many :lot_stocks, :through => :order_products
-  has_many :lots, :through => :lot_stocks  
-  has_many :products, :through => :order_products
-  has_many :movements, class_name: "InternalOrderMovement"
-  has_many :comments, class_name: "InternalOrderComment", foreign_key: "order_id"
+  has_many :lot_stocks, through: :order_products
+  has_many :lots, through: :lot_stocks
+  has_many :products, through: :order_products
+  has_many :movements, class_name: 'InternalOrderMovement'
+  has_many :comments, class_name: 'InternalOrderComment', foreign_key: 'order_id'
   # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
   ###### DEPRECATED ######
@@ -24,20 +23,19 @@ class InternalOrder < ApplicationRecord
   belongs_to :sent_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
   belongs_to :sent_request_by, class_name: 'User', optional: true
-  belongs_to :rejected_by, class_name: "User", optional: true
+  belongs_to :rejected_by, class_name: 'User', optional: true
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validate :presence_of_products_into_the_order
   validates_associated :order_products
   validates_uniqueness_of :remit_code
-  
 
   # Atributos anidados
   accepts_nested_attributes_for :order_products,
-    reject_if: proc { |attributes| attributes['product_id'].blank? },
-    :allow_destroy => true
-  
+                                reject_if: proc { |attributes| attributes['product_id'].blank? },
+                                allow_destroy: true
+
   # Callbacks
   before_validation :record_remit_code, on: :create
 
@@ -61,20 +59,19 @@ class InternalOrder < ApplicationRecord
   )
 
   pg_search_scope :search_code,
-    :against => :remit_code,
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: :remit_code,
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-    :associated_against => { :applicant_sector => :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { applicant_sector: :name },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-    :associated_against => { :provider_sector => :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
+                  associated_against: { provider_sector: :name },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -166,8 +163,6 @@ class InternalOrder < ApplicationRecord
       ['Anulado', 5, 'danger'],
     ]
   end
-
-  public
 
   def is_provider?(a_user)
     return self.provider_sector == a_user.sector
@@ -318,7 +313,7 @@ class InternalOrder < ApplicationRecord
   private
 
   def record_remit_code
-    self.remit_code = "SE"+DateTime.now.to_s(:number)
+    self.remit_code = "SE#{DateTime.now.to_s(:number)}"
     # if self.provision?
     #   self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
     # elsif self.solicitud?

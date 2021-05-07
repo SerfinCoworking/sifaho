@@ -6,7 +6,8 @@
     
       <div class="d-flex align-items-center w-100 h-100">
         <%= image_tag user_avatar(notification.actor, 25), 
-              class:"img-circle media-object",
+              class:"rounded",
+              size: '25',
               :'data-toggle'=>"tooltip",
               :'data-placement'=>"left",
               :'title'=>notification.actor.profile.first_name.titleize %>

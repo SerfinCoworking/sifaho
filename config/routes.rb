@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "search_by_code"
+      resources :lot_provenances, path: :procedencias
     end
   end
 
