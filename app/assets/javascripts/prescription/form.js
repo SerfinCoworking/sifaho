@@ -48,9 +48,10 @@ $(document).on('turbolinks:load', function(e){
         $("#patient-lastname").val(ui.item.lastname).attr('readonly', true);
         $("#patient-firstname").val(ui.item.firstname).attr('readonly', true);
         
-        if(ui.item.create && typeof ui.item.status === 'undefined'){
+        if(ui.item.create){
           $(".andes-input").removeAttr('disabled');
-          $("#patient-status").val("Validado");
+          const status = ui.item.status.charAt(0).toUpperCase() + ui.item.status.slice(1)
+          $("#patient-status").val(status);
           
           // Datos del paciente rellenados con Andes
           $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
@@ -102,7 +103,7 @@ $(document).on('turbolinks:load', function(e){
           
           //Mostramos la imagen [andes]
           const image = new Image();
-          image.src = "data:image/jpg;base64,"+ui.item.avatar.toString();
+          image.src = ui.item.avatar ? "data:image/jpg;base64,"+ui.item.avatar.toString() : $('input#profile-placeholder-path').val();
           $(image).addClass("patient-avatar");
           $("#patient-avatar").html(image);
           

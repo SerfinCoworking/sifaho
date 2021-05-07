@@ -132,18 +132,10 @@ class PatientsController < ApplicationController
   end
 
   def get_by_dni
-    @patients = Patient.search_dni(params[:term]).order(:dni).limit(15)
-    if @patients.present?
-      render json: @patients.map{ |pat| {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name,
-        dni: pat.dni,
-        lastname: pat.last_name,
-        firstname: pat.first_name,
-        fullname: pat.fullname,
-        sex: pat.sex,
-        status: pat.status,
-        avatar_url: (url_for(pat.avatar) if pat.avatar.attached?)
-        }  }
-    else
+    @exac_patient = Patient.find_by(dni: params[:term])
+    @json_patients = []
+
+    if @exac_patient.nil?
       dni = params[:term]
       token = ENV['ANDES_TOKEN']
       url = ENV['ANDES_MPI_URL']
@@ -153,12 +145,13 @@ class PatientsController < ApplicationController
           params: {'documento': dni}
         }
       )
+
       if JSON.parse(andes_patients).count > 0
-        render json: JSON.parse(andes_patients).map{ |pat| 
+         JSON.parse(andes_patients).map{ |pat| 
           patient_photo_res = get_patient_photo_from_andes(pat["_id"], pat["fotoId"])          
           patient_photo = (Base64.strict_encode64(patient_photo_res) if patient_photo_res.present?)
           
-          patient = { 
+          @json_patients << { 
             create: true, 
             label: pat['documento'].to_s+" "+pat['apellido']+" "+pat['nombre'], 
             dni: pat['documento'], 
@@ -166,14 +159,33 @@ class PatientsController < ApplicationController
             firstname: pat['nombre'], 
             fullname: pat['apellido']+" "+pat['nombre'], 
             sex: pat["genero"], 
+            status: pat["estado"], 
             avatar: patient_photo,
             data: pat  
           }
         }
-      else
-        render json: [0].map{ |pat| { create: true, dni: params[:term], label: "Agregar paciente" }}
       end
     end
+
+    @patients = Patient.search_dni(params[:term]).order(:dni).limit(15)
+    if @patients.present?
+      @patients.map{ |pat|        
+        @json_patients << {id: pat.id, label: pat.dni.to_s+" "+pat.last_name+" "+pat.first_name,
+        dni: pat.dni,
+        lastname: pat.last_name,
+        firstname: pat.first_name,
+        fullname: pat.fullname,
+        sex: pat.sex,
+        status: pat.status,
+        avatar_url: (url_for(pat.avatar) if pat.avatar.attached?)
+        }  }
+    end
+    
+    if @json_patients.count == 0
+      @json_patients = [0].map{ |pat| { create: true, dni: params[:term], label: "Agregar paciente" }}
+    end
+    
+    render json: @json_patients
   end
 
   def get_by_fullname
