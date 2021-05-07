@@ -1,0 +1,38 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to inpatient_movements_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+
+    <div class="col">
+      <label>Tipo</label>
+      <%= f.select(:by_type,
+        InpatientMovementType.all.collect {|type| [type.name.humanize, type.id]},
+        {include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick", 
+          multiple: true,
+          allow_blank: false,
+          title: 'Tipo',
+          "data-width"=>"100%",
+          "data-actions-box"=>true
+        }
+      ) %>
+    </div>
+
+    <%# ORDENAMIENTO %>
+    <div class="col">
+      <label>Ordernar por</label>
+      <%= f.select(:sorted_by,
+        @filterrific.select_options[:sorted_by].map {
+          |status| [status.first, status.second]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+  </div>
+<% end %>
