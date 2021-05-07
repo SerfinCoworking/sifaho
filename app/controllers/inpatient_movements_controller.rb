@@ -4,9 +4,6 @@ class InpatientMovementsController < ApplicationController
   # GET /inpatient_movements
   # GET /inpatient_movements.json
   def index
-<<<<<<< HEAD
-    @inpatient_movements = InpatientMovement.all
-=======
     @filterrific = initialize_filterrific(
       InpatientMovement.establishment(current_user.sector.establishment),
       params[:filterrific],
@@ -15,7 +12,6 @@ class InpatientMovementsController < ApplicationController
       },
       persistence_id: false,
     ) or return
->>>>>>> master
   end
 
   # GET /inpatient_movements/1
