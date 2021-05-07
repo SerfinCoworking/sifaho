@@ -9,6 +9,10 @@ class Bed < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates_presence_of :service
 
+  # Delegations
+  delegate :name, to: :bedroom, prefix: :bedroom
+  delegate :name, to: :service, prefix: :service
+
   scope :establishment, -> (establishment_id) { joins(:establishment).where("establishments.id = ?", establishment_id) }
 
   filterrific(
