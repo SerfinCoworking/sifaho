@@ -158,11 +158,18 @@ es:
         sanitary_zone_id: "Zona sanitaria"
         establishment_type_id: "Tipo de establecimiento"
         siisa: 'Código SIISA'
+<<<<<<< HEAD
       bedroom:
         name: 'Nombre'
         location_sector: 'Ubicación'
       bed:
         name: 'Nombre'
+=======
+      lot_provenance:
+        name: 'Nombre'
+      receipt_product:
+        provenance_id: 'procedencia'
+>>>>>>> master
 
   date:
     abbr_day_names:
@@ -265,6 +272,7 @@ es:
       year: Año
   errors:
     format: "%{attribute} %{message}"
+    content_type: no es un formato de archivo válido
     messages:
       accepted: debe ser aceptado
       blank: no puede estar en blanco

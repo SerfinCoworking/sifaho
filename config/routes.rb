@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     end
     collection do
       get "search_by_code"
+      resources :lot_provenances, path: :procedencias
     end
   end
 
@@ -176,16 +177,16 @@ Rails.application.routes.draw do
   resources :internal_orders, path: :pedidos_sectores, only: [:show, :destroy] do
     member do
       get "delete"
-      get :send_provider, path: :editar_proveedor
-      get :send_applicant, :editar_solicitante 
       get "return_provider_status"
       get "return_applicant_status"
       get "receive_applicant"
       get :edit_applicant, path: :editar_solicitante 
       get :edit_provider, path: :editar_proveedor
+      patch :send_provider, path: :editar_proveedor
+      patch :send_applicant, :editar_solicitante 
       get "nullify"
-      patch :update_applicant, :editar_solicitante 
-      patch :update_provider, path: :editar_proveedor
+      put :update_applicant, :editar_solicitante 
+      put :update_provider, path: :editar_proveedor
     end
     collection do
       get :new_applicant, path: :solicitar
@@ -290,6 +291,8 @@ Rails.application.routes.draw do
         end
       end
       resources :bedrooms, path: :habitaciones
+
+      resources :inpatient_movements, path: :movimientos
     end
   end
   

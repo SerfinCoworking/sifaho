@@ -107,7 +107,7 @@
                     :input_html => {
                       id: "since_date",
                       required: true,
-                      class: "form-control since-date",
+                      class: "form-control datepicker",
                       autocomplete: "off",
                       value: f.object.since_date.present? ? f.object.since_date.strftime("%d/%m/%Y") : '',
                     }
@@ -118,7 +118,7 @@
                     :input_html => {
                       id: "to_date",
                       required: true,
-                      class: "form-control to-date",
+                      class: "form-control datepicker",
                       autocomplete: "off",
                       value: f.object.to_date.present? ? f.object.to_date.strftime("%d/%m/%Y") : '',
                     }

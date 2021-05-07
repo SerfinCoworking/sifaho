@@ -18,7 +18,7 @@ class Bed < ApplicationRecord
   delegate :name, to: :bedroom, prefix: :bedroom
   delegate :name, to: :service, prefix: :service
 
-  scope :establishment, -> (establishment_id) {joins(:establishment).where("establishments.id=?", establishment_id)}
+  scope :establishment, -> (establishment_id) { joins(:establishment).where("establishments.id = ?", establishment_id) }
 
   filterrific(
     default_filter_params: { sorted_by: 'estado_desc' },

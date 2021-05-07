@@ -5,6 +5,8 @@ class Profile < ApplicationRecord
   belongs_to :user
   has_one_attached :avatar
 
+  validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+
   def full_name
     self.last_name+" "+self.first_name
   end

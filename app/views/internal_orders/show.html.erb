@@ -248,6 +248,7 @@
       <% if policy(@internal_order).send_applicant? %>
         <%= link_to send_applicant_internal_order_path(@internal_order), 
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          method: :patch,
           class: 'btn btn-primary btn-md mr-1' do %>
           <%= fa_icon "paper-plane" %>
           Enviar solicitud
@@ -255,6 +256,7 @@
       <% end %>
       <% if policy(@internal_order).send_provider? %>
         <%= link_to send_provider_internal_order_path(@internal_order),
+          method: :patch,
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md' do %>
           <%= fa_icon "paper-plane" %>

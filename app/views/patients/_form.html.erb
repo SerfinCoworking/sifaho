@@ -39,7 +39,7 @@
           <%= f.input :birthdate, as: :date_time_picker, label: 'Fecha de nacimiento',
             readonly: f.object.Validado?,
             :placeholder => "Ej: 01/01/1990",
-            input_html: {class: "form-control", autocomplete: 'off',
+            input_html: {class: "form-control datepicker", autocomplete: 'off',
             value: "#{if @patient.birthdate.present?; @patient.birthdate.strftime("%d/%m/%Y"); end }"},
             html5: false,
             required: false

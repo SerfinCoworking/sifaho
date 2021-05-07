@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2021_05_07_115202) do
+=======
+ActiveRecord::Schema.define(version: 2021_04_30_162552) do
+>>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -447,6 +451,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
   create_table "in_pre_prod_lot_stocks", force: :cascade do |t|
     t.bigint "inpatient_prescription_product_id"
     t.bigint "lot_stock_id"
+<<<<<<< HEAD
     t.bigint "dispensed_by_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
@@ -474,6 +479,16 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
     t.index ["movement_type_id"], name: "index_inpatient_movements_on_movement_type_id"
     t.index ["patient_id"], name: "index_inpatient_movements_on_patient_id"
     t.index ["user_id"], name: "index_inpatient_movements_on_user_id"
+=======
+    t.bigint "supplied_by_sector_id"
+    t.integer "available_quantity"
+    t.integer "reserved_quantity", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
+    t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
+    t.index ["supplied_by_sector_id"], name: "index_in_pre_prod_lot_stocks_on_supplied_by_sector_id"
+>>>>>>> master
   end
 
   create_table "inpatient_prescription_movements", force: :cascade do |t|
@@ -493,8 +508,15 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
   create_table "inpatient_prescription_products", force: :cascade do |t|
     t.bigint "inpatient_prescription_id"
     t.bigint "product_id"
+<<<<<<< HEAD
     t.integer "dose_quantiity"
     t.integer "interval"
+=======
+    t.integer "dose_quantity"
+    t.integer "interval"
+    t.integer "dose_total"
+    t.integer "status"
+>>>>>>> master
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

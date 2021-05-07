@@ -45,12 +45,20 @@
         <label>Solicitado</label>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_since, class: 'form-control filterrific-periodically-observed datetimepicker  input-sm',
-              placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+            <%= f.text_field(
+              :requested_date_since,
+              class: 'form-control filterrific-periodically-observed datepicker  input-sm',
+              placeholder: "Desde",
+              autocomplete: 'off',
+              data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:requested_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-              placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+            <%= f.text_field(
+              :requested_date_to,
+              class: 'form-control filterrific-periodically-observed datepicker input-sm',
+              placeholder: "Hasta",
+              autocomplete: 'off',
+              data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
       </div>
@@ -58,19 +66,26 @@
         <div class="d-flex justify-content-between align-items-center">
           <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
           <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
-            :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+            :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip',
+            'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
             <%= fa_icon "redo" %>
           <% end %>
           <%= render_filterrific_spinner %>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <%= f.text_field(:date_received_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-              placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+            <%= f.text_field(:date_received_since,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Desde",
+            autocomplete: 'off',
+            data: { date_format: 'DD/MM/YY'}) %>
           </div>
           <div class="col-md-6">
-            <%= f.text_field(:date_received_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-              placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+            <%= f.text_field(:date_received_to,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Hasta",
+            autocomplete: 'off',
+            data: { date_format: 'DD/MM/YY'}) %>
           </div>
         </div>
       </div>

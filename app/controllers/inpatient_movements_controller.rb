@@ -4,7 +4,18 @@ class InpatientMovementsController < ApplicationController
   # GET /inpatient_movements
   # GET /inpatient_movements.json
   def index
+<<<<<<< HEAD
     @inpatient_movements = InpatientMovement.all
+=======
+    @filterrific = initialize_filterrific(
+      InpatientMovement.establishment(current_user.sector.establishment),
+      params[:filterrific],
+      select_options: {
+        sorted_by: InpatientMovement.options_for_sorted_by
+      },
+      persistence_id: false,
+    ) or return
+>>>>>>> master
   end
 
   # GET /inpatient_movements/1

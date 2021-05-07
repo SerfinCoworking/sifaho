@@ -24,18 +24,27 @@
           <%= current_page?(action: 'index') ? 'Recibido' : 'Entregado' %>
         </label>
         <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
-          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip'  do %>
+          :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip',
+          'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
           <%= fa_icon "redo" %>
         <% end %>
       </div>
       <div class="row text-right">
         <div class="col-6">
-          <%= f.text_field(:received_date_since, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Desde", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :received_date_since,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            placeholder: "Desde",
+            autocomplete: "off",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
         <div class="col-6">
-          <%= f.text_field(:received_date_to, class: 'form-control filterrific-periodically-observed datetimepicker input-sm',
-            placeholder: "Hasta", data: { date_format: 'DD/MM/YY'}) %>
+          <%= f.text_field(
+            :received_date_to,
+            class: 'form-control filterrific-periodically-observed datepicker input-sm',
+            autocomplete: "off",
+            placeholder: "Hasta",
+            data: { date_format: 'DD/MM/YY'}) %>
         </div>
       </div>
     </div>

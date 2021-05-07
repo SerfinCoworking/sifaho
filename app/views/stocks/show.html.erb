@@ -63,6 +63,7 @@
             <tr>
               <th scope="col">Lote</th>
               <th scope="col">Laboratorio</th>
+              <th scope="col"></th>
               <th scope="col">Vencimiento</th>
               <th scope="col">Estado</th>
               <th scope="col">Movimientos</th>
@@ -81,8 +82,9 @@
               <tr>
                 <th scope="row"><%= lot_stock.lot_code %></th>
                 <td><%= lot_stock.lot_laboratory_name %></td>
+                <td><span class="badge badge-secondary"><%= lot_stock.lot_provenance_name %></span></td>
                 <td><%= lot_stock.lot_short_expiry_date_string %></td>
-                <td><%= lot_stock.lot_status.humanize %></td>
+                <td><span class="badge badge-<%= lot_status_label(lot_stock.lot) %>"><%= lot_stock.lot_status.humanize %></span></td>
                 <td><%= lot_stock.movements.count %></td>
                 <td class="table-success text-right"><%= lot_stock.quantity %></td>
                 <td class="table-warning text-right"><%= lot_stock.reserved_quantity %></td>

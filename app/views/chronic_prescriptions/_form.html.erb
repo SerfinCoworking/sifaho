@@ -23,11 +23,11 @@
             <div class="col-6 border-right">
               <div class="d-flex">
                 <div class="w-25">
-                  <%= image_tag patient_avatar(@chronic_prescription.patient), class:"img-thumbnail" %>
+                  <%= image_tag patient_avatar(@chronic_prescription.patient), size: '162x200', class:"img-thumbnail" %>
                 </div>
                 <div class="w-75">
                   <h5 id="patient-name" data-insurance-url="<%= get_insurance_path %>" data-patient-dni="<%= @chronic_prescription.patient.dni %>">
-                    <strong><%= @chronic_prescription.patient.last_name %>,</strong> 
+                    <strong><%= @chronic_prescription.patient.last_name %>,</strong>
                     <%= @chronic_prescription.patient.first_name %>
                   </h5>
                 </div>
@@ -102,11 +102,11 @@
                   :placeholder => "Seleccionar fecha",
                   input_html: {
                     tabindex: "-1",
-                    class: "form-control pull-right #{"date-prescribed" if !policy(chronic_prescription).edit_dispense? }",
+                    class: "form-control pull-right #{"datepicker prescribed-date" if !policy(chronic_prescription).edit_dispense? }",
                     required: true,
                     autocomplete: 'off',
                     readonly: policy(chronic_prescription).edit_dispense?,
-                    value: "#{if f.object.date_prescribed.present?; f.object.date_prescribed.strftime("%d/%m/%Y"); end}"
+                    value: "#{f.object.date_prescribed.present? ? f.object.date_prescribed.strftime("%d/%m/%Y") : Date.today.strftime("%d/%m/%Y")}"
                   },
               html5: false %>
             </div>
@@ -129,9 +129,9 @@
                 Fechas de vencimiento
               <%end%>
               <div id="expiry-date">
-                <%= "#{if f.object.expiry_date.present?; f.object.expiry_date.strftime("%d/%m/%Y"); end }" %>
+                <%= "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 6.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
               </div>
-              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{if f.object.expiry_date.present?; f.object.expiry_date; end }" %>
+              <%= f.hidden_field :expiry_date, id: "expiry_date", value: "#{f.object.expiry_date.present? ? f.object.expiry_date.strftime("%d/%m/%Y") : 6.months.since.end_of_month.strftime("%d/%m/%Y")}" %>
             </div>
           </div>
 
@@ -155,18 +155,18 @@
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', chronic_prescriptions_path, class: 'btn mr-1' %>
   
-    <button type='submit' class='btn btn-success mr-2' form="<%= @chronic_prescription.new_record? ? 'new_chronic_prescription' : 'edit_chronic_prescription_' + @chronic_prescription.id.to_s %>" data-value='audit'>
+    <!--button type='submit' class='btn btn-success mr-2' form="<%#= @chronic_prescription.new_record? ? 'new_chronic_prescription' : 'edit_chronic_prescription_' + @chronic_prescription.id.to_s %>" data-value='audit'>
       
       <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "save" %> Guardar 
+        <%#= fa_icon "save" %> Guardar 
       </div>
       
       <div class="d-none" style="pointer-events: none;">
         Guardando...
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        <%#= fa_icon "spinner", class: "fa-spin send-audit" %>
       </div>
 
-    </button>
+    </button-->
 
     <button type='submit' class='btn btn-primary' form="<%= @chronic_prescription.new_record? ? 'new_chronic_prescription' : 'edit_chronic_prescription_' + @chronic_prescription.id.to_s %>" data-value='dispensing'>
       <div class="c-msg" style="pointer-events: none;">

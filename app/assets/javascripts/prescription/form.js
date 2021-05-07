@@ -36,21 +36,16 @@ $(document).on('turbolinks:load', function(e){
       $("#patient-phones").html("");
       $(".andes-input").attr('disabled', true);
       //Mostramos la imagen [local]
-      if(ui.item.avatar_url){
-        const image = new Image();
-        image.src = ui.item.avatar_url;
-        $(image).addClass("patient-avatar");
-        $("#patient-avatar").html(image);
-      }
 
       if(ui.item.dni != '' && typeof ui.item.lastname !== 'undefined' && typeof ui.item.firstname !== 'undefined'){
         $("#patient-dni").val(ui.item.dni);
         $("#patient-lastname").val(ui.item.lastname).attr('readonly', true);
         $("#patient-firstname").val(ui.item.firstname).attr('readonly', true);
         
-        if(ui.item.create && typeof ui.item.status === 'undefined'){
+        if(ui.item.create){
           $(".andes-input").removeAttr('disabled');
-          $("#patient-status").val("Validado");
+          const status = ui.item.status.charAt(0).toUpperCase() + ui.item.status.slice(1)
+          $("#patient-status").val(status);
           
           // Datos del paciente rellenados con Andes
           $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
@@ -100,15 +95,23 @@ $(document).on('turbolinks:load', function(e){
           $("#patient-andes-id").val(ui.item.data._id);
           $("#patient-andes-photo").val(ui.item.data.fotoId);
           
-          //Mostramos la imagen [andes]
-          const image = new Image();
-          image.src = "data:image/jpg;base64,"+ui.item.avatar.toString();
-          $(image).addClass("patient-avatar");
-          $("#patient-avatar").html(image);
+          
           
         }else{
           $("#patient-status").val(ui.item.status);
         }
+
+        //Mostramos la imagen [andes]
+        const image = new Image();
+        if(typeof ui.item.avatar_url !== 'undefined'){
+          image.src = ui.item.avatar_url ? ui.item.avatar_url : $('input#profile-placeholder-path').val();
+        }else{
+          image.src = ui.item.avatar ? "data:image/jpg;base64,"+ui.item.avatar.toString() : $('input#profile-placeholder-path').val();
+        }
+
+        $(image).addClass("patient-avatar");
+        $("#patient-avatar").html(image);
+        
         setPatientSex(ui.item.sex);      
         $("#container-more-info").addClass("show");
         $("#container-receipts-list").addClass("show");

@@ -2,6 +2,12 @@
 // Obtenemos las recetas
 $("#patient-lastname").val('<%= @patient.last_name %>').attr('readonly', true);
 $("#patient-firstname").val('<%= @patient.last_name %>').attr('readonly', true);
+
+const image = new Image();
+image.src = "<%= @patient.avatar.attached? ? url_for(@patient.avatar) : asset_path('profile-placeholder.jpg') %>"
+$(image).addClass("patient-avatar");
+$("#patient-avatar").html(image);
+
 setPatientSex('<%= @patient.sex %>');
 getPrescriptionsTo(<%= @patient.id %>);
 $("#container-more-info").addClass("show");

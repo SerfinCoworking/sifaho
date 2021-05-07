@@ -492,7 +492,7 @@ class InternalOrdersController < ApplicationController
 
   def new_from_template(template_id, order_type)
     # Buscamos el template
-    @external_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+    @internal_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
     @internal_order = InternalOrder.new
     @internal_order.order_type = @internal_order_template.order_type
     
