@@ -28,28 +28,15 @@
           Movimientos <span class="badge badge-secondary"><%= @inpatient_movements.count %></span>
         </div>
         <% InpatientMovement.find_each do |mov_type| %>
-        <div>
-          <%= link_to inpatient_movements_path(filterrific: {:with_status => 0}), 
-            class: 'tn btn-link text-dark text-left p-0',
-            title: "Ver solicitudes", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-            <%= mov_type.name.humanize.pluralize(@inpatient_movements.for_type(mov_type.id).count) %> 
-            <span class="badge badge-info"><%= @inpatient_movements.disponible.count %></span>
-          <% end %>
-        </div>
-        <div>
-          <%= link_to inpatient_movements_path(filterrific: {:with_status => 1}), 
-            class: 'tn btn-link text-dark text-left p-0',
-            title: "Ver pedidos en auditoría", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-            Ocupadas <span class="badge badge-warning"><%= @inpatient_movements.ocupada.count %></span>
-          <% end %>
-        </div>
-        <div>
-          <%= link_to inpatient_movements_path(filterrific: {:with_status => 2}), 
-            class: 'tn btn-link text-dark text-left p-0',
-            title: "Ver pedidos aceptados", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-            Inactivas <span class="badge badge-primary"><%= @inpatient_movements.inactiva.count %></span>
-          <% end %>
-        </div>
+          <div>
+            <%= link_to inpatient_movements_path(filterrific: { with_status: mov_type.id }), 
+              class: 'tn btn-link text-dark text-left p-0',
+              title: "Ver solicitudes", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+              <%= mov_type.name.humanize.pluralize(@inpatient_movements.for_type(mov_type.id).count) %> 
+              <span class="badge badge-info"><%= @inpatient_movements.disponible.count %></span>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <div class="col-2 d-flex justify-content-end align-items-center">
       </div>
