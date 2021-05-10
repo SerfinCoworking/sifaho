@@ -30,19 +30,19 @@ class InpatientPrescriptionsController < ApplicationController
   # POST /inpatient_prescriptions.json
   def create
     @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
-    @inpatient_prescription.remit_code = "IN"+DateTime.now.to_s(:number)
-    @inpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
+    @inpatient_prescription.remit_code = "IN#{DateTime.now.to_s(:number)}"
+    @inpatient_prescription.status = 'pendiente'
 
     respond_to do |format|
       begin
         @inpatient_prescription.save!
         # if(dispensing?); @inpatient_prescription.dispense_by(current_user); end
 
-        message = dispensing? ? "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha creado correctamente."
-        notification_type = dispensing? ? "creó y dispensó" : "creó"
-        
+        message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
+        notification_type = 'creó'
+
         @inpatient_prescription.create_notification(current_user, notification_type)
-        format.html { redirect_to @inpatient_prescription, notice: message }
+        format.html { redirect_to delivery_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
         flash[:error] = e.message
@@ -51,7 +51,7 @@ class InpatientPrescriptionsController < ApplicationController
         @inpatient_prescription.order_products || @inpatient_prescription.order_products.build
         @inpatients = Patient.all.limit(10)
         format.html { render :new }
-      end      
+      end
     end
   end
 
@@ -76,18 +76,16 @@ class InpatientPrescriptionsController < ApplicationController
     @professional_fullname = @inpatient_prescription.professional.fullname
     @inpatient_prescription.destroy
     respond_to do |format|
-      flash.now[:success] = "La receta de "+@professional_fullname+" se ha eliminado correctamente."
+      flash.now[:success] = "La receta de #{@professional_fullname} se ha eliminado correctamente."
       format.js
     end
   end
-  
-  
+
   # DELIVERY /inpatient_prescriptions/1
   # DELIVERY /inpatient_prescriptions/1.json
   def delivery
   end
-  
-  
+
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
   def update_with_delivery
@@ -105,7 +103,7 @@ class InpatientPrescriptionsController < ApplicationController
     rescue ActiveRecord::RecordInvalid
     ensure
       format.html { render :delivery }
-    end      
+    end
   end
 
   def set_order_product
@@ -113,49 +111,49 @@ class InpatientPrescriptionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_inpatient_prescription
-      @inpatient_prescription = InpatientPrescription.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_inpatient_prescription
+    @inpatient_prescription = InpatientPrescription.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def inpatient_prescription_params
-      params.require(:inpatient_prescription).permit(
-        :patient_id,
-        :professional_id,
-        :bed_id,
-        :remit_code,
-        :observation,
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def inpatient_prescription_params
+    params.require(:inpatient_prescription).permit(
+      :patient_id,
+      :professional_id,
+      :bed_id,
+      :remit_code,
+      :observation,
+      :status,
+      :date_prescribed,
+      order_products_attributes: [
+        :id,
+        :product_id,
+        :dose_quantity,
+        :interval,
+        :dose_total,
         :status,
-        :date_prescribed,
-        order_products_attributes: [
-          :id,
-          :product_id,
-          :dose_quantity,
-          :interval,
-          :dose_total,
-          :status,
-          :observation,
+        :observation,
+        :_destroy
+      ]
+    )
+  end
+
+  def inpatient_prescription_lots_params
+    params.require(:inpatient_prescription).permit(
+      order_products_attributes: [
+        :id,
+        :observation,
+        order_prod_lot_stocks_attributes: [
+          :lot_stock_id,
+          :available_quantity,
           :_destroy
         ]
-      )
-    end
-    
-    def inpatient_prescription_lots_params
-      params.require(:inpatient_prescription).permit(
-        order_products_attributes: [
-          :id,
-          :observation,
-          order_prod_lot_stocks_attributes: [
-            :lot_stock_id,
-            :available_quantity,
-            :_destroy
-          ]
-        ]
-      )
-    end
-    
-    def dispensing?
-      return params[:commit] == "dispensing"
-    end
+      ]
+    )
+  end
+
+  def dispensing?
+    return params[:commit] == "dispensing"
+  end
 end

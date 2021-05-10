@@ -151,7 +151,7 @@ $(document).on('turbolinks:load', function(e){
   function calcTotalDose(row){
     const totalRequestDose = $(row).find('input.request-quantity').first().val() || 0;
     const totalIntervalDose = $(row).find('input.interval-dose').first().val() || 0;
-    const total = totalRequestDose * totalIntervalDose;
+    const total = (24 /  totalIntervalDose) * totalRequestDose;
     $(row).find('input.total-dose').first().val(total);
   }
 });

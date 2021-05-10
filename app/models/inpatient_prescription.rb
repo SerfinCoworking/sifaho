@@ -35,7 +35,7 @@ class InpatientPrescription < ApplicationRecord
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
-  before_save :stock_deliver, :if => :available_quantity_changed?
+  # before_save :stock_deliver, :if => :available_quantity_changed?
 
   def create_notification(of_user, action_type, order_product = nil)
     InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product, action: action_type, sector: of_user.sector)
@@ -54,8 +54,7 @@ class InpatientPrescription < ApplicationRecord
     end
   end
 
-  def available_quantity_changed?
-    any_new_record = self.order_products.any? {|op| op.order_prod_lot_stocks.any? {|opls| opls.new_record? }}
-    asd
-  end
+  # def available_quantity_changed?
+  #   any_new_record = self.order_products.any? {|op| op.order_prod_lot_stocks.any? {|opls| opls.new_record? }}
+  # end
 end
