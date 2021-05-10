@@ -143,6 +143,11 @@ class OutpatientPrescription < ApplicationRecord
     where('outpatient_prescriptions.establishment_id = ?', a_establishment)
   }
 
+  scope :with_patient_id, lambda { |an_id|
+    where(patient_id: [*an_id])
+  }
+
+
   # Métodos públicos #----------------------------------------------------------
   def sum_to?(a_sector)
     if self.dispensada?
@@ -215,10 +220,6 @@ class OutpatientPrescription < ApplicationRecord
   end
   
   # Métodos de clase #----------------------------------------------------------
-  scope :with_patient_id, lambda { |an_id|
-    where(patient_id: [*an_id])
-  }
-
   def self.current_day
     where("date_prescribed >= :today", { today: DateTime.now.beginning_of_day })
   end

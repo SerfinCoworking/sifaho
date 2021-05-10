@@ -37,7 +37,7 @@ class ChronicPrescription < ApplicationRecord
       :search_by_patient,
       :sorted_by,
       :date_prescribed_since,
-      :search_by_status
+      :for_statuses
     ]
   )
 
@@ -113,13 +113,12 @@ class ChronicPrescription < ApplicationRecord
     ]
   end
 
-  def self.options_for_status
+  def self.options_for_statuses
     [
-      ['Todos', '', 'default'],
-      ['Pendiente', 0, 'info'],
-      ['Dispensada', 1, 'success'],
-      ['Dispensada parcial', 2, 'warning'],
-      ['Vencida', 3, 'danger']
+      ['Pendiente', 'pendiente', 'secondary'],
+      ['Dispensada', 'dispensada', 'success'],
+      ['Dispensada parcial', 'dispensada_parcial', 'primary'],
+      ['Vencida', 'vencida', 'danger']
     ]
   end 
 
@@ -139,6 +138,12 @@ class ChronicPrescription < ApplicationRecord
   scope :search_by_status, lambda { |status|
     where('chronic_prescriptions.status = ?', status)
   }
+
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
+  end
 
   def create_notification(of_user, action_type)
     ChronicPrescriptionMovement.create(user: of_user, chronic_prescription: self, action: action_type, sector: of_user.sector)
@@ -183,6 +188,12 @@ class ChronicPrescription < ApplicationRecord
   # Return the i18n model name
   def human_name
     self.class.model_name.human
+  end
+
+  def update_status
+    if (self.dispensada_parcial? || self.pendiente?) && Date.today > self.expiry_date
+      self.status = 'vencida'
+    end
   end
   
   private

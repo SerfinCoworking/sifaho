@@ -18,4 +18,14 @@ namespace :batch do
     end
     Rails.logger.info 'Finished update outpatient prescription status. Pendientes: '+OutpatientPrescription.pendiente.count.to_s+' Dispensadas: '+OutpatientPrescription.dispensada.count.to_s+' Vencidas: '+OutpatientPrescription.vencida.count.to_s
   end
+
+  desc 'Update chronic prescription status'
+  task update_chronic_prescription_status: :environment do
+    Rails.logger.info 'Start update chronic prescription status. Dispensadas parcialmente: '+ChronicPrescription.dispensada_parcial.count.to_s+' Dispensadas: '+ChronicPrescription.dispensada.count.to_s+' Vencidas: '+ChronicPrescription.vencida.count.to_s
+    ChronicPrescription.for_statuses(['dispensada_parcial', 'pendiente']).find_each do |prescription|
+      prescription.update_status
+      prescription.save(validate: false)
+    end
+    Rails.logger.info 'Finished update outpatient prescription status. Dispensadas parcialmente: '+ChronicPrescription.dispensada_parcial.count.to_s+' Dispensadas: '+ChronicPrescription.dispensada.count.to_s+' Vencidas: '+ChronicPrescription.vencida.count.to_s
+  end
 end

@@ -28,3 +28,7 @@ end
 every 15.hours do
   rake 'batch:update_outpatient_prescription_status'
 end
+
+every 15.hours do
+  rake 'batch:update_chronic_prescription_status'
+end

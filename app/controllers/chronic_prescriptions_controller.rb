@@ -11,7 +11,7 @@ class ChronicPrescriptionsController < ApplicationController
       params[:filterrific],
       select_options: {
         sorted_by: ChronicPrescription.options_for_sorted_by,
-        search_by_status: ChronicPrescription.options_for_status
+        for_statuses: ChronicPrescription.options_for_statuses
       },
       persistence_id: false
     ) or return
