@@ -42,4 +42,8 @@ class LotArchive < ApplicationRecord
   def human_name
     self.class.model_name.human
   end
+
+  def remit_code
+    'arch-'+self.id.to_s
+  end
 end
