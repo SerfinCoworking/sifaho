@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= inpatient_form.simple_fields_for :order_products do |form_products| %>
+      <%= inpatient_form.simple_fields_for :original_order_products do |form_products| %>
         <%= render "inpatient_prescriptions/partials/delivery_fields", order: inpatient_form.object, f: form_products %>
       <% end %>
     </tbody>
