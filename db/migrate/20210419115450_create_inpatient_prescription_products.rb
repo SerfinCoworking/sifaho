@@ -5,6 +5,7 @@ class CreateInpatientPrescriptionProducts < ActiveRecord::Migration[5.2]
       t.references :parent
       t.references :product, index: true
       t.integer :dose_quantity
+      t.integer :quantity
       t.integer :interval
       t.integer :dose_total
       t.integer :status

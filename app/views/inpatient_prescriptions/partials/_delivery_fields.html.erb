@@ -1,0 +1,63 @@
+<tr class="nested-fields order-product-<%= f.object.id %> <%= f.object.errors.any? ? 'has-error' : '' %>">
+  
+  <!-- Nombre de Producto -->
+  <td>
+   <%= f.object.product.name %>
+  </td>
+    
+  <td>
+    <%= f.object.dose_total %>
+  </td>
+  
+  <td>
+    <%= f.input :to_delivery, 
+      label: false,
+      placeholder: 'A entregar',
+      input_html: { 
+        class: 'input-sm to-delivery',
+        value: f.object.dose_total
+      }
+    %>
+  </td>
+
+  <td>
+    <%= link_to_add_association f, 
+    :children, 
+    class: 'btn btn-primary btn-sm',
+    partial: "inpatient_prescriptions/partials/delivery_child_fields", 
+    render_options: {
+      locals: { order: order }
+    },
+    data: {
+      "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container-#{f.object.id}",
+      "association-insertion-method" => "append"} do %>
+      <%= fa_icon "plus" %>
+      <%# Agregar insumo %>
+    <% end %>
+  </td>
+</tr>
+<tr>
+  <td colspan="4">
+    <table class="table table-hover table-sm mb-0">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Producto</th>
+          <th>Stock</th>
+          <th>Cantidad por dosis</th>
+          <th>Total</th>
+          <th>Descripción</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="inpatient-order-product-cocoon-container-<%= f.object.id %>" class="inpatient-order-product-cocoon-container">
+        <%= f.simple_fields_for :children do |child_form| %>
+          <%= render "inpatient_prescriptions/partials/delivery_child_fields", f: child_form, order: order %>
+        <% end %>
+        <%#= inpatient_form.simple_fields_for :order_products do |form_products| %>
+          <%#= render "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", order: inpatient_form.object, f: form_products %>
+        <%# end %>
+      </tbody>
+    </table>
+  </td>
+</tr>

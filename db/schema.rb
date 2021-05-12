@@ -475,6 +475,7 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
     t.bigint "parent_id"
     t.bigint "product_id"
     t.integer "dose_quantity"
+    t.integer "quantity"
     t.integer "interval"
     t.integer "dose_total"
     t.integer "status"

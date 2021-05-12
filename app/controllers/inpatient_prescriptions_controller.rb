@@ -90,11 +90,10 @@ class InpatientPrescriptionsController < ApplicationController
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
   def update_with_delivery
     begin
-      
       @inpatient_prescription.update!(inpatient_prescription_lots_params)
 
-      message = "La receta de internación de "+@inpatient_prescription.patient.fullname+" se ha entregado correctamente."
-      notification_type = "entregó"
+      message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha entregado correctamente."
+      notification_type = 'entregó'
       
       @inpatient_prescription.create_notification(current_user, notification_type)
       format.html { redirect_to @inpatient_prescription, notice: message }

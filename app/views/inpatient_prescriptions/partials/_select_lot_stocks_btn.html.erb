@@ -1,0 +1,15 @@
+<div class="btn-progress">
+  <div class="bg-progress bg-info"></div>
+  <%= button_tag type: "button", 
+    class: "btn select-lot-btn text-nowrap w-100 is-invalid",
+    "data-select-lot-url" => find_order_product_lots_url,
+    "data-order-name" => order.model_name.name,
+    "data-order-id" => order.id,
+    "data-order-product-id" => f.object.id do %>
+    <% if f.object.order_prod_lot_stocks.present? %>
+        Seleccionados <%= f.object.order_prod_lot_stocks.count %> 
+    <% else %>
+      <%= fa_icon "barcode" %> Seleccionar lote
+    <% end %>
+  <% end %>
+</div>
