@@ -22,7 +22,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   has_many :children, class_name: 'InpatientPrescriptionProduct', foreign_key: :parent_id
 
   # Validaciones
-  validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :parent_id_nil?
   validates_presence_of :product_id
   # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"},
   # if: :is_proveedor_aceptado_and_quantity_greater_than_0?
@@ -46,10 +46,14 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
-    (self.order.order_products.uniq - [self]).each do |eop|
+    (self.order.order_products.where.not(parent_id: nil).uniq - [self]).each do |eop|
       if eop.product_id == self.product_id
-        errors.add(:uniqueness_product_in_the_order, 'El producto código ya se encuentra en la orden')
+        errors.add(:uniqueness_product_in_the_order, 'El producto ya se encuentra en la orden')
       end
     end
+  end
+
+  def parent_id_nil?
+    self.parent_id.nil?
   end
 end

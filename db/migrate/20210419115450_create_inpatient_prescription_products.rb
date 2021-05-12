@@ -13,6 +13,6 @@ class CreateInpatientPrescriptionProducts < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
-    add_index :inpatient_prescription_products, [:inpatient_prescription_id, :product_id], :unique => true, name: "unique_product_on_inpatient_prescription_products"
+    add_index :inpatient_prescription_products, [:inpatient_prescription_id, :product_id, :parent_id], :unique => true, name: "unique_product_on_inpatient_prescription_products"
   end
 end

@@ -26,7 +26,7 @@
     class: 'btn btn-primary btn-sm',
     partial: "inpatient_prescriptions/partials/delivery_child_fields", 
     render_options: {
-      locals: { order: order }
+      locals: { order: order, parent: f }
     },
     data: {
       "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container-#{f.object.id}",
@@ -52,7 +52,7 @@
       </thead>
       <tbody id="inpatient-order-product-cocoon-container-<%= f.object.id %>" class="inpatient-order-product-cocoon-container">
         <%= f.simple_fields_for :children do |child_form| %>
-          <%= render "inpatient_prescriptions/partials/delivery_child_fields", f: child_form, order: order %>
+          <%= render "inpatient_prescriptions/partials/delivery_child_fields", f: child_form, parent: f, order: order %>
         <% end %>
         <%#= inpatient_form.simple_fields_for :order_products do |form_products| %>
           <%#= render "inpatient_prescriptions/partials/inpatient_prescription_products_delivery_fields", order: inpatient_form.object, f: form_products %>

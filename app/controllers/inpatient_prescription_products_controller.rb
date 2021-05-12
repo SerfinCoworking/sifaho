@@ -24,15 +24,20 @@ class InpatientPrescriptionProductsController < ApplicationController
   # POST /inpatient_prescription_products
   # POST /inpatient_prescription_products.json
   def create
-    @inpatient_prescription_product = InpatientPrescriptionProduct.new(inpatient_prescription_product_params)
+    puts inpatient_prescription_product_ajax_params
+    puts "DEBUG ============================="
+    @inpatient_prescription_product = InpatientPrescriptionProduct.new(inpatient_prescription_product_ajax_params)
+    @inpatient_prescription_product.inpatient_prescription_id = params[:inpatient_prescription_id]
 
     respond_to do |format|
-      if @inpatient_prescription_product.save
+      if @inpatient_prescription_product.save!
         format.html { redirect_to @inpatient_prescription_product, notice: 'Inpatient prescription product was successfully created.' }
         format.json { render :show, status: :created, location: @inpatient_prescription_product }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -69,6 +74,11 @@ class InpatientPrescriptionProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def inpatient_prescription_product_params
-      params.require(:inpatient_prescription_product).permit(:inpatient_prescription_id, :product_id, :dose_quantiity, :interval, :status, :observation, :dispensed_by_id)
+      params.require(:inpatient_prescription_product).permit(
+        :inpatient_prescription_id, :product_id, :dose_quantity, :interval, :status, :observation, :dispensed_by_id)
+    end
+    
+    def inpatient_prescription_product_ajax_params
+      params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :observation)
     end
 end

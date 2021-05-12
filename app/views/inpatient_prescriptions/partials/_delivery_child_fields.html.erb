@@ -68,9 +68,9 @@
   
   <!-- Cantidad por dosis -->
   <td>
-    <%= f.input :dose_quantity, label: false, required: true, input_html: {
-      class: 'product-dose_quantity',
-      value: f.object.dose_quantity.present? ? f.object.dose_quantity : 0
+    <%= f.input :quantity, label: false, required: true, input_html: {
+      class: 'product-quantity',
+      value: f.object.quantity.present? ? f.object.quantity : 0
     } %>
   </td>
 
@@ -82,7 +82,7 @@
   </td>
   
   <td>
-    <%= f.input :observation, label: false, as: :text, :input_html => { class: 'input-sm', :cols => 20  , :rows => 1, readonly: policy(f.object).edit? } %>
+    <%= f.input :observation, label: false, as: :text, :input_html => { class: 'input-sm product-observartion', :cols => 20  , :rows => 1, readonly: policy(f.object).edit? } %>
   </td>
 
   <td>
@@ -94,10 +94,12 @@
       agregar clase para asignarle un ajax a la url
       en la respuesta llamar al modal de lotes
      -->
-      <%= link_to inpatient_prescription_inpatient_prescription_products_path(order.id), remote: true,
+    <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-parent-id="<%= parent.object.id %>">
+      <%= fa_icon 'check' %>
+    </button>
+      <%#= link_to inpatient_prescription_inpatient_prescription_products_path(order.id), remote: true,
             class: 'btn btn-success', title: 'Guardar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon 'check' %>
-      <% end %>
+      <%# end %>
     <% else %>
       <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f: f%>
     <% end %>

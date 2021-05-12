@@ -11,7 +11,6 @@ $(document).on('turbolinks:load', function(e){
       const orderProductId = $(e.target).attr("data-order-product-id");
       const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first();
 
-      console.log(e, "DEBUG ===========");
       $.ajax({
         url: urlFindLots,
         method: 'GET',
@@ -66,6 +65,32 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
+
+    $('button.btn-ipp-save').on('click', function(e){
+      const url = $(e.target).attr('data-url');
+      const urlType = $(e.target).attr('data-url-type');
+      const tr = $(e.target).closest('tr');
+      const parentId = $(e.target).attr('data-parent-id');
+      const productId = $(tr).find('input[type="hidden"].product-id').first().val();
+      const productQuantity = $(tr).find('input.product-quantity').first().val();
+      const productObservation = $(tr).find('input.product-observartion').first().val();
+      if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
+
+        $.ajax({
+          url: url,
+          method: urlType,
+          dataType: "script",
+          data: {
+            inpatient_prescription_product: {
+              parent_id: parentId,
+              product_id: productId,
+              quantity: productQuantity,
+              observation: productObservation
+            }
+          }
+        });
+      }
+    });
   });
 
 
@@ -100,6 +125,5 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-id").val(item.id); // update product id input
       tr.find('div.lot-stocks-hidden').html('');
     }
-  }
-
+  };
 });
