@@ -8,4 +8,13 @@ class OriginalChronicPrescriptionProductPolicy < ApplicationPolicy
     end
   end
  
+  def finish_treatment?
+    if record.pendiente?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+    end
+  end
+
+  def update_treatment?
+    finish_treatment?
+  end
 end

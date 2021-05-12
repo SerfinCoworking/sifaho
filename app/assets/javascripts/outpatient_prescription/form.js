@@ -70,6 +70,7 @@ $(document).on('turbolinks:load', function(e){
       $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
     }
   });
+  
   $('#patient-dni').autocomplete({
     source: $('#patient-dni').data('autocomplete-source'),
     autoFocus: true,

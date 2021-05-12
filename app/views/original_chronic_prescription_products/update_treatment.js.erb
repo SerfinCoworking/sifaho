@@ -1,0 +1,13 @@
+$('#dialog').modal('toggle');
+$('#original_product_<%= @original_product.id %>').replaceWith('<%= j render (@original_product) %>');
+
+$('#original_product_<%= @original_product.id %>').animate({
+  backgroundColor: "#fbc122"
+}, 800 );
+
+
+setTimeout(function(){
+  $('#original_product_<%= @original_product.id %>').animate({
+    backgroundColor: "#ffffff"
+  }, 800 );
+},800);

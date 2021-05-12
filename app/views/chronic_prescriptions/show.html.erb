@@ -121,7 +121,7 @@
 
     <div class="tab-content mt-2">
       <div id='supplies' class='tab-pane fade show active'>
-        <!-- Insumos a dispensar -->
+        <!-- Productos a dispensar -->
         <div class="card">
           <table class="table table-hover table-sm mb-0">
             <thead class="thead-light">
@@ -132,11 +132,12 @@
                 <th>Dispensada</th>
                 <th width="200">Proceso</th>
                 <th>Observaciones</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <% @chronic_prescription.original_chronic_prescription_products.each do |org_chron_pres_prod| %>
-                <tr>
+                <tr id="original_product_<%= org_chron_pres_prod.id %>">
                   <% @stock = Stock.where(sector: current_user.sector, product: org_chron_pres_prod.product).first %>
                   <td class="text-secondary">
                     <% if @stock.present? %>
@@ -177,6 +178,14 @@
                       </div>
                     </div>
                   </td>
+                  <td>
+                    <% if policy(org_chron_pres_prod).finish_treatment? %>
+                      <%= link_to finish_treatment_chronic_prescription_path(id: @chronic_prescription.id, original_product_id: org_chron_pres_prod.id), 
+                        class: 'btn btn-sm btn-warning', remote: true do %>
+                        <%= fa_icon 'check' %>
+                      <% end %>
+                    <% end %>
+                  </td>
                 
                 </tr>
                 <tr>
@@ -187,7 +196,8 @@
                       </div>
                     </div>
                   </td>
-                </tr> <%# fin Listado de lotes y descripciones %>
+                </tr>
+                <%# fin Listado de lotes y descripciones %>
               <% end %>
             </tbody>
           </table>

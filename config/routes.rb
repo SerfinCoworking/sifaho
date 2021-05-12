@@ -282,6 +282,12 @@ Rails.application.routes.draw do
       get 'return_dispensation_modal'
       patch 'return_dispensation'
     end
+
+    member do
+      get 'finish_treatment/:original_product_id', to: 'original_chronic_prescription_products#finish_treatment', as: 'finish_treatment'
+      patch 'update_treatment/:original_product_id', to: 'original_chronic_prescription_products#update_treatment', as: 'update_treatment'
+    end
+    
     collection do
       get "nueva/:patient_id", to: "chronic_prescriptions#new", as: "new"
       post "nueva/:patient_id", to: "chronic_prescriptions#create", as: "create"
