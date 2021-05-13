@@ -1,1 +1,32 @@
-console.log("CREATE SUCCESSFULLY!!!!");
+$("#child-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
+
+$('button.btn-select-lot-stock').on('click', function(e) {
+  e.stopPropagation();
+  const urlFindLots = $(e.target).attr("data-select-lot-url");
+  const orderName = $(e.target).attr("data-order-name");
+  const orderId = $(e.target).attr("data-order-id");
+  const orderProductId = $(e.target).attr("data-order-product-id");
+  const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first().val();
+  $.ajax({
+    url: urlFindLots,
+    method: 'GET',
+    dataType: "script",
+    data: {
+      order_type: orderName,
+      order_id: orderId,
+      order_product_id: orderProductId,
+      product_id: productId
+  }});
+}).trigger('click');
+
+$('.delete-item').on('click', function(e) {
+  const modal = $(e.target).attr('data-target');
+  const title = $(e.target).attr('data-title');
+  const body = $(e.target).attr('data-body');
+  const href = $(e.target).attr('data-href');
+
+  $(modal).find('.modal-title').text(title);
+  $(modal).find('.modal-body').text(body);
+  $(modal).find('.btn[data-method="delete"]').attr('href', href);
+  $(modal).modal('toggle');
+});

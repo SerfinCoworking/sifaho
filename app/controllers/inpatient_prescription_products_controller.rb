@@ -24,15 +24,12 @@ class InpatientPrescriptionProductsController < ApplicationController
   # POST /inpatient_prescription_products
   # POST /inpatient_prescription_products.json
   def create
-    puts inpatient_prescription_product_ajax_params
-    puts "DEBUG ============================="
     @inpatient_prescription_product = InpatientPrescriptionProduct.new(inpatient_prescription_product_ajax_params)
     @inpatient_prescription_product.inpatient_prescription_id = params[:inpatient_prescription_id]
 
     respond_to do |format|
       if @inpatient_prescription_product.save!
-        format.html { redirect_to @inpatient_prescription_product, notice: 'Inpatient prescription product was successfully created.' }
-        format.json { render :show, status: :created, location: @inpatient_prescription_product }
+        flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha eliminado correctamente."
         format.js
       else
         format.html { render :new }

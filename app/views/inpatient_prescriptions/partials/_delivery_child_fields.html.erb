@@ -1,4 +1,4 @@
-<tr class="nested-fields" id="child-<%= f.object.id %>">
+<tr class="nested-fields" id="child-<%= f.object.id.present? ? f.object.product.id : '' %>">
   <!-- Código del producto -->
   <td>
     <div class="custom-input-group">
@@ -86,31 +86,25 @@
     <%= f.input :observation, label: false, as: :text, :input_html => { class: 'input-sm product-observartion', :cols => 20  , :rows => 1, readonly: policy(f.object).edit? } %>
   </td>
 
-  <td>
+  <td class="action-col">
     <% if f.object.new_record? %>
-    <!-- 
-      no clickeable hasta que product_id y dose_quantity esten asignados
-      controlar por js estas dos variables antes de realizar el ajax
-      agregar url de guardado de producto
-      agregar clase para asignarle un ajax a la url
-      en la respuesta llamar al modal de lotes
-     -->
-    <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-parent-id="<%= parent.object.id %>">
-      <%= fa_icon 'check' %>
-    </button>
-      <%#= link_to inpatient_prescription_inpatient_prescription_products_path(order.id), remote: true,
-            class: 'btn btn-success', title: 'Guardar', data: { toggle: 'tooltip', placement: 'top' } do %>
-      <%# end %>
-    <% else %>
-      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f: f%>
-
-      <button type="button" class="btn btn-warning delete-item" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f.object.id) %>">
-        <%= fa_icon "minus" %>
+      <!-- 
+        no clickeable hasta que product_id y dose_quantity esten asignados
+        controlar por js estas dos variables antes de realizar el ajax
+        agregar url de guardado de producto
+        agregar clase para asignarle un ajax a la url
+        en la respuesta llamar al modal de lotes
+      -->
+      <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-parent-id="<%= parent.object.id %>">
+        <%= fa_icon 'check' %>
       </button>
-    <% end %>
 
-    <%#= link_to_remove_association f, class: 'remove-tag btn btn-warning',
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-    <%# end %>
+        <%= fa_icon "minus" %>
+      <% end %>
+    <% else %>
+      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object%>
+    <% end %>
   </td>
 </tr>

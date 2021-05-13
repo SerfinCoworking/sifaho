@@ -17,6 +17,7 @@ $(document).on('turbolinks:load', function(e){
       const productId = $(tr).find('input[type="hidden"].product-id').first().val();
       const productQuantity = $(tr).find('input.product-quantity').first().val();
       const productObservation = $(tr).find('textarea.product-observartion').first().val();
+      $(tr).attr('id', "child-"+productId)
       if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
 
         $.ajax({

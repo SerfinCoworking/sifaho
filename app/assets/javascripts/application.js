@@ -132,15 +132,6 @@ $(document).on('turbolinks:load', function() {
 });
 
 $(document).on('turbolinks:load', function() {
-
-  /* $("#internal_order_since_date , #internal_order_to_date, #external_order_since_date, #external_order_to_date, #report_since_date, #report_to_date").datetimepicker({
-    format: 'DD/MM/YYYY',
-    locale: 'es',
-    icons: {
-      time: "far fa-clock",
-    }
-  }); */
-
   
   /* new version */
   $('[data-toggle="popover"]').popover();
@@ -155,7 +146,6 @@ $(document).on('turbolinks:load', function() {
     $(modal).find('.modal-body').text(body);
     $(modal).find('.btn[data-method="delete"]').attr('href', href);
     $(modal).modal('toggle');
-    
   });
 
   // Inicializamos todos los switch buttons

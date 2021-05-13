@@ -5,11 +5,16 @@
     "data-select-lot-url" => find_order_product_lots_url,
     "data-order-name" => order.model_name.name,
     "data-order-id" => order.id,
-    "data-order-product-id" => f.object.id do %>
-    <% if f.object.order_prod_lot_stocks.present? %>
-      Seleccionados <%= f.object.order_prod_lot_stocks.count %> 
+    "data-order-product-id" => f_object.id,
+    title: 'Seleccionar Lotes', data: { toggle: 'tooltip', placement: 'top' } do %>
+    <% if f_object.order_prod_lot_stocks.present? %>
+      Seleccionados <%= f_object.order_prod_lot_stocks.count %> 
     <% else %>
       <%= fa_icon "barcode" %> Seleccionar lote
     <% end %>
   <% end %>
 </div>
+
+<button type="button" class="btn btn-warning delete-item" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
+  <%= fa_icon "minus" %>
+</button>
