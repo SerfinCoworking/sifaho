@@ -62,4 +62,8 @@
 
 <% content_for :modal do %>
   <%= render "shared/modals/lot_selection_dialog" %>
+  
+  <%# if policy(object).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <%#end%>
 <% end %>

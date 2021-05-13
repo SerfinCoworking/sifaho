@@ -61,24 +61,24 @@ class InpatientPrescriptionProductsController < ApplicationController
   def destroy
     @inpatient_prescription_product.destroy
     respond_to do |format|
-      format.html { redirect_to inpatient_prescription_products_url, notice: 'Inpatient prescription product was successfully destroyed.' }
-      format.json { head :no_content }
+      flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha eliminado correctamente."
+      format.js
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_inpatient_prescription_product
-      @inpatient_prescription_product = InpatientPrescriptionProduct.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_inpatient_prescription_product
+    @inpatient_prescription_product = InpatientPrescriptionProduct.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def inpatient_prescription_product_params
-      params.require(:inpatient_prescription_product).permit(
-        :inpatient_prescription_id, :product_id, :dose_quantity, :interval, :status, :observation, :dispensed_by_id)
-    end
-    
-    def inpatient_prescription_product_ajax_params
-      params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :observation)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def inpatient_prescription_product_params
+    params.require(:inpatient_prescription_product).permit(
+      :inpatient_prescription_id, :product_id, :dose_quantity, :interval, :status, :observation, :dispensed_by_id)
+  end
+
+  def inpatient_prescription_product_ajax_params
+    params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :observation)
+  end
 end

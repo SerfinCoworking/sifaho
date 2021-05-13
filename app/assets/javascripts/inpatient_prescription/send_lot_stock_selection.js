@@ -1,16 +1,49 @@
 $(document).on('turbolinks:load', function(e){
 
   if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery'].includes(_PAGE.action))) ) return false;
+  initEvents();
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
-    // initEvents();
-    $('button.select-lot-btn').on('click', function(e) {
+    initEvents();
+
+    // Guarda la fila del producto seleccionado
+    // Valida que tenga almenos un producto seleccionado
+    // y que tenga una cantidad por dosis
+    $('button.btn-ipp-save').on('click', function(e){
+      const url = $(e.target).attr('data-url');
+      const urlType = $(e.target).attr('data-url-type');
+      const tr = $(e.target).closest('tr');
+      const parentId = $(e.target).attr('data-parent-id');
+      const productId = $(tr).find('input[type="hidden"].product-id').first().val();
+      const productQuantity = $(tr).find('input.product-quantity').first().val();
+      const productObservation = $(tr).find('textarea.product-observartion').first().val();
+      if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
+
+        $.ajax({
+          url: url,
+          method: urlType,
+          dataType: "script",
+          data: {
+            inpatient_prescription_product: {
+              parent_id: parentId,
+              product_id: productId,
+              quantity: productQuantity,
+              observation: productObservation
+            }
+          }
+        });
+      }
+    });
+  });
+
+  function initEvents(){
+    $('button.btn-select-lot-stock').on('click', function(e) {
+      e.stopPropagation();
       const urlFindLots = $(e.target).attr("data-select-lot-url");
       const orderName = $(e.target).attr("data-order-name");
       const orderId = $(e.target).attr("data-order-id");
       const orderProductId = $(e.target).attr("data-order-product-id");
-      const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first();
-
+      const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first().val();
       $.ajax({
         url: urlFindLots,
         method: 'GET',
@@ -65,34 +98,7 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
-
-    $('button.btn-ipp-save').on('click', function(e){
-      const url = $(e.target).attr('data-url');
-      const urlType = $(e.target).attr('data-url-type');
-      const tr = $(e.target).closest('tr');
-      const parentId = $(e.target).attr('data-parent-id');
-      const productId = $(tr).find('input[type="hidden"].product-id').first().val();
-      const productQuantity = $(tr).find('input.product-quantity').first().val();
-      const productObservation = $(tr).find('textarea.product-observartion').first().val();
-      console.log(productObservation, "asd");
-      if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
-
-        $.ajax({
-          url: url,
-          method: urlType,
-          dataType: "script",
-          data: {
-            inpatient_prescription_product: {
-              parent_id: parentId,
-              product_id: productId,
-              quantity: productQuantity,
-              observation: productObservation
-            }
-          }
-        });
-      }
-    });
-  });
+  }// fin initEvents
 
 
   $("button[type='submit']").on('click', function(e){

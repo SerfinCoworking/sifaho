@@ -1,4 +1,4 @@
-<tr class="nested-fields">
+<tr class="nested-fields" id="child-<%= f.object.id %>">
   <!-- Código del producto -->
   <td>
     <div class="custom-input-group">
@@ -61,7 +61,8 @@
       input_html: {
         class: 'stock-quantity input-sm',
         size: 10,
-        placeholder: "0"
+        placeholder: "0",
+        value: (f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0)
       } 
     %> 
   </td>
@@ -102,11 +103,14 @@
       <%# end %>
     <% else %>
       <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f: f%>
-    <% end %>
-  
-    <%= link_to_remove_association f, class: 'remove-tag btn btn-warning',
-        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+
+      <button type="button" class="btn btn-warning delete-item" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f.object.id) %>">
         <%= fa_icon "minus" %>
+      </button>
     <% end %>
+
+    <%#= link_to_remove_association f, class: 'remove-tag btn btn-warning',
+        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+    <%# end %>
   </td>
 </tr>
