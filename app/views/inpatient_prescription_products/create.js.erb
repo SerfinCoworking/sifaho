@@ -1,6 +1,5 @@
 $("#child-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
-
-$('button.btn-select-lot-stock').on('click', function(e) {
+$("#child-<%= @inpatient_prescription_product.product.id %>").find('button.btn-select-lot-stock').first().on('click', function(e) {
   e.stopPropagation();
   const urlFindLots = $(e.target).attr("data-select-lot-url");
   const orderName = $(e.target).attr("data-order-name");
