@@ -1,3 +1,6 @@
 <%= render 'shared/flash_message' %>
 
-$('#child-<%= @inpatient_prescription_product.product.id %>').fadeOut(500);
+$('#child-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
+  const target = $('#child-<%= @inpatient_prescription_product.product.id %>');
+  $(target).remove();
+});
