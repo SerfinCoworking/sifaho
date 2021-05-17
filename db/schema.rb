@@ -472,16 +472,19 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
 
   create_table "inpatient_prescription_products", force: :cascade do |t|
     t.bigint "inpatient_prescription_id"
+    t.bigint "parent_id"
     t.bigint "product_id"
     t.integer "dose_quantity"
+    t.integer "quantity"
     t.integer "interval"
     t.integer "dose_total"
     t.integer "status"
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["inpatient_prescription_id", "product_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
+    t.index ["inpatient_prescription_id", "product_id", "parent_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
     t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
+    t.index ["parent_id"], name: "index_inpatient_prescription_products_on_parent_id"
     t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
   end
 
