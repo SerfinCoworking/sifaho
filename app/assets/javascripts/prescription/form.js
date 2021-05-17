@@ -78,16 +78,16 @@ $(document).on('turbolinks:load', function(e){
             // viene ubicacion
             if(ui.item.data.direccion[0].ubicacion){
               // viene localidad
-              if(ui.item.data.direccion[0].ubicacion.localidad){  
+              if(ui.item.data.direccion[0].ubicacion.localidad && ui.item.data.direccion[0].ubicacion.localidad.nombre){  
                 $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad.nombre);
               }
               // viene provincia
-              if(ui.item.data.direccion[0].ubicacion.provincia){
+              if(ui.item.data.direccion[0].ubicacion.provincia && ui.item.data.direccion[0].ubicacion.provincia.nombre){
                 $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
               }
               // viene pais
-              if(ui.item.data.direccion[0].ubicacion.pais){
-                $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
+              if(ui.item.data.direccion[0].ubicacion.pais && ui.item.data.direccion[0].ubicacion.pais.nombre){
+                // $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
                 $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais.nombre);
               }
             }
