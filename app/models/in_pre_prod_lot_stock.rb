@@ -13,8 +13,8 @@ class InPreProdLotStock < ApplicationRecord
   #   message: "La cantidad seleccionada debe ser menor o igual a %{count}"
   # }
   # validates :available_quantity, :numericality => { :only_integer => true, :greater_than => 0 }
-  validate :quantity_greater_than_0 
-  validate :quantity_less_than_stock 
+  validate :quantity_greater_than_0
+  validate :quantity_less_than_stock
   validates :lot_stock, presence: true
 
   accepts_nested_attributes_for :lot_stock,

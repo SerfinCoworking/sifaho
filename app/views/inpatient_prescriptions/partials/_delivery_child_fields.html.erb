@@ -71,15 +71,16 @@
   <td>
     <%= f.input :quantity, label: false, required: true, input_html: {
       class: 'product-quantity',
-      value: f.object.quantity.present? ? f.object.quantity : 0
+      value: f.object.quantity.present? ? f.object.quantity : 0,
+      data: {'product-dose-to-delivery': parent.object.dose_total, 'product-total-selected-quantity': (f.object.order_prod_lot_stocks.any? ? f.object.order_prod_lot_stocks.sum(:reserved_quantity) : 0) }
     } %>
   </td>
 
   <td>
-    <%= f.input :total_fake, label: false, required: false, disabled: true, input_html: {
+    <%= f.input :dose_total, label: false, readonly: true, input_html: {
       class: 'product-dose-total',
-      value: 0
-    }%>
+      value: f.object.dose_total.present? ? f.object.dose_total : 0
+    } %>
   </td>
   
   <td>

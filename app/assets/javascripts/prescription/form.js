@@ -112,7 +112,7 @@ $(document).on('turbolinks:load', function(e){
         $(image).addClass("patient-avatar");
         $("#patient-avatar").html(image);
         
-        setPatientSex(ui.item.sex);      
+        setPatientSex(ui.item.sex); 
         $("#container-more-info").addClass("show");
         $("#container-receipts-list").addClass("show");
       }else{

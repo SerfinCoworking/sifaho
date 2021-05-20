@@ -1,4 +1,4 @@
-<div class="mb-2">
+<div class="mb-2" id="select-lot-header" data-tr-id="#child-<%= @order_product.product.id %>">
   <h5> Cantidad seleccionada:
     <span id="qv-ref">
        <%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>

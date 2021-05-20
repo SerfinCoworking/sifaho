@@ -76,6 +76,6 @@ class InpatientPrescriptionProductsController < ApplicationController
   end
 
   def inpatient_prescription_product_ajax_params
-    params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :observation)
+    params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :dose_total, :observation)
   end
 end

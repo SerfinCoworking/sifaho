@@ -16,6 +16,7 @@ $(document).on('turbolinks:load', function(e){
       const parentId = $(e.target).attr('data-parent-id');
       const productId = $(tr).find('input[type="hidden"].product-id').first().val();
       const productQuantity = $(tr).find('input.product-quantity').first().val();
+      const productDoseTotal = $(tr).find('input.product-dose-total').first().val();
       const productObservation = $(tr).find('textarea.product-observartion').first().val();
       $(tr).attr('id', "child-"+productId)
       if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
@@ -29,6 +30,7 @@ $(document).on('turbolinks:load', function(e){
               parent_id: parentId,
               product_id: productId,
               quantity: productQuantity,
+              dose_total: productDoseTotal,
               observation: productObservation
             }
           }
