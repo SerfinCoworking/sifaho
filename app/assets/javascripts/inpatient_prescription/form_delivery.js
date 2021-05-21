@@ -32,7 +32,7 @@ $(document).on('turbolinks:load', function(e){
     trs.map((index, tr) => {
 
       const quantity = $(tr).find("input.product-quantity").attr('data-product-total-selected-quantity');
-      const toDelivery = $(tr).find("input.product-quantity").first().attr('data-product-dose-to-delivery');
+      const toDelivery = $(tr).find("input.product-dose-total").first().val();
 
       setLotSelectionProgress(tr, quantity, toDelivery);
     });
@@ -53,7 +53,6 @@ function setLotSelectionProgress(targetRow, selectedQuantity, toDelivery){
     $(targetRow).find('button.btn-select-lot-stock').first().removeAttr('disabled');
     const quantityPercent = (selectedQuantity == 0 || toDelivery == 0) ? 0 : (selectedQuantity * 100 / toDelivery); //calc width percentage progress
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
-
 
     $(targetRow).find('button.btn-select-lot-stock').siblings().first().css({'width': (quantityPercent + '%')});
     
