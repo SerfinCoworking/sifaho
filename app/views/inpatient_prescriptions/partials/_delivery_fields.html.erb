@@ -9,8 +9,8 @@
     <%= f.object.dose_total %>
   </td>
   
-  <td>
-    <%= f.input :to_delivery, 
+  <!--td-->
+    <%#= f.input :to_delivery, 
       label: false,
       placeholder: 'A entregar',
       input_html: { 
@@ -18,7 +18,7 @@
         value: f.object.dose_total
       }
     %>
-  </td>
+  <!--/td-->
 
   <td>
     <%= link_to_add_association f, 
@@ -44,8 +44,8 @@
           <th>Code</th>
           <th>Producto</th>
           <th>Stock</th>
-          <th>Cantidad por dosis</th>
-          <th>Total</th>
+          <!--th>Cantidad por dosis</th-->
+          <th>A Entregar</th>
           <th>Descripción</th>
           <th></th>
         </tr>

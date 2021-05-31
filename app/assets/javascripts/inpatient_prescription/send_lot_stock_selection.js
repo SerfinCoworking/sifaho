@@ -10,16 +10,17 @@ $(document).on('turbolinks:load', function(e){
     // Valida que tenga almenos un producto seleccionado
     // y que tenga una cantidad por dosis
     $('button.btn-ipp-save').on('click', function(e){
-      const url = $(e.target).attr('data-url');
-      const urlType = $(e.target).attr('data-url-type');
-      const tr = $(e.target).closest('tr');
-      const parentId = $(e.target).attr('data-parent-id');
+      updateOrderProduct(e.target);
+     /*  const tr = $(e.target).closest('tr');
+      const url = $(tr).attr('data-url');
+      const urlType = $(tr).attr('data-url-type');
+      const parentId = $(tr).attr('data-parent-id');
       const productId = $(tr).find('input[type="hidden"].product-id').first().val();
-      const productQuantity = $(tr).find('input.product-quantity').first().val();
+      // const productQuantity = $(tr).find('input.product-quantity').first().val();
       const productDoseTotal = $(tr).find('input.product-dose-total').first().val();
       const productObservation = $(tr).find('textarea.product-observartion').first().val();
-      $(tr).attr('id', "child-"+productId)
-      if(typeof productId !== 'undefined' && typeof productQuantity !== 'undefined'){
+      $(tr).attr('id', "child-"+productId);
+      if(typeof productId !== 'undefined' && typeof productDoseTotal !== 'undefined'){
 
         $.ajax({
           url: url,
@@ -29,13 +30,13 @@ $(document).on('turbolinks:load', function(e){
             inpatient_prescription_product: {
               parent_id: parentId,
               product_id: productId,
-              quantity: productQuantity,
+              // quantity: productQuantity,
               dose_total: productDoseTotal,
               observation: productObservation
             }
           }
         });
-      }
+      } */
     });
   });
 
@@ -101,6 +102,33 @@ $(document).on('turbolinks:load', function(e){
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
       }
     });
+
+    /* habilitar edicion */
+    $(".btn-ipp-edit").on('click', function(e){
+      $(".order-product-inputs").removeAttr("readonly");
+      $(".edit-btn-combo").fadeIn();
+      $(".saved-btn-combo").fadeOut();
+    });
+    
+    /* Cancelar edicion */
+    $(".cancel-item").on('click', function(e){
+      $(".order-product-inputs").attr("readonly", true);
+      $(".edit-btn-combo").fadeOut();
+      $(".saved-btn-combo").fadeIn();
+      const url = $(e.target).attr('data-url');
+      const urlType = $(e.target).attr('data-url-type');
+      $.ajax({
+        url: url,
+        method: urlType,
+        dataType: "script",
+      });
+    });
+    
+    /* Guardar modificaciones */
+    $(".update-item").on('click', function(e){
+      updateOrderProduct(e.target)
+    });
+
   }// fin initEvents
 
 
@@ -136,4 +164,33 @@ $(document).on('turbolinks:load', function(e){
       tr.find('div.lot-stocks-hidden').html('');
     }
   };
+
+  function updateOrderProduct(target){
+    const url = $(target).attr('data-url');
+    const urlType = $(target).attr('data-url-type');
+    const parentId = $(target).attr('data-parent-id');
+    const tr = $(target).closest('tr');
+    const productId = $(tr).find('input[type="hidden"].product-id').first().val();
+    const productDoseTotal = $(tr).find('input.product-dose-total').first().val();
+    const productObservation = $(tr).find('textarea.product-observartion').first().val();
+    $(tr).attr('id', "child-"+productId);
+    if(typeof productId !== 'undefined' && typeof productDoseTotal !== 'undefined'){
+      console.log(productId, productDoseTotal, "===================0debug");
+
+      $.ajax({
+        url: url,
+        method: urlType,
+        dataType: "script",
+        data: {
+          inpatient_prescription_product: {
+            parent_id: parentId,
+            product_id: productId,
+            dose_total: productDoseTotal,
+            observation: productObservation
+          }
+        }
+      });
+    }
+  }
+
 });

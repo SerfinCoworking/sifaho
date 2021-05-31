@@ -43,7 +43,8 @@ class InpatientPrescriptionProduct < ApplicationRecord
                                 reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
                                 allow_destroy: true
 
-  scope :only_original, -> { where(parent_id: :nil) }
+  scope :only_parents, -> { where(parent_id: :nil) }
+  scope :only_children, -> { where.not(parent_id: :nil) }
   private
 
   # Validacion: evitar duplicidad de productos en una misma orden

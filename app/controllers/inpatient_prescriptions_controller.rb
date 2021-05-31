@@ -89,25 +89,23 @@ class InpatientPrescriptionsController < ApplicationController
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
   def update_with_delivery
-    begin
-      @inpatient_prescription.update!(inpatient_prescription_lots_params)
-
-      message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha entregado correctamente."
-      notification_type = 'entregó'
-      
-      @inpatient_prescription.create_notification(current_user, notification_type)
-      format.html { redirect_to @inpatient_prescription, notice: message }
-    rescue ArgumentError => e
-      flash[:error] = e.message
-    rescue ActiveRecord::RecordInvalid
-    ensure
-      format.html { render :delivery }
+    puts "DEBUG======"
+    @inpatient_prescription.status = "dispensada"
+    respond_to do |format|
+      begin
+        @inpatient_prescription.save!
+        message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha entregado correctamente."
+        notification_type = 'entregó'
+        @inpatient_prescription.create_notification(current_user, notification_type)
+        format.html { redirect_to @inpatient_prescription, notice: message }
+      rescue ArgumentError => e
+        flash[:error] = e.message
+      ensure
+        format.html { render :delivery }
+      end
     end
   end
 
-  def set_order_product
-    @order_product = params[:order_product_id].present? ? InpatientPrescriptionProduct.find(params[:order_product_id]) : InpatientPrescriptionProduct.new
-  end
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -140,13 +138,12 @@ class InpatientPrescriptionsController < ApplicationController
 
   def inpatient_prescription_lots_params
     params.require(:inpatient_prescription).permit(
-      order_products_attributes: [
+      original_order_products_attributes: [
         :id,
-        :observation,
-        order_prod_lot_stocks_attributes: [
-          :lot_stock_id,
-          :available_quantity,
-          :_destroy
+        children_attributes: [
+          :product_id,
+          :dose_total,
+          :observation
         ]
       ]
     )

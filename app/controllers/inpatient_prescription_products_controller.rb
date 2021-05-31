@@ -29,7 +29,7 @@ class InpatientPrescriptionProductsController < ApplicationController
 
     respond_to do |format|
       if @inpatient_prescription_product.save!
-        flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha eliminado correctamente."
+        flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
         format.html { render :new }
@@ -43,12 +43,13 @@ class InpatientPrescriptionProductsController < ApplicationController
   # PATCH/PUT /inpatient_prescription_products/1.json
   def update
     respond_to do |format|
-      if @inpatient_prescription_product.update(inpatient_prescription_product_params)
-        format.html { redirect_to @inpatient_prescription_product, notice: 'Inpatient prescription product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @inpatient_prescription_product }
+      if @inpatient_prescription_product.update!(inpatient_prescription_product_ajax_params)
+        flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

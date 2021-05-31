@@ -1,20 +1,42 @@
-<div class="btn-progress">
-  <div class="bg-progress bg-info"></div>
-  <%= button_tag type: "button", 
-    class: "btn btn-select-lot-stock text-nowrap w-100 is-invalid",
-    "data-select-lot-url" => find_order_product_lots_url,
-    "data-order-name" => order.model_name.name,
-    "data-order-id" => order.id,
-    "data-order-product-id" => f_object.id,
-    title: 'Seleccionar Lotes', data: { toggle: 'tooltip', placement: 'top' } do %>
-    <% if f_object.order_prod_lot_stocks.present? %>
-      Seleccionados <%= f_object.order_prod_lot_stocks.count %> 
-    <% else %>
-      <%= fa_icon "barcode" %> Seleccionar lote
-    <% end %>
-  <% end %>
-</div>
 
-<button type="button" class="btn btn-warning delete-item" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
-  <%= fa_icon "minus" %>
+<button type="button" class="btn btn-md btn-select-lot-stock btn-primary saved-btn-combo" 
+  data-select-lot-url="<%= find_order_product_lots_url %>" 
+  data-order-name="<%= order.model_name.name %>" 
+  data-order-id="<%= order.id %>" 
+  data-order-product-id="<%= f_object.id %>"
+  title="Seleccionar Lotes"
+  data-toggle="tooltip"
+  data-placement="top">
+  <% if f_object.order_prod_lot_stocks.present? %>
+    <%= f_object.order_prod_lot_stocks.count %> 
+  <% else %>
+    <%= fa_icon "barcode" %> 
+  <% end %>
+</button>
+
+<%# Habilita edicion %>
+<button type="button" class="btn btn-warning btn-ipp-edit saved-btn-combo" data-toggle="tooltip" data-placement="top" title="Guardar">
+  <%= fa_icon 'pen' %>
+</button>
+
+<%# Eliminar producto %>
+<button type="button" class="btn btn-danger delete-item saved-btn-combo" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
+  <%= fa_icon "trash-alt" %>
+</button>
+
+<%# Guardar modificaciones %>
+<button type="button" class="btn btn-success update-item edit-btn-combo" style="display: none;" data-toggle="tooltip" data-placement="top" data-original-title="Actualizar" data-title="Actualizar producto" data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" data-url-type="PATCH">
+  <%= fa_icon "save" %>
+</button>
+
+<%# Cancelar edicion %>
+<button type="button" class="btn btn-danger cancel-item edit-btn-combo" 
+  style="display: none;" 
+  data-toggle="tooltip" 
+  data-placement="top" 
+  data-original-title="Cancelar" 
+  data-title="Cancelar edición"
+  data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" 
+  data-url-type="GET">
+  <%= fa_icon "times" %>
 </button>

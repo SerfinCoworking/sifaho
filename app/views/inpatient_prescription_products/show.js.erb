@@ -1,0 +1,6 @@
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-code').first().val("<%= @inpatient_prescription_product.product.code %>");
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-id').first().val("<%= @inpatient_prescription_product.product.id %>");
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-name').first().val("<%= @inpatient_prescription_product.product.name %>");
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.stock-quantity').first().val("<%= current_user.sector.stock_to(@inpatient_prescription_product.product) %>");
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-dose-total').first().val("<%= @inpatient_prescription_product.dose_total %>");
+$("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-observartion').first().val("<%= @inpatient_prescription_product.observation %>");
