@@ -24,6 +24,12 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
   scope :excluding_ids, lambda { |ids|
     where(['id NOT IN (?)', ids]) if ids.any?
   }
+
+  scope :for_treatment_statuses, ->(values) do
+    return all if values.blank?
+
+    where(treatment_status: treatment_statuses.values_at(*Array(values)))
+  end
   
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_original_product_in_the_order
@@ -36,8 +42,11 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
 
   # Increment a certain quantity to attribute total_delivered_quantity
   def deliver(a_quantity)
-    total_delivered_quantity += a_quantity
-    
-    total_request_quantity >= total_delivered_quantity ? terminado! : pendiente!
+    if self.pendiente?
+      self.total_delivered_quantity += a_quantity
+      self.total_delivered_quantity < self.total_request_quantity ? pendiente! : terminado!
+    else
+      errors.add(:base, "El tratamiento de #{self.product.name} ya se ha terminado.")
+    end
   end
 end

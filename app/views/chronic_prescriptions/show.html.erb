@@ -164,10 +164,10 @@
                     <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
                   </td>
                   <td>
-                    <% progress = org_chron_pres_prod.total_request_quantity > 0 ? (org_chron_pres_prod.total_delivered_quantity * 100 / org_chron_pres_prod.total_request_quantity) : 0 %>
                     <div class="custom-progress progress bg-light position-relative">
-                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
-                      <div class="percentage-text text-black position-absolute font-weight-bold"><%=progress%>%</div>
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= delivered_percentage_ocpp(org_chron_pres_prod) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: <%= end_treatment_percentage_ocpp(org_chron_pres_prod) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                      <span class="justify-content-center d-flex position-absolute align-self-center w-100"><%= progress_label_ocpp(org_chron_pres_prod ) %></span>
                     </div>
                   </td>
                   
@@ -179,9 +179,18 @@
                     </div>
                   </td>
                   <td>
+                    <% if org_chron_pres_prod.terminado_manual? %>
+                      <a tabindex="0" class="btn btn-sm btn-light" role="button" data-toggle="popover" data-trigger="hover" \
+                        title="Terminado por <%= org_chron_pres_prod.finished_by_professional.fullname %>" \ 
+                        data-content="<%= org_chron_pres_prod.finished_observation %>">
+                        <%= fa_icon 'check' %>
+                        <%= fa_icon 'user-md' %>
+                      </a>
+                    <% end %>
+                    <!-- FINISH TREATMENT ACTION -->
                     <% if policy(org_chron_pres_prod).finish_treatment? %>
                       <%= link_to finish_treatment_chronic_prescription_path(id: @chronic_prescription.id, original_product_id: org_chron_pres_prod.id), 
-                        class: 'btn btn-sm btn-warning', remote: true do %>
+                        class: 'btn btn-sm btn-warning', remote: true, data: { toggle: 'tooltip', placement: 'top'}, title: 'Terminar tratamiento' do %>
                         <%= fa_icon 'check' %>
                       <% end %>
                     <% end %>
@@ -299,6 +308,14 @@
         class: "btn btn-warning mr-1" do %>
         <%= fa_icon "pen" %>
         Editar
+      <% end %>
+    <% end %>
+
+    <% if policy(@chronic_prescription).finish? %>
+      <%= link_to finish_chronic_prescription_path(@chronic_prescription), :"data-turbolinks" => false,
+        class: "btn btn-success" do %>
+        <%= fa_icon "check" %>
+        Finalizar
       <% end %>
     <% end %>
     

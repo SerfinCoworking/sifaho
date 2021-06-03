@@ -284,6 +284,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get :finish
       get 'finish_treatment/:original_product_id', to: 'original_chronic_prescription_products#finish_treatment', as: 'finish_treatment'
       patch 'update_treatment/:original_product_id', to: 'original_chronic_prescription_products#update_treatment', as: 'update_treatment'
     end

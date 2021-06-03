@@ -46,7 +46,6 @@ class ChronicPrescriptionProduct < ApplicationRecord
     if self.delivery_quantity.present? && self.delivery_quantity < total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados no debe superar #{self.delivery_quantity}")
     end
-    
     if self.delivery_quantity.present? && self.delivery_quantity > total_quantity
       errors.add(:quantity_lot_stock_sum, "El total de productos seleccionados debe ser igual a #{self.delivery_quantity}")
     end
@@ -89,6 +88,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
     end
   end
 
+  # Incrementamos la cantidad de cada lot stock (proveedor). Utilizado para retornar
   def increment_stock
     self.order_prod_lot_stocks.each do |cpp|
       cpp.lot_stock.increment(cpp.quantity)

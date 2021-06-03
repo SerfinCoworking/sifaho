@@ -15,8 +15,8 @@ class OriginalChronicPrescriptionProductsController < ApplicationController
     @original_product.treatment_status = 'terminado_manual'
     respond_to do |format|
       if @original_product.update(finish_treatment_params)
-        flash.now[:success] = "Se ha terminado el tratamiento de #{@original_product.product_name} correctamente."
-        format.js
+        @original_product.chronic_prescription.create_notification(current_user, "terminó tratamiento de #{@original_product.product_name}")
+        format.js { redirect_to @original_product.chronic_prescription, notice: "Se ha terminado el tratamiento de #{@original_product.product_name}" }
       else
         flash.now[:error] = "No se ha podido terminar el tratamiento de #{@original_product.product_name}."
         format.js { render :finish_treatment }

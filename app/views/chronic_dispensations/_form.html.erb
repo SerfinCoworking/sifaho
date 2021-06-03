@@ -96,14 +96,15 @@
         </tr>
         
         <%= form_chronic_dispensation.simple_fields_for :dispensation_types do |dis_type| %>
-          <tr class="bg-ocpp-light-blue">
+          <tr class="table-<%= row_status_ocpp(dis_type.object.original_chronic_prescription_product)%>">
             <td>
               <%= dis_type.object.original_chronic_prescription_product.product.name %>
             </td>
             <td>
               <div class="custom-progress progress bg-light position-relative">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-total-request="<%= dis_type.object.original_chronic_prescription_product.total_request_quantity%>" data-total-delivered="<%= dis_type.object.original_chronic_prescription_product.total_delivered_quantity%>"></div>
-                <div class="percentage-text text-black position-absolute font-weight-bold">0%</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= delivered_percentage_ocpp(dis_type.object.original_chronic_prescription_product) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-warning" role="progressbar" style="width: <%= end_treatment_percentage_ocpp(dis_type.object.original_chronic_prescription_product) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                <span class="justify-content-center d-flex position-absolute align-self-center w-100"><%= progress_label_ocpp(dis_type.object.original_chronic_prescription_product ) %></span>
               </div>
             </td>
             <td class="text-center">
@@ -113,15 +114,17 @@
               <%= dis_type.object.original_chronic_prescription_product.total_request_quantity - dis_type.object.original_chronic_prescription_product.total_delivered_quantity %>
             </td>
             <td>
+              <% if policy(dis_type.object.original_chronic_prescription_product).deliver? %>
                 <div class="form-group integer optional chronic_dispensation_dispensation_types_chronic_prescription_products_delivery_quantity">
                     <%= dis_type.input :quantity, label: false, :input_html => { class: 'deliver-quantity input-sm', value: dis_type.object.quantity.present? ? dis_type.object.quantity : dis_type.object.original_chronic_prescription_product.request_quantity } %>
                 </div>
                 <%= dis_type.input :original_chronic_prescription_product_id, :as => :hidden, :error => false, :input_html =>  { value: dis_type.object.original_chronic_prescription_product_id } %>
+              <% end %>
             </td>
             <td class="text-center">
-              <% if (dis_type.object.original_chronic_prescription_product.total_request_quantity - dis_type.object.original_chronic_prescription_product.total_delivered_quantity) > 0 %>
-                <%= link_to_add_association dis_type, 
-                  :chronic_prescription_products, 
+              <% if policy(dis_type.object.original_chronic_prescription_product).deliver? %>
+                <%= link_to_add_association dis_type,
+                  :chronic_prescription_products,
                   class: 'btn btn-primary btn-sm',
                   partial: "chronic_dispensations/partials/order_products_fields", 
                   data: {
@@ -130,6 +133,13 @@
                   render_options: {locals: { ocpp_id: dis_type.object.original_chronic_prescription_product.id, original_product_code: dis_type.object.original_chronic_prescription_product.product.code, original_product_name: dis_type.object.original_chronic_prescription_product.product.name, original_product_id: dis_type.object.original_chronic_prescription_product.product.id }} do %>
                   <%= fa_icon "plus" %>
                 <% end %>
+              <% elsif dis_type.object.original_chronic_prescription_product.terminado_manual? %>
+                <a tabindex="0" class="btn btn-sm btn-light" role="button" data-toggle="popover" data-trigger="hover" \
+                  title="Terminado por <%= dis_type.object.original_chronic_prescription_product.finished_by_professional.fullname %>" \ 
+                  data-content="<%= dis_type.object.original_chronic_prescription_product.finished_observation %>">
+                  <%= fa_icon 'check' %>
+                  <%= fa_icon 'user-md' %>
+                </a>
               <% end %>
             </td>
           </tr>

@@ -19,8 +19,8 @@ class ChronicDispensation < ApplicationRecord
   end
 
   def decrement_stock
-    self.dispensation_types.each do |dp|
-       dp.chronic_prescription_products.each do |cpp|
+    self.dispensation_types.each do |dt|
+      dt.chronic_prescription_products.each do |cpp|
         cpp.decrement_stock
       end
     end

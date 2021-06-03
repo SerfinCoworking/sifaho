@@ -172,7 +172,7 @@ class ChronicPrescription < ApplicationRecord
     #   self.pendiente!
     # end
 
-    self.create_notification(a_user, "retorno una dispensación")
+    self.create_notification(a_user, "retornó una dispensación")
   end
 
   # Returns the name of the efetor who deliver the products
@@ -190,17 +190,29 @@ class ChronicPrescription < ApplicationRecord
     self.class.model_name.human
   end
 
-  # Update status prescription based on expiry date
+  # Update status prescription based on expiry date and delivered quantity
   def update_status
     if !vencida? && Date.today > self.expiry_date
       vencida!
-    elsif sum_request_quantity <= sum_delivery_quantity
+    elsif (sum_request_quantity <= sum_delivery_quantity) || !any_product_without_dispensing?
       dispensada!
-    elsif sum_request_quantity > sum_delivery_quantity && self.dispensada?
+    elsif any_product_without_dispensing? && chronic_dispensations.count > 0
       dispensada_parcial!
     elsif chronic_dispensations.count == 0
       pendiente!
     end
+  end
+  
+  # Return true if all products are 'Terminado' or 'Terminado manual'
+  def any_product_without_dispensing?
+    return self.original_chronic_prescription_products.for_treatment_statuses(['pendiente']).present?
+  end
+
+  # Finish chronic prescription if there any product without dispense
+  def finish_by(a_user)
+    raise ArgumentError, 'Tratamientos pendientes' if any_product_without_dispensing?
+    dispensada!
+    create_notification(a_user, 'finalizó la receta')
   end
   
   private
@@ -220,4 +232,5 @@ class ChronicPrescription < ApplicationRecord
   def sum_delivery_quantity
     original_chronic_prescription_products.sum(:total_delivered_quantity)
   end
+
 end
