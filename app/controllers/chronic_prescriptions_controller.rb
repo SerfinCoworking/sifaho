@@ -134,73 +134,18 @@ class ChronicPrescriptionsController < ApplicationController
     end
   end
 
-  # def get_by_patient_id
-  #   @chronic_prescriptions = Prescription.with_patient_id(params[:term]).order(created_at: :desc).limit(10)
-  #   render json: @chronic_prescriptions.map{ |pre| { id: pre.id, order_type: pre.order_type.humanize, status: pre.status.humanize, professional: pre.professional_fullname,
-  #   supply_count: pre.quantity_ord_supply_lots.count, created_at: pre.created_at.strftime("%d/%m/%Y") } }
-  # end
-
-  # def generate_order_report(prescription)
-  #   report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf')
-
-  #   report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf'), :default => true
-    
-  #   if prescription.cronica?
-  #     supply_relations = prescription.quantity_ord_supply_lots.sin_entregar.joins(:supply).order("name")
-  #   else
-  #     supply_relations = prescription.quantity_ord_supply_lots.joins(:supply).order("name")
-  #   end
-  
-  #   supply_relations.each do |qosl|
-  #     if report.page_count == 1 && report.list.overflow?
-  #       report.start_new_page layout: :other_page do |page|
-  #       end
-  #     end
-      
-  #     report.list do |list|
-  #       list.add_row do |row|
-  #         row.values  supply_code: qosl.supply_id,
-  #                     supply_name: qosl.supply.name,
-  #                     requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-  #                     delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-  #                     lot: qosl.sector_supply_lot_lot_code,
-  #                     laboratory: qosl.sector_supply_lot_laboratory_name,
-  #                     expiry_date: qosl.sector_supply_lot_expiry_date, 
-  #                     applicant_obs: qosl.provider_observation
-  #       end
-  #     end
-      
-  #     if report.page_count == 1
-
-  #       report.page[:order_type] = prescription.order_type
-  #       report.page[:prescribed_date] = prescription.prescribed_date.strftime("%d/%m/%Y")
-  #       report.page[:expiry_date] = prescription.expiry_date.present? ? prescription.expiry_date.strftime("%d/%m/%Y") : "---"
-         
-  #       report.page[:professional_name] = prescription.professional.fullname
-  #       report.page[:professional_dni] = prescription.professional.dni
-  #       report.page[:professional_enrollment] = prescription.professional.enrollment
-  #       report.page[:professional_phone] = prescription.professional.phone
-
-  #       report.page[:patien_name] = "#{prescription.patient.first_name} #{prescription.patient.last_name}"
-  #       report.page[:patien_dni] = prescription.patient.dni
-
-  #     end
-  #   end
-    
-
-  #   report.pages.each do |page|
-  #     page[:title] = 'Receta Digital'
-  #     page[:remit_code] = prescription.remit_code
-  #     page[:date_now] = DateTime.now.strftime("%d/%m/%YY")
-  #     page[:page_count] = report.page_count
-  #     page[:sector] = current_user.sector_name
-  #     page[:establishment] = current_user.establishment_name
-  #   end
-
-  #   report.generate
-  # end
-  
-  
+  def finish
+    authorize @chronic_prescription
+    respond_to do |format|
+      begin
+        @chronic_prescription.finish_by(current_user)
+        flash[:success] = 'La receta crónica se ha finalizado correctamente.'
+      rescue ArgumentError => e
+        flash[:error] = e.message
+      end
+      format.html { redirect_to @chronic_prescription }
+    end
+  end
 
   private
     # Set prescription and patient to prescription

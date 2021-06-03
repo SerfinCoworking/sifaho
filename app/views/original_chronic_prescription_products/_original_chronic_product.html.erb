@@ -1,0 +1,50 @@
+<tr id="original_product_<%= original_product.id %>">
+  <% @stock = Stock.where(sector: current_user.sector, product: original_product.product).first %>
+  <td class="text-secondary">
+    <% if @stock.present? %>
+      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+        <%= original_product.product_code %>
+      <% end %>
+    <% else %>
+      <%= original_product.product_code %>
+    <% end %>
+  </td>
+  <td class="text-secondary">
+    <% if @stock.present? %>
+      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+        <%= original_product.product_name %>
+      <% end %>
+    <% else %>
+      <%= original_product.product_name %>
+    <% end %>
+  </td>
+  <td>
+    <%= original_product.request_quantity %> <%= original_product.product_unity_name.pluralize(original_product.request_quantity) %>
+  </td>
+  <td>
+    <%= original_product.total_delivered_quantity %> / <%= original_product.total_request_quantity %>
+  </td>
+  <td>
+    <% progress = original_product.total_request_quantity > 0 ? (original_product.total_delivered_quantity * 100 / original_product.total_request_quantity) : 0 %>
+    <div class="custom-progress progress bg-light position-relative">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= progress %>%" aria-valuenow="<%=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
+      <div class="percentage-text text-black position-absolute font-weight-bold"><%=progress%>%</div>
+    </div>
+  </td>
+  
+  <td>
+    <div class="<%= original_product.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= original_product.observation.presence %>">
+      <div class="text-truncate"  style="max-width: 13.66rem;">
+        <%= original_product.observation.presence || '---' %>
+      </div>
+    </div>
+  </td>
+  <td>
+    <% if policy(original_product).finish_treatment? %>
+      <%= link_to finish_treatment_chronic_prescription_path(id: @chronic_prescription.id, original_product_id: original_product.id), 
+        class: 'btn btn-sm btn-warning', remote: true do %>
+        <%= fa_icon 'check' %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

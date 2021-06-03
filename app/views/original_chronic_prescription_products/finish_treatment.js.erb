@@ -1,0 +1,54 @@
+// Style modal
+$('#dialog .modal-header').addClass('bg-warning');
+
+// Add the dialog title
+$('#dialog .modal-title').html("<i class='fa fa-check'></i>  Terminar tratamiento");
+
+// Render the new form
+$('#dialog .modal-body').html('<%= j render("form_remote") %>');
+
+// Add form button
+$('#dialog .modal-footer').html(
+  "<button type='button' class='btn btn-light' data-dismiss='modal'>Volver</button>"+
+  "<button type='submit' class='btn btn-primary pull-right' form='edit_original_chronic_prescription_product_<%= @original_product.id %>'> Aceptar</button>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Set focus to the first element
+$('#dialog').on('shown.bs.modal', function () {
+  $('#finished-professional').focus();
+});
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('#dialog .modal-header').removeClass('bg-warning');
+});
+
+// Función para autocompletar nombre y apellido del doctor
+$('#finished-professional').autocomplete({
+  source: $('#finished-professional').data('autocomplete-source'),
+  minLength: 2,
+  autoFocus:true,
+  open: function(){
+    setTimeout(function () {
+        $('.ui-autocomplete').css('z-index', 1100);
+    }, 0);
+  },
+  messages: {
+    noResults: function(count) {
+      $(".ui-menu-item-wrapper").html("No se encontró al médico");
+    }
+  },
+  search: function( event, ui ) {
+    $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+  },
+  select:
+  function (event, ui) {
+    $("#finished_by_professional_id").val(ui.item.id);
+  },
+  response: function(event, ui) {
+    $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
+  }
+});

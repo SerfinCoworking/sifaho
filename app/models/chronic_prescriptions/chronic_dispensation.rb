@@ -6,7 +6,7 @@ class ChronicDispensation < ApplicationRecord
   has_many :lot_stocks, :through => :order_prod_lot_stocks
   belongs_to :provider_sector, class_name: 'Sector'
 
-  enum status: { pendiente: 0, dispensada: 1}
+  enum status: { pendiente: 0, dispensada: 1 }
 
   validate :presence_of_products_into_dispensation
   validates_associated :dispensation_types
@@ -19,8 +19,8 @@ class ChronicDispensation < ApplicationRecord
   end
 
   def decrement_stock
-    self.dispensation_types.each do |dp|
-       dp.chronic_prescription_products.each do |cpp|
+    self.dispensation_types.each do |dt|
+      dt.chronic_prescription_products.each do |cpp|
         cpp.decrement_stock
       end
     end
@@ -34,26 +34,15 @@ class ChronicDispensation < ApplicationRecord
     errors.add(:presence_of_products_into_dispensation, "Debe dispensar almenos 1 insumo") unless @products > 0
   end
   
-  # Incremnta la cantidad total dispensada:
+  # Incrementa la cantidad total dispensada:
   # Sumar 1 dosis o Sumar la cantidad segun corresponda [dispensation_type]
   def dispense_prescription
-    
-    self.chronic_prescription.original_chronic_prescription_products.each do |ocpp|
-      dispensation_type = self.dispensation_types.where(original_chronic_prescription_product_id: ocpp.id).first
+    self.chronic_prescription.original_chronic_prescription_products.each do |original_product|
+      dispensation_type = self.dispensation_types.where(original_chronic_prescription_product_id: original_product.id).first
 
-      # is_original_present = self.chronic_prescription_products.where(original_chronic_prescription_product_id: ocpp.id).first
-      if dispensation_type.present?
-
-        ocpp.total_delivered_quantity += dispensation_type.quantity
-      end
-      ocpp.save!
+      original_product.deliver(dispensation_type.quantity) if dispensation_type.present?
     end
-
-    if self.chronic_prescription.pendiente?
-      self.chronic_prescription.dispensada_parcial!
-    end
-    
-    self.chronic_prescription.dispense_by
+    self.chronic_prescription.update_status
   end
 
   def return_dispensation
