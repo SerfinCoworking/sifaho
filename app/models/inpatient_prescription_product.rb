@@ -45,18 +45,32 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
   scope :only_parents, -> { where(parent_id: :nil) }
   scope :only_children, -> { where.not(parent_id: :nil) }
+
+  # Decrementamos el stock
+  # Marcamos "provista" al producto
+  # Luego se llaman a los order_prod_lot_stocks para quitar el reserved_quantity
+  def decrement_stock
+    self.status = 'provista'
+    order_prod_lot_stocks.each(&:remove_reserved_quantity)
+    save!(validate: false)
+  end
+
+  def is_child?
+    !parent_id_nil?
+  end
+
   private
 
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
-    (self.order.order_products.where.not(parent_id: nil).uniq - [self]).each do |eop|
-      if eop.product_id == self.product_id
+    (order.order_products.where.not(parent_id: nil).uniq - [self]).each do |eop|
+      if eop.product_id == product_id
         errors.add(:uniqueness_product_in_the_order, 'El producto ya se encuentra en la orden')
       end
     end
   end
 
   def parent_id_nil?
-    self.parent_id.nil?
+    parent_id.nil?
   end
 end

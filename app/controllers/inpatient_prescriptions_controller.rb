@@ -34,8 +34,8 @@ class InpatientPrescriptionsController < ApplicationController
     @inpatient_prescription.status = 'pendiente'
 
     respond_to do |format|
+      @inpatient_prescription.save!
       begin
-        @inpatient_prescription.save!
         # if(dispensing?); @inpatient_prescription.dispense_by(current_user); end
 
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
@@ -89,14 +89,10 @@ class InpatientPrescriptionsController < ApplicationController
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1
   # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
   def update_with_delivery
-    puts "DEBUG======"
-    @inpatient_prescription.status = "dispensada"
     respond_to do |format|
       begin
-        @inpatient_prescription.save!
+        @inpatient_prescription.dispensed_by(current_user)
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha entregado correctamente."
-        notification_type = 'entregó'
-        @inpatient_prescription.create_notification(current_user, notification_type)
         format.html { redirect_to @inpatient_prescription, notice: message }
       rescue ArgumentError => e
         flash[:error] = e.message

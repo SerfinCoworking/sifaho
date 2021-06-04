@@ -14,7 +14,6 @@ class InpatientPrescription < ApplicationRecord
   # belongs_to :bed
   # belongs_to :prescribed_by, class_name: 'User'
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: 'order_id'
-  
   has_many  :order_products, -> { only_children },
             dependent: :destroy,
             class_name: 'InpatientPrescriptionProduct',
@@ -50,9 +49,6 @@ class InpatientPrescription < ApplicationRecord
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
-  before_update :stock_deliver
-  # before_save :stock_deliver, :if => :available_quantity_changed?
-
   def create_notification(of_user, action_type, order_product = nil)
     InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product, action: action_type, sector: of_user.sector)
     (of_user.sector.users.uniq - [of_user]).each do |user|
@@ -63,18 +59,14 @@ class InpatientPrescription < ApplicationRecord
     end
   end
 
-  private 
-  def stock_deliver
-    # debemos actualizar el estado de la prescripcion a "dispensada"
-    # descontar la cantiadad de cada lote seleccionado: pero de su stock reservado
-    puts "DECREMENT RESERVED STOCK"
-    # self.order_products.each do |op|
-    #   op.decrement_stock
-    # end
+  # Dispensamos la entrega de medicacion a un paciente en internacion
+  # Marcamos "dispensada" parcialmente
+  # Luego se llaman los productos que aun no fueron dispensados para decrementar el stock
+  def dispensed_by(a_user)
+    self.status = 'dispensada' 
+    order_products.sin_proveer.each(&:decrement_stock)
+    save!(validate: false)
+    notification_type = 'entregó'
+    create_notification(a_user, notification_type)
   end
-  
-
-  # def available_quantity_changed?
-  #   any_new_record = self.order_products.any? {|op| op.order_prod_lot_stocks.any? {|opls| opls.new_record? }}
-  # end
 end

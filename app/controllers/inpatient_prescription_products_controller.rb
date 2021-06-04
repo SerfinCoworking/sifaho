@@ -26,6 +26,7 @@ class InpatientPrescriptionProductsController < ApplicationController
   def create
     @inpatient_prescription_product = InpatientPrescriptionProduct.new(inpatient_prescription_product_ajax_params)
     @inpatient_prescription_product.inpatient_prescription_id = params[:inpatient_prescription_id]
+    @inpatient_prescription_product.status = 'sin_proveer'
 
     respond_to do |format|
       if @inpatient_prescription_product.save!

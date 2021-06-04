@@ -13,45 +13,73 @@ class InPreProdLotStock < ApplicationRecord
   #   message: "La cantidad seleccionada debe ser menor o igual a %{count}"
   # }
   # validates :available_quantity, :numericality => { :only_integer => true, :greater_than => 0 }
-  validate :quantity_greater_than_0
-  validate :quantity_less_than_stock
+  validate :quantity_greater_than_0, unless: :order_product_is_parent?
+  validate :quantity_less_than_stock, unless: :order_product_is_parent?
   validates :lot_stock, presence: true
 
   accepts_nested_attributes_for :lot_stock,
-    reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
-    :allow_destroy => true
+                                reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
+                                allow_destroy: true
 
   before_create :reserve_quantity
-  before_update :update_reserved_quantity
-  before_destroy :remove_reserved_quantity
+  before_update :update_reserved_quantity, if: :product_is_not_dispensada?
+  before_destroy :return_reserved_quantity
 
   def lot_stock_quantity
-    return self.lot_stock.quantity
+    lot_stock.quantity
+  end
+
+  def return_reserved_quantity
+    lot_stock.enable_reserved(reserved_quantity)
+  end
+
+  # Decrementamos la cantidad reservada del stock
+  # Quitamos el reserved_quantity de la relacion
+  def remove_reserved_quantity
+    lot_stock.decrement_reserved(reserved_quantity)
+    self.reserved_quantity = 0
+    save!(validate: false)
+  end
+
+  def order_is_dispensada?
+    inpatient_prescription_product.order.dispensada?
+  end
+
+  def product_is_not_dispensada?
+    inpatient_prescription_product.sin_proveer? || inpatient_prescription_product.parcialmente_suministrada?
+  end
+
+  def order_product_is_parent?
+    inpatient_prescription_product.parent_id.nil?
   end
 
   private
-    
+
   def reserve_quantity
     self.lot_stock.reserve(self.available_quantity)
     self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
   end
-  
+
+  # Si se modifica la cantidad seleccionada del lote
+  # se debe tener en cuenta la direfencia entre cantidad disponible
+  # y cantidad reservada, para agregar o devolver stock reservado
   def update_reserved_quantity
-    quantity = self.available_quantity - self.reserved_quantity
-    quantity > 0 ? self.lot_stock.reserve(quantity) : self.lot_stock.enable_reserved(quantity.abs)
+    quantity = available_quantity - reserved_quantity
+    quantity > 0 ? lot_stock.reserve(quantity) : lot_stock.enable_reserved(quantity.abs)
     self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
   end
-  
-  def remove_reserved_quantity
-    self.lot_stock.enable_reserved(self.reserved_quantity)
-  end
-  
+
   def quantity_less_than_stock
-    stock = self.lot_stock.quantity + self.reserved_quantity
-    errors.add(:available_quantity, :less_than_or_equal_to, message: "La cantidad seleccionada debe ser menor o igual a #{stock}") unless stock >= self.available_quantity 
+    stock = lot_stock.quantity + reserved_quantity
+    if stock < available_quantity && !inpatient_prescription_product.provista?
+      errors.add(:available_quantity, :less_than_or_equal_to,
+                 message: "La cantidad seleccionada debe ser menor o igual a #{stock}")
+    end
   end
-  
+
   def quantity_greater_than_0
-    errors.add(:available_quantity, :greater_than, message: "Cantidad debe ser mayor a 0") unless self.available_quantity > 0 
+    if available_quantity.negative? && !inpatient_prescription_product.provista?
+      errors.add(:available_quantity, :greater_than, message: 'Cantidad debe ser mayor a 0')
+    end
   end
 end
