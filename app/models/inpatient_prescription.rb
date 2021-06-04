@@ -69,4 +69,14 @@ class InpatientPrescription < ApplicationRecord
     notification_type = 'entregó'
     create_notification(a_user, notification_type)
   end
+
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    professional.full_info
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    "#{patient.dni} #{patient.fullname}"
+  end
 end
