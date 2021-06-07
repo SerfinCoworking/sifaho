@@ -34,9 +34,8 @@ class InpatientPrescriptionsController < ApplicationController
     @inpatient_prescription.status = 'pendiente'
 
     respond_to do |format|
-      @inpatient_prescription.save!
       begin
-        # if(dispensing?); @inpatient_prescription.dispense_by(current_user); end
+        @inpatient_prescription.save!
 
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
         notification_type = 'creó'
@@ -119,13 +118,12 @@ class InpatientPrescriptionsController < ApplicationController
       :observation,
       :status,
       :date_prescribed,
-      order_products_attributes: [
+      parent_order_products_attributes: [
         :id,
         :product_id,
         :dose_quantity,
         :interval,
         :dose_total,
-        :status,
         :observation,
         :_destroy
       ]

@@ -20,15 +20,12 @@ class InpatientPrescription < ApplicationRecord
             foreign_key: 'inpatient_prescription_id',
             inverse_of: 'order'
 
-  has_many  :original_order_products, -> { only_parents },
+  has_many  :parent_order_products, -> { only_parents },
             dependent: :destroy,
             class_name: 'InpatientPrescriptionProduct',
             foreign_key: 'inpatient_prescription_id',
             inverse_of: 'order'
 
-  # has_many :in_pre_prod_lot_stocks, through: :order_products, inverse_of: 'inpatient_prescription'
-  # has_many :lot_stocks, :through => :order_products
-  # has_many :lots, :through => :lot_stocks
   has_many :products, through: :order_products
 
   # Validaciones
@@ -42,7 +39,7 @@ class InpatientPrescription < ApplicationRecord
   accepts_nested_attributes_for :order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
-  accepts_nested_attributes_for :original_order_products,
+  accepts_nested_attributes_for :parent_order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
 
