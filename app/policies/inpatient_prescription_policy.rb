@@ -16,27 +16,24 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
   end  
   
   def edit?
-    # if (record.pendiente? || record.dispensada_parcial?) && (DateTime.now.to_time < record.expiry_date)
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
-    # end
-  end
-  
-  def edit_dispense?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
-  end
-
-  def update?
-    edit?
-  end
-  
-  def dispense_new?
-    if record.pendiente? || record.dispensada_parcial?
+    if record.pendiente?
+      # && (DateTime.now.to_time < record.expiry_date)
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end
   
-  def dispense?
-    dispense_new?
+  def update?
+    edit?
+  end
+
+  def delivery?
+    if record.pendiente? || record.parcialmente_dispensada?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+    end
+  end
+  
+  def update_with_delivery?
+    delivery?
   end
   
   def return_dispensation?
