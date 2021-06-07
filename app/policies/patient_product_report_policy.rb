@@ -1,6 +1,6 @@
 class PatientProductReportPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :reportes_provincia)
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
   end
 
   def show?
@@ -8,7 +8,7 @@ class PatientProductReportPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:admin, :reportes_provincia)
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
   end
 
   def new?
