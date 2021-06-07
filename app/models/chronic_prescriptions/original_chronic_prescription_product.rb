@@ -49,4 +49,11 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
       errors.add(:base, "El tratamiento de #{self.product.name} ya se ha terminado.")
     end
   end
+
+  def return(a_quantity)
+    self.total_delivered_quantity -= a_quantity
+    unless self.terminado_manual?
+      self.total_delivered_quantity < self.total_request_quantity ? pendiente! : terminado!
+    end
+  end
 end

@@ -47,15 +47,14 @@ class ChronicDispensation < ApplicationRecord
 
   def return_dispensation
     # primero actualizamos los totales de la dosis de cada producto original recetado
-    self.chronic_prescription.original_chronic_prescription_products.each do |ocpp|
+    self.chronic_prescription.original_chronic_prescription_products.each do |original_product|
       self.dispensation_types.each do |dp|
-        # Retornamos la cantidad 
-        is_original_present = dp.chronic_prescription_products.where(original_chronic_prescription_product_id: ocpp.id).first
-        if is_original_present.present?
-          ocpp.total_delivered_quantity -= dp.quantity
-        end
+        # Retornamos la cantidad
+        is_original_present = dp.chronic_prescription_products.where(original_chronic_prescription_product_id: original_product.id).first
+
+        original_product.return(dp.quantity) if is_original_present.present?
       end
-      ocpp.save!
+      original_product.save!
     end
     
     self.dispensation_types.each do |dt| 
