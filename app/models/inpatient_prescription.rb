@@ -62,8 +62,8 @@ class InpatientPrescription < ApplicationRecord
   # Marcamos "dispensada" parcialmente
   # Luego se llaman los productos que aun no fueron dispensados para decrementar el stock
   def dispensed_by(a_user)
-    self.status = 'dispensada' 
-    order_products.sin_proveer.each(&:decrement_stock)
+    parent_order_products.sin_proveer.each(&:decrement_stock)
+    self.status = parent_order_products.sin_proveer.any? ? 'parcialmente_dispensada' : 'dispensada'
     save!(validate: false)
     notification_type = 'entregó'
     create_notification(a_user, notification_type)

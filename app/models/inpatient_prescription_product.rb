@@ -51,9 +51,12 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Marcamos "provista" al producto
   # Luego se llaman a los order_prod_lot_stocks para quitar el reserved_quantity
   def decrement_stock
+    children.each(&:decrement_reserved_stock)
+  end
+
+  def decrement_reserved_stock
     parent.update!(status: :provista) if order_prod_lot_stocks.count.positive?
     order_prod_lot_stocks.each(&:remove_reserved_quantity)
-    # save!(validate: false)
   end
 
   private

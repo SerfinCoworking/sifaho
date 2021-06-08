@@ -42,10 +42,6 @@ class InPreProdLotStock < ApplicationRecord
     save!(validate: false)
   end
 
-  def order_is_dispensada?
-    inpatient_prescription_product.order.dispensada?
-  end
-
   def product_is_not_dispensada?
     inpatient_prescription_product.parent.sin_proveer? || inpatient_prescription_product.parent.parcialmente_suministrada?
   end
@@ -77,8 +73,8 @@ class InPreProdLotStock < ApplicationRecord
                  message: "La cantidad seleccionada debe ser menor o igual a #{stock}")
     end
   end
-    
-    def quantity_greater_than_0
+
+  def quantity_greater_than_0
     if available_quantity.negative? && !inpatient_prescription_product.parent.provista?
       errors.add(:available_quantity, :greater_than, message: 'Cantidad debe ser mayor a 0')
     end
