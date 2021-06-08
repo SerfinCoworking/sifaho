@@ -17,7 +17,7 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions/new
   def new
     @inpatient_prescription = InpatientPrescription.new
-    @inpatient_prescription.order_products.build
+    @inpatient_prescription.parent_order_products.build
     @inpatients = Patient.all.limit(10)
   end
 
@@ -47,7 +47,7 @@ class InpatientPrescriptionsController < ApplicationController
         flash[:error] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @inpatient_prescription.order_products || @inpatient_prescription.order_products.build
+        @inpatient_prescription.parent_order_products || @inpatient_prescription.parent_order_products.build
         @inpatients = Patient.all.limit(10)
         format.html { render :new }
       end

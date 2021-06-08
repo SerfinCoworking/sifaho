@@ -22,13 +22,14 @@ class InpatientPrescriptionProduct < ApplicationRecord
   has_many :children, class_name: 'InpatientPrescriptionProduct', foreign_key: :parent_id
 
   # Validaciones
-  validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :parent_id_nil?
+  validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :parent?
   validates_presence_of :product_id
   # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"},
   # if: :is_proveedor_aceptado_and_quantity_greater_than_0?
 
   validates_associated :order_prod_lot_stocks
-  validate :uniqueness_product_in_the_order
+  validate :uniqueness_parent_product_in_the_order, if: :parent?
+  validate :uniqueness_child_product_in_the_order, if: :not_parent?
 
   delegate :code, :name, to: :product, prefix: :product
 
@@ -50,27 +51,37 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Marcamos "provista" al producto
   # Luego se llaman a los order_prod_lot_stocks para quitar el reserved_quantity
   def decrement_stock
-    self.status = 'provista'
+    parent.update!(status: :provista) if order_prod_lot_stocks.count.positive?
     order_prod_lot_stocks.each(&:remove_reserved_quantity)
-    save!(validate: false)
-  end
-
-  def is_child?
-    !parent_id_nil?
+    # save!(validate: false)
   end
 
   private
 
-  # Validacion: evitar duplicidad de productos en una misma orden
-  def uniqueness_product_in_the_order
-    (order.order_products.where.not(parent_id: nil).uniq - [self]).each do |eop|
+  # Validacion: evitar duplicidad de productos padres en una misma orden
+  def uniqueness_parent_product_in_the_order
+    (order.parent_order_products.uniq - [self]).each do |eop|
       if eop.product_id == product_id
-        errors.add(:uniqueness_product_in_the_order, 'El producto ya se encuentra en la orden')
+        errors.add(:uniqueness_parent_product_in_the_order, 'El producto ya se encuentra en la orden')
       end
     end
   end
 
-  def parent_id_nil?
-    parent_id.nil?
+  # Validacion: evitar duplicidad de productos hijos en una misma orden
+  def uniqueness_child_product_in_the_order
+    (order.order_products.uniq - [self]).each do |eop|
+      if eop.product_id == product_id
+        errors.add(:uniqueness_child_product_in_the_order, 'El producto ya se encuentra en la entrega')
+      end
+    end
   end
+
+  def not_parent?
+    !parent?
+  end
+
+  def parent?
+    parent.nil?
+  end
+  
 end

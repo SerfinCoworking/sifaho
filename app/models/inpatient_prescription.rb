@@ -46,6 +46,8 @@ class InpatientPrescription < ApplicationRecord
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
+  after_create :set_parent_products_status
+
   def create_notification(of_user, action_type, order_product = nil)
     InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product, action: action_type, sector: of_user.sector)
     (of_user.sector.users.uniq - [of_user]).each do |user|
@@ -75,5 +77,11 @@ class InpatientPrescription < ApplicationRecord
   # Returns the name of the efetor who receive the products
   def destiny_name
     "#{patient.dni} #{patient.fullname}"
+  end
+
+  private
+
+  def set_parent_products_status
+    parent_order_products.each(&:sin_proveer!)
   end
 end
