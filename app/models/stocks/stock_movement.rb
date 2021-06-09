@@ -9,7 +9,7 @@ class StockMovement < ApplicationRecord
   has_one :product, through: :lot_stock
 
   # Delegations
-  delegate :destiny_name, :origin_name, :status, :human_name, to: :order, prefix: :order
+  delegate :destiny_name, :origin_name, :status, :human_name, to: :order, prefix: :order, allow_nil: true
 
 
   filterrific(
