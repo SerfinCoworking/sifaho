@@ -62,7 +62,9 @@ class InPreProdLotStock < ApplicationRecord
   # y cantidad reservada, para agregar o devolver stock reservado
   def update_reserved_quantity
     quantity = available_quantity - reserved_quantity
-    quantity > 0 ? lot_stock.reserve(quantity) : lot_stock.enable_reserved(quantity.abs)
+    quantity.positive? ? lot_stock.reserve(quantity) : lot_stock.enable_reserved(quantity.abs)
+    puts quantity
+    puts "DEBUG ===========================".colorize(background: :red)
     self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
   end
 

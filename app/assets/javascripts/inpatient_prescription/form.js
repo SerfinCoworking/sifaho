@@ -69,48 +69,55 @@ $(document).on('turbolinks:load', function(e){
   
   // set expiry date calendar format
   function initEvents(){
+    
     // autocomplete codigo de producto
-    $('.product-code').autocomplete({
-      source: $('.product-code').attr('data-autocomplete-source'),
-      minLength: 1,
-      autoFocus: true,
-      messages: {
-        noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró el código de insumo");
+    $('.product-code').on('keydown', function(e){
+      e.stopPropagation();
+    
+      $(e.target).autocomplete({
+        source: $(e.target).attr('data-autocomplete-source'),
+        minLength: 1,
+        autoFocus: true,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("No se encontró el código de insumo");
+          }
+        },
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
+        select: function (event, ui) { 
+          onChangeOnSelectAutoCProductCode(event.target, ui.item);
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      select: function (event, ui) { 
-        onChangeOnSelectAutoCProductCode(event.target, ui.item);
-      },
-      response: function(event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      }
+      });
     });
 
-    // Función para autocompletar y buscar el insumo
-    $('.product-name').autocomplete({
-      source: $('.product-name').attr('data-autocomplete-source'),
-      minLength: 1,
-      autoFocus: true,
-      messages: {
-        noResults: function(count) {
-          $(".ui-menu-item-wrapper").html("No se encontró el noombre del insumo");
+    $('.product-name').on('keydown', function(e){
+      // Función para autocompletar y buscar el insumo
+      $(e.target).autocomplete({
+        source: $(e.target).attr('data-autocomplete-source'),
+        minLength: 1,
+        autoFocus: true,
+        messages: {
+          noResults: function(count) {
+            $(".ui-menu-item-wrapper").html("No se encontró el noombre del insumo");
+          }
+        },
+        search: function( event, ui ) {
+          $(event.target).parent().siblings('.with-loading').first().addClass('visible');
+        },
+        select: function (event, ui) { 
+          onSelectAutoCSupplyName(event.target, ui.item);
+          const tr = $(event.target).closest(".nested-fields");
+          tr.find("input.request-quantity").focus(); // changes focus to quantity input
+        },
+        response: function(event, ui) {
+          $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
         }
-      },
-      search: function( event, ui ) {
-        $(event.target).parent().siblings('.with-loading').first().addClass('visible');
-      },
-      select: function (event, ui) { 
-        onSelectAutoCSupplyName(event.target, ui.item);
-        const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.request-quantity").focus(); // changes focus to quantity input
-      },
-      response: function(event, ui) {
-        $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
-      }
+      });
     });
     
     calcTotalDoseEvent();

@@ -1,7 +1,7 @@
 <tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
   <!-- Código del producto -->
   <td>
-    <% if policy(f.object).edit_product? %>
+    <% if policy(f.object).edit_parent_product? %>
       <div class="custom-input-group">
         <div class="form-group fake optional products_product_id_fake">
           <input type="text" 
@@ -42,7 +42,7 @@
 
   <!-- Nombre de Producto -->
   <td>
-    <% if policy(f.object).edit_product? %>
+    <% if policy(f.object).edit_parent_product? %>
       <div class="custom-input-group">
         <div class="form-group fake optional products_product_id_fake">
           <input type="text" 
