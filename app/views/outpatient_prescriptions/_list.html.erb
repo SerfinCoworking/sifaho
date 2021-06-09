@@ -31,10 +31,18 @@
           Recetas <span class="badge badge-secondary"><%= @outpatient_prescriptions.count %></span>
         </div>
         <div>
-          Pendientes <span class="badge badge-secondary"><%= @outpatient_prescriptions.pendiente.count %></span>
+          <%= link_to outpatient_prescriptions_path(filterrific: {:for_statuses => ['pendiente']}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver recetas pendientes", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            Pendientes <span class="badge badge-secondary"><%= @outpatient_prescriptions.pendiente.count %></span>
+          <% end %>
         </div>
         <div>
-          Dispensadas <span class="badge badge-success"><%= @outpatient_prescriptions.dispensada.count %></span>
+          <%= link_to outpatient_prescriptions_path(filterrific: {:for_statuses => ['dispensada']}), 
+            class: 'tn btn-link text-dark text-left p-0',
+            title: "Ver recetas dispensadas", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+            Dispensadas <span class="badge badge-success"><%= @outpatient_prescriptions.dispensada.count %></span>
+          <% end %>
         </div>
       </div>
       <div class="col-2 d-flex justify-content-end align-items-center">
