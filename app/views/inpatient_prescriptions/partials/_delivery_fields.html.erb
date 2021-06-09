@@ -9,30 +9,20 @@
     <%= f.object.dose_total %>
   </td>
   
-  <!--td-->
-    <%#= f.input :to_delivery, 
-      label: false,
-      placeholder: 'A entregar',
-      input_html: { 
-        class: 'input-sm to-delivery',
-        value: f.object.dose_total
-      }
-    %>
-  <!--/td-->
-
   <td>
-    <%= link_to_add_association f, 
-    :children, 
-    class: 'btn btn-primary btn-sm',
-    partial: "inpatient_prescriptions/partials/delivery_child_fields", 
-    render_options: {
-      locals: { order: order, parent: f }
-    },
-    data: {
-      "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container-#{f.object.id}",
-      "association-insertion-method" => "append"} do %>
-      <%= fa_icon "plus" %>
-      <%# Agregar insumo %>
+    <% if policy(f.object).edit_parent_product? %>
+      <%= link_to_add_association f, 
+      :children, 
+      class: 'btn btn-primary btn-sm',
+      partial: "inpatient_prescriptions/partials/delivery_child_fields", 
+      render_options: {
+        locals: { order: order, parent: f }
+      },
+      data: {
+        "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container-#{f.object.id}",
+        "association-insertion-method" => "append"} do %>
+        <%= fa_icon "plus" %>
+      <% end %>
     <% end %>
   </td>
 </tr>
@@ -44,7 +34,6 @@
           <th>Code</th>
           <th>Producto</th>
           <th>Stock</th>
-          <!--th>Cantidad por dosis</th-->
           <th>A Entregar</th>
           <th>Descripción</th>
           <th></th>

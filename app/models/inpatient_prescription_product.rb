@@ -47,9 +47,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   scope :only_parents, -> { where(parent_id: :nil) }
   scope :only_children, -> { where.not(parent_id: :nil) }
 
-  # Decrementamos el stock
-  # Marcamos "provista" al producto
-  # Luego se llaman a los order_prod_lot_stocks para quitar el reserved_quantity
+  # Decrementamos el stock de cada producto asignado al parent
   def decrement_stock
     children.each(&:decrement_reserved_stock)
   end
@@ -86,5 +84,5 @@ class InpatientPrescriptionProduct < ApplicationRecord
   def parent?
     parent.nil?
   end
-  
+
 end

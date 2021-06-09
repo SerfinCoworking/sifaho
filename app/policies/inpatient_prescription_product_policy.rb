@@ -1,11 +1,17 @@
 class InpatientPrescriptionProductPolicy < ApplicationPolicy
-  
-  def edit_product?
-    unless record.sin_proveer?
+
+  def edit_parent_product?
+    if record.sin_proveer?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
     end
   end
-  
+
+  def edit_child_product?
+    if record.parent.sin_proveer?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+    end
+  end
+
   def remove_association?
     edit_product?
   end

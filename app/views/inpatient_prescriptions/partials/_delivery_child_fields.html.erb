@@ -101,8 +101,9 @@
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash-alt" %>
       <% end %>
-    <% else %>
-      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object%>
+       
+    <% elsif policy(f.object).edit_child_product? %>
+      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
     <% end %>
   </td>
 </tr>
