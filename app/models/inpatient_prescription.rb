@@ -47,6 +47,7 @@ class InpatientPrescription < ApplicationRecord
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
   after_create :set_parent_products_status
+  after_update :set_parent_products_status
 
   def create_notification(of_user, action_type, order_product = nil)
     InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product, action: action_type, sector: of_user.sector)
@@ -82,6 +83,6 @@ class InpatientPrescription < ApplicationRecord
   private
 
   def set_parent_products_status
-    parent_order_products.each(&:sin_proveer!)
+    parent_order_products.where(status: nil).each(&:sin_proveer!)
   end
 end
