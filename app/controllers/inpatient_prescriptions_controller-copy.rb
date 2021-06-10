@@ -6,13 +6,7 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
   def index
-    @filterrific = initialize_filterrific(
-      InpatientPrescription,
-      params[:filterrific],
-      persistence_id: false
-    ) or return
-    @inpatient_prescriptions = @filterrific.find.paginate(page: params[:page], per_page: 15)
-    # @inpatient_prescriptions = InpatientPrescription.all
+    @inpatient_prescriptions = InpatientPrescription.all
   end
 
   # GET /inpatient_prescriptions/1
@@ -35,14 +29,25 @@ class InpatientPrescriptionsController < ApplicationController
   # POST /inpatient_prescriptions
   # POST /inpatient_prescriptions.json
   def create
+    @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
+    @inpatient_prescription.remit_code = "IN#{DateTime.now.to_s(:number)}"
+    @inpatient_prescription.status = 'pendiente'
+
     respond_to do |format|
-      @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
-      @inpatient_prescription.prescribed_by = current_user
-      if @inpatient_prescription.save!
-        @inpatient_prescription.create_notification(current_user, 'creó')
+      begin
+        @inpatient_prescription.save!
+
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
+        notification_type = 'creó'
+
+        @inpatient_prescription.create_notification(current_user, notification_type)
         format.html { redirect_to delivery_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
-      else
+      rescue ArgumentError => e
+        # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
+        flash[:error] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @inpatient_prescription.parent_order_products || @inpatient_prescription.parent_order_products.build
         @inpatients = Patient.all.limit(10)
         format.html { render :new }
       end
@@ -80,6 +85,22 @@ class InpatientPrescriptionsController < ApplicationController
   def delivery
   end
 
+  # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1
+  # UPDATE_WITH_DELIVERY /inpatient_prescriptions/1.json
+  def update_with_delivery
+    respond_to do |format|
+      begin
+        @inpatient_prescription.dispensed_by(current_user)
+        message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha entregado correctamente."
+        format.html { redirect_to @inpatient_prescription, notice: message }
+      rescue ArgumentError => e
+        flash[:error] = e.message
+      ensure
+        format.html { render :delivery }
+      end
+    end
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -91,9 +112,38 @@ class InpatientPrescriptionsController < ApplicationController
   def inpatient_prescription_params
     params.require(:inpatient_prescription).permit(
       :patient_id,
+      :professional_id,
+      :bed_id,
+      :remit_code,
+      :observation,
+      :status,
       :date_prescribed,
-      :observation
+      parent_order_products_attributes: [
+        :id,
+        :product_id,
+        :dose_quantity,
+        :interval,
+        :dose_total,
+        :observation,
+        :_destroy
+      ]
     )
   end
 
+  def inpatient_prescription_lots_params
+    params.require(:inpatient_prescription).permit(
+      original_order_products_attributes: [
+        :id,
+        children_attributes: [
+          :product_id,
+          :dose_total,
+          :observation
+        ]
+      ]
+    )
+  end
+
+  def dispensing?
+    return params[:commit] == "dispensing"
+  end
 end

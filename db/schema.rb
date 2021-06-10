@@ -511,7 +511,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
 
   create_table "inpatient_prescriptions", force: :cascade do |t|
     t.bigint "patient_id"
-    t.bigint "professional_id"
+    t.bigint "prescribed_by_id"
     t.bigint "bed_id"
     t.string "remit_code"
     t.text "observation"
@@ -521,7 +521,7 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
     t.datetime "updated_at", null: false
     t.index ["bed_id"], name: "index_inpatient_prescriptions_on_bed_id"
     t.index ["patient_id"], name: "index_inpatient_prescriptions_on_patient_id"
-    t.index ["professional_id"], name: "index_inpatient_prescriptions_on_professional_id"
+    t.index ["prescribed_by_id"], name: "index_inpatient_prescriptions_on_prescribed_by_id"
   end
 
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
