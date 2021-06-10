@@ -17,9 +17,9 @@
     <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
       <%= inpatient_form.error_notification %>
         <div class="row">
-          <div class="col-6 border-right">
+          <div class="col-3 border-right">
             <%# Selector de paciente %>
-            <%= inpatient_form.input :patient_id, label: 'Paciente internado', include_blank: false,
+            <%= inpatient_form.input :patient_id, label: 'Paciente', include_blank: false,
               collection: @inpatients.map {|inpatient|  [inpatient.fullname.humanize, inpatient.id ]},
               :input_html => {
                 required: true,
@@ -30,8 +30,48 @@
                 "data-size"=>"10",
               }
             %>
-        
-
+          </div>
+          <div class="col-3 border-right">              
+            <%# Medico %>
+            <div>
+              <%# if !policy(@inpatient_prescription).edit_dispense? %>
+                <%= inpatient_form.label :professional_id do %>
+                  Médico
+                  <%= link_to new_professional_path, class: "btn btn-primary btn-sm", remote: 'true',
+                    title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+                    <%= fa_icon "plus" %>
+                  <% end %>
+                <% end %>
+                <div class="custom-input-group">
+                  <%= inpatient_form.input :professional, as: :string,
+                    label: false,
+                    placeholder: 'Matrícula | Apellido | Nombre',
+                    required: true,
+                    autocomplete: false,
+                    :input_html => {
+                      id: "professional",
+                      data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                      value: "#{ if inpatient_form.object.professional.present?; inpatient_form.object.professional.full_info; end }",
+                      size: 30
+                    }
+                  %>
+                  <%= inpatient_form.hidden_field :professional_id, id: "professional_id", value: "#{if inpatient_form.object.professional.present?; inpatient_form.object.professional.id; end }" %>
+                  <div class="with-loading">
+                    <%= fa_icon 'spinner', class: "fa-spin"%>
+                  </div>
+                </div>
+              <%# else %>
+                <!--label for="professional_fake">
+                  Médico
+                </label>
+                <div class="form-group">
+                  <input class="form-control" name="professional_fake" value="<%#= inpatient_form.object.professional.full_info %>" readonly="'readonly'">
+                </div-->
+              <%# end %>
+            </div>
+            
+          </div>
+          <div class="col-6">
             <%= inpatient_form.input :date_prescribed, label: 'Fecha recetada',
                   as: :string,
                   :placeholder => "Seleccionar fecha",
@@ -44,14 +84,12 @@
                   },
               html5: false %>
 
-            <%= inpatient_form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>        
-          
-          </div>
-          <div class="col-6">
-            Listado de últimas recetas
+            <%= inpatient_form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 1 } %>
           </div>
         </div><!-- /.row-->
 
+      <%# carga de productos originales %>
+      <%= render 'inpatient_prescriptions/partials/parent_products_table', inpatient_form: inpatient_form %>
         
       <input name="commit" id="submit-type" type="hidden">
     <% end %> <%# fin formulario %>
