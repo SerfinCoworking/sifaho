@@ -163,6 +163,11 @@ es:
         name: 'Nombre'
       receipt_product:
         provenance_id: 'procedencia'
+      bedroom:
+        name: 'Nombre'
+        location_sector: 'Ubicación'
+      bed:
+        name: 'Nombre'
 
   date:
     abbr_day_names:

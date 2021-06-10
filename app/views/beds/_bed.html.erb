@@ -1,0 +1,33 @@
+<tr id="bed_<%= bed.id %>">
+  <td><%= bed.name %></td>
+  <td><%= bed.bedroom_name %></td>
+  <td><%= bed.service_name %></td>
+  <td>
+    <span class="badge badge-<%= bed_status_label(bed) %>">
+      <%= bed.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%= bed.updated_at.strftime("%d/%m/%Y") %>
+  </td>
+  <td class="text-left actions-col">
+    <% if policy(bed).show? %>
+      <%= link_to bed_path(bed), class: 'btn btn-secondary btn-sm', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'eye' %>
+      <% end %>
+    <% end %>
+    <% if policy(bed).edit? %>
+      <%= link_to edit_bed_path(bed), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'pen' %>
+      <% end %>
+    <% end %>
+    <% if policy(bed).destroy? %>
+      <%= link_to delete_bed_path(bed), remote: true, class: 'btn btn-danger btn-sm', title: 'Papelera', 
+      data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'trash' %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

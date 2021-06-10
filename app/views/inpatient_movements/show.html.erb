@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @inpatient_movement.name %>
+</p>
+
+<p>
+  <strong>Bed:</strong>
+  <%= @inpatient_movement.bed %>
+</p>
+
+<p>
+  <strong>Patient:</strong>
+  <%= @inpatient_movement.patient %>
+</p>
+
+<p>
+  <strong>Movement type:</strong>
+  <%= @inpatient_movement.movement_type %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @inpatient_movement.user %>
+</p>
+
+<%= link_to 'Edit', edit_inpatient_movement_path(@inpatient_movement) %> |
+<%= link_to 'Back', inpatient_movements_path %>

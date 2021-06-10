@@ -8,11 +8,13 @@ class Patient < ApplicationRecord
   # Relaciones
   belongs_to :patient_type
   belongs_to :address, optional: true
+  belongs_to :bed, optional: true
   has_many :outpatient_prescriptions, dependent: :destroy
   has_many :chronic_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar
   has_one_attached :file
   has_many :patient_phones, :dependent => :destroy
+  has_many :inpatient_movements
 
   # Validaciones
   validates_presence_of :first_name, :last_name, :dni

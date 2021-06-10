@@ -2,9 +2,12 @@
 
 <div class="card fixed-custom-card">
   <div class="card-header">
-    <%= render 'filter' %>
+    <%= render "filter" %>
   </div>
   <div class="card-body fixed-panel-index">
-    <%= render( partial: 'inpatient_prescriptions/list' ) %>
+    <%= render(
+      partial: 'beds/list',
+      locals: { beds: @beds }
+    ) %>
   </div>
 </div>

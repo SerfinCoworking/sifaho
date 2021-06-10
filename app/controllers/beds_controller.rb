@@ -1,5 +1,7 @@
-class BedController < ApplicationController
+class BedsController < ApplicationController
   before_action :set_bed, only: [:show, :edit, :update, :destroy]
+
+  before_action :assign_records, only: [:index, :new, :create, :edit, :update]
 
   # GET /beds
   # GET /beds.json
@@ -9,19 +11,10 @@ class BedController < ApplicationController
       Bed.establishment(current_user.sector.establishment),
       params[:filterrific],
       select_options: {
-        with_status: Bed.options_for_status
+        with_status: Bed.options_for_status,
+        sorted_by: Bed.options_for_sorted_by
       },
       persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :search_patient,
-        :search_bed,
-        :with_order_type,
-        :with_status,
-        :requested_date_since,
-        :requested_date_to,
-        :sorted_by
-      ],
     ) or return
     @beds = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -52,11 +45,9 @@ class BedController < ApplicationController
 
     respond_to do |format|
       if @bed.save
-        @bed.create_notification(current_user, "creó")
-        format.html { redirect_to @bed, notice: 'El pedido de internación se ha creado correctamente.' }
+        format.html { redirect_to @bed, notice: 'La cama de internación se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @bed }
       else
-        @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
         format.html { render :new }
         format.json { render json: @bed.errors, status: :unprocessable_entity }
       end
@@ -69,7 +60,7 @@ class BedController < ApplicationController
     authorize @bed
     respond_to do |format|
       if @bed.update(bed_params)
-        format.html { redirect_to @bed, notice: 'El pedido de internación se ha modificado correctamente.' }
+        format.html { redirect_to @bed, notice: 'La cama de internación se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @bed }
       else
         format.html { render :edit }
@@ -84,7 +75,7 @@ class BedController < ApplicationController
     authorize @bed
     @bed.destroy
     respond_to do |format|
-      format.html { redirect_to beds_url, notice: 'El pedido de internación se ha enviado a la papelera correctamente.' }
+      format.html { redirect_to beds_url, notice: 'La cama de internación se ha enviado a la papelera correctamente.' }
       format.json { head :no_content }
     end
   end
@@ -92,6 +83,12 @@ class BedController < ApplicationController
   def new_bed
     authorize Bed
     @bed = Bed.new
+  end
+
+  def admit_patient
+    authorize Bed
+
+    
   end
 
   private
@@ -102,11 +99,17 @@ class BedController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bed_params
-      params.require(:bed).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, :sent_request_by_id_id, 
-        :order_type, :bed_id, :requested_date, :observation, :sent_date, :deleted_at, :date_received, :patient_id, :establishment_id,
-        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
-        :provider_observation, :_destroy]
-      )
+      params.require(:bed).permit(:name, :bedroom_id, :service_id)
+    end
+
+    def assign_records
+      @bedrooms = Bedroom
+        .select(:id, :name)
+        .establishment(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id)
+      @services = Sector
+        .select(:id, :name)
+        .with_establishment_id(current_user.sector.establishment_id)
+        .where.not(id: current_user.sector_id)
     end
 end

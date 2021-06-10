@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Inpatient Movements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Bed</th>
+      <th>Patient</th>
+      <th>Movement type</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inpatient_movements.each do |inpatient_movement| %>
+      <tr>
+        <td><%= inpatient_movement.name %></td>
+        <td><%= inpatient_movement.bed %></td>
+        <td><%= inpatient_movement.patient %></td>
+        <td><%= inpatient_movement.movement_type %></td>
+        <td><%= inpatient_movement.user %></td>
+        <td><%= link_to 'Show', inpatient_movement %></td>
+        <td><%= link_to 'Edit', edit_inpatient_movement_path(inpatient_movement) %></td>
+        <td><%= link_to 'Destroy', inpatient_movement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Inpatient Movement', new_inpatient_movement_path %>

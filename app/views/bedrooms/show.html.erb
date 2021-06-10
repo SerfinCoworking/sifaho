@@ -1,0 +1,154 @@
+<%= render 'header' %>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading hidden-print">
+      <h3 class="panel-title">
+        <%= content_tag(:span, '', class: 'glyphicon glyphicon-eye-open') %> Viendo provisión de internación
+        <%= link_to bed_orders_path, class: 'btn pull-right close-btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-remove') %>
+        <% end %>
+        <%= link_to bed_order_path(format: 'pdf'), class: 'btn print-btn pull-right',  
+          :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-print") %>
+        <% end %>
+      </h3>
+    </div>
+    <div id=tittle-print class="visible-print-block"><%= current_user.establishment_name %></div>
+    <div class="panel-body" id="panel-body-new">
+      <div class="row">
+        <div class='col-md-2 col-xs-2'>
+          <strong>Paciente:</strong>
+          <%= @bed_order.patient.fullname%>
+        </div>
+        <div class="col-md-2 col-xs-2">
+          <strong>Habitación:</strong>
+          <%= @bed_order.bedroom_name %> <%= @bed_order.bed_name %>
+        </div>
+        <div class='col-md-3 col-xs-3'>
+          <strong>Solicitado:</strong>
+          <%= @bed_order.created_at.strftime("%d/%m/%Y")%>
+        </div>
+        <div class='col-md-3 col-xs-3'>
+          <strong>Observaciones:</strong>
+            <%= @bed_order.observation? ? @bed_order.observation : 'Sin observaciones' %>
+        </div>
+        <div class='col-md-2 col-xs-2'>
+          <strong>Código:</strong>
+          <%= @bed_order.remit_code %>
+        </div>
+      </div>
+      <hr>
+      <!-- Barra de estado -->
+      <%= render 'status_bar', bed_order: @bed_order %>
+      <!-- Insumos a dispensar -->
+      <br><br><br><br>
+      <div class='row'>
+        <div class='col-md-12' style='margin-top: -50px;'>
+          <ul class='nav nav-tabs nav-justified'>
+            <li class='active'>
+              <a data-toggle='tab' href='#supplies'>
+                <span class="glyphicon glyphicon-barcode"></span>
+                Insumos
+                <span class="badge"><%= @bed_order.quantity_ord_supply_lots.count %></span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle='tab' href='#last_movements'>
+                <span class="glyphicon glyphicon-transfer"></span>
+                Movimientos
+                <span class="badge"><%= @bed_order.movements.count %></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="tab-content">
+          <div id='supplies' class='tab-pane fade in active'>
+            <!-- Insumos a dispensar -->
+            <table class="table table-hover table-condensed">
+              <thead>
+                <tr>
+                  <th>Cód Ins</th>
+                  <th>Insumo</th>
+                  <th>Solicitado</th>
+                  <th><%= @bed_order.entregada? ? 'Entregado' : 'A entregar' %></th>
+                  <th>Lote</th>
+                  <th>Laboratorio</th>
+                  <th>Vencimiento</th>
+                  <% if @bed_order.solicitud? %>
+                    <th>Obs. Sol.</th>
+                  <% end %>
+                  <th>Obs. Prov.</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @bed_order.quantity_ord_supply_lots.joins(:supply).order("name").each do |qosl| %>
+                  <tr>
+                    <td>
+                      <%= qosl.supply_id %>
+                    </td>
+                    <td>
+                      <%= qosl.supply_name %>
+                    </td>
+                    <td>
+                      <%= qosl.requested_quantity %> <%= qosl.unity.pluralize(qosl.requested_quantity) %>
+                    </td>
+                    <td>
+                      <%= qosl.delivered_quantity %> <%= qosl.unity.pluralize(qosl.delivered_quantity) %>
+                    </td>
+                    <% if qosl.sector_supply_lot.present? %>
+                      <td>
+                        <%= qosl.sector_supply_lot.lot_code %>
+                      </td>
+                      <td>
+                        <%= qosl.sector_supply_lot.laboratory %>
+                      </td>
+                      <td>
+                        <% if qosl.supply.needs_expiration %>
+                          <%= qosl.sector_supply_lot.expiry_date.present? ? qosl.sector_supply_lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                        <% else %>
+                          No vence
+                        <% end %>
+                      </td>
+                    <% else %>
+                      <td>Sin lote</td><td>----</td><td>----</td>
+                    <% end %>
+                    <% if @bed_order.solicitud? %>
+                      <td><%= qosl.applicant_observation.present? ? qosl.applicant_observation : '----' %></td>
+                    <% end %>
+                    <td><%= qosl.provider_observation.present? ? qosl.provider_observation : '----' %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div id='last_movements' class='tab-pane fade'>
+            <!-- Tabla de movimientos -->
+            <%= render '/shared/movements_table', order: @bed_order %>
+          </div> <!-- End last movements tab pane -->
+        </div> <!-- End Tab content-->
+      </div> <!-- End col-md-12 -->
+    </div>
+    <div class="panel-footer text-right hidden-print">
+      <%= link_to bed_orders_path, class: "btn" do %>Volver<% end %>
+      <% if policy(@bed_order).edit? %>
+        <%= link_to edit_bed_order_path(@bed_order), :"data-turbolinks" => false,
+          class: "btn btn-warning" do %>
+          <%= content_tag(:span, "", class: "glyphicon glyphicon-edit") %>
+          Auditar
+        <% end %>
+      <% end %>
+      <% if policy(@bed_order).send_provider? %>
+        <%= link_to send_provider_bed_order_path(@bed_order), remote: true,
+          class: 'btn btn-primary btn-md' do %>
+          <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
+          Enviar
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

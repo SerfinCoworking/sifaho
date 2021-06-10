@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_30_162552) do
+ActiveRecord::Schema.define(version: 2021_05_07_115202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -109,10 +109,10 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
 
   create_table "bedrooms", force: :cascade do |t|
     t.string "name"
-    t.bigint "sector_id"
+    t.bigint "location_sector_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sector_id"], name: "index_bedrooms_on_sector_id"
+    t.index ["location_sector_id"], name: "index_bedrooms_on_location_sector_id"
   end
 
   create_table "beds", force: :cascade do |t|
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "service_id"
+    t.integer "status", default: 0
     t.index ["bedroom_id"], name: "index_beds_on_bedroom_id"
     t.index ["service_id"], name: "index_beds_on_service_id"
   end
@@ -454,6 +455,26 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
     t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
     t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
     t.index ["supplied_by_sector_id"], name: "index_in_pre_prod_lot_stocks_on_supplied_by_sector_id"
+  end
+
+  create_table "inpatient_movement_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "inpatient_movements", force: :cascade do |t|
+    t.bigint "bed_id"
+    t.bigint "patient_id"
+    t.bigint "movement_type_id"
+    t.bigint "user_id"
+    t.text "observations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bed_id"], name: "index_inpatient_movements_on_bed_id"
+    t.index ["movement_type_id"], name: "index_inpatient_movements_on_movement_type_id"
+    t.index ["patient_id"], name: "index_inpatient_movements_on_patient_id"
+    t.index ["user_id"], name: "index_inpatient_movements_on_user_id"
   end
 
   create_table "inpatient_prescription_movements", force: :cascade do |t|
@@ -908,7 +929,9 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
     t.string "andes_id"
     t.string "cuil"
     t.bigint "patient_type_id", default: 1
+    t.bigint "bed_id"
     t.index ["address_id"], name: "index_patients_on_address_id"
+    t.index ["bed_id"], name: "index_patients_on_bed_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
   end
 
@@ -1225,6 +1248,7 @@ ActiveRecord::Schema.define(version: 2021_04_30_162552) do
     t.datetime "updated_at", null: false
     t.bigint "establishment_id"
     t.integer "user_sectors_count", default: 0
+    t.boolean "provide_hospitalization", default: false
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
