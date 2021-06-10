@@ -36,6 +36,7 @@ module OriginalChronicPrescriptionsHelper
   private
 
   def delivered_percentage_value(ocpp)
+    return 0 if ocpp.total_request_quantity <= 0
     (ocpp.total_delivered_quantity * 100) / ocpp.total_request_quantity
   end
 end

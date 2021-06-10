@@ -44,15 +44,24 @@ class OriginalChronicPrescriptionProduct < ApplicationRecord
   def deliver(a_quantity)
     if self.pendiente?
       self.total_delivered_quantity += a_quantity
-      self.total_delivered_quantity < self.total_request_quantity ? pendiente! : terminado!
+      self.update_status!
     else
       errors.add(:base, "El tratamiento de #{self.product.name} ya se ha terminado.")
     end
   end
 
+
   def return(a_quantity)
     self.total_delivered_quantity -= a_quantity
-    unless self.terminado_manual?
+    self.update_status!
+  end
+
+  # Update status based on delivered quantity
+  def update_status!
+    # Assign again "terminado_manual" anyway to save the changes
+    if self.terminado_manual?
+      self.save!
+    else
       self.total_delivered_quantity < self.total_request_quantity ? pendiente! : terminado!
     end
   end
