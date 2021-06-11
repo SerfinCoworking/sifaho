@@ -284,6 +284,7 @@ Rails.application.routes.draw do
     resources :in_pre_prod_lot_stocks
     resources :beds, path: :camas
     collection do
+      get ":id/productos", to: "inpatient_prescriptions#set_products", as: "set_products"
       get ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
       # get "find_lots(/:order_product_id)", to: "inpatient_prescriptions#find_lots", as: "find_order_product_lots"
       patch ":id/entregar", to: "inpatient_prescriptions#update_with_delivery", as: "update_with_delivery"

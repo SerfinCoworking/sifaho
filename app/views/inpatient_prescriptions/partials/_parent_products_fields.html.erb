@@ -74,17 +74,6 @@
     <% end %>
   </td>
 
-  <!-- Stock -->
-  <td>
-    <%= f.input :stock_fake, label: false, disabled: true, required: false, 
-      input_html: {
-        class: 'product-stock input-sm stock-quantity',
-        size: 10,
-        value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
-      } 
-    %> 
-  </td>
-  
   <!-- Unidad -->
   <td>
     <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
@@ -110,7 +99,7 @@
         # readOnly: policy(f.object).edit_dose_quantity? ? false : true,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"request-quantity input-sm",
+          :class=>"dose-quantity input-sm",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
           min: '1', 
@@ -126,7 +115,7 @@
   <td>
     <%= f.input :interval, label: false, 
       input_html: {
-        class: 'input-sm interval-dose',
+        class: 'input-sm dose-interval',
         size: 6, 
         placeholder: "Cant",
         value: "#{ f.object.interval.present? ? f.object.interval : 0 }"
@@ -147,17 +136,30 @@
 
   <td>
     <%= f.input :observation, label: false, as: :text,
-      :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+      :input_html => { class: 'input-sm observation', :cols => 20  , :rows => 1 } %>
   </td>
   
   <td>
-    <!-- Mostrar botón de quitar  -->
-    <% if policy(f.object).remove_association? %>
-      <!-- Botón quitar -->
-      <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+    <% if f.object.new_record? %>
+      <!-- 
+        no clickeable hasta que product_id y dose_quantity esten asignados
+        controlar por js estas dos variables antes de realizar el ajax
+        agregar url de guardado de producto
+        agregar clase para asignarle un ajax a la url
+        en la respuesta llamar al modal de lotes
+      -->
+      <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-product-id="<%= f.object.id %>">
+        <%= fa_icon 'save' %>
+      </button>
+
+      <!-- Quitar elemento (no persistido) -->
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "minus" %>
+        <%= fa_icon "trash-alt" %>
       <% end %>
-    <% end %>
+       
+    <% elsif policy(f.object).edit_parent_product? %>
+      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
+    <% end %>    
   </td>
 </tr>

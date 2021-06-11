@@ -1,7 +1,7 @@
 class InpatientPrescriptionsController < ApplicationController
   
   include FindLots
-  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery, :update_with_delivery]
+  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery, :update_with_delivery, :set_products]
 
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
@@ -18,6 +18,13 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions/1
   # GET /inpatient_prescriptions/1.json
   def show
+  end
+  
+  
+  # GET /inpatient_prescriptions/1
+  # GET /inpatient_prescriptions/1.json
+  def set_products
+    @inpatient_prescription.parent_order_products.build
   end
 
   # GET /inpatient_prescriptions/new

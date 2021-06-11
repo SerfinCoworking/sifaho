@@ -1,18 +1,19 @@
-
-<button type="button" class="btn btn-md btn-select-lot-stock btn-primary saved-btn-combo" 
-  data-select-lot-url="<%= find_order_product_lots_url %>" 
-  data-order-name="<%= order.model_name.name %>" 
-  data-order-id="<%= order.id %>" 
-  data-order-product-id="<%= f_object.id %>"
-  title="Seleccionar Lotes"
-  data-toggle="tooltip"
-  data-placement="top">
-  <% if f_object.order_prod_lot_stocks.present? %>
-    <%= f_object.order_prod_lot_stocks.count %> 
-  <% else %>
-    <%= fa_icon "barcode" %> 
-  <% end %>
-</button>
+<% if !f_object.parent.nil? %>
+  <button type="button" class="btn btn-md btn-select-lot-stock btn-primary saved-btn-combo" 
+    data-select-lot-url="<%= find_order_product_lots_url %>" 
+    data-order-name="<%= order.model_name.name %>" 
+    data-order-id="<%= order.id %>" 
+    data-order-product-id="<%= f_object.id %>"
+    title="Seleccionar Lotes"
+    data-toggle="tooltip"
+    data-placement="top">
+    <% if f_object.order_prod_lot_stocks.present? %>
+      <%= f_object.order_prod_lot_stocks.count %> 
+    <% else %>
+      <%= fa_icon "barcode" %> 
+    <% end %>
+  </button>
+<% end %>
 
 <%# Habilita edicion %>
 <button type="button" class="btn btn-warning btn-ipp-edit saved-btn-combo" data-toggle="tooltip" data-placement="top" title="Guardar">

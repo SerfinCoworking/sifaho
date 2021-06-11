@@ -1,0 +1,28 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-warning d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pen" %>
+      <h5 class="card-title mb-0 ml-2">
+        <%= "Asignar productos a la receta de #{@inpatient_prescription.patient.fullname}" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+
+  <div class="card-body">
+    <%# carga de productos originales %>
+    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
+      <%= render 'inpatient_prescriptions/partials/parent_products_table', inpatient_form: inpatient_form, order: @inpatient_prescription %>
+    <% end %>
+  </div><!-- /fin .card-body -->
+  
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', :back, class: 'btn mr-1 btn-secondary' %>
+  </div>
+</div>
+
+ 

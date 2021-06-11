@@ -1,7 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
   if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
-  
   // Creamos la fecha actual + 1 dia
   const today = new Date();
   const tomorrow = new Date();
@@ -26,7 +25,6 @@ $(document).on('turbolinks:load', function(e){
   });
   
   $('select.custom-select-pick').on('changed.bs.select', function(e){
-    console.log(e.target.value, "change patient");
     const findPatientUrl = $(e.target).attr("data-find-patient-url");
     const patientId = $(e.target).val();
     $.ajax({

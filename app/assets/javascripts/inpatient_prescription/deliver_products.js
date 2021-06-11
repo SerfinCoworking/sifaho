@@ -1,6 +1,7 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery'].includes(_PAGE.action))) ) return false;
+  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery', 'set_products'].includes(_PAGE.action))) ) return false;
+  console.log("FROM SEND LOT STOCK SELECTION=====");
   initEvents();
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
@@ -9,38 +10,12 @@ $(document).on('turbolinks:load', function(e){
     // Guarda la fila del producto seleccionado
     // Valida que tenga almenos un producto seleccionado
     // y que tenga una cantidad por dosis
+  });
+  
+  function initEvents(){
     $('button.btn-ipp-save').on('click', function(e){
       updateOrderProduct(e.target);
-     /*  const tr = $(e.target).closest('tr');
-      const url = $(tr).attr('data-url');
-      const urlType = $(tr).attr('data-url-type');
-      const parentId = $(tr).attr('data-parent-id');
-      const productId = $(tr).find('input[type="hidden"].product-id').first().val();
-      // const productQuantity = $(tr).find('input.product-quantity').first().val();
-      const productDoseTotal = $(tr).find('input.product-dose-total').first().val();
-      const productObservation = $(tr).find('textarea.product-observartion').first().val();
-      $(tr).attr('id', "child-"+productId);
-      if(typeof productId !== 'undefined' && typeof productDoseTotal !== 'undefined'){
-
-        $.ajax({
-          url: url,
-          method: urlType,
-          dataType: "script",
-          data: {
-            inpatient_prescription_product: {
-              parent_id: parentId,
-              product_id: productId,
-              // quantity: productQuantity,
-              dose_total: productDoseTotal,
-              observation: productObservation
-            }
-          }
-        });
-      } */
     });
-  });
-
-  function initEvents(){
     $('button.btn-select-lot-stock').on('click', function(e) {
       e.stopPropagation();
       const urlFindLots = $(e.target).attr("data-select-lot-url");
@@ -129,18 +104,20 @@ $(document).on('turbolinks:load', function(e){
       updateOrderProduct(e.target)
     });
 
+    calcTotalDoseEvent();
+
   }// fin initEvents
 
 
-  $("button[type='submit']").on('click', function(e){
-    e.preventDefault();
-    $(e.target).attr('disabled', true);
-    // $(e.target).siblings('button, a').attr('disabled', true);
-    $(e.target).find("div.c-msg").css({"display": "none"});
-    $(e.target).find('div.d-none').toggleClass('d-none');
-    $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
-    $('form#'+$(e.target).attr('form')).submit();
-  });
+  // $("button[type='submit']").on('click', function(e){
+  //   e.preventDefault();
+  //   $(e.target).attr('disabled', true);
+  //   // $(e.target).siblings('button, a').attr('disabled', true);
+  //   $(e.target).find("div.c-msg").css({"display": "none"});
+  //   $(e.target).find('div.d-none').toggleClass('d-none');
+  //   $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
+  //   $('form#'+$(e.target).attr('form')).submit();
+  // });
 
   function onChangeOnSelectAutoCProductCode(target, item){
     if(item){
@@ -166,6 +143,7 @@ $(document).on('turbolinks:load', function(e){
   };
 
   function updateOrderProduct(target){
+    console.log(target, "BUTTON ===========");
     const url = $(target).attr('data-url');
     const urlType = $(target).attr('data-url-type');
     const parentId = $(target).attr('data-parent-id');
@@ -175,7 +153,7 @@ $(document).on('turbolinks:load', function(e){
     const productObservation = $(tr).find('textarea.product-observartion').first().val();
     $(tr).attr('id', "child-"+productId);
     if(typeof productId !== 'undefined' && typeof productDoseTotal !== 'undefined'){
-      console.log(productId, productDoseTotal, "===================0debug");
+      // console.log(productId, productDoseTotal, "===================0debug");
 
       $.ajax({
         url: url,
@@ -191,6 +169,22 @@ $(document).on('turbolinks:load', function(e){
         }
       });
     }
+  }
+  
+  // On change delivery quantity
+  function calcTotalDoseEvent(){
+    /* Request Dose and Interval dose */
+    $('input.dose-quantity , input.dose-interval').on('change', function(e){
+      const tr = $(e.target).closest(".nested-fields");
+      calcTotalDose(tr);
+    });
+  }
+
+  function calcTotalDose(row){
+    const totalRequestDose = $(row).find('input.dose-quantity').first().val() || 0;
+    const totalIntervalDose = $(row).find('input.dose-interval').first().val() || 0;
+    const total = (24 /  totalIntervalDose) * totalRequestDose;
+    $(row).find('input.total-dose').first().val(total);
   }
 
 });

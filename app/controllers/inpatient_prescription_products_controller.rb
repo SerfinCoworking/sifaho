@@ -24,7 +24,8 @@ class InpatientPrescriptionProductsController < ApplicationController
   # POST /inpatient_prescription_products
   # POST /inpatient_prescription_products.json
   def create
-    @inpatient_prescription_product = InpatientPrescriptionProduct.new(inpatient_prescription_product_ajax_params)
+    # Parent & child
+    @inpatient_prescription_product = InpatientPrescriptionProduct.new(ipp_create_by_ajax_params)
     @inpatient_prescription_product.inpatient_prescription_id = params[:inpatient_prescription_id]
     @inpatient_prescription_product.status = 'sin_proveer'
 
@@ -79,5 +80,10 @@ class InpatientPrescriptionProductsController < ApplicationController
 
   def inpatient_prescription_product_ajax_params
     params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :dose_total, :observation)
+  end
+  
+  # Parametros para inpatient_prescription_products
+  def ipp_create_by_ajax_params
+    params.require(:inpatient_prescription_product).permit(:product_id, :dose_quantity, :interval, :observation)
   end
 end
