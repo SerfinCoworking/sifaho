@@ -1,4 +1,4 @@
-<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
+<tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>" id="parent-<%= f.object.product.present? ? f.object.product.id : '' %>">
   <!-- Código del producto -->
   <td>
     <% if policy(f.object).edit_parent_product? %>
@@ -139,7 +139,7 @@
       :input_html => { class: 'input-sm product-observartion', :cols => 20  , :rows => 1 } %>
   </td>
   
-  <td>
+  <td class="action-col">
     <% if f.object.new_record? %>
       <!-- 
         no clickeable hasta que product_id y dose_quantity esten asignados

@@ -153,7 +153,8 @@ $(document).on('turbolinks:load', function(e){
     // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
     const total_dose = $(tr).find('input.product-dose-total').first().val();
     const observation = $(tr).find('textarea.product-observartion').first().val();
-    $(tr).attr('id', "child-"+product_id);
+    const trId = parent_id ? "child-"+product_id : "parent-"+product_id;
+    $(tr).attr('id', trId);
 
     if(typeof product_id !== 'undefined'){
 

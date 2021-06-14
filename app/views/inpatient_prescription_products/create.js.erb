@@ -1,6 +1,5 @@
-<% if @inpatient_prescription_product.parent.nil? %>
-  console.log("DEBUG========================");
-<% else %>
+<% if @inpatient_prescription_product.parent.present? %>
+  
   $("#child-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
   $("#child-<%= @inpatient_prescription_product.product.id %>").find('button.btn-select-lot-stock').first().on('click', function(e) {
     e.stopPropagation();
@@ -21,6 +20,13 @@
     }});
   }).trigger('click');
 
+
+  $(".order-product-inputs").attr("readonly", true);
+<% else %>
+  console.log("DEBUG======================== PARENT", "#parent-<%= @inpatient_prescription_product.product.id %>");
+  $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
+<% end %>
+
   $('.delete-item').on('click', function(e) {
     const modal = $(e.target).attr('data-target');
     const title = $(e.target).attr('data-title');
@@ -32,6 +38,3 @@
     $(modal).find('.btn[data-method="delete"]').attr('href', href);
     $(modal).modal('toggle');
   });
-
-  $(".order-product-inputs").attr("readonly", true);
-<% end %>
