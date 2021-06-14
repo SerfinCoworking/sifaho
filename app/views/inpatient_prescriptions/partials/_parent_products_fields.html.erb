@@ -123,20 +123,20 @@
   </td>
 
   <td>
-    <%= f.input :dose_total, 
+    <%= f.input :total_dose, 
       label: false,
       readonly: true,
       placeholder: 'Dosis total',
       input_html: { 
-        class: 'input-sm total-dose',
-        value: f.object.dose_total.present? ? f.object.dose_total : 0
+        class: 'input-sm product-dose-total',
+        value: f.object.total_dose.present? ? f.object.total_dose : 0
       }
     %>
   </td>
 
   <td>
     <%= f.input :observation, label: false, as: :text,
-      :input_html => { class: 'input-sm observation', :cols => 20  , :rows => 1 } %>
+      :input_html => { class: 'input-sm product-observartion', :cols => 20  , :rows => 1 } %>
   </td>
   
   <td>

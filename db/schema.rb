@@ -496,9 +496,9 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
     t.bigint "parent_id"
     t.bigint "product_id"
     t.integer "dose_quantity"
-    t.integer "quantity"
+    t.integer "deliver_quantity"
     t.integer "interval"
-    t.integer "dose_total"
+    t.integer "total_dose"
     t.integer "status"
     t.text "observation"
     t.datetime "created_at", null: false

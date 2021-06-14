@@ -1,6 +1,14 @@
 <%= render 'shared/flash_message' %>
 
-$('#child-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
-  const target = $('#child-<%= @inpatient_prescription_product.product.id %>');
-  $(target).remove();
-});
+<% if @inpatient_prescription_product.parent.nil? %>
+  $('#child-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
+    const target = $('#child-<%= @inpatient_prescription_product.product.id %>');
+    $(target).remove();
+  });
+<% else %>
+  $('#parent-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
+    const target = $('#parent-<%= @inpatient_prescription_product.product.id %>');
+    $(target).remove();
+  });
+  console.log("DEUBG =======eleminando producto");
+<% end %>

@@ -1,7 +1,7 @@
 $(document).on('turbolinks:load', function(e){
 
   if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery', 'set_products'].includes(_PAGE.action))) ) return false;
-  console.log("FROM SEND LOT STOCK SELECTION=====");
+  
   initEvents();
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
@@ -143,17 +143,19 @@ $(document).on('turbolinks:load', function(e){
   };
 
   function updateOrderProduct(target){
-    console.log(target, "BUTTON ===========");
     const url = $(target).attr('data-url');
     const urlType = $(target).attr('data-url-type');
-    const parentId = $(target).attr('data-parent-id');
     const tr = $(target).closest('tr');
-    const productId = $(tr).find('input[type="hidden"].product-id').first().val();
-    const productDoseTotal = $(tr).find('input.product-dose-total').first().val();
-    const productObservation = $(tr).find('textarea.product-observartion').first().val();
-    $(tr).attr('id', "child-"+productId);
-    if(typeof productId !== 'undefined' && typeof productDoseTotal !== 'undefined'){
-      // console.log(productId, productDoseTotal, "===================0debug");
+    const parent_id = $(target).attr('data-parent-id');
+    const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
+    const dose_quantity = $(tr).find('input.dose-quantity').first().val();
+    const interval = $(tr).find('input.dose-interval').first().val();
+    // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
+    const total_dose = $(tr).find('input.product-dose-total').first().val();
+    const observation = $(tr).find('textarea.product-observartion').first().val();
+    $(tr).attr('id', "child-"+product_id);
+
+    if(typeof product_id !== 'undefined'){
 
       $.ajax({
         url: url,
@@ -161,10 +163,13 @@ $(document).on('turbolinks:load', function(e){
         dataType: "script",
         data: {
           inpatient_prescription_product: {
-            parent_id: parentId,
-            product_id: productId,
-            dose_total: productDoseTotal,
-            observation: productObservation
+            product_id: product_id,
+            dose_quantity: dose_quantity,
+            interval: interval,
+            // deliver_quantity: deliver_quantity,
+            observation: observation,
+            parent_id: parent_id,
+            total_dose: total_dose
           }
         }
       });
@@ -184,7 +189,7 @@ $(document).on('turbolinks:load', function(e){
     const totalRequestDose = $(row).find('input.dose-quantity').first().val() || 0;
     const totalIntervalDose = $(row).find('input.dose-interval').first().val() || 0;
     const total = (24 /  totalIntervalDose) * totalRequestDose;
-    $(row).find('input.total-dose').first().val(total);
+    $(row).find('input.product-dose-total').first().val(total);
   }
 
 });
