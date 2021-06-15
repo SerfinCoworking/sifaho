@@ -80,16 +80,18 @@ $(document).on('turbolinks:load', function(e){
 
     /* habilitar edicion */
     $(".btn-ipp-edit").on('click', function(e){
-      $(".order-product-inputs").removeAttr("readonly");
-      $(".edit-btn-combo").fadeIn();
-      $(".saved-btn-combo").fadeOut();
+      const tr = $(e.target).closest('tr');
+      $(tr).find(".order-product-inputs").removeAttr("readonly");
+      $(tr).find(".edit-btn-combo").fadeIn();
+      $(tr).find(".saved-btn-combo").fadeOut();
     });
     
     /* Cancelar edicion */
     $(".cancel-item").on('click', function(e){
-      $(".order-product-inputs").attr("readonly", true);
-      $(".edit-btn-combo").fadeOut();
-      $(".saved-btn-combo").fadeIn();
+      const tr = $(e.target).closest('tr');
+      $(tr).find(".order-product-inputs").attr("readonly", true);
+      $(tr).find(".edit-btn-combo").fadeOut();
+      $(tr).find(".saved-btn-combo").fadeIn();
       const url = $(e.target).attr('data-url');
       const urlType = $(e.target).attr('data-url-type');
       $.ajax({
@@ -141,41 +143,6 @@ $(document).on('turbolinks:load', function(e){
       tr.find('div.lot-stocks-hidden').html('');
     }
   };
-
-  function updateOrderProduct(target){
-    const url = $(target).attr('data-url');
-    const urlType = $(target).attr('data-url-type');
-    const tr = $(target).closest('tr');
-    const parent_id = $(target).attr('data-parent-id');
-    const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
-    const dose_quantity = $(tr).find('input.dose-quantity').first().val();
-    const interval = $(tr).find('input.dose-interval').first().val();
-    // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
-    const total_dose = $(tr).find('input.product-dose-total').first().val();
-    const observation = $(tr).find('textarea.product-observartion').first().val();
-    const trId = parent_id ? "child-"+product_id : "parent-"+product_id;
-    $(tr).attr('id', trId);
-
-    if(typeof product_id !== 'undefined'){
-
-      $.ajax({
-        url: url,
-        method: urlType,
-        dataType: "script",
-        data: {
-          inpatient_prescription_product: {
-            product_id: product_id,
-            dose_quantity: dose_quantity,
-            interval: interval,
-            // deliver_quantity: deliver_quantity,
-            observation: observation,
-            parent_id: parent_id,
-            total_dose: total_dose
-          }
-        }
-      });
-    }
-  }
   
   // On change delivery quantity
   function calcTotalDoseEvent(){
@@ -194,3 +161,38 @@ $(document).on('turbolinks:load', function(e){
   }
 
 });
+
+function updateOrderProduct(target){
+  const url = $(target).attr('data-url');
+  const urlType = $(target).attr('data-url-type');
+  const tr = $(target).closest('tr');
+  const parent_id = $(target).attr('data-parent-id');
+  const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
+  const dose_quantity = $(tr).find('input.dose-quantity').first().val();
+  const interval = $(tr).find('input.dose-interval').first().val();
+  // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
+  const total_dose = $(tr).find('input.product-dose-total').first().val();
+  const observation = $(tr).find('textarea.product-observartion').first().val();
+  const trId = parent_id ? "child-"+product_id : "parent-"+product_id;
+  $(tr).attr('id', trId);
+
+  if(typeof product_id !== 'undefined'){
+
+    $.ajax({
+      url: url,
+      method: urlType,
+      dataType: "script",
+      data: {
+        inpatient_prescription_product: {
+          product_id: product_id,
+          dose_quantity: dose_quantity,
+          interval: interval,
+          // deliver_quantity: deliver_quantity,
+          observation: observation,
+          parent_id: parent_id,
+          total_dose: total_dose
+        }
+      }
+    });
+  }
+}

@@ -1,5 +1,4 @@
 <% if @inpatient_prescription_product.parent.present? %>
-  
   $("#child-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
   $("#child-<%= @inpatient_prescription_product.product.id %>").find('button.btn-select-lot-stock').first().on('click', function(e) {
     e.stopPropagation();
@@ -37,4 +36,32 @@ $('.delete-item').on('click', function(e) {
   $(modal).find('.modal-body').text(body);
   $(modal).find('.btn[data-method="delete"]').attr('href', href);
   $(modal).modal('toggle');
+});
+
+/* habilitar edicion */
+$(".btn-ipp-edit").on('click', function(e){
+  const tr = $(e.target).closest('tr');
+  $(tr).find(".order-product-inputs").removeAttr("readonly");
+  $(tr).find(".edit-btn-combo").fadeIn();
+  $(tr).find(".saved-btn-combo").fadeOut();
+});
+
+/* Cancelar edicion */
+$(".cancel-item").on('click', function(e){
+  const tr = $(e.target).closest('tr');
+  $(tr).find(".order-product-inputs").attr("readonly", true);
+  $(tr).find(".edit-btn-combo").fadeOut();
+  $(tr).find(".saved-btn-combo").fadeIn();
+  const url = $(e.target).attr('data-url');
+  const urlType = $(e.target).attr('data-url-type');
+  $.ajax({
+    url: url,
+    method: urlType,
+    dataType: "script",
+  });
+});
+
+/* Guardar modificaciones */
+$(".update-item").on('click', function(e){
+  updateOrderProduct(e.target)
 });
