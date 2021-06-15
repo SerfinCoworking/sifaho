@@ -216,7 +216,7 @@ function initActionsButton(){
   $(".btn-ipp-edit").on('click', function(e){
     const tr = $(e.target).closest('tr');
     $(tr).find(".order-product-inputs").removeAttr("readonly");
-    $(tr).find(".saved-btn-combo").fadeOut(500, function(){
+    $(tr).find(".saved-btn-combo").fadeOut(250, function(){
       $(tr).find(".edit-btn-combo").fadeIn();
     });
   });
@@ -225,7 +225,7 @@ function initActionsButton(){
   $(".cancel-item").on('click', function(e){
     const tr = $(e.target).closest('tr');
     $(tr).find(".order-product-inputs").attr("readonly", true);
-    $(tr).find(".edit-btn-combo").fadeOut(500, function(){
+    $(tr).find(".edit-btn-combo").fadeOut(250, function(){
       $(tr).find(".saved-btn-combo").fadeIn();
     });
     const url = $(e.target).attr('data-url');

@@ -22,7 +22,7 @@
 
 <% else %>
   $("#parent-<%= @inpatient_prescription_product.product.id %>").find('.btn-ipp-save').tooltip('hide');
-  $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.actions-col').first().fadeOut(500, function(e){
+  $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.actions-col').first().fadeOut(250, function(e){
     $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
     $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.actions-col').first().fadeIn();
     initActionsButton();

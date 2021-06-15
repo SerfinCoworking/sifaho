@@ -81,9 +81,13 @@ class InpatientPrescriptionProductsController < ApplicationController
   def inpatient_prescription_product_ajax_params
     params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :dose_total, :observation)
   end
-  
+
   # Parametros para inpatient_prescription_products
   def ipp_create_by_ajax_params
-    params.require(:inpatient_prescription_product).permit(:product_id, :dose_quantity, :interval, :observation)
+    params.require(:inpatient_prescription_product).permit(:product_id,
+                                                           :dose_quantity,
+                                                           :interval,
+                                                           :total_dose,
+                                                           :observation)
   end
 end
