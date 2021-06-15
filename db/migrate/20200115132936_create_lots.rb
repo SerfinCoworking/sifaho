@@ -4,7 +4,8 @@ class CreateLots < ActiveRecord::Migration[5.2]
       t.references :product, foreign_key: true
       t.references :laboratory, foreign_key: true
       t.string :code
-      t.datetime :expiry_date
+      t.date :expiry_date
+      t.integer :status, default: 0
 
       t.timestamps
     end
