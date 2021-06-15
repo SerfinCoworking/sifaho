@@ -152,14 +152,14 @@
         agregar clase para asignarle un ajax a la url
         en la respuesta llamar al modal de lotes
       -->
-      <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-product-id="<%= f.object.id %>">
-        <%= fa_icon 'save' %>
+      <button type="button" class="btn btn-md btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-product-id="<%= f.object.id %>">
+        <%= fa_icon 'save', class: "fa-fw" %>
       </button>
 
       <!-- Quitar elemento (no persistido) -->
-      <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger',
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger btn-md',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash-alt" %>
+        <%= fa_icon "trash-alt", class: "fa-fw" %>
       <% end %>
        
     <% elsif policy(f.object).edit_parent_product? %>
