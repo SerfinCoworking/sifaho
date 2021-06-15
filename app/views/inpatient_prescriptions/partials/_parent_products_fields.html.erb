@@ -7,11 +7,12 @@
           <input type="text" 
           name="<%="product_code_fake-#{f.object.id}"%>" 
           value="<%= f.object.product.present? ? f.object.product.code : '' %>"
-          class="form-control fake optional product-code input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+          class="form-control fake optional product-code order-product-inputs input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
           data-autocomplete-source="<%= search_by_code_products_path %>"
           size="6"
           autocomplete="off" 
-          placeholder="Código">
+          placeholder="Código"
+          <%= f.object.product.present? ? 'readonly="readonly"' : ''%>>
           <div class="invalid-feedback">
             <% if f.object.errors[:product_id].any? %>
               Producto <%= f.object.errors[:product_id].first %>
@@ -48,11 +49,12 @@
           <input type="text" 
           name="<%="product_name_fake-#{f.object.id}"%>"
           value="<%= f.object.product.present? ? f.object.product.name : '' %>"
-          class="form-control fake optional product-name input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+          class="form-control fake optional product-name order-product-inputs input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
           data-autocomplete-source="<%= search_by_name_products_path %>"
           size="45" 
           autocomplete="off" 
-          placeholder="Nombre">
+          placeholder="Nombre"
+          <%= f.object.product.present? ? 'readonly="readonly"' : ''%>>
           <% if f.object.errors[:product_id].first %>
             <div id="product_id_fake" class="invalid-feedback">
               Producto <%= f.object.errors[:product_id].first %>
@@ -78,7 +80,7 @@
   <td>
     <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
       input_html: {
-        class: 'product-unity input-sm',
+        class: 'product-unity input-sm order-product-inputs',
         size: 10,
         value: "#{
           if f.object.product.present?
@@ -96,10 +98,10 @@
         label: false,
         placeholder: 'Cant',
         required: false,
-        # readOnly: policy(f.object).edit_dose_quantity? ? false : true,
+        readonly: !f.object.new_record?,
         input_html: {
           "data-tooltip"=>true,
-          :class=>"dose-quantity input-sm",
+          :class=>"dose-quantity input-sm order-product-inputs",
           :title=>"Cantidad solicitada",
           "data-placement"=>"right",
           min: '1', 
@@ -114,8 +116,9 @@
   <!-- Intervalo -->
   <td>
     <%= f.input :interval, label: false, 
+      readonly: !f.object.new_record?,
       input_html: {
-        class: 'input-sm dose-interval',
+        class: 'input-sm dose-interval order-product-inputs',
         size: 6, 
         placeholder: "Cant",
         value: "#{ f.object.interval.present? ? f.object.interval : 0 }"
@@ -128,7 +131,7 @@
       readonly: true,
       placeholder: 'Dosis total',
       input_html: { 
-        class: 'input-sm product-dose-total',
+        class: 'input-sm product-dose-total order-product-inputs',
         value: f.object.total_dose.present? ? f.object.total_dose : 0
       }
     %>
@@ -136,7 +139,8 @@
 
   <td>
     <%= f.input :observation, label: false, as: :text,
-      :input_html => { class: 'input-sm product-observartion', :cols => 20  , :rows => 1 } %>
+      readonly: !f.object.new_record?,
+      :input_html => { class: 'input-sm product-observartion order-product-inputs', :cols => 20  , :rows => 1 } %>
   </td>
   
   <td class="action-col">

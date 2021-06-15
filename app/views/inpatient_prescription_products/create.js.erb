@@ -20,10 +20,11 @@
     }});
   }).trigger('click');
 
-  $(".order-product-inputs").attr("readonly", true);
+  $("#child-<%= @inpatient_prescription_product.product.id %>").find(".order-product-inputs").attr("readonly", true);
 <% else %>
   $("#parent-<%= @inpatient_prescription_product.product.id %>").find('.btn-ipp-save').tooltip('hide');
   $("#parent-<%= @inpatient_prescription_product.product.id %>").find('td.action-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
+  $("#parent-<%= @inpatient_prescription_product.product.id %>").find(".order-product-inputs").attr("readonly", true);
 <% end %>
 
 $('.delete-item').on('click', function(e) {
