@@ -1,6 +1,6 @@
 <%= render 'shared/flash_message' %>
 
-<% if @inpatient_prescription_product.parent.nil? %>
+<% if @inpatient_prescription_product.parent.present? %>
   $('#child-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
     const target = $('#child-<%= @inpatient_prescription_product.product.id %>');
     $(target).remove();
@@ -8,7 +8,7 @@
 <% else %>
   $('#parent-<%= @inpatient_prescription_product.product.id %>').fadeOut(500, function(e){
     const target = $('#parent-<%= @inpatient_prescription_product.product.id %>');
+    $(target).find('btn data-toggle["tooltip"]').tooltip('hide');
     $(target).remove();
   });
-  console.log("DEUBG =======eleminando producto");
 <% end %>
