@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_115202) do
+ActiveRecord::Schema.define(version: 2021_06_15_134939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -503,9 +503,11 @@ ActiveRecord::Schema.define(version: 2021_05_07_115202) do
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "prescribed_by_id"
     t.index ["inpatient_prescription_id", "product_id", "parent_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
     t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
     t.index ["parent_id"], name: "index_inpatient_prescription_products_on_parent_id"
+    t.index ["prescribed_by_id"], name: "index_inpatient_prescription_products_on_prescribed_by_id"
     t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
   end
 

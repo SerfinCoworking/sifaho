@@ -78,36 +78,7 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
-    // /* habilitar edicion */
-    // $(".btn-ipp-edit").on('click', function(e){
-    //   const tr = $(e.target).closest('tr');
-    //   $(tr).find(".order-product-inputs").removeAttr("readonly");
-    //   $(tr).find(".saved-btn-combo").fadeOut(500, function(){
-    //     $(tr).find(".edit-btn-combo").fadeIn();
-    //   });
-    // });
-    
-    // /* Cancelar edicion */
-    // $(".cancel-item").on('click', function(e){
-    //   const tr = $(e.target).closest('tr');
-    //   $(tr).find(".order-product-inputs").attr("readonly", true);
-    //   $(tr).find(".edit-btn-combo").fadeOut(500, function(){
-    //     $(tr).find(".saved-btn-combo").fadeIn();
-    //   });
-    //   const url = $(e.target).attr('data-url');
-    //   const urlType = $(e.target).attr('data-url-type');
-    //   $.ajax({
-    //     url: url,
-    //     method: urlType,
-    //     dataType: "script",
-    //   });
-    // });
-    
-    // /* Guardar modificaciones */
-    // $(".update-item").on('click', function(e){
-    //   updateOrderProduct(e.target)
-    // });
-    initActionsButton();
+    initActionsButton(); // set eventos de los botones de accion
     calcTotalDoseEvent();
 
   }// fin initEvents
@@ -199,6 +170,7 @@ function updateOrderProduct(target){
   }
 }
 
+/* Seteo de eventos a los botones de accion */
 function initActionsButton(){
   $('.delete-item').on('click', function(e) {
     const modal = $(e.target).attr('data-target');

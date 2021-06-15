@@ -15,7 +15,7 @@
 
   <div class="card-body">
     <%# carga de productos originales %>
-    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
+    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified' } do |inpatient_form| %>
       <%= render 'inpatient_prescriptions/partials/parent_products_table', inpatient_form: inpatient_form, order: @inpatient_prescription %>
     <% end %>
   </div><!-- /fin .card-body -->

@@ -28,6 +28,7 @@ class InpatientPrescriptionProductsController < ApplicationController
     @inpatient_prescription_product = InpatientPrescriptionProduct.new(ipp_create_by_ajax_params)
     @inpatient_prescription_product.inpatient_prescription_id = params[:inpatient_prescription_id]
     @inpatient_prescription_product.status = 'sin_proveer'
+    @inpatient_prescription_product.prescribed_by = current_user unless ipp_create_by_ajax_params[:parent_id].present?
 
     respond_to do |format|
       if @inpatient_prescription_product.save!

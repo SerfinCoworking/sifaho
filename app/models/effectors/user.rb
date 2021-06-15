@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :external_order_comments
   has_many :reports, :dependent => :destroy
   has_many :permission_requests, :dependent => :destroy
+  has_many :inpatient_prescription_products
 
   accepts_nested_attributes_for :profile, :professional
 

@@ -16,6 +16,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
                                    source: :in_pre_prod_lot_stocks, inverse_of: 'inpatient_prescription_product'
   belongs_to :order, class_name: 'InpatientPrescription', foreign_key: 'inpatient_prescription_id',
                      inverse_of: 'order_products'
+  belongs_to :prescribed_by, optional: true, class_name: 'User'
   belongs_to :product
   has_many :lot_stocks, through: :order_prod_lot_stocks
   belongs_to :parent, class_name: 'InpatientPrescriptionProduct', required: false
@@ -24,6 +25,8 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Validaciones
   validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :parent?
   validates_presence_of :product_id
+  validates_presence_of :prescribed_by_id, if: :parent?
+
   # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"},
   # if: :is_proveedor_aceptado_and_quantity_greater_than_0?
 
