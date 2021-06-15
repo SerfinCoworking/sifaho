@@ -26,19 +26,15 @@
           <%= fa_icon 'spinner', class: "fa-spin"%>
         </div>
       </div>
-    <% else %>
-      <%= f.input :product_code_fake, label: false, disabled: true,
-        input_html: {
-          value: "#{ f.object.product.code }",
-          class: "product-code",
-          size: 8,
-        }
-      %>
-    <% end %>
 
-    <%# Hidden product_id %>
-    <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
-      value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+      <%# Hidden product_id %>
+      <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
+                  value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+    <% else %>
+      <div class="product-info">
+        <%= f.object.product.code %>
+      </div>
+    <% end %>
   </td>
 
   <!-- Nombre de Producto -->
@@ -67,80 +63,107 @@
         </div>
       </div>
     <% else %>
-      <%= f.input :product_name_fake, label: false, disabled: true,
-        input_html: {
-          value: "#{ f.object.product.name }",
-          size: 30,
-        }
-      %>
+      <div class="product-info">
+        <%= f.object.product.name %>
+      </div>
     <% end %>
   </td>
 
   <!-- Unidad -->
   <td>
-    <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
-      input_html: {
-        class: 'product-unity input-sm order-product-inputs',
-        size: 10,
-        value: "#{
-          if f.object.product.present?
-            f.object.product.unity.name
-          end
-        }"
-      } 
-    %> 
+    <% if policy(f.object).edit_parent_product? %>
+      <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'product-unity input-sm order-product-inputs',
+          size: 10,
+          value: "#{
+            if f.object.product.present?
+              f.object.product.unity.name
+            end
+          }"
+        } 
+      %> 
+    <% else %>
+      <div class="product-info">
+        <%= f.object.product.unity.name %>
+      </div>
+    <% end %>
   </td>
     
   <!-- Dosis -->
   <%# if policy(f.object).edit_request_quantity? %>
     <td style="width: 100px">
-      <%= f.input :dose_quantity,
-        label: false,
-        placeholder: 'Cant',
-        required: false,
-        readonly: !f.object.new_record?,
-        input_html: {
-          "data-tooltip"=>true,
-          :class=>"dose-quantity input-sm order-product-inputs",
-          :title=>"Cantidad solicitada",
-          "data-placement"=>"right",
-          min: '1', 
-          step:'any',
-          :style => 'width: 100px',
-          value: f.object.dose_quantity.present? ?  f.object.dose_quantity : 0
-        }
-      %>
+      <% if policy(f.object).edit_parent_product? %>
+        <%= f.input :dose_quantity,
+          label: false,
+          placeholder: 'Cant',
+          required: false,
+          readonly: !f.object.new_record?,
+          input_html: {
+            "data-tooltip"=>true,
+            :class=>"dose-quantity input-sm order-product-inputs",
+            :title=>"Cantidad solicitada",
+            "data-placement"=>"right",
+            min: '1', 
+            step:'any',
+            :style => 'width: 100px',
+            value: f.object.dose_quantity.present? ?  f.object.dose_quantity : 0
+          }
+        %>
+      <% else %>
+        <div class="product-info">
+          <%= f.object.dose_quantity %>
+        </div>
+      <% end %>
     </td>
   <%# end %>
 
   <!-- Intervalo -->
   <td>
-    <%= f.input :interval, label: false, 
-      readonly: !f.object.new_record?,
-      input_html: {
-        class: 'input-sm dose-interval order-product-inputs',
-        size: 6, 
-        placeholder: "Cant",
-        value: "#{ f.object.interval.present? ? f.object.interval : 0 }"
-      } %>
+    <% if policy(f.object).edit_parent_product? %>
+      <%= f.input :interval, label: false, 
+        readonly: !f.object.new_record?,
+        input_html: {
+          class: 'input-sm dose-interval order-product-inputs',
+          size: 6, 
+          placeholder: "Cant",
+          value: "#{ f.object.interval.present? ? f.object.interval : 0 }"
+        } %>
+    <% else %>
+      <div class="product-info">
+        <%= f.object.interval %>
+      </div>
+    <% end %>
   </td>
 
   <td>
-    <%= f.input :total_dose, 
-      label: false,
-      readonly: true,
-      placeholder: 'Dosis total',
-      input_html: { 
-        class: 'input-sm product-dose-total order-product-inputs',
-        value: f.object.total_dose.present? ? f.object.total_dose : 0
-      }
-    %>
+    <% if policy(f.object).edit_parent_product? %>
+      <%= f.input :total_dose, 
+        label: false,
+        readonly: true,
+        placeholder: 'Dosis total',
+        input_html: { 
+          class: 'input-sm product-dose-total order-product-inputs',
+          value: f.object.total_dose.present? ? f.object.total_dose : 0
+        }
+      %>
+    <% else %>
+      <div class="product-info">
+        <%= f.object.total_dose %>
+      </div>
+    <% end %>
   </td>
 
   <td>
-    <%= f.input :observation, label: false, as: :text,
-      readonly: !f.object.new_record?,
-      :input_html => { class: 'input-sm product-observartion order-product-inputs', :cols => 20  , :rows => 1 } %>
+    <% if policy(f.object).edit_parent_product? %>
+      <%= f.input :observation, label: false, as: :text,
+                  readonly: !f.object.new_record?,
+                  input_html: { class: 'input-sm product-observartion order-product-inputs', cols: 20  , rows: 1 } %>
+    <% else %>  
+      <div class="product-info">
+        <%= f.object.observation %>
+      </div>
+    <% end %>
   </td>
   
   <td class="actions-col">
