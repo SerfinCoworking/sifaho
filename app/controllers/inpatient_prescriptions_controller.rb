@@ -31,7 +31,7 @@ class InpatientPrescriptionsController < ApplicationController
   def new
     @inpatient_prescription = InpatientPrescription.new
     @inpatient_prescription.parent_order_products.build
-    @inpatients = Patient.all.limit(10)
+    @inpatients = Patient.last(10)
   end
 
   # GET /inpatient_prescriptions/1/edit
