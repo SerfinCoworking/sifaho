@@ -25,15 +25,17 @@
       </div>
       <div class="col-5 d-flex justify-content-around align-items-center">
         <div>
-          Movimientos <span class="badge badge-secondary"><%= @inpatient_movements.count %></span>
+          Movimientos hoy <span class="badge badge-secondary"><%= InpatientMovement.since_date(Date.today).count %></span>
         </div>
-        <% InpatientMovement.find_each do |mov_type| %>
+        <% InpatientMovementType.find_each do |mov_type| %>
           <div>
-            <%= link_to inpatient_movements_path(filterrific: { with_status: mov_type.id }), 
+            <%= link_to inpatient_movements_path(filterrific: { by_type: mov_type.id }), 
               class: 'tn btn-link text-dark text-left p-0',
-              title: "Ver solicitudes", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-              <%= mov_type.name.humanize.pluralize(@inpatient_movements.for_type(mov_type.id).count) %> 
-              <span class="badge badge-info"><%= @inpatient_movements.disponible.count %></span>
+              title: "Ver #{mov_type.name.humanize.pluralize}",
+              data: { toggle: 'tooltip', placement: 'bottom' } do %>
+              <%= fa_icon "#{mov_type.fa_icon}" %>
+              <%= mov_type.name.humanize.pluralize %> 
+              <span class="badge badge-info"><%= @inpatient_movements.by_type(mov_type.id).count %></span>
             <% end %>
           </div>
         <% end %>

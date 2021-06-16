@@ -12,6 +12,7 @@ class InpatientMovementsController < ApplicationController
       },
       persistence_id: false,
     ) or return
+    @inpatient_movements = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
   # GET /inpatient_movements/1
@@ -22,6 +23,8 @@ class InpatientMovementsController < ApplicationController
   # GET /inpatient_movements/new
   def new
     @inpatient_movement = InpatientMovement.new
+    @inpatient_movement.movement_type_id = params[:movement_type_id] if params[:movement_type_id].present?
+    @patient = Patient.new
   end
 
   # GET /inpatient_movements/1/edit
@@ -32,12 +35,14 @@ class InpatientMovementsController < ApplicationController
   # POST /inpatient_movements.json
   def create
     @inpatient_movement = InpatientMovement.new(inpatient_movement_params)
+    @inpatient_movement.user = current_user
 
     respond_to do |format|
-      if @inpatient_movement.save
+      if @inpatient_movement.save!
         format.html { redirect_to @inpatient_movement, notice: 'El movimiento del paciente se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @inpatient_movement }
       else
+        @patient = @inpatient_movement.patient.present? ? @inpatient_movement.patient : Patient.new
         format.html { render :new }
         format.json { render json: @inpatient_movement.errors, status: :unprocessable_entity }
       end
@@ -76,6 +81,6 @@ class InpatientMovementsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def inpatient_movement_params
-      params.require(:inpatient_movement).permit(:observations, :bed_id, :patient_id, :movement_type_id, :user_id)
+      params.require(:inpatient_movement).permit(:bed_id, :patient_id, :movement_type_id, :observations)
     end
 end

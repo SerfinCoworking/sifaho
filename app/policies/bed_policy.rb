@@ -42,6 +42,8 @@ class BedPolicy < ApplicationPolicy
   end
 
   def admit_patient?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    if record.disponible?
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
   end
 end

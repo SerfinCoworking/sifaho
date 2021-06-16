@@ -61,14 +61,40 @@
       </div>  
     </div>
     <div class="row mt-4">
-      <div class="col-6">
+      <div class="col-4">
         <h5 class="border-bottom pb-2"><%= fa_icon 'user-injured' %> Paciente</h5>
-        <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block' do %>
-          <%= fa_icon 'plus' %> Ingresar paciente
+        <% if @bed.patient.present? %>
+          <!-- Patient profile -->
+          <div class='col-12'>
+            <div class="media">
+              <div class="mr-3">
+                <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
+                  <%= image_tag patient_avatar(@bed.patient, 83, 102), size: '83x102', class:"img-thumbnail media-object" %>
+                <% end %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Paciente</h4>
+                <p>
+                  <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
+                    <%= @bed.patient_fullname.titleize %>
+                  <% end %>
+                </p>
+                <p><strong>DNI: </strong><%= @bed.patient_dni %></p>
+                <p><strong>Edad: </strong><%= @bed.patient_age_string %></p>
+              </div>
+            </div>
+          </div> <!-- End Patient profile -->
+        <% end  %>
+
+        <% if policy(@bed).admit_patient? %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block' do %>
+            <%= fa_icon 'plus' %> Ingresar paciente
+          <% end %>
         <% end %>
       </div>
-      <div class="col-6">
-        <h5 class="border-bottom pb-2"><%= fa_icon 'user-md' %> Médico</h5>
+      <div class="col-8">
+        <h5 class="border-bottom pb-2"> Tratamientos desde su ingreso <%= @bed.patient.last_hospitalization.created_at.strftime("%d/%m/%y") %></h5>
+        <% @bed.patient.inpatient_prescriptions %>
       </div>
     </div>
   </div>

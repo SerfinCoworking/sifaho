@@ -1,22 +1,30 @@
 class InpatientMovement < ApplicationRecord
   
   # Relationships
-  has_one :establishment, through: :bed
   belongs_to :bed
+  has_one :bedroom, through: :bed
+  has_one :establishment, through: :bedroom
   belongs_to :patient
   belongs_to :movement_type, class_name: 'InpatientMovementType'
   belongs_to :user
 
   # Validations
-  validates :bed, :patient, :movement_type, :user, :observations, presence: true
+  validates :bed_id, :patient_id, :movement_type, :user, presence: true
+
+  # Delegations
+  delegate :name, to: :movement_type, prefix: true
+  delegate :name, to: :bedroom, prefix: true
+  delegate :name, to: :bed, prefix: true
 
   # Callbacks
-  before_validation :assign_description
-
+  before_create :apply_movement
+  
   # Scopes
   scope :establishment, -> (establishment_id) {
-    joins(:bed).where(bed: { establishment_id: establishment_id }) 
+    left_joins(:establishment).where("establishments.id = ?" , establishment_id)
   }
+
+  scope :admissions, -> { where(movement_type_id: 1) }
 
   filterrific(
     default_filter_params: { sorted_by: 'fecha_desc' },
@@ -57,4 +65,20 @@ class InpatientMovement < ApplicationRecord
   end
 
   scope :by_type, ->(ids_ary) { where(movement_type_id: ids_ary) }
+
+  scope :since_date, ->(a_date) { where("inpatient_movements.created_at >= ?", a_date) }
+
+  private
+
+  # Apply the inpatient movement depending the movement type
+  def apply_movement
+    if self.movement_type_id == 1 # Ingreso
+      self.bed.assign_patient(self.patient)
+    elsif self.movement_type_id == 2 # Egreso
+      self.bed.remove_patient(self.patient)
+    elsif self.movement_type_id == 3 # Traspaso
+      self.bed.remove_patient(self.patient)
+      self.bed.assign_patient(self.patient)
+    end
+  end
 end

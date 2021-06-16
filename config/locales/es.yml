@@ -169,6 +169,9 @@ es:
         name: 'Nombre'
       receipt_product:
         provenance_id: 'procedencia'
+      inpatient_movement:
+        bed_id: 'Cama'
+        patient_id: 'Paciente'
 
   date:
     abbr_day_names:

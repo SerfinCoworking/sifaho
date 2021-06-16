@@ -23,17 +23,11 @@ class BedroomPolicy < ApplicationPolicy
   end
 
   def update?
-    unless ["en_camino", "entregado"].include? record.provider_status
-      user.has_any_role?(:admin, :enfermero)
-    end
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
 
   def edit?
-    if record.borrador?
-      user.has_any_role?(:admin, :farmaceutico, :enfermero)
-    elsif record.pendiente?
-      user.has_any_role?(:admin, :farmaceutico)
-    end
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
 
   def destroy?

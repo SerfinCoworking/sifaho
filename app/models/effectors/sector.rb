@@ -71,6 +71,8 @@ class Sector < ApplicationRecord
     where(establishment_id: [*an_id])
   }
 
+  scope :provide_hospitalization, -> { where(provide_hospitalization: true) }
+
   def establishment_name
     self.establishment.name
   end

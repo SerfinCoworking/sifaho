@@ -17,6 +17,8 @@ class Bed < ApplicationRecord
   # Delegations
   delegate :name, to: :bedroom, prefix: :bedroom
   delegate :name, to: :service, prefix: :service
+  delegate :fullname, :dni, :age_string, to: :patient, prefix: :patient
+
 
   scope :establishment, -> (establishment_id) { joins(:establishment).where("establishments.id = ?", establishment_id) }
 
@@ -80,4 +82,18 @@ class Bed < ApplicationRecord
   end
 
   scope :by_bedroom, ->(ids_ary) { where(bedroom_id: ids_ary) }
+
+  # Assign a certain patient to the bed
+  def assign_patient(a_patient)
+    raise ArgumentError, 'Cama ocupada' unless self.disponible?
+    self.patient = a_patient
+    self.ocupada!
+  end
+
+  # Remve a certain patient from the bed
+  def remove_patient(a_patient)
+    raise ArgumentError, 'El paciente no corresponde al que desea liberar' if self.patient != a_patient
+    self.patient = nil
+    self.disponible!
+  end
 end

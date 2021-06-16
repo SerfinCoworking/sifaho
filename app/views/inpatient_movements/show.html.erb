@@ -1,29 +1,94 @@
-<p id="notice"><%= notice %></p>
+<%= render 'inpatient_prescriptions/header' %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @inpatient_movement.name %>
-</p>
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo movimiento de internación
+      </h5>
+    </div>
+    <div>
+      <%= link_to bed_path(format: 'pdf'), class: 'btn',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+      <%= link_to inpatient_movements_path, class: 'btn btn-light',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
 
-<p>
-  <strong>Bed:</strong>
-  <%= @inpatient_movement.bed %>
-</p>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <h4>Tipo de movimiento</h4>
+        <%= fa_icon "#{@inpatient_movement.movement_type.fa_icon}" %> <%= @inpatient_movement.movement_type_name.upcase %>
+        <hr>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'door-closed', size: '4x' %>
+          <h4 class="pl-2">
+            Habitación
+            <span class="badge badge-secondary">
+              <%= @inpatient_movement.bed.bedroom_name %>
+            </span>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'bed', size: '4x' %>
+          <h4 class="pl-2">
+            Cama
+            <%= @inpatient_movement.bed_name %>
+          </h4>
+        </div>
+      </div>
+      <div class="col-12">
+        <hr>
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'user-injured', size: '4x' %>
+          <h4 class="pl-2">
+            Paciente
+            <span class="badge badge-info">
+              <%= @inpatient_movement.patient.fullname %>
+            </span>
+          </h4>
+        </div>
+      </div> 
+      <div class="col-12">
+        <hr>
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'user', size: '4x' %>
+          <h4 class="pl-2">
+            Creado por
+            <span class="badge badge-info">
+              <%= @inpatient_movement.user.full_name %>
+            </span>
+          </h4>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <div class="text-right w-100">
+      <%= link_to inpatient_movements_path,
+        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
 
-<p>
-  <strong>Patient:</strong>
-  <%= @inpatient_movement.patient %>
-</p>
-
-<p>
-  <strong>Movement type:</strong>
-  <%= @inpatient_movement.movement_type %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @inpatient_movement.user %>
-</p>
-
-<%= link_to 'Edit', edit_inpatient_movement_path(@inpatient_movement) %> |
-<%= link_to 'Back', inpatient_movements_path %>
+      <% if policy(@inpatient_movement).edit? %>
+        <%= link_to edit_inpatient_movement_path(@inpatient_movement), :"data-turbolinks" => false,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
+          class: "btn btn-warning mr-1" do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
+      <% end %>
+    </div> <!-- fin botones right -->
+  </div>
+</div>
