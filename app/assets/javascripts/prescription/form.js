@@ -49,7 +49,7 @@ $(document).on('turbolinks:load', function(e){
           
           // Datos del paciente rellenados con Andes
           $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
-          $("#patient-marital-status").val(capitalize(ui.item.data.estadoCivil));
+          $("#patient-marital-status").val(ui.item.data.estadoCivil);
 
           for(let index = 0; ui.item.data.contacto.length > index; index++){
             if(['celular', 'fijo'].includes(ui.item.data.contacto[index].tipo)){

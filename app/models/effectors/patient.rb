@@ -3,7 +3,7 @@ class Patient < ApplicationRecord
 
   enum status: { Temporal: 0, Validado: 1 }
   enum sex: { Otro: 1, Femenino: 2, Masculino: 3 }
-  enum marital_status: { Soltero: 1, Casado: 2, Separado: 3, Divorciado: 4, Viudo: 5, otro: 6 }
+  enum marital_status: { soltero: 1, casado: 2, separado: 3, divorciado: 4, viudo: 5, otro: 6 }
 
   # Relaciones
   belongs_to :patient_type
