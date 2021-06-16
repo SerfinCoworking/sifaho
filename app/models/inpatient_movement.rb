@@ -9,7 +9,8 @@ class InpatientMovement < ApplicationRecord
   belongs_to :user
 
   # Validations
-  validates :bed_id, :patient_id, :movement_type, :user, presence: true
+  validates_presence_of :bed_id, :patient_id, :movement_type, :user
+  validate :admit_patient, if: :is_admission?
 
   # Delegations
   delegate :name, to: :movement_type, prefix: true
@@ -68,6 +69,10 @@ class InpatientMovement < ApplicationRecord
 
   scope :since_date, ->(a_date) { where("inpatient_movements.created_at >= ?", a_date) }
 
+  def is_admission?
+    self.movement_type_id == 1
+  end
+
   private
 
   # Apply the inpatient movement depending the movement type
@@ -79,6 +84,12 @@ class InpatientMovement < ApplicationRecord
     elsif self.movement_type_id == 3 # Traspaso
       self.bed.remove_patient(self.patient)
       self.bed.assign_patient(self.patient)
+    end
+  end
+
+  def admit_patient
+    if self.patient.present? && self.patient.bed.present?
+      errors.add(:patient_id, "DNI #{self.patient.dni} ya se encuentra hospitalizado en la cama #{self.patient.bed.name}")
     end
   end
 end

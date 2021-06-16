@@ -8,7 +8,7 @@ class InpatientMovementPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:admin)
+    user.has_any_role?(:admin, :farmaceutico, :enfermero)
   end
 
   def new?

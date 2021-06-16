@@ -36,10 +36,11 @@ class InpatientMovementsController < ApplicationController
   def create
     @inpatient_movement = InpatientMovement.new(inpatient_movement_params)
     @inpatient_movement.user = current_user
+    authorize @inpatient_movement
 
     respond_to do |format|
-      if @inpatient_movement.save!
-        format.html { redirect_to @inpatient_movement, notice: 'El movimiento del paciente se ha creado correctamente.' }
+      if @inpatient_movement.save
+        format.html { redirect_to @inpatient_movement.bed, notice: 'El movimiento del paciente se ha creado correctamente.' }
         format.json { render :show, status: :created, location: @inpatient_movement }
       else
         @patient = @inpatient_movement.patient.present? ? @inpatient_movement.patient : Patient.new

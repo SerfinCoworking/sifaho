@@ -46,4 +46,10 @@ class BedPolicy < ApplicationPolicy
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
+
+  def discharge_patient?
+    if record.ocupada?
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
+  end
 end

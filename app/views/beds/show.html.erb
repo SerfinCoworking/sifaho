@@ -69,7 +69,7 @@
             <div class="media">
               <div class="mr-3">
                 <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
-                  <%= image_tag patient_avatar(@bed.patient, 83, 102), size: '83x102', class:"img-thumbnail media-object" %>
+                  <%= image_tag patient_avatar(@bed.patient, 83, 102), size: '150x200', class:"img-thumbnail media-object" %>
                 <% end %>
               </div>
               <div class="media-body">
@@ -77,7 +77,7 @@
                 <p>
                   <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
                     <%= @bed.patient_fullname.titleize %>
-                  <% end %>
+                  <% end %> 
                 </p>
                 <p><strong>DNI: </strong><%= @bed.patient_dni %></p>
                 <p><strong>Edad: </strong><%= @bed.patient_age_string %></p>
@@ -87,14 +87,22 @@
         <% end  %>
 
         <% if policy(@bed).admit_patient? %>
-          <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block' do %>
-            <%= fa_icon 'plus' %> Ingresar paciente
+          <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block mt-2' do %>
+            <%= fa_icon 'sign-in-alt' %> Ingresar paciente
+          <% end %>
+        <% end %>
+        
+        <% if policy(@bed).discharge_patient? %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 2), class: 'btn btn-danger btn-block mt-2' do %>
+            <%= fa_icon 'sign-out-alt' %> Egresar paciente
           <% end %>
         <% end %>
       </div>
       <div class="col-8">
-        <h5 class="border-bottom pb-2"> Tratamientos desde su ingreso <%= @bed.patient.last_hospitalization.created_at.strftime("%d/%m/%y") %></h5>
-        <% @bed.patient.inpatient_prescriptions %>
+        <% if @bed.patient.present? %>
+          <h5 class="border-bottom pb-2"> Tratamientos desde su ingreso <%= @bed.patient.last_hospitalization.created_at.strftime("%d/%m/%y") %></h5>
+          <% @bed.patient.inpatient_prescriptions %>
+        <% end %>
       </div>
     </div>
   </div>

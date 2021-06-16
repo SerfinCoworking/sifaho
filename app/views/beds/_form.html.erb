@@ -12,7 +12,7 @@
   </div>
   <div class="card-body" id="panel-body-new">
 
-    <%= simple_form_for @bed, html: {class: "", role: 'check-modified'} do |f| %>
+    <%= simple_form_for @bed, html: {class: "", id: 'bed-form', role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
 
       <div class="row">
@@ -56,8 +56,8 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', beds_path, class: 'btn mr-2' %>
-    <button type='submit' name='commit' class='btn btn-success' form="<%= @bed.new_record? ? 'new_bed' : 'edit_bed_' + @bed.id.to_s %>">
-      <%= fa_icon 'save' %> Guardar
-    </button>
+    <%= button_tag type: 'submit', class: "btn btn-success", form: "bed-form", 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Guardando".html_safe do %>
+      <%= fa_icon 'save'%> Guardar
+    <% end %>
   </div>
 </div>
