@@ -6,7 +6,11 @@ $(document).on('turbolinks:load', function(e){
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
-
+    $(inserted_item).find('.form-control').each(function(i, element){
+      const currentName = $(element).attr('name');
+      $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
+    });
+    // console.log($(inserted_item));
     // Guarda la fila del producto seleccionado
     // Valida que tenga almenos un producto seleccionado
     // y que tenga una cantidad por dosis
@@ -71,7 +75,7 @@ $(document).on('turbolinks:load', function(e){
       select: function (event, ui) { 
         onSelectAutoCSupplyName(event.target, ui.item);
         const tr = $(event.target).closest(".nested-fields");
-        tr.find("input.request-quantity").focus(); // changes focus to quantity input
+        tr.find("input.dose_quantity").focus(); // changes focus to quantity input
       },
       response: function(event, ui) {
         $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
@@ -101,8 +105,7 @@ $(document).on('turbolinks:load', function(e){
       tr.find("input.product-unity").val(item.unity); // update product unity input      
       tr.find("input.stock-quantity").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input  
-      tr.find("input.deliver-quantity").first().focus();
-      tr.find('div.lot-stocks-hidden').html('');
+      tr.find("input.dose_quantity").first().focus();
     }
   }
 
@@ -120,17 +123,17 @@ $(document).on('turbolinks:load', function(e){
   // On change delivery quantity
   function calcTotalDoseEvent(){
     /* Request Dose and Interval dose */
-    $('input.dose-quantity , input.dose-interval').on('change', function(e){
+    $('input.dose_quantity , input.interval').on('change', function(e){
       const tr = $(e.target).closest(".nested-fields");
       calcTotalDose(tr);
     });
   }
 
   function calcTotalDose(row){
-    const totalRequestDose = $(row).find('input.dose-quantity').first().val() || 0;
-    const totalIntervalDose = $(row).find('input.dose-interval').first().val() || 0;
+    const totalRequestDose = $(row).find('input.dose_quantity').first().val() || 0;
+    const totalIntervalDose = $(row).find('input.interval').first().val() || 0;
     const total = (24 /  totalIntervalDose) * totalRequestDose;
-    $(row).find('input.product-dose-total').first().val(total);
+    $(row).find('input.total_dose').first().val(total);
   }
 
 });
@@ -141,33 +144,33 @@ function updateOrderProduct(target){
   const tr = $(target).closest('tr');
   const parent_id = $(target).attr('data-parent-id');
   const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
-  const dose_quantity = $(tr).find('input.dose-quantity').first().val();
-  const interval = $(tr).find('input.dose-interval').first().val();
+  const dose_quantity = $(tr).find('input.dose_quantity').first().val();
+  const interval = $(tr).find('input.interval').first().val();
   // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
-  const total_dose = $(tr).find('input.product-dose-total').first().val();
+  const total_dose = $(tr).find('input.total_dose').first().val();
   const observation = $(tr).find('textarea.product-observartion').first().val();
-  const trId = parent_id ? "child-"+product_id : "parent-"+product_id;
+  const uniqId = Date.now();
+  const trId = parent_id ? "child-"+uniqId : "parent-"+uniqId;
+  $(tr).find(".is-invalid").removeClass('is-invalid');
   $(tr).attr('id', trId);
 
-  if(typeof product_id !== 'undefined'){
-
-    $.ajax({
-      url: url,
-      method: urlType,
-      dataType: "script",
-      data: {
-        inpatient_prescription_product: {
-          product_id: product_id,
-          dose_quantity: dose_quantity,
-          interval: interval,
-          // deliver_quantity: deliver_quantity,
-          observation: observation,
-          parent_id: parent_id,
-          total_dose: total_dose
-        }
-      }
-    });
-  }
+  $.ajax({
+    url: url,
+    method: urlType,
+    dataType: "script",
+    data: {
+      inpatient_prescription_product: {
+        product_id: product_id,
+        dose_quantity: dose_quantity,
+        interval: interval,
+        // deliver_quantity: deliver_quantity,
+        observation: observation,
+        parent_id: parent_id,
+        total_dose: total_dose
+      },
+      tr_id: trId
+    }
+  });
 }
 
 /* Seteo de eventos a los botones de accion */

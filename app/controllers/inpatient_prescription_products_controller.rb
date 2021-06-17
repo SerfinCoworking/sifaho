@@ -31,13 +31,16 @@ class InpatientPrescriptionProductsController < ApplicationController
     @inpatient_prescription_product.prescribed_by = current_user unless ipp_create_by_ajax_params[:parent_id].present?
 
     respond_to do |format|
-      if @inpatient_prescription_product.save!
+      if @inpatient_prescription_product.save
         flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
-        format.html { render :new }
-        format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
-        format.js
+        # format.html { render :new }
+        # format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
+        # puts @inpatient_prescription_product.errors
+        puts params[:tr_id].to_s.colorize(background: :red)
+        puts "DEBUG=============ERRORS"
+        format.js { render :new, locals: { tr_id: params[:tr_id].to_s } }
       end
     end
   end

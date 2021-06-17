@@ -23,9 +23,11 @@ class InpatientPrescriptionProduct < ApplicationRecord
   has_many :children, class_name: 'InpatientPrescriptionProduct', foreign_key: :parent_id
 
   # Validaciones
-  validates :dose_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :parent?
-  validates_presence_of :product_id
+  validates :dose_quantity, numericality: { only_integer: true, greater_than: 0, message: 'Dosis debe ser mayor a 0' }, if: :parent?
+  validates :interval, numericality: { only_integer: true, greater_than: 0, message: 'Intervalo debe ser mayor a 0' }, if: :parent?
+  validates_presence_of :product_id, message: 'Producto no puede estar en blanco'
   validates_presence_of :prescribed_by_id, if: :parent?
+
 
   # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"},
   # if: :is_proveedor_aceptado_and_quantity_greater_than_0?
