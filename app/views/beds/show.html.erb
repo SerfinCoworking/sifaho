@@ -31,10 +31,16 @@
           <%= fa_icon 'bed', size: '4x', class: 'text-'+bed_status_label(@bed ) %>
           <h4 class="pl-2">
               Cama
-            <span class="badge badge-secondary">
+            <span class="badge badge-info">
               <%= @bed.name %>
             </span>
           </h4>
+          <% if policy(@bed).edit? %>
+            <%= link_to edit_bed_path(@bed), :"data-turbolinks" => false, class: 'btn btn-outline-warning btn-sm ml-2 mb-2', 
+              title: 'Editar cama', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon 'pen' %>
+            <% end %>
+          <% end %>
         </div>
       </div>
       <div class="col-4">
@@ -42,7 +48,7 @@
           <%= fa_icon 'door-closed', size: '4x' %>
           <h4 class="pl-2">
             Habitación
-            <span class="badge badge-secondary">
+            <span class="badge badge-info">
               <%= @bed.bedroom_name %>
             </span>
           </h4>
@@ -87,13 +93,13 @@
         <% end  %>
 
         <% if policy(@bed).admit_patient? %>
-          <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block mt-2' do %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 1, bed_id: @bed.id), class: 'btn btn-primary btn-block mt-2' do %>
             <%= fa_icon 'sign-in-alt' %> Ingresar paciente
           <% end %>
         <% end %>
-        
+
         <% if policy(@bed).discharge_patient? %>
-          <%= link_to new_inpatient_movement_path(movement_type_id: 2), class: 'btn btn-danger btn-block mt-2' do %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 2, bed_id: @bed.id), class: 'btn btn-danger btn-block mt-2' do %>
             <%= fa_icon 'sign-out-alt' %> Egresar paciente
           <% end %>
         <% end %>
@@ -112,15 +118,6 @@
         'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
         class: "btn btn-light mr-1" do %>
         Volver
-      <% end %>
-
-      <% if policy(@bed).edit? %>
-        <%= link_to edit_bed_path(@bed), :"data-turbolinks" => false,
-          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
-          class: "btn btn-warning mr-1" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
       <% end %>
     </div> <!-- fin botones right -->
   </div>

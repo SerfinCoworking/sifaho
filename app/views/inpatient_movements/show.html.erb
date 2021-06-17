@@ -29,6 +29,15 @@
       </div>
       <div class="col-4">
         <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'bed', size: '4x' %>
+          <h4 class="pl-2">
+            Cama
+            <%= @inpatient_movement.bed_name %>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
           <%= fa_icon 'door-closed', size: '4x' %>
           <h4 class="pl-2">
             Habitación
@@ -38,38 +47,37 @@
           </h4>
         </div>
       </div>
-      <div class="col-4">
-        <div class="d-flex justify-content-bewteen align-items-center">
-          <%= fa_icon 'bed', size: '4x' %>
-          <h4 class="pl-2">
-            Cama
-            <%= @inpatient_movement.bed_name %>
-          </h4>
-        </div>
-      </div>
       <div class="col-12">
         <hr>
         <div class="d-flex justify-content-bewteen align-items-center">
-          <%= fa_icon 'user-injured', size: '4x' %>
-          <h4 class="pl-2">
-            Paciente
-            <span class="badge badge-info">
-              <%= @inpatient_movement.patient.fullname %>
-            </span>
-          </h4>
+          <!-- Patient profile -->
+          <div class='col-12'>
+            <div class="media">
+              <div class="mr-3">
+                <%= link_to patient_path(@inpatient_movement.patient), target: :_blank, class: "link" do %>
+                  <%= image_tag patient_avatar(@inpatient_movement.patient, 83, 102), size: '150x200', class:"img-thumbnail media-object" %>
+                <% end %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Paciente</h4>
+                <p>
+                  <%= link_to patient_path(@inpatient_movement.patient), target: :_blank, class: "link" do %>
+                    <%= @inpatient_movement.patient_fullname.titleize %>
+                  <% end %> 
+                </p>
+                <p><strong>DNI: </strong><%= @inpatient_movement.patient_dni %></p>
+                <p><strong>Edad: </strong><%= @inpatient_movement.patient_age_string %></p>
+              </div>
+            </div>
+          </div> <!-- End Patient profile -->
         </div>
       </div> 
       <div class="col-12">
         <hr>
-        <div class="d-flex justify-content-bewteen align-items-center">
-          <%= fa_icon 'user', size: '4x' %>
-          <h4 class="pl-2">
-            Creado por
-            <span class="badge badge-info">
-              <%= @inpatient_movement.user.full_name %>
-            </span>
-          </h4>
-        </div>
+        <h5>Creado por</h5>
+        <p>
+          <%= @inpatient_movement.user.full_name %>
+        </p>
       </div>  
     </div>
   </div>

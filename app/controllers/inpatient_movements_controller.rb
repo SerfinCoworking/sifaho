@@ -24,6 +24,10 @@ class InpatientMovementsController < ApplicationController
   def new
     @inpatient_movement = InpatientMovement.new
     @inpatient_movement.movement_type_id = params[:movement_type_id] if params[:movement_type_id].present?
+    @inpatient_movement.bed_id = params[:bed_id] if params[:bed_id].present?
+    if @inpatient_movement.bed.present? && @inpatient_movement.bed.patient.present?
+      @inpatient_movement.patient_id = @inpatient_movement.bed.patient.id
+    end
     @patient = Patient.new
   end
 
