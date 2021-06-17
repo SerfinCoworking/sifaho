@@ -12,7 +12,7 @@
                  size="6"
                  autocomplete="off"
                  placeholder="Código"
-                 <%= f.object.product.present? ? 'readonly="readonly"' : ''%>>
+                 <%= 'readonly' if f.object.product.present? %>>
           <div class="invalid-feedback"></div>
         </div>
 
