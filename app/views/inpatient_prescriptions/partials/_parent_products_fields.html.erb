@@ -47,7 +47,7 @@
                  size="45"
                  autocomplete="off"
                  placeholder="Nombre"
-                 <%= f.object.product.present? ? 'readonly="readonly"' : ''%>>
+                 <%= 'readonly' if f.object.product.present? %>>
           <div class="invalid-feedback"></div>
         </div>
 
@@ -88,7 +88,8 @@
                 value="<%= f.object.dose_quantity if f.object.dose_quantity.present? %>"
                 placeholder="Cant" 
                 type="number"
-                name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>">
+                name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>"
+                <%= 'readonly' if f.object.id.present? %>>
           <div class="invalid-feedback"> </div>
         </div>
        
@@ -108,7 +109,8 @@
               value="<%= f.object.interval if f.object.interval.present? %>"
               placeholder="Intervalo" 
               type="number"
-              name="<%= f.object.id.present? ? "interval-#{f.object.id}": "interval"%>">
+              name="<%= f.object.id.present? ? "interval-#{f.object.id}": "interval"%>"
+              <%= 'readonly' if f.object.id.present? %>>
         <div class="invalid-feedback"> </div>
       </div>
 
@@ -127,7 +129,8 @@
               placeholder="Dosis total" 
               type="number"
               readonly
-              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose"%>">
+              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose"%>"
+              <%= 'readonly' if f.object.id.present?  %>>
         <div class="invalid-feedback"> </div>
       </div>
     <% else %>

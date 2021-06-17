@@ -31,16 +31,12 @@ class InpatientPrescriptionProductsController < ApplicationController
     @inpatient_prescription_product.prescribed_by = current_user unless ipp_create_by_ajax_params[:parent_id].present?
 
     respond_to do |format|
+      @tr_id = params[:tr_id].to_s
       if @inpatient_prescription_product.save
         flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
-        # format.html { render :new }
-        # format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
-        # puts @inpatient_prescription_product.errors
-        puts params[:tr_id].to_s.colorize(background: :red)
-        puts "DEBUG=============ERRORS"
-        format.js { render :new, locals: { tr_id: params[:tr_id].to_s } }
+        format.js { render :new }
       end
     end
   end
@@ -48,13 +44,12 @@ class InpatientPrescriptionProductsController < ApplicationController
   # PATCH/PUT /inpatient_prescription_products/1
   # PATCH/PUT /inpatient_prescription_products/1.json
   def update
+    @tr_id = params[:tr_id].to_s
     respond_to do |format|
       if @inpatient_prescription_product.update!(inpatient_prescription_product_ajax_params)
         flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
-        format.html { render :edit }
-        format.json { render json: @inpatient_prescription_product.errors, status: :unprocessable_entity }
         format.js
       end
     end
