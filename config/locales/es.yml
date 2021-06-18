@@ -48,6 +48,7 @@ es:
       filter: Filtrar
       dispense: Dispensar
       delivery: Entregar
+      set_products: Agregar productos
   activerecord:
     models:
       external_order: "Pedido de establecimiento"

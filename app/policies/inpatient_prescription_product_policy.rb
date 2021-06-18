@@ -6,7 +6,7 @@ class InpatientPrescriptionProductPolicy < ApplicationPolicy
   def edit_parent_product?
     # review
     if (record.sin_proveer? && (record.prescribed_by_id == user.id)) || record.new_record?
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medico, :enfermero)
     end
   end
 

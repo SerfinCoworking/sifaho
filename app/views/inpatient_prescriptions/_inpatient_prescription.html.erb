@@ -25,6 +25,16 @@
   </td>
   <td class="text-left actions-col">
     <div class="d-flex">
+      <% if policy(inpatient_prescription).set_products? %>
+        <%= link_to set_products_inpatient_prescriptions_path(inpatient_prescription),
+          class: 'btn btn-sm btn-primary mr-1 ml-1',
+          title: t("actions.tooltip.set_products"),
+          target: (dispense_target if defined?(dispense_target)),
+          data: { toggle: 'tooltip', placement: 'top'} do %> 
+          <%= fa_icon "file-signature"%>
+        <% end %>
+      <% end %>
+      
       <% if policy(inpatient_prescription).delivery? %>
         <%= link_to delivery_inpatient_prescriptions_path(inpatient_prescription),
           class: 'btn btn-sm btn-primary mr-1 ml-1',

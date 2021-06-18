@@ -48,7 +48,7 @@ class InpatientPrescriptionsController < ApplicationController
       if @inpatient_prescription.save!
         @inpatient_prescription.create_notification(current_user, 'creó')
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
-        format.html { redirect_to delivery_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
+        format.html { redirect_to set_products_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
       else
         @inpatients = Patient.all.limit(10)
         format.html { render :new }
@@ -61,7 +61,7 @@ class InpatientPrescriptionsController < ApplicationController
   def update
     respond_to do |format|
       if @inpatient_prescription.update(inpatient_prescription_params)
-        format.html { redirect_to delivery_inpatient_prescriptions_path(@inpatient_prescription), notice: 'Inpatient prescription was successfully updated.' }
+        format.html { redirect_to set_products_inpatient_prescriptions_path(@inpatient_prescription), notice: 'Inpatient prescription was successfully updated.' }
         format.json { render :show, status: :ok, location: @inpatient_prescription }
       else
         format.html { render :edit }
