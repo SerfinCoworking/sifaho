@@ -11,9 +11,13 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
   end
 
+  def set_products?
+    Date.today <= record.date_prescribed
+  end
+  
   def create?
     new?
-  end  
+  end
   
   def edit?
     if record.pendiente?

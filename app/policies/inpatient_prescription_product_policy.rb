@@ -4,7 +4,8 @@ class InpatientPrescriptionProductPolicy < ApplicationPolicy
   # Si es el profesional que lo creo
   # Si la fecha recetada es la misma o mayor que la actual 
   def edit_parent_product?
-    if (record.sin_proveer? && (record.prescribed_by_id == user.id) && (Date.today..record.order.date_prescribed)) || record.new_record?
+    # review
+    if (record.sin_proveer? && (record.prescribed_by_id == user.id)) || record.new_record?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
     end
   end

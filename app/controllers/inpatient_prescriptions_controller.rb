@@ -20,10 +20,10 @@ class InpatientPrescriptionsController < ApplicationController
   def show
   end
   
-  
   # GET /inpatient_prescriptions/1
   # GET /inpatient_prescriptions/1.json
   def set_products
+    authorize @inpatient_prescription
     @inpatient_prescription.parent_order_products.build
   end
 
