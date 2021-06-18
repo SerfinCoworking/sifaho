@@ -1,5 +1,6 @@
 // Add the dialog title
-$('#dialog h4').html("<i class=' glyphicon glyphicon-trash'></i>  Enviar a papelera la <%= @internal_order.order_type%>");
+$('#dialog .modal-title').html("<i class='fa fa-trash'></i>  Enviar a papelera la <%= @internal_order.order_type%>");
+$('#dialog .modal-header').addClass('bg-danger text-white');
 
 // Render the edit form
 $('#dialog .modal-body').html(
@@ -9,7 +10,7 @@ $('#dialog .modal-body').html(
 // Add form button
 $('#dialog .modal-footer').html(
   "<button type='button' class='btn pull-left' data-dismiss='modal'>Volver</button>"+
-  "<a data-remote='true' data-method='delete' href='/internal_orders/<%= @internal_order.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='<%= internal_order_path(@internal_order) %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

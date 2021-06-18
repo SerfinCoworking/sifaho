@@ -66,12 +66,12 @@
     <% end %>
     <% if policy(internal_order).destroy? %>
       <%= link_to delete_internal_order_path(internal_order), remote: true,
-            class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+          class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).nullify? %>
-      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#anular-confirm-<%=internal_order.id%>">
+      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" title="Anular" data-target="#anular-confirm-<%=internal_order.id%>">
         <%= fa_icon "ban" %>
       </button>
     <% end %>
