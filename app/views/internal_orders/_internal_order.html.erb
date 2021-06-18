@@ -81,7 +81,7 @@
 
 <% content_for :modal do %>
   <% if policy(internal_order).nullify? %>
-    <div class="modal fade" id="anular-confirm-<%=internal_order.id%>">
+    <div class="modal fade" id="anular-confirm-<%= internal_order.id %>">
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
           <div class="modal-header panel-heading">
@@ -95,7 +95,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Anular', nullify_internal_order_path(internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
+            <%= link_to 'Anular', nullify_internal_order_path(internal_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>

@@ -26,10 +26,18 @@
     <% end %>
   </li>
   <% if policy(InternalOrder).new_provider? %>
-    <li class="nav-item non-sel">
+    <li class="nav-item non-sel d-flex align-items-center">
       <%= link_to provider_index_internal_orders_path, class: "nav-link #{ active_action_and_controller('provider_index', 'internal_orders') }" do %>
         <%= fa_icon "paper-plane" %>
         Entregas
+      <% end %>
+      <!-- Badge notification -->
+      <% request_count = InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+      <% if request_count > 0%>
+        <%= link_to provider_index_internal_orders_path(filterrific: {:with_status => 1}), class: 'badge badge-info mr-2',
+        title: "Solicitudes sin responder", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+          <%= request_count %>
+        <% end %>
       <% end %>
     </li>
   <% end %>

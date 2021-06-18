@@ -38,17 +38,6 @@ class InternalOrdersController < ApplicationController
       persistence_id: false,
     ) or return
     @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
-
-    respond_to do |format|
-      format.html
-      format.js
-      format.pdf do
-        send_data generate_apply_report(@applicant_orders),
-          filename: 'pedidos_internos.pdf',
-          type: 'application/pdf',
-          disposition: 'inline'
-      end
-    end
   end
 
   # GET /internal_orders/1

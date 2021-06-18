@@ -1,6 +1,22 @@
   <%= form_for_filterrific @filterrific do |f| %>
     <div class="row justify-content-between">
-      <div class="col-2">
+      <div class="col d-flex justify-content-end align-items-center">
+        <%= render_filterrific_spinner %>
+        <% if current_page?(action: 'applicant_index') %>
+          <%= link_to applicant_index_internal_orders_path(reset: true), class: 'btn btn-secondary ml-2',
+            title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+            'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+            <%= fa_icon 'redo' %>
+          <% end %>
+        <% else %>
+          <%= link_to provider_index_internal_orders_path(reset: true), class: 'btn btn-secondary ml-2',
+            title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+            'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+            <%= fa_icon 'redo' %>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="col">
         <label>Código</label>
         <%= f.text_field(
           :search_code,
@@ -8,7 +24,7 @@
           placeholder: 'Cód'
         ) %>
       </div>
-      <div class="col-2">
+      <div class="col">
         <% if current_page?(action: 'applicant_index') %>
           <label>Proveedor</label>
           <%= f.text_field(
@@ -27,13 +43,13 @@
           ) %>
         <% end %>
       </div>
-      <div class="col-2">
+      <div class="col">
         <label>Origen</label>
         <%= f.select(:with_order_type,
           InternalOrder.order_types.map{ |type| [type.first.humanize, type.second] },{:include_blank => 'Todos'},
           { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%"}) %>
       </div>
-      <div class="col-2">
+      <div class="col">
         <label>Estado</label>
         <%= f.select(:with_status,
           @filterrific.select_options[:with_status].map {
@@ -41,7 +57,7 @@
           },{},
           { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%"}) %>
       </div>
-      <div class="col-2">
+      <div class="col">
         <label>Solicitado</label>
         <div class="row">
           <div class="col-md-6">
@@ -62,15 +78,9 @@
           </div>
         </div>
       </div>
-      <div class="col-2">
+      <div class="col">
         <div class="d-flex justify-content-between align-items-center">
           <label><%= current_page?(action: 'applicant_index') ? 'Recibido' : 'Entregado' %></label>
-          <%= link_to reset_filterrific_url, class: "btn btn-sm pb-1 pt-0", 
-            :title => 'Reiniciar', :'data-placement'=>'top', :'data-toggle'=>'tooltip',
-            'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
-            <%= fa_icon "redo" %>
-          <% end %>
-          <%= render_filterrific_spinner %>
         </div>
         <div class="row">
           <div class="col-md-6">
