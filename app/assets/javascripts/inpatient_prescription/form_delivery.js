@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery'].includes(_PAGE.action))) ) return false;
+  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['deliverysad'].includes(_PAGE.action))) ) return false;
   console.log("===FROM DELIVERY===")
   initEvents();
   

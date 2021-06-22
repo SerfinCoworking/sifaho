@@ -87,6 +87,8 @@ class InpatientPrescriptionProductsController < ApplicationController
                                                            :dose_quantity,
                                                            :interval,
                                                            :total_dose,
+                                                           :deliver_quantity,
+                                                           :parent_id,
                                                            :observation)
   end
 end

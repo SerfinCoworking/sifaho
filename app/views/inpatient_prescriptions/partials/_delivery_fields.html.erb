@@ -1,16 +1,32 @@
 <tr class="nested-fields order-product-<%= f.object.id %> <%= f.object.errors.any? ? 'has-error' : '' %>">
   
+  <!-- Codigo de Producto -->
+  <td>
+   <%= f.object.product.code %>
+  </td>
+  
   <!-- Nombre de Producto -->
   <td>
    <%= f.object.product.name %>
   </td>
-    
+  
+  <!-- Unidad de Producto -->
   <td>
-    <%= f.object.dose_total %>
+   <%= f.object.product.unity.name %>
+  </td>
+
+  <!-- Dosis total -->
+  <td>
+    <%= f.object.total_dose %>
+  </td>
+  
+  <!-- Observation -->
+  <td>
+    <%= f.object.observation %>
   </td>
   
   <td>
-    <% if policy(f.object).edit_parent_product? %>
+    <%# if policy(f.object).edit_parent_product? %>
       <%= link_to_add_association f, 
       :children, 
       class: 'btn btn-primary btn-sm',
@@ -20,14 +36,15 @@
       },
       data: {
         "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container-#{f.object.id}",
-        "association-insertion-method" => "append"} do %>
+        "association-insertion-method" => "append",
+        "product-id" => f.object.id } do %>
         <%= fa_icon "plus" %>
       <% end %>
-    <% end %>
+    <%# end %>
   </td>
 </tr>
 <tr>
-  <td colspan="4">
+  <td colspan="6" style="display: none;" id="parent-product-<%= f.object.id %>">
     <table class="table table-hover table-sm mb-0">
       <thead>
         <tr>

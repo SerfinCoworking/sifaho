@@ -1,6 +1,5 @@
 <% if @inpatient_prescription_product.parent.present? %>
-  $("#child-<%= @inpatient_prescription_product.product.id %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
-  $("#child-<%= @inpatient_prescription_product.product.id %>").find('button.btn-select-lot-stock').first().on('click', function(e) {
+  $("#"+"<%= @tr_id.to_s %>").find('button.btn-select-lot-stock').first().on('click', function(e) {
     e.stopPropagation();
     const urlFindLots = $(e.target).attr("data-select-lot-url");
     const orderName = $(e.target).attr("data-order-name");
@@ -19,15 +18,14 @@
     }});
   }).trigger('click');
 
-  $("#child-<%= @inpatient_prescription_product.product.id %>").find(".order-product-inputs").attr("readonly", true);
-<% else %>
+<%# else %>
 
-  $("#"+"<%= @tr_id.to_s %>").find('.btn-ipp-save').tooltip('hide');
-  $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function(e){
-    $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
-    $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeIn();
-    initActionsButton($("#"+"<%= @tr_id.to_s %>"));
-  });
   
-  $("#"+"<%= @tr_id.to_s %>").find(".order-product-inputs").attr("readonly", true);
 <% end %>
+$("#"+"<%= @tr_id.to_s %>").find('.btn-ipp-save').tooltip('hide');
+$("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function(e){
+  $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
+  $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeIn();
+  initActionsButton($("#"+"<%= @tr_id.to_s %>"));
+});
+$("#"+"<%= @tr_id.to_s %>").find(".order-product-inputs").attr("readonly", true);
