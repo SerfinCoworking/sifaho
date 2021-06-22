@@ -27,7 +27,7 @@ $(document).on('turbolinks:load', function(e){
       e.stopPropagation();
       updateOrderProduct(e.target);
     });
-    /* $('button.btn-select-lot-stock').on('click', function(e) {
+    $(target).find('button.btn-select-lot-stock').on('click', function(e) {
       e.stopPropagation();
       const urlFindLots = $(e.target).attr("data-select-lot-url");
       const orderName = $(e.target).attr("data-order-name");
@@ -44,7 +44,7 @@ $(document).on('turbolinks:load', function(e){
           order_product_id: orderProductId,
           product_id: productId
       }});
-    }); */
+    });
 
     $(target).find('.product-code').autocomplete({
       source: $('.product-code').attr('data-autocomplete-source'),
