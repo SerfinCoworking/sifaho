@@ -2,12 +2,18 @@ $(document).on('turbolinks:load', function(e){
 
   if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery', 'set_products'].includes(_PAGE.action))) ) return false;
   
-  initEvents();
+  $('.inpatient-order-product-cocoon-container').find('tr').each((index, element) => {
+    initEvents(element);
+  });
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
-    initEvents();
+    initEvents(inserted_item);
+    const mainTd = $(inserted_item).closest('td');
+    if(!$(mainTd).is(":visible")) $(mainTd).fadeIn();
+
     $(inserted_item).find('.form-control').each(function(i, element){
       const currentName = $(element).attr('name');
+      // console.log(currentName);
       $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
     });
     // console.log($(inserted_item));
@@ -16,11 +22,12 @@ $(document).on('turbolinks:load', function(e){
     // y que tenga una cantidad por dosis
   });
   
-  function initEvents(){
-    $('button.btn-ipp-save').on('click', function(e){
+  function initEvents(target){
+    $(target).find('button.btn-ipp-save').on('click', function(e){
+      e.stopPropagation();
       updateOrderProduct(e.target);
     });
-    $('button.btn-select-lot-stock').on('click', function(e) {
+    /* $('button.btn-select-lot-stock').on('click', function(e) {
       e.stopPropagation();
       const urlFindLots = $(e.target).attr("data-select-lot-url");
       const orderName = $(e.target).attr("data-order-name");
@@ -37,9 +44,9 @@ $(document).on('turbolinks:load', function(e){
           order_product_id: orderProductId,
           product_id: productId
       }});
-    });
+    }); */
 
-    $('.product-code').autocomplete({
+    $(target).find('.product-code').autocomplete({
       source: $('.product-code').attr('data-autocomplete-source'),
       minLength: 1,
       autoFocus: true,
@@ -60,7 +67,7 @@ $(document).on('turbolinks:load', function(e){
     });
 
     // Función para autocompletar y buscar el insumo
-    $('.product-name').autocomplete({
+    $(target).find('.product-name').autocomplete({
       source: $('.product-name').attr('data-autocomplete-source'),
       minLength: 1,
       autoFocus: true,
@@ -82,8 +89,8 @@ $(document).on('turbolinks:load', function(e){
       }
     });
 
-    initActionsButton(); // set eventos de los botones de accion
-    calcTotalDoseEvent();
+    initActionsButton(target); // set eventos de los botones de accion
+    calcTotalDoseEvent(target);
 
   }// fin initEvents
 
@@ -121,11 +128,10 @@ $(document).on('turbolinks:load', function(e){
   };
   
   // On change delivery quantity
-  function calcTotalDoseEvent(){
+  function calcTotalDoseEvent(target){
     /* Request Dose and Interval dose */
-    $('input.dose_quantity , input.interval').on('change', function(e){
-      const tr = $(e.target).closest(".nested-fields");
-      calcTotalDose(tr);
+    $(target).find('input.dose_quantity , input.interval').on('change', function(e){
+      calcTotalDose(target);
     });
   }
 
@@ -146,14 +152,13 @@ function updateOrderProduct(target){
   const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
   const dose_quantity = $(tr).find('input.dose_quantity').first().val();
   const interval = $(tr).find('input.interval').first().val();
-  // const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
+  const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
   const total_dose = $(tr).find('input.total_dose').first().val();
   const observation = $(tr).find('textarea.product-observartion').first().val();
   const uniqId = Date.now();
   const trId = parent_id ? "child-"+uniqId : "parent-"+uniqId;
   $(tr).find(".is-invalid").removeClass('is-invalid');
   $(tr).attr('id', trId);
-
   $.ajax({
     url: url,
     method: urlType,
@@ -163,7 +168,7 @@ function updateOrderProduct(target){
         product_id: product_id,
         dose_quantity: dose_quantity,
         interval: interval,
-        // deliver_quantity: deliver_quantity,
+        deliver_quantity: deliver_quantity,
         observation: observation,
         parent_id: parent_id,
         total_dose: total_dose
@@ -174,8 +179,8 @@ function updateOrderProduct(target){
 }
 
 /* Seteo de eventos a los botones de accion */
-function initActionsButton(){
-  $('.delete-item').on('click', function(e) {
+function initActionsButton(target){
+  $(target).find('.delete-item').on('click', function(e) {
     const modal = $(e.target).attr('data-target');
     const title = $(e.target).attr('data-title');
     const body = $(e.target).attr('data-body');
@@ -188,7 +193,7 @@ function initActionsButton(){
   });
   
   /* habilitar edicion */
-  $(".btn-ipp-edit").on('click', function(e){
+  $(target).find(".btn-ipp-edit").on('click', function(e){
     const tr = $(e.target).closest('tr');
     $(tr).find(".order-product-inputs").removeAttr("readonly");
     $(tr).find(".saved-btn-combo").fadeOut(250, function(){
@@ -197,7 +202,7 @@ function initActionsButton(){
   });
   
   /* Cancelar edicion */
-  $(".cancel-item").on('click', function(e){
+  $(target).find(".cancel-item").on('click', function(e){
     const tr = $(e.target).closest('tr');
     $(tr).find(".order-product-inputs").attr("readonly", true);
     $(tr).find(".edit-btn-combo").fadeOut(250, function(){
@@ -213,7 +218,7 @@ function initActionsButton(){
   });
   
   /* Guardar modificaciones */
-  $(".update-item").on('click', function(e){
+  $(target).find(".update-item").on('click', function(e){
     updateOrderProduct(e.target)
   });
 }

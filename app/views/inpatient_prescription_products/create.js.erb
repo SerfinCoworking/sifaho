@@ -26,7 +26,7 @@
   $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function(e){
     $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
     $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeIn();
-    initActionsButton();
+    initActionsButton($("#"+"<%= @tr_id.to_s %>"));
   });
   
   $("#"+"<%= @tr_id.to_s %>").find(".order-product-inputs").attr("readonly", true);
