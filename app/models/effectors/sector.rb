@@ -16,6 +16,7 @@ class Sector < ApplicationRecord
   has_many :users, :through => :user_sectors
   has_many :reports, dependent: :destroy
   has_many :stocks
+  has_many :beds, foreign_key: :service_id
 
   has_many :provider_external_orders, foreign_key: "provider_sector_id", class_name: "ExternalOrder"
   has_many :provider_ordering_quantity_supplies, through: :provider_external_orders, source: "quantity_ord_supply_lots"
