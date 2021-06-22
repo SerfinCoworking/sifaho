@@ -152,7 +152,7 @@ function updateOrderProduct(target){
   const product_id = $(tr).find('input[type="hidden"].product-id').first().val();
   const dose_quantity = $(tr).find('input.dose_quantity').first().val();
   const interval = $(tr).find('input.interval').first().val();
-  const deliver_quantity = $(tr).find('input[type="hidden"].product-id').first().val();
+  const deliver_quantity = $(tr).find('input[type="hidden"].deliver_quantity').first().val();
   const total_dose = $(tr).find('input.total_dose').first().val();
   const observation = $(tr).find('textarea.product-observartion').first().val();
   const uniqId = Date.now();

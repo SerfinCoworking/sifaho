@@ -4,7 +4,7 @@
     <div class="custom-input-group">
       <div class="form-group">
         <input type="text" 
-                class="form-control product_id uniqueness_parent_product_in_the_order product-code order-product-inputs input-sm"
+                class="form-control product_id uniqueness_child_product_in_the_order product-code order-product-inputs input-sm"
                 name="<%= f.object.id.present? ? "product_code_fake-#{f.object.id}": "product_code_fake"%>" 
                 value="<%= f.object.product.present? ? f.object.product.code : parent.object.product.code %>"
                 data-autocomplete-source="<%= search_by_code_products_path %>"
@@ -33,7 +33,7 @@
     <div class="custom-input-group" style="width: 21.875rem">
       <div class="form-group">
         <input type="text"
-                class="form-control product_id uniqueness_parent_product_in_the_order product-name order-product-inputs input-sm"
+                class="form-control product_id uniqueness_child_product_in_the_order product-name order-product-inputs input-sm"
                 name="<%= f.object.id.present? ? "product_name_fake-#{f.object.id}": "product_name_fake"%>"
                 value="<%= f.object.product.present? ? f.object.product.name : parent.object.product.name %>"
                 data-autocomplete-source="<%= search_by_name_products_path %>"
