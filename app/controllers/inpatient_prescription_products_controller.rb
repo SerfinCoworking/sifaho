@@ -10,6 +10,7 @@ class InpatientPrescriptionProductsController < ApplicationController
   # GET /inpatient_prescription_products/1
   # GET /inpatient_prescription_products/1.json
   def show
+    @tr_id = params[:tr_id].to_s
   end
 
   # GET /inpatient_prescription_products/new
@@ -46,11 +47,11 @@ class InpatientPrescriptionProductsController < ApplicationController
   def update
     @tr_id = params[:tr_id].to_s
     respond_to do |format|
-      if @inpatient_prescription_product.update!(ipp_create_by_ajax_params)
+      if @inpatient_prescription_product.update(ipp_create_by_ajax_params)
         flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
-        format.js
+        format.js { render :edit }
       end
     end
   end
@@ -70,12 +71,6 @@ class InpatientPrescriptionProductsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_inpatient_prescription_product
     @inpatient_prescription_product = InpatientPrescriptionProduct.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def inpatient_prescription_product_params
-    params.require(:inpatient_prescription_product).permit(
-      :inpatient_prescription_id, :product_id, :dose_quantity, :interval, :status, :observation, :dispensed_by_id)
   end
 
   # Parametros para inpatient_prescription_products

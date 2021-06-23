@@ -13,13 +13,8 @@ $(document).on('turbolinks:load', function(e){
 
     $(inserted_item).find('.form-control').each(function(i, element){
       const currentName = $(element).attr('name');
-      // console.log(currentName);
       $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
     });
-    // console.log($(inserted_item));
-    // Guarda la fila del producto seleccionado
-    // Valida que tenga almenos un producto seleccionado
-    // y que tenga una cantidad por dosis
   });
   
   function initEvents(target){
@@ -204,10 +199,10 @@ function initActionsButton(target){
   
   /* Cancelar edicion */
   $(target).find(".cancel-item").on('click', function(e){
-    const tr = $(e.target).closest('tr');
-    $(tr).find(".order-product-inputs").attr("readonly", true);
-    $(tr).find(".edit-btn-combo").fadeOut(250, function(){
-      $(tr).find(".saved-btn-combo").fadeIn();
+    const tr_id = $(target).attr("id");
+    $(target).find(".order-product-inputs").attr("readonly", true);
+    $(target).find(".edit-btn-combo").fadeOut(250, function(){
+      $(target).find(".saved-btn-combo").fadeIn();
     });
     const url = $(e.target).attr('data-url');
     const urlType = $(e.target).attr('data-url-type');
@@ -215,6 +210,9 @@ function initActionsButton(target){
       url: url,
       method: urlType,
       dataType: "script",
+      data: {
+        tr_id: tr_id
+      }
     });
   });
   

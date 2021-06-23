@@ -80,26 +80,24 @@
   </td>
     
   <!-- Dosis -->
-  <%# if policy(f.object).edit_request_quantity? %>
-    <td style="width: 100px">
-      <% if policy(f.object).edit_parent_product? %>
-        <div class="form-group">
-          <input class="form-control input-sm order-product-inputs dose_quantity" 
-                value="<%= f.object.dose_quantity if f.object.dose_quantity.present? %>"
-                placeholder="Cant" 
-                type="number"
-                name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>"
-                <%= 'readonly' if f.object.id.present? %>>
-          <div class="invalid-feedback"> </div>
-        </div>
-       
-      <% else %>
-        <div class="product-info">
-          <%= f.object.dose_quantity %>
-        </div>
-      <% end %>
-    </td>
-  <%# end %>
+  <td style="width: 100px">
+    <% if policy(f.object).edit_parent_product? %>
+      <div class="form-group">
+        <input class="form-control input-sm order-product-inputs dose_quantity" 
+              value="<%= f.object.dose_quantity if f.object.dose_quantity.present? %>"
+              placeholder="Cant" 
+              type="number"
+              name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>"
+              <%= 'readonly' if f.object.id.present? %>>
+        <div class="invalid-feedback"> </div>
+      </div>
+      
+    <% else %>
+      <div class="product-info">
+        <%= f.object.dose_quantity %>
+      </div>
+    <% end %>
+  </td>
 
   <!-- Intervalo -->
   <td>
@@ -156,14 +154,14 @@
   
   <td class="actions-col">
     <% if f.object.new_record? %>
-      <!-- 
-        no clickeable hasta que product_id y dose_quantity esten asignados
-        controlar por js estas dos variables antes de realizar el ajax
-        agregar url de guardado de producto
-        agregar clase para asignarle un ajax a la url
-        en la respuesta llamar al modal de lotes
-      -->
-      <button type="button" class="btn btn-md btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-product-id="<%= f.object.id %>">
+      <!-- Boton crear-->
+      <button type="button" class="btn btn-md btn-success btn-ipp-save" 
+              data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" 
+              data-url-type="POST" 
+              data-toggle="tooltip" 
+              data-placement="top" 
+              title="Guardar" 
+              data-product-id="<%= f.object.id %>">
         <%= fa_icon 'save', class: "fa-fw" %>
       </button>
 

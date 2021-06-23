@@ -63,7 +63,7 @@
   <!-- Delivery quantity -->
   <td>
     <div class="form-group">
-      <input class="form-control input-sm order-product-inputs deliver_quantity" 
+      <input class="form-control input-sm order-product-inputs deliver_quantity product-deliver-quantity" 
              value="<%= f.object.id.present? ? f.object.deliver_quantity : parent.object.total_dose %>"
              placeholder="A entregar" 
              type="number"
@@ -83,14 +83,14 @@
 
   <td class="actions-col">
     <% if f.object.new_record? %>
-      <!-- 
-        no clickeable hasta que product_id y deliver_quantity esten asignados
-        controlar por js estas dos variables antes de realizar el ajax
-        agregar url de guardado de producto
-        agregar clase para asignarle un ajax a la url
-        en la respuesta llamar al modal de lotes
-      -->
-      <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-parent-id="<%= parent.object.id %>">
+      <!-- Boton crear -->
+      <button type="button" class="btn btn-success btn-ipp-save" 
+              data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" 
+              data-url-type="POST" 
+              data-toggle="tooltip" 
+              data-placement="top" 
+              title="Guardar" 
+              data-parent-id="<%= parent.object.id %>">
         <%= fa_icon 'save', class: "fa-fw" %>
       </button>
 

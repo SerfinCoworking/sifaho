@@ -26,7 +26,15 @@
 </button>
 
 <%# Guardar modificaciones %>
-<button type="button" class="btn btn-success update-item edit-btn-combo btn-md" style="display: none;" data-toggle="tooltip" data-placement="top" data-original-title="Actualizar" data-title="Actualizar producto" data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" data-url-type="PATCH">
+<button type="button" class="btn btn-success update-item edit-btn-combo btn-md" 
+        style="display: none;" 
+        data-toggle="tooltip" 
+        data-placement="top" 
+        data-original-title="Actualizar" 
+        data-title="Actualizar producto" 
+        data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" 
+        data-url-type="PATCH"
+        <%= "data-parent-id=#{f_object.parent.id}" if f_object.parent.present? %>>
   <%= fa_icon "save", class: "fa-fw" %>
 </button>
 

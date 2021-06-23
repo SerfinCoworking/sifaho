@@ -61,7 +61,7 @@
   
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', :back, class: 'btn mr-1' %>
-      <button type='submit' class='btn btn-primary' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>">
+    <button type='submit' class='btn btn-primary' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>">
       <div class="c-msg" style="pointer-events: none;">
         <%= fa_icon "paper-plane" %> Guardar
       </div>

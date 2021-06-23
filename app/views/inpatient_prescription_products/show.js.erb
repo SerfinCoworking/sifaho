@@ -1,16 +1,47 @@
-<% if @inpatient_prescription_product.parent.present? %>
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-code').first().val("<%= @inpatient_prescription_product.product.code %>");
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-id').first().val("<%= @inpatient_prescription_product.product.id %>");
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-name').first().val("<%= @inpatient_prescription_product.product.name %>");
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.stock-quantity').first().val("<%= current_user.sector.stock_to(@inpatient_prescription_product.product) %>");
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-dose-total').first().val("<%= @inpatient_prescription_product.total_dose %>");
-  $("tr#child-<%= @inpatient_prescription_product.product.id %>").find('.product-observartion').first().val("<%= @inpatient_prescription_product.observation %>");
-<% else %>
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.product-code').first().val("<%= @inpatient_prescription_product.product.code %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.product-id').first().val("<%= @inpatient_prescription_product.product.id %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.product-name').first().val("<%= @inpatient_prescription_product.product.name %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.dose-interval').first().val("<%= @inpatient_prescription_product.interval %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.dose-quantity').first().val("<%= @inpatient_prescription_product.dose_quantity %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.product-dose-total').first().val("<%= @inpatient_prescription_product.total_dose %>");
-  $("tr#parent-<%= @inpatient_prescription_product.product.id %>").find('.product-observartion').first().val("<%= @inpatient_prescription_product.observation %>");
-<% end %>
+$("#<%= @tr_id %>").find('.product-code').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.product.code %>");
+
+$("#<%= @tr_id %>").find('.product-id').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.product.id %>");
+
+$("#<%= @tr_id %>").find('.product-name').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.product.name %>");
+
+$("#<%= @tr_id %>").find('.stock-quantity').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= current_user.sector.stock_to(@inpatient_prescription_product.product) %>");
+
+$("#<%= @tr_id %>").find('.product-deliver-quantity').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.deliver_quantity %>");
+
+$("#<%= @tr_id %>").find('.product-dose-total').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.total_dose %>");
+
+$("#<%= @tr_id %>").find('.product-observartion').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.observation %>");
+
+
+$("#<%= @tr_id %>").find('.dose-interval').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.interval %>");
+
+$("#<%= @tr_id %>").find('.dose-quantity').
+                    first().
+                    removeClass("is-invalid").
+                    val("<%= @inpatient_prescription_product.dose_quantity %>");
+
+  
