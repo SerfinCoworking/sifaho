@@ -25,6 +25,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Validaciones
   validates :dose_quantity, numericality: { only_integer: true, greater_than: 0, message: 'Dosis debe ser mayor a 0' }, if: :parent?
   validates :interval, numericality: { only_integer: true, greater_than: 0, message: 'Intervalo debe ser mayor a 0' }, if: :parent?
+  validates :deliver_quantity, numericality: { only_integer: true, greater_than: 0, message: 'A entregar debe ser mayor a 0' }, unless: :parent?
   validates_presence_of :product_id, message: 'Producto no puede estar en blanco'
   validates_presence_of :prescribed_by_id, if: :parent?
 
