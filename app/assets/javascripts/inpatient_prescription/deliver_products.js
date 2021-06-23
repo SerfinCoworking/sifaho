@@ -180,7 +180,8 @@ function updateOrderProduct(target){
 
 /* Seteo de eventos a los botones de accion */
 function initActionsButton(target){
-  $(target).find('.delete-item').on('click', function(e) {
+  $(target).find('.delete-product').on('click', function(e) {
+    const tr_id = $(target).attr("id");
     const modal = $(e.target).attr('data-target');
     const title = $(e.target).attr('data-title');
     const body = $(e.target).attr('data-body');
@@ -188,7 +189,7 @@ function initActionsButton(target){
   
     $(modal).find('.modal-title').text(title);
     $(modal).find('.modal-body').text(body);
-    $(modal).find('.btn[data-method="delete"]').attr('href', href);
+    $(modal).find('.btn[data-method="delete"]').attr('href', href+"?tr_id="+tr_id);
     $(modal).modal('toggle');
   });
   

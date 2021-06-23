@@ -58,6 +58,7 @@ class InpatientPrescriptionProductsController < ApplicationController
   # DELETE /inpatient_prescription_products/1
   # DELETE /inpatient_prescription_products/1.json
   def destroy
+    @tr_id = params[:tr_id].to_s
     @inpatient_prescription_product.destroy
     respond_to do |format|
       flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha eliminado correctamente."
