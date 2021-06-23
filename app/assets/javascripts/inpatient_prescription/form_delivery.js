@@ -42,7 +42,5 @@ function setLotSelectionProgress(targetRow, selectedQuantity, toDelivery){
     $(targetRow).find('button.btn-select-lot-stock').first().removeAttr('disabled');
     const quantityPercent = (selectedQuantity == 0 || toDelivery == 0) ? 0 : (selectedQuantity * 100 / toDelivery); //calc width percentage progress
     if(isNaN(quantityPercent)) return false; //return false if quantityPercent is NaN
-
-  
   }
 } 

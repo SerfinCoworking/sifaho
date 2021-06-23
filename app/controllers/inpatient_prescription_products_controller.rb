@@ -46,7 +46,7 @@ class InpatientPrescriptionProductsController < ApplicationController
   def update
     @tr_id = params[:tr_id].to_s
     respond_to do |format|
-      if @inpatient_prescription_product.update!(inpatient_prescription_product_ajax_params)
+      if @inpatient_prescription_product.update!(ipp_create_by_ajax_params)
         flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha guardado correctamente."
         format.js
       else
@@ -75,10 +75,6 @@ class InpatientPrescriptionProductsController < ApplicationController
   def inpatient_prescription_product_params
     params.require(:inpatient_prescription_product).permit(
       :inpatient_prescription_id, :product_id, :dose_quantity, :interval, :status, :observation, :dispensed_by_id)
-  end
-
-  def inpatient_prescription_product_ajax_params
-    params.require(:inpatient_prescription_product).permit(:parent_id, :product_id, :quantity, :dose_total, :observation)
   end
 
   # Parametros para inpatient_prescription_products

@@ -64,8 +64,8 @@
   <td>
     <div class="form-group">
       <input class="form-control input-sm order-product-inputs deliver_quantity" 
-             value="<%= f.object.deliver_quantity.present? ? f.object.deliver_quantity : parent.object.total_dose %>"
-             placeholder="Cant" 
+             value="<%= f.object.id.present? ? f.object.deliver_quantity : parent.object.total_dose %>"
+             placeholder="A entregar" 
              type="number"
              name="<%= f.object.id.present? ? "deliver_quantity-#{f.object.id}": "deliver_quantity"%>"
             <%= 'readonly' if f.object.id.present? %>>
@@ -91,12 +91,12 @@
         en la respuesta llamar al modal de lotes
       -->
       <button type="button" class="btn btn-success btn-ipp-save" data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" data-url-type="POST" data-toggle="tooltip" data-placement="top" title="Guardar" data-parent-id="<%= parent.object.id %>">
-        <%= fa_icon 'save' %>
+        <%= fa_icon 'save', class: "fa-fw" %>
       </button>
 
       <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash-alt" %>
+        <%= fa_icon "trash-alt", class: "fa-fw" %>
       <% end %>
        
     <% elsif policy(f.object).edit_child_product? %>
