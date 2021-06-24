@@ -1,5 +1,6 @@
 <tr>
-  <td><%= patient_product_state_report.product_name %></td>
+  <td><%= patient_product_state_report.created_at.strftime("%d/%m/%y") %></td>
+  <td><%= patient_product_state_report.product.present? ? patient_product_state_report.product_name : patient_product_state_report.report_products.count %></td>
   <td><%= patient_product_state_report.since_date.strftime("%d/%m/%Y") %></td>
   <td><%= patient_product_state_report.to_date.strftime("%d/%m/%Y") %></td>
   <td>
