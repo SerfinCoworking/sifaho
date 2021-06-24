@@ -1,0 +1,34 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="report-product-cocoon-container"">
+      <%= form.simple_fields_for :report_products do |form_product| %>
+        <%= render "shared/reports/report_product_fields", f: form_product %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to_add_association form,
+    :report_products,
+    class: 'btn btn-primary btn-sm',
+    partial: "shared/reports/report_product_fields",
+    data: {
+      "association-insertion-node" => "tbody#report-product-cocoon-container",
+      "association-insertion-method" => "append"} do %>
+    <%= fa_icon "plus" %>
+    Agregar producto
+  <% end %>
+  
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if form.object.errors[:presence_of_products_into_the_report].any? %>
+    <div class="invalid-feedback d-block">
+      <%= form.object.errors[:presence_of_products_into_the_report].first %>
+    </div>
+  <% end %>
+</div>

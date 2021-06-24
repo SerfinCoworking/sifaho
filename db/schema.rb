@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_101832) do
+ActiveRecord::Schema.define(version: 2021_06_24_105335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -460,6 +460,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "fa_icon", default: "exchange-alt"
   end
 
   create_table "inpatient_movements", force: :cascade do |t|
@@ -507,6 +508,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
     t.bigint "patient_id"
     t.bigint "professional_id"
     t.bigint "bed_id"
+    t.bigint "prescribed_by_id"
     t.string "remit_code"
     t.text "observation"
     t.integer "status", default: 0
@@ -515,6 +517,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
     t.datetime "updated_at", null: false
     t.index ["bed_id"], name: "index_inpatient_prescriptions_on_bed_id"
     t.index ["patient_id"], name: "index_inpatient_prescriptions_on_patient_id"
+    t.index ["prescribed_by_id"], name: "index_inpatient_prescriptions_on_prescribed_by_id"
     t.index ["professional_id"], name: "index_inpatient_prescriptions_on_professional_id"
   end
 
@@ -905,15 +908,6 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
     t.index ["product_id"], name: "index_patient_product_state_reports_on_product_id"
   end
 
-  create_table "patient_state_report_products", force: :cascade do |t|
-    t.bigint "product_id"
-    t.bigint "report_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_patient_state_report_products_on_product_id"
-    t.index ["report_id"], name: "index_patient_state_report_products_on_report_id"
-  end
-
   create_table "patient_types", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -1201,6 +1195,16 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
     t.index ["received_by_id"], name: "index_receipts_on_received_by_id"
   end
 
+  create_table "report_product_lines", force: :cascade do |t|
+    t.string "reportable_type"
+    t.bigint "reportable_id"
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_report_product_lines_on_product_id"
+    t.index ["reportable_type", "reportable_id"], name: "index_report_product_lines_on_reportable_type_and_reportable_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "name", default: "Reporte"
     t.datetime "since_date"
@@ -1418,6 +1422,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_101832) do
   add_foreign_key "quantity_ord_supply_lots", "laboratories"
   add_foreign_key "quantity_ord_supply_lots", "supplies"
   add_foreign_key "quantity_ord_supply_lots", "supply_lots"
+  add_foreign_key "report_product_lines", "products"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"

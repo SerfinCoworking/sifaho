@@ -15,7 +15,7 @@ wb.add_worksheet(name: "Reporte por paciente") do |sheet|
       movement.order.patient.age_string,
       movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---',
       movement.order.establishment.name,
-      @patient_product_state_report.product_name,
+      movement.product.name,
       movement.quantity
     ]
   end

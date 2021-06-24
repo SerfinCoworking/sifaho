@@ -17,8 +17,15 @@
   
     <div class="d-flex justify-content-between">
       <div class="p-2 flex-fill">
-        <h5>Producto</h5>
-        <%= @patient_product_state_report.product_name %>
+        <% if @patient_product_state_report.product.present? %>
+          <h5>Producto</h5>
+          <%= @patient_product_state_report.product_name %>
+        <% else %>
+          <h5>Productos</h5>
+          <% @patient_product_state_report.report_products.each do |line| %>
+            <p><%= line.product_code %> <%= line.product_name %></p>
+          <% end %>
+        <% end %>
       </div>
       <div class="p-2 flex-fill">
         <h5>Desde</h5>
@@ -42,6 +49,7 @@
               <th>Edad</th>
               <th>CUIE</th>
               <th>Establecimiento</th>
+              <th>Producto</th>
               <th>Cantidad</th>
             </tr>
           </thead>
@@ -50,19 +58,17 @@
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
                 <td><%= movement.order.patient_dni %></td>
-                <td><%= movement.order.patient_fullname %></td>
+                <td class="text-truncate align-middle" style="max-width: 200px;"><%= movement.order.patient_fullname %></td>
                 <td><%= movement.order.patient.birthdate_string %></td>
                 <td><%= movement.order.patient.age_string %></td>
                 <td><%= movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---' %></td>
-                <td><%= movement.order.establishment.name %></td>
+                <td class="text-truncate align-middle" style="max-width: 200px;"><%= movement.order.establishment.short_name %></td>
+                <td class="text-truncate align-middle" style="max-width: 120px;"><%= movement.product.name %></td>
                 <td><%= movement.quantity %></td>
               </tr>
             <% end %>
             <tr class="table-info">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="text-right">Total</td>
+              <td class="text-right" colspan="8">Total</td>
               <td><%= @movements.sum(:quantity) %></td>
             </tr>
           </tbody>
