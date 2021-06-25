@@ -53,13 +53,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   scope :only_parents, -> { where(parent_id: :nil) }
   scope :only_children, -> { where.not(parent_id: :nil) }
 
-  # Decrementamos el stock de cada producto asignado al parent
-  def decrement_stock
-    children.each(&:decrement_reserved_stock)
-  end
-
   def decrement_reserved_stock
-    parent.update!(status: :provista) if order_prod_lot_stocks.count.positive?
     order_prod_lot_stocks.each(&:remove_reserved_quantity)
   end
 
@@ -67,31 +61,46 @@ class InpatientPrescriptionProduct < ApplicationRecord
   # Marcamos "dispensada" parcialmente
   # Luego se llaman los productos que aun no fueron dispensados para decrementar el stock
   def dispensed_by(a_user)
+    # Validamos que cada producto, tenga almenos 1 lote seleccionado
     children.each(&:validate_presence_of_order_prod_lot_stocks)
+    # Validar que la cantidad a entregar sea igual a la seleccionada por la seleccion de lotes (este debe controlarse al guardar la relacion)
 
-    # raise ActiveRecord::RecordInvalid.new(self) if children.any?(&:errors)
-    puts children.any?(&:errors)
-    puts "========================="
+    if children.any? { |child| child.errors.any? }
+      raise ActiveRecord::RecordInvalid.new(self)
 
+      puts "error ==============================================="
+    else
+      puts "CREADO ==============================================="
+      # children.each(&:decrement_reserved_stock)
+      # self.status = 'provista'
+      # save!(validate: false)
+      # notification_type = "entregó el producto #{product.name}"
+      # create_notification(a_user, notification_type)
 
-    # parent_order_products.sin_proveer.each(&:decrement_stock)
-    # self.status = parent_order_products.sin_proveer.any? ? 'parcialmente_dispensada' : 'dispensada'
-    # save!(validate: false)
-    # notification_type = 'entregó'
-    # create_notification(a_user, notification_type)
+    end
   end
 
   # Validacion: evitar duplicidad de productos padres en una misma orden
   def validate_presence_of_order_prod_lot_stocks
     if !order_prod_lot_stocks.present?
       errors.add(:presence_of_order_prod_lot_stocks, 'Debe seleccionar almenos 1 lote')
-
-      # raise ActiveRecord::RecordInvalid.new(self)
     end
   end
-  
+
+  def create_notification(of_user, action_type, order_product = nil)
+    InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product,
+                                         action: action_type, sector: of_user.sector)
+    (of_user.sector.users.uniq - [of_user]).each do |user|
+      @not = Notification.where(actor: of_user, user: user, target: self, notify_type: 'internación',
+                                action_type: action_type, actor_sector: of_user.sector).first_or_create
+      @not.updated_at = DateTime.now
+      @not.read_at = nil
+      @not.save
+    end
+  end
+
   private
-  
+
   # Validacion: evitar duplicidad de productos padres en una misma orden
   def uniqueness_parent_product_in_the_order
     (order.parent_order_products.uniq - [self]).each do |eop|

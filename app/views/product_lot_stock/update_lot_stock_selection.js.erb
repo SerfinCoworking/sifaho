@@ -2,7 +2,7 @@
 const quantity = parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>");
 const toDelivery = parseInt("<%= @order_product.total_dose %>");
 
-const tr = $("tr#child-<%= @order_product.product.id.to_s %>");
+const tr = $("tr#child-<%= @order_product.id.to_s %>");
 $(tr).find('button.btn-select-lot-stock').first().text('<%= @order_product.order_prod_lot_stocks.count.to_s %>');
 
 $('#lot-selection').modal('hide');

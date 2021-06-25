@@ -1,24 +1,6 @@
-console.log("<%= @inpatient_prescription_product.children.count %>", "<===================");
-<% @inpatient_prescription_product.children.map do |child| %>
-  <% child.errors.keys.map do |error_key| %>
-    if("<%= error_key %>" == 'presence_of_order_prod_lot_stocks'){
-console.log("<%= error_key %>", "<%= child.id.to_s %>",  "<===================");
-      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover({
-        content: "<%= child.errors[error_key].first %>",
-        delay: { "show": 500, "hide": 500 },
-        placement: "left",
-        trigger: "manual",
-        template: '<div class="popover popover-danger border-danger" role="tooltip"><div class="arrow"></div><div class="popover-body text-danger"></div></div>',
-      });
-      
-      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").addClass('btn-outline-danger').removeClass("btn-danger");
-      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('show');
-      setTimeout(function(){
-        $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('hide');
-      }, 2500);
-    }else{
-      $("#child-"+"<%= child.id.to_s %>").find("input."+"<%= error_key %>").addClass('is-invalid');
-      $("#child-"+"<%= child.id.to_s %>").find("input."+"<%= error_key %>").siblings('.invalid-feedback').text("<%= child.errors[error_key].first %>");
-    }
-  <% end %>
-<% end %>
+<%= render 'shared/flash_message' %>
+setTimeout(function(){
+  $("#parent-"+"<%= @inpatient_prescription_product.id.to_s %>").fadeOut(500);
+  $("#child-"+"<%= @inpatient_prescription_product.children.first.id.to_s %>").closest('table').closest('tr').fadeOut(500);
+}, 300);
+console.log("se entregó correctamente");

@@ -68,12 +68,14 @@ class InpatientPrescriptionProductsController < ApplicationController
   end
 
   def deliver_children
-    puts "DEBUG========================="
-    begin
-      @inpatient_prescription_product.dispensed_by(current_user)
-      
-    rescue
-      format.js { render :deliver_children }
+    respond_to do |format|
+      begin
+        @inpatient_prescription_product.dispensed_by(current_user)
+        flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se entrego correctamente."
+        format.js
+      rescue
+        format.js { render :deliver_children_errors }
+      end
     end
   end
 
