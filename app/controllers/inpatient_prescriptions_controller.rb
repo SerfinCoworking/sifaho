@@ -87,6 +87,10 @@ class InpatientPrescriptionsController < ApplicationController
   def delivery
   end
 
+  def update_with_delivery
+    @inpatient_prescription.dispensed_by(current_user)
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

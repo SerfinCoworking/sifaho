@@ -27,8 +27,8 @@ class InpatientPrescriptionProduct < ApplicationRecord
   validates :interval, numericality: { only_integer: true, greater_than: 0, message: 'Intervalo debe ser mayor a 0' }, if: :parent?
   validates :deliver_quantity, numericality: { only_integer: true, greater_than: 0, message: 'A entregar debe ser mayor a 0' }, unless: :parent?
   validates_presence_of :product_id, message: 'Producto no puede estar en blanco'
-  validates_presence_of :prescribed_by_id, if: :parent?
 
+  validates_presence_of :prescribed_by_id, if: :parent?
 
   # validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"},
   # if: :is_proveedor_aceptado_and_quantity_greater_than_0?
@@ -63,8 +63,35 @@ class InpatientPrescriptionProduct < ApplicationRecord
     order_prod_lot_stocks.each(&:remove_reserved_quantity)
   end
 
-  private
+  # Dispensamos la entrega de medicacion a un paciente en internacion
+  # Marcamos "dispensada" parcialmente
+  # Luego se llaman los productos que aun no fueron dispensados para decrementar el stock
+  def dispensed_by(a_user)
+    children.each(&:validate_presence_of_order_prod_lot_stocks)
 
+    # raise ActiveRecord::RecordInvalid.new(self) if children.any?(&:errors)
+    puts children.any?(&:errors)
+    puts "========================="
+
+
+    # parent_order_products.sin_proveer.each(&:decrement_stock)
+    # self.status = parent_order_products.sin_proveer.any? ? 'parcialmente_dispensada' : 'dispensada'
+    # save!(validate: false)
+    # notification_type = 'entregó'
+    # create_notification(a_user, notification_type)
+  end
+
+  # Validacion: evitar duplicidad de productos padres en una misma orden
+  def validate_presence_of_order_prod_lot_stocks
+    if !order_prod_lot_stocks.present?
+      errors.add(:presence_of_order_prod_lot_stocks, 'Debe seleccionar almenos 1 lote')
+
+      # raise ActiveRecord::RecordInvalid.new(self)
+    end
+  end
+  
+  private
+  
   # Validacion: evitar duplicidad de productos padres en una misma orden
   def uniqueness_parent_product_in_the_order
     (order.parent_order_products.uniq - [self]).each do |eop|

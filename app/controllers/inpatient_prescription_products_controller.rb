@@ -1,5 +1,5 @@
 class InpatientPrescriptionProductsController < ApplicationController
-  before_action :set_inpatient_prescription_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_inpatient_prescription_product, only: [:show, :edit, :update, :destroy, :deliver_children]
 
   # GET /inpatient_prescription_products
   # GET /inpatient_prescription_products.json
@@ -64,6 +64,16 @@ class InpatientPrescriptionProductsController < ApplicationController
     respond_to do |format|
       flash.now[:success] = "El producto #{@inpatient_prescription_product.product.name} se ha eliminado correctamente."
       format.js
+    end
+  end
+
+  def deliver_children
+    puts "DEBUG========================="
+    begin
+      @inpatient_prescription_product.dispensed_by(current_user)
+      
+    rescue
+      format.js { render :deliver_children }
     end
   end
 

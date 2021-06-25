@@ -1,0 +1,20 @@
+<% @inpatient_prescription_product.children.map do |child| %>
+  <% child.errors.keys.map do |error_key| %>
+    if("<%= error_key %>" == 'presence_of_order_prod_lot_stocks'){
+      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover({
+        content: "<%= child.errors[error_key].first %>",
+        delay: { "show": 500, "hide": 500 },
+        placement: "left",
+        template: '<div class="popover popover-danger" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
+      });
+      
+      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('show');
+      setTimeout(function(){
+        $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('hide');
+      }, 2500);
+    }else{
+      $("#child-"+"<%= child.id.to_s %>").find("input."+"<%= error_key %>").addClass('is-invalid');
+      $("#child-"+"<%= child.id.to_s %>").find("input."+"<%= error_key %>").siblings('.invalid-feedback').text("<%= child.errors[error_key].first %>");
+    }
+  <% end %>
+<% end %>

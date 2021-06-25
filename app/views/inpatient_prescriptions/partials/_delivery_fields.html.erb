@@ -25,11 +25,14 @@
     <%= f.object.observation %>
   </td>
   
-  <td>
+  <td class="actions-col">
+    <%= link_to deliver_children_inpatient_prescription_inpatient_prescription_products_path(order.id, f.object.id), remote: true, method: :PATCH, class: "btn btn-success" do %>
+      <%= fa_icon 'paper-plane'%>
+    <% end %>
     <%# if policy(f.object).edit_parent_product? %>
       <%= link_to_add_association f, 
       :children, 
-      class: 'btn btn-primary btn-sm',
+      class: 'btn btn-primary btn-md',
       partial: "inpatient_prescriptions/partials/delivery_child_fields", 
       render_options: {
         locals: { order: order, parent: f }
