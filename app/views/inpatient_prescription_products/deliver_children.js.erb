@@ -1,13 +1,17 @@
+console.log("<%= @inpatient_prescription_product.children.count %>", "<===================");
 <% @inpatient_prescription_product.children.map do |child| %>
   <% child.errors.keys.map do |error_key| %>
     if("<%= error_key %>" == 'presence_of_order_prod_lot_stocks'){
+console.log("<%= error_key %>", "<%= child.id.to_s %>",  "<===================");
       $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover({
         content: "<%= child.errors[error_key].first %>",
         delay: { "show": 500, "hide": 500 },
         placement: "left",
-        template: '<div class="popover popover-danger" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
+        trigger: "manual",
+        template: '<div class="popover popover-danger border-danger" role="tooltip"><div class="arrow"></div><div class="popover-body text-danger"></div></div>',
       });
       
+      $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").addClass('btn-outline-danger').removeClass("btn-danger");
       $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('show');
       setTimeout(function(){
         $("#child-"+"<%= child.id.to_s %>").find(".btn-select-lot-stock").popover('hide');

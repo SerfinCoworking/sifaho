@@ -84,7 +84,7 @@
   <td class="actions-col">
     <% if f.object.new_record? %>
       <!-- Boton crear -->
-      <button type="button" class="btn btn-success btn-ipp-save" 
+      <button type="button" class="btn btn-outline-success btn-ipp-save" 
               data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" 
               data-url-type="POST" 
               data-toggle="tooltip" 
@@ -94,7 +94,7 @@
         <%= fa_icon 'save', class: "fa-fw" %>
       </button>
 
-      <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger',
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-outline-danger',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash-alt", class: "fa-fw" %>
       <% end %>

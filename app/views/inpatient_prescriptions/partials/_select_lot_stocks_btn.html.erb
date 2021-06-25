@@ -1,5 +1,5 @@
 <% if !f_object.parent.nil? %>
-  <button type="button" class="btn btn-md btn-select-lot-stock btn-primary saved-btn-combo" 
+  <button type="button" class="btn btn-md btn-select-lot-stock btn-outline-primary saved-btn-combo" 
     data-select-lot-url="<%= find_order_product_lots_url %>" 
     data-order-name="<%= order.model_name.name %>" 
     data-order-id="<%= order.id %>" 
@@ -17,17 +17,17 @@
 <% end %>
 
 <%# Habilita edicion %>
-<button type="button" class="btn btn-warning btn-ipp-edit saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" title="Editar">
+<button type="button" class="btn btn-outline-warning btn-ipp-edit saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" title="Editar">
   <%= fa_icon 'pen', class: "fa-fw" %>
 </button>
 
 <%# Eliminar producto %>
-<button type="button" class="btn btn-danger delete-product saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
+<button type="button" class="btn btn-outline-danger delete-product saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
   <%= fa_icon "trash-alt", class: "fa-fw" %>
 </button>
 
 <%# Guardar modificaciones %>
-<button type="button" class="btn btn-success update-item edit-btn-combo btn-md" 
+<button type="button" class="btn btn-outline-success update-item edit-btn-combo btn-md" 
         style="display: none;" 
         data-toggle="tooltip" 
         data-placement="top" 
@@ -40,7 +40,7 @@
 </button>
 
 <%# Cancelar edicion %>
-<button type="button" class="btn btn-danger cancel-item edit-btn-combo btn-md" 
+<button type="button" class="btn btn-outline-danger cancel-item edit-btn-combo btn-md" 
   style="display: none;" 
   data-toggle="tooltip" 
   data-placement="top" 

@@ -1,6 +1,7 @@
 <%= render 'shared/flash_message' %>
 
 $('#<%= @tr_id.to_s %>').fadeOut(500, function(e){
+  $("#"+"<%= @tr_id.to_s %>").find('.btn').tooltip('hide');
   const target = $('#<%= @tr_id.to_s %>');
   $(target).remove();
 });

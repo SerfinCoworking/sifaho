@@ -6,3 +6,9 @@
   min-width: 15px;
   box-sizing: content-box;
 }
+
+.popover-danger{
+  .arrow::before{
+    border-left-color: #dc3545!important
+  }
+}
