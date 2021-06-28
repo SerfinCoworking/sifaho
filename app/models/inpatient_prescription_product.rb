@@ -67,16 +67,12 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
     if children.any? { |child| child.errors.any? }
       raise ActiveRecord::RecordInvalid.new(self)
-
-      puts "error ==============================================="
     else
-      puts "CREADO ==============================================="
-      # children.each(&:decrement_reserved_stock)
-      # self.status = 'provista'
-      # save!(validate: false)
+      children.each(&:decrement_reserved_stock)
+      self.status = 'provista'
+      save!(validate: false)
       # notification_type = "entregó el producto #{product.name}"
       # create_notification(a_user, notification_type)
-
     end
   end
 
@@ -88,15 +84,15 @@ class InpatientPrescriptionProduct < ApplicationRecord
   end
 
   def create_notification(of_user, action_type, order_product = nil)
-    InpatientPrescriptionMovement.create(user: of_user, order: self, order_product: order_product,
-                                         action: action_type, sector: of_user.sector)
-    (of_user.sector.users.uniq - [of_user]).each do |user|
-      @not = Notification.where(actor: of_user, user: user, target: self, notify_type: 'internación',
-                                action_type: action_type, actor_sector: of_user.sector).first_or_create
-      @not.updated_at = DateTime.now
-      @not.read_at = nil
-      @not.save
-    end
+    # InpatientPrescriptionMovement.create!(user: of_user, order: self, order_product: order_product,
+    #                                      action: action_type, sector: of_user.sector)
+    # (of_user.sector.users.uniq - [of_user]).each do |user|
+    #   @not = Notification.where(actor: of_user, user: user, target: self, notify_type: 'internación',
+    #                             action_type: action_type, actor_sector: of_user.sector).first_or_create
+    #   @not.updated_at = DateTime.now
+    #   @not.read_at = nil
+    #   @not.save!
+    # end
   end
 
   private
@@ -112,7 +108,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
   # Validacion: evitar duplicidad de productos hijos en una misma orden
   def uniqueness_child_product_in_the_order
-    (order.order_products.uniq - [self]).each do |eop|
+    (parent.children.uniq - [self]).each do |eop|
       if eop.product_id == product_id
         errors.add(:uniqueness_child_product_in_the_order, 'El producto ya se encuentra en la entrega')
       end
