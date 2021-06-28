@@ -113,6 +113,22 @@ class InpatientPrescription < ApplicationRecord
     create_notification(a_user, notification_type)
   end
 
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    
+    # self.professional.full_info
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.patient.dni.to_s+" "+self.patient.fullname
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
+  end
+
   private
 
   def set_defaults

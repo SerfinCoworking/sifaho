@@ -95,6 +95,21 @@ class InpatientPrescriptionProduct < ApplicationRecord
     # end
   end
 
+  # Returns the name of the efetor who deliver the products
+  def origin_name
+    self.professional.full_info
+  end
+
+  # Returns the name of the efetor who receive the products
+  def destiny_name
+    self.patient.dni.to_s+" "+self.patient.fullname
+  end
+
+  # Return the i18n model name
+  def human_name
+    self.class.model_name.human
+  end
+
   private
 
   # Validacion: evitar duplicidad de productos padres en una misma orden
