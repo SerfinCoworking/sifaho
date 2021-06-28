@@ -32,7 +32,7 @@ class BedPolicy < ApplicationPolicy
   end
 
   def destroy?
-    unless record.patient.present?
+    unless record.patient.present? || record.inpatient_movements.present?
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
@@ -42,6 +42,14 @@ class BedPolicy < ApplicationPolicy
   end
 
   def admit_patient?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    if record.disponible?
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
+  end
+
+  def discharge_patient?
+    if record.ocupada?
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
   end
 end

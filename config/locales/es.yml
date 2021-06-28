@@ -59,6 +59,8 @@ es:
       purchase: "Compra"
       lot_archive: "Archivo de lote"
       establishment: "Establecimiento"
+      bed: "Cama"
+      patient: "Paciente"
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
@@ -160,15 +162,18 @@ es:
         sanitary_zone_id: "Zona sanitaria"
         establishment_type_id: "Tipo de establecimiento"
         siisa: 'Código SIISA'
-      lot_provenance:
-        name: 'Nombre'
-      receipt_product:
-        provenance_id: 'procedencia'
       bedroom:
         name: 'Nombre'
         location_sector: 'Ubicación'
       bed:
         name: 'Nombre'
+      lot_provenance:
+        name: 'Nombre'
+      receipt_product:
+        provenance_id: 'procedencia'
+      inpatient_movement:
+        bed_id: 'Cama'
+        patient_id: 'Paciente'
 
   date:
     abbr_day_names:

@@ -29,12 +29,16 @@ class BedroomsController < ApplicationController
     @sectors = Sector
       .select(:id, :name)
       .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id)
+      .provide_hospitalization
   end
 
   # GET /beds/1/edit
   def edit
     authorize @bedroom
+    @sectors = Sector
+      .select(:id, :name)
+      .with_establishment_id(current_user.sector.establishment_id)
+      .where.not(id: current_user.sector_id)
   end
 
   # POST /beds
@@ -87,8 +91,8 @@ class BedroomsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_bed
-      @bedroom = Bed.find(params[:id])
+    def set_bedroom
+      @bedroom = Bedroom.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

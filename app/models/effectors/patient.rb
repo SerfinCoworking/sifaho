@@ -3,28 +3,29 @@ class Patient < ApplicationRecord
 
   enum status: { Temporal: 0, Validado: 1 }
   enum sex: { Otro: 1, Femenino: 2, Masculino: 3 }
-  enum marital_status: { Soltero: 1, Casado: 2, Separado: 3, Divorciado: 4, Viudo: 5, otro: 6 }
+  enum marital_status: { soltero: 1, casado: 2, separado: 3, divorciado: 4, viudo: 5, otro: 6 }
 
-  # Relaciones
+  # Relationships
   belongs_to :patient_type
   belongs_to :address, optional: true
   belongs_to :bed, optional: true
   has_many :outpatient_prescriptions, dependent: :destroy
   has_many :chronic_prescriptions, dependent: :destroy
+  has_many :inpatient_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar
   has_one_attached :file
   has_many :patient_phones, :dependent => :destroy
   has_many :inpatient_movements
 
-  # Validaciones
+  # Validations
   validates_presence_of :first_name, :last_name, :dni
   validates_uniqueness_of :dni
   validates_associated :patient_phones
 
+  # Delegations
   delegate :country_name, :state_name, :city_name, :line, to: :address, prefix: :address
   delegate :name, to: :patient_type, prefix: :patient_type
 
-  # Atributos anidados
   accepts_nested_attributes_for :patient_phones,
     reject_if: proc { |attributes| attributes['number'].blank? },
     :allow_destroy => true
@@ -93,7 +94,6 @@ class Patient < ApplicationRecord
     ]
   end
 
-  #Métodos públicos
   def full_info
     self.last_name+", "+self.first_name+" "+self.dni.to_s
   end
@@ -111,7 +111,13 @@ class Patient < ApplicationRecord
     end
   end
 
+  # Return formatted birthdate
   def birthdate_string
     self.birthdate.present? ? self.birthdate.strftime("%d/%m/%Y") : '---'
+  end
+
+  # Return the last hospitalization
+  def last_hospitalization
+    self.inpatient_movements.admissions.last
   end
 end

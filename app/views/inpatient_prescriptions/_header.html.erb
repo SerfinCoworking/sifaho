@@ -20,6 +20,12 @@
     <% end %>
   </li>
   <li class="nav-item">
+    <%= link_to inpatient_movements_path, class: "nav-link #{ active_action_and_controller('index', 'inpatient_movements') }" do %>
+      <%= fa_icon "exchange-alt" %>
+      Movimientos
+    <% end %>
+  </li>
+  <li class="nav-item">
     <%= link_to new_bed_path, class: "nav-link #{ active_action_and_controller('new', 'beds') }" do %>
       <%= fa_icon "plus" %>
       Agregar cama

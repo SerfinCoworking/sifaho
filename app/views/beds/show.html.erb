@@ -31,10 +31,16 @@
           <%= fa_icon 'bed', size: '4x', class: 'text-'+bed_status_label(@bed ) %>
           <h4 class="pl-2">
               Cama
-            <span class="badge badge-secondary">
+            <span class="badge badge-info">
               <%= @bed.name %>
             </span>
           </h4>
+          <% if policy(@bed).edit? %>
+            <%= link_to edit_bed_path(@bed), :"data-turbolinks" => false, class: 'btn btn-outline-warning btn-sm ml-2 mb-2', 
+              title: 'Editar cama', data: { toggle: 'tooltip', placement: 'top' } do %>
+              <%= fa_icon 'pen' %>
+            <% end %>
+          <% end %>
         </div>
       </div>
       <div class="col-4">
@@ -42,7 +48,7 @@
           <%= fa_icon 'door-closed', size: '4x' %>
           <h4 class="pl-2">
             Habitación
-            <span class="badge badge-secondary">
+            <span class="badge badge-info">
               <%= @bed.bedroom_name %>
             </span>
           </h4>
@@ -61,14 +67,48 @@
       </div>  
     </div>
     <div class="row mt-4">
-      <div class="col-6">
+      <div class="col-4">
         <h5 class="border-bottom pb-2"><%= fa_icon 'user-injured' %> Paciente</h5>
-        <%= link_to admit_patient_inpatient_prescriptions_path(), class: 'btn btn-primary btn-block' do %>
-          <%= fa_icon 'plus' %> Ingresar paciente
+        <% if @bed.patient.present? %>
+          <!-- Patient profile -->
+          <div class='col-12'>
+            <div class="media">
+              <div class="mr-3">
+                <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
+                  <%= image_tag patient_avatar(@bed.patient, 83, 102), size: '150x200', class:"img-thumbnail media-object" %>
+                <% end %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Paciente</h4>
+                <p>
+                  <%= link_to patient_path(@bed.patient), target: :_blank, class: "link" do %>
+                    <%= @bed.patient_fullname.titleize %>
+                  <% end %> 
+                </p>
+                <p><strong>DNI: </strong><%= @bed.patient_dni %></p>
+                <p><strong>Edad: </strong><%= @bed.patient_age_string %></p>
+              </div>
+            </div>
+          </div> <!-- End Patient profile -->
+        <% end  %>
+
+        <% if policy(@bed).admit_patient? %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 1, bed_id: @bed.id), class: 'btn btn-primary btn-block mt-2' do %>
+            <%= fa_icon 'sign-in-alt' %> Ingresar paciente
+          <% end %>
+        <% end %>
+
+        <% if policy(@bed).discharge_patient? %>
+          <%= link_to new_inpatient_movement_path(movement_type_id: 2, bed_id: @bed.id), class: 'btn btn-danger btn-block mt-2' do %>
+            <%= fa_icon 'sign-out-alt' %> Egresar paciente
+          <% end %>
         <% end %>
       </div>
-      <div class="col-6">
-        <h5 class="border-bottom pb-2"><%= fa_icon 'user-md' %> Médico</h5>
+      <div class="col-8">
+        <% if @bed.patient.present? %>
+          <h5 class="border-bottom pb-2"> Tratamientos desde su ingreso <%= @bed.patient.last_hospitalization.created_at.strftime("%d/%m/%y") %></h5>
+          <% @bed.patient.inpatient_prescriptions %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -78,15 +118,6 @@
         'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
         class: "btn btn-light mr-1" do %>
         Volver
-      <% end %>
-
-      <% if policy(@bed).edit? %>
-        <%= link_to edit_bed_path(@bed), :"data-turbolinks" => false,
-          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
-          class: "btn btn-warning mr-1" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
       <% end %>
     </div> <!-- fin botones right -->
   </div>

@@ -1,17 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
-
-  
-  // button submit
-  $("button[type='submit']").on('click', function(e){
-    e.preventDefault();
-    $(e.target).attr('disabled', true);
-    $(e.target).siblings('button, a').attr('disabled', true);
-    $(e.target).find("div.c-msg").css({"display": "none"});
-    $(e.target).find('div.d-none').toggleClass('d-none');
-    $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
-    $('form#'+$(e.target).attr('form')).submit();
-  });
+  if(!(['inpatient_movements'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
 
   $('#patient-dni').autocomplete({
     source: $('#patient-dni').data('autocomplete-source'),
@@ -49,7 +37,7 @@ $(document).on('turbolinks:load', function(e){
           
           // Datos del paciente rellenados con Andes
           $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
-          $("#patient-marital-status").val(ui.item.data.estadoCivil);
+          $("#patient-marital-status").val(capitalize(ui.item.data.estadoCivil));
 
           for(let index = 0; ui.item.data.contacto.length > index; index++){
             if(['celular', 'fijo'].includes(ui.item.data.contacto[index].tipo)){
@@ -112,7 +100,7 @@ $(document).on('turbolinks:load', function(e){
         $(image).addClass("patient-avatar");
         $("#patient-avatar").html(image);
         
-        setPatientSex(ui.item.sex); 
+        setPatientSex(ui.item.sex);      
         $("#container-more-info").addClass("show");
         $("#container-receipts-list").addClass("show");
       }else{
@@ -123,6 +111,7 @@ $(document).on('turbolinks:load', function(e){
       const url = $('#patient-dni').attr('data-insurance-url');
       getInsurances(url, ui.item.dni);
       setPatientPrescriptions(ui.item.create, ui.item.id);
+      $('#patient-id').val(ui.item.id);
     }
   });
   
