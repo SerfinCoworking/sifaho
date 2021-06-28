@@ -516,7 +516,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_140715) do
     t.bigint "patient_id"
     t.bigint "prescribed_by_id"
     t.bigint "bed_id"
-    t.bigint "prescribed_by_id"
     t.string "remit_code"
     t.text "observation"
     t.integer "status", default: 0
@@ -821,11 +820,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_140715) do
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "treatment_status", default: 0
-    t.bigint "finished_by_professional_id"
-    t.text "finished_observation"
     t.index ["chronic_prescription_id"], name: "unique_chron_pres_on_org_cron_pres_prod"
-    t.index ["finished_by_professional_id"], name: "original_product_finished_by_professional"
     t.index ["product_id"], name: "index_original_chronic_prescription_products_on_product_id"
   end
 
