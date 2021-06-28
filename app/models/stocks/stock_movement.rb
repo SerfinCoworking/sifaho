@@ -7,13 +7,13 @@ class StockMovement < ApplicationRecord
   belongs_to :lot_stock
   has_one :lot, through: :lot_stock
   has_one :product, through: :lot_stock
+  has_one :sector, through: :stock
 
   # Delegations
   delegate :destiny_name, :origin_name, :status, :human_name, to: :order, prefix: :order, allow_nil: true
 
-
   filterrific(
-    default_filter_params: { sorted_by: 'fecha_desc'},
+    default_filter_params: { sorted_by: 'fecha_desc' },
     available_filters: [
       :search_lot,
       :since_date,
@@ -26,9 +26,9 @@ class StockMovement < ApplicationRecord
   # Scopes
 
   pg_search_scope :search_lot,
-    associated_against: { lot: [:code] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { lot: [:code] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -66,21 +66,21 @@ class StockMovement < ApplicationRecord
       ['Receta crónica', 'ChronicPrescription'],
       ['Pedido de sector', 'InternalOrder'],
       ['Pedido de establecimiento', 'ExternalOrder'],
-      ['Recibo', 'Receipt'],
+      ['Recibo', 'Receipt']
     ]
   end
 
-  scope :since_date, lambda { 
-    |a_date| where('stock_movements.created_at >= ?', DateTime.strptime(a_date, '%d/%m/%Y').beginning_of_day) 
-  }
+  scope :to_sector, ->(a_sector) { where('stocks.sector_id = ?', a_sector).joins(:stock) }
 
-  scope :to_date, lambda { |a_date| where('stock_movements.created_at <= ?', DateTime.strptime(a_date, '%d/%m/%Y').end_of_day) }
+  scope :since_date, ->(a_date) { where('stock_movements.created_at >= ?', DateTime.strptime(a_date, '%d/%m/%Y').beginning_of_day) }
 
-  scope :to_stock_id, lambda { |an_id| where(stock_id: an_id) }
+  scope :to_date, ->(a_date) { where('stock_movements.created_at <= ?', DateTime.strptime(a_date, '%d/%m/%Y').end_of_day) }
+
+  scope :to_stock_id, ->(an_id) { where(stock_id: an_id) }
 
   scope :with_product_ids, ->(product_ids) { joins(:product).where('products.id': product_ids) }
 
-  scope :for_movement_types, ->(movement_types){ where(order_type: movement_types) }
+  scope :for_movement_types, ->(movement_types) { where(order_type: movement_types) }
 
   def order_human_name_string
     self.order.present? ? self.order.human_name : 'Se eliminó'
@@ -93,11 +93,11 @@ class StockMovement < ApplicationRecord
   def order_origin_name_string
     self.order_origin_name if self.order.present?
   end
-  
+
   def order_destiny_name_string
     self.order_destiny_name if self.order.present?
   end
-  
+
   def order_status_string
     self.order_status if self.order.present?
   end

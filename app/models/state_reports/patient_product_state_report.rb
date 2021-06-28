@@ -1,10 +1,10 @@
 class PatientProductStateReport < ApplicationRecord
   include Reportable
-  
+
   # Relationships
   belongs_to :created_by, class_name: 'User'
   belongs_to :product, optional: true
-  
+
   # Delegations
   delegate :code, :name, to: :product, prefix: :product
 

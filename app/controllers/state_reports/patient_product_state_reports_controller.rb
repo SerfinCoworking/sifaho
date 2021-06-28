@@ -37,7 +37,7 @@ class StateReports::PatientProductStateReportsController < ApplicationController
 
     respond_to do |format|
       if @patient_product_state_report.save
-        format.html { redirect_to state_reports_patient_product_state_report_path(@patient_product_state_report), notice:'El reporte se ha creado correctamente.'}
+        format.html { redirect_to state_reports_patient_product_state_report_path(@patient_product_state_report), notice: 'El reporte se ha creado correctamente.'}
       else
         @last_reports = PatientProductStateReport.limit(5).order(created_at: :desc)
         format.html { render :new }
@@ -61,7 +61,7 @@ class StateReports::PatientProductStateReportsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def patient_product_state_report_params
-    params.require(:patient_product_state_report).permit(:product_id, :since_date, :to_date, 
+    params.require(:patient_product_state_report).permit(:product_id, :since_date, :to_date,
       report_products_attributes: [:id, :product_id, :_destroy])
   end
 

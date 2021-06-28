@@ -63,24 +63,18 @@ class Stock < ApplicationRecord
     end
   }
 
-  scope :to_sector, lambda { |sector|
-    where('stocks.sector_id = ?', sector.id)
-  }
-  
-  scope :by_product_code, lambda { |product_code|
-    joins(:product).where('products.code': product_code)
-  }
-  
-  scope :with_area_ids, ->(area_ids) { joins(:product).where('products.area_id': area_ids) } 
-  
-  scope :with_available_quantity, lambda {
-    joins(:lot_stocks).where("lot_stocks.quantity > ?", 0) 
-  }
-  
-  scope :with_lot_stocks, lambda { |id|
-    self.find(id).lot_stocks
-  }
-  
+  scope :to_sector, ->(sector) { where('stocks.sector_id = ?', sector.id) }
+
+  scope :with_product_ids, ->(product_ids) { joins(:product).where('products.id': product_ids) }
+
+  scope :by_product_code, ->(product_code) { joins(:product).where('products.code': product_code) }
+
+  scope :with_area_ids, ->(area_ids) { joins(:product).where('products.area_id': area_ids) }
+
+  scope :with_available_quantity, -> { joins(:lot_stocks).where('lot_stocks.quantity > ?', 0) }
+
+  scope :with_lot_stocks, ->(id) { find(id).lot_stocks }
+
   def self.options_for_sorted_by
     [
       ['Código (asc)', 'codigo_asc'],
@@ -88,7 +82,7 @@ class Stock < ApplicationRecord
       ['Unidad (a-z)', 'unidad_asc']
     ]
   end
-  
+
   def self.options_for_sorted_by_lots
     [
       ['Código (asc)', 'codigo_asc'],

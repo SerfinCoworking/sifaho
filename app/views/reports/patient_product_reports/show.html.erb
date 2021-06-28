@@ -15,18 +15,37 @@
   </div>
   <div class="card-body">
   
-    <div class="d-flex justify-content-between">
-      <div class="p-2 flex-fill">
-        <h5>Producto</h5>
-        <%= @patient_product_report.product_name %>
-      </div>
-      <div class="p-2 flex-fill">
+    <div class="row">
+      <div class="col-2">
         <h5>Desde</h5>
         <%= @patient_product_report.since_date.strftime("%d/%m/%Y") %>
       </div>    
-      <div class="p-2 flex-fill">
+      <div class="col-2">
         <h5>Hasta</h5>
         <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="col-8">
+        <h5>Productos consultados:</h5>
+        <div class="card">
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Unidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @patient_product_report.products.each do |product|%>
+                <tr>
+                  <td><%= product.code %></td>
+                  <td><%= product.name %></td>
+                  <td><%= product.unity_name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
       
