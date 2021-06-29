@@ -25,27 +25,7 @@
         <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %>
       </div>
       <div class="col-8">
-        <h5>Productos consultados:</h5>
-        <div class="card">
-          <table class="table table-hover table-sm">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Unidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @patient_product_report.products.each do |product|%>
-                <tr>
-                  <td><%= product.code %></td>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity_name %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+        <%= render 'shared/reports/products_requested', products: @patient_product_report.products %>
       </div>
     </div>
       

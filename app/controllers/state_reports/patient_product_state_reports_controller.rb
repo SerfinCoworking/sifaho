@@ -9,6 +9,7 @@ class StateReports::PatientProductStateReportsController < ApplicationController
                               .since_date(@patient_product_state_report.since_date.strftime('%d/%m/%Y'))
                               .to_date(@patient_product_state_report.to_date.strftime('%d/%m/%Y'))
                               .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
+                              .where(adds: false)
                               .order(created_at: :desc)
 
     respond_to do |format|

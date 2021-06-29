@@ -16,17 +16,16 @@
   <div class="card-body">
   
     <div class="d-flex justify-content-between pb-1">
-      <div class="p-2 flex-fill">
-        <h5>Producto</h5>
-        <%= @internal_order_product_report.product_name %>
-      </div>
-      <div class="p-2 flex-fill">
+      <div class="col-2">
         <h5>Desde</h5>
         <%= @internal_order_product_report.since_date.strftime("%d/%m/%Y") %>
       </div>    
-      <div class="p-2 flex-fill">
+      <div class="col-2">
         <h5>Hasta</h5>
         <%= @internal_order_product_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="col-8">
+        <%= render 'shared/reports/products_requested', products: @internal_order_product_report.products %>
       </div>
     </div>
     <% if @movements.present? %>

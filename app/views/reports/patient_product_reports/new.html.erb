@@ -21,6 +21,8 @@
           <div class="col-7 border-right">
             <%=  simple_form_for @patient_product_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= f.error_notification %>
+              <%= f.error_notification message: f.object.errors[:base].to_sentence %>
               <%= f.error_notification message: f.object.errors[:patient_product_report].to_sentence if f.object.errors[:patient_product_report].present? %>
               <div class="row nested-fields">
                 <div class="col-6">
@@ -46,7 +48,7 @@
                   %>
                 </div>
 
-                <%# INSUMOS SOLICITADOS %>
+                <%# PRODUCTOS SOLICITADOS %>
                 <div class="col-12">
                   <%= render "shared/reports/report_products_table", form: f %>
                 </div>
@@ -67,11 +69,11 @@
               <tbody>
                 <% @last_reports.each do |report|%>
                   <tr>
-                    <td><%= report.product.present? ? report.product_name : report.products.count %></td>
+                    <td class="text-truncate"><%= report.products.count == 1 ? report.products.first.name : report.products.count.to_s+' productos' %></td>
                     <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
                     <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
                     <td>
-                      <%= link_to reports_internal_order_product_report_path(report), class: 'btn btn-light btn-sm',
+                      <%= link_to reports_patient_product_report_path(report), class: 'btn btn-light btn-sm',
                         title: 'Ver reporte', data: { toggle: 'tooltip', placement: 'top'}, 
                         'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
                         <%= fa_icon "eye" %>

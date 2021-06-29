@@ -9,6 +9,7 @@ class Reports::PatientProductReportsController < ApplicationController
                               .since_date(@patient_product_report.since_date.strftime('%d/%m/%Y'))
                               .to_date(@patient_product_report.to_date.strftime('%d/%m/%Y'))
                               .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
+                              .where(adds: false)
                               .order(created_at: :desc)
 
     respond_to do |format|
@@ -37,7 +38,7 @@ class Reports::PatientProductReportsController < ApplicationController
     authorize @patient_product_report
 
     respond_to do |format|
-      if @patient_product_report.save!
+      if @patient_product_report.save
         format.html { redirect_to reports_patient_product_report_path(@patient_product_report), notice: 'El reporte se ha creado correctamente.' }
       else
         @last_reports = PatientProductReport.limit(10)

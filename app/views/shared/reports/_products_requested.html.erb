@@ -1,0 +1,21 @@
+<h5>Productos consultados:</h5>
+<div class="card mb-2">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Unidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.each do |product|%>
+        <tr>
+          <td><%= product.code %></td>
+          <td><%= product.name %></td>
+          <td><%= product.unity_name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

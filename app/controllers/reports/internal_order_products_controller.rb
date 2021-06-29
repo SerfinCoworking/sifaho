@@ -3,18 +3,14 @@ class Reports::InternalOrderProductsController < ApplicationController
 
   def show
     authorize @internal_order_product_report
-    @stock = Stock.where(sector: current_user.sector, product_id: @internal_order_product_report.product_id).first
-    if @stock.present?
-      @movements =
-        @stock
-        .movements
-        .with_product_ids(@internal_order_product_report.product_id)
-        .since_date(@internal_order_product_report.since_date.strftime("%d/%m/%Y"))
-        .to_date(@internal_order_product_report.to_date.strftime("%d/%m/%Y"))
-        .where(order_type: 'InternalOrder')
-        .order(created_at: :desc)
-    end
-    
+
+    @movements = StockMovement.with_product_ids(@internal_order_product_report.products.ids)
+                              .since_date(@internal_order_product_report.since_date.strftime('%d/%m/%Y'))
+                              .to_date(@internal_order_product_report.to_date.strftime('%d/%m/%Y'))
+                              .where(order_type: 'InternalOrder')
+                              .where(adds: false)
+                              .order(created_at: :desc)
+
     respond_to do |format|
       format.html
       format.pdf do
@@ -30,6 +26,7 @@ class Reports::InternalOrderProductsController < ApplicationController
   def new
     authorize InternalOrderProductReport
     @internal_order_product_report = InternalOrderProductReport.new
+    @internal_order_product_report.report_products.build
     @last_reports = InternalOrderProductReport.where(sector_id: current_user.sector_id).limit(10).order(created_at: :desc)
   end
 
@@ -57,22 +54,23 @@ class Reports::InternalOrderProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def internal_order_product_report_params
-      params.require(:internal_order_product_report).permit(:product_id, :since_date, :to_date)
+      params.require(:internal_order_product_report).permit(:product_id, :since_date, :to_date,
+                                                            report_products_attributes: [:id, :product_id, :_destroy])
     end
 
     def generate_report(movements, params)
       report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf')
-      
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf'), :default => true
+
+      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'first_page.tlf'), default: true
       report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_product', 'other_page.tlf'), id: :other_page
-    
+
       movements.each_with_index do |movement, index|
         if report.page_count == 1 && report.list.overflow?
           report.start_new_page layout: :other_page do |page|
           end
         end
-        
-        # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"} 
+
+        # movement => {["last_name", "first_name", "dni", "dispensed_at"] => "delivered_quantity"}
         report.list do |list|
           list.add_row do |row|
             row.values  line_index: index,
@@ -82,8 +80,7 @@ class Reports::InternalOrderProductsController < ApplicationController
           end
         end
       end
-      
-  
+
       report.pages.each do |page|
         page[:product_name] = @internal_order_product_report.supply_name
         page[:title] = 'Reporte producto entregado por sectores'
@@ -94,7 +91,7 @@ class Reports::InternalOrderProductsController < ApplicationController
         page[:establishment_name] = @internal_order_product_report.establishment_name
         page[:establishment] = @internal_order_product_report.establishment_name
       end
-  
+
       report.generate
     end
 

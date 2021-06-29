@@ -1,13 +1,14 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['patient_product_state_reports', 'patient_product_reports'].includes(_PAGE.controller) && 
-  (['new'].includes(_PAGE.action))) ) return false;
+  if(!(['patient_product_state_reports', 'patient_product_reports', 'internal_order_products'].includes(_PAGE.controller) && 
+  (['new', 'create'].includes(_PAGE.action))) ) return false;
 
   initEvents();
 
   // cocoon init
   $('#report-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents();
+    console.log("12");
     $(inserted_item).find('input.product-code').first().focus();
   });
 
