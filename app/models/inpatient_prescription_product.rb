@@ -47,6 +47,12 @@ class InpatientPrescriptionProduct < ApplicationRecord
                                 reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
                                 allow_destroy: true
   scope :only_parents, -> { where(parent_id: :nil) }
+
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
+  end
   scope :only_children, -> { where.not(parent_id: :nil) }
 
   def decrement_reserved_stock

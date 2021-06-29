@@ -11,7 +11,8 @@
       </tr>
     </thead>
     <tbody id="inpatient-order-product-cocoon-container">
-      <%= inpatient_form.simple_fields_for :parent_order_products do |form_products| %>
+      <%= inpatient_form.simple_fields_for :parent_order_products, inpatient_form.object.parent_order_products.for_statuses("sin_proveer") do |form_products| %>
+
         <%= render "inpatient_prescriptions/partials/delivery_fields", f: form_products, order: order %>
       <% end %>
     </tbody>

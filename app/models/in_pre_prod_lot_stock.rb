@@ -6,13 +6,6 @@ class InPreProdLotStock < ApplicationRecord
   has_one :product, through: :inpatient_prescription_product
 
   # Validations
-  # validates :available_quantity, 
-  # numericality: { 
-  #   only_integer: true, 
-  #   less_than_or_equal_to: :lot_stock_quantity, 
-  #   message: "La cantidad seleccionada debe ser menor o igual a %{count}"
-  # }
-  # validates :available_quantity, :numericality => { :only_integer => true, :greater_than => 0 }
   validate :quantity_greater_than_0, unless: :order_product_is_parent?
   validate :quantity_less_than_stock, unless: :order_product_is_parent?
   validates :lot_stock, presence: true
