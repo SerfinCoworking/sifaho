@@ -36,7 +36,7 @@ class InpatientPrescriptionsController < ApplicationController
 
   # GET /inpatient_prescriptions/1/edit
   def edit
-    @inpatients = Patient.all.limit(10)
+    @inpatients = current_user.establishment.hospitalized_patients
   end
 
   # POST /inpatient_prescriptions
@@ -50,7 +50,7 @@ class InpatientPrescriptionsController < ApplicationController
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
         format.html { redirect_to set_products_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
       else
-        @inpatients = Patient.all.limit(10)
+        @inpatients = current_user.establishment.hospitalized_patients
         format.html { render :new }
       end
     end
@@ -74,7 +74,7 @@ class InpatientPrescriptionsController < ApplicationController
   # DELETE /inpatient_prescriptions/1.json
   def destroy
     authorize @inpatient_prescription
-    @professional_fullname = @inpatient_prescription.professional.fullname
+    @professional_fullname = @inpatient_prescription.prescribed_by.professional.fullname
     @inpatient_prescription.destroy
     respond_to do |format|
       flash.now[:success] = "La receta de #{@professional_fullname} se ha eliminado correctamente."

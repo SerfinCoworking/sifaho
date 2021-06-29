@@ -13,7 +13,7 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
 
   def set_products?
     if Date.today <= record.date_prescribed
-      user.has_any_role?(:medico)
+      user.has_any_role?(:admin, :medico)
     end
   end
 
