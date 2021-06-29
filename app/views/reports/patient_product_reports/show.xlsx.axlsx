@@ -1,9 +1,9 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Reporte por paciente") do |sheet|
-  sheet.add_row ["#", "Fecha", "DNI", "Paciente", "Fecha de nacimiento", "Edad", "CUIE", "Establecimiento", "Producto", 
+  sheet.add_row ["#", "Fecha", "DNI", "Paciente", "Fecha de nacimiento", "Edad", "CUIE", "Establecimiento", "Código producto", "Producto", 
     "Cantidad"]
 
-  sheet.add_style 'A1:J1', bg_color: '00407A', fg_color: 'FFFFFF'
+  sheet.add_style 'A1:K1', bg_color: '00407A', fg_color: 'FFFFFF'
   
   @movements.each_with_index do |movement, index|
     sheet.add_row [
@@ -15,9 +15,10 @@ wb.add_worksheet(name: "Reporte por paciente") do |sheet|
       movement.order.patient.age_string,
       movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---',
       movement.order.establishment.name,
+      movement.product.code,
       movement.product.name,
       movement.quantity
     ]
   end
-  sheet.column_widths 5,10,10,40,10,10,8,40,60,10
+  sheet.column_widths 5,10,10,40,10,10,8,40,10,60,10
 end

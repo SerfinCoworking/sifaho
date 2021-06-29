@@ -25,19 +25,23 @@
         <%= @patient_product_report.to_date.strftime("%d/%m/%Y") %>
       </div>
       <div class="col-8">
+        <h5>Entregado por</h5>
+        <%= @patient_product_report.sector.sector_and_establishment %>
+      </div>
+      <div class="col-12 mt-3">
         <%= render 'shared/reports/products_requested', products: @patient_product_report.products %>
       </div>
     </div>
-      
+    
     <% if @movements.present? %>
-      <div class="card">
+      <div class="card mt-3">
         <table class="table table-hover table-sm">
           <thead>
             <tr>
               <th>Fecha</th>
               <th>DNI</th>
               <th>Paciente</th>
-              <th>Establecimiento</th>
+              <th>Producto</th>
               <th>Cantidad</th>
             </tr>
           </thead>
@@ -47,7 +51,7 @@
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
                 <td><%= movement.order.patient_dni %></td>
                 <td><%= movement.order.patient_fullname %></td>
-                <td><%= movement.order.establishment.name %></td>
+                <td class="text-truncate align-middle" style="max-width: 120px;"><%= movement.product.name %></td>
                 <td><%= movement.quantity %></td>
               </tr>
             <% end %>
