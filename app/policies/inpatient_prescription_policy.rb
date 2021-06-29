@@ -22,8 +22,7 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def edit?
-    if record.pendiente? && set_products?
-      # && (DateTime.now.to_time < record.expiry_date)
+    if !record.parent_order_products.any?(&:provista?) && set_products?
       user.has_any_role?(:admin, :medico)
     end
   end
@@ -48,7 +47,7 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    if record.pendiente?
+    if !record.parent_order_products.any?(&:provista?)
       user.has_any_role?(:admin, :medico)
     end
   end
