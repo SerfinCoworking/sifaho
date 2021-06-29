@@ -10,7 +10,6 @@ class InpatientPrescription < ApplicationRecord
 
   # Relations
   belongs_to :patient
-  # belongs_to :bed
   belongs_to :prescribed_by, class_name: 'User'
 
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: 'order_id'

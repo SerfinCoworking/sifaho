@@ -38,12 +38,11 @@ class InPreProdLotStock < ApplicationRecord
   def remove_reserved_quantity
     lot_stock.decrement_reserved(reserved_quantity)
     lot_stock.stock.create_stock_movement(inpatient_prescription_product.order, lot_stock, available_quantity, false)
-    self.reserved_quantity = 0
-    save!(validate: false)
+    update_columns(reserved_quantity: 0)
   end
 
   def product_is_not_dispensada?
-    inpatient_prescription_product.parent.sin_proveer? || inpatient_prescription_product.parent.parcialmente_suministrada?
+    inpatient_prescription_product.parent.sin_proveer?
   end
 
   def order_product_is_parent?
@@ -53,8 +52,9 @@ class InPreProdLotStock < ApplicationRecord
   private
 
   def reserve_quantity
-    self.lot_stock.reserve(self.available_quantity)
-    self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
+    lot_stock.reserve(available_quantity)
+    # igualamos lo solocitado con lo reservado
+    self.reserved_quantity = available_quantity
   end
 
   # Si se modifica la cantidad seleccionada del lote
@@ -63,9 +63,8 @@ class InPreProdLotStock < ApplicationRecord
   def update_reserved_quantity
     quantity = available_quantity - reserved_quantity
     quantity.positive? ? lot_stock.reserve(quantity) : lot_stock.enable_reserved(quantity.abs)
-    puts quantity
-    puts "DEBUG ===========================".colorize(background: :red)
-    self.reserved_quantity = self.available_quantity #igualamos lo solocitado con lo reservado
+    # igualamos lo solocitado con lo reservado
+    self.reserved_quantity = available_quantity
   end
 
   def quantity_less_than_stock
