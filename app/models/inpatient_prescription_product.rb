@@ -70,6 +70,9 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
     if children.any? { |child| child.errors.any? }
       raise ActiveRecord::RecordInvalid.new(self)
+    elsif !children.any?
+      errors.add(:presence_of_child, 'Debe asignar almenos 1 producto')
+      raise ActiveRecord::RecordInvalid.new(self)
     else
       children.each(&:decrement_reserved_stock)
       self.status = 'provista'

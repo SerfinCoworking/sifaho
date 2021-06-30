@@ -1,3 +1,24 @@
+<%# Si hay algun error en el producto padre %>
+<% if @inpatient_prescription_product.errors.any? %>
+  <% @inpatient_prescription_product.errors.keys.map do |error_key| %>
+    if("<%= error_key %>" == 'presence_of_child'){
+      $("#parent-"+"<%= @inpatient_prescription_product.id.to_s %>").find(".actions-col .btn-success").popover({
+        content: "<%= @inpatient_prescription_product.errors[error_key].first %>",
+        delay: { "show": 500, "hide": 500 },
+        placement: "left",
+        trigger: "manual",
+        template: '<div class="popover popover-danger border-danger" role="tooltip"><div class="arrow"></div><div class="popover-body text-danger"></div></div>',
+      });
+      
+      $("#parent-"+"<%= @inpatient_prescription_product.id.to_s %>").find(".actions-col .btn-success").popover('show');
+      setTimeout(function(){
+        $("#parent-"+"<%= @inpatient_prescription_product.id.to_s %>").find(".actions-col .btn-success").popover('hide');
+      }, 2500);
+    }
+  <% end %>
+<% end %>
+
+<%# Si hay algun error en los productos hijos %>
 <% @inpatient_prescription_product.children.map do |child| %>
   <% child.errors.keys.map do |error_key| %>
     if("<%= error_key %>" == 'presence_of_order_prod_lot_stocks'){
