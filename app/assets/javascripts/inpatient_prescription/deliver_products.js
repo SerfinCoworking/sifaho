@@ -15,6 +15,14 @@ $(document).on('turbolinks:load', function(e){
       const currentName = $(element).attr('name');
       $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
     });
+  }).on('cocoon:before-remove', function(e, task) {
+    // allow some time for the animation to complete
+    const table = $(task).closest('table');
+    if( $(table).find('tbody tr').length <= 1 ){
+      $(table).closest('td').fadeOut('slow');
+    }
+    $(this).data('remove-timeout', 1000);
+    task.fadeOut('slow');
   });
   
   function initEvents(target){

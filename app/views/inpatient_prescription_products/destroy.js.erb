@@ -1,5 +1,8 @@
 <%= render 'shared/flash_message' %>
 
+if( $('#<%= @tr_id.to_s %>').closest('table').find('tbody tr').length <= 1 ){
+  $('#<%= @tr_id.to_s %>').closest('table').closest('td').fadeOut(500);
+}
 $('#<%= @tr_id.to_s %>').fadeOut(500, function(e){
   $("#"+"<%= @tr_id.to_s %>").find('.btn').tooltip('hide');
   const target = $('#<%= @tr_id.to_s %>');
