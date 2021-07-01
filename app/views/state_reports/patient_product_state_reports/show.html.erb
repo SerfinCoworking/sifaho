@@ -15,25 +15,17 @@
   </div>
   <div class="card-body">
   
-    <div class="d-flex justify-content-between">
-      <div class="p-2 flex-fill">
-        <% if @patient_product_state_report.product.present? %>
-          <h5>Producto</h5>
-          <%= @patient_product_state_report.product_name %>
-        <% else %>
-          <h5>Productos</h5>
-          <% @patient_product_state_report.report_products.each do |line| %>
-            <p><%= line.product_code %> <%= line.product_name %></p>
-          <% end %>
-        <% end %>
-      </div>
-      <div class="p-2 flex-fill">
+    <div class="row">
+      <div class="col-2">
         <h5>Desde</h5>
         <%= @patient_product_state_report.since_date.strftime("%d/%m/%Y") %>
       </div>    
-      <div class="p-2 flex-fill">
+      <div class="col-2">
         <h5>Hasta</h5>
         <%= @patient_product_state_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="col-8 mt-3">
+        <%= render 'shared/reports/products_requested', products: @patient_product_state_report.products %>
       </div>
     </div>
       
