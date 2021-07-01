@@ -140,6 +140,9 @@ es:
         product_id: "Producto"
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
+      external_order_product_report:
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
       internal_order_product_report:
         product: "Producto"
         since_date: "Fecha desde"

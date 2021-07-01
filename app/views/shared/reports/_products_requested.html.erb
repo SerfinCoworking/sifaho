@@ -11,8 +11,25 @@
     <tbody>
       <% products.each do |product|%>
         <tr>
-          <td><%= product.code %></td>
-          <td><%= product.name %></td>
+          <td class="text-secondary">
+            <% @stock = Stock.where(sector: current_user.sector, product: product ).first %>
+            <% if @stock.present? %>
+              <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                <%= product.code %>
+              <% end %>
+            <% else %>
+              <%= product.code %>
+            <% end %>
+          </td>
+          <td class="text-secondary">
+            <% if @stock.present? %>
+              <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                <%= product.name %>
+              <% end %>
+            <% else %>
+              <%= product.name %>
+            <% end %>
+          </td>
           <td><%= product.unity_name %></td>
         </tr>
       <% end %>

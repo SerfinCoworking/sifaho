@@ -14,33 +14,32 @@
     <% end %>
   </div>
   <div class="card-body">
-    <div class="d-flex justify-content-between">
-      <div class="p-2 flex-fill">
-        <h5>Ubicación</h5>
-        <strong><%= @external_order_product_report.sector.name %></strong>
-        <%= @external_order_product_report.establishment_name %>
-      </div>
-      <div class="p-2 flex-fill">
-        <h5>Producto</h5>
-        <%= @external_order_product_report.product_name %>
-      </div>
-      <div class="p-2 flex-fill">
+    <div class="row">
+      <div class="col-2">
         <h5>Desde</h5>
         <%= @external_order_product_report.since_date.strftime("%d/%m/%Y") %>
       </div>
-      <div class="p-2 flex-fill">
+      <div class="col-2">
         <h5>Hasta</h5>
         <%= @external_order_product_report.to_date.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="col-8">
+        <h5>Entregado por</h5>
+        <%= @external_order_product_report.sector.sector_and_establishment %>
+      </div>
+      <div class="col-12 mt-3">
+        <%= render 'shared/reports/products_requested', products: @external_order_product_report.products %>
       </div>
     </div>
       
     <%# movement => {["establishment.name", "sector.name" ] => "delivered_quantity"} %>
     <% if @movements.present? %>
-      <div class="card">
+      <div class="card mt-3">
         <table class="table table-hover table-sm">
           <thead>
             <tr>
               <th>Establecimiento</th>
+              <th>Producto</th>
               <th>Cantidad</th>
             </tr>
           </thead>
@@ -51,12 +50,15 @@
                   <%= movement.order_destiny_name %>
                 </td>
                 <td>
+                  <%= movement.product.name %>
+                </td>
+                <td>
                   <%= movement.quantity %>
                 </td>
               </tr>
             <% end %>
-            <tr>
-              <td>Total</td>
+            <tr class="table-info">
+              <td colspan="2" class="text-right">Total</td>
               <td><%= @movements.sum(&:quantity) %></td>
             </tr>
           </tbody>
@@ -71,10 +73,6 @@
   <div class="card-footer d-flex justify-content-end">
     <%= link_to :back, class: 'btn btn-light mr-2' do %>
       Volver
-    <% end %>
-    <%= link_to reports_external_order_product_report_path(format: 'pdf', id: @external_order_product_report.id), 
-      class: "btn btn-info mr-2", id: "print-report", target: :_blank do %>
-      <%= fa_icon "print" %> Imprimir
     <% end %>
     <%= link_to reports_external_order_product_report_path(format: 'xlsx', id: @external_order_product_report.id), 
       class: "btn btn-success mr-2", id: "print-report", target: :_blank do %>

@@ -170,8 +170,6 @@ class ExternalOrder < ApplicationRecord
     ]
   end
 
-  public
-
   def self.provided_establishments_by(a_sector)
     @sector_ids = ExternalOrder.provider(a_sector).pluck(:applicant_sector_id).to_set
     return Establishment.joins(:sectors).where(sectors: { id: @sector_ids }).pluck(:id, :name).to_set

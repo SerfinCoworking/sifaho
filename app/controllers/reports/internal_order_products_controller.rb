@@ -4,12 +4,15 @@ class Reports::InternalOrderProductsController < ApplicationController
   def show
     authorize @internal_order_product_report
 
-    @movements = StockMovement.with_product_ids(@internal_order_product_report.products.ids)
+    @movements = StockMovement.to_sector(@internal_order_product_report.sector)
+                              .with_product_ids(@internal_order_product_report.products.ids)
+                              .select('DISTINCT ON(stock_movements.order_id, stock_movements.lot_stock_id)
+                              stock_movements.lot_stock_id, stock_movements.*')
                               .since_date(@internal_order_product_report.since_date.strftime('%d/%m/%Y'))
                               .to_date(@internal_order_product_report.to_date.strftime('%d/%m/%Y'))
                               .where(order_type: 'InternalOrder')
                               .where(adds: false)
-                              .order(created_at: :desc)
+                              .order(:lot_stock_id, :order_id, created_at: :desc)
 
     respond_to do |format|
       format.html

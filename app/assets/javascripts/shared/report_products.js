@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['patient_product_state_reports', 'patient_product_reports', 'internal_order_products'].includes(_PAGE.controller) && 
+  if(!(['patient_product_state_reports', 'patient_product_reports', 'internal_order_products', 'external_order_products'].includes(_PAGE.controller) && 
   (['new', 'create'].includes(_PAGE.action))) ) return false;
 
   initEvents();

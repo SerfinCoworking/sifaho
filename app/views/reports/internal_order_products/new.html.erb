@@ -69,7 +69,7 @@
               <tbody>
                 <% @last_reports.each do |report|%>
                   <tr>
-                    <td><%= report.product.present? ? report.product_name : report.products.count %></td>
+                    <td class="text-truncate"><%= report.products.count == 1 ? report.products.first.name : report.products.count.to_s+' productos' %></td>
                     <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
                     <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
                     <td>

@@ -13,6 +13,7 @@
       <%= fa_icon 'times' %>
     <% end %>
   </div>
+  
   <div class="card-body">
     <div class="row">
       <div class="col-8">
@@ -56,6 +57,8 @@
         <a class="nav-link" id="statistics-tab" data-toggle="tab" href="#statistics" role="tab" aria-controls="statistics" aria-selected="false"><%= fa_icon "chart-bar" %> Estadísticas</a>
       </li>
     </ul>
+
+    <%# LOTS %>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="lots" role="tabpanel" aria-labelledby="lots-tab">
         <table class="table table-hover table-sm">
@@ -102,6 +105,8 @@
           </tbody>
         </table>
       </div>
+
+      <%# MOVEMENTS %>
       <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
         <table class="table table-hover table-sm">
           <thead class="thead-light">
@@ -141,7 +146,10 @@
           </div>
         <% end %>
       </div>
-      <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab"></div>
+
+      <%# STATISTICS %>
+      <div class="tab-pane fade" id="statistics" role="tabpanel" aria-labelledby="statistics-tab">
+      </div>
     </div>
   </div>
 

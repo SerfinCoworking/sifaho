@@ -4,13 +4,15 @@ class Reports::PatientProductReportsController < ApplicationController
   def show
     authorize @patient_product_report
 
-    @movements = StockMovement.to_sector(current_user.sector)
+    @movements = StockMovement.to_sector(@patient_product_report.sector)
                               .with_product_ids(@patient_product_report.products.ids)
+                              .select('DISTINCT ON(stock_movements.order_id, stock_movements.lot_stock_id)
+                              stock_movements.lot_stock_id, stock_movements.*')
                               .since_date(@patient_product_report.since_date.strftime('%d/%m/%Y'))
                               .to_date(@patient_product_report.to_date.strftime('%d/%m/%Y'))
                               .where(order_type: ['OutpatientPrescription', 'ChronicPrescription'])
                               .where(adds: false)
-                              .order(created_at: :desc)
+                              .order(:lot_stock_id, :order_id, created_at: :desc)
 
     respond_to do |format|
       format.html
