@@ -1,7 +1,7 @@
 class ProductLotStockController < ApplicationController
 
   before_action :find_order
-  append_before_action :find_order_product, only: [ :find_lots, :update_lot_stock_selection ]
+  append_before_action :find_order_product, only: %i[find_lots update_lot_stock_selection]
 
   def find_lots
     @selected_lot_stocks = @order_product.order_prod_lot_stocks.pluck(:lot_stock_id)
