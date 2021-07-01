@@ -61,6 +61,7 @@ es:
       establishment: "Establecimiento"
       bed: "Cama"
       patient: "Paciente"
+      inpatient_prescription: "Internación"
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
