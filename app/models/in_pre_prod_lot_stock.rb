@@ -9,6 +9,7 @@ class InPreProdLotStock < ApplicationRecord
   validate :quantity_greater_than_0, unless: :order_product_is_parent?
   validate :quantity_less_than_stock, unless: :order_product_is_parent?
   validates :lot_stock, presence: true
+  validate :total_available_quantity
 
   accepts_nested_attributes_for :lot_stock,
                                 reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
@@ -17,10 +18,6 @@ class InPreProdLotStock < ApplicationRecord
   before_create :reserve_quantity
   before_update :update_reserved_quantity, if: :product_is_not_dispensada?
   before_destroy :return_reserved_quantity
-
-  def lot_stock_quantity
-    lot_stock.quantity
-  end
 
   def return_reserved_quantity
     lot_stock.enable_reserved(reserved_quantity)
@@ -71,6 +68,13 @@ class InPreProdLotStock < ApplicationRecord
   def quantity_greater_than_0
     if available_quantity.negative? && !inpatient_prescription_product.parent.provista?
       errors.add(:available_quantity, :greater_than, message: 'Cantidad debe ser mayor a 0')
+    end
+  end
+
+  def total_available_quantity
+    max_deliver_quantity = inpatient_prescription_product.order_prod_lot_stocks.sum(&:available_quantity)
+    if inpatient_prescription_product.deliver_quantity != max_deliver_quantity
+      errors.add(:total_available_quantity, message: "La cantidad seleccionada debe igual a #{inpatient_prescription_product.deliver_quantity}")
     end
   end
 end

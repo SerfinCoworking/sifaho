@@ -97,23 +97,12 @@ $(document).on('turbolinks:load', function(e){
 
   }// fin initEvents
 
-
-  // $("button[type='submit']").on('click', function(e){
-  //   e.preventDefault();
-  //   $(e.target).attr('disabled', true);
-  //   // $(e.target).siblings('button, a').attr('disabled', true);
-  //   $(e.target).find("div.c-msg").css({"display": "none"});
-  //   $(e.target).find('div.d-none').toggleClass('d-none');
-  //   $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
-  //   $('form#'+$(e.target).attr('form')).submit();
-  // });
-
   function onChangeOnSelectAutoCProductCode(target, item){
     if(item){
       const tr = $(target).closest(".nested-fields");
       tr.find("input.product-name").val(item.name); // update product name input
       tr.find("input.product-unity").val(item.unity); // update product unity input      
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input
+      tr.find("input.product-stock").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input  
       tr.find("input.dose_quantity").first().focus();
     }
@@ -124,7 +113,7 @@ $(document).on('turbolinks:load', function(e){
       const tr = $(target).closest(".nested-fields");
       tr.find("input.product-code").val(item.code); // update product name input
       tr.find("input.product-unity").val(item.unity); // update product unity input
-      tr.find("input.stock-quantity").val(item.stock); // update product stock input
+      tr.find("input.product-stock").val(item.stock); // update product stock input
       tr.find("input.product-id").val(item.id); // update product id input
       tr.find('div.lot-stocks-hidden').html('');
     }
@@ -228,4 +217,17 @@ function initActionsButton(target){
   $(target).find(".update-item").on('click', function(e){
     updateOrderProduct(e.target)
   });
+
+  // Se renderiza el porcentual del background
+  
 }
+
+function setLotSelectionProgress(targetRow, selectedQuantity, toDelivery){
+  if(selectedQuantity > toDelivery){
+    $(targetRow).find('button.btn-select-lot-stock').addClass('btn-outline-danger').removeClass('btn-outline-success btn-outline-primary');
+  }else if(selectedQuantity = toDelivery ){
+    $(targetRow).find('button.btn-select-lot-stock').addClass('btn-outline-success').removeClass('btn-outline-danger btn-outline-primary');
+  }else{
+    $(targetRow).find('button.btn-select-lot-stock').addClass('btn-outline-primary').removeClass('btn-outline-danger btn-outline-success');
+  }
+} 

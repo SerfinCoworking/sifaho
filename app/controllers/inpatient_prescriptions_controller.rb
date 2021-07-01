@@ -85,12 +85,12 @@ class InpatientPrescriptionsController < ApplicationController
   # DELIVERY /inpatient_prescriptions/1
   # DELIVERY /inpatient_prescriptions/1.json
   def delivery
+    authorize @inpatient_prescription
   end
 
   def update_with_delivery
     @inpatient_prescription.dispensed_by(current_user)
   end
-
 
   private
   # Use callbacks to share common setup or constraints between actions.

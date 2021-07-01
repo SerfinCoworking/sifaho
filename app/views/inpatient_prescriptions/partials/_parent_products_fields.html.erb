@@ -155,7 +155,7 @@
   <td class="actions-col">
     <% if f.object.new_record? %>
       <!-- Boton crear-->
-      <button type="button" class="btn btn-md btn-success btn-ipp-save" 
+      <button type="button" class="btn btn-md btn-outline-success btn-ipp-save" 
               data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" 
               data-url-type="POST" 
               data-toggle="tooltip" 
@@ -166,7 +166,7 @@
       </button>
 
       <!-- Quitar elemento (no persistido) -->
-      <%= link_to_remove_association  f, class: 'remove-tag btn btn-danger btn-md',
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-outline-danger btn-md',
         title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "trash-alt", class: "fa-fw" %>
       <% end %>
