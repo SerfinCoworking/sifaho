@@ -19,21 +19,19 @@ module ApplicationHelper
   end
 
   def active_class(link_path)
-    if params[:controller] == link_path
-      return 'active'
-    end
+    return 'active' if params[:controller] == link_path
+  end
+
+  def active_class_folder(folder_name)
+    return 'active' if params[:controller].start_with?(folder_name)
   end
 
   def active_action(link_path)
-    if params[:action] == link_path
-      return 'active'
-    end
+    return 'active' if params[:action] == link_path
   end
 
   def active_action_and_controller(action_name, a_controller_name)
-    if params[:action] == action_name && controller_name == a_controller_name
-      return 'active'
-    end
+    return 'active' if params[:action] == action_name && controller_name == a_controller_name
   end
 
   def order_status_label(an_order)
