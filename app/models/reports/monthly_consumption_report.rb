@@ -1,5 +1,7 @@
 class MonthlyConsumptionReport < ApplicationRecord
+
   enum report_type: { un_producto: 0, por_rubro: 1 }
+
   belongs_to :created_by, class_name: 'User'
   belongs_to :sector
   belongs_to :product, optional: true

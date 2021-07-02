@@ -25,7 +25,6 @@ class ChronicPrescription < ApplicationRecord
   accepts_nested_attributes_for :original_chronic_prescription_products,
   :allow_destroy => true
   
-  
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :enrollment, :fullname, to: :professional, prefix: :professional
 
@@ -159,20 +158,21 @@ class ChronicPrescription < ApplicationRecord
   # se actualiza el estado de la receta a "dispensada"
   def dispense_by
     # dispensacion completa: cambio de estado a "dispensada"
-    if self.original_chronic_prescription_products.sum(:total_request_quantity) <= self.original_chronic_prescription_products.sum(:total_delivered_quantity)
+    if sum_request_quantity <= sum_delivery_quantity
       self.dispensada!
     end
   end
     
   def return_dispense_by(a_user)
     # dispensacion incompleta con previo estado "dispensada": cambio de estado a "dispensada_parcial"
-    if self.original_chronic_prescription_products.sum(:total_request_quantity) > self.original_chronic_prescription_products.sum(:total_delivered_quantity) && self.dispensada?
-      self.dispensada_parcial!
-    elsif self.chronic_dispensations.count == 0 && self.dispensada_parcial!
-      self.pendiente!
-    end
+    update_status
+    # if sum_request_quantity > sum_delivery_quantity && self.dispensada?
+    #   self.dispensada_parcial!
+    # elsif self.chronic_dispensations.count == 0 # && self.dispensada_parcial?
+    #   self.pendiente!
+    # end
 
-    self.create_notification(a_user, "retorno una dispensación")
+    self.create_notification(a_user, "retornó una dispensación")
   end
 
   # Returns the name of the efetor who deliver the products
@@ -190,16 +190,47 @@ class ChronicPrescription < ApplicationRecord
     self.class.model_name.human
   end
 
+  # Update status prescription based on expiry date and delivered quantity
   def update_status
-    if (self.dispensada_parcial? || self.pendiente?) && Date.today > self.expiry_date
-      self.status = 'vencida'
+    if !vencida? && Date.today > self.expiry_date
+      vencida!
+    elsif (sum_request_quantity <= sum_delivery_quantity) || !any_product_without_dispensing?
+      dispensada!
+    elsif any_product_without_dispensing? && chronic_dispensations.count > 0
+      dispensada_parcial!
+    elsif chronic_dispensations.count == 0
+      pendiente!
     end
   end
   
+  # Return true if all products are 'Terminado' or 'Terminado manual'
+  def any_product_without_dispensing?
+    return self.original_chronic_prescription_products.for_treatment_statuses(['pendiente']).present?
+  end
+
+  # Finish chronic prescription if there any product without dispense
+  def finish_by(a_user)
+    raise ArgumentError, 'Tratamientos pendientes' if any_product_without_dispensing?
+    dispensada!
+    create_notification(a_user, 'finalizó la receta')
+  end
+  
   private
+  
   def presence_of_products_into_the_order
     if self.original_chronic_prescription_products.size == 0
       errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
     end
   end
+
+  # Get total requested quantity of original products
+  def sum_request_quantity
+    original_chronic_prescription_products.sum(:total_request_quantity)
+  end
+
+  # Get total delivered quantity of original products
+  def sum_delivery_quantity
+    original_chronic_prescription_products.sum(:total_delivered_quantity)
+  end
+
 end

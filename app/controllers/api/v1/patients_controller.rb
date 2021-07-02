@@ -123,7 +123,7 @@ module Api::V1
           "otro"
         end
       else
-        return "Soltero"
+        return "soltero"
       end
     end
 
@@ -131,14 +131,14 @@ module Api::V1
       if params[:data][:gender].present?
         return case params[:data][:gender]
         when "male"
-          "Masculino"
+          "masculino"
         when "female"
-          "Femenino"
+          "femenino"
         else
-          "Otro"
+          "otro"
         end
       else
-        return "Otro"
+        return "otro"
       end
     end
 

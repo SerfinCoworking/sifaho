@@ -81,7 +81,7 @@ class LotStocksController < ApplicationController
     
     respond_to do |format|
       if @lot_archive.save
-        format.html { redirect_to show_stock_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
+        format.html { redirect_to stock_show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
       else
         format.js { render :new_archive }
       end

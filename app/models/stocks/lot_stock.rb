@@ -41,9 +41,9 @@ class LotStock < ApplicationRecord
     case sort_option.to_s
     when /^expiry_/s
       # Ordenamiento por fecha de modificación en la BD
-      reorder("lots.expiry_date #{ direction }").joins(:lot)
+      reorder("lots.expiry_date #{direction}").joins(:lot)
     # when /^created_at_/s
-    #   # Ordenamiento por fecha de creación en la BD
+    #   # Ordenamiento por fecha de creacion en la BD
     #   reorder("lot_stocks.created_at #{ direction }")
     # when /^medico_/
     #   # Ordenamiento por nombre de droga
@@ -55,45 +55,31 @@ class LotStock < ApplicationRecord
     #   # Ordenamiento por nombre de estado
     #   reorder("lot_stocks.status #{ direction }")
     # when /^recetada_/
-    #   # Ordenamiento por la fecha de recepción
+    #   # Ordenamiento por la fecha de recepcion
     #   reorder("lot_stocks.date_prescribed #{ direction }")
     # when /^creado_/
-    #   # Ordenamiento por la fecha de recepción
+    #   # Ordenamiento por la fecha de recepcion
     #   reorder("lot_stocks.created_at #{ direction }")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
-  scope :with_product, lambda { |a_product| 
-    where('lot_stocks.product_id = ?', a_product.id).joins(:lot)
-  }
-  
-  scope :with_status, lambda { |status| 
-    where('lots.status = ?', status).joins(:lot)
-  }
+  scope :with_product, ->(a_product) { where('lot_stocks.product_id = ?', a_product.id).joins(:lot) }
 
-  scope :without_status, lambda { |a_status|
-    where.not('lots.status = ?', a_status )
-  }
-  
-  scope :lots_for_sector, lambda { |a_sector| 
-    where(sector: a_sector)
-  }
-  
-  scope :by_stock, lambda { |stock_id|
-    where(stock_id: stock_id)
-  }
+  scope :with_status, ->(status) { where('lots.status = ?', status).joins(:lot) }
 
-  scope :greater_than_zero, lambda {
-    where("lot_stocks.quantity > 0 OR lot_stocks.reserved_quantity > 0")
-  }
+  scope :without_status, ->(a_status) { where.not('lots.status = ?', a_status) }
 
-  scope :search_by_status, lambda { |status|
-    joins(:lot).where('lots.status = ?', status)
-  }
-  
+  scope :lots_for_sector, ->(a_sector) { where(sector: a_sector) }
+
+  scope :by_stock, ->(stock_id) { where(stock_id: stock_id) }
+
+  scope :greater_than_zero, -> { where('lot_stocks.quantity > 0 OR lot_stocks.reserved_quantity > 0') }
+
+  scope :search_by_status, ->(status) { joins(:lot).where('lots.status = ?', status) }
+
   scope :search_by_quantity, lambda { |quantity|
     if quantity == 0 || quantity == 1
       quantity == 0 ? where('lot_stocks.quantity = 0') : where('lot_stocks.quantity > 0')
@@ -107,7 +93,7 @@ class LotStock < ApplicationRecord
       ['Por vencer', 1, 'warning'],
       ['Vencido', 2, 'danger']
     ]
-  end 
+  end
 
   def self.options_for_quantity
     [

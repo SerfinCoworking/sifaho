@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_134939) do
+ActiveRecord::Schema.define(version: 2021_06_24_105335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -447,14 +447,34 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
   create_table "in_pre_prod_lot_stocks", force: :cascade do |t|
     t.bigint "inpatient_prescription_product_id"
     t.bigint "lot_stock_id"
-    t.bigint "supplied_by_sector_id"
-    t.integer "available_quantity"
-    t.integer "reserved_quantity", default: 0
+    t.bigint "dispensed_by_id"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["dispensed_by_id"], name: "index_in_pre_prod_lot_stocks_on_dispensed_by_id"
     t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
     t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
-    t.index ["supplied_by_sector_id"], name: "index_in_pre_prod_lot_stocks_on_supplied_by_sector_id"
+  end
+
+  create_table "inpatient_movement_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "fa_icon", default: "exchange-alt"
+  end
+
+  create_table "inpatient_movements", force: :cascade do |t|
+    t.bigint "bed_id"
+    t.bigint "patient_id"
+    t.bigint "movement_type_id"
+    t.bigint "user_id"
+    t.text "observations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bed_id"], name: "index_inpatient_movements_on_bed_id"
+    t.index ["movement_type_id"], name: "index_inpatient_movements_on_movement_type_id"
+    t.index ["patient_id"], name: "index_inpatient_movements_on_patient_id"
+    t.index ["user_id"], name: "index_inpatient_movements_on_user_id"
   end
 
   create_table "inpatient_movement_types", force: :cascade do |t|
@@ -494,7 +514,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
 
   create_table "inpatient_prescription_products", force: :cascade do |t|
     t.bigint "inpatient_prescription_id"
-    t.bigint "parent_id"
     t.bigint "product_id"
     t.integer "dose_quantity"
     t.integer "deliver_quantity"
@@ -516,6 +535,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
     t.bigint "patient_id"
     t.bigint "prescribed_by_id"
     t.bigint "bed_id"
+    t.bigint "prescribed_by_id"
     t.string "remit_code"
     t.text "observation"
     t.integer "status", default: 0
@@ -820,7 +840,11 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "treatment_status", default: 0
+    t.bigint "finished_by_professional_id"
+    t.text "finished_observation"
     t.index ["chronic_prescription_id"], name: "unique_chron_pres_on_org_cron_pres_prod"
+    t.index ["finished_by_professional_id"], name: "original_product_finished_by_professional"
     t.index ["product_id"], name: "index_original_chronic_prescription_products_on_product_id"
   end
 
@@ -1197,6 +1221,16 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
     t.index ["received_by_id"], name: "index_receipts_on_received_by_id"
   end
 
+  create_table "report_product_lines", force: :cascade do |t|
+    t.string "reportable_type"
+    t.bigint "reportable_id"
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_report_product_lines_on_product_id"
+    t.index ["reportable_type", "reportable_id"], name: "index_report_product_lines_on_reportable_type_and_reportable_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "name", default: "Reporte"
     t.datetime "since_date"
@@ -1414,6 +1448,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_134939) do
   add_foreign_key "quantity_ord_supply_lots", "laboratories"
   add_foreign_key "quantity_ord_supply_lots", "supplies"
   add_foreign_key "quantity_ord_supply_lots", "supply_lots"
+  add_foreign_key "report_product_lines", "products"
   add_foreign_key "reports", "sectors"
   add_foreign_key "reports", "supplies"
   add_foreign_key "reports", "users"

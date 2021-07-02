@@ -1,0 +1,38 @@
+<h5>Productos consultados:</h5>
+<div class="card mb-2">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Unidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.each do |product|%>
+        <tr>
+          <td class="text-secondary">
+            <% @stock = Stock.where(sector: current_user.sector, product: product ).first %>
+            <% if @stock.present? %>
+              <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                <%= product.code %>
+              <% end %>
+            <% else %>
+              <%= product.code %>
+            <% end %>
+          </td>
+          <td class="text-secondary">
+            <% if @stock.present? %>
+              <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                <%= product.name %>
+              <% end %>
+            <% else %>
+              <%= product.name %>
+            <% end %>
+          </td>
+          <td><%= product.unity_name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

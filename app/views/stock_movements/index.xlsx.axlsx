@@ -1,7 +1,7 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Movimientos de stock") do |sheet|
   sheet.add_row ["#", "Fecha", "Lote", "Movimiento", "Código movimiento", "Origen", "Destino", "Estado", 
-    "Recibido", "Entregado" ]
+    "Recibido", "Entregado"]
 
   sheet.add_style 'A1:J1', bg_color: '00407A', fg_color: 'FFFFFF'
   
@@ -16,7 +16,7 @@ wb.add_worksheet(name: "Movimientos de stock") do |sheet|
       movement.order_destiny_name_string,
       movement.order_status_string,
       movement.adds? ? movement.quantity : 0,
-      movement.adds? ? 0 : movement.quantity,
+      movement.adds? ? 0 : movement.quantity
     ]
   end
   sheet.column_widths 5,10,20,22,18,50,50,19,10,10

@@ -46,7 +46,7 @@
           <%= link_to applicant_index_external_orders_path(filterrific: {:with_status => 0}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver solicitudes en auditoría", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-            En auditoría <span class="badge badge-warning"><%= @applicant_orders.solicitud_enviada.count %></span>
+            En auditoría <span class="badge badge-warning"><%= @applicant_orders.solicitud_auditoria.count %></span>
           <% end %>
         </div>
         <div>
@@ -66,6 +66,7 @@
       </div>
       <div class="col-1 d-flex justify-content-end align-items-center">
       </div>
+    </div>
   </div>
 <% else %>
   <%= render(

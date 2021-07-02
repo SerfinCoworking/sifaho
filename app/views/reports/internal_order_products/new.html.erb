@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center ml-2">
           <%= fa_icon "plus" %>
           <h5 class="card-title mb-0 ml-2">
-            Nuevo reporte de producto entregado por sectores
+            Nuevo reporte de productos entregados por sectores
           </h5>
         </div>
         <%= link_to :back, class: "btn text-white" do %>
@@ -21,46 +21,10 @@
           <div class="col-7 border-right">
             <%=  simple_form_for @internal_order_product_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= f.error_notification %>
+              <%= f.error_notification message: f.object.errors[:base].to_sentence %>
               <%= f.error_notification message: f.object.errors[:internal_order_product_report].to_sentence if f.object.errors[:internal_order_product_report].present? %>
               <div class="row nested-fields">
-                <!-- Código de producto -->
-                <div class="custom-input-group col-3">
-                  <%= f.input :product, as: :string,
-                    placeholder: 'Código',
-                    label: 'Código',
-                    required: true,
-                    :input_html => {
-                      class: "report-product-code select-change input-sm",
-                      data: { autocomplete_source: search_by_code_products_path },
-                      size: 4,
-                      autocomplete: 'off',
-                      value: "#{if f.object.supply.present?; f.object.supply.id; end }"
-                    }
-                  %>
-                  <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
-                  </div>
-                </div>
-
-                <!-- Nombre de producto  -->
-                <div class="custom-input-group col-9">
-                  <%= f.input :product, as: :string, id: "nom_ins", class: "form-control",
-                    label: 'Producto',
-                    placeholder: 'Nombre',
-                    required: true,
-                    :input_html => {
-                      class: "report-product-name select-change input-sm",
-                      data: { autocomplete_source: search_by_name_products_path },
-                      size: 35,
-                      value: "#{if f.object.supply.present?; f.object.supply_name; end }"
-                    } 
-                  %>
-                  <div class="with-loading">
-                    <%= fa_icon 'spinner', class: "fa-spin"%>
-                  </div>
-                  <%= f.input :product_id, as: :hidden, input_html: { class: 'report-product-id' } %>
-                </div>
-
                 <div class="col-6">
                   <%= f.input :since_date, as: :string, label: "Desde", html5: true, required: true,
                     :input_html => {
@@ -83,6 +47,11 @@
                     }
                   %>
                 </div>
+
+                <%# PRODUCTOS SOLICITADOS %>
+                <div class="col-12">
+                  <%= render "shared/reports/report_products_table", form: f %>
+                </div>
               </div>
             <% end %>
           </div>
@@ -100,7 +69,7 @@
               <tbody>
                 <% @last_reports.each do |report|%>
                   <tr>
-                    <td><%= report.product_name %></td>
+                    <td class="text-truncate"><%= report.products.count == 1 ? report.products.first.name : report.products.count.to_s+' productos' %></td>
                     <td><%= report.since_date.strftime("%d/%m/%Y") %></td>
                     <td><%= report.to_date.strftime("%d/%m/%Y") %></td>
                     <td>

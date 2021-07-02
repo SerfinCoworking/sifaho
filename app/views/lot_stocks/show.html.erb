@@ -39,7 +39,15 @@
 
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="reserved-tab" data-toggle="tab" href="#reserved" role="tab" aria-controls="reserved" aria-selected="true">
+        <a class="nav-link active" id="movements-tab" data-toggle="tab" href="#movements" role="tab" aria-controls="movements">
+          <%= fa_icon "exchange-alt" %> Últimos movimientos
+          <span class="badge badge-secondary">
+            <%= @lot_stock.movements.count %>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="reserved-tab" data-toggle="tab" href="#reserved" role="tab" aria-controls="reserved">
           <%= fa_icon "bookmark" %> Reservado
           <span class="badge badge-secondary">
             <%= @lot_stock.reserved_quantity %>
@@ -47,24 +55,51 @@
         </a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive" aria-selected="true">
+        <a class="nav-link" id="lots-archive-tab" data-toggle="tab" href="#lot-archives" role="tab" aria-controls="lots-archive">
           <%= fa_icon "archive" %> Archivos
           <span class="badge badge-secondary">
             <%= @lot_stock.lot_archives.count %>
           </span>
         </a>
       </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="movements-tab" data-toggle="tab" href="#movements" role="tab" aria-controls="movements" aria-selected="false">
-          <%= fa_icon "exchange-alt" %> Últimos movimientos
-          <span class="badge badge-secondary">
-            <%= @lot_stock.movements.count %>
-          </span>
-        </a>
-      </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="reserved" role="tabpanel" aria-labelledby="reserved">
+      <div class="tab-pane fade show active" id="movements" role="tabpanel" aria-labelledby="movements-tab">
+        <table class="table table-hover table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Movimiento</th>
+              <th scope="col">Origen</th>
+              <th scope="col">Destino</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
+              <tr>
+                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= movement.order_human_name %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
+                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
+                <td><%= movement.order_status.present? ? movement.order_status.humanize : '' %></td>
+                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
+                <td>
+                  <% if movement.order.present? %>
+                    <%= link_to polymorphic_path(movement.order, resaltar: @lot_stock.stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %>
+                      <%= fa_icon 'external-link-alt' %>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+      </div>
+      <div class="tab-pane fade" id="reserved" role="tabpanel" aria-labelledby="reserved">
         <% if @reserved_lots.present? %>
           <table class="table table-hover table-sm">
             <thead class="thead-light">
@@ -143,35 +178,6 @@
             Aún no se ha archivado de este lote
           </div>
         <% end %>
-      </div>
-      <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
-        <table class="table table-hover table-sm">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">Fecha</th>
-              <th scope="col">Movimiento</th>
-              <th scope="col">Origen</th>
-              <th scope="col">Destino</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
-              <tr>
-                <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <td><%= movement.order.class.model_name.human %></td>
-                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
-                <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
-                <td><%= movement.order_status.humanize %></td>
-                <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
-                <td><%= link_to polymorphic_path(movement.order, resaltar: @lot_stock.stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        
       </div>
     </div>
   </div>

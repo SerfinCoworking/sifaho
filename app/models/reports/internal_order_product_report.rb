@@ -1,6 +1,8 @@
 class InternalOrderProductReport < ApplicationRecord
+  include Reportable
+
   belongs_to :created_by, class_name: 'User'
-  belongs_to :product
+  belongs_to :product, optional: true
   belongs_to :supply, optional: true
   belongs_to :sector
 
@@ -8,5 +10,5 @@ class InternalOrderProductReport < ApplicationRecord
   delegate :name, to: :product, prefix: :product
   delegate :establishment_name, to: :sector
 
-  validates_presence_of :product, :since_date, :to_date, :created_by
+  validates_presence_of :since_date, :to_date, :created_by
 end

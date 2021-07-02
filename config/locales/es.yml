@@ -145,6 +145,9 @@ es:
         product_id: "Producto"
         since_date: "Fecha desde"
         to_date: "Fecha hasta"
+      external_order_product_report:
+        since_date: "Fecha desde"
+        to_date: "Fecha hasta"
       internal_order_product_report:
         product: "Producto"
         since_date: "Fecha desde"
@@ -175,6 +178,10 @@ es:
       inpatient_movement:
         bed_id: 'Cama'
         patient_id: 'Paciente'
+      original_chronic_prescription_product:
+        finished_by_professional: 'Terminado por el médico'
+        finished_by_professional_id: 'Médico'
+        finished_observation: 'Observaciones'
 
   date:
     abbr_day_names:

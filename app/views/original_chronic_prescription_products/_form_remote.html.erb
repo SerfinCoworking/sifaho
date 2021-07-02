@@ -1,0 +1,26 @@
+<%= simple_form_for @original_product, 
+  url: update_treatment_chronic_prescription_path(id: @original_product.chronic_prescription.id, original_product_id: @original_product.id ), 
+  method: :patch, remote: true, html: { role: 'check-modified' } do |f| %>
+  <%= f.error_notification %>
+  <%# Medico %>
+  <div>
+    <div class="custom-input-group">
+      <%= f.input :finished_by_professional, as: :string,
+        placeholder: 'Matrícula | Apellido | Nombre',
+        required: true,
+        autocomplete: false,
+        :input_html => {
+          id: "finished-professional",
+          data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+          value: "#{f.object.chronic_prescription.professional.full_info}",
+          size: 30
+        }
+      %>
+      <%= f.hidden_field :finished_by_professional_id, id: "finished_by_professional_id", value: "#{f.object.chronic_prescription.professional_id}" %>
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+  </div>
+  <%= f.input :finished_observation, input_html: { rows: 6 } %>
+<% end %>
