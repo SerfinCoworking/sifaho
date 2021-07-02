@@ -1,0 +1,14 @@
+.product-info{
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-select-lot-stock{
+  min-width: 15px;
+  box-sizing: content-box;
+}
+
+.popover-danger{
+  .arrow::before{
+    border-left-color: #dc3545!important
+  }
+}

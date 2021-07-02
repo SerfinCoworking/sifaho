@@ -1,0 +1,4 @@
+<% @inpatient_prescription_product.errors.keys.map do |error_key| %>
+  $("#"+"<%= @tr_id.to_s %>").find("input."+"<%= error_key %>").addClass('is-invalid');
+  $("#"+"<%= @tr_id.to_s %>").find("input."+"<%= error_key %>").siblings('.invalid-feedback').text("<%= @inpatient_prescription_product.errors[error_key].first %>");
+<% end %>

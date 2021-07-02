@@ -1,0 +1,5 @@
+<%= render 'shared/flash_message' %>
+setTimeout(function(){
+  $("#parent-"+"<%= @inpatient_prescription_product.id.to_s %>").fadeOut(500);
+  $("#child-"+"<%= @inpatient_prescription_product.children.first.id.to_s %>").closest('table').closest('tr').fadeOut(500);
+}, 300);

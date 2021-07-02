@@ -6,24 +6,25 @@ class LotStock < ApplicationRecord
   has_many :ext_ord_prod_lot_stocks
   has_many :out_pres_prod_lot_stocks
   has_many :chron_pres_prod_lot_stocks
+  has_many :in_pre_prod_lot_stocks
   has_many :receipt_products
   has_many :lot_archives
-  has_many :movements, class_name: "StockMovement"
+  has_many :movements, class_name: 'StockMovement'
   has_many :external_orders, through: :ext_ord_prod_lot_stocks, source: :order
 
-  has_one :sector, :through => :stock
-  has_one :product, :through => :lot
+  has_one :sector, through: :stock
+  has_one :product, through: :lot
 
   after_save :stock_refresh_quantity
 
-  validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
-  validates :reserved_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
+  validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :reserved_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates_presence_of :stock_id
-  
+
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, :code, to: :product, prefix: true
-  delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name, 
-    :short_expiry_date_string, to: :lot, prefix: true
+  delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name,
+           :short_expiry_date_string, to: :lot, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'expiry_desc' },

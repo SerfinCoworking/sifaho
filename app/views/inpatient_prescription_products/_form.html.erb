@@ -1,0 +1,19 @@
+
+<%= simple_form_for(@inpatient_prescription_product) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :inpatient_prescription %>
+    <%= f.association :product %>
+    <%= f.input :dose_quantiity %>
+    <%= f.input :interval %>
+    <%= f.input :status %>
+    <%= f.input :observation %>
+    <%= f.association :dispensed_by %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

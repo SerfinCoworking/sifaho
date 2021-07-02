@@ -167,6 +167,9 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    inline_svg (1.7.2)
+      activesupport (>= 3.0)
+      nokogiri (>= 1.6)
     jaro_winkler (1.5.4)
     jaro_winkler (1.5.4-java)
     jbuilder (2.7.0)
@@ -508,6 +511,7 @@ DEPENDENCIES
   font_awesome5_rails
   groupdate
   highcharts-rails
+  inline_svg
   jbuilder (~> 2.5)
   jquery-ui-rails
   jwt

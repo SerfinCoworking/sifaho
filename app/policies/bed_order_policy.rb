@@ -1,6 +1,6 @@
 class BedOrderPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :enfermero)
+    user.has_any_role?(:admin, :enfermero, :medico)
   end
 
   def bed_map?

@@ -1,0 +1,53 @@
+<% if @inpatient_movements.present? %>
+  <div id="filterrific_results">
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th><%= filterrific_sorting_link(@filterrific, :fecha) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :movimiento) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :cama) %></th>
+            <th><%= filterrific_sorting_link(@filterrific, :habitacion) %></th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="inpatient_movements">
+          <%= render @inpatient_movements %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row d-flex align-items-center" style="height: 50px">
+      <div class="col-5">
+        <%= will_paginate @inpatient_movements, list_classes: %w(pagination mb-0), 
+          previous_label: '<i class="fa fa-angle-left"></i>',
+          next_label: '<i class="fa fa-angle-right"></i>', 
+          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+      </div>
+      <div class="col-5 d-flex justify-content-around align-items-center">
+        <div>
+          Movimientos hoy <span class="badge badge-secondary"><%= InpatientMovement.since_date(Date.today).count %></span>
+        </div>
+        <% InpatientMovementType.find_each do |mov_type| %>
+          <div>
+            <%= link_to inpatient_movements_path(filterrific: { by_type: mov_type.id }), 
+              class: 'tn btn-link text-dark text-left p-0',
+              title: "Ver #{mov_type.name.humanize.pluralize}",
+              data: { toggle: 'tooltip', placement: 'bottom' } do %>
+              <%= fa_icon "#{mov_type.fa_icon}" %>
+              <%= mov_type.name.humanize.pluralize %> 
+              <span class="badge badge-info"><%= @inpatient_movements.by_type(mov_type.id).count %></span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-2 d-flex justify-content-end align-items-center">
+      </div>
+    </div>
+  </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'camas' }
+  ) %>
+<% end %>

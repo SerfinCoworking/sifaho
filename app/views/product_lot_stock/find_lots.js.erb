@@ -1,0 +1,52 @@
+
+<% js = escape_javascript(
+  render(partial: 'product_lot_stock/find_lot_stock', locals: { lot_stocks: @lot_stocks })
+) %>
+$("button[type='submit']").removeAttr('disabled');
+$("#lot-selection .modal-body").html('<%= js %>');
+$('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, element ) {
+  element.switchButton();
+});
+
+$('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
+  const tr = $(e.target).closest('tr');  
+  const targetHidden = $(tr).find('input.hidden-lot-stock').first();
+  const targetHiddenDestroy = $(tr).find('input.hidden-destroy-lot-stock').first();
+  const selectedQuantity = parseInt($(tr).find('input.available-quantity').first().val());
+  const selectedQuantityBefore = parseInt($("#qv-ref").text());
+
+  if($(e.target).is(':checked')){
+    $(targetHidden).val($(e.target).attr("data-value"));
+    $(targetHiddenDestroy).val(0);
+    $("#qv-ref").text(selectedQuantityBefore + selectedQuantity);
+  }else{
+    //$(targetHidden).val("");
+    $(targetHiddenDestroy).val(true);// destroy associate
+    $("#qv-ref").text(selectedQuantityBefore - selectedQuantity);
+  }
+});
+
+
+$("input.available-quantity").on("change", function(e){ 
+  const tr = $(e.target).closest('tr');
+  const targetSwitchButton = document.getElementById($(e.target).attr('data-target'));
+  const targetHidden = $(tr).find('input.hidden-lot-stock').first();
+  const targetHiddenDestroy = $(tr).find('input.hidden-destroy-lot-stock').first();
+  let selectedLotsQuantity = 0;
+  $(tr).closest('tbody').find('input.available-quantity').map(function(index, element){
+    selectedLotsQuantity += parseInt($(element).val());
+  });
+
+  if($(e.target).val() > 0){
+    targetSwitchButton.switchButton("on");
+    $(targetHidden).val($(targetSwitchButton).attr("data-value"));
+    $(targetHiddenDestroy).val(0);
+  }else{
+    targetSwitchButton.switchButton("off");
+    //$(targetHidden).val('');
+    $(targetHiddenDestroy).val(true);// destroy associate
+  }
+  $("#qv-ref").text(selectedLotsQuantity)
+});
+
+$('#lot-selection').modal('show');

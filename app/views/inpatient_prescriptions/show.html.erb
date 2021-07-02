@@ -1,0 +1,255 @@
+<%= render 'header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo receta crónica
+        <span class="badge badge-<%#= inpatient_prescription_status_label(@inpatient_prescription) %>">
+          <%= @inpatient_prescription.status.underscore.humanize %>
+        </span>
+      </h5>
+    </div>
+    <div>
+      <%= link_to inpatient_prescriptions_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <!-- Professional profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to professional_path(@inpatient_prescription.professional), class: "link" do %>
+              <%= image_tag professional_avatar(@inpatient_prescription.professional, 83), class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Médico</h4>
+            <p>
+              <%= link_to professional_path(@inpatient_prescription.professional), class: "link" do %>
+                <%= @inpatient_prescription.professional_fullname %>
+              <% end %>
+            </p>
+            <p><strong>Matrícula: </strong><%= @inpatient_prescription.professional_enrollment %></p>
+          </div>
+        </div> 
+      </div><!-- End professional profile -->
+
+      <!-- Patient profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to patient_path(@inpatient_prescription.patient), class: "link" do %>
+              <%= image_tag patient_avatar(@inpatient_prescription.patient, 83, 102), class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Paciente</h4>
+            <p>
+              <%= link_to patient_path(@inpatient_prescription.patient), class: "link" do %>
+                <%= @inpatient_prescription.patient_fullname.titleize %>
+              <% end %>    
+            </p>
+            <p><strong>DNI: </strong><%= @inpatient_prescription.patient_dni %></p>
+            <p><strong>Edad: </strong><%= @inpatient_prescription.patient_age_string %></p>
+          </div>
+        </div>
+      </div> <!-- End Patient profile -->
+
+      <!-- Extra info -->
+      <div class='col-md-6 col-xs-6'>
+        <div class='row'>
+          <div class='col-3 col-xs-3'>    
+            <strong>Recetada:</strong><br>
+            <%= @inpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+          </div>
+          <div class='col-3 col-xs-3'>
+            <strong>Vencimiento:</strong><br>
+            <%#= @inpatient_prescription.expiry_date.strftime("%d/%m/%Y") %>
+          </div>
+          <div class="col-3">
+            <strong>Meses: </strong><br>
+            <%#= (@inpatient_prescription.expiry_date - @inpatient_prescription.date_prescribed.to_date).to_i / 30%>
+          </div>
+          <div class='col-3 col-xs-3'>
+            <strong>Código:</strong>
+            <%= @inpatient_prescription.remit_code %>
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class="col-12">
+            <strong>Diagnóstico:</strong>
+            <%= @inpatient_prescription.observation.present? ? @inpatient_prescription.observation : 'Ninguno' %>
+          </div>
+        </div>
+      </div><!-- End extra info -->
+    </div>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos recetados
+              <span class="badge badge-secondary"><%= @inpatient_prescription.order_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%#= @inpatient_prescription.chronic_dispensations.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#dispensations' role="tab">
+              <%= fa_icon "paper-plane" %> Dispensaciones
+              <span class="badge badge-secondary"><%#= @inpatient_prescription.chronic_dispensations.count %></span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link <%= @inpatient_prescription.movements.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @inpatient_prescription.movements.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-content mt-2">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Cantidad mensual</th>
+                <th>Dispensada</th>
+                <th width="200">Proceso</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @inpatient_prescription.order_products.each do |order_prod| %>
+                <tr>
+                  <% @stock = Stock.where(sector: current_user.sector, product: order_prod.product).first %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= order_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= order_prod.product_code %>
+                    <% end %>
+                  </td>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= order_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= order_prod.product_name %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= order_prod.dose_quantity %> <%= order_prod.product.unity.name.pluralize(order_prod.dose_quantity) %>
+                  </td>
+                  <td>
+                    <%#= order_prod.total_delivered_quantity %> / <%= order_prod.dose_total %>
+                  </td>
+                  <td>
+                    <%# progress = order_prod.dose_total > 0 ? (order_prod.total_delivered_quantity * 100 / order_prod.dose_total) : 0 %>
+                    <div class="custom-progress progress bg-light position-relative">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%#= progress %>%" aria-valuenow="<%#=progress%>" aria-valuemin="0" aria-valuemax="100" ></div>
+                      <div class="percentage-text text-black position-absolute font-weight-bold"><%#=progress%>%</div>
+                    </div>
+                  </td>
+                  
+                  <td>
+                    <div class="<%= order_prod.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= order_prod.observation.presence %>">
+                      <div class="text-truncate"  style="max-width: 13.66rem;">
+                        <%= order_prod.observation.presence || '---' %>
+                      </div>
+                    </div>
+                  </td>
+                
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= order_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                        <%= order_prod.observation %>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id='dispensations' class='tab-pane fade'>
+        <!-- Tabla de dispensaciones -->
+        <div class="row">
+          
+          <div class="col-3">
+            <div class="card">
+
+              <div class="list-group p-1" id="list-tab" role="tablist">
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="col-9">
+            <div class="card table-sm tab-content" id="nav-tabContent">
+              
+            </div>
+          </div>
+        </div>        
+      </div> <!-- End last movements tab pane -->
+      
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @inpatient_prescription %>
+      </div> <!-- End last movements tab pane -->
+
+    </div>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', inpatient_prescriptions_path, class: "btn btn-light mr-1" %>
+    <%#= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+      <%#= fa_icon "print" %>
+      <%# Imprimir %>
+    <%# end %>
+    <% if policy(@inpatient_prescription).edit? %>
+      <%= link_to edit_inpatient_prescription_path(@inpatient_prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+    
+    <%# if policy(@inpatient_prescription).dispense_new? %>
+      <%#= link_to new_inpatient_prescription_chronic_dispensation_path(@inpatient_prescription), :"data-turbolinks" => false,
+        class: "btn btn-primary" do %>
+        <%#= fa_icon "paper-plane" %>
+        Dispensar
+      <%# end %>
+    <%# end %>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <%# if policy(@inpatient_prescription).return_dispensation? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <%# end %>
+<% end %>
+

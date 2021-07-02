@@ -1,0 +1,80 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header bg-warning d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "pen" %>
+      <h5 class="card-title mb-0 ml-2">
+        <%= "Asignar productos a la receta de #{@inpatient_prescription.patient.fullname}" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+
+  <div class="card-body">
+    <%# Datos del paciente y receta %>
+    <div class="row mb-2">
+      <div class="col-5 border-right">
+        <div class="d-flex">
+          <div class="mr-2">
+            <%= image_tag patient_avatar(@inpatient_prescription.patient), size: '91x200', class:"img-thumbnail" %>
+          </div>
+          <div class="patient-info-container">
+            <h5 id="patient-name" data-insurance-url="<%= get_insurance_path %>" data-patient-dni="<%= @inpatient_prescription.patient.dni %>">
+              <strong><%= @inpatient_prescription.patient.last_name %>,</strong>
+              <%= @inpatient_prescription.patient.first_name %>
+            </h5>
+
+            <div class="d-flex">
+              <h5 class="mr-2 pr-2 border-right">
+                <%= @inpatient_prescription.patient.dni %>
+                <span class="badge badge-<%= @inpatient_prescription.patient.Temporal? ? "warning" : "success" %>">
+                  <%= @inpatient_prescription.patient.status %>
+                </span>
+                <div>
+                  <%= @inpatient_prescription.patient.email %>
+                </div>
+              </h5>
+
+              <% if @inpatient_prescription.patient.birthdate.present? %>
+                <div>
+                  <p class="mb-0"><strong>Fecha de nacimiento</strong></p>
+                  <p class="mb-0"><%= @inpatient_prescription.patient.birthdate.strftime("%d/%m/%Y")%> | <%= @inpatient_prescription.patient.age_string %></h5>
+                </div>
+              <% end %>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-7">
+        <div class="mb-2">
+          <label class="font-weight-bold mb-0"> Fecha recetada: </label>
+          <%= @inpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+        </div>
+        <div>
+          <label class="font-weight-bold mb-0"> Observaciones: </label>
+          <%= @inpatient_prescription.observation %>
+        </div>
+      </div>
+    </div>
+    <%# carga de productos originales %>
+    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified' } do |inpatient_form| %>
+      <%= render 'inpatient_prescriptions/partials/delivery_table', inpatient_form: inpatient_form, order: @inpatient_prescription %>
+    <% end %>
+  </div><!-- /fin .card-body -->
+  
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', :back, class: 'btn mr-1 btn-secondary' %>
+    <%#= link_to 'Entregar', update_with_delivery_inpatient_prescriptions_path(@inpatient_prescription.id), class: 'btn mr-1 btn-success', method: :PATCH %>    
+  </div>  
+</div>
+
+ 
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog_v2" %>
+  
+  <%= render(partial: 'shared/modals/delete_confirmation') %>
+<% end %>

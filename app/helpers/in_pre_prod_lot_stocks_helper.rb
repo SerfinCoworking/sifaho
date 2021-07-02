@@ -1,0 +1,2 @@
+module InPreProdLotStocksHelper
+end

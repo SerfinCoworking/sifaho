@@ -1,0 +1,68 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to beds_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+
+    <%# CAMA %>
+    <div class="col">
+      <label>Cama</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_name,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off',
+      ) %>
+    </div>
+
+    <div class="col">
+      <label>Habitación</label>
+      <%= f.select(:by_bedroom,
+        @bedrooms.collect {|br| [br.name, br.id]},
+        {include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick", 
+          multiple: true,
+          allow_blank: false,
+          title: 'Habitación',
+          "data-width"=>"100%",
+          "data-actions-box"=>true
+        }
+      ) %>
+    </div>
+
+    <%# ESTADO %>
+    <div class="col">
+       <label>Estado</label>
+      <%= f.select(:for_statuses,
+        @filterrific.select_options[:with_status].map {
+          |status| [status.first, status.second, data: {'content': "<span class='badge badge-"+status.third+"'>"+status.first+"</span>"}]
+        },{include_blank: false, include_hidden: false},
+        { 
+          class: "selectpicker-md show-tick custom-select-pick", 
+          multiple: true,
+          allow_blank: false,
+          title: 'Estado',
+          "data-width"=>"100%"
+        }
+      ) %>
+    </div>
+
+    
+    <%# ORDENAMIENTO %>
+    <div class="col">
+      <label>Ordernar por</label>
+      <%= f.select(:sorted_by,
+        @filterrific.select_options[:sorted_by].map {
+          |status| [status.first, status.second]
+        },{},
+        { class: "selectpicker-md show-tick custom-select-pick", "data-width"=>"100%"}) %>
+    </div>
+  </div>
+<% end %>

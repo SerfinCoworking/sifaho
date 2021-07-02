@@ -29,7 +29,7 @@
     <% end %>
 
     <% if policy(BedOrder).index? %>
-      <%= link_to main_app.bed_orders_path, class: "list-group-item list-group-item-action list-custom #{active_class('bed_orders')}" do %>
+      <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom #{active_class('inpatient_prescriptions')}" do %>
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
         </span>

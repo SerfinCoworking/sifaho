@@ -117,17 +117,6 @@ Rails.application.routes.draw do
 
   resources :profiles, path: :perfiles, only: [ :edit, :update, :show ]
 
-  resources :bed_orders, path: :internacion do
-    member do
-      get "delete"
-    end
-    collection do
-      get "bed_map"
-      get "new_bed"
-      post "create_bed"
-    end
-  end
-
   resources :laboratories, path: :laboratorios do
     member do
       get "delete"
@@ -289,10 +278,38 @@ Rails.application.routes.draw do
     end
   end
   
-    
-  # resources :prescriptions, path: :recetas do
-    
-  # end
+  resources :inpatient_prescriptions, path: :internacion do
+    resources :inpatient_prescription_products do
+      collection do
+        patch ":id/entregar", to: "inpatient_prescription_products#deliver_children", as: "deliver_children"
+      end
+    end
+    resources :in_pre_prod_lot_stocks
+    resources :beds, path: :camas
+    collection do
+      get ":id/productos", to: "inpatient_prescriptions#set_products", as: "set_products"
+      get ":id/entregar", to: "inpatient_prescriptions#delivery", as: "delivery"
+      # get "find_lots(/:order_product_id)", to: "inpatient_prescriptions#find_lots", as: "find_order_product_lots"
+      # patch ":id/entregar", to: "inpatient_prescriptions#update_with_delivery", as: "update_with_delivery"
+      get "ingresar_paciente(/:bed_id)", to: 'beds#admit_patient', as: 'admit_patient'
+      
+      resources :beds, path: :camas do
+        member do
+          get :delete
+          get :admit_patient
+          get :discharge_patient
+        end
+      end
+      resources :bedrooms, path: :habitaciones
+
+      resources :inpatient_movements, path: :movimientos
+    end
+  end
+  
+  
+  get "find_lots", to: "product_lot_stock#find_lots", as: "find_order_product_lots"
+  patch "update_lot_stock_selection/:order_product_id", to: "product_lot_stock#update_lot_stock_selection", as: "update_lot_stock_selection" #ajax para guardar los lotes seleccionados
+  
   get "recetas", to: "prescriptions#new", as: "new_prescription"
   get "prescriptions(/:patient_id)", to: "prescriptions#get_prescriptions", as: "get_prescriptions" #ajax para obtener recetas [cronicas / ambulatorias]
 

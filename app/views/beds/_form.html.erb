@@ -1,0 +1,63 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @bed.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@bed.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @bed.new_record? ? "Agregar cama" : "Editando cama" %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @bed.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body" id="panel-body-new">
+
+    <%= simple_form_for @bed, html: {class: "", id: 'bed-form', role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+
+      <div class="row">
+        <div class="col-6 d-flex justify-content-center">
+          <%= inline_svg_tag("bed-solid.svg", class: 'svg-form text-secondary') %>
+        </div>
+
+        <div class="col-6">
+            <%= f.input :name, required: true, label: 'Nombre' %>
+            <%= f.input :bedroom_id, label: 'Habitación',
+              collection: @bedrooms.map {|bedroom|  [bedroom.name, bedroom.id ]},
+              :input_html => {
+                required: true,
+                include_blank: false,
+                class: 'selectpicker custom-select-pick',
+                "data-width"=>"100%",
+                "data-size"=>"10",
+                "title"=>"Seleccionar habitación",
+                "data-live-search"=>true,
+                "data-none-results-text" => "No se encontró el habitación"
+              }
+            %>
+            <%= f.input :service_id, label: 'Servicio',
+              collection: @services.map {|service|  [service.name, service.id ]},
+              :input_html => {
+                required: true,
+                include_blank: false,
+                class: 'selectpicker custom-select-pick',
+                "data-width"=>"100%",
+                "data-size"=>"10",
+                "title"=>"Seleccionar servicio",
+                "data-live-search"=>true,
+                "data-none-results-text" => "No se encontró el servicio"
+              }
+            %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', beds_path, class: 'btn btn-light mr-2' %>
+    <%= button_tag type: 'submit', class: "btn btn-success", form: "bed-form", 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Guardando".html_safe do %>
+      <%= fa_icon 'save'%> Guardar
+    <% end %>
+  </div>
+</div>

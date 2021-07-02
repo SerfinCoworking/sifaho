@@ -1,0 +1,79 @@
+<%= render 'inpatient_prescriptions/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo habitación
+        <%= @bedroom.name %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to bed_path(format: 'pdf'), class: 'btn',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+      <%= link_to beds_path, class: 'btn btn-light',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'door-closed', size: '4x' %>
+          <h4 class="pl-2">
+            Habitación
+            <span class="badge badge-secondary">
+              <%= @bedroom.name %>
+            </span>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'bed', size: '4x' %>
+          <h4 class="pl-2">
+            Camas
+            <span class="badge badge-secondary">
+              <%= @bedroom.beds.map(&:name).join(', ') %>
+            </span>
+          </h4>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="d-flex justify-content-bewteen align-items-center">
+          <%= fa_icon 'stethoscope', size: '4x' %>
+          <h4 class="pl-2">
+            Servicio
+            <span class="badge badge-info">
+              <%= @bedroom.location_sector.name %>
+            </span>
+          </h4>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <div class="text-right w-100">
+      <%= link_to bedrooms_path,  
+        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
+
+      <% if policy(@bedroom).edit? %>
+        <%= link_to edit_bedroom_path(@bedroom), :"data-turbolinks" => false,
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
+          class: "btn btn-warning mr-1" do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
+      <% end %>
+    </div> <!-- fin botones right -->
+  </div>
+</div>

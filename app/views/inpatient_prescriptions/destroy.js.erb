@@ -1,0 +1,7 @@
+<%= render 'shared/flash_message' %>
+
+$('#inpatient_prescription_<%= @inpatient_prescription.id.to_s %>').fadeOut(500, function(e){
+  $("#inpatient_prescription_"+"<%= @inpatient_prescription.id.to_s %>").find('.btn').tooltip('hide');
+  const target = $('#inpatient_prescription_<%= @inpatient_prescription.id.to_s %>');
+  $(target).remove();
+});

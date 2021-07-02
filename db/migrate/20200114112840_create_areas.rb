@@ -6,5 +6,8 @@ class CreateAreas < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+    # Add subareas
+    add_reference :areas, :parent_area, index: true
+    add_reference :areas, :first_area, index: true
   end
 end

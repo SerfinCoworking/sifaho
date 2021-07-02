@@ -1,0 +1,21 @@
+<tr id="inpatient_movement_<%= inpatient_movement.id %>">
+  <td><%= inpatient_movement.created_at.strftime("%d/%m/%y") %></td>
+  <td><%= inpatient_movement.patient.fullname %></td>
+  <td><%= fa_icon "#{inpatient_movement.movement_type.fa_icon}" %> <%= inpatient_movement.movement_type_name %></td>
+  <td><%= inpatient_movement.bed_name %></td>
+  <td><%= inpatient_movement.bedroom_name %></td>
+  <td class="text-left actions-col">
+    <% if policy(inpatient_movement).show? %>
+      <%= link_to inpatient_movement_path(inpatient_movement), class: 'btn btn-secondary btn-sm', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'eye' %>
+      <% end %>
+    <% end %>
+    <% if policy(inpatient_movement).edit? %>
+      <%= link_to edit_inpatient_movement_path(inpatient_movement), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon 'pen' %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

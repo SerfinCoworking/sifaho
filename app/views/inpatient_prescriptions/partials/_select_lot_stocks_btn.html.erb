@@ -1,0 +1,52 @@
+<% if !f_object.parent.nil? %>
+  <button type="button" class="btn btn-md btn-select-lot-stock btn-outline-primary saved-btn-combo" 
+    data-select-lot-url="<%= find_order_product_lots_url %>" 
+    data-order-name="<%= order.model_name.name %>" 
+    data-order-id="<%= order.id %>" 
+    data-order-product-id="<%= f_object.id %>"
+    title="Seleccionar Lotes"
+    data-toggle="tooltip"
+    data-placement="top">
+    <% if f_object.order_prod_lot_stocks.present? %>
+      <%= f_object.order_prod_lot_stocks.count %> 
+    <% else %>
+      <%= fa_icon "barcode", class: "fa-fw" %> 
+    <% end %>
+  </button>
+  
+<% end %>
+
+<%# Habilita edicion %>
+<button type="button" class="btn btn-outline-warning btn-ipp-edit saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" title="Editar">
+  <%= fa_icon 'pen', class: "fa-fw" %>
+</button>
+
+<%# Eliminar producto %>
+<button type="button" class="btn btn-outline-danger delete-product saved-btn-combo btn-md" data-toggle="tooltip" data-placement="top" data-original-title="Quitar" data-target="#delete-item" data-title="Eliminar producto" data-body="Eliminar producto de la lista" data-href="<%=  inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>">
+  <%= fa_icon "trash-alt", class: "fa-fw" %>
+</button>
+
+<%# Guardar modificaciones %>
+<button type="button" class="btn btn-outline-success update-item edit-btn-combo btn-md" 
+        style="display: none;" 
+        data-toggle="tooltip" 
+        data-placement="top" 
+        data-original-title="Actualizar" 
+        data-title="Actualizar producto" 
+        data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" 
+        data-url-type="PATCH"
+        <%= "data-parent-id=#{f_object.parent.id}" if f_object.parent.present? %>>
+  <%= fa_icon "save", class: "fa-fw" %>
+</button>
+
+<%# Cancelar edicion %>
+<button type="button" class="btn btn-outline-danger cancel-item edit-btn-combo btn-md" 
+  style="display: none;" 
+  data-toggle="tooltip" 
+  data-placement="top" 
+  data-original-title="Cancelar" 
+  data-title="Cancelar edición"
+  data-url="<%= inpatient_prescription_inpatient_prescription_product_path(order.id, f_object.id) %>" 
+  data-url-type="GET">
+  <%= fa_icon "times", class: "fa-fw" %>
+</button>

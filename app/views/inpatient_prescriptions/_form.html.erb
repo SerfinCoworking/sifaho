@@ -1,0 +1,76 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @inpatient_prescription.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@inpatient_prescription.new_record? ?  "plus" : "pen")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @inpatient_prescription.new_record? ? 'Agregar receta internación' : 'Editando receta internación' %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @inpatient_prescription.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+
+  <div class="card-body">
+    <%= simple_form_for @inpatient_prescription, html: { role: 'check-modified'} do |inpatient_form| %>
+      <%= inpatient_form.error_notification %>
+        <div class="row">
+          <div class="col-6 border-right">
+            <%# Selector de paciente %>
+            <%= inpatient_form.input :patient_id, label: 'Paciente internado', include_blank: false,
+              collection: @inpatients.map {|inpatient|  [inpatient.fullname.humanize, inpatient.id ]},
+              :input_html => {
+                required: true,
+                include_blank: false,
+                title: 'Seleccionar paciente',
+                class: 'selectpicker-md custom-select-pick',
+                "data-find-patient-url"=> inpatient_prescriptions_path,
+                "data-width"=>"100%",
+                "data-size"=>"10",
+              }
+            %>
+        
+
+            <%= inpatient_form.input :date_prescribed, label: 'Fecha recetada',
+                  as: :string,
+                  :placeholder => "Seleccionar fecha",
+                  input_html: {
+                    tabindex: "-1",
+                    class: "form-control pull-right datepicker prescribed-date",
+                    required: true,
+                    autocomplete: 'off',
+                    value: "#{if inpatient_form.object.date_prescribed.present?; inpatient_form.object.date_prescribed.strftime("%d/%m/%Y"); end}"
+                  },
+              html5: false %>
+
+            <%= inpatient_form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 3 } %>        
+          
+          </div>
+          <div class="col-6" id="patient-list">
+            Listado de últimas recetas
+          </div>
+        </div><!-- /.row-->
+
+        
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %> <%# fin formulario %>
+
+  </div><!-- /fin .card-body -->
+  
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', :back, class: 'btn mr-1' %>
+    <button type='submit' class='btn btn-primary' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>">
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Guardar
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        Guardando...
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+      </div>
+    </button>
+  </div>
+</div>
+
+ 

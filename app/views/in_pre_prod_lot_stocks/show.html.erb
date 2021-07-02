@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Inpatient prescription product:</strong>
+  <%= @in_pre_prod_lot_stock.inpatient_prescription_product %>
+</p>
+
+<p>
+  <strong>Lot stock:</strong>
+  <%= @in_pre_prod_lot_stock.lot_stock %>
+</p>
+
+<p>
+  <strong>Dispensed by:</strong>
+  <%= @in_pre_prod_lot_stock.dispensed_by %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @in_pre_prod_lot_stock.quantity %>
+</p>
+
+<%= link_to 'Edit', edit_in_pre_prod_lot_stock_path(@in_pre_prod_lot_stock) %> |
+<%= link_to 'Back', in_pre_prod_lot_stocks_path %>

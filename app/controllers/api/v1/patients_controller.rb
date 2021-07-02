@@ -1,6 +1,6 @@
 module Api::V1
   class PatientsController < ApiController
-    skip_before_action :authenticate_user!, only: [:create]
+    skip_before_action :authenticate_user!
     skip_before_action :verify_authenticity_token
     
     # GET /v1/patients
@@ -110,18 +110,18 @@ module Api::V1
       if params[:data][:maritalStatus].present?
         return case params[:data][:maritalStatus][:text].downcase
         when "unmarried"
-          "Soltero"
+          "soltero"
         when "married"
-          "Casado"
+          "casado"
         when "legallySeparated"
-          "Separado"
+          "separado"
         when "divorced"
-          "Divorciado"
+          "divorciado"
         when "widowded"
-          "Viudo"
+          "viudo"
         else
           "otro"
-        end      
+        end
       else
         return "Soltero"
       end

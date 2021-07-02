@@ -13,20 +13,23 @@
     <% end %>
   </div>
 
-
   <div class="card-body">
     <div class="card mb-4">
       <div class="card-body">
           <ul class="list-group list-group-flush">
-          <li class="list-group-item"><span class="font-weight-bold">Establecimiento:</span> <%= @sector.establishment.name %> </li>
+          <li class="list-group-item"><span class="font-weight-bold">Establecimiento:</span> 
+            <%= link_to establishment_path(@sector.establishment), class: 'link' do %>
+              <%= @sector.establishment.name %>
+            <% end %>
+          </li>
           <li class="list-group-item"><span class="font-weight-bold">Descripción:</span> <%= @sector.description %></li>
+          <li class="list-group-item"><span class="font-weight-bold">Internación:</span> <%= @sector.provide_hospitalization? ? 'Si' : 'No' %></li>
         </ul>
       </div>
     </div>
 
     <%= render 'shared/users_table', users: @sector.users %>
   </div>
-
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to :back, class: "btn btn-light mr-2" do %>

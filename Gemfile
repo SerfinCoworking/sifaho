@@ -7,6 +7,8 @@ end
 
 ruby "2.6.5"
 
+# To render svg images
+gem 'inline_svg'
 # To generate xlsx reports
 gem 'axlsx_styler'
 gem 'caxlsx'
