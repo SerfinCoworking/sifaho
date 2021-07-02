@@ -131,6 +131,5 @@ class InpatientPrescription < ApplicationRecord
 
   def set_defaults
     self.remit_code = "IN#{DateTime.now.to_s(:number)}"
-    self.status = 'pendiente'
   end
 end
