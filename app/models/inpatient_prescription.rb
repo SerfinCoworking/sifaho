@@ -2,7 +2,7 @@ class InpatientPrescription < ApplicationRecord
   include PgSearch
 
   enum status: {
-    pendiente: 0,
+    pending: 0,
     parcialmente_dispensada: 1,
     dispensada: 2,
     anulado: 3

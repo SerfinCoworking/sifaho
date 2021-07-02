@@ -447,34 +447,14 @@ ActiveRecord::Schema.define(version: 2021_06_24_105335) do
   create_table "in_pre_prod_lot_stocks", force: :cascade do |t|
     t.bigint "inpatient_prescription_product_id"
     t.bigint "lot_stock_id"
-    t.bigint "dispensed_by_id"
-    t.integer "quantity"
+    t.bigint "supplied_by_sector_id"
+    t.integer "available_quantity"
+    t.integer "reserved_quantity", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dispensed_by_id"], name: "index_in_pre_prod_lot_stocks_on_dispensed_by_id"
     t.index ["inpatient_prescription_product_id"], name: "inpatient_prescription_product"
     t.index ["lot_stock_id"], name: "index_in_pre_prod_lot_stocks_on_lot_stock_id"
-  end
-
-  create_table "inpatient_movement_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "fa_icon", default: "exchange-alt"
-  end
-
-  create_table "inpatient_movements", force: :cascade do |t|
-    t.bigint "bed_id"
-    t.bigint "patient_id"
-    t.bigint "movement_type_id"
-    t.bigint "user_id"
-    t.text "observations"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bed_id"], name: "index_inpatient_movements_on_bed_id"
-    t.index ["movement_type_id"], name: "index_inpatient_movements_on_movement_type_id"
-    t.index ["patient_id"], name: "index_inpatient_movements_on_patient_id"
-    t.index ["user_id"], name: "index_inpatient_movements_on_user_id"
+    t.index ["supplied_by_sector_id"], name: "index_in_pre_prod_lot_stocks_on_supplied_by_sector_id"
   end
 
   create_table "inpatient_movement_types", force: :cascade do |t|
@@ -514,6 +494,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_105335) do
 
   create_table "inpatient_prescription_products", force: :cascade do |t|
     t.bigint "inpatient_prescription_id"
+    t.bigint "parent_id"
     t.bigint "product_id"
     t.integer "dose_quantity"
     t.integer "deliver_quantity"
@@ -535,7 +516,6 @@ ActiveRecord::Schema.define(version: 2021_06_24_105335) do
     t.bigint "patient_id"
     t.bigint "prescribed_by_id"
     t.bigint "bed_id"
-    t.bigint "prescribed_by_id"
     t.string "remit_code"
     t.text "observation"
     t.integer "status", default: 0
