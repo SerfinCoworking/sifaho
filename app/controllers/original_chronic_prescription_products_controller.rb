@@ -14,7 +14,7 @@ class OriginalChronicPrescriptionProductsController < ApplicationController
     authorize @original_product
     @original_product.treatment_status = 'terminado_manual'
     respond_to do |format|
-      if @original_product.update!(finish_treatment_params)
+      if @original_product.update(finish_treatment_params)
         @original_product.chronic_prescription.create_notification(current_user, "terminó tratamiento de #{@original_product.product_name}")
         format.js { redirect_to @original_product.chronic_prescription, notice: "Se ha terminado el tratamiento de #{@original_product.product_name}" }
       else
