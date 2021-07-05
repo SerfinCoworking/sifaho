@@ -72,6 +72,8 @@ class Professional < ApplicationRecord
     string = query.to_s
     where('professionals.dni::text LIKE ?', "%#{string}%")
   }
+  
+  scope :without_user_asigned, -> { where(user_id: :nil) }
 
   def full_name
     self.fullname

@@ -36,6 +36,7 @@ class UsersController < ApplicationController
   def edit_permissions
     authorize @user
     @sectors = Sector.joins(:establishment).pluck(:id, :name, "establishments.name")
+    @professional = Professional.new
     if @user.has_role? :admin
       @roles = Role.all.order(:name).pluck(:id, :name)
     else

@@ -341,6 +341,8 @@ Rails.application.routes.draw do
     collection do
       get "doctors"
       get "get_by_enrollment_and_fullname"
+      get "get_by_unsigned_enrollment_fullname"
+      post "asign_user"
     end
   end
 

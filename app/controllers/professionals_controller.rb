@@ -111,6 +111,24 @@ class ProfessionalsController < ApplicationController
     render json: @doctors.map{ |doc| { id: doc.id, label: doc.enrollment+" "+doc.last_name+" "+doc.first_name } }
   end
 
+  def get_by_unsigned_enrollment_fullname
+    @doctors = Professional.without_user_asigned.get_by_enrollment_and_fullname(params[:term]).limit(10).order(:last_name)
+    render json: @doctors.map{ |doc| { id: doc.id, label: "#{doc.enrollment} #{doc.last_name} #{doc.first_name}" } }
+  end
+
+  def asign_user
+    respond_to do |format|
+      @professional = Professional.find(params[:professional_id])
+      if @professional.update(user_id: params[:user_id])
+        flash[:success] = "#{@professional.fullname} se ha modificado correctamente."
+        format.js
+      else
+        flash[:error] = 'No se ha podido modificar el profesional.'
+        format.js { render :asign_user_error }
+      end
+    end
+  end
+
   def doctors
     @doctors = Professional.order(:first_name).search_professional(params[:term]).limit(10)
     render json: @doctors.map{ |doc| { id: doc.id, dni: doc.dni, label: doc.fullname, enrollment: doc.enrollment } }

@@ -20,6 +20,39 @@
         <div class="col-6">
           <%= render 'form', user: @user %>
         </div>
+        <div class="col-6" id="professional-asign">
+        <% if @user.professional.present? %>
+        
+          <%= render 'professionals/professional_asigned', professional: @user.professional %>
+          
+        <% else %>
+          <%= form_with url: asign_user_professionals_path, id: "update_professional", method: :post, remote: true do |f| %>
+            <div class="d-flex w-100">
+              <div class="custom-input-group w-100">
+                <input type="text"
+                    name="professional"
+                    id="professional"
+                    class="form-control is-valid string required ui-autocomplete-input"
+                    autocomplete="off"
+                    placeholder="Matrícula | Apellido | Nombre"
+                    data-autocomplete-source="<%= get_by_unsigned_enrollment_fullname_professionals_path %>"
+                    value="">
+                
+                <%= f.hidden_field :professional_id, id: "professional_id", value: "" %>
+                <div class="with-loading">
+                  <%= fa_icon 'spinner', class: "fa-spin"%>
+                </div>
+              </div>
+              <button type='submit' name='commit' class='btn btn-success ml-2' form='update_professional'>
+                <%= fa_icon 'save' %>
+              </button>
+            </div>
+            
+            <%= f.hidden_field :user_id, id: "user_id", value: @user.id %><br>
+          <% end %>
+        <% end %>
+
+        </div>
       </div>
       <div class="row">
 
