@@ -93,7 +93,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
     InpatientPrescriptionMovement.create!(user: of_user, order: order, order_product: order_product,
                                           action: action_type, sector: of_user.sector)
     (of_user.sector.users.uniq - [of_user]).each do |user|
-      @not = Notification.where(actor: of_user, user: user, target: order, notify_type: 'internación',
+      @not = Notification.where(actor: of_user, user: user, target: order, notify_type: 'internacion',
                                 action_type: action_type, actor_sector: of_user.sector).first_or_create
       @not.updated_at = DateTime.now
       @not.read_at = nil
