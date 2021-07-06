@@ -42,6 +42,26 @@
         </div>
       </div> <!-- End Patient profile -->
 
+      <!-- Habiación / Cama -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.patient.bed.id), class: "link" do %>
+              <%= fa_icon 'bed', class: "fa-5x"%>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Habitación <%= @inpatient_prescription.patient.bed.bedroom.name %></h4>
+            <p>
+              <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.patient.bed.id), class: "link" do %>
+                Cama <%= @inpatient_prescription.patient.bed.name %>
+              <% end %>    
+            </p>
+            <p><strong>Servicio: </strong><%= @inpatient_prescription.patient.bed.service.name %></p>
+          </div>
+        </div>
+      </div> <!-- End habitacion / cama -->
+
       <!-- Extra info -->
       <div class='col-md-6 col-xs-6'>
         <div class='row'>
@@ -119,7 +139,7 @@
                         <%= image_tag user_avatar(parent_pres_prod.prescribed_by, 25), size: '25', class:"rounded" %>
                       </span>
                     <% end %>                            
-                    <%= parent_pres_prod.prescribed_by.first_name %>
+                    <%= parent_pres_prod.prescribed_by.full_name %>
                   </td>
                   <td class="text-secondary">
                     <% if @stock.present? %>
@@ -216,8 +236,8 @@
                           <span>
                             <%= image_tag user_avatar(child_product.parent.delivered_by, 25), size: '25', class:"rounded" %>
                           </span>
-                          <%=child_product.parent.delivered_by.first_name %>
                         <% end %>                            
+                        <%=child_product.parent.delivered_by.full_name %>
                       </td>
                       <td class="org-product"><%= child_product.product_code %></td>
                       <td class="org-product"><%= child_product.product_name %></td>
@@ -237,11 +257,12 @@
                     <tr>
                       <td colspan="7" align="right" class="p-0">
                         <div id="collapse-row-<%= child_product.id %>" class="products-collapse collapse in">
-                          <table class="w-75">
+                          <table class="w-75 table-borderless">
                             <tbody>
                               <% child_product.order_prod_lot_stocks.order("created_at desc").each_with_index do |ord_prod_lot_stock, index| %>
                                 <tr>
-                                  <td><%= ord_prod_lot_stock.available_quantity %></td>
+                                  <td><%= ord_prod_lot_stock.available_quantity %> <%= ord_prod_lot_stock.product.unity.name.pluralize(ord_prod_lot_stock.available_quantity) %>
+                                  </td> 
                                   <td><%= ord_prod_lot_stock.lot_stock.lot.code %></td>
                                   <td><%= ord_prod_lot_stock.lot_stock.lot.laboratory.name %></td>
                                   <td><%= ord_prod_lot_stock.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") %></td>
@@ -262,7 +283,7 @@
       
       <div id='last-movements' class='tab-pane fade'>
         <!-- Tabla de movimientos -->
-        <%#= render '/shared/movements_table', order: @inpatient_prescription %>
+        <%= render '/shared/movements_table', order: @inpatient_prescription %>
       </div> <!-- End last movements tab pane -->
 
     </div>
