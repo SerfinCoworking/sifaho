@@ -35,6 +35,7 @@ class ProductLotStockController < ApplicationController
   end
 
   private
+
   def find_order
     @klass = params[:order_type].constantize
     @order = @klass.find(params[:order_id])

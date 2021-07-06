@@ -18,19 +18,26 @@
       <%= inpatient_form.error_notification %>
         <div class="row">
           <div class="col-6 border-right">
-            <%# Selector de paciente %>
-            <%= inpatient_form.input :patient_id, label: 'Paciente internado', include_blank: false,
-              collection: @inpatients.map {|inpatient|  [inpatient.fullname.humanize, inpatient.id ]},
-              :input_html => {
-                required: true,
-                include_blank: false,
-                title: 'Seleccionar paciente',
-                class: 'selectpicker-md custom-select-pick',
-                "data-find-patient-url"=> inpatient_prescriptions_path,
-                "data-width"=>"100%",
-                "data-size"=>"10",
-              }
-            %>
+            <% if @inpatients.present? %>
+              <%# Selector de paciente %>
+              <%= inpatient_form.input :patient_id, label: 'Paciente internado', include_blank: false,
+                collection: @inpatients.map {|inpatient|  [inpatient.fullname.titleize, inpatient.id ]},
+                :input_html => {
+                  required: true,
+                  include_blank: false,
+                  title: 'Seleccionar paciente',
+                  class: 'selectpicker-md custom-select-pick',
+                  "data-find-patient-url"=> inpatient_prescriptions_path,
+                  "data-width"=>"100%",
+                  "data-size"=>"10",
+                }
+              %>
+            <% else %>
+              <label>No hay pacientes internados...</label>
+              <%= link_to new_inpatient_movement_path(movement_type_id: 1), class: 'btn btn-primary btn-block mt-2 mb-2' do %>
+                <%= fa_icon 'sign-in-alt' %> Ingresar paciente
+              <% end %>
+            <% end %>
         
 
             <%= inpatient_form.input :date_prescribed, label: 'Fecha recetada',
@@ -45,10 +52,11 @@
                   },
               html5: false %>
 
-            <%= inpatient_form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 3 } %>        
+            <%= inpatient_form.input :observation, label: 'Observaciones', as: :text, :input_html => { :cols => 30  , :rows => 3 } %>
           
           </div>
-          <div class="col-6" id="patient-list">
+          <% hide_patient = true %>
+          <div class="col-6" id="filterrific_results">
             Listado de últimas recetas
           </div>
         </div><!-- /.row-->
@@ -60,7 +68,7 @@
   </div><!-- /fin .card-body -->
   
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', :back, class: 'btn mr-1' %>
+    <%= link_to 'Volver', :back, class: 'btn btn-light mr-1' %>
     <button type='submit' class='btn btn-primary' form="<%= @inpatient_prescription.new_record? ? 'new_inpatient_prescription' : 'edit_inpatient_prescription_' + @inpatient_prescription.id.to_s %>">
       <div class="c-msg" style="pointer-events: none;">
         <%= fa_icon "paper-plane" %> Guardar

@@ -1,7 +1,7 @@
 class InpatientPrescriptionsController < ApplicationController
-  
   include FindLots
   before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery, :update_with_delivery, :set_products]
+  before_action :set_hospitalized_patients, only: %i[index new edit create]
 
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
@@ -9,17 +9,20 @@ class InpatientPrescriptionsController < ApplicationController
     @filterrific = initialize_filterrific(
       InpatientPrescription,
       params[:filterrific],
+      select_options: {
+        sorted_by: InpatientPrescription.options_for_sorted_by,
+        for_statuses: InpatientPrescription.options_for_status
+      },
       persistence_id: false
     ) or return
     @inpatient_prescriptions = @filterrific.find.paginate(page: params[:page], per_page: 15)
-    # @inpatient_prescriptions = InpatientPrescription.all
   end
 
   # GET /inpatient_prescriptions/1
   # GET /inpatient_prescriptions/1.json
   def show
   end
-  
+
   # GET /inpatient_prescriptions/1
   # GET /inpatient_prescriptions/1.json
   def set_products
@@ -31,12 +34,10 @@ class InpatientPrescriptionsController < ApplicationController
   def new
     @inpatient_prescription = InpatientPrescription.new
     @inpatient_prescription.parent_order_products.build
-    @inpatients = current_user.establishment.hospitalized_patients
   end
 
   # GET /inpatient_prescriptions/1/edit
   def edit
-    @inpatients = current_user.establishment.hospitalized_patients
   end
 
   # POST /inpatient_prescriptions
@@ -45,12 +46,11 @@ class InpatientPrescriptionsController < ApplicationController
     respond_to do |format|
       @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
       @inpatient_prescription.prescribed_by = current_user
-      if @inpatient_prescription.save!
+      if @inpatient_prescription.save
         @inpatient_prescription.create_notification(current_user, 'creó')
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
         format.html { redirect_to set_products_inpatient_prescriptions_path(@inpatient_prescription), notice: message }
       else
-        @inpatients = current_user.establishment.hospitalized_patients
         format.html { render :new }
       end
     end
@@ -93,6 +93,7 @@ class InpatientPrescriptionsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_inpatient_prescription
     @inpatient_prescription = InpatientPrescription.find(params[:id])
@@ -107,4 +108,7 @@ class InpatientPrescriptionsController < ApplicationController
     )
   end
 
+  def set_hospitalized_patients
+    @inpatients = current_user.establishment.hospitalized_patients
+  end
 end

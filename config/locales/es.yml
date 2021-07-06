@@ -182,6 +182,9 @@ es:
         finished_by_professional: 'Terminado por el médico'
         finished_by_professional_id: 'Médico'
         finished_observation: 'Observaciones'
+      inpatient_prescription:
+        date_prescribed: 'Fecha recetada'
+        patient_id: 'Paciente'
 
   date:
     abbr_day_names:

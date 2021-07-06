@@ -14,7 +14,7 @@ class Patient < ApplicationRecord
   has_many :inpatient_prescriptions, dependent: :destroy
   has_one_base64_attached :avatar
   has_one_attached :file
-  has_many :patient_phones, :dependent => :destroy
+  has_many :patient_phones, dependent: :destroy
   has_many :inpatient_movements
 
   # Validations
@@ -27,8 +27,8 @@ class Patient < ApplicationRecord
   delegate :name, to: :patient_type, prefix: :patient_type
 
   accepts_nested_attributes_for :patient_phones,
-    reject_if: proc { |attributes| attributes['number'].blank? },
-    :allow_destroy => true
+                                reject_if: proc { |attributes| attributes['number'].blank? },
+                                allow_destroy: true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -41,15 +41,15 @@ class Patient < ApplicationRecord
   )
 
   pg_search_scope :get_by_dni_and_fullname,
-    against: [ :dni, :first_name, :last_name ],
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: %i[dni first_name last_name],
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_fullname,
-    against: [ :first_name, :last_name ],
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-    
+                  against: %i[first_name last_name],
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
+
   scope :search_dni, lambda { |query|
     string = query.to_s
     where('dni::text LIKE ?', "%#{string}%")
@@ -57,7 +57,7 @@ class Patient < ApplicationRecord
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
@@ -95,7 +95,7 @@ class Patient < ApplicationRecord
   end
 
   def full_info
-    self.last_name+", "+self.first_name+" "+self.dni.to_s
+    "#{last_name} #{first_name} #{dni}"
   end
 
   def fullname
