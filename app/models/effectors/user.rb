@@ -25,7 +25,7 @@ class User < ApplicationRecord
   after_create :create_profile # Comment in development
 
   # Delegaciones
-  delegate :full_name, :dni, :email, to: :profile
+  delegate :full_name, :first_name, :dni, :email, to: :profile
   delegate :name, :establishment_short_name, to: :sector, prefix: :sector
   delegate :establishment_name, to: :sector
   delegate :establishment, to: :sector

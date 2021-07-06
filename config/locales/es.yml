@@ -185,6 +185,8 @@ es:
       inpatient_prescription:
         date_prescribed: 'Fecha recetada'
         patient_id: 'Paciente'
+        statuses:
+          pending: 'Pendiente'
 
   date:
     abbr_day_names:

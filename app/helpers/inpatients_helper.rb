@@ -26,4 +26,12 @@ module InpatientsHelper
       return 'danger'
     end
   end
+
+  def inpatient_prescription_status_label(order)
+    if order.pending?; return 'secondary'
+    elsif order.dispensada?; return 'success'
+    elsif order.dispensada_parcial?; return 'primary'
+    elsif order.anulado?; return 'danger'
+    end
+  end
 end
