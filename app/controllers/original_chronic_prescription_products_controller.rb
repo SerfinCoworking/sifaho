@@ -25,14 +25,15 @@ class OriginalChronicPrescriptionProductsController < ApplicationController
   end
 
   private
-    def set_original_chronic_prescription_product
-      @original_product = OriginalChronicPrescriptionProduct.find(params[:original_product_id])
-    end
 
-    def finish_treatment_params
-      params.require(:original_chronic_prescription_product).permit(
-        :finished_by_professional_id,
-        :finished_observation,
-      )
-    end
+  def set_original_chronic_prescription_product
+    @original_product = OriginalChronicPrescriptionProduct.find(params[:original_product_id])
+  end
+
+  def finish_treatment_params
+    params.require(:original_chronic_prescription_product).permit(
+      :finished_by_professional_id,
+      :finished_observation,
+    )
+  end
 end

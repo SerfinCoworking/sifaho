@@ -1,0 +1,17 @@
+
+<%if short_message %>
+  <div class="text-nowrap">
+    <%= notification.action_type %> un pedido de abastecimiento
+  </div>
+
+<%else %>
+  <div class="">
+    <%= notification.actor.profile.first_name.titleize %>
+    <%= notification.action_type %>
+    un
+    <span class="visible-print">pedido de abastecimiento</span>
+    de 
+    <%= osCount = notification.target.order_products.count %><%= ' producto'.pluralize(osCount) %>
+    para <%= notification.target.destiny_name %> de <%= notification.target.origin_name %>.
+  </div>
+<% end%>
