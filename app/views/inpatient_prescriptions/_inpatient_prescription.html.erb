@@ -4,8 +4,8 @@
     <td class="pres-col-pat"><%= inpatient_prescription.patient.full_info %></td>
   <% end %>
   <td>
-    <span class="badge badge-<%#= inpatient_prescription_status_label(inpatient_prescription) %>">
-      <%= inpatient_prescription.status.underscore.humanize %>
+    <span class="badge badge-<%= inpatient_prescription_status_label(inpatient_prescription) %>">
+      <%= InpatientPrescription.human_enum_name(:status, inpatient_prescription.status) %>
     </span>
   </td>
   <td>
