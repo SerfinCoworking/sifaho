@@ -1,5 +1,6 @@
 class InpatientPrescription < ApplicationRecord
   include PgSearch
+  include EnumTranslation
 
   enum status: {
     pending: 0,

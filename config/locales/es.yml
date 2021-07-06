@@ -182,6 +182,9 @@ es:
         finished_by_professional: 'Terminado por el médico'
         finished_by_professional_id: 'Médico'
         finished_observation: 'Observaciones'
+      inpatient_prescription:
+        statuses:
+          pending: 'Pendiente'
 
   date:
     abbr_day_names:

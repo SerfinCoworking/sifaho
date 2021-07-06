@@ -16,6 +16,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   belongs_to :order, class_name: 'InpatientPrescription', foreign_key: 'inpatient_prescription_id',
                      inverse_of: 'order_products'
   belongs_to :prescribed_by, optional: true, class_name: 'User'
+  belongs_to :delivered_by, optional: true, class_name: 'User'
   belongs_to :product
   has_many :lot_stocks, through: :order_prod_lot_stocks
   belongs_to :parent, class_name: 'InpatientPrescriptionProduct', required: false
@@ -37,7 +38,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   validate :uniqueness_parent_product_in_the_order, if: :parent?
   validate :uniqueness_child_product_in_the_order, if: :not_parent?
 
-  delegate :code, :name, to: :product, prefix: :product
+  delegate :unity_name, :code, :name, to: :product, prefix: :product
   accepts_nested_attributes_for :product,
                                 allow_destroy: true
   accepts_nested_attributes_for :order_prod_lot_stocks,
@@ -76,6 +77,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
     else
       children.each(&:decrement_reserved_stock)
       self.status = 'provista'
+      self.delivered_by_id = a_user.id
       save!(validate: false)
       notification_type = "entregó el producto #{product.name}"
       create_notification(a_user, notification_type, self)
