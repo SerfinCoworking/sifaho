@@ -8,6 +8,7 @@ $(document).on('turbolinks:load', function(e){
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents(inserted_item);
+    $(inserted_item).find('input[name="product_code_fake"]').first().trigger('focus');
     const mainTd = $(inserted_item).closest('td');
     if(!$(mainTd).is(":visible")) $(mainTd).fadeIn();
 
