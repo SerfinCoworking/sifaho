@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo receta crónica
+        Viendo receta de internación
         <span class="badge badge-<%= inpatient_prescription_status_label(@inpatient_prescription) %>">
           <%= InpatientPrescription.human_enum_name(:status, @inpatient_prescription.status) %>
         </span>
@@ -134,7 +134,7 @@
                 <tr id="parent_product_<%= parent_pres_prod.id %>">
                   <% @stock = Stock.where(sector: current_user.sector, product: parent_pres_prod.product).first %>
                   <td>
-                    <% if parent_pres_prod.prescribed_by.profile.present? %>
+                    <% if parent_pres_prod.prescribed_by.present? %>
                       <span>
                         <%= image_tag user_avatar(parent_pres_prod.prescribed_by, 25), size: '25', class:"rounded" %>
                       </span>
@@ -229,50 +229,52 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% @inpatient_prescription.order_products.order("created_at desc").each_with_index do |child_product, index| %>
-                    <tr class="toggle-collapse-row" data-target="#collapse-row-<%= child_product.id %>">
-                      <td class="org-product">
-                        <% if child_product.parent.delivered_by.profile.present? %>
-                          <span>
-                            <%= image_tag user_avatar(child_product.parent.delivered_by, 25), size: '25', class:"rounded" %>
-                          </span>
-                        <% end %>                            
-                        <%=child_product.parent.delivered_by.full_name %>
-                      </td>
-                      <td class="org-product"><%= child_product.product_code %></td>
-                      <td class="org-product"><%= child_product.product_name %></td>
-                      <td class="org-product"><%= child_product.product_unity_name %></td>
-                      <td class="org-product">
-                        <%= child_product.deliver_quantity %> <%= child_product.product_unity_name.pluralize(child_product.deliver_quantity) %>
-                      </td> 
-                      <td class="org-product observations-col">
-                        <%= child_product.observation %>
-                      </td>
-                      <td class="org-product">
-                        <div class="fa-icon-container">
-                          <%= fa_icon 'angle-right'%>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="7" align="right" class="p-0">
-                        <div id="collapse-row-<%= child_product.id %>" class="products-collapse collapse in">
-                          <table class="w-75 table-borderless">
-                            <tbody>
-                              <% child_product.order_prod_lot_stocks.order("created_at desc").each_with_index do |ord_prod_lot_stock, index| %>
-                                <tr>
-                                  <td><%= ord_prod_lot_stock.available_quantity %> <%= ord_prod_lot_stock.product.unity.name.pluralize(ord_prod_lot_stock.available_quantity) %>
-                                  </td> 
-                                  <td><%= ord_prod_lot_stock.lot_stock.lot.code %></td>
-                                  <td><%= ord_prod_lot_stock.lot_stock.lot.laboratory.name %></td>
-                                  <td><%= ord_prod_lot_stock.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") %></td>
-                                </tr>
-                              <% end %>
-                            </tbody>
-                          </table>
-                        </div>
-                      </td>
-                    </tr>
+                  <% @inpatient_prescription.parent_order_products.for_statuses(:provista).each do |parent_product| %>
+                    <% parent_product.children.order("created_at desc").each_with_index do |child_product, index| %>
+                      <tr class="toggle-collapse-row" data-target="#collapse-row-<%= child_product.id %>">
+                        <td class="org-product">
+                          <% if child_product.parent.delivered_by.present? %>
+                            <span>
+                              <%= image_tag user_avatar(child_product.parent.delivered_by, 25), size: '25', class:"rounded" %>
+                            </span>
+                            <%=child_product.parent.delivered_by.full_name %>
+                          <% end %>                            
+                        </td>
+                        <td class="org-product"><%= child_product.product_code %></td>
+                        <td class="org-product"><%= child_product.product_name %></td>
+                        <td class="org-product"><%= child_product.product_unity_name %></td>
+                        <td class="org-product">
+                          <%= child_product.deliver_quantity %> <%= child_product.product_unity_name.pluralize(child_product.deliver_quantity) %>
+                        </td> 
+                        <td class="org-product observations-col">
+                          <%= child_product.observation %>
+                        </td>
+                        <td class="org-product">
+                          <div class="fa-icon-container">
+                            <%= fa_icon 'angle-right'%>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="7" align="right" class="p-0">
+                          <div id="collapse-row-<%= child_product.id %>" class="products-collapse collapse in">
+                            <table class="w-75 table-borderless">
+                              <tbody>
+                                <% child_product.order_prod_lot_stocks.order("created_at desc").each_with_index do |ord_prod_lot_stock, index| %>
+                                  <tr>
+                                    <td><%= ord_prod_lot_stock.available_quantity %> <%= ord_prod_lot_stock.product.unity.name.pluralize(ord_prod_lot_stock.available_quantity) %>
+                                    </td> 
+                                    <td><%= ord_prod_lot_stock.lot_stock.lot.code %></td>
+                                    <td><%= ord_prod_lot_stock.lot_stock.lot.laboratory.name %></td>
+                                    <td><%= ord_prod_lot_stock.lot_stock.lot.expiry_date.strftime("%d/%m/%Y") %></td>
+                                  </tr>
+                                <% end %>
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
                   <% end %>
                 </tbody>
               </table>
