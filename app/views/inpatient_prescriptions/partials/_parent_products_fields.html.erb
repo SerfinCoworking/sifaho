@@ -125,13 +125,12 @@
   <td>
     <% if policy(f.object).edit_parent_product? %>
     <div class="form-group">
-        <input class="form-control input-sm order-product-inputs total_dose" 
+        <input class="form-control input-sm total_dose" 
               value="<%= f.object.total_dose if f.object.total_dose.present? %>"
               placeholder="Dosis total" 
               type="number"
               readonly
-              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose"%>"
-              <%= 'readonly' if f.object.id.present?  %>>
+              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose" %>">
         <div class="invalid-feedback"> </div>
       </div>
     <% else %>
