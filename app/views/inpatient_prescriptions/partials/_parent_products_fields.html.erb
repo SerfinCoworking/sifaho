@@ -87,6 +87,7 @@
               value="<%= f.object.dose_quantity if f.object.dose_quantity.present? %>"
               placeholder="Cant" 
               type="number"
+              min="0"
               name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>"
               <%= 'readonly' if f.object.id.present? %>>
         <div class="invalid-feedback"> </div>
@@ -107,6 +108,8 @@
               value="<%= f.object.interval if f.object.interval.present? %>"
               placeholder="Intervalo" 
               type="number"
+              min="0"
+              max="24"
               name="<%= f.object.id.present? ? "interval-#{f.object.id}": "interval"%>"
               <%= 'readonly' if f.object.id.present? %>>
         <div class="invalid-feedback"> </div>
