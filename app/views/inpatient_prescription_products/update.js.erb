@@ -1,7 +1,7 @@
 <%= render 'shared/flash_message' %>
 
 $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function(e){
-  $("#"+"<%= @tr_id.to_s %>").find('.btn-ipp-save').tooltip('hide');
+  $("#"+"<%= @tr_id.to_s %>").find('.btn').tooltip('hide');
   $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().html('<%= j render("inpatient_prescriptions/partials/select_lot_stocks_btn", order: @inpatient_prescription_product.order, f_object: @inpatient_prescription_product) %>');
   $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeIn();
   initActionsButton($("#"+"<%= @tr_id.to_s %>"));
@@ -28,4 +28,8 @@ $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function
   <% end %>
   $("#"+"<%= @tr_id.to_s %>").find(".order-product-inputs").attr("readonly", true);
   $("#"+"<%= @tr_id.to_s %>").attr('id', "<%= @inpatient_prescription_product.parent.present? ? "child-" : "parent-" %><%= @inpatient_prescription_product.id %>");
+  $('[data-toggle="tooltip"]').tooltip({
+    'selector': '',
+    'container':'body'
+  });
 })

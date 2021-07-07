@@ -15,6 +15,10 @@ $(document).on('turbolinks:load', function(e){
       const currentName = $(element).attr('name');
       $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
     });
+    $('[data-toggle="tooltip"]').tooltip({
+      'selector': '',
+      'container':'body'
+    });
   }).on('cocoon:before-remove', function(e, task) {
     // allow some time for the animation to complete
     const table = $(task).closest('table');
