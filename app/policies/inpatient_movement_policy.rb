@@ -1,6 +1,6 @@
 class InpatientMovementPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :enfermero)
+    user.has_any_role?(:admin, :farmaceutico, :medico, :enfermero)
   end
 
   def show?
