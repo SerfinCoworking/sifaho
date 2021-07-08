@@ -1,4 +1,4 @@
-<div class="card fixed-custom-card">
+<div class="card fixed-custom-card cards-container">
   <div class="card-header <%= @inpatient_movement.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@inpatient_movement.new_record? ?  "plus" : "edit")%>
@@ -157,7 +157,6 @@
                 </div>
               </div>
               
-
                 <div id="pat-container" class="d-flex">
                   <input type="hidden" value="<%= asset_path('profile-placeholder.jpg') %>" id="profile-placeholder-path">
                   <div id="patient-avatar"></div>
@@ -165,8 +164,9 @@
                 </div>
                 <h5 id="last-receipt-title" class="fade">Última recetada</h5>
                 <div id="last-prescription-info"></div>
-          
             </div>
+
+
           </div>
         <% end %>
       </div>

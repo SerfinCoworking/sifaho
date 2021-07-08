@@ -163,7 +163,7 @@
                     <%= parent_pres_prod.dose_quantity %> <%= parent_pres_prod.product_unity_name.pluralize(parent_pres_prod.dose_quantity) %>
                   </td>
                   <td>
-                    <%= parent_pres_prod.interval %>
+                    <%= pluralize(parent_pres_prod.interval, 'hr', plural: 'hrs') %>
                   </td>
                   <td>
                     <%= parent_pres_prod.total_dose %> <%= parent_pres_prod.product_unity_name.pluralize(parent_pres_prod.total_dose) %>
