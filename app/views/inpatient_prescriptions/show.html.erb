@@ -1,4 +1,4 @@
-<%= render 'prescriptions/header' %>
+<%= render 'header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex align-items-center justify-content-between">
@@ -292,32 +292,27 @@
   </div>
   <div class="card-footer text-right">
     <%= link_to 'Volver', inpatient_prescriptions_path, class: "btn btn-light mr-1" %>
-    <%#= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
-      <%#= fa_icon "print" %>
-      <%# Imprimir %>
-    <%# end %>
-    <%# if policy(@inpatient_prescription).edit? %>
-      <%#= link_to edit_inpatient_prescription_path(@inpatient_prescription), :"data-turbolinks" => false,
-        class: "btn btn-warning mr-1" do %>
-        <%#= fa_icon "pen" %>
-        Editar
-      <%# end %>
-    <%# end %>
 
-    <%# if policy(@inpatient_prescription).finish? %>
-      <%#= link_to finish_inpatient_prescription_path(@inpatient_prescription), :"data-turbolinks" => false,
-        class: "btn btn-success" do %>
-        <%#= fa_icon "check" %>
-        Finalizar
-      <%# end %>
-    <%# end %>
+    <% if policy(@inpatient_prescription).edit? %>
+      <%= link_to edit_inpatient_prescription_path(@inpatient_prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+
+    <% if policy(@inpatient_prescription).set_products? %>
+      <%= link_to set_products_inpatient_prescriptions_path(@inpatient_prescription),
+        class: 'btn btn-sm btn-primary mr-1 ml-1'  do %>
+        <%= fa_icon "file-signature" %> Agregar productos
+      <% end %>
+    <% end %>
     
-    <%# if policy(@inpatient_prescription).dispense_new? %>
-      <%#= link_to new_inpatient_prescription_chronic_dispensation_path(@inpatient_prescription), :"data-turbolinks" => false,
-        class: "btn btn-primary" do %>
-        <%#= fa_icon "paper-plane" %>
-        Dispensar
-      <%# end %>
-    <%# end %>
+    <% if policy(@inpatient_prescription).delivery? %>
+      <%= link_to delivery_inpatient_prescriptions_path(@inpatient_prescription),
+        class: 'btn btn-sm btn-primary mr-1 ml-1' do %> 
+        <%= fa_icon "paper-plane"%> Entregar productos
+      <% end %>
+    <% end %>
   </div>
 </div>
