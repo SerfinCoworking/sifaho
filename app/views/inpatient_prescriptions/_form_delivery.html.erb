@@ -7,7 +7,7 @@
         <%= "Entregar productos recetados" %>
       </h5>
     </div>
-    <%= link_to :back, class: 'btn' do %>
+    <%= link_to inpatient_prescriptions_path, class: 'btn' do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
@@ -67,7 +67,7 @@
   </div><!-- /fin .card-body -->
   
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', :back, class: 'btn mr-1 btn-secondary' %>
+    <%= link_to 'Volver', inpatient_prescriptions_path, class: 'btn mr-1 btn-secondary' %>
     <%#= link_to 'Entregar', update_with_delivery_inpatient_prescriptions_path(@inpatient_prescription.id), class: 'btn mr-1 btn-success', method: :PATCH %>    
   </div>  
 </div>
