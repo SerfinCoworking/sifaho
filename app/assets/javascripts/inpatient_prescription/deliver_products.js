@@ -35,25 +35,8 @@ $(document).on('turbolinks:load', function(e){
       e.stopPropagation();
       updateOrderProduct(e.target);
     });
-    $(target).find('button.btn-select-lot-stock').on('click', function(e) {
-      e.stopPropagation();
-      const urlFindLots = $(e.target).attr("data-select-lot-url");
-      const orderName = $(e.target).attr("data-order-name");
-      const orderId = $(e.target).attr("data-order-id");
-      const orderProductId = $(e.target).attr("data-order-product-id");
-      const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first().val();
-      $.ajax({
-        url: urlFindLots,
-        method: 'GET',
-        dataType: "script",
-        data: {
-          order_type: orderName,
-          order_id: orderId,
-          order_product_id: orderProductId,
-          product_id: productId
-      }});
-    });
-
+    lotSelectBtnWithoutStock(target, target);
+    
     $(target).find('.product-code').autocomplete({
       source: $('.product-code').attr('data-autocomplete-source'),
       minLength: 1,
@@ -236,3 +219,51 @@ function setLotSelectionProgress(targetRow, selectedQuantity, toDelivery){
     $(targetRow).find('button.btn-select-lot-stock').addClass('btn-outline-primary').removeClass('btn-outline-danger btn-outline-success');
   }
 } 
+
+/* Funcion que se utiliza para mostrar el modal de seleccion de lotes
+*  si tiene stock, de lo contrario muestra un popover con el mensaje
+*  "no posee stock".
+*  Se llama en las acciones de iniciar el formulario, crear y actualizar un proucto.
+*/
+function lotSelectBtnWithoutStock(row, current_row){
+  const stock = $(row).find('input.product-stock').first().val();
+  if(stock > 0){
+    $(row).find('button.btn-select-lot-stock').first().on('click', function(e) {
+      e.stopPropagation();
+      const urlFindLots = $(e.target).attr("data-select-lot-url");
+      const orderName = $(e.target).attr("data-order-name");
+      const orderId = $(e.target).attr("data-order-id");
+      const orderProductId = $(e.target).attr("data-order-product-id");
+      const productId = $(e.target).closest('tr').find('input[type="hidden"].product-id').first().val();
+      $.ajax({
+        url: urlFindLots,
+        method: 'GET',
+        dataType: "script",
+        data: {
+          order_type: orderName,
+          order_id: orderId,
+          order_product_id: orderProductId,
+          product_id: productId
+      }});
+    }).trigger('click');
+  }else{
+    $(row).find('button.btn-select-lot-stock').first().popover({
+      content: "Este producto no posee stock",
+      delay: { "show": 500, "hide": 500 },
+      placement: "left",
+      trigger: "manual",
+      template: '<div class="popover popover-warning border-warning" role="tooltip"><div class="arrow"></div><div class="popover-body text-warning"></div></div>',
+    });
+    $(row).find('button.btn-select-lot-stock').addClass('btn-outline-warning').removeClass("btn-primary");
+    $(row).find('button.btn-select-lot-stock').popover('show');
+    setTimeout(function(){
+      $(current_row).find('button.btn-select-lot-stock').popover('hide');
+      $(current_row).find('button.btn-select-lot-stock').on('click', function(e){
+        $(e.target).popover('show');
+        setTimeout(function(){
+          $(e.target).popover('hide');
+        }, 2500);
+      })
+    }, 2500);
+  }
+}
