@@ -26,9 +26,13 @@ $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function
           product_id: productId
       }});
     }).trigger('click');
+  <% else %>  
+    $("a.add_fields").trigger('focus');
   <% end %>  
   $("#"+"<%= @tr_id.to_s %>").find(".order-product-inputs").attr("readonly", true);
   $("#"+"<%= @tr_id.to_s %>").attr('id', "<%= @inpatient_prescription_product.parent.present? ? "child-" : "parent-" %><%= @inpatient_prescription_product.id %>");
+  $('[data-toggle="tooltip"]').tooltip({
+    'selector': '',
+    'container':'body'
+  });
 });
-
-

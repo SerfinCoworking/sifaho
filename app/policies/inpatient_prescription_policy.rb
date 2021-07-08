@@ -32,7 +32,7 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def delivery?
-    if Date.today <= record.date_prescribed && (record.pending? || record.parcialmente_dispensada?)
+    if Date.today <= record.date_prescribed && (record.pending? || record.parcialmente_dispensada?) && record.parent_order_products.any?(&:sin_proveer?)
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end

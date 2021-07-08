@@ -1,4 +1,14 @@
 class InpatientPrescriptionProductPolicy < ApplicationPolicy
+
+  def create?
+    if record.order.pending?
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medico, :enfermero)
+    end
+  end
+
+  def update?
+    edit_parent_product? || edit_child_product?
+  end
   # Solo podran editarse si, aun no ha sido proveido el producto
   # Si es un nuevo objecto
   # Si es el profesional que lo creo

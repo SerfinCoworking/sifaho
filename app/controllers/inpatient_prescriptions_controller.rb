@@ -44,6 +44,7 @@ class InpatientPrescriptionsController < ApplicationController
   # POST /inpatient_prescriptions
   # POST /inpatient_prescriptions.json
   def create
+    authorize @inpatient_prescription
     respond_to do |format|
       @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
       @inpatient_prescription.prescribed_by = current_user
@@ -60,6 +61,7 @@ class InpatientPrescriptionsController < ApplicationController
   # PATCH/PUT /inpatient_prescriptions/1
   # PATCH/PUT /inpatient_prescriptions/1.json
   def update
+    authorize @inpatient_prescription
     respond_to do |format|
       if @inpatient_prescription.update(inpatient_prescription_params)
         format.html { redirect_to set_products_inpatient_prescriptions_path(@inpatient_prescription), notice: 'Inpatient prescription was successfully updated.' }

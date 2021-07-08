@@ -8,12 +8,17 @@ $(document).on('turbolinks:load', function(e){
   
   $('.inpatient-order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initEvents(inserted_item);
+    $(inserted_item).find('input[name="product_code_fake"]').first().trigger('focus');
     const mainTd = $(inserted_item).closest('td');
     if(!$(mainTd).is(":visible")) $(mainTd).fadeIn();
 
     $(inserted_item).find('.form-control').each(function(i, element){
       const currentName = $(element).attr('name');
       $(element).attr('name', "ip_products["+Date.now()+"]["+currentName+"]");
+    });
+    $('[data-toggle="tooltip"]').tooltip({
+      'selector': '',
+      'container':'body'
     });
   }).on('cocoon:before-remove', function(e, task) {
     // allow some time for the animation to complete
