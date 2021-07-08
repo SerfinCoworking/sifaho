@@ -5,7 +5,7 @@
         <thead class="thead-light">
           <tr>
             <th>Código</th>
-            <% if active_action(:index) %>
+            <% if active_action('index') %>
               <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
             <% end %>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
