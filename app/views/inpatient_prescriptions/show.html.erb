@@ -51,13 +51,13 @@
             <% end %>
           </div>
           <div class="media-body">
-            <h4 class="media-heading">Habitación <%= @inpatient_prescription.patient.bed.bedroom.name %></h4>
+            <h4 class="media-heading">Habitación <%= @inpatient_prescription.bedroom_name %></h4>
             <p>
-              <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.patient.bed.id), class: "link" do %>
-                Cama <%= @inpatient_prescription.patient.bed.name %>
-              <% end %>    
+              <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.bed_id), class: "link" do %>
+                Cama <%= @inpatient_prescription.bed_name %>
+              <% end %>
             </p>
-            <p><strong>Servicio: </strong><%= @inpatient_prescription.patient.bed.service.name %></p>
+            <p><strong>Servicio: </strong><%= @inpatient_prescription.service_name %></p>
           </div>
         </div>
       </div> <!-- End habitacion / cama -->

@@ -32,9 +32,8 @@ $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function
   $("#"+"<%= @tr_id.to_s %>").attr('id', "<%= @inpatient_prescription_product.parent.present? ? "child-" : "parent-" %><%= @inpatient_prescription_product.id %>");
 })
 
-.tooltip('hide')
-  $('[data-toggle="tooltip"]').tooltip({
-    'selector': '',
-    'container':'body'
-  });
-})
+
+$('[data-toggle="tooltip"]').tooltip({
+  'selector': '',
+  'container':'body'
+});

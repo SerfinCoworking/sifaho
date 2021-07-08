@@ -44,10 +44,10 @@ class InpatientPrescriptionsController < ApplicationController
   # POST /inpatient_prescriptions
   # POST /inpatient_prescriptions.json
   def create
+    @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
     authorize @inpatient_prescription
+    @inpatient_prescription.prescribed_by = current_user
     respond_to do |format|
-      @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
-      @inpatient_prescription.prescribed_by = current_user
       if @inpatient_prescription.save
         @inpatient_prescription.create_notification(current_user, 'creó')
         message = "La receta de internación de #{@inpatient_prescription.patient.fullname} se ha creado correctamente."
