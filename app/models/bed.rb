@@ -9,6 +9,7 @@ class Bed < ApplicationRecord
   has_many :bed_orders
   has_one :patient
   has_many :inpatient_movements
+  has_many :inpatient_prescriptions
 
   # Validations
   validates :name, :bedroom, presence: true

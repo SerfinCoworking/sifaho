@@ -12,6 +12,7 @@ class InpatientPrescription < ApplicationRecord
   # Relations
   belongs_to :patient
   belongs_to :prescribed_by, class_name: 'User'
+  belongs_to :bed
 
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: 'order_id'
   has_many  :order_products, -> { only_children },
@@ -33,7 +34,7 @@ class InpatientPrescription < ApplicationRecord
   validates :prescribed_by, presence: true
   validates :patient, presence: true
   validates :remit_code, uniqueness: true
-  validates_presence_of :date_prescribed, :patient_id
+  validates_presence_of :date_prescribed, :patient_id, :bed_id
   validates_uniqueness_of :date_prescribed, scope: :patient_id, message: 'en uso. El paciente ya tiene una receta.'
 
   # Atributos anidados
@@ -45,8 +46,10 @@ class InpatientPrescription < ApplicationRecord
                                 allow_destroy: true
 
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
+  delegate :bedroom_name, :service_name, to: :bed, prefix: false
+  delegate :name, to: :bed, prefix: :bed
 
-  before_create :set_defaults
+  before_validation :set_defaults, on: :create
 
   filterrific(
     default_filter_params: { sorted_by: 'recetada_desc' },
@@ -175,5 +178,6 @@ class InpatientPrescription < ApplicationRecord
 
   def set_defaults
     self.remit_code = "IN#{DateTime.now.to_s(:number)}"
+    self.bed_id = patient.bed_id if patient.bed_id.present?
   end
 end
