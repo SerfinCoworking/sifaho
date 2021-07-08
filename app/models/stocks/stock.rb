@@ -34,29 +34,29 @@ class Stock < ApplicationRecord
       :sorted_by,
     ]
   )
-  
+
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^modificado_/s
       # Ordenamiento por fecha de creación en la BD
-      reorder("stocks.updated_at #{ direction }")
+      reorder("stocks.updated_at #{direction}")
     when /^codigo_/
       # Ordenamiento por id de insumo
-      reorder("products.code #{ direction }").joins(:product)
+      reorder("products.code #{direction}").joins(:product)
     when /^cantidad_/
       # Ordenamiento por la cantidad de stock
-      reorder("stocks.quantity #{ direction }")
+      reorder("stocks.quantity #{direction}")
     when /^nombre_/
       # Ordenamiento por el nombre del producto
-      reorder("products.name #{ direction }").joins(:product)
+      reorder("products.name #{direction}").joins(:product)
     when /^rubro_/
       # Ordenamiento por el rubro del producto
-      reorder("areas.name #{ direction }").joins(:product, :area)
+      reorder("areas.name #{direction}").joins(:product, :area)
     when /^unidad_/
       # Ordenamiento por la unidad del prudcto
-      reorder("unities.name #{ direction }").joins(:product, :unity)
+      reorder("unities.name #{direction}").joins(:product, :unity)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")

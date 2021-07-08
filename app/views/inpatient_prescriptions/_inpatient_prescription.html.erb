@@ -1,6 +1,6 @@
 <tr id="inpatient_prescription_<%= inpatient_prescription.id %>">
   <td><%= inpatient_prescription.remit_code %></th>
-  <% if active_action(:index) %>
+  <% if active_action('index') %>
     <td class="pres-col-pat"><%= inpatient_prescription.patient.full_info %></td>
   <% end %>
   <td>

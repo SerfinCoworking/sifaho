@@ -1,6 +1,7 @@
 class InpatientPrescriptionsController < ApplicationController
   include FindLots
-  before_action :set_inpatient_prescription, only: [:show, :edit, :update, :destroy, :delivery, :update_with_delivery, :set_products]
+  before_action :set_inpatient_prescription, only: %i[show edit update destroy delivery update_with_delivery
+                                                      set_products]
   before_action :set_hospitalized_patients, only: %i[index new edit create]
 
   # GET /inpatient_prescriptions

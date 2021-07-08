@@ -34,6 +34,7 @@ class InpatientPrescription < ApplicationRecord
   validates :patient, presence: true
   validates :remit_code, uniqueness: true
   validates_presence_of :date_prescribed, :patient_id
+  validates_uniqueness_of :date_prescribed, scope: :patient_id, message: 'en uso. El paciente ya tiene una receta.'
 
   # Atributos anidados
   accepts_nested_attributes_for :order_products,
@@ -48,7 +49,7 @@ class InpatientPrescription < ApplicationRecord
   before_create :set_defaults
 
   filterrific(
-    default_filter_params: { sorted_by: 'updated_at_desc' },
+    default_filter_params: { sorted_by: 'recetada_desc' },
     available_filters: [
       :search_by_remit_code,
       :date_prescribed_since,
@@ -128,7 +129,7 @@ class InpatientPrescription < ApplicationRecord
       ['Paciente (a-z)', 'paciente_asc'],
       ['Estado (a-z)', 'estado_asc'],
       ['Fecha recetada (nueva primero)', 'recetada_desc'],
-      ['Fecha recetada (antigua primero)', 'recetada_asc'],
+      ['Fecha recetada (antigua primero)', 'recetada_asc']
     ]
   end
 

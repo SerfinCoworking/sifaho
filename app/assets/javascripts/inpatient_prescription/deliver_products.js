@@ -173,7 +173,7 @@ function initActionsButton(target){
     $(modal).modal('toggle');
   });
   
-  /* habilitar edicion */
+  /* Habilitar edicion */
   $(target).find(".btn-ipp-edit").on('click', function(e){
     const tr = $(e.target).closest('tr');
     $(tr).find(".order-product-inputs").removeAttr("readonly");
