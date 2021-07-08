@@ -47,7 +47,7 @@ es:
       delete: Eliminar
       filter: Filtrar
       dispense: Dispensar
-      delivery: Entregar
+      delivery: Entregar productos
       set_products: Agregar productos
   activerecord:
     models:
