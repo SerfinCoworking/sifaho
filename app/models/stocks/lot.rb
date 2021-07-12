@@ -111,7 +111,7 @@ class Lot < ApplicationRecord
 
   scope :without_status, lambda { |a_status|
     where.not('status = ?', a_status )
-  }  
+  }
 
   def expire?
     expiry_date.present?
@@ -120,7 +120,7 @@ class Lot < ApplicationRecord
   def expiry_date_string
     self.expire? ? self.expiry_date.strftime("%d/%m/%Y") : ''
   end
-  
+
   def short_expiry_date_string
     self.expire? ? self.expiry_date.strftime("%m/%y") : ''
   end

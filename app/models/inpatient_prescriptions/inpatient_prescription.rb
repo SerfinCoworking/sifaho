@@ -6,7 +6,8 @@ class InpatientPrescription < ApplicationRecord
     pending: 0,
     parcialmente_dispensada: 1,
     dispensada: 2,
-    anulado: 3
+    finished: 3,
+    canceled: 4
   }
 
   # Relations

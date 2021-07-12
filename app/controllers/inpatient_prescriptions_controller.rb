@@ -7,6 +7,7 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
   def index
+    authorize InpatientPrescription
     @filterrific = initialize_filterrific(
       current_user.sector.establishment.inpatient_prescriptions,
       params[:filterrific],
@@ -22,6 +23,7 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions/1
   # GET /inpatient_prescriptions/1.json
   def show
+    authorize @inpatient_prescription
   end
 
   # GET /inpatient_prescriptions/1
@@ -33,12 +35,15 @@ class InpatientPrescriptionsController < ApplicationController
 
   # GET /inpatient_prescriptions/new
   def new
+    authorize InpatientPrescription
     @inpatient_prescription = InpatientPrescription.new
     @inpatient_prescription.parent_order_products.build
+    @inpatient_prescription.patient_id = params[:patient_id] if params[:patient_id]
   end
 
   # GET /inpatient_prescriptions/1/edit
   def edit
+    authorize @inpatient_prescription
   end
 
   # POST /inpatient_prescriptions

@@ -5,7 +5,7 @@
         <thead class="thead-light">
           <tr>
             <th>Código</th>
-            <% if active_action('index') %>
+            <% unless hide_patient %>
               <th><%= filterrific_sorting_link(@filterrific, :paciente) %></th>
             <% end %>
             <th><%= filterrific_sorting_link(@filterrific, :estado) %></th>
@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody id="outpatient_prescriptions">
-          <%= render @inpatient_prescriptions %>
+          <%= render @inpatient_prescriptions, hide_patient: hide_patient %>
         </tbody>
       </table>
     </div>

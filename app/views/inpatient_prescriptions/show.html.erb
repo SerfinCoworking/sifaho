@@ -46,7 +46,7 @@
       <div class='col-md-3 col-xs-3'>
         <div class="media">
           <div class="mr-3">
-            <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.patient.bed.id), class: "link" do %>
+            <%= link_to inpatient_prescription_bed_path(@inpatient_prescription, @inpatient_prescription.bed_id), class: "link" do %>
               <%= fa_icon 'bed', class: "fa-5x"%>
             <% end %>
           </div>
