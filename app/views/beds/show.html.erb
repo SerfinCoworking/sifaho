@@ -106,8 +106,9 @@
       </div>
       <div class="col-8">
         <% if @bed.patient.present? %>
-          <h5 class="border-bottom pb-2"> Tratamientos desde su ingreso <%= @bed.patient.last_hospitalization.created_at.strftime("%d/%m/%y") %></h5>
-          <% @bed.patient.inpatient_prescriptions %>
+          <h5 class="border-bottom pb-2"> Últimos tratamientos</h5>
+          <% @inpatient_prescriptions = @bed.patient.inpatient_prescriptions %>
+          <%= render 'inpatient_prescriptions/list', hide_patient: true %>
         <% end %>
       </div>
     </div>

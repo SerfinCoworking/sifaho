@@ -18,18 +18,22 @@ class BedsController < ApplicationController
     ) or return
     @beds = @filterrific.find.page(params[:page]).per_page(15)
   end
-    
+
   # GET /beds/1
   # GET /beds/1.json
   def show
     authorize @bed
+    return unless @bed.patient.present?
+
+    @filterrific = initialize_filterrific(@bed.patient.inpatient_prescriptions, persistence_id: false)
+    @inpatient_prescriptions = @filterrific.find
   end
 
   # GET /beds/new
   def new
     authorize Bed
     @bed = Bed.new
-    @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
+    @beds = Bed.joins(:bedroom).pluck(:id, :name, 'bedrooms.name')
   end
 
   # GET /beds/1/edit

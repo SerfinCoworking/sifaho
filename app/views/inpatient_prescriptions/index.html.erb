@@ -5,6 +5,6 @@
     <%= render 'filter' %>
   </div>
   <div class="card-body fixed-panel-index">
-    <%= render( partial: 'inpatient_prescriptions/list' ) %>
+    <%= render 'list', hide_patient: false  %>
   </div>
 </div>
