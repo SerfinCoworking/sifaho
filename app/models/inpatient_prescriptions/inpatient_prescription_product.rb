@@ -83,6 +83,12 @@ class InpatientPrescriptionProduct < ApplicationRecord
     end
   end
 
+  def added_by(a_user)
+    self.prescribed_by = a_user
+    notification_type = "agregó el producto #{product.name}"
+    create_notification(a_user, notification_type, self)
+  end
+
   # Validacion: evitar duplicidad de productos padres en una misma orden
   def validate_presence_of_order_prod_lot_stocks
     unless order_prod_lot_stocks.present?
