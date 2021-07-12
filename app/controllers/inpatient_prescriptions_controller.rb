@@ -8,7 +8,7 @@ class InpatientPrescriptionsController < ApplicationController
   # GET /inpatient_prescriptions.json
   def index
     @filterrific = initialize_filterrific(
-      InpatientPrescription,
+      current_user.sector.establishment.inpatient_prescriptions,
       params[:filterrific],
       select_options: {
         sorted_by: InpatientPrescription.options_for_sorted_by,

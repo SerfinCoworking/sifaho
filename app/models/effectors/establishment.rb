@@ -7,6 +7,7 @@ class Establishment < ApplicationRecord
   has_many :prescriptions
   has_many :beds, through: :sectors
   has_many :hospitalized_patients, through: :beds, source: :patient
+  has_many :inpatient_prescriptions, through: :hospitalized_patients
   belongs_to :city, optional: true
   belongs_to :sanitary_zone
   belongs_to :establishment_type
