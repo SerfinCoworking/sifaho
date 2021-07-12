@@ -34,7 +34,8 @@ $(document).on('turbolinks:load', function(e){
       data: {
         filterrific: {
           search_by_patient_id: patientId
-        }
+        },
+        hide_patient: true
       }
     });
   });

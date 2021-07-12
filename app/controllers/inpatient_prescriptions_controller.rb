@@ -3,6 +3,7 @@ class InpatientPrescriptionsController < ApplicationController
   before_action :set_inpatient_prescription, only: %i[show edit update destroy delivery update_with_delivery
                                                       set_products]
   before_action :set_hospitalized_patients, only: %i[index new edit create]
+  before_action :set_hide_patient, only: %i[index]
 
   # GET /inpatient_prescriptions
   # GET /inpatient_prescriptions.json
@@ -118,5 +119,9 @@ class InpatientPrescriptionsController < ApplicationController
 
   def set_hospitalized_patients
     @inpatients = current_user.establishment.hospitalized_patients
+  end
+
+  def set_hide_patient
+    @hide_patient = params[:hide_patient].present?
   end
 end
