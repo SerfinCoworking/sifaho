@@ -130,7 +130,9 @@
               placeholder="Dosis total" 
               type="number"
               readonly
-              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose" %>">
+              tabindex="-1"
+              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose" %>"
+              style="pointer-events: none;">
         <div class="invalid-feedback"> </div>
       </div>
     <% else %>

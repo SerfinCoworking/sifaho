@@ -4,7 +4,7 @@
       notification_id: notification.id), 
       class:'notification-link d-flex align-items-center p-2' do %>    
     
-      <div class="d-flex align-items-center w-100 h-100">
+      <div class="d-flex align-items-center h-100 mw-100">
         <%= image_tag user_avatar(notification.actor, 25), 
               class:"rounded",
               size: '25',
@@ -14,7 +14,9 @@
         <div class="ml-2">
           <%= render partial: "/notifications/notifications/#{notification.notify_type}", 
           locals: { notification: notification, short_message: short_message } %>
-          <small class="text-nowrap"><%= time_ago_in_words(notification.created_at) %></small>
+          <small class="text-nowrap text-truncate"><%= time_ago_in_words(notification.created_at) %>
+           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+          </small>
         </div>
       </div>
 

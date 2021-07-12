@@ -1,11 +1,16 @@
 <div class="mb-2" id="select-lot-header" data-tr-id="#child-<%= @order_product.product.id %>">
-  <h5> Cantidad seleccionada:
+  <h5><%= @order_product.product_name %></h5>
+  <h6> Cantidad seleccionada:
     <span id="qv-ref">
        <%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>
     </span> 
     de 
-    <span class="badge badge-primary" id="tdelivery-ref"><%= @order_product.parent.total_dose %></span>
-  </h5>
+    <%= @order_product.parent.total_dose %>
+    <%# <span class="badge badge-primary" id="tdelivery-ref">
+      <h5 class="mb-0">
+      </h5>
+    </span> %>
+  </h6>
 </div>
 
 <%= simple_form_for @order_product, :url => update_lot_stock_selection_path(@order_product), method: :patch, remote: true, as: "order_products", html: { id: "order-prod-lot-stock-form", role: 'check-modified'} do |f| %>
@@ -34,7 +39,7 @@
         <% opls = f.object.order_prod_lot_stocks.select { |u| u.lot_stock_id == lot_stock.id }.first %>
 
         <tr class="<%= opls.present? && opls.errors.any? ? 'table-danger' : '' %> <%= opls.present? && !opls.errors.any? ? 'table-success' : '' %>">
-          <td>
+          <td class="align-middle">
             <div class="custom-control custom-switch">
               <input type="checkbox" id="lot-stock-<%=lot_stock.id%>" 
                 <%= opls.present? ? 'checked' : ''%>
@@ -52,7 +57,7 @@
               <input type="hidden" name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][_destroy]" value="false" class="hidden-destroy-lot-stock">
               
           </td>
-          <td>
+          <td class="align-middle">
             <div class="form-group integer">
               <input type="number" class="form-control numeric integer optional available-quantity input-sm <%= opls.present? && opls.errors[:available_quantity].any? ? 'is-invalid' : ''%>"
               name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][available_quantity]"
@@ -64,24 +69,24 @@
               </div>
             </div>
           </td>
-          <td>
+          <td class="align-middle">
             <%= lot_stock.lot.code %>
           </td>
-          <td>
+          <td class="align-middle">
             <%= lot_stock.quantity %>
           </td>
-          <td>
+          <td class="align-middle">
             <span class="badge badge-<%= lot_status_label(lot_stock.lot) %> ">
               <%= lot_stock.lot.status %>
             </span>
           </td>
-          <td>
-            <%= lot_stock.lot.expiry_date.strftime("%d/%m/%Y") %>
+          <td class="align-middle">
+            <%= lot_stock.lot_short_expiry_date_string %>
           </td>
-          <td>
+          <td class="align-middle">
             <%= lot_stock.lot.laboratory.name %>
           </td>
-          <td>
+          <td class="align-middle">
             <%= opls.present? ? opls.reserved_quantity : '-' %>
           </td>
         </tr>

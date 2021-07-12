@@ -245,7 +245,7 @@ function lotSelectBtnWithoutStock(row, current_row){
           order_product_id: orderProductId,
           product_id: productId
       }});
-    }).trigger('click');
+    });
   }else{
     $(row).find('button.btn-select-lot-stock').first().popover({
       content: "Este producto no posee stock",

@@ -9,6 +9,7 @@ $("#"+"<%= @tr_id.to_s %>").find('td.actions-col').first().fadeOut(250, function
   <%# Se agrega el evento al boton para seleccionar lotes, y se hace click sobre el mismo %>
   <% if @inpatient_prescription_product.parent.present? %>
     lotSelectBtnWithoutStock("#"+"<%= @tr_id.to_s %>", "#child-"+"<%= @inpatient_prescription_product.id %>");
+    $("#"+"<%= @tr_id.to_s %>").find('button.btn-select-lot-stock').first().trigger('click');
   <% else %>
     $("a.add_fields").trigger('focus');
   <% end %>  
