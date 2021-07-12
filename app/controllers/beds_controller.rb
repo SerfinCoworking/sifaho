@@ -25,7 +25,7 @@ class BedsController < ApplicationController
     authorize @bed
     return unless @bed.patient.present?
 
-    @filterrific = initialize_filterrific(@bed.patient.inpatient_prescriptions, persistence_id: false)
+    @filterrific = initialize_filterrific(@bed.patient.inpatient_prescriptions, params[:filterrific], persistence_id: false)
     @inpatient_prescriptions = @filterrific.find
   end
 
