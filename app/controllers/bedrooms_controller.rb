@@ -26,19 +26,17 @@ class BedroomsController < ApplicationController
   def new
     authorize Bedroom
     @bedroom = Bedroom.new
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .provide_hospitalization
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .provide_hospitalization
   end
 
   # GET /beds/1/edit
   def edit
     authorize @bedroom
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id)
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .provide_hospitalization
   end
 
   # POST /beds

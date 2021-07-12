@@ -1,7 +1,6 @@
 class BedsController < ApplicationController
-  before_action :set_bed, only: [:show, :edit, :update, :destroy]
-
-  before_action :assign_records, only: [:index, :new, :create, :edit, :update]
+  before_action :set_bed, only: %i[show edit update destroy]
+  before_action :assign_records, only: %i[index new create edit update]
 
   # GET /beds
   # GET /beds.json
@@ -14,7 +13,7 @@ class BedsController < ApplicationController
         with_status: Bed.options_for_status,
         sorted_by: Bed.options_for_sorted_by
       },
-      persistence_id: false,
+      persistence_id: false
     ) or return
     @beds = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -91,29 +90,25 @@ class BedsController < ApplicationController
 
   def admit_patient
     authorize Bed
-
-    
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_bed
-      @bed = Bed.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def bed_params
-      params.require(:bed).permit(:name, :bedroom_id, :service_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_bed
+    @bed = Bed.find(params[:id])
+  end
 
-    def assign_records
-      @bedrooms = Bedroom
-        .select(:id, :name)
-        .establishment(current_user.sector.establishment_id)
-        .where.not(id: current_user.sector_id)
-      @services = Sector
-        .select(:id, :name)
-        .with_establishment_id(current_user.sector.establishment_id)
-        .where.not(id: current_user.sector_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def bed_params
+    params.require(:bed).permit(:name, :bedroom_id, :service_id)
+  end
+
+  def assign_records
+    @bedrooms = Bedroom.select(:id, :name)
+                       .establishment(current_user.sector.establishment_id)
+    @services = Sector.select(:id, :name)
+                      .with_establishment_id(current_user.sector.establishment_id)
+                      .provide_hospitalization
+  end
 end
