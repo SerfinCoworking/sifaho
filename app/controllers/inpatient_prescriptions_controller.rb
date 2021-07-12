@@ -38,6 +38,7 @@ class InpatientPrescriptionsController < ApplicationController
     authorize InpatientPrescription
     @inpatient_prescription = InpatientPrescription.new
     @inpatient_prescription.parent_order_products.build
+    @inpatient_prescription.patient_id = params[:patient_id] if params[:patient_id]
   end
 
   # GET /inpatient_prescriptions/1/edit

@@ -119,6 +119,11 @@
         class: "btn btn-light mr-1" do %>
         Volver
       <% end %>
+      <% if @bed.patient.present? && policy(InpatientPrescription).new? %>
+        <%= link_to new_inpatient_prescription_path(patient_id: @bed.patient_id), class: "btn btn-primary" do %>
+          <%= fa_icon "plus" %> Agregar receta
+        <% end %>
+      <% end %>
     </div> <!-- fin botones right -->
   </div>
 </div>

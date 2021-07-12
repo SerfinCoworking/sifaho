@@ -18,8 +18,7 @@ class Bed < ApplicationRecord
   # Delegations
   delegate :name, to: :bedroom, prefix: :bedroom
   delegate :name, to: :service, prefix: :service
-  delegate :fullname, :dni, :age_string, to: :patient, prefix: :patient
-
+  delegate :fullname, :dni, :age_string, :id, to: :patient, prefix: :patient
 
   scope :establishment, -> (establishment_id) { joins(:establishment).where("establishments.id = ?", establishment_id) }
 
