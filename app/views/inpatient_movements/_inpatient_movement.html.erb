@@ -11,11 +11,5 @@
         <%= fa_icon 'eye' %>
       <% end %>
     <% end %>
-    <% if policy(inpatient_movement).edit? %>
-      <%= link_to edit_inpatient_movement_path(inpatient_movement), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
-        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon 'pen' %>
-      <% end %>
-    <% end %>
   </td>
 </tr>

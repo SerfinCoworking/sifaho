@@ -88,15 +88,6 @@
         class: "btn btn-light mr-1" do %>
         Volver
       <% end %>
-
-      <% if policy(@inpatient_movement).edit? %>
-        <%= link_to edit_inpatient_movement_path(@inpatient_movement), :"data-turbolinks" => false,
-          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
-          class: "btn btn-warning mr-1" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
     </div> <!-- fin botones right -->
   </div>
 </div>
