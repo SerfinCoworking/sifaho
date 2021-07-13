@@ -1,10 +1,10 @@
 class BedPolicy < ApplicationPolicy
   def index?
-    user.has_any_role?(:admin, :enfermero)
+    user.has_any_role?(:admin, :medico, :farmaceutico, :enfermero)
   end
 
   def bed_map?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    user.has_any_role?(:admin, :medico, :farmaceutico, :enfermero)
   end
 
   def show?
@@ -28,7 +28,7 @@ class BedPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    user.has_any_role?(:admin)
   end
 
   def destroy?
