@@ -187,6 +187,7 @@ es:
         patient_id: 'Paciente'
         statuses:
           pending: 'Pendiente'
+          finished: 'Terminada'
 
   date:
     abbr_day_names:

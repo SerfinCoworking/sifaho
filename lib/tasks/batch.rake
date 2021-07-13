@@ -28,4 +28,18 @@ namespace :batch do
     end
     Rails.logger.info 'Finished update outpatient prescription status. Dispensadas parcialmente: '+ChronicPrescription.dispensada_parcial.count.to_s+' Dispensadas: '+ChronicPrescription.dispensada.count.to_s+' Vencidas: '+ChronicPrescription.vencida.count.to_s
   end
+
+  desc 'Update inpatient prescription status'
+  task update_inpatient_prescription_status: :environment do
+    Rails.logger.info 'Starting update inpatient prescription status...'
+    Rails.logger.info "Pendientes: #{InpatientPrescription.pending.count}"
+    Rails.logger.info "Parcialmente dispensadas: #{InpatientPrescription.parcialmente_dispensada.count}"
+    Rails.logger.info "Dispensadas: #{InpatientPrescription.dispensada.count}"
+    Rails.logger.info "Terminadas: #{InpatientPrescription.finished.count}"
+
+    InpatientPrescription.for_statuses(['dispensada_parcial', 'pending']).find_each do |prescription|
+      prescription.update_status
+    end
+    Rails.logger.info 'Finished update outpatient prescription status.'
+  end
 end
