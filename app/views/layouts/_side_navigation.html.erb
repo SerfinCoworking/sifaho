@@ -28,7 +28,7 @@
       <% end %>
     <% end %>
 
-    <% if policy(BedOrder).index? %>
+    <% if policy(InpatientPrescription).index? %>
       <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom #{active_class('inpatient_prescriptions')}" do %>
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
