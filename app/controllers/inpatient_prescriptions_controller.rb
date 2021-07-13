@@ -96,8 +96,9 @@ class InpatientPrescriptionsController < ApplicationController
   def delivery
     authorize @inpatient_prescription
   end
-
+  
   def update_with_delivery
+    authorize @inpatient_prescription
     @inpatient_prescription.dispensed_by(current_user)
   end
 
