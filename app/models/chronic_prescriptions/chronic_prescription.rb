@@ -133,7 +133,7 @@ class ChronicPrescription < ApplicationRecord
   scope :with_establishment, lambda { |a_establishment|
     where('chronic_prescriptions.establishment_id = ?', a_establishment)
   }
-  
+
   scope :search_by_status, lambda { |status|
     where('chronic_prescriptions.status = ?', status)
   }

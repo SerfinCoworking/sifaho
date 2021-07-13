@@ -120,6 +120,7 @@ class InpatientPrescription < ApplicationRecord
       ['Pendiente', 'pending', 'secondary'],
       ['Parcialmente dispensada', 'parcialmente_dispensada', 'warning'],
       ['Dispensada', 'dispensada', 'success'],
+      ['Terminada', 'finished', 'primary'],
       ['Anulado', 'anulado', 'danger']
     ]
   end
@@ -173,6 +174,11 @@ class InpatientPrescription < ApplicationRecord
   # Return the i18n model name
   def human_name
     self.class.model_name.human
+  end
+
+  # Update status to the specific criteria
+  def update_status
+    finished! if pending? && Date.today > date_prescribed
   end
 
   private
