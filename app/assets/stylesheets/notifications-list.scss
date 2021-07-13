@@ -28,6 +28,9 @@ ul.list-group{
         height: 30px;
         border-radius: 50%;
       }
+      .notification-content{
+        width: calc(100% - (25px + 0.5rem));
+      }
     }
     .notifications-action{
       position: absolute;

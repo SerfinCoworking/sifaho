@@ -11,11 +11,10 @@
               :'data-toggle'=>"tooltip",
               :'data-placement'=>"left",
               :'title'=>notification.actor.profile.first_name.titleize %>
-        <div class="ml-2">
+        <div class="ml-2 notification-content text-truncate">
           <%= render partial: "/notifications/notifications/#{notification.notify_type}", 
           locals: { notification: notification, short_message: short_message } %>
           <small class="text-nowrap text-truncate"><%= time_ago_in_words(notification.created_at) %>
-           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
           </small>
         </div>
       </div>
