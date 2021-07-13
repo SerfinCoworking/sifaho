@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "log/cron.log"
+set :output, 'log/cron.log'
 
 every 5.hours do
   rake 'batch:update_lot_status'
@@ -31,4 +31,8 @@ end
 
 every 15.hours do
   rake 'batch:update_chronic_prescription_status'
+end
+
+every 15.hours do
+  rake 'update_inpatient_prescription_status'
 end
