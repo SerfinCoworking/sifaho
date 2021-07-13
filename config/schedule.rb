@@ -34,5 +34,5 @@ every 15.hours do
 end
 
 every 15.hours do
-  rake 'update_inpatient_prescription_status'
+  rake 'batch:update_inpatient_prescription_status'
 end
