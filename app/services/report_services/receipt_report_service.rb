@@ -16,8 +16,10 @@ module ReportServices
       # Agregamos el encabezado
       report.page[:title] = "Recibo #{@receipt.code}"
       report.page[:requested_date] = @receipt.created_at.strftime('%d/%m/%YY')
-      report.page[:efector] = "#{@user.sector_name} #{@user.establishment_name}"
+      report.page[:applicant] = @receipt.applicant_sector_and_establishment
+      report.page[:provider] = @receipt.provider_sector_and_establishment
       report.page[:username].value("DNI: #{@user.dni}, #{@user.full_name}")
+      report.page[:observation].value(@receipt.observation)
       report.page[:products_count].value(@receipt.receipt_products.count)
 
       # Se van agregando los productos
