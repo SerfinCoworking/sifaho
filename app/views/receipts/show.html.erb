@@ -146,6 +146,11 @@
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', receipts_path, class: "btn btn-light mr-1" %>
+    <%= link_to receipt_path(@receipt, format: 'pdf'), :"data-turbolinks" => false,
+      class: "btn btn-info" do %>
+      <%= fa_icon "print" %>
+      Imprimir
+    <% end %>
     <% if policy(@receipt).edit? %>
       <%= link_to edit_receipt_path(@receipt), :"data-turbolinks" => false,
         class: "btn btn-warning" do %>
