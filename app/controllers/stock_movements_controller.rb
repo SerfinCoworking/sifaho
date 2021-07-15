@@ -20,7 +20,7 @@ class StockMovementsController < ApplicationController
     else
       @stock_movements = @filterrific.find.paginate(page: params[:page], per_page: 20)
     end
-    
+
     respond_to do |format|
       format.html
       format.js

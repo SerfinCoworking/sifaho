@@ -1,4 +1,5 @@
 class LotStock < ApplicationRecord
+  # Relationships
   belongs_to :lot
   belongs_to :stock
 
@@ -16,14 +17,16 @@ class LotStock < ApplicationRecord
 
   after_save :stock_refresh_quantity
 
+  # Validations
   validates :quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :reserved_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates_presence_of :stock_id
-  
+
+  # Delegations
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, :code, to: :product, prefix: true
-  delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name, 
-    :short_expiry_date_string, to: :lot, prefix: true
+  delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name,
+           :short_expiry_date_string, to: :lot, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'expiry_desc' },
