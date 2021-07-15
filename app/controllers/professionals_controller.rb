@@ -107,8 +107,10 @@ class ProfessionalsController < ApplicationController
   end
 
   def get_by_enrollment_and_fullname
-    @doctors = Professional.get_by_enrollment_and_fullname(params[:term]).limit(10).order(:last_name)
-    render json: @doctors.map{ |doc| { id: doc.id, label: doc.enrollment+" "+doc.last_name+" "+doc.first_name } }
+    @professionals = ProfessionalCreator.new(params).find_practitioner
+    respond_to do |format|
+      format.js { render :professional_list }
+    end
   end
 
   def get_by_unsigned_enrollment_fullname

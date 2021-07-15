@@ -2,16 +2,59 @@
 $('#dialog .modal-header').addClass('bg-primary text-white');
 
 // Add the dialog title
-$('#dialog .modal-title').html("<i class='fa fa-plus'></i>  Nuevo médico");
+$('#dialog .modal-title').html("<i class='fa fa-plus'></i>  Agregar nuevo médico");
 
 // Render the new form
 $('#dialog .modal-body').html('<%= j render("form_remote") %>');
 
 // Add form button
 $('#dialog .modal-footer').html(
-  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"+
-  "<button type='submit' class='btn btn-success pull-right' form='new_professional'><i class='fa fa-plus'></i> Cargar médico</button>"
+  "<button type='button' class='btn' data-dismiss='modal'>Volver</button>"
 );
+
+$("#dialog").on('show.bs.modal', function(){
+
+  let professional_form = null;
+
+  $("input.form-control").on('keyup', function(e){
+    if(e.target.value.length > 2){
+
+      $(e.target).closest('form').submit();
+    }
+  });
+
+  $("#professional-form-async").on('submit', function(e){
+    e.preventDefault();
+
+    professional_form = jQuery.ajax({
+      type: $(e.target).attr('method'),
+      dataType: "html",
+      data: {
+        last_name: $("#last-name").val(),
+        first_name: $("#first-name").val()
+      },
+      url: $(e.target).attr("action"),
+      beforeSend : function()    {           
+        if(professional_form != null) {
+          console.log("DEBUG");
+          professional_form.abort();
+        }
+      },
+      success: function(data) {
+        // Success
+        $('#professionals-list').html(data);
+        $('[data-toggle="tooltip"]').tooltip({
+          'selector': '',
+          'container':'body'
+        });
+        console.log(data, "success");
+      },
+      error:function(e){
+        // Error
+      }
+    });
+  });
+});
 
 // Show the dynamic dialog
 $('#dialog').modal("show");

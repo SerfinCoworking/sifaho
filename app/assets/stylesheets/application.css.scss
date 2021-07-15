@@ -331,3 +331,9 @@ a {
     width: 100%!important;
   }
 }
+
+.list-group-hovered{
+  li:hover{
+    background-color: #f8f9fa;
+  }
+}
