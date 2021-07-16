@@ -16,7 +16,7 @@ $("#dialog").on('show.bs.modal', function(){
 
   let professional_form = null;
 
-  $("input.form-control").on('keyup', function(e){
+  $("input#last-name, input#first-name").on('keyup', function(e){
     if(e.target.value.length > 2){
 
       $(e.target).closest('form').submit();
@@ -47,7 +47,6 @@ $("#dialog").on('show.bs.modal', function(){
           'selector': '',
           'container':'body'
         });
-        console.log(data, "success");
       },
       error:function(e){
         // Error

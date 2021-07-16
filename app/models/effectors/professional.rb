@@ -8,14 +8,17 @@ class Professional < ApplicationRecord
   # Relaciones
   has_many :outpatient_prescriptions
   has_many :chronic_prescriptions
+  has_many :qualifications
   belongs_to :professional_type, optional: true
   has_one :user
   has_one_attached :avatar
 
   # Validaciones
-  validates_presence_of :first_name, :last_name, :enrollment
-  validates_uniqueness_of :enrollment
+  validates_presence_of :first_name, :last_name
   validates :dni, uniqueness: true, if: -> { dni.present? }
+
+  accepts_nested_attributes_for :qualifications,
+                                allow_destroy: true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -80,7 +83,7 @@ class Professional < ApplicationRecord
   end
 
   def full_info
-    self.fullname+" MP "+self.enrollment
+    self.fullname+" MP "+self.qualifications.first.code
   end
 
   # filters on 'sector_id' foreign key

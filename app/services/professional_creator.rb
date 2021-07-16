@@ -29,7 +29,7 @@ class ProfessionalCreator
         fullname: "#{last_name} #{first_name}",
         dni: dni,
         sex: sex,
-        enrollments: enrollments }
+        qualifications_attributes: enrollments }
     end
   end
 end

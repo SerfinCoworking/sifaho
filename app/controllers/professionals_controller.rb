@@ -56,11 +56,8 @@ class ProfessionalsController < ApplicationController
     respond_to do |format|
       if @professional.save!
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
-        if remote?
-          format.js
-        else
-          format.html { redirect_to @professional }
-        end
+        format.html { redirect_to @professional }
+        format.js
       else
         @professional_types = ProfessionalType.all
         flash[:error] = "El profesional no se ha podido crear."
@@ -94,14 +91,6 @@ class ProfessionalsController < ApplicationController
     @professional.destroy
     respond_to do |format|
       flash.now[:success] = @fullname+" se ha eliminado correctamente."
-      format.js
-    end
-  end
-
-  # GET /professional/1/delete
-  def delete
-    authorize @professional
-    respond_to do |format|
       format.js
     end
   end
@@ -144,16 +133,18 @@ class ProfessionalsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def professional_params
-      params.require(:professional).permit( :id,
+      params.require(:professional).permit(
+        :id,
         :first_name,
         :last_name,
         :dni,
         :enrollment,
         :professional_type_id,
-        :is_active)
-    end
-
-    def remote?
-      return params[:commit] == "remote"
+        :is_active,
+        qualifications_attributes: [
+          :professional_id,
+          :name,
+          :code
+        ])
     end
 end

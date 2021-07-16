@@ -2,10 +2,5 @@
 
 $('#dialog').modal('toggle');
 
-// Efecto de ingreso
-$('#professional_<%= @professional.id %>').hide().fadeIn(500);
-
-// Se rellena la prescripción
-$('#professional').val('<%= @professional.fullname %>');
-$('#prof_enrollment').val('<%= @professional.enrollment %>');
-$('#professional_id').val('<%= @professional.id %>');
+$("input#professional").val("<%= @professional.qualifications.first.code %> | <%= @professional.last_name %> | <%= @professional.first_name %>");
+$("#professional_id").val("<%=@professional.id%>");

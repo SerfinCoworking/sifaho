@@ -13,24 +13,20 @@
     <td><%= professional.dni %></td>
     <td><%= professional.professional_type.present? ? professional.professional_type.name : "----" %></td>
     <td class="actions-col">
-      <% if policy(professional).show? %>
-        <%= link_to professional_path(professional), class: 'btn btn-secondary btn-sm',
-              title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "eye" %>
-        <% end %>
-      <% end %>
-      <% if policy(professional).edit? %>
-        <%= link_to edit_professional_path(professional), class: 'btn btn-warning btn-sm',
-              title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "pen" %>
-        <% end %>
-      <% end %>
-      <% if policy(professional).delete? %>
-        <%= link_to delete_professional_path(professional), remote: true,
-              class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "trash" %>
-        <% end %>
-      <% end %>
+      <%= render(
+        partial: 'shared/action_buttons',
+        locals:{ 
+            object: professional, 
+            show: {visible: true, target: (show_target if defined?(show_target) )},
+            edit: {visible: true, target: (edit_target if defined?(edit_target) )},
+            destroy: {
+              visible: true, 
+              title: "Eliminar Médico",
+              body: "Esta seguro que desea eliminar la Médico #{ professional.full_name }?",
+              path: "/medicos/#{professional.id}"
+            }
+        })
+      %>
     </td>
   </div>
 </tr>
