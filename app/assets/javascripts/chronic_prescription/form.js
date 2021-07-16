@@ -74,7 +74,10 @@ $(document).on('turbolinks:load', function(e){
 
   // Función para autocompletar nombre y apellido del doctor
   $('#professional').autocomplete({
-    source: $('#professional').data('autocomplete-source'),
+    source: function(request, response) {
+      $.getJSON($('#professional').data('autocomplete-source'), { filterrific: {get_by_qualifications_and_fullname: $('#professional').val()}, keep_params: true }, 
+                response);
+    },
     minLength: 2,
     autoFocus:true,
     messages: {

@@ -69,7 +69,7 @@
                     autocomplete: false,
                     :input_html => {
                       id: "professional",
-                      data: { autocomplete_source: get_by_enrollment_and_fullname_professionals_path },
+                      data: { autocomplete_source: professionals_path },
                       value: "#{ if f.object.professional.present?; f.object.professional.full_info; end }",
                       size: 30
                     }

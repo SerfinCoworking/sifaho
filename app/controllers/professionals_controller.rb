@@ -12,17 +12,14 @@ class ProfessionalsController < ApplicationController
         sorted_by: Professional.options_for_sorted_by,
         professional_type_id: ProfessionalType.options_for_select
       },
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'created_at_desc'},
-      available_filters: [
-        :sorted_by,
-        :search_professional,
-        :search_professional_enrollment,
-        :search_dni,
-        :with_professional_type_id,
-      ],
+      persistence_id: false
     ) or return
     @professionals = @filterrific.find.page(params[:page]).per_page(15)
+    respond_to do |format|
+      format.html
+      format.js
+      format.json { render json: @professionals.map{ |doc| { id: doc.id, label: "#{doc.qualifications.first.code} #{doc.last_name} #{doc.first_name}" } } }
+    end
   end
 
   # GET /professionals/1

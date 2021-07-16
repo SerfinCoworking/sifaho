@@ -26,6 +26,7 @@ class Professional < ApplicationRecord
       :sorted_by,
       :search_professional,
       :search_professional_qualification,
+      :get_by_qualifications_and_fullname,
       :search_dni,
       :with_professional_type_id,
     ]
