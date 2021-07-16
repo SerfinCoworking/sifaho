@@ -13,7 +13,9 @@
   </div>
   <div class="col-md-4">
     <h5><strong>Matrícula: </strong></h5>
-    <%= @professional.enrollment %>
+    <% @professional.qualifications.each do |qualification| %>
+      <p> <%= "#{qualification.name} #{qualification.code}" %> </p>
+    <% end %>
     <h5><strong>Legajo: </strong></h5>
     <%= @professional.docket %>
     <h5><strong>Especialdad </strong></h5>

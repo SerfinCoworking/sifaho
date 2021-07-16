@@ -2,7 +2,7 @@
     <div class="js-fade fade-in is-paused">
     <td><%= professional.first_name %></td>
     <td><%= professional.last_name %></td>
-    <td><%= professional.enrollment? ? professional.enrollment : "---" %></td>
+    <td><%= professional.qualifications.present? ? professional.qualifications.first.code : "---" %></td>
     <% @count_pres = (professional.outpatient_prescriptions.count + professional.chronic_prescriptions.count) %>
     <td><span class="badge badge-<%=if @count_pres > 0; 'primary'; else; 'secondary'; end%>" ><%= @count_pres %></span></td>
     <td>

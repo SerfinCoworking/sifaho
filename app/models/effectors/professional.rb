@@ -25,19 +25,20 @@ class Professional < ApplicationRecord
     available_filters: [
       :sorted_by,
       :search_professional,
-      :search_professional_enrollment,
+      :search_professional_qualification,
       :search_dni,
       :with_professional_type_id,
     ]
   )
 
-  pg_search_scope :get_by_enrollment_and_fullname,
-    against: [:enrollment, :last_name, :first_name],
+  pg_search_scope :get_by_qualifications_and_fullname,
+    against: [:last_name, :first_name],
+    :associated_against => { qualifications: :code },
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
-  pg_search_scope :search_professional_enrollment,
-    against: :enrollment,
+  pg_search_scope :search_professional_qualification,
+    :associated_against => { qualifications: :code },
     :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
     :ignoring => :accents # Ignorar tildes.
 
@@ -61,7 +62,7 @@ class Professional < ApplicationRecord
       order("LOWER(professionals.last_name) #{ direction }")
     when /^matricula_/
       # Ordenamiento por matricula
-      order("professionals.enrollment #{ direction }")
+      order("LOWER(qualifications.code) #{ direction }").joins(:qualifications)
     when /^professional_type_/
       # Ordenamiento por nombre del sector
       order("LOWER(professional_types.name) #{ direction }").joins(:professional_type)

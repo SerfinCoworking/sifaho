@@ -26,7 +26,7 @@ class ChronicPrescription < ApplicationRecord
   :allow_destroy => true
   
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
-  delegate :enrollment, :fullname, to: :professional, prefix: :professional
+  delegate :qualifications, :fullname, to: :professional, prefix: :professional
 
   filterrific(
     default_filter_params: { sorted_by: 'updated_at_desc' },
@@ -219,7 +219,7 @@ class ChronicPrescription < ApplicationRecord
   
   def presence_of_products_into_the_order
     if self.original_chronic_prescription_products.size == 0
-      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")
     end
   end
 

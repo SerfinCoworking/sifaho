@@ -207,7 +207,10 @@
         <h5 class="mt-3"> <%= @professional.dni %> </h5>
 
         <h5><strong>Activo?: </strong> <%= @professional.is_active? ? "Si" : "No" %> </h5>
-        <h5><strong>Matrícula: </strong> <%= @professional.enrollment %> </h5>
+        <h5><strong>Matrículas: </strong></h5>
+        <% @professional.qualifications.each do |qualification| %>
+          <p class="mb-1"> <%= "#{qualification.name} #{qualification.code}" %> </p>
+        <% end %>
         <h5><strong>Legajo: </strong> <%= @professional.docket %> </h5>
         <h5><strong>Especialdad </strong>
           <% if @professional_type.present? %>

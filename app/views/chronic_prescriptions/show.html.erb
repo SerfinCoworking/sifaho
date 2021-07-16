@@ -36,7 +36,10 @@
                 <%= @chronic_prescription.professional_fullname %>
               <% end %>
             </p>
-            <p><strong>Matrícula: </strong><%= @chronic_prescription.professional_enrollment %></p>
+            <p class="mb-1"><strong>Matrículas: </strong>
+            <% @chronic_prescription.professional_qualifications.each do |qualification| %>
+              <p class="mb-1"> <%= "#{qualification.name} #{qualification.code}" %> </p>
+            <% end %>
           </div>
         </div> 
       </div><!-- End professional profile -->
@@ -56,8 +59,8 @@
                 <%= @chronic_prescription.patient_fullname.titleize %>
               <% end %>    
             </p>
-            <p><strong>DNI: </strong><%= @chronic_prescription.patient_dni %></p>
-            <p><strong>Edad: </strong><%= @chronic_prescription.patient_age_string %></p>
+            <p class="mb-1"><strong>DNI: </strong><%= @chronic_prescription.patient_dni %></p>
+            <p class="mb-1"><strong>Edad: </strong><%= @chronic_prescription.patient_age_string %></p>
           </div>
         </div>
       </div> <!-- End Patient profile -->

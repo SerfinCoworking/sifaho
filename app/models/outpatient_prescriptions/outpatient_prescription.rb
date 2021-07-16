@@ -28,7 +28,7 @@ class OutpatientPrescription < ApplicationRecord
     :allow_destroy => true
 
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
-  delegate :enrollment, :fullname, to: :professional, prefix: :professional
+  delegate :qualifications, :fullname, to: :professional, prefix: :professional
 
   filterrific(
     default_filter_params: { sorted_by: 'updated_at_desc' },
