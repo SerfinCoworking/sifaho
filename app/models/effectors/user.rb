@@ -8,14 +8,14 @@ class User < ApplicationRecord
 
   # Relaciones
   has_many :user_sectors
-  has_many :sectors, :through => :user_sectors
+  has_many :sectors, through: :user_sectors
   belongs_to :sector, optional: true
-  has_many :establishments, :through => :sectors
-  has_one :profile, :dependent => :destroy
-  has_one :professional, :dependent => :destroy
+  has_many :establishments, through: :sectors
+  has_one :profile, dependent: :destroy
+  has_one :professional, dependent: :destroy
   has_many :external_order_comments
-  has_many :reports, :dependent => :destroy
-  has_many :permission_requests, :dependent => :destroy
+  has_many :reports, dependent: :destroy
+  has_many :permission_requests, dependent: :destroy
   has_many :inpatient_prescription_products
 
   accepts_nested_attributes_for :profile, :professional
@@ -26,9 +26,10 @@ class User < ApplicationRecord
 
   # Delegaciones
   delegate :full_name, :first_name, :dni, :email, to: :profile
-  delegate :name, :establishment_short_name, to: :sector, prefix: :sector
-  delegate :establishment_name, to: :sector
+  delegate :name, :establishment_short_name, to: :sector, prefix: :sector, allow_nil: true
+  delegate :establishment_name, to: :sector, allow_nil: true
   delegate :establishment, to: :sector
+  delegate :full_info, to: :professional, prefix: true, allow_nil: true
 
   def create_profile
     #first_name = Devise::LDAP::Adapter.get_ldap_param("Test", "givenname").first # Uncomment in test

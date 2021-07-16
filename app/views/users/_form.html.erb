@@ -1,6 +1,23 @@
 <%= simple_form_for @user, url: update_permissions_users_admin_path, method: :put, html: { role: 'check-modified'} do |f| %>
   <%= f.error_notification %>
-  <%= f.input :sector_ids, label: 'Sectores',
+    <%= f.input :sector_id, label: 'Sector actual',
+    collection:
+      @enabled_sectors.map {
+        |sector| [sector.second, sector.first, data: {'subtext': ""+sector.third+"" }]
+      },
+    :input_html => {
+      multiple: true,
+      required: true,
+      include_blank: false,
+      class: 'selectpicker custom-select-pick',
+      "data-width"=>"100%",
+      "data-size"=>"15",
+      "title"=>"Seleccionar sector",
+      "data-live-search"=>true,
+      "data-none-results-text" => "No se encontró el sector"
+    } 
+  %>
+  <%= f.input :sector_ids, label: 'Sectores habilitados',
     collection: 
       @sectors.map {
         |sector| [sector.second, sector.first, data: {'subtext': ""+sector.third+"" }]

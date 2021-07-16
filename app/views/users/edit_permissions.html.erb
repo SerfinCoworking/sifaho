@@ -18,44 +18,39 @@
       <div class="row">
         
         <div class="col-6">
+          <div id="professional-asign">
+            <% if @user.professional.present? %>
+              <%= render 'professionals/professional_asigned', professional: @user.professional %>
+            <% else %>
+              <%= form_with url: asign_user_professionals_path, id: "update_professional", method: :post, remote: true do |f| %>
+                <label>Asignar médico</label>
+                <div class="d-flex w-100">
+                  <div class="custom-input-group w-100">
+                    <input type="text"
+                        name="professional"
+                        id="professional"
+                        class="form-control is-valid string required ui-autocomplete-input"
+                        autocomplete="off"
+                        placeholder="Matrícula | Apellido | Nombre"
+                        data-autocomplete-source="<%= get_by_unsigned_enrollment_fullname_professionals_path %>"
+                        value="">
+                    
+                    <%= f.hidden_field :professional_id, id: "professional_id", value: "" %>
+                    <div class="with-loading">
+                      <%= fa_icon 'spinner', class: "fa-spin"%>
+                    </div>
+                  </div>
+                  <button type='submit' name='commit' class='btn btn-success ml-2' form='update_professional'>
+                    <%= fa_icon 'save' %>
+                  </button>
+                </div>
+                
+                <%= f.hidden_field :user_id, id: "user_id", value: @user.id %><br>
+              <% end %>
+            <% end %>
+          </div>
           <%= render 'form', user: @user %>
         </div>
-        <div class="col-6" id="professional-asign">
-        <% if @user.professional.present? %>
-        
-          <%= render 'professionals/professional_asigned', professional: @user.professional %>
-          
-        <% else %>
-          <%= form_with url: asign_user_professionals_path, id: "update_professional", method: :post, remote: true do |f| %>
-            <div class="d-flex w-100">
-              <div class="custom-input-group w-100">
-                <input type="text"
-                    name="professional"
-                    id="professional"
-                    class="form-control is-valid string required ui-autocomplete-input"
-                    autocomplete="off"
-                    placeholder="Matrícula | Apellido | Nombre"
-                    data-autocomplete-source="<%= get_by_unsigned_enrollment_fullname_professionals_path %>"
-                    value="">
-                
-                <%= f.hidden_field :professional_id, id: "professional_id", value: "" %>
-                <div class="with-loading">
-                  <%= fa_icon 'spinner', class: "fa-spin"%>
-                </div>
-              </div>
-              <button type='submit' name='commit' class='btn btn-success ml-2' form='update_professional'>
-                <%= fa_icon 'save' %>
-              </button>
-            </div>
-            
-            <%= f.hidden_field :user_id, id: "user_id", value: @user.id %><br>
-          <% end %>
-        <% end %>
-
-        </div>
-      </div>
-      <div class="row">
-
         <div class="col-6 text-center">
           <% if @user.profile.present? %>
             <%= image_tag user_avatar(@user, 200), class:"img-thumbnail" %>
@@ -70,15 +65,15 @@
             <h5>Sin perfil</h5>
           <% end %>
           <strong>Roles activados:</strong> <%= @user.roles.map(&:name).join(", ").humanize %>.
-        </div>
-        <div class="col-6">
-          <%= render 'shared/sectors_table', sectors: @user.sectors, title: "Sectores activos" %>
+          <div class="mt-4">
+            <%= render 'shared/sectors_table', sectors: @user.sectors, title: "Sectores activos" %>
+          </div>
         </div>
       </div>
     </div>
     
     <div class="card-footer d-flex justify-content-end">
-      <%= link_to 'Volver', users_admin_index_path, class: 'btn mr-2' %>
+      <%= link_to 'Volver', users_admin_index_path, class: 'btn btn-light mr-2' %>
       <button type='submit' name='commit' class='btn btn-success' form='edit_user_<%=@user.id%>'>
         <%= fa_icon 'save' %> Guardar
       </button>

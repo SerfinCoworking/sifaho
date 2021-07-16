@@ -36,6 +36,7 @@ class UsersController < ApplicationController
   def edit_permissions
     authorize @user
     @sectors = Sector.joins(:establishment).pluck(:id, :name, "establishments.name")
+    @enabled_sectors = @user.sectors.joins(:establishment).pluck(:id, :name, "establishments.name")
     @professional = Professional.new
     if @user.has_role? :admin
       @roles = Role.all.order(:name).pluck(:id, :name)
@@ -80,4 +81,4 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:id, :sector_id, sector_ids: [], role_ids: [])
   end
-end 
+end
