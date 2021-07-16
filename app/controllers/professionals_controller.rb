@@ -49,13 +49,13 @@ class ProfessionalsController < ApplicationController
   # POST /professionals.json
   def create
     @professional = Professional.find_by(dni: professional_params[:dni])
-    authorize @professional
     respond_to do |format|
       if @professional
         format.html { redirect_to @professional }
         format.js
       else
         @professional = Professional.new(professional_params)
+        authorize @professional
         @professional.save!
         flash.now[:success] = @professional.fullname+" se ha creado correctamente."
         format.html { redirect_to @professional }
