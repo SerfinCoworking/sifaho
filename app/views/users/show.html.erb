@@ -14,8 +14,14 @@
   </div>
 
     <div class="card-body">
-      
       <div class="row">
+        <div class="col-6">
+          <h5>Perfil médico</h5>
+          <p><%= @user.professional_full_info || 'Sin perfil' %></p>
+          <h5>Sector actual</h5>
+          <p><%= "#{@user.sector_name || 'Sin sector'} #{@user.establishment_name}" %></p>
+          <%= render 'shared/sectors_table', sectors: @user.sectors, title: "Sectores habilitados" %>
+        </div>
         <div class="col-6 text-center">
           <% if @user.profile.present? %>
             <%= image_tag user_avatar(@user, 200), class:"img-thumbnail mb-2" %>
@@ -32,11 +38,7 @@
           
           <strong>Roles activados:</strong> <%= @user.roles.map(&:name).join(", ").humanize %>.
         </div>
-        <div class="col-6">
-          <%= render 'shared/sectors_table', sectors: @user.sectors, title: "Sectores activos" %>
-        </div>
       </div>
-              
     </div><!-- End panel body -->
 
   <div class="card-footer d-flex justify-content-end">

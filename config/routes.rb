@@ -309,7 +309,7 @@ Rails.application.routes.draw do
       end
       resources :bedrooms, path: :habitaciones
 
-      resources :inpatient_movements, path: :movimientos, only: [:index, :show]
+      resources :inpatient_movements, path: :movimientos, only: [:index, :show, :new, :create]
     end
   end
   

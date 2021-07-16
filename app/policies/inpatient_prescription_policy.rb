@@ -8,12 +8,12 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def new?
-    user.has_any_role?(:admin, :medico)
+    user.has_any_role?(:admin, :medico, :recetar_internacion)
   end
 
   def set_products?
     if Date.today <= record.date_prescribed
-      user.has_any_role?(:admin, :medico)
+      user.has_any_role?(:admin, :medico, :recetar_internacion)
     end
   end
 
@@ -48,7 +48,7 @@ class InpatientPrescriptionPolicy < ApplicationPolicy
 
   def destroy?
     if !record.parent_order_products.any?(&:provista?)
-      user.has_any_role?(:admin, :medico)
+      user.has_any_role?(:admin, :medico, :recetar_internacion)
     end
   end
 
