@@ -48,18 +48,18 @@ class ProfessionalsController < ApplicationController
   # POST /professionals
   # POST /professionals.json
   def create
+    @professional = Professional.find_by(dni: professional_params[:dni])
     authorize @professional
-    @professional = Professional.new(professional_params)
     respond_to do |format|
-      if @professional.save!
-        flash.now[:success] = @professional.fullname+" se ha creado correctamente."
+      if @professional
         format.html { redirect_to @professional }
         format.js
       else
-        @professional_types = ProfessionalType.all
-        flash[:error] = "El profesional no se ha podido crear."
-        format.html { render :new }
-        format.js { render layout: false, content_type: 'text/javascript' }
+        @professional = Professional.new(professional_params)
+        @professional.save!
+        flash.now[:success] = @professional.fullname+" se ha creado correctamente."
+        format.html { redirect_to @professional }
+        format.js
       end
     end
   end
