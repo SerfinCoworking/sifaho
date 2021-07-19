@@ -1,0 +1,43 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col d-flex justify-content-between align-items-center">
+      <p class="mb-0"><strong>SNOMED</strong> <small>Terminología clínica global</small></p>
+      <%= link_to "https://www.argentina.gob.ar/salud/snomed", target: :_blank, class: 'btn btn-outline-info btn-sm' do %>
+        <%= fa_icon 'external-link-alt' %>
+        Más información
+      <% end %>
+    </div>
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to snomed_concepts_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' },
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+
+    <%# CÓDIGO DE PRODUCTO %>
+    <div class="col">
+      <label>Código</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_code,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un código',
+        autocomplete: 'off',
+      ) %>
+    </div>
+
+    <%# NOMBRE DE PRODUCTO %>
+    <div class="col">
+      <label>Nombre</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_name,
+        class: 'filterrific-periodically-observed form-control input-sm',
+        placeholder: 'Un nombre',
+        autocomplete: 'off',
+      ) %>
+    </div>    
+  </div>
+<% end %>

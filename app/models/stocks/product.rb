@@ -1,13 +1,14 @@
 class Product < ApplicationRecord
   include PgSearch
-  
+
   # Relations
   belongs_to :unity
   belongs_to :area
+  belongs_to :snomed_concept, optional: true
   has_many :stocks, dependent: :destroy
   has_many :external_order_product
   has_many :patient_product_state_reports
-  
+
   # Validations
   validates_presence_of :name, :code, :area_id, :unity_id
   validates_uniqueness_of :code
@@ -15,6 +16,7 @@ class Product < ApplicationRecord
   # Delegations
   delegate :name, to: :area, prefix: true
   delegate :name, to: :unity, prefix: true
+  delegate :term, :fsn, :concept_id, :semantic_tag, to: :snomed_concept, prefix: :snomed, allow_nil: true
 
   filterrific(
     default_filter_params: { sorted_by: 'nombre_asc' },

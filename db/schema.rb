@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_133836) do
+ActiveRecord::Schema.define(version: 2021_07_16_142308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1011,8 +1011,10 @@ ActiveRecord::Schema.define(version: 2021_07_06_133836) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "area_id"
+    t.bigint "snomed_concept_id"
     t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["code"], name: "index_products_on_code", unique: true
+    t.index ["snomed_concept_id"], name: "index_products_on_snomed_concept_id"
     t.index ["unity_id"], name: "index_products_on_unity_id"
   end
 
@@ -1271,6 +1273,16 @@ ActiveRecord::Schema.define(version: 2021_07_06_133836) do
     t.index ["establishment_id"], name: "index_sectors_on_establishment_id"
   end
 
+  create_table "snomed_concepts", force: :cascade do |t|
+    t.string "concept_id"
+    t.string "term"
+    t.text "fsn"
+    t.string "semantic_tag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
+  end
+
   create_table "states", force: :cascade do |t|
     t.bigint "country_id"
     t.string "name"
@@ -1425,6 +1437,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_133836) do
   add_foreign_key "prescriptions", "patients"
   add_foreign_key "prescriptions", "professionals"
   add_foreign_key "products", "areas"
+  add_foreign_key "products", "snomed_concepts"
   add_foreign_key "products", "unities"
   add_foreign_key "professionals", "professional_types"
   add_foreign_key "quantity_ord_supply_lots", "laboratories"

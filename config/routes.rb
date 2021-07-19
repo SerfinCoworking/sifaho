@@ -440,4 +440,6 @@ Rails.application.routes.draw do
       get :delete
     end
   end
+
+  resources :snomed_concepts, only: %i[index show], path: 'snomed'
 end

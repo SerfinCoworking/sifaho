@@ -1,0 +1,32 @@
+<div class="row pl-3">
+  <div class="col-12 p-2">
+    <h5>Producto</h5><%= @product.name %>
+  </div>
+
+  <div class="col-12 p-2"> 
+    <h5>Unidad</h5>
+    <%= @product.unity_name %>
+  </div>
+
+  <div class="col-12 p-2">
+    <h5>Área</h5>
+    <%= @product.area_name %>
+  </div>
+
+  <div class="col-12 p-2">
+    <h5>Descripción</h5>
+    <%= @product.description.present? ? @product.description : "----" %>
+  </div>
+
+  <div class="col-12 p-2">
+    <h5>Observación</h5>
+    <%= @product.observation.present? ? @product.observation : "----" %>
+  </div>
+
+  <div class="col-12 p-2">
+    <h5>
+      Mi stock
+    </h5>
+    <%= @stock.present? ? @stock.quantity : '0' %>
+  </div>
+</div>

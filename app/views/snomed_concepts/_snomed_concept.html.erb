@@ -1,0 +1,18 @@
+<tr id="snomed_concept_<%= snomed_concept.id %>">
+  <td><%= snomed_concept.concept_id %></td>
+  <td><%= snomed_concept.term %></td>
+  <td class="text-left actions-col">
+    <% if policy(snomed_concept).show? %>
+      <%= link_to snomed_concept_path(snomed_concept), class: 'btn btn-secondary btn-sm',
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+    <% if policy(snomed_concept).edit? %>
+      <%= link_to edit_snomed_concept_path(snomed_concept), class: 'btn btn-warning btn-sm',
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

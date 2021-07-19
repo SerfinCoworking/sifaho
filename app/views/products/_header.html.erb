@@ -1,17 +1,25 @@
 <% content_for :title, "Productos" %>
 
 <% content_for :page_header do %>
-  <li class="nav-item <%= active_action('index') %> non-sel">
-    <%= link_to products_path, class: "nav-link #{ active_action('index') }" do %>
+  <li class="nav-item">
+    <%= link_to products_path, class: "nav-link #{ active_action_and_controller('index', 'products') }" do %>
       <%= fa_icon "pills" %>
       Productos
     <% end %>
   </li>
   <% if policy(Product).new? %>
-    <li class="nav-item <%= active_action('new') %> non-sel">
-      <%= link_to new_product_path, class: "nav-link #{ active_action('new') }" do %>
+    <li class="nav-item">
+      <%= link_to new_product_path, class: "nav-link #{ active_action_and_controller('new', 'products') }" do %>
         <%= fa_icon "plus" %>
         Agregar producto
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(SnomedConcept).index? %>
+    <li class="nav-item">
+      <%= link_to snomed_concepts_path, class: "nav-link #{ active_action_and_controller('index', 'snomed_concepts') }" do %>
+        <%= fa_icon "globe-americas" %>
+        SNOMED
       <% end %>
     </li>
   <% end %>
