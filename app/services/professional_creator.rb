@@ -7,11 +7,11 @@ class ProfessionalCreator
 
   def find_practitioner
     token = ENV['ANDES_FHIR_TOKEN']
-    url = ENV['ANDES_FHIR_URL']
+    url = "#{ENV['ANDES_FHIR_URL']}/practitioner"
     @practitioners = RestClient::Request.execute( method: :get,
                                                   url: url,
                                                   timeout: 30,
-                                                  headers: {
+                                                    headers: {
                                                     'Authorization' => "Bearer #{token}",
                                                     params: { 'given': @first_name, 'family': @last_name }
                                                   }
