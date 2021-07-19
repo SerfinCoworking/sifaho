@@ -47,15 +47,15 @@
       <input type="checkbox" name="professional-status" data-toggle="switchbutton" <%= (f.object.is_active.present? ? "checked" : true) %> data-onlabel="Activo" data-offlabel="Inactivo" data-onstyle="success" data-offstyle="danger">
     <% end %>
 
-    <%= link_to new_professional_path(id: @professional), class: "btn btn-primary btn-sm", remote: 'true',
-      title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-      Válidar
-      <%= fa_icon "check" %>
-    <% end %>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', professionals_path, class: 'btn mr-2' %>
+    <%= link_to new_professional_path(id: @professional), class: "btn btn-primary mr-2", remote: 'true',
+      title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+      Validar
+      <%= fa_icon "check" %>
+    <% end %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @professional.new_record? ? 'new_professional' : 'edit_professional_' + @professional.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
