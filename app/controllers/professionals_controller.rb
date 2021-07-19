@@ -35,7 +35,7 @@ class ProfessionalsController < ApplicationController
   # GET /professionals/new
   def new
     authorize Professional
-    @professional = Professional.new
+    @professional = params[:id].present? ? Professional.find(params[:id]) : Professional.new
     @professional_types = ProfessionalType.all
   end
 
@@ -54,10 +54,16 @@ class ProfessionalsController < ApplicationController
         format.html { redirect_to @professional }
         format.js
       else
-        @professional = Professional.new(professional_params)
-        authorize @professional
-        @professional.save!
-        flash.now[:success] = @professional.fullname+" se ha creado correctamente."
+        if professional_params[:id].present?
+          @professional = Professional.find(professional_params[:id])
+          @professional.update(professional_params)
+          flash.now[:success] = "#{@professional.fullname} se ha actualizado correctamente."
+        else
+          @professional = Professional.new(professional_params)
+          authorize @professional
+          @professional.save!
+          flash.now[:success] = "#{@professional.fullname} se ha creado correctamente."
+        end
         format.html { redirect_to @professional }
         format.js
       end
@@ -70,11 +76,11 @@ class ProfessionalsController < ApplicationController
     authorize @professional
     respond_to do |format|
       if @professional.update(professional_params)
-        flash[:success] = @professional.fullname+" se ha modificado correctamente."
+        flash[:success] = "#{@professional.fullname} se ha modificado correctamente."
         format.html { redirect_to @professional }
       else
         @professional_types = ProfessionalType.all
-        flash[:error] = @professional.fullname+" no se ha podido modificar."
+        flash[:error] = "#{@professional.fullname} no se ha podido modificar."
         format.html { redirect_to @professional }
       end
     end
@@ -138,6 +144,8 @@ class ProfessionalsController < ApplicationController
         :enrollment,
         :professional_type_id,
         :is_active,
+        :fullname,
+        :sex,
         qualifications_attributes: [
           :professional_id,
           :name,

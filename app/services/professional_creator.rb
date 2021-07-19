@@ -2,6 +2,10 @@ class ProfessionalCreator
   def initialize(param)
     @first_name = param[:first_name]
     @last_name = param[:last_name]
+    @id = param[:id] || ''
+
+    puts "===================="
+    puts @id
   end
 
   def find_practitioner
@@ -24,7 +28,8 @@ class ProfessionalCreator
       enrollments = doc['qualification'].map do |qual|
         { name: qual['identifier'][0]['value'], code: qual['code']['text'] } if qual['identifier'].present?
       end
-      { first_name: first_name,
+      { id: @id,
+        first_name: first_name,
         last_name: last_name,
         fullname: "#{last_name} #{first_name}",
         dni: dni,

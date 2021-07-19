@@ -1,7 +1,7 @@
 class Professional < ApplicationRecord
   include PgSearch
   
-  enum sex: { indeterminado: 1, mujer: 2, hombre: 3 }
+  enum sex: { indeterminate: 1, female: 2, male: 3 }
 
   after_create :assign_full_name
 

@@ -1,6 +1,6 @@
 <tr id="chronic_prescription_<%= chronic_prescription.id %>">
   <td><%= chronic_prescription.remit_code %></th>
-  <td class="pres-col-pro"><%= chronic_prescription.professional.full_name %></td>
+  <td class="pres-col-pro"><%= chronic_prescription.professional.fullname %></td>
   <%# Si esta definida la variable y esta en true debemos ocultar el campo%>
   <% if !defined?(hide_patient) || (defined?(hide_patient) && !hide_patient) %>
     <td class="pres-col-pat"><%= chronic_prescription.patient.full_info %></td>
@@ -43,7 +43,7 @@
             destroy: {
               visible: true, 
               title: "Eliminar prescripción",
-              body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.full_name }?",
+              body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.fullname }?",
               path: "/recetas_cronicas/#{chronic_prescription.id}"
             }
             

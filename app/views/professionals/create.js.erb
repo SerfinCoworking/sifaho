@@ -2,5 +2,13 @@
 
 $('#dialog').modal('toggle');
 
-$("input#professional").val("<%= @professional.qualifications.first.code %> | <%= @professional.last_name %> | <%= @professional.first_name %>");
-$("#professional_id").val("<%=@professional.id%>");
+if($("#edit_professional_<%= @professional.id %>").is(":visible")){
+  console.log("DEBUG========================== form visible");
+  $("#edit_professional_<%= @professional.id %>").find("#professional_first_name").val("<%= @professional.first_name %>");
+  $("#edit_professional_<%= @professional.id %>").find("#professional_last_name").val("<%= @professional.last_name %>");
+  $("#edit_professional_<%= @professional.id %>").find("#professional_dni").val("<%= @professional.dni %>");
+}
+else{
+  $("input#professional").val("<%= @professional.qualifications.first.code %> | <%= @professional.last_name %> | <%= @professional.first_name %>");
+  $("#professional_id").val("<%= @professional.id %>");
+}

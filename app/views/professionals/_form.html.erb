@@ -14,7 +14,7 @@
 
     <%= simple_form_for @professional, html: {class: "", role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
-      <%= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
+      <%#= f.input :enrollment, placeholder: '1234', required: true, label: 'Matrícula', input_html: { min: '1000', max:'9999' } %>
       <%= f.input :first_name, placeholder: 'Juan', required: true, label: 'Nombres' %>
       <%= f.input :last_name, placeholder: 'Perez', required: true, label: 'Apellidos' %>
       <%= f.input :dni, placeholder: '12345678', required: false, label: 'DNI', input_html: { min: '10000', max:'99999999' } %>
@@ -47,6 +47,11 @@
       <input type="checkbox" name="professional-status" data-toggle="switchbutton" <%= (f.object.is_active.present? ? "checked" : true) %> data-onlabel="Activo" data-offlabel="Inactivo" data-onstyle="success" data-offstyle="danger">
     <% end %>
 
+    <%= link_to new_professional_path(id: @professional), class: "btn btn-primary btn-sm", remote: 'true',
+      title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+      Válidar
+      <%= fa_icon "check" %>
+    <% end %>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
