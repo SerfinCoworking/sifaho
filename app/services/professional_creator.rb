@@ -6,8 +6,8 @@ class ProfessionalCreator
   end
 
   def find_practitioner
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNmUzODFlODdlMTcwZTEwOTZhNzc2ZCIsImFwcCI6eyJpZCI6IjVmNmUzNjM1M2ZiNDkyMDlkMDEzOWQ5ZSIsIm5vbWJyZSI6IlNJRkhBTyJ9LCJvcmdhbml6YWNpb24iOnsiaWQiOiI1OTM4MDE1M2RiOGU5MGZlNDYwMmVjMDIiLCJub21icmUiOiJTSUZIQU8ifSwicGVybWlzb3MiOlsidXNlci9Pcmdhbml6YXRpb24ucmVhZCIsInVzZXIvUHJhY3RpdGlvbmVyLnJlYWQiLCJ1c2VyL1BhdGllbnQucmVhZCJdLCJhY2NvdW50X2lkIjpudWxsLCJ0eXBlIjoiYXBwLXRva2VuIiwiaWF0IjoxNjAxMDU4ODQ2fQ.OoW0qT83sanFwcbp2VFr1C0HxG79fNVYrVwtFAyvR7w'
-    url = 'https://fhir.andes.gob.ar/4_0_0/practitioner'
+    token = ENV['ANDES_FHIR_TOKEN']
+    url = ENV['ANDES_FHIR_URL']
     @practitioners = RestClient::Request.execute( method: :get,
                                                   url: url,
                                                   timeout: 30,
