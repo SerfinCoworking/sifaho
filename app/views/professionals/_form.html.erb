@@ -27,10 +27,12 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', professionals_path, class: 'btn mr-2' %>
-    <%= link_to new_professional_path(id: @professional), class: "btn btn-primary mr-2", remote: 'true',
-      title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
-      Validar
-      <%= fa_icon "check" %>
+    <% unless @professional.new_record? %>
+      <%= link_to new_professional_path(id: @professional), class: "btn btn-primary mr-2", remote: 'true',
+        title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
+        Validar
+        <%= fa_icon "check" %>
+      <% end %>
     <% end %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @professional.new_record? ? 'new_professional' : 'edit_professional_' + @professional.id.to_s %>">
       <%= fa_icon 'save' %> Guardar

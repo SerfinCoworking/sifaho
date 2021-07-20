@@ -19,7 +19,10 @@ $("#dialog").on('show.bs.modal', function(){
   
   $("input#last-name, input#first-name").on('keyup', function(e){
     if(e.target.value.length > 2 || e.target.value.length == 0){
+      $("#loading-icon").show();
       $(e.target).closest('form').submit();
+    }else{
+      $("#loading-icon").hide();
     }
   });
 
@@ -42,6 +45,7 @@ $("#dialog").on('show.bs.modal', function(){
       },
       success: function(data) {
         // Success
+        $("#loading-icon").hide();
         $('#professionals-list').html(data);
         $('[data-toggle="tooltip"]').tooltip({
           'selector': '',

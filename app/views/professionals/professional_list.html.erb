@@ -1,5 +1,5 @@
 <p>Seleccione uno de los siguientes médicos:</p>
-<ul class="list-group list-group-hovered">
+<ul class="list-group list-group-hovered practitioner-list">
   <% @professionals.each do |item| %>
     <li class="list-group-item p-2 d-flex align-items-center justify-content-between">
       <span><%= item[:fullname] %> | <%= item[:dni] %> | MP <%= item[:qualifications_attributes][0][:code] %></span>

@@ -1,11 +1,13 @@
 class ProfessionalCreator
   def initialize(param)
-    @first_name = param[:first_name]
-    @last_name = param[:last_name]
+    @first_name = param[:first_name] || ''
+    @last_name = param[:last_name] || ''
     @id = param[:id] || ''
   end
 
   def find_practitioner
+    return [] if @first_name.empty? && @last_name.empty?
+
     token = ENV['ANDES_FHIR_TOKEN']
     url = "#{ENV['ANDES_FHIR_URL']}/practitioner"
     @practitioners = RestClient::Request.execute( method: :get,
