@@ -1,2 +1,2 @@
 <label>Perfil médico</label>
-<p><%= "#{professional.full_name} #{professional.dni} | Matrícula: #{professional.enrollment}" %> </p>
+<p><%= "#{professional.full_name} #{professional.dni} | Matrícula: #{professional.qualifications.first.code}" %> </p>

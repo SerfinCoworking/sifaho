@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_15_151600) do
+ActiveRecord::Schema.define(version: 2021_07_20_110040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1025,7 +1025,6 @@ ActiveRecord::Schema.define(version: 2021_07_15_151600) do
     t.string "last_name", limit: 50
     t.string "fullname", limit: 102
     t.integer "dni"
-    t.string "enrollment", limit: 20
     t.string "email"
     t.string "phone"
     t.integer "sex", default: 1

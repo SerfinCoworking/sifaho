@@ -80,6 +80,14 @@ class Professional < ApplicationRecord
   
   scope :without_user_asigned, -> { where(user_id: :nil) }
 
+  def qualifications_attributes=(attributes)
+    attributes.each do |attr|
+      qualification = Qualification.find_by(code: attr[:code])
+      attr[:id] = qualification.id if qualification.present?
+    end
+    super
+  end
+
   def full_name
     self.fullname
   end

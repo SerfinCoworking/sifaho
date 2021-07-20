@@ -48,25 +48,20 @@ class ProfessionalsController < ApplicationController
   # POST /professionals
   # POST /professionals.json
   def create
-    @professional = Professional.find_by(dni: professional_params[:dni])
+    @professional = Professional.find(professional_params[:id])
     respond_to do |format|
       if @professional
-        format.html { redirect_to @professional }
-        format.js
+        @professional = Professional.find(professional_params[:id])
+        @professional.update(professional_params)
+        flash.now[:success] = "#{@professional.fullname} se ha actualizado correctamente."
       else
-        if professional_params[:id].present?
-          @professional = Professional.find(professional_params[:id])
-          @professional.update(professional_params)
-          flash.now[:success] = "#{@professional.fullname} se ha actualizado correctamente."
-        else
-          @professional = Professional.new(professional_params)
-          authorize @professional
-          @professional.save!
-          flash.now[:success] = "#{@professional.fullname} se ha creado correctamente."
-        end
-        format.html { redirect_to @professional }
-        format.js
+        @professional = Professional.new(professional_params)
+        authorize @professional
+        @professional.save!
+        flash.now[:success] = "#{@professional.fullname} se ha creado correctamente."
       end
+      format.html { redirect_to @professional }
+      format.js
     end
   end
 

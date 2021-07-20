@@ -1,0 +1,39 @@
+<%= form_for_filterrific @filterrific do |f| %>
+  <div class="row justify-content-between">
+    <div class="col-1 d-flex justify-content-end align-items-center">
+      <%= render_filterrific_spinner %>
+      <%= link_to professionals_path(reset: true), class: 'btn btn-secondary ml-2',
+        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+        <%= fa_icon 'redo' %>
+      <% end %>
+    </div>
+    <div class="col">
+      <label>Buscar</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_professional,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Nombre o apellido',
+        autocomplete: 'off'
+      ) %>
+    </div>
+    <div class="col">
+      <label>Buscar</label>
+      <%# give the search field the 'filterrific-periodically-observed' class for live updates %>
+      <%= f.text_field(
+        :search_professional_qualification,
+        class: 'filterrific-periodically-observed form-control',
+        placeholder: 'Matrícula'
+      ) %>
+    </div>
+    <div class="col">
+      <label>Buscar</label>
+      <%= f.text_field(
+        :search_dni,
+        class: 'filterrific-periodically-observed form-control',
+          placeholder: 'DNI'
+          ) %>
+    </div>
+  </div>
+<% end %>
