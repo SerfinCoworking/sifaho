@@ -1,6 +1,7 @@
 <tr id="snomed_concept_<%= snomed_concept.id %>">
   <td><%= snomed_concept.concept_id %></td>
   <td><%= snomed_concept.term %></td>
+  <td><%= snomed_concept.products %></td>
   <td class="text-left actions-col">
     <% if policy(snomed_concept).show? %>
       <%= link_to snomed_concept_path(snomed_concept), class: 'btn btn-secondary btn-sm',

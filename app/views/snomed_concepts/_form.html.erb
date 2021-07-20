@@ -1,56 +1,30 @@
 
 <div class="card fixed-custom-card">
-  <div class="card-header <%= @product.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+  <div class="card-header <%= @snomed_concept.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
-      <%= fa_icon (@product.new_record? ?  "plus" : "edit")%>
+      <%= fa_icon (@snomed_concept.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @product.new_record? ? "Agregar producto" : "Editando producto" %>
+        <%= @snomed_concept.new_record? ? "Agregar" : "Editando" %> concepto SNOMED
       </h5>
     </div>
-    <%= link_to :back, class: @product.new_record? ? 'btn text-white' : 'btn' do %>
+    <%= link_to :back, class: @snomed_concept.new_record? ? 'btn text-white' : 'btn' do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
   <div class="card-body">
-    <%= simple_form_for @product, html: { role: 'check-modified'} do |f| %>
+    <%= simple_form_for @snomed_concept, html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
-        <div class="col-12">
-          <%= f.input :code, label: 'Código', required: true, placeholder: "Ej: 1234", input_html: {size: 20} %>
-          <%= f.input :name, label: 'Nombre de insumo', placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg',
-              required: true, size: 50, autocomplete: 'off' %>
-          <%= f.input :unity_id, label: 'Unidad',
-            collection:
-              @unities.map { |unity| [unity.name, unity.id] },
-            :input_html => {
-              required: true,
-              include_blank: false,
-              class: 'selectpicker custom-select-pick',
-              "data-width"=>"100%",
-              "data-size"=>"15",
-              "title"=>"Seleccionar unidad",
-              "data-live-search"=>true,
-              "data-none-results-text" => "No se encontró la unidad"
-            }
-          %>
-          <%= f.input :area_id, label: 'Rubro',
-            collection:
-              @areas,
-            :input_html => {
-              required: true,
-              include_blank: false,
-              class: 'selectpicker custom-select-pick',
-              "data-width"=>"100%",
-              "data-size"=>"15",
-              "title"=>"Seleccionar rubro",
-              "data-live-search"=>true,
-              "data-none-results-text" => "No se encontró el rubro"
-            }
-          %>
-          <%= f.input :description, label: 'Descripción', as: :text,
-            :input_html => { :cols => 50, :rows => 2 } %>
-          <%= f.input :observation, label: 'Observación', as: :text,
-            :input_html => { :cols => 50, :rows => 2 } %>
+        <div class="col-6">
+          <%= f.input :search_concept, as: :fake, label: 'Buscar concepto', 
+            input_html: { placeholder: 'Ingrese un concepto', class: 'search-concept' } %>
+        </div>
+        <div class="col-6 border-left">
+          <h5>Concepto a agregar</h5>
+          <%= f.input :concept_id, label: 'Código', input_html: { readOnly: true, placeholder: "Ej: 1234" } %>
+          <%= f.input :term, label: 'Concepto', input_html: { readOnly: true, placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg' } %>
+          <%= f.input :fsn, label: 'Descripción', input_html: { readOnly: true, placeholder: "Una descripción" } %>
+          <%= f.input :semantic_tag, label: 'Categoría', input_html: { readOnly: true, placeholder: "Ej: Fármaco de uso clínico" } %>
         </div>
       </div>
     <% end %>
@@ -59,7 +33,7 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', products_path, class: 'btn mr-2' %>
-    <button type='submit' name='commit' class='btn btn-success' form="<%= @product.new_record? ? 'new_product' : 'edit_product_' + @product.id.to_s %>">
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @snomed_concept.new_record? ? 'new_product' : 'edit_product_' + @snomed_concept.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
   </div>

@@ -441,5 +441,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :snomed_concepts, only: %i[index show], path: 'snomed'
+  resources :snomed_concepts, path: 'snomed'
 end
