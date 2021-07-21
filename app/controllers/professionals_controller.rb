@@ -37,6 +37,9 @@ class ProfessionalsController < ApplicationController
     authorize Professional
     @professional = params[:id].present? ? Professional.find(params[:id]) : Professional.new
     @professional_types = ProfessionalType.all
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /professionals/1/edit
@@ -48,10 +51,10 @@ class ProfessionalsController < ApplicationController
   # POST /professionals
   # POST /professionals.json
   def create
-    @professional = Professional.find(professional_params[:id])
+    @professional = Professional.find(professional_params[:id]) if professional_params[:id].present?
+    @professional = Professional.find_by(dni: professional_params[:dni]) unless @professional.present?
     respond_to do |format|
-      if @professional
-        @professional = Professional.find(professional_params[:id])
+      if @professional.present?
         @professional.update(professional_params)
         flash.now[:success] = "#{@professional.fullname} se ha actualizado correctamente."
       else

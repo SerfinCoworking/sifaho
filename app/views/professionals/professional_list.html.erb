@@ -3,7 +3,7 @@
   <% @professionals.each do |item| %>
     <li class="list-group-item p-2 d-flex align-items-center justify-content-between">
       <span><%= item[:fullname] %> | <%= item[:dni] %> | MP <%= item[:qualifications_attributes][0][:code] %></span>
-      <%= link_to professionals_path(professional: item), method: :POST, remote: true, class: "btn btn-sm btn-success", data: { toggle: "tooltip", placement: "top" },
+      <%= link_to professionals_path(professional: item), method: :POST, remote: true, class: "btn btn-sm btn-success", data: { toggle: "tooltip", placement: "left" },
         title: "Seleccionar" do %>
         <%= fa_icon "check" %>
       <% end %>
