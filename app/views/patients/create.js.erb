@@ -1,7 +1,8 @@
 <%= render 'shared/flash_message' %>
 // Obtenemos las recetas
 $("#patient-lastname").val('<%= @patient.last_name %>').attr('readonly', true);
-$("#patient-firstname").val('<%= @patient.last_name %>').attr('readonly', true);
+$("#patient-firstname").val('<%= @patient.first_name %>').attr('readonly', true);
+$("#patient-id").val('<%= @patient.id %>');
 
 const image = new Image();
 image.src = "<%= @patient.avatar.attached? ? url_for(@patient.avatar) : asset_path('profile-placeholder.jpg') %>"

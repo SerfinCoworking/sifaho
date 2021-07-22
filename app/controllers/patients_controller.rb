@@ -203,15 +203,15 @@ class PatientsController < ApplicationController
 
     @state = State.find_by(name: address_param[:state_name], country_id: @country.id)
     @state = State.create(name: address_param[:state_name], country_id: @country.id) unless @state.present?
-    
+
     @city = City.find_by(name: address_param[:city_name], state_id: @state.id)
     @city = City.create(name: address_param[:city_name], state_id: @state.id) unless @city.present?
 
-    @address = Address.create(postal_code: address_param[:postal_code], 
-      line: address_param[:line], 
-      city_id: @city.id, 
-      country_id: @country.id, 
-      state_id: @state.id)
+    @address = Address.create(postal_code: address_param[:postal_code],
+                              line: address_param[:line],
+                              city_id: @city.id,
+                              country_id: @country.id,
+                              state_id: @state.id)
 
     return @address
   end

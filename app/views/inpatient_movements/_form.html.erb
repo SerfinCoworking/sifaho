@@ -94,6 +94,7 @@
                     id="patient-dni" 
                     data-autocomplete-source="<%= get_by_dni_patients_path %>" 
                     data-insurance-url="<%= get_insurance_path %>" 
+                    data-create-url="<%= patients_path() %>"
                     name="patient[dni]"
                     value="" 
                     required="" 
@@ -128,24 +129,6 @@
                 </select>
                 <input class="form-control string patient-form-input" id="patient-sex-fake"  type="text" autocomplete="off" name="patient-sex-fake" readonly="readonly" value="Otro">
               </div>
-
-              <input id="patient-status" name="patient[status]" type="hidden">
-              <%# campos de paciente con datos de Andes %>
-              <input id="patient-birthdate" class="andes-input" name="patient[birthdate]" type="hidden">
-              <input id="patient-marital-status" class="andes-input" name="patient[marital_status]" type="hidden">
-              
-              <div id="patient-phones"></div>
-
-              <input id="patient-email" class="andes-input" name="patient[email]" type="hidden">
-              <input id="patient-postal-code" class="andes-input" name="patient[address][postal_code]" type="hidden">
-              <input id="patient-line" class="andes-input" name="patient[address][line]" type="hidden">
-              <input id="patient-city-name" class="andes-input" name="patient[address][city_name]" type="hidden">
-              <input id="patient-state-name" class="andes-input" name="patient[address][state_name]" type="hidden">
-              <input id="patient-country-name" class="andes-input" name="patient[address][country_name]" type="hidden">
-              <input id="patient-andes-id" class="andes-input" name="patient[andes_id]" type="hidden">
-              <input id="patient-andes-photo" class="andes-input" name="patient[photo_andes_id]" type="hidden">
-
-
             <% end %>
           </div>
           <div class="col-6 h-100 fade" id="container-more-info">

@@ -29,62 +29,80 @@ $(document).on('turbolinks:load', function(e){
         $("#patient-dni").val(ui.item.dni);
         $("#patient-lastname").val(ui.item.lastname).attr('readonly', true);
         $("#patient-firstname").val(ui.item.firstname).attr('readonly', true);
-        
+        setPatientSex(ui.item.sex);
         if(ui.item.create){
-          $(".andes-input").removeAttr('disabled');
-          const status = ui.item.status.charAt(0).toUpperCase() + ui.item.status.slice(1)
-          $("#patient-status").val(status);
-          
-          // Datos del paciente rellenados con Andes
-          $("#patient-birthdate").val(ui.item.data.fechaNacimiento);
-          $("#patient-marital-status").val(capitalize(ui.item.data.estadoCivil));
-
+          const patientCreateUrl = $("#patient-dni").attr("data-create-url");
+          const status = ui.item.status.charAt(0).toUpperCase() + ui.item.status.slice(1);
+          const contacts = [];
+          let patient_email = "";
+          const address = {
+            country_name: "",
+            state_name: "",
+            city_name: "",
+            postal_code: "",
+            line: ""
+          };
           for(let index = 0; ui.item.data.contacto.length > index; index++){
             if(['celular', 'fijo'].includes(ui.item.data.contacto[index].tipo)){
-
-              const phoneType = $("<input>");
-              $(phoneType).attr('id', 'patient-phone-type-'+index)
-              .attr('name', 'patient[patient_phones_attributes]['+index+'[phone_type]')
-              .attr('type', 'hidden')
-              .val(ui.item.data.contacto[index].tipo);
-              
-              const phoneNumber = $("<input>");
-              $(phoneNumber).attr('id', 'patient-phone-number-'+index)
-              .attr('name', 'patient[patient_phones_attributes]['+index+'][number]')
-              .attr('type', 'hidden')
-              .val(ui.item.data.contacto[index].valor);
-              $("#patient-phones").append(phoneType, phoneNumber);
+              contacts.push({
+                phone_type: ui.item.data.contacto[index].tipo,
+                number: ui.item.data.contacto[index].valor
+              });
             }else if(['email'].includes(ui.item.data.contacto[index].tipo)){
-              $("#patient-email").val(ui.item.data.contacto[index].valor);
+              patient_email = ui.item.data.contacto[index].valor;
             }
           };
 
           // viene direccion
           if(ui.item.data.direccion.length){
-            $("#patient-postal-code").val(ui.item.data.direccion[0].codigoPostal);
-            $("#patient-line").val(ui.item.data.direccion[0].valor);
+            address.postal_code = ui.item.data.direccion[0].codigoPostal;
+            address.line = ui.item.data.direccion[0].valor;
             // viene ubicacion
             if(ui.item.data.direccion[0].ubicacion){
               // viene localidad
               if(ui.item.data.direccion[0].ubicacion.localidad){  
-                $("#patient-city-name").val(ui.item.data.direccion[0].ubicacion.localidad.nombre);
+                address.city_name = ui.item.data.direccion[0].ubicacion.localidad.nombre;
               }
               // viene provincia
               if(ui.item.data.direccion[0].ubicacion.provincia){
-                $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
+                address.state_name = ui.item.data.direccion[0].ubicacion.provincia.nombre;
               }
               // viene pais
               if(ui.item.data.direccion[0].ubicacion.pais){
-                $("#patient-state-name").val(ui.item.data.direccion[0].ubicacion.provincia.nombre);
-                $("#patient-country-name").val(ui.item.data.direccion[0].ubicacion.pais.nombre);
+                address.state_name = ui.item.data.direccion[0].ubicacion.provincia.nombre;
+                address.country_name = ui.item.data.direccion[0].ubicacion.pais.nombre;
               }
             }
           }
-          $("#patient-andes-id").val(ui.item.data._id);
-          $("#patient-andes-photo").val(ui.item.data.fotoId);
-          
-          
-          
+
+          const patient = {
+            first_name: ui.item.firstname,
+            last_name: ui.item.lastname,
+            dni: ui.item.dni,
+            email: patient_email,
+            birthdate: ui.item.data.fechaNacimiento,
+            sex: "",
+            marital_status: capitalize(ui.item.data.estadoCivil),
+            status: status,
+            address: address,
+            andes_id: ui.item.data._id,
+            patient_phones_attributes: [ ...contacts ],
+            photo_andes_id: ui.item.data.fotoId 
+          };
+          const sex = $("#patient-sex").val();
+          patient.sex = sex;
+          // ajax create patient
+         
+
+          $.ajax({
+            url: patientCreateUrl,
+            method: 'POST',
+            dataType: "script",
+            data: {
+              patient: patient
+            }
+          });
+
         }else{
           $("#patient-status").val(ui.item.status);
         }
@@ -100,7 +118,7 @@ $(document).on('turbolinks:load', function(e){
         $(image).addClass("patient-avatar");
         $("#patient-avatar").html(image);
         
-        setPatientSex(ui.item.sex);      
+        
         $("#container-more-info").addClass("show");
         $("#container-receipts-list").addClass("show");
       }else{
@@ -108,6 +126,7 @@ $(document).on('turbolinks:load', function(e){
         $("#container-more-info").removeClass("show");
         $("#container-receipts-list").removeClass("show");
       }
+      
       const url = $('#patient-dni').attr('data-insurance-url');
       getInsurances(url, ui.item.dni);
       setPatientPrescriptions(ui.item.create, ui.item.id);
