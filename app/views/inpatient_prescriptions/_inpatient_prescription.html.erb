@@ -52,7 +52,7 @@
             destroy: {
               visible: true, 
               title: "Eliminar prescripción",
-              body: "Esta seguro que desea eliminar la prescripción de #{ inpatient_prescription.prescribed_by.professional.fullname }?",
+              body: "Esta seguro que desea eliminar la prescripción de #{ inpatient_prescription.patient.fullname }?",
               path: "/internacion/#{inpatient_prescription.id}"
             }
         }

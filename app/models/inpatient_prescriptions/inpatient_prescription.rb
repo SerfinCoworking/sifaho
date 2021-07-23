@@ -12,7 +12,7 @@ class InpatientPrescription < ApplicationRecord
 
   # Relations
   belongs_to :patient
-  belongs_to :prescribed_by, class_name: 'User'
+  belongs_to :prescribed_by, class_name: 'User', optional: true
   belongs_to :bed
 
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: 'order_id'
@@ -32,7 +32,7 @@ class InpatientPrescription < ApplicationRecord
 
   # Validaciones
   validates_associated :order_products
-  validates :prescribed_by, presence: true
+  # validates :prescribed_by, presence: true
   validates :patient, presence: true
   validates :remit_code, uniqueness: true
   validates_presence_of :date_prescribed, :patient_id, :bed_id

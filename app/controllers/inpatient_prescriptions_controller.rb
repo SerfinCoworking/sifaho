@@ -52,7 +52,7 @@ class InpatientPrescriptionsController < ApplicationController
   def create
     @inpatient_prescription = InpatientPrescription.new(inpatient_prescription_params)
     authorize @inpatient_prescription
-    @inpatient_prescription.prescribed_by = current_user
+    @inpatient_prescription.prescribed_by = current_user if current_user.professional.present?
     respond_to do |format|
       if @inpatient_prescription.save
         @inpatient_prescription.create_notification(current_user, 'creó')
