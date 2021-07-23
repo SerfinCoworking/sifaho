@@ -12,19 +12,46 @@
     <% end %>
   </div>
   <div class="card-body">
-    <%= simple_form_for @snomed_concept, html: { role: 'check-modified'} do |f| %>
+    <%= simple_form_for @snomed_concept, html: { role: 'check-modified',  class: 'h-100' } do |f| %>
       <%= f.error_notification %>
-      <div class="row">
-        <div class="col-6">
-          <%= f.input :search_concept, as: :fake, label: 'Buscar concepto', 
-            input_html: { placeholder: 'Ingrese un concepto', class: 'search-concept' } %>
+      <div class="row h-100">
+        <div class="col-6 h-100">
+          <div class="form-group">
+            <label for="search-concept" class="col-form-label">Buscar concepto:</label>
+            <div class="custom-input-group">
+              <!--
+              <%= f.input :search_concept, as: :fake, label: 'Buscar concepto', 
+                input_html: { placeholder: 'Ingrese un concepto', id: 'search-concept', class: 'w-100',
+                  data: { snomed_search_url: find_new_snomed_concepts_path } 
+                } %>
+              -->
+              <div class="form-group string required chronic_prescription_patient">
+                <input class="form-control" 
+                  id="search-concept"
+                  data-snomed-search-url="<%= find_new_snomed_concepts_path %>"  
+                  placeholder="Ingrese un concepto" 
+                  type="text"
+                  autocomplete="off"
+                  autofocus>
+              </div>
+              <div class="with-loading">
+                <%= fa_icon 'circle-notch', class: "fa-spin"%>
+              </div>
+            </div>
+          </div>
+          <div class="row overflow-auto pl-2" id="concepts-list">
+          </div>
         </div>
         <div class="col-6 border-left">
           <h5>Concepto a agregar</h5>
-          <%= f.input :concept_id, label: 'Código', input_html: { readOnly: true, placeholder: "Ej: 1234" } %>
-          <%= f.input :term, label: 'Concepto', input_html: { readOnly: true, placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg' } %>
-          <%= f.input :fsn, label: 'Descripción', input_html: { readOnly: true, placeholder: "Una descripción" } %>
-          <%= f.input :semantic_tag, label: 'Categoría', input_html: { readOnly: true, placeholder: "Ej: Fármaco de uso clínico" } %>
+          <%= f.input :concept_id, label: 'Código', input_html: { readOnly: true, 
+            placeholder: "Ej: 1234", id: 'concept-id' } %>
+          <%= f.input :term, label: 'Concepto', input_html: { readOnly: true, 
+            placeholder: 'Ej: CITRATO DE CLOMIFENO Comp. 50 mg', id: 'term' } %>
+          <%= f.input :fsn, label: 'Descripción', input_html: { readOnly: true, placeholder: "Una descripción",
+            id: 'fsn' } %>
+          <%= f.input :semantic_tag, label: 'Categoría', input_html: { readOnly: true, 
+            placeholder: "Ej: Fármaco de uso clínico", id: 'semantic-tag' } %>
         </div>
       </div>
     <% end %>
@@ -33,7 +60,7 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', products_path, class: 'btn mr-2' %>
-    <button type='submit' name='commit' class='btn btn-success' form="<%= @snomed_concept.new_record? ? 'new_product' : 'edit_product_' + @snomed_concept.id.to_s %>">
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @snomed_concept.new_record? ? 'new_snomed_concept' : 'edit_snomed_concept_' + @snomed_concept.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>
   </div>

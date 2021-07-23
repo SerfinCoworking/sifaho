@@ -1,0 +1,13 @@
+<div class="list-group">
+  <p><%= @result.size %> resultados: </p>
+  <% @result.each do |concept| %>
+    <button type="button"
+            class="complete-concept list-group-item list-group-item-action"
+            data-concept-id="<%= concept['conceptId']%>"
+            data-term="<%= concept['term'] %>" 
+            data-fsn="<%= concept['fsn'] %>" 
+            data-semantic-tag="<%= concept['semanticTag'] %>">
+      <%= highlight(concept['term'], @searched_term.split) %>
+    </button>
+  <% end %>
+</div>

@@ -1,4 +1,5 @@
 class SnomedConceptsController < ApplicationController
+  before_action :set_snomed_concept, only: %i[show edit update delete]
 
   def index
     authorize SnomedConcept
@@ -55,11 +56,43 @@ class SnomedConceptsController < ApplicationController
     end
   end
 
+  def find_new
+    # @results = AndesServices::FindSnomedConcept.new(params).call
+    @searched_term = params[:term]
+    @result = JSON.parse(RestClient::Request.execute(method: :get, url: "#{ENV['ANDES_SNOMED_URL']}/",
+                                          timeout: 120, headers: {
+                                            params: { 'search': params[:term], 'semanticTag': 'fármaco de uso clínico' }
+                                          }))
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def destroy
     authorize @snomed_concept
-
+    @snomed_concept.destroy
     respond_to do |format|
-      format.html {  }
+      flash.now[:success] = 'El concepto se ha eliminado correctamente.'
+      format.js
     end
+  end
+
+  def delete
+    authorize @snomed_concept
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_snomed_concept
+    @snomed_concept = SnomedConcept.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def snomed_concept_params
+    params.require(:snomed_concept).permit(:concept_id, :term, :fsn, :semantic_tag)
   end
 end

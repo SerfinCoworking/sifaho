@@ -441,5 +441,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :snomed_concepts, path: 'snomed'
+  resources :snomed_concepts, path: 'snomed' do
+    collection do
+      get :find_new
+    end
+  end
 end
