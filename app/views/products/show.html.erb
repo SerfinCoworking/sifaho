@@ -14,36 +14,49 @@
   </div>
 
   <div class="card-body">
-    <p class="border-bottom mt-2">
-      <strong>Código: </strong><%= @product.code %>
-    </p>
+    <div class="row">
+      <div class="col-6">
+        <p class="border-bottom mt-2">
+          <strong>Código: </strong><%= @product.code %>
+        </p>
 
-    <p class="border-bottom mt-2">
-      <strong>Nombre: </strong><%= @product.name %>
-    </p>
+        <p class="border-bottom mt-2">
+          <strong>Nombre: </strong><%= @product.name %>
+        </p>
 
-    <p class="border-bottom mt-2">
-      <strong>Unidad: </strong><%= @product.unity_name %>
-    </p>
+        <p class="border-bottom mt-2">
+          <strong>Unidad: </strong><%= @product.unity_name %>
+        </p>
 
-    <p class="border-bottom mt-2">
-      <strong>Rubro: </strong><%= @product.area_name %>
-    </p>
+        <p class="border-bottom mt-2">
+          <strong>Rubro: </strong><%= @product.area_name %>
+        </p>
 
-    <p class="border-bottom mt-2">
-      <strong>Descripción: </strong>
-      <%= @product.description.present? ? @product.description : "----" %>
-    </p>
+        <p class="border-bottom mt-2">
+          <strong>Descripción: </strong>
+          <%= @product.description.present? ? @product.description : "----" %>
+        </p>
 
-    <p class="border-bottom mt-2">
-      <strong>Observación: </strong>
-      <%= @product.observation.present? ? @product.observation : "----" %>
-    </p>
-    
-    <p class="border-bottom mt-2">
-      <strong>En stock: </strong>
-      <%= @stock_quantity %>
-    </p>
+        <p class="border-bottom mt-2">
+          <strong>Observación: </strong>
+          <%= @product.observation.present? ? @product.observation : "----" %>
+        </p>
+        
+        <p class="border-bottom mt-2">
+          <strong>En stock: </strong>
+          <%= @stock_quantity %>
+        </p>
+      </div>
+      <div class="col-6">
+        <h5>Producto asociado SNOMED</h5>
+        <% if @product.snomed_concept.present? %>
+          
+          <p></p>
+        <% else %>
+          Sin asociar
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
