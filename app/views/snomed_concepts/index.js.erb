@@ -1,0 +1,5 @@
+<% js = escape_javascript(
+  render(partial: 'snomed_concepts/list', locals: { snomed_concepts: @snomed_concepts })
+) %>
+
+$("#filter_results").html("<%= js %>");

@@ -440,4 +440,14 @@ Rails.application.routes.draw do
       get :delete
     end
   end
+
+  resources :snomed_concepts, except: %i[edit update], path: 'snomed' do
+    member do
+      get :delete
+    end
+
+    collection do
+      get :find_new
+    end
+  end
 end

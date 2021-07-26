@@ -1,0 +1,13 @@
+<% render 'products/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header">
+    <%= render 'filter' %>
+  </div>
+  <div class="card-body fixed-panel-index">
+    <%= render(
+      partial: 'snomed_concepts/list',
+      locals: { snomed_concepts: @snomed_concepts }
+    ) %>
+  </div>
+</div>

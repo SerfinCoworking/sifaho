@@ -1,6 +1,5 @@
 $(document).on('turbolinks:load', function(e){
   if(!(['prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
-
   
   // button submit
   $("button[type='submit']").on('click', function(e){

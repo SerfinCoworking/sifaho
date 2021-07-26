@@ -1,0 +1,52 @@
+<%= render 'products/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo concepto <%= @snomed_concept.term %>
+      </h5>
+    </div>
+    <%= link_to snomed_concepts_path, class: 'btn btn-light' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+      <p class="border-bottom mt-2">
+        <strong>Código: </strong><%= @snomed_concept.concept_id %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Concepto: </strong><%= @snomed_concept.term %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Descripción: </strong><%= @snomed_concept.fsn %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Rubro: </strong><%= @snomed_concept.semantic_tag %>
+      </p>
+
+      <p class="border-bottom mt-2">
+        <strong>Productos asociados: </strong>
+        <%= @snomed_concept.products_count %>
+      </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', snomed_concepts_path, class: "btn btn-light mr-2" %>
+    <% if @stock.present? && policy(@stock).show? %>
+      <%= link_to stock_path(@stock), target: :_blank, class: "btn btn-secondary" do %>
+        <%= fa_icon "eye" %>
+        Ver stock
+      <% end %>
+    <% end %>
+  </div>
+</div>
