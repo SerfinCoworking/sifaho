@@ -2,7 +2,7 @@ class SnomedConcept < ApplicationRecord
   include PgSearch
 
   # Relationships
-  has_many :products
+  has_many :products, dependent: :restrict_with_exception
 
   # Validations
   validates_uniqueness_of :concept_id

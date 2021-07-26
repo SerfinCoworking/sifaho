@@ -1,5 +1,5 @@
 class SnomedConceptsController < ApplicationController
-  before_action :set_snomed_concept, only: %i[show edit update delete]
+  before_action :set_snomed_concept, only: %i[show edit update delete destroy]
 
   def index
     authorize SnomedConcept
@@ -60,9 +60,10 @@ class SnomedConceptsController < ApplicationController
     # @results = AndesServices::FindSnomedConcept.new(params).call
     @searched_term = params[:term]
     @result = JSON.parse(RestClient::Request.execute(method: :get, url: "#{ENV['ANDES_SNOMED_URL']}/",
-                                          timeout: 120, headers: {
-                                            params: { 'search': params[:term], 'semanticTag': 'fármaco de uso clínico' }
-                                          }))
+                                                     timeout: 120, headers: {
+                                                       params: { 'search': params[:term],
+                                                                 'semanticTag': 'fármaco de uso clínico' }
+                                                     }))
     respond_to do |format|
       format.js
     end
@@ -70,10 +71,17 @@ class SnomedConceptsController < ApplicationController
 
   def destroy
     authorize @snomed_concept
-    @snomed_concept.destroy
     respond_to do |format|
-      flash.now[:success] = 'El concepto se ha eliminado correctamente.'
-      format.js
+      begin
+        @snomed_concept.destroy
+        flash.now[:success] = 'El concepto se ha eliminado correctamente.'
+      rescue ActiveRecord::DeleteRestrictionError
+        flash.now[:error] = I18n.t('errors.messages.restrict_dependent_destroy',
+                                   attribute: SnomedConcept.human_attribute_name('products_count'))
+        # flash.now[:error] = @snomed_concept.errors.messages[:restrict_dependent_destroy]
+      ensure
+        format.js
+      end
     end
   end
 

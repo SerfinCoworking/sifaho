@@ -188,6 +188,11 @@ es:
         statuses:
           pending: 'Pendiente'
           finished: 'Terminada'
+      snomed_concept:
+        term: 'Concepto'
+        products_count: 'Productos asociados'
+        fsn: 'Descripción'
+        semantic_tag: 'Categoría'
 
   date:
     abbr_day_names:
@@ -323,6 +328,7 @@ es:
         one: "no tiene la longitud correcta (1 carácter exactos)"
         other: "no tiene la longitud correcta (%{count} caracteres exactos)"
       other_than: debe ser distinto de %{count}
+      restrict_dependent_destroy: no se puede eliminar por %{attribute} dependientes
     template:
       body: 'Se encontraron problemas con los siguientes campos:'
       header:

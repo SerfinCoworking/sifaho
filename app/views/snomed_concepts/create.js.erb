@@ -1,8 +1,0 @@
-<%= render 'shared/flash_message' %>
-
-$('#dialog').modal('toggle');
-
-$('#supplies').prepend('<%= j render (@supply) %>')
-
-// Efecto de ingreso
-$('#supply_<%= @supply.id %>').hide().fadeIn(500);

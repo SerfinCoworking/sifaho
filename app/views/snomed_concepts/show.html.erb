@@ -1,72 +1,47 @@
-<%= render 'header' %>
+<%= render 'products/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex justify-content-between">
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo producto <%= @product.name %>
+        Viendo concepto <%= @snomed_concept.term %>
       </h5>
     </div>
-    <%= link_to products_path, class: 'btn btn-light' do %>
+    <%= link_to snomed_concepts_path, class: 'btn btn-light' do %>
       <%= fa_icon 'times' %>
     <% end %>
   </div>
 
   <div class="card-body">
     <div class="row">
-      <div class="col-6">
-        <p class="border-bottom mt-2">
-          <strong>Código: </strong><%= @product.code %>
-        </p>
+      <div class="col-12">
+      <p class="border-bottom mt-2">
+        <strong>Código: </strong><%= @snomed_concept.concept_id %>
+      </p>
 
-        <p class="border-bottom mt-2">
-          <strong>Nombre: </strong><%= @product.name %>
-        </p>
+      <p class="border-bottom mt-2">
+        <strong>Concepto: </strong><%= @snomed_concept.term %>
+      </p>
 
-        <p class="border-bottom mt-2">
-          <strong>Unidad: </strong><%= @product.unity_name %>
-        </p>
+      <p class="border-bottom mt-2">
+        <strong>Descripción: </strong><%= @snomed_concept.fsn %>
+      </p>
 
-        <p class="border-bottom mt-2">
-          <strong>Rubro: </strong><%= @product.area_name %>
-        </p>
+      <p class="border-bottom mt-2">
+        <strong>Rubro: </strong><%= @snomed_concept.semantic_tag %>
+      </p>
 
-        <p class="border-bottom mt-2">
-          <strong>Descripción: </strong>
-          <%= @product.description.present? ? @product.description : "----" %>
-        </p>
-
-        <p class="border-bottom mt-2">
-          <strong>Observación: </strong>
-          <%= @product.observation.present? ? @product.observation : "----" %>
-        </p>
-        
-        <p class="border-bottom mt-2">
-          <strong>En stock: </strong>
-          <%= @stock_quantity %>
-        </p>
-      </div>
-      <div class="col-6">
-        <h5>Producto asociado SNOMED</h5>
-        <% if @product.snomed_concept.present? %>
-          
-          <p></p>
-        <% else %>
-          Sin asociar
-        <% end %>
+      <p class="border-bottom mt-2">
+        <strong>Productos asociados: </strong>
+        <%= @snomed_concept.products_count %>
+      </p>
       </div>
     </div>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', products_path, class: "btn mr-2" %>
-    <% if policy(@product).edit? %>
-      <%= link_to edit_product_path(@product), :"data-turbolinks" => false, class: "btn btn-warning mr-2" do %>
-        <%= fa_icon "pen" %>
-        Editar
-      <% end %>
-    <% end %>
+    <%= link_to 'Volver', snomed_concepts_path, class: "btn btn-light mr-2" %>
     <% if @stock.present? && policy(@stock).show? %>
       <%= link_to stock_path(@stock), target: :_blank, class: "btn btn-secondary" do %>
         <%= fa_icon "eye" %>

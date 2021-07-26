@@ -1,3 +1,5 @@
 <%= render 'shared/flash_message' %>
 
-$('#supply_<%= @supply.id %>').fadeOut(500);
+<% if @snomed_concept.destroyed? %>
+  $('#snomed_concept_<%= @snomed_concept.id %>').fadeOut(500);
+<% end %>
