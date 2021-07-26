@@ -4,17 +4,15 @@ body {
     overflow-x: hidden;
 }
 
-.logo{
-    height: 2.45rem;
-}
-
 #wrapper{
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    &.toggled{
+    &.toggled, &.wrapper-1220{
         #wrapper-2 > #sidebar-wrapper{
             width: $sidebar-width-hidden!important;
+            z-index: 100;
+            position: fixed;
             .list-group-item{
                 &.profile-link > .img-container > img{
                     height: 30px!important;
@@ -27,10 +25,13 @@ body {
         }
         #page-content-wrapper{
             width: calc(100% - #{$sidebar-width-hidden})!important;
+            position: absolute;
+            right: 0;
         }
     }
 
-    &.toggled > #wrapper-2 > #sidebar-wrapper:hover{
+    &.toggled > #wrapper-2 > #sidebar-wrapper:hover,
+    &.wrapper-1220 > #wrapper-2 > #sidebar-wrapper:hover{
         width: $sidebar-width-visible!important;
         @media(min-width: 1200px) and (max-width: 1600px){
             width: $sidebar-width-visible-bml!important;
@@ -45,12 +46,12 @@ body {
             opacity: 1!important;
         }
     }
-    &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
-        width: calc(100% - #{$sidebar-width-visible})!important;
-        @media(min-width: 1200px) and (max-width: 1600px){
-            width: calc(100% - #{$sidebar-width-visible-bml})!important;
-        }
+    
+    &.toggled > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper,
+    &.wrapper-1220 > #wrapper-2 > #sidebar-wrapper:hover ~ #page-content-wrapper{
+        width: calc(100% - #{$sidebar-width-hidden})!important;
     }
+
     #wrapper-2{
         width: 100%;
 

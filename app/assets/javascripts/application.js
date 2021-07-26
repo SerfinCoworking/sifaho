@@ -26,13 +26,30 @@
 //= require chartkick
 //= require Chart.bundle
 //= require turbolinks
-//= require cocoon
+//= require cocoon  
 //= bootstrap-switch-button
 //= require bootstrap
 //= require bootstrap-select
 //= require_tree .
 //= require bootstrap_datepicker_1_9_0/js/bootstrap-datepicker.min
 //= require bootstrap_datepicker_1_9_0/locales/bootstrap-datepicker.es.min
+
+$( document ).ready(function() {
+  resize();
+});
+
+function resize(){
+  const width = document.body.clientWidth;
+  if(width >= 931 && width <= 1220){
+    $("#wrapper").addClass('wrapper-1220');
+  }else{
+    $("#wrapper").removeClass('wrapper-1220');
+  }
+}
+
+window.onresize = function(event) {
+  resize();
+};
 
 // Se oculta el flash message
 window.setTimeout(function() {

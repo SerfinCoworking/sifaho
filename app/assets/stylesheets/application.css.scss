@@ -42,6 +42,7 @@
 @import "chosen";
 @import 'font_awesome5_webfont';
 @import 'bootstrap-switch-button';
+@import 'responsive/main';
 @import 'sidebar';
 @import 'panels';
 @import 'cards';
@@ -111,39 +112,6 @@ body{
 
 td .form-group{
   margin-bottom: 0px !important;
-}
-
-// barra navegación principal
-.navbar{
-  padding: 8px 16px 8px 3px;
-  height: $navbar-height;
-  @media(min-width: 1200px) and (max-width: 1600px){
-    height: $navbar-height-bml;
-  }
-  .brand-container{
-    width: $sidebar-width-visible;
-    @media(min-width: 1200px) and (max-width: 1600px){
-      width: $sidebar-width-visible-bml;
-    }
-    a.navbar-brand{
-      margin-right: 0;
-      margin-left: 1rem;
-    }
-    button#menu-toggle{
-      width: 37px;
-    }
-    button#menu-toggle:hover{
-      background-color: $cblue2;
-      color: #fff;
-    }
-    button#menu-toggle:focus{
-      box-shadow: none!important;
-      background-color: $cblue2;
-      color: #fff;
-      // background-color: transparent;
-    }
-
-  }
 }
 
 // columna de acciones de los listados (tables)

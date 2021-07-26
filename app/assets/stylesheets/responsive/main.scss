@@ -1,0 +1,115 @@
+#wrapper {
+// barra navegación principal Estilos a full screen 1221px en adelante
+  .navbar{
+    padding: 8px 16px 8px 3px;
+    height: $navbar-height;
+    &.navbar-expand-custom{
+      .navbar-collapse {
+        display: flex;
+        flex-basis: auto;
+        .navbar-nav{
+          flex-direction: row;
+          .nav-link{
+            padding: 0.5rem 1rem;
+          }
+        }
+      }
+      .navbar-toggle-custom{
+        display: none;
+      }
+    }
+    .brand-container{
+      width: $sidebar-width-visible;
+      a.navbar-brand{
+        margin: 0;
+        padding: 0;
+        .logo{
+          height: 2.45rem;
+          transition: height 0.35s ease-out;
+        }
+      }
+      button#menu-toggle{
+        width: 37px;
+        margin-right: 1rem;
+      }
+      button#menu-toggle:hover{
+        background-color: $cblue2;
+        color: #fff;
+      }
+      button#menu-toggle:focus{
+        box-shadow: none!important;
+        background-color: $cblue2;
+        color: #fff;
+      }
+
+    }
+    #dropdown-menu-header{
+
+      .dropdown-menu-right.show{
+        position: absolute;
+      }
+    }
+  }
+
+  // barra navegación principal Estilos entre 931px y 1220px
+  &.wrapper-1220{
+    #menu-toggle{
+      display: none;
+    }
+    .navbar{
+      height: auto;
+      padding: 8px 16px 8px 5px;
+      &.navbar-expand-custom{
+        .collapse:not(.show) {
+          display: none!important;
+        }
+        .navbar-collapse {
+          display: block;
+          flex-basis: 100%;
+          .navbar-nav{
+            flex-direction: column;
+          }
+        }
+        .navbar-toggle-custom{
+          display: block;
+        }
+      }
+
+      .brand-container{
+        width: auto!important;
+        .logo{
+          height: 1.9rem!important;
+        }
+      }
+      #dropdown-menu-header{
+        display: block;
+        position: absolute;
+        z-index: 1001;
+        top: 56px;
+        background-color: rgb(248, 249, 250);
+        left: 0px;
+        width: 100%;
+        border-bottom: 1px solid rgba(134, 134, 134, 0.5);
+        .nav-link{
+          margin: 0;
+          padding: 0.5rem 6px;
+          border-radius: 0;
+        }
+        .notification-container{
+          display: none!important;
+        }
+        .dropdown-menu-right.show{
+          position: static;
+        }
+      }
+      #dropdown-btn-header-login{
+        width: 100%;
+        .dropdown-text-btn{
+          width: 100%;
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
