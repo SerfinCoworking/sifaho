@@ -16,15 +16,19 @@
       <%= f.error_notification %>
       <div class="row h-100">
         <div class="col-6 h-100">
+          <!-- CATEGORY -->
+          <label>Categoría</label>
+          <%= select_tag :category,
+            options_for_select(SnomedConcept.options_for_semantic_tag.map {
+              |tag| [tag.first, data: { 'content': "<i class='fa fa-"+tag.second+"'></i> "+tag.first.humanize }]
+            }, 'fármaco de uso clínico'),
+            { class: "selectpicker custom-select-pick show-tick", "data-width"=>"100%", multiple: true, 
+              title: "Seleccionar categoría", id: 'category' } %>
+          
+          <!-- SEARCH CONCEPT -->
           <div class="form-group">
             <label for="search-concept" class="col-form-label">Buscar concepto:</label>
             <div class="custom-input-group">
-              <!--
-              <%= f.input :search_concept, as: :fake, label: 'Buscar concepto', 
-                input_html: { placeholder: 'Ingrese un concepto', id: 'search-concept', class: 'w-100',
-                  data: { snomed_search_url: find_new_snomed_concepts_path } 
-                } %>
-              -->
               <div class="form-group string required chronic_prescription_patient">
                 <input class="form-control" 
                   id="search-concept"

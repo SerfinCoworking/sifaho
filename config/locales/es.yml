@@ -189,6 +189,7 @@ es:
           pending: 'Pendiente'
           finished: 'Terminada'
       snomed_concept:
+        concept_id: 'Código'
         term: 'Concepto'
         products_count: 'Productos asociados'
         fsn: 'Descripción'

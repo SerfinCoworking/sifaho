@@ -5,6 +5,7 @@ class SnomedConcept < ApplicationRecord
   has_many :products, dependent: :restrict_with_exception
 
   # Validations
+  validates_presence_of :concept_id, :term, :fsn, :semantic_tag
   validates_uniqueness_of :concept_id
 
   filterrific(
@@ -55,6 +56,15 @@ class SnomedConcept < ApplicationRecord
       ['Código (mayor primero)', 'codigo_desc'],
       ['Concepto (a-z)', 'concepto_asc'],
       ['Concepto (z-a)', 'concepto_desc']
+    ]
+  end
+
+  def self.options_for_semantic_tag
+    [
+      ['fármaco de uso clínico', 'pills'],
+      ['sustancia', 'vial'],
+      ['producto', 'box'],
+      ['objeto físico', 'cube']
     ]
   end
 end

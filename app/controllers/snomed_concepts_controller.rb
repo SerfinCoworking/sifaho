@@ -59,10 +59,11 @@ class SnomedConceptsController < ApplicationController
   def find_new
     # @results = AndesServices::FindSnomedConcept.new(params).call
     @searched_term = params[:term]
+    @semantic_tag = params[:semantic_tag].join(', ') if params[:semantic_tag].present?
     @result = JSON.parse(RestClient::Request.execute(method: :get, url: "#{ENV['ANDES_SNOMED_URL']}/",
                                                      timeout: 120, headers: {
                                                        params: { 'search': params[:term],
-                                                                 'semanticTag': 'fármaco de uso clínico' }
+                                                                 'semanticTag': @semantic_tag }
                                                      }))
     respond_to do |format|
       format.js

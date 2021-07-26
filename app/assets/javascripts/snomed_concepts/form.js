@@ -1,6 +1,10 @@
 $(document).on('turbolinks:load', function(e){
   if(!(['snomed_concepts'].includes(_PAGE.controller) && (['new', 'create'].includes(_PAGE.action))) ) return false;
 
+  $('.selectpicker').on('change', function(){
+    $("#search-concept").keyup();
+  });
+
   let snomed_concepts_list = null;
   // Complete list of snomed concepts
   $( "#search-concept" ).keyup(function() {
@@ -13,6 +17,7 @@ $(document).on('turbolinks:load', function(e){
         dataType: 'html',
         data: {
           term: $(this).val(),
+          semantic_tag: $('#category').val()
         },
         url: $(this).attr("data-snomed-search-url"),
         beforeSend : function() {
