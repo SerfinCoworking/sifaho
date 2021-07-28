@@ -43,6 +43,7 @@
 @import 'font_awesome5_webfont';
 @import 'bootstrap-switch-button';
 @import 'responsive/main';
+@import 'themes/dark';
 @import 'sidebar';
 @import 'panels';
 @import 'cards';
@@ -67,7 +68,11 @@
 
 
 html {
-  @media(min-width: 1200px) and (max-width: 1600px){
+  @media(min-width: 1221px) and (max-width: 1600px){
+    font-size: 12px;
+  }
+  
+  @media(min-width: 651px) and (max-width: 1220px){
     font-size: 12px;
   }
 }

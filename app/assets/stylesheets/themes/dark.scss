@@ -1,0 +1,35 @@
+#wrapper.dark {
+
+  nav.navbar-expand-custom{
+    background-color: #393E46;
+    color: #ddd;
+  }
+
+  .card{
+    background-color: #393E46;
+    color: #ddd;
+    .card-header.bg-warning{
+      color: #212529
+    }
+
+    table thead th{
+      color: #ddd;
+    }
+
+    .form-control:focus{
+      border-color: #29abe1;
+    }
+    .form-control, .form-control:focus{
+      background-color: #6c6f75;
+      color: #e9ecef;
+      &::placeholder{
+        color: #e9ecef
+      }
+      &[disabled], &[readonly]{
+        background-color: #4e4f52;
+        cursor: not-allowed;
+      } 
+    }
+  }
+    
+}
