@@ -1,6 +1,6 @@
 <div class="card fixed-custom-card">
   <div class="card-header d-flex align-items-center justify-content-between bg-warning">
-    <div class="d-flex align-items-center ml-2">
+    <div class="d-flex align-items-center">
       <%= fa_icon "edit" %>
       <h5 class="card-title mb-0 ml-2">
         Editando perfil
@@ -23,7 +23,6 @@
                 <%= f.input :avatar %>
               </div>
             </div>
-
           </div>
 
           <div class="col-md-6">
@@ -39,6 +38,8 @@
               value_method: :first,
               input_html: {class: "radio ml-3"}
             %>
+            
+            <input type="checkbox" name="theme" data-toggle="switchbutton" <%= (f.object.dark? ? "checked" : true) %> data-onlabel="Light" data-offlabel="Dark" data-onstyle="light" data-offstyle="dark">
           </div>
         </div>
       </div>

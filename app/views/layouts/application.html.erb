@@ -12,7 +12,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <div id="wrapper" class="dark">
+    <div id="wrapper" class="<%= user_signed_in? ? current_user.profile.theme : 'light' %>">
       <% if user_signed_in? %>
         <!-- General Navbar -->
         <%= render 'layouts/navigation' %>

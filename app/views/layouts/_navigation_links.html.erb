@@ -1,6 +1,7 @@
 <% if policy(Notification).index? %>
   
     <div class="btn-group">
+      <input type="checkbox" name="theme" data-toggle="switchbutton" <%= (current_user.profile.dark? ? "checked" : true) %> data-onlabel="Light" data-offlabel="Dark" data-onstyle="light" data-offstyle="dark">
       <button role="button" class="nav-link btn d-flex align-items-center notification-btn" title="Ver notificaciones" data-placement="bottom" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <% count = Notification.unread_count(current_user) %>
         <%= fa_icon "bell" %>

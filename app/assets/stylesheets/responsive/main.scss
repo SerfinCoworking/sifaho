@@ -3,6 +3,7 @@
   .navbar{
     padding: 8px $nav-padding-lr;
     height: $navbar-height;
+    transition: background-color 0.3s ease-out;
     &.navbar-expand-custom{
       .navbar-collapse {
         display: flex;
@@ -14,6 +15,7 @@
           }
           .nav-link{
             padding: 0.5rem 1rem;
+            background-color: transparent;
             &:hover, &:focus{
               background-color: #28ABE1;
               color: #fff;
@@ -55,6 +57,12 @@
       .dropdown-menu-right.show{
         position: absolute;
       }
+    }
+  }
+
+  .card{
+    .card-header{
+      padding: 5px 10px;
     }
   }
 

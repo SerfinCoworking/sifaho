@@ -1,33 +1,33 @@
-#wrapper.dark {
+#wrapper.light {
 
   nav.navbar-expand-custom{
-    background-color: $bg-main-in-dark;
-    color: $font-main-in-dark;
-    border-bottom: 1px solid $bg-in-dark!important;
+    background-color: $bg-main-in-light;
+    color: $font-main-in-light;
+    border-bottom: 1px solid $bg-in-light!important;
     .dark-logo{
-      display: block;
-    }
-    .light-logo{
       display: none;
     }
+    .light-logo{
+      display: block;
+    }
     .nav-link{
-      color: $font-main-in-dark;
-      // background-color: $bg-main-in-dark;
+      color: $font-main-in-light;
+      // background-color: $bg-main-in-light;
     }
 
     .notification-btn{
-      color: $font-main-in-dark;
+      color: $font-main-in-light;
     }
 
     .brand-container{
       button#menu-toggle{
-        color: $font-main-in-dark;
+        color: $font-main-in-light;
       }
     }
     
     .navbar-toggle-custom{
       .navbar-toggler{
-        color: $font-main-in-dark;
+        color: $font-main-in-light;
         &:hover, &:focus{
           color: #fff;
           background-color: #28ABE1;
@@ -38,14 +38,14 @@
   }
 
   .card{
-    background-color: $bg-main-in-dark;
-    color: $font-main-in-dark;
+    background-color: $bg-main-in-light;
+    color: $font-main-in-light;
     .card-header.bg-warning{
       color: #212529
     }
 
     table thead th{
-      color: $font-main-in-dark;
+      color: $font-main-in-light;
     }
 
     .form-control:focus{
@@ -53,9 +53,9 @@
     }
     .form-control, .form-control:focus{
       background-color: #6c6f75;
-      color: #e9ecef;
+      color: $bg-main-in-light;
       &::placeholder{
-        color: #e9ecef
+        color: $bg-main-in-light
       }
       &[disabled], &[readonly]{
         background-color: #4e4f52;

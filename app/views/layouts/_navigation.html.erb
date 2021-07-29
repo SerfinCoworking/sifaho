@@ -2,7 +2,8 @@
  <!--Brand-->
   <div class="brand-container d-flex justify-content-between">
     <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')} d-flex justify-content-start align-items-center" do %>
-      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo') %>
+      <%= image_tag("sifaho-brand-dark.svg", alt: "Logo SIFAHO", class: 'logo dark-logo') %>
+      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo light-logo') %>
     <% end %>
     <% if policy(:dashboard).sidebar? %>
       <button class="btn" id="menu-toggle"><%= fa_icon "bars" %></button>
