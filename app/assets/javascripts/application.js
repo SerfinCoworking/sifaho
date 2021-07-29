@@ -40,7 +40,7 @@ $( document ).ready(function() {
 
 function resize(){
   const width = document.body.clientWidth;
-  if(width >= 931 && width <= 1220){
+  if(width >= 650 && width <= 1220){
     $("#wrapper").addClass('wrapper-1220');
   }else{
     $("#wrapper").removeClass('wrapper-1220');

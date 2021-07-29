@@ -1,19 +1,15 @@
 <%= render 'header' %>
 <% if current_user.sector.present? %>
-  <div class="card fixed-custom-card">
-    <div class="card-body">
-      <div class="dashboard-grid">
-        
-        <%# Prescripciones %>
-        <%= render 'prescriptions' %>
-        <%# Ordenes stock %>
-        <%= render 'stock' %>
-        <%# Ordenes internas %>
-        <%= render 'internal_orders' %>
-        <%# Ordenes externas %>
-        <%= render 'external_orders' %>
-      </div>
-    </div>
+  <div class="dashboard-grid">
+    
+    <%# Prescripciones %>
+    <%= render 'prescriptions' %>
+    <%# Ordenes stock %>
+    <%= render 'stock' %>
+    <%# Ordenes internas %>
+    <%= render 'internal_orders' %>
+    <%# Ordenes externas %>
+    <%= render 'external_orders' %>
   </div>
 <% else %>
   <% if current_user.permission_requests.any? %>

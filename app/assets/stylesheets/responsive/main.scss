@@ -1,7 +1,7 @@
 #wrapper {
 // barra navegación principal Estilos a full screen 1221px en adelante
   .navbar{
-    padding: 8px 16px 8px 3px;
+    padding: 8px $nav-padding-lr;
     height: $navbar-height;
     &.navbar-expand-custom{
       .navbar-collapse {
@@ -9,8 +9,16 @@
         flex-basis: auto;
         .navbar-nav{
           flex-direction: row;
+          .notification-container .nav-link:hover{
+            background-color: transparent!important;
+          }
           .nav-link{
             padding: 0.5rem 1rem;
+            &:hover, &:focus{
+              background-color: #28ABE1;
+              color: #fff;
+              box-shadow: none;
+            }
           }
         }
       }
@@ -19,7 +27,7 @@
       }
     }
     .brand-container{
-      width: $sidebar-width-visible;
+      width: calc(#{$sidebar-width-visible} - #{$nav-padding-lr});
       a.navbar-brand{
         margin: 0;
         padding: 0;
@@ -30,7 +38,6 @@
       }
       button#menu-toggle{
         width: 37px;
-        margin-right: 1rem;
       }
       button#menu-toggle:hover{
         background-color: $cblue2;
@@ -44,7 +51,7 @@
 
     }
     #dropdown-menu-header{
-
+      padding-left: calc(15px - 2.5px);
       .dropdown-menu-right.show{
         position: absolute;
       }
@@ -58,20 +65,21 @@
     }
     .navbar{
       height: auto;
-      padding: 8px 16px 8px 5px;
       &.navbar-expand-custom{
         .collapse:not(.show) {
           display: none!important;
         }
         .navbar-collapse {
-          display: block;
           flex-basis: 100%;
+          flex-direction: column;
+          padding-left: 0!important;
           .navbar-nav{
             flex-direction: column;
+            width: 100%;
           }
         }
         .navbar-toggle-custom{
-          display: block;
+          display: flex;
         }
       }
 

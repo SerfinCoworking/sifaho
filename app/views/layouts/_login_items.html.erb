@@ -1,10 +1,9 @@
 <% if user_signed_in? %>
   <li class="nav-item dropdown">
-    <button class="nav-link dropdown-toggle d-flex align-items-center" type="button" id="dropdown-btn-header-login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link btn dropdown-toggle" type="button" id="dropdown-btn-header-login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <% if current_user.sector.present? %>
       <div class="dropdown-text-btn">
-        <div><%= current_user.sector_name %></div>
-        <div><small><%= current_user.sector_establishment_short_name %></small></div>
+        <%= current_user.sector_name %> <small><%= current_user.sector_establishment_short_name %></small>
       </div>
       <% else %>
         <%= fa_icon "exclamation-triangle" %> Sin sector

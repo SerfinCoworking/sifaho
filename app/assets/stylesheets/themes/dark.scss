@@ -3,6 +3,33 @@
   nav.navbar-expand-custom{
     background-color: #393E46;
     color: #ddd;
+    border-bottom: 1px solid #303030!important;
+    
+    .nav-link{
+      color: #ddd;
+      background-color: #393E46;
+    }
+
+    .notification-btn{
+      color: #ddd;
+    }
+
+    .brand-container{
+      button#menu-toggle{
+        color: #ddd;
+      }
+    }
+    
+    .navbar-toggle-custom{
+      .navbar-toggler{
+        color: #ddd;
+        &:hover, &:focus{
+          color: #fff;
+          background-color: #28ABE1;
+          outline: none!important;
+        }
+      }
+    }
   }
 
   .card{
@@ -31,5 +58,6 @@
       } 
     }
   }
-    
+
+
 }
