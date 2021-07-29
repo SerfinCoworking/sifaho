@@ -50,8 +50,21 @@
       <div class="col-6">
         <h5>Producto asociado SNOMED</h5>
         <% if @product.snomed_concept.present? %>
-          
-          <p></p>
+          <p class="border-bottom mt-2">
+            <strong>Código: </strong><%= @product.snomed_concept_id %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Concepto: </strong><%= @product.snomed_term %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Descripción: </strong><%= @product.snomed_fsn %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Categoría: </strong><%= @product.snomed_semantic_tag %>
+          </p>
         <% else %>
           Sin asociar
         <% end %>

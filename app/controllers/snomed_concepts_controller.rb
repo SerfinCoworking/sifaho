@@ -1,5 +1,13 @@
 class SnomedConceptsController < ApplicationController
   before_action :set_snomed_concept, only: %i[show edit update delete destroy]
+  has_scope :by_concept_id
+  has_scope :by_term
+
+  def search
+    authorize SnomedConcept
+    @snomed_concepts = apply_scopes(SnomedConcept.all)
+    render json: @snomed_concepts.map { |concept| { label: concept.term, id: concept.id } }
+  end
 
   def index
     authorize SnomedConcept
@@ -57,7 +65,6 @@ class SnomedConceptsController < ApplicationController
   end
 
   def find_new
-    # @results = AndesServices::FindSnomedConcept.new(params).call
     @searched_term = params[:term]
     @semantic_tag = params[:semantic_tag].join(', ') if params[:semantic_tag].present?
     @result = JSON.parse(RestClient::Request.execute(method: :get, url: "#{ENV['ANDES_SNOMED_URL']}/",

@@ -11,14 +11,14 @@ class SnomedConcept < ApplicationRecord
   filterrific(
     default_filter_params: { sorted_by: 'concepto_asc' },
     available_filters: [
-      :search_concept_id,
-      :search_term,
+      :by_concept_id,
+      :by_term,
       :sorted_by
     ]
   )
 
   # Scopes
-  pg_search_scope :search_concept_id,
+  pg_search_scope :by_concept_id,
                   against: :concept_id,
                   using: {
                     tsearch: { prefix: true },
@@ -26,7 +26,7 @@ class SnomedConcept < ApplicationRecord
                   }, # Buscar coincidencia en cualquier parte del string
                   ignoring: :accents # Ignorar tildes.
 
-  pg_search_scope :search_term,
+  pg_search_scope :by_term,
                   against: :term,
                   using: {
                     tsearch: { prefix: true },

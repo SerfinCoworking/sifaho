@@ -4,6 +4,10 @@ class SnomedConceptPolicy < ApplicationPolicy
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
   end
 
+  def search?
+    index?
+  end
+
   def show?
     index?
   end

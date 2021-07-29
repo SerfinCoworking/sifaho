@@ -7,6 +7,8 @@ end
 
 ruby "2.6.5"
 
+# To allow the use of model scopes into controllers
+gem 'has_scope'
 # To render svg images
 gem 'inline_svg'
 # To generate xlsx reports

@@ -448,6 +448,7 @@ Rails.application.routes.draw do
 
     collection do
       get :find_new
+      get :search
     end
   end
 end
