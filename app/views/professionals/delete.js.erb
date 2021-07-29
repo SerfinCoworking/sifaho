@@ -8,7 +8,7 @@ $('#dialog .modal-body').html('Esta seguro que desea eliminar al médico <%= @pr
 // Add form button
 $('#dialog .modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
-  "<a data-remote='true' data-method='delete' href='/professionals/<%= @professional.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='<%= professional_path(@professional)%>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog
