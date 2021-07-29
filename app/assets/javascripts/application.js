@@ -34,13 +34,13 @@
 //= require bootstrap_datepicker_1_9_0/js/bootstrap-datepicker.min
 //= require bootstrap_datepicker_1_9_0/locales/bootstrap-datepicker.es.min
 
-$( document ).ready(function() {
+$(document).on('turbolinks:load', function() {
   resize();
 });
 
 function resize(){
   const width = document.body.clientWidth;
-  if(width >= 931 && width <= 1220){
+  if(width >= 650 && width <= 1220){
     $("#wrapper").addClass('wrapper-1220');
   }else{
     $("#wrapper").removeClass('wrapper-1220');
