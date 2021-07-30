@@ -1,5 +1,11 @@
 $(document).on('turbolinks:load', function() {
+  $("#dropdown-btn-header-login").on('hide.bs.dropdown', function(e){
+    e.stopPropagation();
+    console.log("hide dropdown");
+  });
+
   $('input[name="professional-status"]').change( function(e) {
+    e.stopPropagation();
     $("input#is_active").val($(this).is(":checked"));
   });
 });
