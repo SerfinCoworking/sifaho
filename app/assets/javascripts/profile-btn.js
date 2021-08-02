@@ -1,4 +1,5 @@
 $(document).on('turbolinks:load', function() {
+
   $('input[name="theme"]').on('change', function(e){
     const isLight = $(e.target).prop('checked');
     const url = $(e.target).attr('data-url');
@@ -12,6 +13,7 @@ $(document).on('turbolinks:load', function() {
     }
     updateTheme(url, value);
   });
+
 
   function updateTheme(url, theme){
     $.ajax({
