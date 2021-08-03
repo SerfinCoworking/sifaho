@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_20_110040) do
+ActiveRecord::Schema.define(version: 2021_08_03_122559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1289,6 +1289,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_110040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
+    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 

@@ -6,7 +6,7 @@ class SnomedConcept < ApplicationRecord
 
   # Validations
   validates_presence_of :concept_id, :term, :fsn, :semantic_tag
-  validates_uniqueness_of :concept_id
+  validates :concept_id, uniqueness: { scope: :term }
 
   filterrific(
     default_filter_params: { sorted_by: 'concepto_asc' },
