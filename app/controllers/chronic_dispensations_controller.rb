@@ -1,7 +1,7 @@
 class ChronicDispensationsController < ApplicationController
   include FindLots
-  
-  before_action :set_chronic_prescription, only: [:new, :create, :return_dispensation] 
+
+  before_action :set_chronic_prescription, only: %i[new create return_dispensation]
 
   # GET /chronic_dispensations/new
   def new
@@ -17,12 +17,12 @@ class ChronicDispensationsController < ApplicationController
     @chronic_dispensation = ChronicDispensation.new(chronic_prescription_dispensation_params)
     @chronic_dispensation.provider_sector = current_user.sector
     authorize @chronic_dispensation
-    
+
     respond_to do |format|
       begin
         @chronic_dispensation.save!
-        @chronic_dispensation.chronic_prescription.create_notification(current_user, "dispensó")
-        flash.now[:success] = "La receta de "+@chronic_dispensation.chronic_prescription.professional.fullname+" se ha dispensado correctamente."
+        @chronic_dispensation.chronic_prescription.create_notification(current_user, 'dispensó')
+        flash.now[:success] = "La receta de #{@chronic_dispensation.chronic_prescription.professional.fullname} se ha dispensado correctamente."
         format.html { redirect_to @chronic_prescription }
       rescue ArgumentError => e
         flash[:error] = e.message

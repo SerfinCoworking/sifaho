@@ -1,5 +1,5 @@
 class EstablishmentsController < ApplicationController
-  before_action :set_establishment, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_establishment, only: %i[show edit update destroy delete]
 
   # GET /establishments
   # GET /establishments.json
@@ -44,11 +44,11 @@ class EstablishmentsController < ApplicationController
     authorize @establishment
     respond_to do |format|
       if @establishment.save
-        flash.now[:success] = @establishment.name + " se ha creado correctamente."
+        flash.now[:success] = "#{@establishment.name} se ha creado correctamente."
         format.html { redirect_to @establishment }
         format.js
       else
-        flash[:error] = "El establecimiento no se ha podido crear."
+        flash[:error] = 'El establecimiento no se ha podido crear.'
         format.html { render :new }
         format.js { render layout: false, content_type: 'text/javascript' }
       end
@@ -61,14 +61,13 @@ class EstablishmentsController < ApplicationController
     authorize @establishment
     respond_to do |format|
       if @establishment.update(establishment_params)
-        flash.now[:success] = @establishment.name + " se ha modificado correctamente."
+        flash.now[:success] = "#{@establishment.name} se ha modificado correctamente."
         format.html { redirect_to @establishment }
-        format.js
       else
-        flash.now[:error] = @establishment.name + " no se ha podido modificar."
+        flash.now[:error] = "#{@establishment.name} no se ha podido modificar."
         format.html { render :edit }
-        format.js
       end
+      format.js
     end
   end
 
@@ -79,7 +78,7 @@ class EstablishmentsController < ApplicationController
     establishment_name = @establishment.name
     @establishment.destroy
     respond_to do |format|
-      flash.now[:success] = "El establecimiento "+establishment_name+" se ha eliminado correctamente."
+      flash.now[:success] = "El establecimiento #{@establishment_name} se ha eliminado correctamente."
       format.js
     end
   end
@@ -94,7 +93,7 @@ class EstablishmentsController < ApplicationController
 
   def search_by_name
     @establishments = Establishment.order(:name).search_name(params[:term]).limit(10).where_not_id(current_user.sector.establishment_id)
-    render json: @establishments.map{ |est| { label: est.name, id: est.id } }
+    render json: @establishments.map { |est| { label: est.name, id: est.id } }
   end
 
   private
