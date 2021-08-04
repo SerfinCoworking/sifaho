@@ -1,5 +1,5 @@
 #wrapper.dark {
-
+  // Navbar header
   nav.navbar-expand-custom{
     background-color: $bg-main-in-dark;
     color: $font-main-in-dark;
@@ -37,6 +37,7 @@
     }
   }
 
+  // Card body
   .card{
     background-color: $bg-main-in-dark;
     color: $font-main-in-dark;
@@ -64,5 +65,26 @@
     }
   }
 
+  // Dropdowns
+  .dropdown-menu{
+    background-color: $bg-main-in-dark;
+    a.dropdown-item{
+      color: $font-main-in-dark;
+    }
+  }
 
+  // Listados
+  #sidebar-wrapper{
+    background-color: $bg-main-in-dark;
+    .link-group{
+      .list-group-item{
+        color: $font-main-in-dark;
+        /* .notification-link{
+        } */
+        &:hover{
+          color: $bg-main-in-dark;
+        }
+      }
+    }
+  }
 }

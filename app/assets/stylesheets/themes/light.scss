@@ -64,5 +64,25 @@
     }
   }
 
+  .dropdown-menu{
+    background-color: $bg-main-in-light; 
+    a.dropdown-item{
+      color: $font-main-in-light;
+    }
+  }
+
+  #sidebar-wrapper{
+    background-color: $cblue;
+    .link-group{
+      .list-group-item{
+        color: #ddd;
+        /* .notification-link{
+        } */
+        &:hover{
+          color: #fff;
+        }
+      }
+    }
+  }
 
 }
