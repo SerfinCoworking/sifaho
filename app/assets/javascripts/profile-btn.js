@@ -14,6 +14,10 @@ $(document).on('turbolinks:load', function() {
     updateTheme(url, value);
   });
 
+  $("#dropdown-header-login .theme-change").on('click', function(e){
+    e.stopPropagation();
+    e.preventDefault();
+  });
 
   function updateTheme(url, theme){
     $.ajax({

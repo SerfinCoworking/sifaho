@@ -1,8 +1,8 @@
 #wrapper {
 // barra navegación principal Estilos a full screen 1221px en adelante
   .navbar{
-    padding: 8px $nav-padding-lr;
-    height: $navbar-height;
+    padding: 3px $nav-padding-lr;
+    // height: $navbar-height;
     transition: background-color 0.3s ease-out;
     &.navbar-expand-custom{
       .navbar-collapse {
@@ -34,7 +34,7 @@
         margin: 0;
         padding: 0;
         .logo{
-          height: 2.45rem;
+          height: 2rem;
           transition: height 0.35s ease-out;
         }
       }
@@ -56,6 +56,16 @@
       padding-left: calc(15px - 2.5px);
       .dropdown-menu-right.show{
         position: absolute;
+      }
+    }
+    
+    #dropdown-header-login{
+      .theme-change{
+        padding: 0.25rem 1.5rem;
+        text-align: right;
+        .switch .btn{
+          font-size: 0.652rem;
+        }
       }
     }
   }
@@ -101,7 +111,7 @@
         display: block;
         position: absolute;
         z-index: 1001;
-        top: 56px;
+        top: 2.87rem;
         background-color: rgb(248, 249, 250);
         left: 0px;
         width: 100%;
