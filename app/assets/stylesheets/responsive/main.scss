@@ -2,7 +2,6 @@
 // barra navegación principal Estilos a full screen 1221px en adelante
   .navbar{
     padding: 3px $nav-padding-lr;
-    // height: $navbar-height;
     transition: background-color 0.3s ease-out;
     &.navbar-expand-custom{
       .navbar-collapse {
@@ -10,14 +9,11 @@
         flex-basis: auto;
         .navbar-nav{
           flex-direction: row;
-          .notification-container .nav-link:hover{
-            background-color: transparent!important;
-          }
           .nav-link{
             padding: 0.5rem 1rem;
             background-color: transparent;
-            &:hover, &:focus{
-              background-color: #28ABE1;
+            &.active, &:hover, &:focus{
+              background-color: $cblue2;
               color: #fff;
               box-shadow: none;
             }
@@ -26,6 +22,16 @@
       }
       .navbar-toggle-custom{
         display: none;
+      }
+      .notification-dropdown .list-group .list-group-item, .notification-dropdown .list-group .list-group-item.unread{
+        background-color: transparent;
+        .notification-link:hover, .notification-link.active{
+          background-color: $cblue2;
+          color: #fff;
+        }
+        .notification-link:hover ~ .notifications-action a{
+          color: #fff
+        }
       }
     }
     .brand-container{
@@ -78,6 +84,10 @@
 
   .dropdown-menu{
     transition: background-color 0.3s ease-out;    
+    a.dropdown-item:hover{
+      background-color: $cblue2;
+      color: #fff;
+    }
   }
   
   .list-group-item{
@@ -120,14 +130,18 @@
         position: absolute;
         z-index: 1001;
         top: 2.87rem;
-        background-color: rgb(248, 249, 250);
         left: 0px;
         width: 100%;
         border-bottom: 1px solid rgba(134, 134, 134, 0.5);
+        transition: background-color 0.3s ease-out;
         .nav-link{
           margin: 0;
           padding: 0.5rem 6px;
           border-radius: 0;
+          &:hover{
+            color: #fff;
+            background-color: $cblue2;
+          }
         }
         .notification-container{
           display: none!important;

@@ -12,11 +12,11 @@
     }
     .nav-link{
       color: $font-main-in-light;
-      // background-color: $bg-main-in-light;
     }
 
-    .notification-btn{
-      color: $font-main-in-light;
+    .notification-btn, .notification-btn:hover, .notification-btn:focus{
+      background-color: transparent!important;
+      color: $font-main-in-light!important;
     }
 
     .brand-container{
@@ -35,6 +35,17 @@
         }
       }
     }
+
+    .notification-dropdown .list-group{
+      background-color: $bg-main-in-light;
+      .list-group-item .notification-link{
+        color: $font-main-in-light;
+      }
+    }
+  }
+
+  #dropdown-menu-header{
+    background-color: $bg-main-in-light;
   }
 
   .card{

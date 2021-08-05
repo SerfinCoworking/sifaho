@@ -12,11 +12,11 @@
     }
     .nav-link{
       color: $font-main-in-dark;
-      // background-color: $bg-main-in-dark;
     }
 
-    .notification-btn{
-      color: $font-main-in-dark;
+    .notification-btn, .notification-btn:hover, .notification-btn:focus{
+      background-color: transparent!important;
+      color: $font-main-in-dark!important;
     }
 
     .brand-container{
@@ -30,11 +30,21 @@
         color: $font-main-in-dark;
         &:hover, &:focus{
           color: #fff;
-          background-color: #28ABE1;
+          background-color: $cblue2;
           outline: none!important;
         }
       }
     }
+    .notification-dropdown .list-group{
+      background-color: $bg-main-in-dark;
+      .list-group-item .notification-link{
+        color: $font-main-in-dark;
+      }
+    }
+  }
+
+  #dropdown-menu-header{
+    background-color: $bg-main-in-dark;
   }
 
   // Card body
