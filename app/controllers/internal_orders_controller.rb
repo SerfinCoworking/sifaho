@@ -1,9 +1,9 @@
 class InternalOrdersController < ApplicationController
   include FindLots
 
-  before_action :set_internal_order, only: [:show, :edit_provider, :update, :destroy, :delete,
-  :edit_applicant, :update_applicant, :update_provider, :send_provider, :receive_applicant_confirm, :receive_applicant, 
-  :return_provider_status, :return_applicant_status, :send_applicant, :nullify ]
+  before_action :set_internal_order, only: %i[show edit_provider update destroy delete edit_applicant update_applicant
+                                              update_provider send_provider receive_applicant_confirm receive_applicant
+                                              return_provider_status return_applicant_status send_applicant nullify]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)
@@ -24,7 +24,7 @@ class InternalOrdersController < ApplicationController
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
-  
+
   # GET /internal_orders
   # GET /internal_orders.json
   def applicant_index
@@ -60,7 +60,7 @@ class InternalOrdersController < ApplicationController
   # GET /internal_orders/new_deliver
   def new_provider
     authorize InternalOrder
-    begin      
+    begin
       new_from_template(params[:template], 'provision')
     rescue
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
@@ -71,42 +71,39 @@ class InternalOrdersController < ApplicationController
         .with_establishment_id(current_user.sector.establishment_id)
         .where.not(id: current_user.sector_id).as_json
       @internal_order.order_products.build
-    end   
+    end
   end
 
   # GET /internal_orders/new_applicant
   def new_applicant
     authorize InternalOrder
-    begin      
+    begin
       new_from_template(params[:template], 'solicitud')
     rescue
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'solicitud'
-      @sectors = Sector
-        .select(:id, :name)
-        .with_establishment_id(current_user.sector.establishment_id)
-        .where.not(id: current_user.sector_id).as_json
+      @sectors = Sector.select(:id, :name)
+                       .with_establishment_id(current_user.sector.establishment_id)
+                       .where.not(id: current_user.sector_id).as_json
       @internal_order.order_products.build
-    end   
+    end
   end
 
   # GET /internal_orders/1/edit
   def edit_provider
     authorize @internal_order
-    @sectors = Sector
-    .select(:id, :name)
-    .with_establishment_id(current_user.sector.establishment_id)
-    .where.not(id: current_user.sector_id).as_json
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .where.not(id: current_user.sector_id).as_json
   end
 
   # GET /external_orders/1/edit_receipt
   def edit_applicant
     authorize @internal_order
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(current_user.sector.establishment_id)
-      .where.not(id: current_user.sector_id).as_json
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .where.not(id: current_user.sector_id).as_json
   end
 
   # POST /internal_orders
@@ -118,7 +115,7 @@ class InternalOrdersController < ApplicationController
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.applicant_sector = current_user.sector
-    @internal_order.order_type = "solicitud"
+    @internal_order.order_type = 'solicitud'
 
     respond_to do |format|
       begin
@@ -126,12 +123,12 @@ class InternalOrdersController < ApplicationController
 
         if sending?
           @internal_order.solicitud_enviada!
-          @internal_order.create_notification(current_user, "creó y envió")
-          message = "La solicitud se ha auditado y enviado correctamente."
+          @internal_order.create_notification(current_user, 'creó y envió')
+          message = 'La solicitud se ha auditado y enviado correctamente.'
         else
           @internal_order.solicitud_auditoria!
-          @internal_order.create_notification(current_user, "creó y auditó")
-          message = "La solicitud se ha creado y se encuentra en auditoria."
+          @internal_order.create_notification(current_user, 'creó y auditó')
+          message = 'La solicitud se ha creado y se encuentra en auditoria.'
         end
 
         format.html { redirect_to @internal_order }
@@ -139,11 +136,10 @@ class InternalOrdersController < ApplicationController
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
+        @sectors = Sector.select(:id, :name)
+                         .with_establishment_id(current_user.sector.establishment_id)
+                         .where.not(id: current_user.sector_id).as_json
+        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :new_applicant }
       end
     end
@@ -156,14 +152,14 @@ class InternalOrdersController < ApplicationController
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.provider_sector = current_user.sector
-    @internal_order.order_type = "provision"
-    @internal_order.status = sending? ? "provision_en_camino" : "proveedor_auditoria"
+    @internal_order.order_type = 'provision'
+    @internal_order.status = sending? ? 'provision_en_camino' : 'proveedor_auditoria'
 
     respond_to do |format|
       begin
         @internal_order.save!
-        
-        if sending?; @internal_order.send_order_by(current_user); end
+
+        @internal_order.send_order_by(current_user) if sending?
 
         message = sending? ? "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente." :message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
         format.html { redirect_to @internal_order, notice: message }
@@ -218,7 +214,7 @@ class InternalOrdersController < ApplicationController
       end
     end
   end
-  
+
   # PATCH /internal_orders
   # PATCH /internal_orders.json
   def update_provider
@@ -226,14 +222,14 @@ class InternalOrdersController < ApplicationController
     previous_status = @internal_order.status
     @internal_order.audited_by = current_user
     @internal_order.status = sending? ? "provision_en_camino" : 'proveedor_auditoria'
-        
+
     respond_to do |format|
       begin
         @internal_order.update!(internal_order_params)
 
-        if sending?; @internal_order.send_order_by(current_user); end
-        
-        message = sending? ? 'La provision se ha enviado correctamente.' : "La solicitud se ha editado y se encuentra en auditoria."
+        @internal_order.send_order_by(current_user) if sending?
+
+        message = sending? ? 'La provision se ha enviado correctamente.' : 'La solicitud se ha editado y se encuentra en auditoria.'
 
         format.html { redirect_to @internal_order, notice: message }
       rescue ArgumentError => e
@@ -253,15 +249,14 @@ class InternalOrdersController < ApplicationController
     end
   end
 
-
   # DELETE /internal_orders/1
   # DELETE /internal_orders/1.json
   def destroy
     authorize @internal_order
     @internal_order.destroy
     respond_to do |format|
-      @internal_order.create_notification(current_user, "se eliminó correctamente")
-      flash.now[:success] = "El pedido interno de se ha eliminado correctamente."
+      @internal_order.create_notification(current_user, 'se eliminó correctamente')
+      flash.now[:success] = 'El pedido interno de se ha eliminado correctamente.'
       format.js
     end
   end
@@ -280,10 +275,10 @@ class InternalOrdersController < ApplicationController
     previous_status = @internal_order.status
     respond_to do |format|
       begin
-        @internal_order.status = "provision_en_camino"
+        @internal_order.status = 'provision_en_camino'
         @internal_order.save!
 
-        @internal_order.send_order_by(current_user);        
+        @internal_order.send_order_by(current_user)
         message = 'La provision se ha enviado correctamente.'
 
         format.html { redirect_to @internal_order, notice: message }
@@ -292,14 +287,13 @@ class InternalOrdersController < ApplicationController
       rescue ActiveRecord::RecordInvalid
       ensure
         @internal_order.status = previous_status
-        @sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
+        @sectors = Sector.select(:id, :name)
+                         .with_establishment_id(current_user.sector.establishment_id)
+                         .where.not(id: current_user.sector_id).as_json
+        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :edit_provider }
       end
-    end    
+    end
   end
 
   # GET /internal_orders/1/send_applicant
@@ -307,7 +301,7 @@ class InternalOrdersController < ApplicationController
     authorize @internal_order
     @internal_order.send_request_by(current_user)
     respond_to do |format|
-      flash[:success] = "La solicitud se ha enviado correctamente."
+      flash[:success] = 'La solicitud se ha enviado correctamente.'
       format.html { redirect_to @internal_order }
     end
   end

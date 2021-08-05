@@ -97,6 +97,7 @@ class EstablishmentsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_establishment
     @establishment = Establishment.find(params[:id])
@@ -104,21 +105,7 @@ class EstablishmentsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def establishment_params
-    params.require(:establishment).permit(
-      :sanitary_zone_id,
-      :establishment_type_id,
-      :cuie,
-      :siisa,
-      :code,
-      :name,
-      :short_name,
-      :cuit,
-      :email,
-      :domicile,
-      :phone,
-      :image,
-      :latitude,
-      :longitude
-    )
+    params.require(:establishment).permit(:sanitary_zone_id, :establishment_type_id, :cuie, :siisa, :code, :name,
+                                          :short_name, :cuit, :email, :domicile, :phone, :image, :latitude, :longitude)
   end
 end

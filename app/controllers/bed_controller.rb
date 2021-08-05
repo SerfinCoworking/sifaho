@@ -1,5 +1,5 @@
 class BedController < ApplicationController
-  before_action :set_bed, only: [:show, :edit, :update, :destroy]
+  before_action :set_bed, only: %i[show edit update destroy]
 
   # GET /beds
   # GET /beds.json
@@ -25,7 +25,7 @@ class BedController < ApplicationController
     ) or return
     @beds = @filterrific.find.page(params[:page]).per_page(15)
   end
-    
+
   # GET /beds/1
   # GET /beds/1.json
   def show
@@ -36,7 +36,7 @@ class BedController < ApplicationController
   def new
     authorize Bed
     @bed = Bed.new
-    @beds = Bed.joins(:bedroom).pluck(:id, :name, "bedrooms.name")
+    @beds = Bed.joins(:bedroom).pluck(:id, :name, 'bedrooms.name')
   end
 
   # GET /beds/1/edit
@@ -95,18 +95,20 @@ class BedController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_bed
-      @bed = Bed.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def bed_params
-      params.require(:bed).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, :sent_request_by_id_id, 
-        :order_type, :bed_id, :requested_date, :observation, :sent_date, :deleted_at, :date_received, :patient_id, :establishment_id,
-        quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
-        :requested_quantity, :delivered_quantity, :observation, :applicant_observation,
-        :provider_observation, :_destroy]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_bed
+    @bed = Bed.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def bed_params
+    params.require(:bed).permit(:status, :remit_code, :created_by_id, :audited_by_id, :sent_dy, :received_by_id, 
+                                :sent_request_by_id_id, :order_type, :bed_id, :requested_date, :observation, :sent_date,
+                                :deleted_at, :date_received, :patient_id, :establishment_id, 
+                                quantity_ord_supply_lots_attributes: [:id, :supply_id, :sector_supply_lot_id,
+                                                                      :requested_quantity, :delivered_quantity,
+                                                                      :observation, :applicant_observation,
+                                                                      :provider_observation, :_destroy])
+  end
 end

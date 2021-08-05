@@ -22,7 +22,8 @@ class ChronicDispensationsController < ApplicationController
       begin
         @chronic_dispensation.save!
         @chronic_dispensation.chronic_prescription.create_notification(current_user, 'dispensó')
-        flash.now[:success] = "La receta de #{@chronic_dispensation.chronic_prescription.professional.fullname} se ha dispensado correctamente."
+        flash.now[:success] = "La receta de #{@chronic_dispensation.chronic_prescription.professional.fullname} se ha
+                               dispensado correctamente."
         format.html { redirect_to @chronic_prescription }
       rescue ArgumentError => e
         flash[:error] = e.message
@@ -49,7 +50,8 @@ class ChronicDispensationsController < ApplicationController
         @chronic_dispensation.return_dispensation
         @chronic_dispensation.destroy
         @chronic_prescription.return_dispense_by(current_user)
-        flash[:success] = "La receta de "+@chronic_dispensation.chronic_prescription.professional.fullname+" se ha retornado una dispensa correctamente."
+        flash[:success] = "La receta de #{@chronic_dispensation.chronic_prescription.professional.fullname} se ha
+                           retornado una dispensa correctamente."
       rescue ArgumentError => e
         flash[:error] = e.message
       end
@@ -62,40 +64,39 @@ class ChronicDispensationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_chronic_prescription
-      @chronic_prescription = ChronicPrescription.find(params[:chronic_prescription_id])
-    end
 
-    
-    def chronic_prescription_dispensation_params
-      params.require(:chronic_dispensation).permit(
-        :chronic_prescription_id,
-        :observation,
-        :status,
-        :_destroy,
-        dispensation_types_attributes: [
-          :quantity,
-          :quantity_type,
+  # Use callbacks to share common setup or constraints between actions.
+  def set_chronic_prescription
+    @chronic_prescription = ChronicPrescription.find(params[:chronic_prescription_id])
+  end
+
+  def chronic_prescription_dispensation_params
+    params.require(:chronic_dispensation).permit(
+      :chronic_prescription_id,
+      :observation,
+      :status,
+      :_destroy,
+      dispensation_types_attributes: [
+        :quantity,
+        :quantity_type,
+        :original_chronic_prescription_product_id,
+        chronic_prescription_products_attributes: [
+          :id, 
           :original_chronic_prescription_product_id,
-          chronic_prescription_products_attributes: [
-            :id, 
-            :original_chronic_prescription_product_id,
-            :product_id, 
+          :product_id, 
+          :lot_stock_id,
+          :request_quantity,
+          :delivery_quantity,
+          :observation,
+          :_destroy,
+          order_prod_lot_stocks_attributes: [
+            :id,
+            :quantity,
             :lot_stock_id,
-            :request_quantity,
-            :delivery_quantity,
-            :observation,
-            :_destroy,
-            order_prod_lot_stocks_attributes: [
-              :id,
-              :quantity,
-              :lot_stock_id,
-              :_destroy
-            ]
+            :_destroy
           ]
-        ],
-      )
-    end
-
+        ]
+      ]
+    )
+  end
 end

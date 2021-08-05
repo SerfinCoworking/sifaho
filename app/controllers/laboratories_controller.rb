@@ -1,5 +1,5 @@
 class LaboratoriesController < ApplicationController
-  before_action :set_laboratory, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_laboratory, only: %i[show edit update destroy delete]
 
   # GET /laboratories
   # GET /laboratories.json
@@ -8,13 +8,7 @@ class LaboratoriesController < ApplicationController
     @filterrific = initialize_filterrific(
       Laboratory,
       params[:filterrific],
-      persistence_id: false,
-      default_filter_params: {sorted_by: 'razon_social_asc'},
-      available_filters: [
-        :search_name,
-        :search_cuit,
-        :search_gln,
-      ],
+      persistence_id: false
     ) or return
     @laboratories = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -47,11 +41,11 @@ class LaboratoriesController < ApplicationController
 
     respond_to do |format|
       if @laboratory.save
-        flash.now[:success] = @laboratory.name+" se ha creado correctamente."
+        flash.now[:success] = "#{@laboratory.name} se ha creado correctamente."
         format.html { redirect_to @laboratory }
         format.js
       else
-        flash.now[:error] = "El laboratorio no se ha podido crear."
+        flash.now[:error] = 'El laboratorio no se ha podido crear.'
         format.html { render :new }
         format.js { render layout: false, content_type: 'text/javascript' }
       end
@@ -64,11 +58,11 @@ class LaboratoriesController < ApplicationController
     authorize @laboratory
     respond_to do |format|
       if @laboratory.update(laboratory_params)
-        flash.now[:success] = @laboratory.name+" se ha modificado correctamente."
+        flash.now[:success] = "#{@laboratory.name} se ha modificado correctamente."
         format.html { redirect_to @laboratory }
         format.js
       else
-        flash.now[:error] = @laboratory.name+" no se ha podido modificar."
+        flash.now[:error] = "#{@laboratory.name} no se ha podido modificar."
         format.html { render :edit }
         format.js
       end
@@ -82,7 +76,7 @@ class LaboratoriesController < ApplicationController
     @name = @laboratory.name
     @laboratory.destroy
     respond_to do |format|
-      flash.now[:success] = @name+" se ha enviado a la papelera."
+      flash.now[:success] = "#{@name} se ha enviado a la papelera."
       format.js
     end
   end
@@ -101,13 +95,14 @@ class LaboratoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_laboratory
-      @laboratory = Laboratory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def laboratory_params
-      params.require(:laboratory).permit(:cuit, :gln, :name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_laboratory
+    @laboratory = Laboratory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def laboratory_params
+    params.require(:laboratory).permit(:cuit, :gln, :name)
+  end
 end
