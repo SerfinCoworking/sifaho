@@ -1,7 +1,40 @@
 $(document).on('turbolinks:load', function(e){
   if(!(['prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
 
-  
+  $(document).scannerDetection({
+    //https://github.com/kabachello/jQuery-Scanner-Detection
+    timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+    avgTimeByChar: 40, // it's not a barcode if a character takes longer than 100ms
+    preventDefault: false,
+    endChar: [13],
+    onComplete: function(barcode, qty){
+      validScan = true;
+
+      let sexes = {'M':'Masculino', 'F':'Femenino', 'X':'Otro'};
+      let barcodeArray =  barcode.split('@');
+      console.log('Barcode', barcodeArray);
+      if ( barcodeArray.length <= 9 ){
+        $("#patient-dni").val(barcodeArray[4]);
+        $("#patient-lastname").val(barcodeArray[1]).attr('readonly', true);
+        $("#patient-firstname").val(barcodeArray[2]).attr('readonly', true);
+        $('#patient-sex-fake').val(sexes[barcodeArray[3]]);
+        console.log(sexes[barcodeArray[3]]);
+      } else {
+        $("#patient-dni").val($.trim(barcodeArray[1]));
+        $("#patient-lastname").val(barcodeArray[4]).attr('readonly', true);
+        $("#patient-firstname").val(barcodeArray[5]).attr('readonly', true);
+        $('#patient-sex-fake').val(sexes[barcodeArray[8]]);
+      }
+      $('#patient-dni').autocomplete("search");
+    
+    } // main callback function
+    ,
+    onError: function(string, qty) {
+      console.log("Entró error");
+      $('#userInput').val ($('#userInput').val()  + string);
+    }
+  });
+
   // button submit
   $("button[type='submit']").on('click', function(e){
     e.preventDefault();
