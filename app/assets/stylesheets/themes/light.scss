@@ -14,7 +14,8 @@
       color: $font-main-in-light;
     }
 
-    .notification-btn{
+    .notification-btn, .notification-btn:hover, .notification-btn:focus{
+      background-color: transparent!important;
       color: $font-main-in-light!important;
     }
     
@@ -70,7 +71,7 @@
 
   .dropdown-menu{
     background-color: $bg-main-in-light; 
-    a.dropdown-item{
+    a.dropdown-item, .theme-change{
       color: $font-main-in-light;
     }
   }
@@ -80,8 +81,6 @@
     .link-group{
       .list-group-item{
         color: #ddd;
-        /* .notification-link{
-        } */
         &:hover{
           color: #fff;
         }

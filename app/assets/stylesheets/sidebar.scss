@@ -109,6 +109,7 @@ body {
                     &.active{
                         background-color: $sidebar-bg-active-color;
                         border-color: $sidebar-bg-active-color;
+                        color: #fff;
                     }
                     &:hover{
                         background-color: $sidebar-bg-hover-color;

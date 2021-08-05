@@ -78,7 +78,7 @@
   // Dropdowns
   .dropdown-menu{
     background-color: $bg-main-in-dark;
-    a.dropdown-item{
+    a.dropdown-item, .theme-change{
       color: $font-main-in-dark;
     }
   }
