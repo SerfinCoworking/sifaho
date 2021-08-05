@@ -44,9 +44,6 @@
           transition: height 0.35s ease-out;
         }
       }
-      button#menu-toggle{
-        width: 37px;
-      }
       button#menu-toggle:hover{
         background-color: $cblue2;
         color: #fff;
@@ -83,15 +80,15 @@
   }
 
   .dropdown-menu{
-    transition: background-color 0.3s ease-out;    
+    transition: background-color 0.3s ease-out;
     a.dropdown-item:hover{
       background-color: $cblue2;
-      color: #fff;
+      color: #fff!important;
     }
   }
   
   .list-group-item{
-    transition: background-color 0.3s ease-out;
+    transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
   }
 
   // barra navegación principal Estilos entre 931px y 1220px

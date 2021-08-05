@@ -14,15 +14,8 @@
       color: $font-main-in-light;
     }
 
-    .notification-btn, .notification-btn:hover, .notification-btn:focus{
-      background-color: transparent!important;
+    .notification-btn{
       color: $font-main-in-light!important;
-    }
-
-    .brand-container{
-      button#menu-toggle{
-        color: $font-main-in-light;
-      }
     }
     
     .navbar-toggle-custom{
@@ -30,7 +23,7 @@
         color: $font-main-in-light;
         &:hover, &:focus{
           color: #fff;
-          background-color: #28ABE1;
+          background-color: $cblue2;
           outline: none!important;
         }
       }
