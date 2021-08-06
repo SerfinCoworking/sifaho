@@ -74,6 +74,7 @@
   }
 
   .card{
+    transition: background-color 0.3s ease-out;
     .card-header{
       padding: 5px 10px;
     }
@@ -89,6 +90,14 @@
   
   .list-group-item{
     transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
+  }
+
+  .nav-tabs .nav-item .nav-link{
+    background-color: transparent;
+    &:hover, &.active{
+      background-color: $cblue2;
+      color: #fff!important;
+    }
   }
 
   // barra navegación principal Estilos entre 931px y 1220px

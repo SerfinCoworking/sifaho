@@ -38,7 +38,7 @@
     }
   }
 
-  #dropdown-menu-header{
+  &.wrapper-1220 #dropdown-menu-header{
     background-color: $bg-main-in-light;
   }
 
@@ -57,13 +57,13 @@
       border-color: #29abe1;
     }
     .form-control, .form-control:focus{
-      background-color: #6c6f75;
-      color: $bg-main-in-light;
+      background-color: #f8f9fa;
+      color: $font-main-in-light;
       &::placeholder{
-        color: $bg-main-in-light
+        color: $font-main-in-light;
       }
       &[disabled], &[readonly]{
-        background-color: #4e4f52;
+        background-color: #e2e4e6;
         cursor: not-allowed;
       } 
     }
@@ -86,6 +86,11 @@
         }
       }
     }
+  }
+ 
+  // Tabs
+  .nav-tabs .nav-item .nav-link{
+    color: $font-main-in-light;
   }
 
 }

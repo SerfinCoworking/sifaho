@@ -9,7 +9,7 @@
       height: calc(100% - 25.8333333333rem);
       #prescriptions-tab{
         height: calc(100% - 32px);
-        overflow-x: scroll;
+        overflow: auto;
       }
     }
   }
@@ -29,12 +29,11 @@
       width: calc(100% - 5rem);
       padding: 0 0.8rem;
       max-height: 113px;
-      overflow-y: scroll;
+      overflow: auto;
       table.table-insurance{
         thead th{
           position: sticky;
           top: 0;
-          background-color: #fff;
         }
       }
     }

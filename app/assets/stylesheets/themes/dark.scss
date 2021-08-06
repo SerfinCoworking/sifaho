@@ -43,7 +43,7 @@
     }
   }
 
-  #dropdown-menu-header{
+  &.wrapper-1220 #dropdown-menu-header{
     background-color: $bg-main-in-dark;
   }
 
@@ -83,18 +83,27 @@
     }
   }
 
+  // Tabs
+  .nav-tabs .nav-item .nav-link{
+    color: $font-main-in-dark;
+  }
+
   // Listados
   #sidebar-wrapper{
     background-color: $bg-main-in-dark;
     .link-group{
       .list-group-item{
         color: $font-main-in-dark;
-        /* .notification-link{
-        } */
         &:hover{
           color: $bg-main-in-dark;
         }
       }
+    }
+  }
+
+  table{
+    td{ 
+      color: $font-main-in-dark;
     }
   }
 }
