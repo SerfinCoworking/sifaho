@@ -93,4 +93,13 @@
     color: $font-main-in-light;
   }
 
+  table{
+    td, th a{ 
+      color: $font-main-in-light;
+    }
+  }
+
+  .pagination .page-item .page-link{
+      color: $font-main-in-light;
+  }
 }

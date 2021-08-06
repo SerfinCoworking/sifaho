@@ -102,8 +102,12 @@
   }
 
   table{
-    td{ 
+    td, th a{ 
       color: $font-main-in-dark;
     }
+  }
+
+  .pagination .page-item .page-link{
+      color: $font-main-in-dark;
   }
 }
