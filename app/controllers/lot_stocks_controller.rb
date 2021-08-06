@@ -17,7 +17,14 @@ class LotStocksController < ApplicationController
       persistence_id: false,
     ) or return
     @stocks = ''
-    @lot_stocks = @filterrific.find.paginate(page: params[:page], per_page: 15)
+
+    @lot_stocks = request.format.xlsx? ? @filterrific.find : @filterrific.find.paginate(page: params[:page], per_page: 20)
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.xlsx { headers['Content-Disposition'] = "attachment; filename=\"Lotes_#{DateTime.now.strftime('%d-%m-%Y')}.xlsx\"" }
+    end
   end
 
   # GET /stocks

@@ -1,5 +1,6 @@
 class InternalOrderTemplatesController < ApplicationController
-  before_action :set_internal_order_template, only: [:show, :edit, :update, :destroy, :delete, :use_applicant, :use_provider, :edit_provider]
+  before_action :set_internal_order_template, only: %i[show edit update destroy delete use_applicant use_provider 
+                                                       edit_provider]
 
   # GET /internal_order_templates
   # GET /internal_order_templates.json
@@ -16,10 +17,8 @@ class InternalOrderTemplatesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        send_data generate_report(),
-          filename: "plantilla_#{@internal_order_template.order_type}_sector.pdf",
-          type: 'application/pdf',
-          disposition: 'inline'
+        pdf = ReportServices::InternalOrderTemplateReportService.new(current_user, @internal_order_template).generate_pdf
+        send_data pdf, filename: "Plantilla_#{@internal_order_template.order_type}_sector.pdf", type: 'application/pdf', disposition: 'inline'
       end
     end
   end
@@ -110,57 +109,17 @@ class InternalOrderTemplatesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_internal_order_template
-      @internal_order_template = InternalOrderTemplate.find(params[:id])
-    end
 
-    def generate_report()
-      report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'internal_order_template', 'first_page.tlf')
-      report.use_layout File.join(Rails.root, 'app', 'reports', 'internal_order_template', 'second_page.tlf'), id: :other_page
-      
-      # Comenzamos con la pagina principal
-      report.start_new_page
+  # Use callbacks to share common setup or constraints between actions.
+  def set_internal_order_template
+    @internal_order_template = InternalOrderTemplate.find(params[:id])
+  end
 
-      report.page[:template_name] = @internal_order_template.name
-      report.page[:efector] = @internal_order_template.destination_sector.sector_and_establishment
-      report.page[:username].value("DNI: "+current_user.dni.to_s+", "+current_user.full_name)
-      
-      @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots|
-        if report.page_count == 1 && report.list.overflow?
-          report.start_new_page layout: :other_page
-        end
-
-        report.list do |list|
-          list.add_row do |row|
-            row.item(:product_code).value(iots.product_code)
-            row.item(:product_name).value(iots.product_name)
-            row.item(:unity_name).value(iots.product.unity_name)
-          end
-        end
-      end
-      
-      report.pages.each do |page|
-        page[:title] = "Plantilla de #{@internal_order_template.order_type} de sector"
-        page[:requested_date] = DateTime.now.strftime("%d/%m/%Y")
-        page[:page_count] = report.page_count
-      end
-  
-      report.generate
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def internal_order_template_params
-      params.require(:internal_order_template).permit(:name,
-        :owner_sector_id,
-        :destination_sector_id,
-        :observation,
-        :order_type,
-        internal_order_product_templates_attributes: [ 
-          :id,
-          :product_id,
-          :_destroy
-        ]
-      )
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def internal_order_template_params
+    params.require(:internal_order_template).permit(:name, :owner_sector_id, :destination_sector_id, :observation,
+                                                    :order_type,
+                                                    internal_order_product_templates_attributes: [:id, :product_id,
+                                                                                                  :_destroy])
+  end
 end

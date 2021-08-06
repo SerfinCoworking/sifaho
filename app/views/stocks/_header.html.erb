@@ -47,7 +47,7 @@
   </li>
 
   <li class="nav-item non-sel">
-    <%= link_to receipts_path, class: "nav-link #{ active_action_and_controller('index', 'receipts') }" do %>
+    <%= link_to receipts_path, class: "nav-link #{ active_action_and_controller(['index', 'show'], 'receipts') }" do %>
       <%= fa_icon "receipt" %>
       Recibos
     <% end %>

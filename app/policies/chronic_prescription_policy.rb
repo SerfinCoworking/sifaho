@@ -32,7 +32,7 @@ class ChronicPrescriptionPolicy < ApplicationPolicy
   end
   
   def dispense_new?
-    if record.any_product_without_dispensing? && !record.vencida?
+    if record.any_product_without_dispensing? && !record.vencida? && !record.dispensada?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
     end
   end

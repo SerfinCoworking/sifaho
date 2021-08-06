@@ -1,0 +1,8 @@
+<%= render 'shared/flash_message' %>
+
+$('#dialog').modal('toggle');
+
+$('#lot-provenances').prepend('<%= j render (@lot_provenance) %>')
+
+// Efecto de ingreso
+$('#lot_provenance_<%= @lot_provenance.id %>').hide().fadeIn(500);

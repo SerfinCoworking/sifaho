@@ -11,10 +11,11 @@ class ReceiptProduct < ApplicationRecord
   validates_presence_of :lot_stock_id, if: :is_recibido? 
   validates :provenance_id, presence: true
 
-  delegate :code, to: :product, prefix: true
-  delegate :name, to: :product, prefix: true
+  # Delegations
+  delegate :code, :name, :unity_name, to: :product, prefix: true
   delegate :destiny_name, :origin_name, :status, to: :receipt
   delegate :name, to: :provenance, prefix: true
+  delegate :name, to: :laboratory, prefix: true, allow_nil: true
 
   def increment_new_lot_to(a_sector)
     @lot = Lot.where(
@@ -57,4 +58,3 @@ class ReceiptProduct < ApplicationRecord
     self.receipt
   end
 end
-

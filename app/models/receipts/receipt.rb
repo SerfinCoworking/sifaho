@@ -14,12 +14,15 @@ class Receipt < ApplicationRecord
   has_many :movements, class_name: "ReceiptMovement"
   has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector, :code
   validates_uniqueness_of :code
   validate :validate_receipt_products_length
   validates_associated :receipt_products
+
+  # Delegations
+  delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
+  delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
 
   # Atributos anidados
   accepts_nested_attributes_for :receipt_products,

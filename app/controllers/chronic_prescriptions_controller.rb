@@ -1,6 +1,6 @@
 class ChronicPrescriptionsController < ApplicationController
-  before_action :set_chronic_prescription, except: [:index, :new, :create ]
-  before_action :set_patient_to_chronic_prescription, only: [ :new, :create ]
+  before_action :set_chronic_prescription, except: %i[index new create]
+  before_action :set_patient_to_chronic_prescription, only: %i[new create]
 
   # GET /chronic_prescriptions
   # GET /chronic_prescriptions.json
@@ -28,7 +28,7 @@ class ChronicPrescriptionsController < ApplicationController
       format.js
       format.pdf do
         send_data generate_order_report(@chronic_prescription),
-        filename: 'Rec_amb_'+@chronic_prescription.patient_last_name+'.pdf',
+        filename: "Rec_amb_#{@chronic_prescription.patient_last_name}.pdf",
         type: 'application/pdf',
         disposition: 'inline'
       end
@@ -59,9 +59,9 @@ class ChronicPrescriptionsController < ApplicationController
       # Si se entrega la receta
       begin
         @chronic_prescription.save!
-        message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha creado correctamente."
-        notification_type = "creó"
-        
+        message = "La receta crónica de #{@chronic_prescription.patient.fullname} se ha creado correctamente."
+        notification_type = 'creó'
+
         @chronic_prescription.create_notification(current_user, notification_type)
         if dispensing?
           format.html { redirect_to new_chronic_prescription_chronic_dispensation_path(@chronic_prescription), notice: message }
@@ -89,8 +89,8 @@ class ChronicPrescriptionsController < ApplicationController
       begin
         @chronic_prescription.update!(chronic_prescription_params)
 
-        message = "La receta crónica de "+@chronic_prescription.patient.fullname+" se ha auditado correctamente."
-        notification_type = "auditó"
+        message = "La receta crónica de #{@chronic_prescription.patient.fullname} se ha auditado correctamente."
+        notification_type = 'auditó'
 
         @chronic_prescription.create_notification(current_user, notification_type)
         if dispensing?
@@ -115,7 +115,7 @@ class ChronicPrescriptionsController < ApplicationController
     @professional_fullname = @chronic_prescription.professional.fullname
     @chronic_prescription.destroy
     respond_to do |format|
-      flash.now[:success] = "La receta de "+@professional_fullname+" se ha eliminado correctamente."
+      flash.now[:success] = "La receta de #{@professional_fullname} se ha eliminado correctamente."
       format.js
     end
   end
@@ -128,7 +128,7 @@ class ChronicPrescriptionsController < ApplicationController
       rescue ArgumentError => e
         flash[:error] = e.message
       else
-        flash[:notice] = 'La receta se ha retornado a '+@chronic_prescription.status+'.'
+        flash[:notice] = "La receta se ha retornado a #{@chronic_prescription.status}."
       end
       format.html { redirect_to @chronic_prescription }
     end
@@ -148,36 +148,37 @@ class ChronicPrescriptionsController < ApplicationController
   end
 
   private
-    # Set prescription and patient to prescription
-    def set_patient_to_chronic_prescription
-      @chronic_prescription = params[:chronic_prescription].present? ? ChronicPrescription.create(chronic_prescription_params) : ChronicPrescription.new
-      @patient = Patient.find(params[:patient_id])
-      @chronic_prescription.patient_id =  @patient.id
-    end
-    
-    # Use callbacks to share common setup or constraints between actions.
-    def set_chronic_prescription
-      @chronic_prescription = ChronicPrescription.find(params[:id])
-    end
 
-    def chronic_prescription_params
-      params.require(:chronic_prescription).permit(
-        :professional_id,
-        :diagnostic,        
-        :date_prescribed,
-        :expiry_date,
-        original_chronic_prescription_products_attributes: [
-          :id,
-          :product_id, 
-          :request_quantity,
-          :total_request_quantity,
-          :observation,
-          :_destroy
-        ]
-      )
-    end
+  # Set prescription and patient to prescription
+  def set_patient_to_chronic_prescription
+    @chronic_prescription = params[:chronic_prescription].present? ? ChronicPrescription.create(chronic_prescription_params) : ChronicPrescription.new
+    @patient = Patient.find(params[:patient_id])
+    @chronic_prescription.patient_id = @patient.id
+  end
 
-    def dispensing?
-      return params[:commit] == "dispensing"
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_chronic_prescription
+    @chronic_prescription = ChronicPrescription.find(params[:id])
+  end
+
+  def chronic_prescription_params
+    params.require(:chronic_prescription).permit(
+      :professional_id,
+      :diagnostic,
+      :date_prescribed,
+      :expiry_date,
+      original_chronic_prescription_products_attributes: [
+        :id,
+        :product_id, 
+        :request_quantity,
+        :total_request_quantity,
+        :observation,
+        :_destroy
+      ]
+    )
+  end
+
+  def dispensing?
+    return params[:commit] == 'dispensing'
+  end
 end
