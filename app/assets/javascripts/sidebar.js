@@ -1,22 +1,8 @@
 // on turbolinks load 
 $(document).on('turbolinks:load', function() {
-  initMenu();
   let weekChart, yearChart;
-  // init sessionStorage
-  function initMenu(){
-    if(sessionStorage.getItem('menu_display') === null){
-        sessionStorage.setItem('menu_display', true);
-    }else if(sessionStorage.getItem('menu_display') === 'false' || sessionStorage.getItem('menu_display') == 'false'){
-      if(!$("#wrapper").hasClass("toggled")){
-        $("#wrapper").addClass("toggled");
-      }
-    }
-  }
 
   if((_PAGE.controller === 'welcome' && (['index'].includes(_PAGE.action)))){
-      
-      
-      
       const outpatientPrescriptionsCountByDay = JSON.parse($("#week").attr("data-outpatient-prescriptions"));
       const chronicPrescriptionsCountByDay = JSON.parse($("#week").attr("data-chronic-prescriptions"));
       const chronicPrescriptionsCountByDayName = JSON.parse($("#week").attr("data-chronic-prescriptions-days"));
@@ -101,26 +87,25 @@ $(document).on('turbolinks:load', function() {
             }]
         });
         
-    }
-        // manejamos el valor sessionStorage y pliegue/desiplegue del menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-            
-        $("#wrapper").toggleClass("toggled");
-        
-        if(sessionStorage.getItem('menu_display') !== null){
-            // sessionStorage es null y no tiene la clase 'toggled'
-        const newValue = !(sessionStorage.getItem('menu_display') === 'true' || sessionStorage.getItem('menu_display') == 'true');
-        sessionStorage.setItem('menu_display', newValue);
-        }else if(sessionStorage.getItem('menu_display') === null){
-        // sessionStorage es null y tiene la clase 'toggled'
-        sessionStorage.setItem('menu_display', $("#wrapper").hasClass('toggled'));
-        }
+    }        
+});
 
-        if((_PAGE.controller === 'welcome' && (['index'].includes(_PAGE.action)))){
-            weekChart.reflow();
-            yearChart.reflow();
+// manejamos el valor sessionStorage y pliegue/desiplegue del menu
+function toggleSidabar(e) {
+    const target = $(e).attr("data-target");
+    const sidebar_status = $(target).hasClass('toggled') ? 'show' : 'hide';
+    const url = $(e).attr('data-url');
+    $.ajax({
+        url: url,
+        method: 'PATCH',
+        data: { 
+            profile: { sidebar_status } 
         }
     });
-
-});
+    $(target).toggleClass("toggled");
+    
+    if((_PAGE.controller === 'welcome' && (['index'].includes(_PAGE.action)))){
+        weekChart.reflow();
+        yearChart.reflow();
+    }
+}

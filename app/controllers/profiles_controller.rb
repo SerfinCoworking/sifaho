@@ -28,6 +28,6 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.require(:profile).permit(:id, :sex, :avatar, :theme)
+    params.require(:profile).permit(:id, :sex, :avatar, :theme, :sidebar_status)
   end
 end

@@ -6,7 +6,7 @@
       <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo light-logo') %>
     <% end %>
     <% if policy(:dashboard).sidebar? %>
-      <button class="btn" id="menu-toggle"><%= fa_icon "bars" %></button>
+      <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
     <% end %>
     <% if ENV['DEMO_RIBBON'] %>
       <span class="badge badge-warning demo-badge-nav"><strong>DEMO</strong></span>

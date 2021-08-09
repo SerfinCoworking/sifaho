@@ -1,6 +1,7 @@
 class Profile < ApplicationRecord
   enum sex: { indeterminado: 1, femenino: 2, masculino: 3 }
   enum theme: { light: 0, dark: 1 }
+  enum sidebar_status: { show: 0, hide: 1 }
 
   #Relaciones
   belongs_to :user
