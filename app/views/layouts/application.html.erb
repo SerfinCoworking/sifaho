@@ -12,7 +12,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <div id="wrapper" class="<%="#{current_user.profile.theme}" if user_signed_in? %> <%= current_user.profile.hide? ? 'toggled' : '' %>">
+    <div id="wrapper" class="<%="#{current_user.profile.theme}" if user_signed_in? %> <%= user_signed_in? && current_user.profile.hide? ? 'toggled' : '' %>">
       <% if user_signed_in? %>
         <!-- General Navbar -->
         <%= render 'layouts/navigation' %>
