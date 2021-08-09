@@ -1,20 +1,17 @@
 <nav class="navbar navbar-expand-custom border-bottom">
  <!--Brand-->
   <div class="brand-container d-flex">
-    <% if policy(:dashboard).sidebar? %>
-      <button class="btn btn-light" id="menu-toggle"><%= fa_icon "bars" %></button>
-    <% end %>
-    <div class="position-relative">
-    <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')} d-flex justify-content-start align-items-center" do %>
-      <%= image_tag("sifaho-brand-dark.svg", alt: "Logo SIFAHO", class: 'logo dark-logo') %>
-      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo light-logo') %>
-    <% end %>
-    <% if policy(:dashboard).sidebar? %>
-      <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
-    <% end %>
-    <% if ENV['DEMO_RIBBON'] %>
-      <span class="badge badge-warning demo-badge-nav"><strong>DEMO</strong></span>
-    <% end %>
+    <div class="brand-container d-flex justify-content-between position-relative">
+      <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')} d-flex justify-content-start align-items-center" do %>
+        <%= image_tag("sifaho-brand-dark.svg", alt: "Logo SIFAHO", class: 'logo dark-logo') %>
+        <%= image_tag("sifaho-logo.svg", alt: "Logo SIFAHO", class: 'logo light-logo') %>
+        <% if ENV['DEMO_RIBBON'] %>
+          <span class="badge badge-warning demo-badge-nav"><strong>DEMO</strong></span>
+        <% end %>
+      <% end %>
+      <% if policy(:dashboard).sidebar? %>
+        <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
+      <% end %>
     </div>
   </div>
   <div class="navbar-toggle-custom align-items-center">
