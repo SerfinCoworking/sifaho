@@ -1,16 +1,15 @@
 <% if user_signed_in? %>
   <li class="nav-item dropdown">
-    <button class="nav-link dropdown-toggle d-flex align-items-center" type="button" id="dropdown-btn-header-login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link btn dropdown-toggle" type="button" id="dropdown-btn-header-login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <% if current_user.sector.present? %>
       <div class="dropdown-text-btn">
-        <div><%= current_user.sector_name %></div>
-        <div><small><%= current_user.sector_establishment_short_name %></small></div>
+        <%= current_user.sector_name %> <small><%= current_user.sector_establishment_short_name %></small>
       </div>
       <% else %>
         <%= fa_icon "exclamation-triangle" %> Sin sector
       <% end %>
     </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-btn-header-login">
+    <div class="dropdown-menu dropdown-menu-right" id="dropdown-header-login" aria-labelledby="dropdown-btn-header-login">
       <% if current_user.has_role? :admin %>
         <%= link_to main_app.rails_admin_path, class: "dropdown-item" do %>
           <%= fa_icon "users-cog" %>
@@ -27,6 +26,19 @@
           Cambiar ubicación
         <% end %>
       <% end %>
+      <div class="dropdown-divider"></div>
+        <div class="theme-change d-flex justify-content-between">
+          <span>Tema</span>
+          <input type="checkbox" 
+                 name="theme" 
+                 data-url="<%= profile_path(current_user.profile) %>"
+                 data-toggle="switchbutton" <%= (current_user.profile.dark? ? "checked" : true) %> 
+                 data-onlabel='<%= fa_icon "sun", class: "text-warning" %>'
+                 data-offlabel='<%= fa_icon "moon" %>' 
+                 data-onstyle="primary" 
+                 data-offstyle="dark" 
+                 data-size="xs">
+        </div>
       <div class="dropdown-divider"></div>
       <%= link_to main_app.destroy_user_session_path, :method => :delete, class: "dropdown-item" do %>
         <%= fa_icon "power-off" %>

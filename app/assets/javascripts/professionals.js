@@ -1,5 +1,6 @@
 $(document).on('turbolinks:load', function() {
   $('input[name="professional-status"]').change( function(e) {
+    e.stopPropagation();
     $("input#is_active").val($(this).is(":checked"));
   });
 });

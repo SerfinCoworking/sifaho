@@ -34,9 +34,6 @@
 //= require bootstrap_datepicker_1_9_0/js/bootstrap-datepicker.min
 //= require bootstrap_datepicker_1_9_0/locales/bootstrap-datepicker.es.min
 
-$(document).on('turbolinks:load', function() {
-  resize();
-});
 
 function resize(){
   const width = document.body.clientWidth;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_20_110040) do
+ActiveRecord::Schema.define(version: 2021_08_09_113336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1052,6 +1052,8 @@ ActiveRecord::Schema.define(version: 2021_07_20_110040) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "theme", default: 0
+    t.integer "sidebar_status", default: 0
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
@@ -1289,6 +1291,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_110040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
+    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 
@@ -1340,8 +1343,10 @@ ActiveRecord::Schema.define(version: 2021_07_20_110040) do
     t.bigint "product_id"
     t.integer "total_quantity", default: 0
     t.integer "reserved_quantity", default: 0
+    t.bigint "snomed_concept_id"
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["sector_id"], name: "index_stocks_on_sector_id"
+    t.index ["snomed_concept_id"], name: "index_stocks_on_snomed_concept_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -1460,6 +1465,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_110040) do
   add_foreign_key "states", "countries"
   add_foreign_key "stocks", "products"
   add_foreign_key "stocks", "sectors"
+  add_foreign_key "stocks", "snomed_concepts"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"

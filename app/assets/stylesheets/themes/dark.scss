@@ -1,0 +1,113 @@
+#wrapper.dark {
+  // Navbar header
+  nav.navbar-expand-custom{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+    border-bottom: 1px solid $bg-in-dark!important;
+    .dark-logo{
+      display: block;
+    }
+    .light-logo{
+      display: none;
+    }
+    .nav-link{
+      color: $font-main-in-dark;
+    }
+
+    .notification-btn, .notification-btn:hover, .notification-btn:focus{
+      background-color: transparent!important;
+      color: $font-main-in-dark!important;
+    }
+
+    .brand-container{
+      button#menu-toggle{
+        color: $font-main-in-dark;
+      }
+    }
+    
+    .navbar-toggle-custom{
+      .navbar-toggler{
+        color: $font-main-in-dark;
+        &:hover, &:focus{
+          color: #fff;
+          background-color: $cblue2;
+          outline: none!important;
+        }
+      }
+    }
+    .notification-dropdown .list-group{
+      background-color: $bg-main-in-dark;
+      .list-group-item .notification-link{
+        color: $font-main-in-dark;
+      }
+    }
+  }
+
+  &.wrapper-1220 #dropdown-menu-header{
+    background-color: $bg-main-in-dark;
+  }
+
+  // Card body
+  .card{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+    .card-header.bg-warning{
+      color: #212529
+    }
+
+    table thead th{
+      color: $font-main-in-dark;
+    }
+
+    .form-control:focus{
+      border-color: #29abe1;
+    }
+    .form-control, .form-control:focus{
+      background-color: #6c6f75;
+      color: #e9ecef;
+      &::placeholder{
+        color: #e9ecef
+      }
+      &[disabled], &[readonly]{
+        background-color: #4e4f52;
+        cursor: not-allowed;
+      } 
+    }
+  }
+
+  // Dropdowns
+  .dropdown-menu{
+    background-color: $bg-main-in-dark;
+    a.dropdown-item, .theme-change{
+      color: $font-main-in-dark;
+    }
+  }
+
+  // Tabs
+  .nav-tabs .nav-item .nav-link{
+    color: $font-main-in-dark;
+  }
+
+  // Listados
+  #sidebar-wrapper{
+    background-color: $bg-main-in-dark;
+    .link-group{
+      .list-group-item{
+        color: $font-main-in-dark;
+        &:hover{
+          color: $bg-main-in-dark;
+        }
+      }
+    }
+  }
+
+  table{
+    td, th a{ 
+      color: $font-main-in-dark;
+    }
+  }
+
+  .pagination .page-item .page-link{
+      color: $font-main-in-dark;
+  }
+}
