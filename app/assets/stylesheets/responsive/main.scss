@@ -1,8 +1,8 @@
 #wrapper {
 // barra navegación principal Estilos a full screen 1221px en adelante
   .navbar{
-    padding: 8px 16px 8px 3px;
-    height: $navbar-height;
+    padding: 3px $nav-padding-lr;
+    transition: background-color 0.3s ease-out;
     &.navbar-expand-custom{
       .navbar-collapse {
         display: flex;
@@ -11,26 +11,38 @@
           flex-direction: row;
           .nav-link{
             padding: 0.5rem 1rem;
+            background-color: transparent;
+            &.active, &:hover, &:focus{
+              background-color: $cblue2;
+              color: #fff;
+              box-shadow: none;
+            }
           }
         }
       }
       .navbar-toggle-custom{
         display: none;
       }
+      .notification-dropdown .list-group .list-group-item, .notification-dropdown .list-group .list-group-item.unread{
+        background-color: transparent;
+        .notification-link:hover, .notification-link.active{
+          background-color: $cblue2;
+          color: #fff;
+        }
+        .notification-link:hover ~ .notifications-action a{
+          color: #fff
+        }
+      }
     }
     .brand-container{
-      width: $sidebar-width-visible;
+      width: calc(#{$sidebar-width-visible} - #{$nav-padding-lr});
       a.navbar-brand{
         margin: 0;
         padding: 0;
         .logo{
-          height: 2.45rem;
+          height: 2rem;
           transition: height 0.35s ease-out;
         }
-      }
-      button#menu-toggle{
-        width: 37px;
-        margin-right: 1rem;
       }
       button#menu-toggle:hover{
         background-color: $cblue2;
@@ -51,70 +63,133 @@
 
     }
     #dropdown-menu-header{
-
+      padding-left: calc(15px - 2.5px);
       .dropdown-menu-right.show{
         position: absolute;
       }
     }
+    
+    #dropdown-header-login{
+      .theme-change{
+        padding: 0.25rem 1.5rem;
+        text-align: right;
+        .switch .btn{
+          font-size: 0.652rem;
+        }
+      }
+    }
   }
 
-  // barra navegación principal Estilos entre 931px y 1220px
-  &.wrapper-1220{
-    #menu-toggle{
-      display: none;
+  .card{
+    transition: background-color 0.3s ease-out;
+    .card-header{
+      padding: 5px 10px;
     }
-    .navbar{
-      height: auto;
-      padding: 8px 16px 8px 5px;
-      &.navbar-expand-custom{
-        .collapse:not(.show) {
-          display: none!important;
-        }
-        .navbar-collapse {
-          display: block;
-          flex-basis: 100%;
-          .navbar-nav{
-            flex-direction: column;
-          }
-        }
-        .navbar-toggle-custom{
-          display: block;
-        }
-      }
+  }
 
-      .brand-container{
-        width: auto!important;
-        .logo{
-          height: 1.9rem!important;
-        }
+  .dropdown-menu{
+    transition: background-color 0.3s ease-out;
+    a.dropdown-item:hover{
+      background-color: $cblue2;
+      color: #fff!important;
+    }
+  }
+  
+  .list-group-item{
+    transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
+  }
+
+  .nav-tabs .nav-item .nav-link{
+    background-color: transparent;
+    &:hover, &.active{
+      background-color: $cblue2;
+      color: #fff!important;
+    }
+  }
+
+  table{
+    th a:hover{ 
+      color: $cblue2!important;
+      text-decoration: none;
+    }
+  }
+
+  .pagination .page-item .page-link{
+    background-color: transparent;
+  }
+  .pagination .page-item.disabled{
+    background-color: transparent!important;
+    cursor: not-allowed;
+  }
+  .pagination .page-item.active, .pagination .page-item:hover{
+    background-color: $cblue2;
+    .page-link{
+      color: #fff!important;
+    }
+  }
+}
+
+  // barra navegación principal Estilos entre 931px y 1220px
+#wrapper.wrapper-1220{
+  #menu-toggle{
+    display: none;
+  }
+  .navbar{
+    height: auto;
+    &.navbar-expand-custom{
+      .collapse:not(.show) {
+        display: none!important;
       }
-      #dropdown-menu-header{
-        display: block;
-        position: absolute;
-        z-index: 1001;
-        top: 56px;
-        background-color: rgb(248, 249, 250);
-        left: 0px;
-        width: 100%;
-        border-bottom: 1px solid rgba(134, 134, 134, 0.5);
-        .nav-link{
-          margin: 0;
-          padding: 0.5rem 6px;
-          border-radius: 0;
-        }
-        .notification-container{
-          display: none!important;
-        }
-        .dropdown-menu-right.show{
-          position: static;
-        }
-      }
-      #dropdown-btn-header-login{
-        width: 100%;
-        .dropdown-text-btn{
+      .navbar-collapse {
+        flex-basis: 100%;
+        flex-direction: column;
+        padding-left: 0!important;
+        .navbar-nav{
+          flex-direction: column;
           width: 100%;
-          text-align: left;
         }
+      }
+      .navbar-toggle-custom{
+        display: flex;
+      }
+    }
+
+    .brand-container{
+      width: auto!important;
+      .logo{
+        height: 1.9rem!important;
+      }
+    }
+    #dropdown-menu-header{
+      display: block;
+      position: absolute;
+      z-index: 1001;
+      top: 2.87rem;
+      left: 0px;
+      width: 100%;
+      border-bottom: 1px solid rgba(134, 134, 134, 0.5);
+      transition: background-color 0.3s ease-out;
+      .nav-link{
+        margin: 0;
+        padding: 0.5rem 6px;
+        border-radius: 0;
+        &:hover{
+          color: #fff;
+          background-color: $cblue2;
+        }
+      }
+      .notification-container{
+        display: none!important;
+      }
+      .dropdown-menu-right.show{
+        position: static;
+      }
+    }
+    #dropdown-btn-header-login{
+      width: 100%;
+      .dropdown-text-btn{
+        width: 100%;
+        text-align: left;
       }
     }
   }

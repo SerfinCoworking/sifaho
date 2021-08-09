@@ -43,6 +43,8 @@
 @import 'font_awesome5_webfont';
 @import 'bootstrap-switch-button';
 @import 'responsive/main';
+@import 'themes/dark';
+@import 'themes/light';
 @import 'sidebar';
 @import 'panels';
 @import 'cards';
@@ -68,7 +70,11 @@
 
 
 html {
-  @media(min-width: 1200px) and (max-width: 1600px){
+  @media(min-width: 1221px) and (max-width: 1600px){
+    font-size: 12px;
+  }
+  
+  @media(min-width: 651px) and (max-width: 1220px){
     font-size: 12px;
   }
 }
@@ -173,7 +179,7 @@ td .form-group{
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  grid-template-columns: 50% 50%;//en dos columnas
+  grid-template-columns: calc(50% - 5px) calc(50% - 5px);//en dos columnas
   height: auto;
 }
 

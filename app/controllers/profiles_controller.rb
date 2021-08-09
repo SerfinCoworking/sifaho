@@ -14,11 +14,9 @@ class ProfilesController < ApplicationController
     authorize @profile
 
     if @profile.update_attributes(profile_params)
-      flash[:success] = "Tu perfil se ha modificado correctamente."
-      redirect_to request.referrer
+      # flash[:success] = "Tu perfil se ha modificado correctamente."
     else
       flash[:error] = "Tu perfil no se ha podido modificar."
-      redirect_to request.referrer
     end
   end
 
@@ -30,6 +28,6 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    params.require(:profile).permit(:id, :sex, :avatar)
+    params.require(:profile).permit(:id, :sex, :avatar, :theme, :sidebar_status)
   end
 end

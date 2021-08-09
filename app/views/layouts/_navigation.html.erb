@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-custom navbar-light bg-light border-bottom">
+<nav class="navbar navbar-expand-custom border-bottom">
  <!--Brand-->
   <div class="brand-container d-flex">
     <% if policy(:dashboard).sidebar? %>
@@ -6,24 +6,28 @@
     <% end %>
     <div class="position-relative">
     <%= link_to main_app.root_path, data: { turbolinks: false }, class: "navbar-brand #{active_class('welcome')} d-flex justify-content-start align-items-center" do %>
-      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo') %>
+      <%= image_tag("sifaho-brand-dark.svg", alt: "Logo SIFAHO", class: 'logo dark-logo') %>
+      <%= image_tag("sifaho-brand.png", alt: "Logo SIFAHO", class: 'logo light-logo') %>
+    <% end %>
+    <% if policy(:dashboard).sidebar? %>
+      <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
     <% end %>
     <% if ENV['DEMO_RIBBON'] %>
       <span class="badge badge-warning demo-badge-nav"><strong>DEMO</strong></span>
     <% end %>
     </div>
   </div>
-  <div class="navbar-toggle-custom">
+  <div class="navbar-toggle-custom align-items-center">
     <%= render 'layouts/navigation_links' %>
-    <button class="navbar-toggler btn btn-xs" type="button" data-toggle="collapse" data-target="#dropdown-menu-header" aria-controls="dropdown-menu-header" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dropdown-menu-header" aria-controls="dropdown-menu-header" aria-expanded="false" aria-label="Toggle navigation">
+      <%= fa_icon "bars" %>
     </button>
   </div>
-  <div class="collapse navbar-collapse" id="dropdown-menu-header">
-    <ul class="navbar-nav mr-auto module-links-navbar">
+  <div class="collapse navbar-collapse d-flex align-items-center justify-content-between" id="dropdown-menu-header">
+    <ul class="navbar-nav module-links-navbar modules-links">
       <%= yield :page_header %>
     </ul>
-    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+    <ul class="navbar-nav module-links-navbar">
       <li class="nav-item d-flex align-items-center <%= active_class('notifications/notifications') %> mr-2 notification-container">
         <%= render 'layouts/navigation_links' %>
       </li>
