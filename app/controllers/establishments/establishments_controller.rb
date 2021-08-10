@@ -1,4 +1,4 @@
-class EstablishmentsController < ApplicationController
+class Establishments::EstablishmentsController < ApplicationController
   before_action :set_establishment, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /establishments
@@ -80,14 +80,6 @@ class EstablishmentsController < ApplicationController
     @establishment.destroy
     respond_to do |format|
       flash.now[:success] = "El establecimiento "+establishment_name+" se ha eliminado correctamente."
-      format.js
-    end
-  end
-
-  # GET /establishment/1/delete
-  def delete
-    authorize @establishment
-    respond_to do |format|
       format.js
     end
   end

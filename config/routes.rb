@@ -118,20 +118,19 @@ Rails.application.routes.draw do
   resources :profiles, path: :perfiles, only: [ :edit, :update, :show ]
 
   resources :laboratories, path: :laboratorios do
-    member do
-      get "delete"
-    end
     collection do
       get "search_by_name"
     end
   end
 
-  resources :establishments, path: :establecimientos do
-    member do
-      get "delete"
-    end
-    collection do
-      get "search_by_name"
+  scope module: :establishments, path: 'establecimientos' do
+    resources :establishments, path: '/' do
+      member do
+        get "delete"
+      end
+      collection do
+        get "search_by_name"
+      end
     end
   end
   
@@ -364,7 +363,7 @@ Rails.application.routes.draw do
     resources :index_reports, only: [:index], path: '/'
 
     resources :internal_order_product_reports,
-      only: [:show], 
+      only: [:show],
       controller: 'internal_order_products',
       model: 'internal_order_prodcut_reports',
       path: 'producto_por_sectores' do
