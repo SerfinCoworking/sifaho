@@ -3,10 +3,12 @@
 $('#dialog').modal('toggle');
 
 if($("#edit_professional_<%= @professional.id %>").is(":visible")){
-  console.log("DEBUG========================== form visible");
   $("#edit_professional_<%= @professional.id %>").find("#professional_first_name").val("<%= @professional.first_name %>");
   $("#edit_professional_<%= @professional.id %>").find("#professional_last_name").val("<%= @professional.last_name %>");
   $("#edit_professional_<%= @professional.id %>").find("#professional_dni").val("<%= @professional.dni %>");
+  $("#edit_professional_<%= @professional.id %>").find("#professional_dni").val("<%= @professional.dni %>");
+  $('.switch').removeClass('off');
+  console.log("Entró");
 }
 else{
   $("input#professional").val("<%= @professional.qualifications.first.code %> | <%= @professional.last_name %> | <%= @professional.first_name %>");

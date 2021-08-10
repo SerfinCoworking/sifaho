@@ -26,7 +26,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', professionals_path, class: 'btn mr-2' %>
+    <%= link_to 'Volver', professionals_path, class: 'btn btn-light mr-2' %>
     <% unless @professional.new_record? %>
       <%= link_to new_professional_path(id: @professional), class: "btn btn-primary mr-2", remote: 'true',
         title: 'Nuevo médico', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
