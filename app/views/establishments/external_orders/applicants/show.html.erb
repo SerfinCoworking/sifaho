@@ -239,7 +239,7 @@
       <% end %>
 
       <% if policy(:external_order_applicant).send?(@external_order) %>
-        <%= link_to send_applicant_external_order_path(@external_order), 
+        <%= link_to external_orders_applicant_send_path(@external_order), 
           'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>
           <%= fa_icon "paper-plane" %>

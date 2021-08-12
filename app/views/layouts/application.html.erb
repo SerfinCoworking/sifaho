@@ -6,7 +6,7 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "SIFAHO App farmacia HSMA" %>">
     <%= favicon_link_tag 'sifaho-favicon.png' %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload' %>
-    <%= tag :meta, name: :psj, action: action_name, controller: controller_name %>
+    <%= tag :meta, name: :psj, action: action_name, controller: controller_path %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
     <%= yield(:head) %>
     <%= csrf_meta_tags %>
@@ -22,7 +22,6 @@
       <div id="flash_messages" class="alert-container">
         <%= render "layouts/flash_notices" %>
       </div>
-
       <!-- Page Content -->
       <div class="d-flex" id="wrapper-2">
 

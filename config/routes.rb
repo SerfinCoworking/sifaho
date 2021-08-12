@@ -134,7 +134,9 @@ Rails.application.routes.draw do
     end
 
     namespace :external_orders, path: 'pedidos' do
-      resources :applicants
+      resources :applicants do
+        patch :send
+      end
     end
   end
   

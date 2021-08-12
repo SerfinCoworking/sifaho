@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['external_orders', 'internal_orders'].includes(_PAGE.controller) && (['new_applicant', 'edit_applicant','new_provider', 'edit_provider', 'accept_provider', 'create_applicant', 'update_applicant', 'create_provider', 'update_provider', 'send_provider'].includes(_PAGE.action))) ) return false;
+  if(!(['establishments/external_orders/applicants', 'internal_orders'].includes(_PAGE.controller) && (['new', 'edit','new_provider', 'edit_provider', 'accept_provider', 'create_applicant', 'update_applicant', 'create_provider', 'update_provider', 'send_provider'].includes(_PAGE.action))) ) return false;
   console.log("entró edit");
   initEvents();
   

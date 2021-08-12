@@ -47,7 +47,7 @@
       <% end %>
     <% end %>
     <% if policy(:external_order_applicant).edit?(external_order) %>
-      <%= link_to edit_applicant_external_order_path(external_order), :"data-turbolinks" => false, 
+      <%= link_to edit_external_orders_applicant_path(external_order), :"data-turbolinks" => false, 
         class: 'btn btn-warning btn-sm', title: 'Editar', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
         <%= fa_icon "pen" %>
       <% end %>

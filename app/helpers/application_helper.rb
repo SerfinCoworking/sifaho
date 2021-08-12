@@ -26,6 +26,10 @@ module ApplicationHelper
     return 'active' if params[:controller].start_with?(folder_name)
   end
 
+  def controller_path
+    return params[:controller]
+  end
+
   def active_action(link_path)
     return 'active' if params[:action] == link_path
   end

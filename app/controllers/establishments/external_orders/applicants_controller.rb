@@ -30,7 +30,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   # GET /external_orders/new_applicant
   def new
-    authorize ExternalOrder
+    authorize :external_order_applicant
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -44,7 +44,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   # GET /external_orders/1/edit_applicant
   def edit
-    authorize @external_order
+    policy(:external_order_applicant).edit?(@external_order)
     @external_order.order_products || @external_order.order_products.build
     @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
   end
@@ -54,7 +54,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # POST /external_orders.json
   def create
     @external_order = ExternalOrder.new(external_order_params)
-    authorize @external_order
+    authorize @external_order, policy_class: ExternalOrderApplicantPolicy
     @external_order.requested_date = DateTime.now
     @external_order.applicant_sector = current_user.sector
     @external_order.order_type = "solicitud"
@@ -68,7 +68,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
         @external_order.create_notification(current_user, notification_type)
 
-        format.html { redirect_to @external_order, notice: message }
+        format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -83,7 +83,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # PATCH /external_orders
   # PATCH /external_orders.json
   def update
-    authorize @external_order
+    policy(:external_order_applicant).update?(@external_order)
     @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
 
     respond_to do |format|
@@ -96,7 +96,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
         @external_order.create_notification(current_user, notification_type)
 
-        format.html { redirect_to @external_order, notice: message }
+        format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
