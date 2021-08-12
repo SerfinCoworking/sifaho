@@ -16,7 +16,7 @@
   </li>
 
   <li class="nav-item non-sel">
-    <%= link_to external_orders_applicants_path, class: "nav-link #{ active_action('applicant_index') }" do %>
+    <%= link_to external_orders_applicants_path, class: "nav-link #{ active_action_and_controller('index', 'applicants') }" do %>
       <%= fa_icon "inbox" %>
       Recibos
     <% end %>
@@ -37,9 +37,9 @@
     <% end %>
   </li>
 
-  <% if policy(ExternalOrder).new_applicant? %>
+  <% if policy(:external_order_applicant).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_external_orders_applicant_path, class: "nav-link #{ active_action_and_controller('new_applicant', 'external_orders') }" do %>
+      <%= link_to new_external_orders_applicant_path, class: "nav-link #{ active_action_and_controller('new', 'applicants') }" do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>

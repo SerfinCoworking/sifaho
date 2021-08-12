@@ -1,0 +1,16 @@
+<% content_for :applicant_serach_filter do %>
+  <label>Solicitante</label>
+  <input class="filterrific-periodically-observed form-control input-sm" 
+         placeholder="Sector/Establecimiento"
+         autocomplete="off"
+         type="text"
+         name="filterrific[search_applicant]"
+         id="filterrific_search_applicant"
+         type="text">
+<% end %>
+
+<% content_for :date_filter_label do %>
+  <label>Recibido</label>
+<% end %>
+
+<%= render "establishments/external_orders/filters_main" %>

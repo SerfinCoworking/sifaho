@@ -91,7 +91,7 @@
         <span class="caret"></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
-        <%= link_to applicant_index_external_orders_path, class: "dropdown-item" do %>
+        <%= link_to external_orders_applicants_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>
         <% end %>
@@ -111,7 +111,7 @@
           <% end %>
         <% end %>
         <% if policy(ExternalOrder).new_applicant? %>
-          <%= link_to new_applicant_external_orders_path, class: "dropdown-item" do %>
+          <%= link_to new_external_orders_applicant_path, class: "dropdown-item" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             S<span class="hidden-xs">olicitud</span>
           <% end %>

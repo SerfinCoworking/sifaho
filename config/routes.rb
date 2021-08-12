@@ -132,6 +132,10 @@ Rails.application.routes.draw do
         get "search_by_name"
       end
     end
+
+    namespace :external_orders, path: 'pedidos' do
+      resources :applicants
+    end
   end
   
   resources :purchases, path: :abastecimientos do 
@@ -215,25 +219,25 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get "send_provider"
-      get "send_applicant"
+      # get "send_applicant"
       get "return_provider_status"
-      get "return_applicant_status"
+      # get "return_applicant_status"
       get "accept_provider"
-      get "receive_applicant"
-      get :edit_applicant, path: :editar_solicitante
+      # get "receive_applicant"
+      # get :edit_applicant, path: :editar_solicitante
       get :edit_provider, path: :editar_proveedor
       get "nullify"
-      patch "update_applicant"
+      # patch "update_applicant"
       patch "update_provider"
     end
     collection do
-      get :new_applicant, path: :solicitar
+      # get :new_applicant, path: :solicitar
       get :new_provider, path: :despachar
-      get :applicant_index, path: :recibos
+      # get :applicant_index, path: :recibos
       get :provider_index, path: :despachos
       get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
-      post "create_applicant"
+      # post "create_applicant"
       post "create_provider"
     end
   end

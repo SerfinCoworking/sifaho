@@ -1,4 +1,4 @@
-<%= render 'header' %>
+<%= render 'establishments/external_orders/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header">
@@ -6,7 +6,7 @@
   </div>
   <div class="card-body fixed-panel-index">
     <%= render(
-      partial: 'external_orders/applicant_list',
+      partial: 'list',
       locals: { applicant_orders: @applicant_orders }
     ) %>
   </div>

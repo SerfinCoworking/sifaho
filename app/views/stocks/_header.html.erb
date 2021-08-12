@@ -34,7 +34,7 @@
         <% end %>
       <% end %>
       <% if policy(ExternalOrder).new_applicant? %>
-        <%= link_to new_applicant_external_orders_path, class: "dropdown-item" do %>
+        <%= link_to new_external_orders_applicant_path, class: "dropdown-item" do %>
           <%= fa_icon "plus" %>
           Solicitar a establecimiento
         <% end %>

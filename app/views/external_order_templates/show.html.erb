@@ -99,7 +99,7 @@
         <% end %>
       <% end %>
       <% if policy(@external_order_template).use_applicant? %>
-        <%= link_to new_applicant_external_orders_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
+        <%= link_to new_external_orders_applicant_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
           <%= fa_icon "plus" %>
           Crear solicitud
         <% end %>

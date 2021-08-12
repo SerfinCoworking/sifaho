@@ -3,12 +3,15 @@ class ExternalOrderPolicy < ApplicationPolicy
     show?
   end
 
-  def applicant_index?
-    show?
-  end
+  # def applicant_index?
+  #   show?
+  # end
 
   def show?
     user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+  end
+
+  def edit?
   end
 
   # new version
