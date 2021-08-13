@@ -238,8 +238,8 @@
         <% end %>
       <% end %>
 
-      <% if policy(:external_order_applicant).send?(@external_order) %>
-        <%= link_to external_orders_applicant_send_path(@external_order), 
+      <% if policy(:external_order_applicant).can_send?(@external_order) %>
+        <%= link_to dispatch_order_external_orders_applicant_path(@external_order), 
           'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>
           <%= fa_icon "paper-plane" %>
@@ -275,7 +275,7 @@
 
 <% content_for :modal do %>
   <%# Retornar a un estado anterior (solo solicitudes enviadas o entregas aceptadas)%>
-  <% if policy(:external_order_applicant).return_status?(@external_order) %>
+  <% if policy(:external_order_applicant).rollback_order?(@external_order) %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -293,7 +293,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', return_applicant_status_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Retornando...".html_safe, :class => 'btn btn-warning' %>
+            <%= link_to 'Confirmar', rollback_order_external_orders_applicant_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Retornando...".html_safe, :class => 'btn btn-warning' %>
           </div>
         </div>
       </div>

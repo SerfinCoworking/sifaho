@@ -1,11 +1,11 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
   # include FindLots
   before_action :set_applicant_order, only: [
-    :send_applicant,
-    :destroy,
-    :return_status,
     :edit,
     :update,
+    :dispatch_order,
+    :rollback_order,
+    :destroy,
     :accept_provider,
     :receive_applicant_confirm,
     :receive,
@@ -108,6 +108,28 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
+  def dispatch_order
+    policy(:external_order_applicant).can_send?(@external_order)
+    @external_order.send_request_by(current_user)
+    respond_to do |format|
+      message = 'La solicitud se ha enviado correctamente.'
+      format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
+    end
+  end
+
+  def rollback_order
+    policy(:external_order_applicant).rollback_order?(@external_order)
+    respond_to do |format|
+      begin
+        @external_order.return_applicant_status_by(current_user)
+        flash[:notice] = 'La solicitud se ha retornado a un estado anterior.'
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      end
+      format.html { redirect_to external_orders_applicant_url(@external_order) }
+    end
+  end
+
   # GET /external_orders/1/receive_applicant
   def receive
     authorize @external_order
@@ -122,29 +144,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       format.html { redirect_to @external_order }
     end
   end
-
-  def return_status
-    authorize @external_order
-    respond_to do |format|
-      begin
-        @external_order.return_applicant_status_by(current_user)
-        flash[:notice] = 'La solicitud se ha retornado a un estado anterior.'
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      end
-      format.html { redirect_to @external_order }
-    end
-  end
-
-  # GET /external_orders/1/send_applicant
-  # def send
-  #   authorize @external_order
-  #   @external_order.send_request_by(current_user)
-  #   respond_to do |format|
-  #     flash[:success] = "La solicitud se ha enviado correctamente."
-  #     format.html { redirect_to @external_order }
-  #   end
-  # end
 
   def set_order_product
     @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new

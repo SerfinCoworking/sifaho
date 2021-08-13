@@ -38,8 +38,6 @@
       <% end %>
     <% end %>
 
-
-
     <% if policy(:external_order_applicant).show? %>
       <%= link_to external_orders_applicant_path(external_order),
         class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
@@ -66,7 +64,6 @@
           <%= fa_icon "trash" %>
       </button>
     <% end %>
-    
   </td>
 </tr>    
 

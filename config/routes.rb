@@ -135,7 +135,10 @@ Rails.application.routes.draw do
 
     namespace :external_orders, path: 'pedidos' do
       resources :applicants do
-        patch :send
+        member do
+          get :dispatch_order
+          get :rollback_order
+        end
       end
     end
   end

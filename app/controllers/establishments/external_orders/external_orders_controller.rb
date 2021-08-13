@@ -9,7 +9,7 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     :accept_provider,
     :receive_applicant_confirm
   ]
-  
+
   def statistics
     @external_orders = ExternalOrder.all
     @requests_sent = ExternalOrder.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
@@ -42,7 +42,6 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     end
   end
 
-
   # DELETE /external_orders/1
   # DELETE /external_orders/1.json
   def destroy
@@ -65,15 +64,14 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
       format.js
     end
   end
-  
+
   def set_order_product
     @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_external_order
-      @external_order = ExternalOrder.find(params[:id])
-    end
-
+  # Use callbacks to share common setup or constraints between actions.
+  def set_external_order
+    @external_order = ExternalOrder.find(params[:id])
+  end
 end
