@@ -1,6 +1,6 @@
 module Api::V1
   class InsurancesController < ApiController
-    skip_before_action :verify_authenticity_token
+    # skip_before_action :verify_authenticity_token
     require 'json'
     require 'rest-client'
 
