@@ -31,7 +31,7 @@
           <span>Tema</span>
           <input type="checkbox" 
                  name="theme" 
-                 data-url="<%= profile_path(current_user.profile) %>"
+                 data-url="<%= main_app.profile_path(current_user.profile) %>"
                  data-toggle="switchbutton" <%= (current_user.profile.dark? ? "checked" : true) %> 
                  data-onlabel='<%= fa_icon "sun", class: "text-warning" %>'
                  data-offlabel='<%= fa_icon "moon" %>' 
