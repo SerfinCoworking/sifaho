@@ -75,7 +75,7 @@ Rails.application.routes.draw do
 
   get 'report/newExternalOrder'
 
-  post 'auth/login', to: 'authentication#authenticate'
+  # post 'auth/login', to: 'authentication#authenticate'
 
   resources :categories
 
@@ -106,16 +106,17 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :patients
+      post 'authenticate', to: 'authentication#authenticate'
       # get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
     end
   end
-  
-  get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', :as => "get_insurance"
+
+  get 'insurances/get_by_dni(/:dni)', to: 'insurances#get_by_dni', as: :get_insurance
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
 
-  resources :profiles, path: :perfiles, only: [ :edit, :update, :show ]
+  resources :profiles, path: :perfiles, only: %i[edit update show]
 
   resources :laboratories, path: :laboratorios do
     collection do
@@ -159,11 +160,11 @@ Rails.application.routes.draw do
 
   resources :purchases, path: :abastecimientos do
     member do
-      get "set_products"
-      patch "set_products", to: "purchases#save_products"
-      get "receive_purchase"
-      get "return_to_audit_confirm"
-      patch "return_to_audit"
+      get 'set_products'
+      patch 'set_products', to: 'purchases#save_products'
+      get 'receive_purchase'
+      get 'return_to_audit_confirm'
+      patch 'return_to_audit'
     end
   end
 

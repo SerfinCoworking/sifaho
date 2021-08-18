@@ -31,9 +31,9 @@ gem 'rack-cors'
 # To serialize API
 gem 'active_model_serializers'
 # To resize images
-gem "mini_magick"
+gem 'mini_magick'
 # To ldap athentication
-gem "devise_ldap_authenticatable"
+gem 'devise_ldap_authenticatable'
 # To generate reports
 gem 'thinreports'
 # To notifications
@@ -45,11 +45,12 @@ gem 'bootstrap-select-rails'
 # For full text search
 gem 'pg_search'
 # To avoid delete records
-gem "paranoia", "~> 2.2"
+gem 'paranoia', '~> 2.2'
 # For a lot of jquery functions
 gem 'jquery-ui-rails'
 # To group by date
 gem 'groupdate'
+
 gem 'active_median'
 # Use chartkick and highcharts-rails to perform charts
 gem 'chartkick'
@@ -61,13 +62,14 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap4'
 # Use momentjs and bootstrap3-datettimepicker for datetimepicker
 gem 'momentjs-rails', '>= 2.9.0'
+
 gem 'bootstrap4-datetime-picker-rails'
 # Use chosen-rails for autocomplete on select
 gem 'chosen-rails'
 # Use simple_form for do forms more easily
 gem 'simple_form'
 # Use cocoon for nested forms
-gem "cocoon"
+gem 'cocoon'
 # Use bootstrap 4.5 to layouts
 gem 'bootstrap', '~> 4.5.0'
 # Use Pundit for permissions in classes
@@ -100,7 +102,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+
+gem 'simple_command'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -120,9 +124,9 @@ end
 group :development do
   gem 'solargraph'
   gem 'rails_layout'
-  #Gem with better erros show de variables
+  # Gem with better erros show de variables
   gem 'binding_of_caller'
-  #Gem for view better errors
+  # Gem for view better errors
   gem 'better_errors'
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
@@ -132,10 +136,10 @@ group :development do
 end
 
 group :test do
-  gem 'factory_bot_rails', '~> 4.0'
-  gem 'shoulda-matchers', '~> 3.1'
-  gem 'faker'
   gem 'database_cleaner'
+  gem 'factory_bot_rails', '~> 4.0'
+  gem 'faker'
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,11 +1,11 @@
 class LotProvenancesController < ApplicationController
-  before_action :set_lot_provenance, only: [:show, :edit, :update, :destroy]
+  before_action :set_lot_provenance, only: %i[show edit update destroy]
 
   # GET /lot_provenances
   # GET /lot_provenances.json
   def index
     authorize LotProvenance
-    @lot_provenances = LotProvenance.all
+    @lot_provenances = LotProvenance.all.paginate(page: params[:page], per_page: 20)
   end
 
   # GET /lot_provenances/1
@@ -34,8 +34,9 @@ class LotProvenancesController < ApplicationController
 
     respond_to do |format|
       if @lot_provenance.save
-        format.html { redirect_to @lot_provenance, notice: 'LotProvenance was successfully created.' }
-        format.js { render :create, flash.now[:notice] = "Here is my flash notice" }
+        flash.now[:notice] = 'La procedencia se ha cargado correctamente'
+        format.html { redirect_to @lot_provenance, notice: 'La procedencia se ha cargado correctamente.' }
+        format.js { render :create }
       else
         format.js { render :new }
         format.json { render json: @lot_provenance.errors, status: :unprocessable_entity }
@@ -50,7 +51,7 @@ class LotProvenancesController < ApplicationController
 
     respond_to do |format|
       if @lot_provenance.update(lot_provenance_params)
-        format.html { redirect_to @lot_provenance, notice: 'LotProvenance was successfully updated.' }
+        format.html { redirect_to @lot_provenance, notice: 'La procedencia se ha modificado correctamente.' }
         format.json { render :show, status: :ok, location: @lot_provenance }
       else
         format.html { render :edit }
@@ -65,19 +66,20 @@ class LotProvenancesController < ApplicationController
     authorize @lot_provenance
     @lot_provenance.destroy
     respond_to do |format|
-      format.html { redirect_to lot_provenances_url, notice: 'LotProvenance was successfully destroyed.' }
+      format.html { redirect_to lot_provenances_url, notice: 'La procedencia se ha eliminado correctamente.' }
       format.json { head :no_content }
     end
   end
-  
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_lot_provenance
-      @lot_provenance = LotProvenance.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def lot_provenance_params
-      params.require(:lot_provenance).permit(:name)
-    end  
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_lot_provenance
+    @lot_provenance = LotProvenance.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def lot_provenance_params
+    params.require(:lot_provenance).permit(:name)
+  end
 end

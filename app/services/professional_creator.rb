@@ -34,7 +34,7 @@ class ProfessionalCreator
       end
 
       { id: @id, first_name: first_name, last_name: last_name, fullname: "#{last_name} #{first_name}", dni: dni,
-        sex: sex, qualifications_attributes: enrollments }
+        sex: sex, qualifications_attributes: enrollments, is_active: true }
     end
     @formated_practitioners.select { |prac| prac[:qualifications_attributes].present? }
   end

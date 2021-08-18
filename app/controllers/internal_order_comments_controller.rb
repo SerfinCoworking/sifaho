@@ -23,6 +23,7 @@ class InternalOrderCommentsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_internal_order_comment
     @internal_order_comment = InternalOrderComment.find(params[:id])
@@ -32,5 +33,4 @@ class InternalOrderCommentsController < ApplicationController
   def internal_order_comment_params
     params.require(:internal_order_comment).permit(:order_id, :text)
   end
-
 end

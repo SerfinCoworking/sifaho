@@ -59,9 +59,6 @@
     .form-control, .form-control:focus{
       background-color: #f8f9fa;
       color: $font-main-in-light;
-      &::placeholder{
-        color: $font-main-in-light;
-      }
       &[disabled], &[readonly]{
         background-color: #e2e4e6;
         cursor: not-allowed;

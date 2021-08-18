@@ -18,25 +18,17 @@
         </tbody>
       </table>
     </div>
-    <div class="row d-flex align-items-center" style="height: 50px">
-      <div class="col-5">
-        <%= will_paginate @lots, list_classes: %w(pagination mb-0), 
-          previous_label: '<i class="fa fa-angle-left"></i>',
-          next_label: '<i class="fa fa-angle-right"></i>', 
-          renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+    <div class="col-5 d-flex justify-content-around align-items-center">
+      <div>
+        Procedencias <span class="badge badge-secondary"><%= @lot_provenances.count %></span>
       </div>
-      <div class="col-5 d-flex justify-content-around align-items-center">
-        <div>
-          Lotes <span class="badge badge-secondary"><%= @lots.count %></span>
-        </div>
-      </div>
-      <div class="col-2 d-flex justify-content-end align-items-center">
-      </div>
+    </div>
+    <div class="col-2 d-flex justify-content-end align-items-center">
     </div>
   </div>
 <% else %>
   <%= render(
     partial: 'shared/not_found_filter',
-    locals: { object_name: 'lotes' }
+    locals: { object_name: 'procedencias' }
   ) %>
 <% end %>

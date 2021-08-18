@@ -1,9 +1,9 @@
 module Api::V1
   class InsurancesController < ApiController
-    skip_before_action :verify_authenticity_token
+    # skip_before_action :verify_authenticity_token
     require 'json'
     require 'rest-client'
-        
+
     # GET /api/v1/insurances/get_by_dni/:dni
     def get_by_dni
       dni = params[:dni]

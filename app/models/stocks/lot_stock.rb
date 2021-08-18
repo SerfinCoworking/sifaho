@@ -1,4 +1,5 @@
 class LotStock < ApplicationRecord
+  # Relationships
   belongs_to :lot
   belongs_to :stock
 
@@ -17,10 +18,12 @@ class LotStock < ApplicationRecord
 
   after_save :stock_refresh_quantity
 
+  # Validations
   validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :reserved_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates_presence_of :stock_id
 
+  # Delegations
   delegate :refresh_quantity, to: :stock, prefix: true
   delegate :name, :code, to: :product, prefix: true
   delegate :code, :laboratory_name, :expiry_date_string, :status, :provenance_name,
@@ -37,7 +40,7 @@ class LotStock < ApplicationRecord
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^expiry_/s
       # Ordenamiento por fecha de modificación en la BD
@@ -99,24 +102,24 @@ class LotStock < ApplicationRecord
     [
       ['Todos', '', 'default'],
       ['Igual a 0', 0, 'warning'],
-      ['Mayor a 0', 1, 'success'],
-    ]
-  end
-  
-  def self.options_for_sort
-    [
-      ['Fecha vencimiento (nueva primero)', 'expiry_desc', 'warning'],
-      ['Fecha vencimiento (antigua primero)', 'expiry_asc', 'success'],
+      ['Mayor a 0', 1, 'success']
     ]
   end
 
-  # Método para incrementar la cantidad del lote. 
+  def self.options_for_sort
+    [
+      ['Fecha vencimiento (nueva primero)', 'expiry_desc', 'warning'],
+      ['Fecha vencimiento (antigua primero)', 'expiry_asc', 'success']
+    ]
+  end
+
+  # Metodo para incrementar la cantidad del lote.
   # Si se encuentra archivado, vuelve a vigente con 0 de cantidad.
   def increment(a_quantity)
     self.quantity += a_quantity
     self.save!
   end
-  
+
   # Disminuye la cantidad del stock
   def decrement(a_quantity)
     if self.quantity < a_quantity

@@ -1,5 +1,5 @@
 class ChronicPrescriptionCommentsController < ApplicationController
-  before_action :set_chronic_prescription_comment, only: [:show ]
+  before_action :set_chronic_prescription_comment, only: [:show]
 
   def show
   end
@@ -15,16 +15,17 @@ class ChronicPrescriptionCommentsController < ApplicationController
     respond_to do |format|
       if @chronic_prescription_comment.save!
         @count = @chronic_prescription_comment.order.comments.count
-        flash.now[:success] = "El comentario se ha enviado correctamente."
+        flash.now[:success] = 'El comentario se ha enviado correctamente.'
         format.js
       else
-        flash[:error] = "El comentario no se ha podido enviar."
+        flash[:error] = 'El comentario no se ha podido enviar.'
         format.js { render layout: false, content_type: 'text/javascript' }
       end
     end
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_chronic_prescription_comment
     @chronic_prescription_comment = ChronicPrescriptionComment.find(params[:id])
@@ -34,5 +35,4 @@ class ChronicPrescriptionCommentsController < ApplicationController
   def chonic_prescription_comment_params
     params.require(:chronic_prescription_comment).permit(:order_id, :text)
   end
-
 end

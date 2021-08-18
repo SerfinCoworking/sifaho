@@ -12,15 +12,11 @@
           <%= fa_icon 'plus' %>
         <% end %> 
       </div>
-      <div class="card-body">
-        <ul class="list-group">
-          <% @lot_provenances.each do |lot_provenance| %>
-            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-              <%= lot_provenance.name %>
-              <span class="badge badge-pill badge-secondary"><%= lot_provenance.lots_count %></span>
-            </a>
-          <% end %>
-        </ul>
+      <div class="card-body" id='lot-provenances'>
+        <%= render(
+          partial: 'lot_provenances/list',
+          locals: { lot_provenances: @lot_provenances }
+        ) %>
       </div>
     </div>
   </div>

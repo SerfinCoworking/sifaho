@@ -1,5 +1,5 @@
 class AreasController < ApplicationController
-  before_action :set_area, only: [:show, :edit, :update, :destroy, :fill_products_card]
+  before_action :set_area, only: %i[show edit update destroy fill_products_card]
 
   # GET /areas
   # GET /areas.json
@@ -99,13 +99,14 @@ class AreasController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_area
-      @area = Area.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def area_params
-      params.require(:area).permit(:name, :parent_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_area
+    @area = Area.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def area_params
+    params.require(:area).permit(:name, :parent_id)
+  end
 end

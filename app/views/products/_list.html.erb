@@ -29,6 +29,12 @@
         </div>
       </div>
       <div class="col-2 d-flex justify-content-end align-items-center">
+        <%= link_to products_path(format: 'xlsx'),
+          class: "btn btn-success", target: :_blank,
+          title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "file-excel" %>
+          Excel
+        <% end %>
       </div>
     </div>
   </div>

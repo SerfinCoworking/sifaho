@@ -9,7 +9,7 @@
       <%= fa_icon "user-injured" %>
       <h5 class="card-title mb-0 ml-2">Viendo reporte de producto entregado por pacientes</h5>
     </div>
-    <%= link_to :back, class: "btn text-white" do %>
+    <%= link_to reports_patient_product_reports_path, class: "btn text-white" do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
@@ -72,7 +72,7 @@
     <% end %>
   </div>
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to :back, class: 'btn btn-light mr-2' do %>
+    <%= link_to reports_patient_product_reports_path, class: 'btn btn-light mr-2' do %>
       Volver
     <% end %>
     <%= link_to reports_patient_product_report_path(format: 'xlsx', id: @patient_product_report.id), 

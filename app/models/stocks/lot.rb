@@ -142,8 +142,4 @@ class Lot < ApplicationRecord
       end
     end
   end
-
-  # Métodos privados #----------------------------------------------------------
-  private
-  
 end

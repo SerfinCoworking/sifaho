@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Productos") do |sheet|
+  sheet.add_row ["#", "Código", "Producto", "Unidad", "Rubro"]
+
+  sheet.add_style 'A1:E1', bg_color: '00407A', fg_color: 'FFFFFF'
+  
+  @products.each_with_index do |product, index|
+    sheet.add_row [
+      index + 1,
+      product.code,
+      product.name,
+      product.unity_name,
+      product.area_name
+    ]
+  end
+  sheet.column_widths 5,8,50,12,30
+end

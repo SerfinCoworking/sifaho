@@ -7,7 +7,7 @@ $('#dialog .modal-body').html('Esta seguro que desea eliminar el insumo <%= @sup
 // Add form button
 $('#dialog .modal-footer').html(
   "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
-  "<a data-remote='true' data-method='delete' href='/supplies/<%= @supply.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='<%= supply_path(@supply) %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

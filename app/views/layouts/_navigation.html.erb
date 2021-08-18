@@ -10,7 +10,7 @@
         <% end %>
       <% end %>
       <% if policy(:dashboard).sidebar? %>
-        <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
+        <button type="button" class="btn" id="menu-toggle" data-target="#wrapper"  onClick="toggleSidabar(this);" data-url="<%= main_app.profile_path(current_user.profile) %>"><%= fa_icon "bars" %></button>
       <% end %>
     </div>
   </div>

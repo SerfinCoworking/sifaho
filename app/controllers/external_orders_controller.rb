@@ -1,8 +1,10 @@
 class ExternalOrdersController < ApplicationController
   include FindLots
-  before_action :set_external_order, only: [:show, :send_provider, :send_applicant, :destroy, :delete, :return_applicant_status, :return_provider_status, :edit_provider, :edit_applicant,
-    :update_applicant, :update_provider, :accept_provider, :receive_applicant_confirm, :receive_applicant, :receive_applicant, :nullify, :nullify_confirm ]
-  
+  before_action :set_external_order, only: %i[show send_provider send_applicant destroy delete return_applicant_status
+                                              return_provider_status edit_provider edit_applicant update_applicant
+                                              update_provider accept_provider receive_applicant_confirm
+                                              receive_applicant receive_applicant nullify nullify_confirm ]
+
   def statistics
     @external_orders = ExternalOrder.all
     @requests_sent = ExternalOrder.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }
@@ -61,14 +63,11 @@ class ExternalOrdersController < ApplicationController
       format.html
       format.js
       format.pdf do
-        send_data generate_order_report(@external_order),
-          filename: 'Despacho_'+@external_order.remit_code+'.pdf',
-          type: 'application/pdf',
-          disposition: 'inline'
+        pdf = ReportServices::ExternalOrderReportService.new(current_user, @external_order).generate_pdf
+        send_data pdf, filename: "Pedido_#{@external_order.remit_code}.pdf", type: 'application/pdf', disposition: 'inline'
       end
     end
   end
-
 
   # GET /external_orders/new
   def new_report
@@ -90,7 +89,7 @@ class ExternalOrdersController < ApplicationController
       @external_order.order_products.build
     end
   end
-  
+
   # GET /external_orders/new_provider
   def new_provider
     authorize ExternalOrder
@@ -158,7 +157,7 @@ class ExternalOrdersController < ApplicationController
     @external_order.requested_date = DateTime.now
     @external_order.provider_sector = current_user.sector
     @external_order.order_type = "provision"
-        
+
     respond_to do |format|
       begin
         if accepting?
@@ -236,11 +235,11 @@ class ExternalOrdersController < ApplicationController
   # GET /external_orders/1/send_provider
   def send_provider
     authorize @external_order
-    
+
     respond_to do |format|
       begin
-        @external_order.status = "provision_en_camino"
-        @external_order.send_order_by(current_user)        
+        @external_order.status = 'provision_en_camino'
+        @external_order.send_order_by(current_user)
         @external_order.save!
 
         format.html { redirect_to @external_order, notice: 'La provision se ha enviado correctamente.' }
@@ -312,7 +311,7 @@ class ExternalOrdersController < ApplicationController
       format.html { redirect_to @external_order }
     end
   end
-  
+
   def return_provider_status
     authorize @external_order
     respond_to do |format|
@@ -348,83 +347,6 @@ class ExternalOrdersController < ApplicationController
     respond_to do |format|
       format.js
     end
-  end
-  
-  def generate_order_report(external_order)
-    report = Thinreports::Report.new
-
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'other_page.tlf'), :default => true
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'external_order', 'first_page.tlf'), id: :cover_page
-    
-    # Comenzamos con la pagina principal
-    report.start_new_page layout: :cover_page
-
-    # Agregamos el encabezado
-    report.page[:title] = 'Pedido de establecimiento'
-    report.page[:remit_code] = external_order.remit_code
-    report.page[:requested_date] = external_order.requested_date.strftime('%d/%m/%YY')
-    report.page[:applicant_efector] = external_order.applicant_sector.sector_and_establishment
-    report.page[:applicant_user] = external_order.sent_request_by_user_fullname 
-    report.page[:provider_efector] = external_order.provider_sector.sector_and_establishment
-    report.page[:provider_user] = external_order.sent_provision_by_user_fullname
-    report.page[:observations] = external_order.observation
-    report.page[:products_count].value(external_order.order_products.count)
-    report.page[:observations_count].value("solicitante "+external_order.order_products.where.not(applicant_observation: [nil, ""]).count.to_s+" / proveedor "+external_order.order_products.where.not(provider_observation: [nil, ""]).count.to_s)
-
-    # Se van agregando los productos
-    external_order.order_products.joins(:product).order("name").each do |eop|  
-      # Luego de que la primer pagina ya halla sido rellenada, agregamos la pagina defualt (no tiene header)
-      
-      if report.page_count == 1 && report.list.overflow?
-        report.start_new_page
-      end
-      report.list do |list|
-        if eop.order_prod_lot_stocks.present?
-          eop.order_prod_lot_stocks.each_with_index do |opls, index|
-            if index == 0
-              list.add_row do |row|
-                row.values  lot_code: opls.lot_stock.lot.code,
-                  expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
-                  lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
-                row.values  product_code: eop.product.code,
-                  product_name: eop.product.name,
-                  requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
-                  obs_req: eop.applicant_observation,
-                  obs_del: eop.provider_observation
-        
-                row.item(:border).show if eop.order_prod_lot_stocks.count == 1
-              end
-            else                
-              list.add_row do |row|
-                row.values  lot_code: opls.lot_stock.lot.code,
-                expiry_date: opls.lot_stock.lot.expiry_date.present? ? opls.lot_stock.lot.expiry_date.strftime("%m/%y") : '----',
-                lot_q: "#{opls.quantity} #{eop.product.unity.name.pluralize(opls.quantity)}"
-        
-                row.item(:border).show if eop.order_prod_lot_stocks.last == opls
-              end
-            end
-          end
-        else
-          list.add_row do |row|
-            row.values  product_code: eop.product.code,
-            product_name: eop.product.name,
-            requested_quantity: eop.request_quantity.to_s+" "+eop.product.unity.name.pluralize(eop.request_quantity),
-            obs_req: eop.applicant_observation,
-            obs_del: eop.provider_observation
-            row.item(:border).show
-          end
-        end
-      end # fin lista      
-    end # fin productos
-
-    # A cada pagina le agregamos el pie de pagina
-    report.pages.each do |page|
-      page[:page_count] = report.page_count
-      page[:sector] = current_user.sector_name
-      page[:establishment] = current_user.establishment_name
-    end
-
-    report.generate
   end
 
   # patch /external_order/1/nullify

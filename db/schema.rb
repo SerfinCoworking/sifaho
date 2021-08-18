@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_160500) do
+ActiveRecord::Schema.define(version: 2021_08_18_144327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["country_id"], name: "index_addresses_on_country_id"
     t.index ["state_id"], name: "index_addresses_on_state_id"
+  end
+
+  create_table "app_users", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "areas", force: :cascade do |t|
@@ -250,12 +257,6 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
     t.datetime "updated_at", null: false
     t.index ["chronic_dispensation_id"], name: "index_dispensation_types_on_chronic_dispensation_id"
     t.index ["original_chronic_prescription_product_id"], name: "unique_org_chron_pres_on_dispensation_types"
-  end
-
-  create_table "dosage_instructions", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "establishment_types", force: :cascade do |t|
@@ -512,16 +513,12 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
     t.datetime "updated_at", null: false
     t.bigint "prescribed_by_id"
     t.bigint "delivered_by_id"
-    t.bigint "snomed_concept_id"
-    t.bigint "dosage_instruction_id"
     t.index ["delivered_by_id"], name: "index_inpatient_prescription_products_on_delivered_by_id"
-    t.index ["dosage_instruction_id"], name: "index_inpatient_prescription_products_on_dosage_instruction_id"
     t.index ["inpatient_prescription_id", "product_id", "parent_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
     t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
     t.index ["parent_id"], name: "index_inpatient_prescription_products_on_parent_id"
     t.index ["prescribed_by_id"], name: "index_inpatient_prescription_products_on_prescribed_by_id"
     t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
-    t.index ["snomed_concept_id"], name: "index_inpatient_prescription_products_on_snomed_concept_id"
   end
 
   create_table "inpatient_prescriptions", force: :cascade do |t|
@@ -936,7 +933,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
   create_table "patients", force: :cascade do |t|
     t.string "first_name", limit: 100
     t.string "last_name", limit: 100
-    t.integer "dni"
+    t.string "dni"
     t.integer "sex", default: 1
     t.datetime "birthdate"
     t.string "email", limit: 50
@@ -1353,8 +1350,10 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
     t.bigint "product_id"
     t.integer "total_quantity", default: 0
     t.integer "reserved_quantity", default: 0
+    t.bigint "snomed_concept_id"
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["sector_id"], name: "index_stocks_on_sector_id"
+    t.index ["snomed_concept_id"], name: "index_stocks_on_snomed_concept_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -1450,8 +1449,6 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
   add_foreign_key "cities", "states"
   add_foreign_key "external_order_comments", "external_orders", column: "order_id"
   add_foreign_key "external_order_comments", "users"
-  add_foreign_key "inpatient_prescription_products", "dosage_instructions"
-  add_foreign_key "inpatient_prescription_products", "snomed_concepts"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
   add_foreign_key "patient_phones", "patients"
@@ -1475,6 +1472,7 @@ ActiveRecord::Schema.define(version: 2021_08_06_160500) do
   add_foreign_key "states", "countries"
   add_foreign_key "stocks", "products"
   add_foreign_key "stocks", "sectors"
+  add_foreign_key "stocks", "snomed_concepts"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"

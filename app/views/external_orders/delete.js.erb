@@ -10,7 +10,7 @@ $('#dialog .modal-body').html('Enviar a papelera el pedido de <%= @external_orde
 // Add form button
 $('#dialog .modal-footer').html(
   "<a class='btn' data-dismiss='modal'>Cancelar</a>"+
-  "<a data-remote='true' data-method='delete' href='/external_orders/<%= @external_order.id %>>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+  "<a data-remote='true' data-method='delete' href='<%= external_order_path(@external_order) %>' data-dismiss='modal' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
 );
 
 // Show the dynamic dialog

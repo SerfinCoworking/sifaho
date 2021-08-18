@@ -35,7 +35,7 @@ module ApplicationHelper
   end
 
   def active_action_and_controller(action_name, a_controller_name)
-    return 'active' if params[:action] == action_name && controller_name == a_controller_name
+    return 'active' if (action_name).include?(params[:action]) && controller_name == a_controller_name
   end
 
   def order_status_label(an_order)

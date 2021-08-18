@@ -20,6 +20,7 @@ class Patient < ApplicationRecord
   # Validations
   validates_presence_of :first_name, :last_name, :dni
   validates_uniqueness_of :dni
+  validates :dni, numericality: { only_integer: true }
   validates_associated :patient_phones
 
   # Delegations

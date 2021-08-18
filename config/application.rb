@@ -12,7 +12,7 @@ module Sifaho
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
-    
+
     config.exceptions_app = self.routes # a Rack Application
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -24,7 +24,7 @@ module Sifaho
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :options]
+        resource '*', headers: :any, methods: %i[get post options]
       end
     end
 
@@ -32,11 +32,10 @@ module Sifaho
 
     config.generators.system_tests = nil
 
-
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}')]
     config.i18n.enforce_available_locales = true
     # Permitted locales available for the application
-    I18n.available_locales = [:en, :es]
+    I18n.available_locales = %i[en es]
     config.i18n.default_locale = :es
 
     config.autoload_paths += Dir[Rails.root.join('app', 'jobs', '*/')]
@@ -44,5 +43,6 @@ module Sifaho
     config.autoload_paths += Dir[Rails.root.join('app', 'mailers', '*/')]
     config.autoload_paths += Dir[Rails.root.join('app', 'policies', '*/')]
     config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '*/')]
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

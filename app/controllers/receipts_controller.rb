@@ -17,6 +17,13 @@ class ReceiptsController < ApplicationController
   # GET /receipts/1
   # GET /receipts/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = ReportServices::ReceiptReportService.new(current_user, @receipt).generate_pdf
+        send_data pdf, filename: "recibo_#{@receipt.remit_code}.pdf", type: 'application/pdf', disposition: 'inline'
+      end
+    end
   end
 
   # GET /receipts/new
@@ -94,10 +101,10 @@ class ReceiptsController < ApplicationController
       ensure
         @sectors = @receipt.provider_sector.present? ? @receipt.provider_sector.establishment.sectors : []
         @receipt_products = @receipt.receipt_products.present? ? @receipt.receipt_products : @receipt.receipt_products.build
-        
+
         format.html { render :edit }
         format.json { render json: @receipt.errors, status: :unprocessable_entity }
-      end       
+      end
     end
   end
 
@@ -122,37 +129,38 @@ class ReceiptsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_receipt
-      @receipt = params[:id].present? ? Receipt.find(params[:id]) : Receipt.new
-      @sectors = @receipt.provider_sector.present? ? @receipt.provider_sector.establishment.sectors : []
-      @receipt_products = @receipt.receipt_products.present? ? @receipt.receipt_products : @receipt.receipt_products.build
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def receipt_params
-      params.require(:receipt).permit(
-        :provider_sector_id,
-        :observation,
-        receipt_products_attributes: 
-        [
-          :id,
-          :product_id,
-          :receipt_id,
-          :expiry_date, 
-          :quantity,
-          :provenance_id,
-          :lot_code,
-          :laboratory_id,
-          :lot_id,
-          :lot_stock_id,
-          :_destroy
-        ]
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_receipt
+    @receipt = params[:id].present? ? Receipt.find(params[:id]) : Receipt.new
+    @sectors = @receipt.provider_sector.present? ? @receipt.provider_sector.establishment.sectors : []
+    @receipt_products = @receipt.receipt_products.present? ? @receipt.receipt_products : @receipt.receipt_products.build
+  end
 
-    def receiving?
-      submit = params[:commit]
-      return submit == "receive"
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def receipt_params
+    params.require(:receipt).permit(
+      :provider_sector_id,
+      :observation,
+      receipt_products_attributes: 
+      [
+        :id,
+        :product_id,
+        :receipt_id,
+        :expiry_date, 
+        :quantity,
+        :provenance_id,
+        :lot_code,
+        :laboratory_id,
+        :lot_id,
+        :lot_stock_id,
+        :_destroy
+      ]
+    )
+  end
+
+  def receiving?
+    submit = params[:commit]
+    return submit == "receive"
+  end
 end
