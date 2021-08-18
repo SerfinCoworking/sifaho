@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_12_140918) do
+ActiveRecord::Schema.define(version: 2021_08_18_144327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -933,7 +933,7 @@ ActiveRecord::Schema.define(version: 2021_08_12_140918) do
   create_table "patients", force: :cascade do |t|
     t.string "first_name", limit: 100
     t.string "last_name", limit: 100
-    t.integer "dni"
+    t.string "dni"
     t.integer "sex", default: 1
     t.datetime "birthdate"
     t.string "email", limit: 50
