@@ -149,7 +149,11 @@ Rails.application.routes.draw do
           get :accept_order
           get :nullify_order
         end
+        collection do
+          get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
+        end
       end
+
     end
   end
 
@@ -233,7 +237,7 @@ Rails.application.routes.draw do
   resources :external_orders, path: :pedidos_establecimientos, only: [:show, :destroy] do
     collection do
       get :statistics, path: :estadisticas
-      get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
+      # get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
     end
   end
 

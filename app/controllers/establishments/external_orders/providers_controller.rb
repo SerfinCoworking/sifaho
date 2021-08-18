@@ -3,16 +3,14 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   before_action :set_provider_order, only: [
     :edit,
     :update,
-    :destroy,
-    :delete,
     :dispatch_order,
     :rollback_order,
     :accept_order,
     :nullify_order
   ]
 
-  # GET /external_orders
-  # GET /external_orders.json
+  # GET /external_orders/providers
+  # GET /external_orders/providers.json
   def index
     policy(:external_order_provider).index?
     @filterrific = initialize_filterrific(
@@ -27,7 +25,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     @provider_orders = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
-  # GET /external_orders/new_provider
+  # GET /external_orders/providers
   def new
     authorize :external_order_provider
     begin
@@ -41,15 +39,15 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
-  # GET /external_orders/1/edit
+  # GET /external_orders/providers/1/edit
   def edit
     policy(:external_order_provider).edit?(@external_order)
     @external_order.order_products || @external_order.order_products.build
     @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
   end
 
-  # PATCH /external_orders
-  # PATCH /external_orders.json
+  # PATCH /external_orders/providers
+  # PATCH /external_orders/providers.json
   def create
     policy(:external_order_provider).create?
     @external_order = ExternalOrder.new(external_order_params)
@@ -79,8 +77,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
-  # PATCH /external_orders
-  # PATCH /external_orders.json
+  # PATCH /external_orders/providers/1
   def update
     policy(:external_order_provider).update?(@external_order)
     respond_to do |format|
@@ -108,7 +105,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
-  # GET /external_orders/1/send_provider
+  # GET /external_orders/providers/1/dispatch_order
   def dispatch_order
     policy(:external_order_provider).can_send?(@external_order)
 
@@ -131,7 +128,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
-  # GET /external_orders/1/accept_provider
+  # GET /external_orders/providers/1/accept_order
   def accept_order
     policy(:external_order_provider).accept_order?(@external_order)
     respond_to do |format|
@@ -150,6 +147,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
+  # GET /external_orders/providers/1/rollback_order
   def rollback_order
     policy(:external_order_provider).rollback_order?(@external_order)
     respond_to do |format|
@@ -164,7 +162,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
-  # patch /external_order/1/nullify
+  # GET /external_order/providers/1/nullify_order
   def nullify_order
     policy(:external_order_provider).nullify_order?(@external_order)
     @external_order.nullify_by(current_user)
@@ -174,15 +172,17 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
+  # DELETE /external_orders/providers/1
+  def destroy
+    policy(:external_order_applicant).destroy?(@external_order)
+    super destroy
+  end
+
   def set_order_product
     @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_provider_order
-      @external_order = ExternalOrder.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def external_order_params
@@ -215,14 +215,4 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     def accepting?
       return params[:commit] == "accepting"
     end
-
-    def receiving?
-      submit = params[:commit]
-      return submit == "Recibir" || submit == "Auditar y recibir"
-    end
-
-    def sending?
-      return params[:commit] == "sending"
-    end
-
 end

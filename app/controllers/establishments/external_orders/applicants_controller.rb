@@ -1,17 +1,16 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
-  # include FindLots
+  
   before_action :set_applicant_order, only: [
     :edit,
     :update,
     :dispatch_order,
     :rollback_order,
-    :destroy,
     :accept_provider,
-    :receive_order,
+    :receive_order
   ]
 
-  # GET /external_orders
-  # GET /external_orders.json
+  # GET /external_orders/applicants
+  # GET /external_orders/applicants.json
   def index
     policy(:external_order_applicant).index?
     @filterrific = initialize_filterrific(
@@ -26,7 +25,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     @applicant_orders = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
 
-  # GET /external_orders/new_applicant
+  # GET /external_orders/applicant
   def new
     authorize :external_order_applicant
     begin
@@ -40,16 +39,15 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
-  # GET /external_orders/1/edit_applicant
+  # GET /external_orders/applicant/1/edit
   def edit
     policy(:external_order_applicant).edit?(@external_order)
     @external_order.order_products || @external_order.order_products.build
     @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
   end
 
-  # Creación despacho o recibo
-  # POST /external_orders
-  # POST /external_orders.json
+  # POST /external_orders/applicants
+  # POST /external_orders/applicants.json
   def create
     policy(:external_order_applicant).create?
     @external_order = ExternalOrder.new(external_order_params)
@@ -78,8 +76,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
-  # PATCH /external_orders
-  # PATCH /external_orders.json
+  # PATCH /external_orders/applicants/1
   def update
     policy(:external_order_applicant).update?(@external_order)
     @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
@@ -106,6 +103,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
+  # GET /external_orders/applicants/1/dispatch_order
   def dispatch_order
     policy(:external_order_applicant).can_send?(@external_order)
     @external_order.send_request_by(current_user)
@@ -115,6 +113,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
+  # GET /external_orders/applicants/1/rollback_order
   def rollback_order
     policy(:external_order_applicant).rollback_order?(@external_order)
     respond_to do |format|
@@ -128,7 +127,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
-  # GET /external_orders/1/receive_applicant
+  # GET /external_orders/applicants/1/receive_order
   def receive_order
     policy(:external_order_applicant).receive_order?(@external_order)
     respond_to do |format|
@@ -142,78 +141,67 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       format.html { redirect_to external_orders_applicant_url(@external_order) }
     end
   end
-
-  def set_order_product
-    @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new
+  
+  # DELETE /external_orders/applicants/1
+  def destroy
+    policy(:external_order_applicant).destroy?(@external_order)
+    super destroy
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_applicant_order
-    @external_order = ExternalOrder.find(params[:id])
-  end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def external_order_params
-    params.require(:external_order).permit(:applicant_sector_id, 
-    :sent_by_id, 
-    :order_type,
-    :provider_sector_id, 
-    :requested_date, 
-    :date_received, 
-    :observation, 
-    :remit_code,
-    order_products_attributes: [
-      :id, 
-      :product_id, 
-      :lot_stock_id,
-      :request_quantity,
-      :delivery_quantity,
-      :applicant_observation,
-      :provider_observation, 
-      :_destroy,
-      order_prod_lot_stocks_attributes: [
-        :id,
-        :quantity,
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def external_order_params
+      params.require(:external_order).permit(:applicant_sector_id, 
+      :sent_by_id, 
+      :order_type,
+      :provider_sector_id, 
+      :requested_date, 
+      :date_received, 
+      :observation, 
+      :remit_code,
+      order_products_attributes: [
+        :id, 
+        :product_id, 
         :lot_stock_id,
-        :_destroy
-      ]
-    ])
-  end
-
-  def new_from_template(template_id, order_type)
-    # Buscamos el template
-    @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
-    @external_order = ExternalOrder.new
-    @external_order.order_type = @external_order_template.order_type
-    
-    if @external_order.provision?
-      @external_order.applicant_sector = @external_order_template.destination_sector
-    else
-      @external_order.provider_sector = @external_order_template.destination_sector
+        :request_quantity,
+        :delivery_quantity,
+        :applicant_observation,
+        :provider_observation, 
+        :_destroy,
+        order_prod_lot_stocks_attributes: [
+          :id,
+          :quantity,
+          :lot_stock_id,
+          :_destroy
+        ]
+      ])
     end
-    
-    # Seteamos los productos a la orden
-    @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
-      @external_order.order_products.build(product_id: iots.product_id)
+
+    def new_from_template(template_id, order_type)
+      # Buscamos el template
+      @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+      @external_order = ExternalOrder.new
+      @external_order.order_type = @external_order_template.order_type
+      
+      if @external_order.provision?
+        @external_order.applicant_sector = @external_order_template.destination_sector
+      else
+        @external_order.provider_sector = @external_order_template.destination_sector
+      end
+      
+      # Seteamos los productos a la orden
+      @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
+        @external_order.order_products.build(product_id: iots.product_id)
+      end
+      # Establecemos la opciones del selector de sector
+      @sectors = Sector
+        .select(:id, :name)
+        .with_establishment_id(@external_order_template.destination_establishment_id)
+        .where.not(id: current_user.sector_id)
     end
-    # Establecemos la opciones del selector de sector
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(@external_order_template.destination_establishment_id)
-      .where.not(id: current_user.sector_id)
-  end
 
-  def accepting?
-    return params[:commit] == "accepting"
-  end
-
-  def receiving?
-    submit = params[:commit]
-    return submit == "Recibir" || submit == "Auditar y recibir"
-  end
-
-  def sending?
-    return params[:commit] == "sending"
-  end
+    def sending?
+      return params[:commit] == "sending"
+    end
 end

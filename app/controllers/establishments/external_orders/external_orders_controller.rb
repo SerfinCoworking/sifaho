@@ -1,13 +1,8 @@
 class Establishments::ExternalOrders::ExternalOrdersController < ApplicationController
-  include FindLots
+
   before_action :set_external_order, only: [
     :show,
-    :destroy,
-    :delete,
-    :return_applicant_status,
-    :return_provider_status,
-    :accept_provider,
-    :receive_applicant_confirm
+    :destroy
   ]
 
   def statistics
@@ -42,10 +37,7 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     end
   end
 
-  # DELETE /external_orders/1
-  # DELETE /external_orders/1.json
   def destroy
-    authorize @external_order
     @sector_name = @external_order.applicant_sector.name
     @order_type = @external_order.order_type
     Notification.destroy_with_target_id(@external_order.id)
@@ -57,19 +49,7 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     end
   end
 
-  # GET /external_order/1/delete
-  def delete
-    authorize @external_order
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  def set_order_product
-    @order_product = params[:order_product_id].present? ? ExternalOrderProduct.find(params[:order_product_id]) : ExternalOrderProduct.new
-  end
-
-  private
+  protected
   # Use callbacks to share common setup or constraints between actions.
   def set_external_order
     @external_order = ExternalOrder.find(params[:id])
