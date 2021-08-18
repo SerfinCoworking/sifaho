@@ -209,13 +209,6 @@
     </div> <!-- End Tab content-->
   </div>
   <div class="card-footer d-flex justify-content-between">
-    <% if policy(@external_order).nullify? %>
-      <span data-toggle="modal" data-target="#anular-confirm">
-        <button class="btn btn-danger btn-sm" data-toggle='tooltip' title="Anular solicitud" >
-          <%= fa_icon 'ban' %>
-        </button>
-      </span>
-    <% end %>
     <div class="text-right w-100">
       <%= link_to external_orders_applicants_path,  
         'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
@@ -247,21 +240,13 @@
         <% end %>
       <% end %>
       
-      <% if policy(@external_order).return_applicant_status? %>
+      <% if policy(:external_order_applicant).rollback_order?(@external_order) %>
         <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
           Retornar
         </button>
       <% end %>
       
-      <% if policy(@external_order).accept_provider? %>
-        <%= link_to accept_provider_external_order_path(@external_order),  
-          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Aceptando... ".html_safe,
-          class: 'btn btn-primary btn-md mr-1' do %>
-          <%= fa_icon "thumbs-up" %> Aceptar
-        <% end %>
-      <% end %>
-
       
       <% if policy(@external_order).receive_applicant? %>
         <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">

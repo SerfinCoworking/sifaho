@@ -23,7 +23,7 @@
   </li>
 
   <li class="nav-item non-sel d-flex align-items-center">
-    <%= link_to provider_index_external_orders_path, class: "nav-link #{ active_action_and_controller('provider_index', 'external_orders') }" do %>
+    <%= link_to external_orders_providers_path, class: "nav-link #{ active_action_and_controller('index', 'providers') }" do %>
       <%= fa_icon "paper-plane" %>
       Despachos
     <% end %>
@@ -46,9 +46,9 @@
     </li>
   <% end %>
 
-  <% if policy(ExternalOrder).new_provider? %>
+  <% if policy(:external_order_provider).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_provider_external_orders_path, class: "nav-link #{ active_action_and_controller('new_provider', 'external_orders') }" do %>
+      <%= link_to new_external_orders_provider_path, class: "nav-link #{ active_action_and_controller('new', 'providers') }" do %>
         <%= fa_icon "plus" %>
         Despachar
       <% end %>

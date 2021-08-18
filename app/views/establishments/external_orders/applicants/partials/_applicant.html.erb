@@ -31,6 +31,13 @@
     <% end %>
   </td>
   <td class="text-left actions-col">
+    <% if policy(:external_order_applicant).can_send?(external_order) %>
+      <%= link_to dispatch_order_external_orders_applicant_path(external_order),
+        class: 'btn btn-primary btn-sm', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "paper-plane" %>
+      <% end %>
+    <% end %>
+
     <% if policy(:external_order_applicant).show? %>
       <%= link_to external_order_path(external_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>

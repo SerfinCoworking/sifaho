@@ -1,0 +1,39 @@
+<div class="card mx-auto">
+  <table class="table table-hover table-sm mb-0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Tu stock</th>
+        <th>Solicitar</th>
+        <th>Tu observación</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
+      <%= form.simple_fields_for :order_products do |form_product| %>
+        <%= render "shared/orders/applicant/fields", f: form_product %>
+      <% end %>
+    </tbody>
+    
+  </table>
+
+  <%= link_to_add_association form, 
+    :order_products, 
+    class: 'btn btn-primary btn-sm',
+    partial: "shared/orders/applicant/fields", 
+    data: {
+      "association-insertion-node" => "tbody#order-product-cocoon-container",
+      "association-insertion-method" => "append"} do %>
+    <%= fa_icon "plus" %>
+    Agregar producto
+  <% end %>
+  
+  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
+  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
+    <div class="invalid-feedback d-block">
+      <%= form.object.errors[:presence_of_products_into_the_order].first %>
+    </div>
+  <% end %>
+</div>

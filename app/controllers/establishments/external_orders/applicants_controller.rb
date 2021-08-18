@@ -15,7 +15,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders
   # GET /external_orders.json
   def index
-    # authorize ExternalOrder
+    policy(:external_order_applicant).index?
     @filterrific = initialize_filterrific(
       ExternalOrder.applicant(current_user.sector),
       params[:filterrific],
@@ -53,8 +53,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # POST /external_orders
   # POST /external_orders.json
   def create
+    policy(:external_order_applicant).create?
     @external_order = ExternalOrder.new(external_order_params)
-    authorize @external_order, policy_class: ExternalOrderApplicantPolicy
     @external_order.requested_date = DateTime.now
     @external_order.applicant_sector = current_user.sector
     @external_order.order_type = "solicitud"

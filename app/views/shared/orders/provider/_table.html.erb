@@ -6,18 +6,16 @@
         <th>Producto</th>
         <th>Unidad</th>
         <th>Tu stock</th>
-        <th><%= policy(form.object).edit_provider? || form.object.provision?  ? 'Solicitado' : 'Solicitar' %></th>
-        <% if policy(form.object).show_provider_fields? %>
+        <th> Solicitado</th>
           <th>Entregar</th>
           <th>Lote</th>
-        <% end %>
         <th>Tu observación</th>
         <th></th>
       </tr>
     </thead>
     <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
       <%= form.simple_fields_for :order_products do |form_product| %>
-        <%= render "shared/orders/order_product_fields", f: form_product %>
+        <%= render "shared/orders/provider/fields", f: form_product %>
       <% end %>
     </tbody>
     
@@ -26,7 +24,7 @@
   <%= link_to_add_association form, 
     :order_products, 
     class: 'btn btn-primary btn-sm',
-    partial: "shared/orders/order_product_fields", 
+    partial: "shared/orders/provider/fields", 
     data: {
       "association-insertion-node" => "tbody#order-product-cocoon-container",
       "association-insertion-method" => "append"} do %>

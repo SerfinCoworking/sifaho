@@ -140,6 +140,13 @@ Rails.application.routes.draw do
           get :rollback_order
         end
       end
+
+      resources :providers do
+        member do
+          # get :dispatch_order
+          # get :rollback_order
+        end
+      end
     end
   end
   
@@ -224,9 +231,7 @@ Rails.application.routes.draw do
     member do
       get "delete"
       get "send_provider"
-      # get "send_applicant"
       get "return_provider_status"
-      # get "return_applicant_status"
       get "accept_provider"
       # get "receive_applicant"
       # get :edit_applicant, path: :editar_solicitante

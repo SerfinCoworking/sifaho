@@ -110,15 +110,17 @@
             Recibo
           <% end %>
         <% end %>
-        <% if policy(ExternalOrder).new_applicant? %>
+        <% if policy(:external_order_applicant).new? %>
           <%= link_to new_external_orders_applicant_path, class: "dropdown-item" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             S<span class="hidden-xs">olicitud</span>
           <% end %>
         <% end %>
-        <%= link_to new_provider_external_orders_path, class: "dropdown-item" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          D<span class="hidden-xs">espacho</span>
+        <% if policy(:external_order_provider).new? %>
+          <%= link_to new_provider_external_orders_path, class: "dropdown-item" do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            D<span class="hidden-xs">espacho</span>
+          <% end %>
         <% end %>
         <%= link_to external_order_templates_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
