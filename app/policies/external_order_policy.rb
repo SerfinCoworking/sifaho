@@ -78,15 +78,6 @@ class ExternalOrderPolicy < ApplicationPolicy
   
   ####### TO REVIEW ######
 
-  def receive_order?
-    if record.applicant_sector == user.sector && receive_order.any? { |role| user.has_role?(role) }
-      if record.recibo?
-        record.recibo_auditoria?
-      elsif record.despacho? || record.solicitud_abastecimiento?
-        record.provision_en_camino?
-      end
-    end
-  end
 
   def return_status?
     if destroy_pres.any? { |role| user.has_role?(role) }

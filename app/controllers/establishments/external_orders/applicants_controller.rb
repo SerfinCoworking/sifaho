@@ -7,9 +7,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     :rollback_order,
     :destroy,
     :accept_provider,
-    :receive_applicant_confirm,
-    :receive,
-    :receive_applicant
+    :receive_order,
   ]
 
   # GET /external_orders
@@ -131,17 +129,17 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   end
 
   # GET /external_orders/1/receive_applicant
-  def receive
-    authorize @external_order
+  def receive_order
+    policy(:external_order_applicant).receive_order?(@external_order)
     respond_to do |format|
       begin
         unless @external_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
         @external_order.receive_order_by(current_user)
-        flash[:success] = 'La '+@external_order.order_type+' se ha recibido correctamente'
+        flash[:success] = "La #{@external_order.order_type} se ha recibido correctamente"
       rescue ArgumentError => e
         flash[:error] = e.message
       end
-      format.html { redirect_to @external_order }
+      format.html { redirect_to external_orders_applicant_url(@external_order) }
     end
   end
 

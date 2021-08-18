@@ -37,8 +37,8 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
     dispense_pres.any? { |role| user.has_role?(role) }
   end
   
-  def receive_applicant?
-    if record.applicant_sector == user.sector && record.provision_en_camino? 
+  def receive_order?(resource)
+    if resource.applicant_sector == user.sector && resource.provision_en_camino? 
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
@@ -57,15 +57,6 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
 
   ####### TO REVIEW ######
 
-  def receive_order?
-    if record.applicant_sector == user.sector && receive_order.any? { |role| user.has_role?(role) }
-      if record.recibo?
-        record.recibo_auditoria?
-      elsif record.despacho? || record.solicitud_abastecimiento?
-        record.provision_en_camino?
-      end
-    end
-  end
 
   # def return_status?
   #   if destroy_pres.any? { |role| user.has_role?(role) }

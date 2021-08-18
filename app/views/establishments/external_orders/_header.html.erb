@@ -30,7 +30,7 @@
     <!-- Badge notification -->
     <% request_count = ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
     <% if request_count > 0%>
-      <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 1}), class: 'badge badge-info',
+      <%= link_to external_orders_providers_path(filterrific: {:with_status => 1}), class: 'badge badge-info',
       title: "Solicitud", data: { toggle: 'tooltip', placement: 'bottom' } do %>
         <%= request_count %>
       <% end %>

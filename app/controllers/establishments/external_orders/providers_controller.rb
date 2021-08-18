@@ -1,16 +1,14 @@
 class Establishments::ExternalOrders::ProvidersController < Establishments::ExternalOrders::ExternalOrdersController
   include FindLots
   before_action :set_provider_order, only: [
-    :show,
-    :send_provider,
-    :destroy,
-    :delete,
-    :return_provider_status,
     :edit,
     :update,
-    :accept_provider,
-    :nullify,
-    :nullify_confirm 
+    :destroy,
+    :delete,
+    :dispatch_order,
+    :rollback_order,
+    :accept_order,
+    :nullify_order
   ]
 
   # GET /external_orders
@@ -87,10 +85,15 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     policy(:external_order_provider).update?(@external_order)
     respond_to do |format|
       begin
-        @external_order.update!(external_order_params)
-        @external_order.accept_order_by(current_user) if accepting?
-        message = accepting? ? 'La provisión se ha auditado y aceptado correctamente.' : "La provisión se ha auditado y se encuentra en auditoria."
-        @external_order.create_notification(current_user, "auditó") unless accepting?
+        if accepting?
+          @external_order.accept_order_by(current_user)
+          message = 'La provisión se ha auditado y aceptado correctamente.'
+        else
+          @external_order.status = 'proveedor_auditoria'
+          @external_order.update!(external_order_params)
+          message = 'La provisión se ha auditado y se encuentra en auditoria.'
+          @external_order.create_notification(current_user, "auditó")
+        end
 
         format.html { redirect_to external_orders_provider_url(@external_order), notice: message }
       rescue ArgumentError => e
@@ -115,7 +118,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
         @external_order.send_order_by(current_user)
         @external_order.save!
 
-        format.html { redirect_to @external_order, notice: 'La provision se ha enviado correctamente.' }
+        format.html { redirect_to external_orders_provider_url(@external_order), notice: 'La provision se ha enviado correctamente.' }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
@@ -129,12 +132,12 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   end
 
   # GET /external_orders/1/accept_provider
-  def accept_provider
-    authorize @external_order
+  def accept_order
+    policy(:external_order_provider).accept_order?(@external_order)
     respond_to do |format|
       begin
         @external_order.accept_order_by(current_user)
-        format.html { redirect_to @external_order, notice: 'La provision se ha aceptado correctamente.' }
+        format.html { redirect_to external_orders_provider_url(@external_order), notice: 'La provision se ha aceptado correctamente.' }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
@@ -148,7 +151,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   end
 
   def rollback_order
-    authorize @external_order
+    policy(:external_order_provider).rollback_order?(@external_order)
     respond_to do |format|
       begin
         @external_order.return_to_proveedor_auditoria_by(current_user)
@@ -157,17 +160,17 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       else
         flash[:notice] = 'El pedido se ha retornado a un estado anterior.'
       end
-      format.html { redirect_to @external_order }
+      format.html { redirect_to external_orders_provider_url(@external_order) }
     end
   end
 
   # patch /external_order/1/nullify
-  def nullify
-    authorize @external_order
+  def nullify_order
+    policy(:external_order_provider).nullify_order?(@external_order)
     @external_order.nullify_by(current_user)
     respond_to do |format|
       flash[:success] = "#{@external_order.order_type.humanize} se ha anulado correctamente."
-      format.html { redirect_to @external_order }
+      format.html { redirect_to external_orders_provider_url(@external_order) }
     end
   end
 
@@ -183,8 +186,8 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def external_order_params
-      params.require(:external_order).permit(:applicant_sector_id, 
-      :sent_by_id, 
+      params.require(:external_order).permit(:applicant_sector_id,
+      :sent_by_id,
       :order_type,
       :provider_sector_id, 
       :requested_date, 

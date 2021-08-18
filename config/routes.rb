@@ -138,19 +138,22 @@ Rails.application.routes.draw do
         member do
           get :dispatch_order
           get :rollback_order
+          get :receive_order
         end
       end
 
       resources :providers do
         member do
-          # get :dispatch_order
-          # get :rollback_order
+          get :dispatch_order
+          get :rollback_order
+          get :accept_order
+          get :nullify_order
         end
       end
     end
   end
-  
-  resources :purchases, path: :abastecimientos do 
+
+  resources :purchases, path: :abastecimientos do
     member do
       get "set_products"
       patch "set_products", to: "purchases#save_products"
@@ -228,27 +231,9 @@ Rails.application.routes.draw do
   end
 
   resources :external_orders, path: :pedidos_establecimientos, only: [:show, :destroy] do
-    member do
-      get "delete"
-      get "send_provider"
-      get "return_provider_status"
-      get "accept_provider"
-      # get "receive_applicant"
-      # get :edit_applicant, path: :editar_solicitante
-      get :edit_provider, path: :editar_proveedor
-      get "nullify"
-      # patch "update_applicant"
-      patch "update_provider"
-    end
     collection do
-      # get :new_applicant, path: :solicitar
-      get :new_provider, path: :despachar
-      # get :applicant_index, path: :recibos
-      get :provider_index, path: :despachos
       get :statistics, path: :estadisticas
       get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
-      # post "create_applicant"
-      post "create_provider"
     end
   end
 

@@ -1,12 +1,7 @@
 <%= form_for_filterrific @filterrific do |f| %>
   <div class="row justify-content-between">
     <div class="col-1 d-flex justify-content-end align-items-center">
-      <%= render_filterrific_spinner %>
-      <%= link_to provider_index_external_orders_path(reset: true), class: 'btn btn-secondary ml-2',
-        title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
-        'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
-        <%= fa_icon 'redo' %>
-      <% end %>
+      <%= yield(:reset_filters) %>      
     </div>
 
     <%# CÓDIGO DE PEDIDO %>
@@ -23,7 +18,7 @@
 
     <%# PROVEEDOR / SOLICITANTE %>
     <div class="col">
-      <%= yield(:applicant_serach_filter) %>
+      <%= yield(:applicant_search_filter) %>
     </div>
 
     <%# TIPO DE ORDEN %>

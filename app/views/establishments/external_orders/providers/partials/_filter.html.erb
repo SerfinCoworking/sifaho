@@ -1,0 +1,13 @@
+<% content_for :reset_filters do %>
+  <%= render_filterrific_spinner %>
+  <%= link_to external_orders_providers_path(reset: true), class: 'btn btn-secondary ml-2',
+    title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' }, 
+    'data-disable-with' => "<i class='fa fa-redo fa-spin'></i>".html_safe do %>
+    <%= fa_icon 'redo' %>
+  <% end %>
+<% end %>
+
+<% content_for :date_filter_label do %>
+  <label>Entregado</label>
+<% end %>
+<%= render "establishments/external_orders/filters_main" %>

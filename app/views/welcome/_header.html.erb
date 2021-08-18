@@ -95,7 +95,7 @@
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>
         <% end %>
-        <%= link_to provider_index_external_orders_path, class: "dropdown-item" do %>
+        <%= link_to external_orders_providers_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
           <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
@@ -117,7 +117,7 @@
           <% end %>
         <% end %>
         <% if policy(:external_order_provider).new? %>
-          <%= link_to new_provider_external_orders_path, class: "dropdown-item" do %>
+          <%= link_to new_external_orders_provider_path, class: "dropdown-item" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             D<span class="hidden-xs">espacho</span>
           <% end %>

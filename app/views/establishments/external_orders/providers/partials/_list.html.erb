@@ -43,21 +43,21 @@
           Despachos <span class="badge badge-secondary"><%= @provider_orders.count %></span>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 1}), 
+          <%= link_to external_orders_providers_path(filterrific: {:with_status => 1}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver solicitudes", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             Solicitudes sin responder <span class="badge badge-info"><%= @provider_orders.solicitud_enviada.count %></span>
           <% end %>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 2}), 
+          <%= link_to external_orders_providers_path(filterrific: {:with_status => 2}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver pedidos en auditoría", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             En auditoría <span class="badge badge-warning"><%= @provider_orders.proveedor_auditoria.count %></span>
           <% end %>
         </div>
         <div>
-          <%= link_to provider_index_external_orders_path(filterrific: {:with_status => 3}), 
+          <%= link_to external_orders_providers_path(filterrific: {:with_status => 3}), 
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver pedidos aceptados", data: { toggle: 'tooltip', placement: 'bottom' } do %>
             Aceptados <span class="badge badge-primary"><%= @provider_orders.proveedor_aceptado.count %></span>

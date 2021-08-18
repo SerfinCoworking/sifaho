@@ -52,14 +52,14 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
     end
   end
 
-  def nullify?(resource)
+  def nullify_order?(resource)
     if (["solicitud_enviada"].include? resource.status) && resource.provider_sector == user.sector
       edit?(resource)
     end
   end
 
   def nullify_confirm?(resource)
-    nullify?(resource)
+    nullify_order?(resource)
   end
   ####### TO REVIEW ######
 

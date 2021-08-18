@@ -63,7 +63,7 @@
       </button>
     <% end %>
     
-    <% if policy(:external_order_provider).nullify?(external_order) %>
+    <% if policy(:external_order_provider).nullify_order?(external_order) %>
       <span data-toggle="modal" data-target="#anular-confirm-<%= external_order.id %>">
         <%= button_tag class:"btn btn-sm btn-danger",
           title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
@@ -82,7 +82,7 @@
     <%= render(partial: 'shared/modals/delete_confirmation') %>
   <% end %>
 
-  <% if policy(:external_order_provider).nullify?(external_order) %>
+  <% if policy(:external_order_provider).nullify_order?(external_order) %>
     <div class="modal fade" id="anular-confirm-<%=external_order.id%>">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -97,7 +97,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Anular', nullify_external_order_path(external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando...".html_safe, :class => 'btn btn-danger' %>
+            <%= link_to 'Anular', nullify_order_external_orders_provider_path(external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando...".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>

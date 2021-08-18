@@ -286,7 +286,7 @@
   <% end %>
   
   <%# Recibo de orden (solo en proveedor en camino) %>
-  <% if policy(@external_order).receive_applicant? %>
+  <% if policy(:external_order_applicant).receive_order?(@external_order) %>
     <div class="modal fade" id="receive-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -302,7 +302,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', receive_applicant_external_order_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Recibiendo...".html_safe, :class => 'btn btn-success' %>
+            <%= link_to 'Confirmar', receive_order_external_orders_applicant_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Recibiendo...".html_safe, :class => 'btn btn-success' %>
           </div>
         </div>
       </div>
