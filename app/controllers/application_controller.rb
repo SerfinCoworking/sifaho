@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, :keep_params
   #before_action :configure_permitted_parameters, if: :devise_controller?
   include Pundit
-  
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
     flash[:error] = "Usted no está autorizado para realizar esta acción."
     redirect_to(request.referrer || root_path)
   end
+
   protected
     
     def configure_permitted_parameters

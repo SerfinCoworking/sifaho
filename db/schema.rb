@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_10_153529) do
+ActiveRecord::Schema.define(version: 2021_08_12_140918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -50,6 +50,13 @@ ActiveRecord::Schema.define(version: 2021_08_10_153529) do
     t.index ["city_id"], name: "index_addresses_on_city_id"
     t.index ["country_id"], name: "index_addresses_on_country_id"
     t.index ["state_id"], name: "index_addresses_on_state_id"
+  end
+
+  create_table "app_users", force: :cascade do |t|
+    t.string "username"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "areas", force: :cascade do |t|
