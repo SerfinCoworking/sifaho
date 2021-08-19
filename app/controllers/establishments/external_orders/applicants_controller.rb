@@ -73,7 +73,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       ensure
         @order_products = @external_order.order_products.present? ? @external_order.order_products : @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
-        format.html { render :new_applicant }
+        format.html { render :new }
       end
     end
   end
@@ -100,7 +100,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       ensure
         @order_products = @external_order.order_products.present? ? @external_order.order_products : @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
-        format.html { render :edit_applicant }
+        format.html { render :edit }
       end
     end
   end

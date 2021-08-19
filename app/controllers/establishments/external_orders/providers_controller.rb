@@ -74,7 +74,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       ensure
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
-        format.html { render :new_provider }
+        format.html { render :new }
       end
     end
   end
@@ -102,7 +102,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
         @external_order.status = "proveedor_auditoria"
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
-        format.html { render :edit_provider }
+        format.html { render :edit }
       end
     end
   end
@@ -125,7 +125,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       ensure
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
-        format.html { render :edit_provider }
+        format.html { render :edit }
       end
     end
   end
@@ -144,7 +144,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       ensure
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
-        format.html { render :edit_provider }
+        format.html { render :edit }
       end
     end
   end

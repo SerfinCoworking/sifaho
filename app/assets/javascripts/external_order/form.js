@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['establishments/external_orders/applicants','establishments/external_orders/providers', 'internal_orders'].includes(_PAGE.controller) && (['new', 'edit', 'accept_provider', 'create_applicant', 'update_applicant', 'create_provider', 'update_provider'].includes(_PAGE.action))) ) return false;
+  if(!(['establishments/external_orders/applicants','establishments/external_orders/providers', 'internal_orders'].includes(_PAGE.controller) && (['new', 'edit', 'accept_order', 'create', 'update'].includes(_PAGE.action))) ) return false;
   $('#effector-establishment').autocomplete({
     source: $('#effector-establishment').data('autocomplete-source'),
     minLength: 2,
