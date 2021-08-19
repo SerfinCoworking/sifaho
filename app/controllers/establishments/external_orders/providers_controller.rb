@@ -1,12 +1,14 @@
 class Establishments::ExternalOrders::ProvidersController < Establishments::ExternalOrders::ExternalOrdersController
   include FindLots
   before_action :set_external_order, only: [
+    :show,
     :edit,
     :update,
     :dispatch_order,
     :rollback_order,
     :accept_order,
-    :nullify_order
+    :nullify_order,
+    :destroy
   ]
 
   # GET /external_orders/providers

@@ -1,10 +1,5 @@
 class Establishments::ExternalOrders::ExternalOrdersController < ApplicationController
 
-  before_action :set_external_order, only: [
-    :show,
-    :destroy
-  ]
-
   def statistics
     @external_orders = ExternalOrder.all
     @requests_sent = ExternalOrder.applicant(current_user.sector).solicitud_abastecimiento.group(:status).count.transform_keys { |key| key.split('_').map(&:capitalize).join(' ') }

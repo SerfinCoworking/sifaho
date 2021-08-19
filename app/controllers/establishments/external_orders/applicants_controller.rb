@@ -1,12 +1,14 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
 
   before_action :set_external_order, only: [
+    :show,
     :edit,
     :update,
     :dispatch_order,
     :rollback_order,
     :accept_provider,
-    :receive_order
+    :receive_order,
+    :destroy
   ]
 
   # GET /external_orders/applicants
