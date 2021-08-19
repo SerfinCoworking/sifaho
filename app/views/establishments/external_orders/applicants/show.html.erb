@@ -248,7 +248,7 @@
       <% end %>
       
       
-      <% if policy(@external_order).receive_applicant? %>
+      <% if policy(:external_order_applicant).receive_order?(@external_order) %>
         <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
           <%= fa_icon "check" %>
           Recibir
