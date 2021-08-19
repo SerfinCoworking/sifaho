@@ -1,7 +1,6 @@
 class Establishments::ExternalOrders::Templates::TemplatesController < ApplicationController
 
-  before_action :set_template, only: %i[show edit update destroy use_applicant use_provider
-                                                       edit_provider]
+  before_action :set_template, only: %i[show edit update destroy use_applicant use_provider]
 
   # GET /external_order_templates
   # GET /external_order_templates.json
@@ -24,60 +23,6 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
     end
   end
 
-  # GET /external_order_templates/new_provider
-  def new_provider
-    authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
-    @external_order_template.external_order_product_templates.build
-    @sectors = []
-  end
-
-  # GET /external_order_templates/1/edit_provider
-  def edit_provider
-    authorize @external_order_template
-    @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
-  end
-
-  # POST /external_order_templates
-  # POST /external_order_templates.json
-  def create
-    authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new(external_order_template_params)
-    @external_order_template.owner_sector = current_user.sector
-    @external_order_template.created_by = current_user
-
-    respond_to do |format|
-      begin
-        @external_order_template.save!
-        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha creado correctamente.' }
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
-        format.html { render :new }
-      end
-    end
-  end
-
-  # PATCH/PUT /external_order_templates/1
-  # PATCH/PUT /external_order_templates/1.json
-  def update
-    authorize @external_order_template
-
-    respond_to do |format|
-      begin
-        @external_order_template.update!(external_order_template_params)
-        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha editado correctamente.' }
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
-        format.html { render :edit }
-      end
-    end
-  end
 
   # DELETE /external_order_templates/1
   # DELETE /external_order_templates/1.json

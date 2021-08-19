@@ -66,8 +66,8 @@
         data-placement="top"
         data-target="#delete-item" 
         data-title="Eliminar solicitud"
-        data-body="Esta seguro que desea eliminar la solicitud #{ external_order.remit_code }?"
-        data-href="/establecimientos/pedidos/applicants/#{external_order.id}">
+        data-body="Esta seguro que desea eliminar la solicitud <%= external_order.remit_code %>?"
+        data-href="<%= external_orders_templates_applicant_url(external_order.id) %>">
           <%= fa_icon "trash" %>
       </button>
     <% end %>

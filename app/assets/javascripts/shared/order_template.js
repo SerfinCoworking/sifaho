@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['establishments/external_orders/templates/applicants', 'internal_order_templates'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
+  if(!(['establishments/external_orders/templates/applicants', 'establishments/external_orders/templates/providers', 'internal_order_templates'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   // Función para autocompletar y buscar el insumo por código
   initEvents();
   

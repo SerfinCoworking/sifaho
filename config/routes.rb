@@ -164,17 +164,8 @@ Rails.application.routes.draw do
         # Solicitudes
         resources :applicants
         # Despachos
-        # resources :providers
+        resources :providers
       end
-      # resources :external_order_templates, path: "plantilla" do
-      #   collection do
-      #     get "new_provider"
-      #   end
-      #   member do
-      #     get "delete"
-      #     get "edit_provider"
-      #   end
-      # end
     end
   end
 

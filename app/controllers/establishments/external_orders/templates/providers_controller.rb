@@ -1,15 +1,15 @@
-class Establishments::ExternalOrders::Templates::ApplicantsController < Establishments::ExternalOrders::Templates::TemplatesController
-
-  # GET /external_order_templates/new
-  def new
+class Establishments::ExternalOrders::Templates::ProvidersController < Establishments::ExternalOrders::Templates::TemplatesController
+   # GET /external_order_templates/new
+   def new
     authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new(order_type: 'solicitud')
+    @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
     @external_order_template.external_order_product_templates.build
     @sectors = []
   end
- # GET /external_order_templates/1/edit
+
+  # GET /external_order_templates/1/edit
   def edit
-    policy(:external_order_template_applicant).edit?(@external_order_template)
+    policy(:external_order_template_provider).edit?(@external_order_template)
     @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
 
@@ -24,7 +24,7 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
     respond_to do |format|
       begin
         @external_order_template.save!
-        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha creado correctamente.' }
+        format.html { redirect_to external_orders_templates_provider_url(@external_order_template), notice: 'La plantilla se ha creado correctamente.' }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -43,7 +43,7 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
     respond_to do |format|
       begin
         @external_order_template.update!(external_order_template_params)
-        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha editado correctamente.' }
+        format.html { redirect_to external_orders_templates_provider_url(@external_order_template), notice: 'La plantilla se ha editado correctamente.' }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -53,5 +53,4 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
       end
     end
   end
-
 end
