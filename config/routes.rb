@@ -124,6 +124,7 @@ Rails.application.routes.draw do
     end
   end
 
+  # Establecimientos
   scope module: :establishments, path: 'establecimientos' do
     resources :establishments, path: '/' do
       member do
@@ -135,6 +136,7 @@ Rails.application.routes.draw do
     end
 
     namespace :external_orders, path: 'pedidos' do
+      # Solicitudes
       resources :applicants do
         member do
           get :dispatch_order
@@ -143,6 +145,7 @@ Rails.application.routes.draw do
         end
       end
 
+      # Despachos
       resources :providers do
         member do
           get :dispatch_order
@@ -154,7 +157,24 @@ Rails.application.routes.draw do
           get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
         end
       end
-
+      
+      # Plantillas
+      namespace :templates, path: 'plantillas' do
+        get '', to: 'templates#index'
+        # Solicitudes
+        resources :applicants
+        # Despachos
+        # resources :providers
+      end
+      # resources :external_order_templates, path: "plantilla" do
+      #   collection do
+      #     get "new_provider"
+      #   end
+      #   member do
+      #     get "delete"
+      #     get "edit_provider"
+      #   end
+      # end
     end
   end
 
@@ -235,24 +255,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :external_orders, path: :pedidos_establecimientos, only: [:show, :destroy] do
-    collection do
-      get :statistics, path: :estadisticas
-      # get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
-    end
-  end
-
   resources :external_order_comments, only: [ :show, :create]
 
-  resources :external_order_templates, path: :plantillas_pedidos_establecimientos do
-    collection do
-      get "new_provider"
-    end
-    member do
-      get "delete"
-      get "edit_provider"
-    end
-  end
+  
 
   get "internal_order/:id", to: "internal_orders#deliver", as: "deliver_internal_order"
 
