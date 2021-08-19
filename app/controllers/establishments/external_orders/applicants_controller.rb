@@ -1,6 +1,6 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
-  
-  before_action :set_applicant_order, only: [
+
+  before_action :set_external_order, only: [
     :edit,
     :update,
     :dispatch_order,
@@ -141,7 +141,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       format.html { redirect_to external_orders_applicant_url(@external_order) }
     end
   end
-  
+
   # DELETE /external_orders/applicants/1
   def destroy
     policy(:external_order_applicant).destroy?(@external_order)
@@ -151,57 +151,55 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def external_order_params
-      params.require(:external_order).permit(:applicant_sector_id, 
-      :sent_by_id, 
-      :order_type,
-      :provider_sector_id, 
-      :requested_date, 
-      :date_received, 
-      :observation, 
-      :remit_code,
-      order_products_attributes: [
-        :id, 
-        :product_id, 
+  def external_order_params
+    params.require(:external_order).permit(:applicant_sector_id, 
+    :sent_by_id, 
+    :order_type,
+    :provider_sector_id, 
+    :requested_date, 
+    :date_received, 
+    :observation, 
+    :remit_code,
+    order_products_attributes: [
+      :id, 
+      :product_id, 
+      :lot_stock_id,
+      :request_quantity,
+      :delivery_quantity,
+      :applicant_observation,
+      :provider_observation, 
+      :_destroy,
+      order_prod_lot_stocks_attributes: [
+        :id,
+        :quantity,
         :lot_stock_id,
-        :request_quantity,
-        :delivery_quantity,
-        :applicant_observation,
-        :provider_observation, 
-        :_destroy,
-        order_prod_lot_stocks_attributes: [
-          :id,
-          :quantity,
-          :lot_stock_id,
-          :_destroy
-        ]
-      ])
-    end
+        :_destroy
+      ]
+    ])
+  end
 
-    def new_from_template(template_id, order_type)
-      # Buscamos el template
-      @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
-      @external_order = ExternalOrder.new
-      @external_order.order_type = @external_order_template.order_type
-      
-      if @external_order.provision?
-        @external_order.applicant_sector = @external_order_template.destination_sector
-      else
-        @external_order.provider_sector = @external_order_template.destination_sector
-      end
-      
-      # Seteamos los productos a la orden
-      @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
-        @external_order.order_products.build(product_id: iots.product_id)
-      end
-      # Establecemos la opciones del selector de sector
-      @sectors = Sector
-        .select(:id, :name)
-        .with_establishment_id(@external_order_template.destination_establishment_id)
-        .where.not(id: current_user.sector_id)
+  def new_from_template(template_id, order_type)
+    # Buscamos el template
+    @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+    @external_order = ExternalOrder.new
+    @external_order.order_type = @external_order_template.order_type
+    if @external_order.provision?
+      @external_order.applicant_sector = @external_order_template.destination_sector
+    else
+      @external_order.provider_sector = @external_order_template.destination_sector
     end
+    # Seteamos los productos a la orden
+    @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
+      @external_order.order_products.build(product_id: iots.product_id)
+    end
+    # Establecemos la opciones del selector de sector
+    @sectors = Sector
+      .select(:id, :name)
+      .with_establishment_id(@external_order_template.destination_establishment_id)
+      .where.not(id: current_user.sector_id)
+  end
 
-    def sending?
-      return params[:commit] == "sending"
-    end
+  def sending?
+    return params[:commit] == "sending"
+  end
 end
