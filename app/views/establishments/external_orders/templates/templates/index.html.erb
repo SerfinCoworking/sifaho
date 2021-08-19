@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                   <% @applicant_templates.each do |app_template| %>
-                    <tr class="table-row" data-href="<%= external_order_template_path(app_template) %>">
+                    <tr class="table-row" data-href="<%= external_orders_templates_applicant_path(app_template) %>">
                       <td><%= app_template.name %></td>
                       <td><%= app_template.destination_establishment.name %></td>
                       <td><%= app_template.destination_sector.name %></td>
@@ -81,7 +81,7 @@
                 </thead>
                 <tbody>
                   <% @provider_templates.each do |prv_template| %>
-                    <tr class="table-row" data-href="<%= external_order_template_path(prv_template) %>">
+                    <tr class="table-row" data-href="<%= external_orders_templates_applicant_path(prv_template) %>">
                       <td><%= prv_template.name %></td>
                       <td><%= prv_template.destination_establishment.name %></td>
                       <td><%= prv_template.destination_sector.name %></td>

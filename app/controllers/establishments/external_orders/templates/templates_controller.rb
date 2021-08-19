@@ -1,6 +1,6 @@
 class Establishments::ExternalOrders::Templates::TemplatesController < ApplicationController
 
-  before_action :set_external_order_template, only: %i[show edit update destroy delete use_applicant use_provider
+  before_action :set_template, only: %i[show edit update destroy use_applicant use_provider
                                                        edit_provider]
 
   # GET /external_order_templates
@@ -24,26 +24,12 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
     end
   end
 
-  # GET /external_order_templates/new
-  def new
-    authorize ExternalOrderTemplate
-    @external_order_template = ExternalOrderTemplate.new(order_type: 'solicitud')
-    @external_order_template.external_order_product_templates.build
-    @sectors = []
-  end
-
   # GET /external_order_templates/new_provider
   def new_provider
     authorize ExternalOrderTemplate
     @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
     @external_order_template.external_order_product_templates.build
     @sectors = []
-  end
-
-  # GET /external_order_templates/1/edit
-  def edit
-    authorize @external_order_template
-    @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
 
   # GET /external_order_templates/1/edit_provider
@@ -63,7 +49,7 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
     respond_to do |format|
       begin
         @external_order_template.save!
-        format.html { redirect_to @external_order_template, notice: 'La plantilla se ha creado correctamente.' }
+        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha creado correctamente.' }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -82,7 +68,7 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
     respond_to do |format|
       begin
         @external_order_template.update!(external_order_template_params)
-        format.html { redirect_to @external_order_template, notice: 'La plantilla se ha editado correctamente.' }
+        format.html { redirect_to external_orders_templates_applicant_url(@external_order_template), notice: 'La plantilla se ha editado correctamente.' }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -99,23 +85,15 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
     authorize @external_order_template
     @external_order_template.destroy
     respond_to do |format|
-      format.html { redirect_to external_order_templates_url, notice: 'La plantilla se ha eliminado correctamente.' }
+      format.html { redirect_to external_orders_templates_url, notice: 'La plantilla se ha eliminado correctamente.' }
       format.json { head :no_content }
-    end
-  end
-
-  # GET /external_order_templates/1/delete
-  def delete
-    authorize @external_order_template
-    respond_to do |format|
-      format.js
     end
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_external_order_template
+  def set_template
     @external_order_template = ExternalOrderTemplate.find(params[:id])
   end
 
