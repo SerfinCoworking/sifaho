@@ -1,4 +1,4 @@
-class Establishments::EstablishmentsController < ApplicationController
+class EstablishmentsController < ApplicationController
   before_action :set_establishment, only: [:show, :edit, :update, :destroy, :delete]
 
   # GET /establishments
