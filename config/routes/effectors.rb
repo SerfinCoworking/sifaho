@@ -36,16 +36,5 @@ Rails.application.routes.draw do
         get :search_by_name
       end
     end
-
-    # Sectors
-    resources :sectors do
-      member do
-        get :delete
-      end
-
-      collection do
-        get :with_establishment_id
-      end
-    end
   end
 end

@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   localized do
-    # Internal orders
+    # Sectors
+    scope module: :sectors, path: :sectors do
+      # Sectors
+      resources :sectors do
+        collection do
+          get :with_establishment_id
+        end
+      end
+    end
+
     resources :internal_orders, only: %i[show destroy] do
       member do
         get :delete
