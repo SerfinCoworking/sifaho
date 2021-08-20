@@ -1,5 +1,3 @@
-<%= render "external_orders/header" %>
-
 <div class="card fixed-custom-card">
   <div class="card-header d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center ml-2">
@@ -8,7 +6,7 @@
         Viendo plantilla de <%= @external_order_template.order_type %>
       </h5>
     </div>
-    <%= link_to external_order_templates_path, class: 'btn btn-light',
+    <%= link_to external_orders_templates_path, class: 'btn btn-light',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
       <%= fa_icon "times" %>
     <% end %>
@@ -20,11 +18,7 @@
         <%= @external_order_template.name %>
       </div>
       <div class="col-md-3">
-        <% if @external_order_template.solicitud? %>
-          <h5>Efector proveedor</h5>
-        <% else %>
-          <h5>Efector solicitante</h5>
-        <% end %>
+        <%= yield(:external_order_template_show_title) %>
         <%= @external_order_template.destination_sector.sector_and_establishment %>
       </div>
       <% if @external_order_template.observation.present? %>
@@ -69,47 +63,12 @@
     </div>
   </div>
   <div class="card-footer d-flex align-item-center justify-content-between">
-    <div>
-      <% if policy(@external_order_template).destroy? %>
-        <%= link_to delete_external_order_template_path(@external_order_template), remote: true,
-              class: 'btn btn-danger btn-md pull-left', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "trash" %>
-        <% end %>
-      <% end %>
-    </div>
-    <div>
-      <%= link_to 'Volver', external_order_templates_path, class: "btn btn-light mr-2" %>
-      <% if policy(@external_order_template).show? %>
-        <%= link_to external_order_template_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
-          <%= fa_icon "print" %> Imprimir
-        <% end %>
-      <% end %>
-      <% if policy(@external_order_template).edit? %>
-        <%= link_to edit_external_order_template_path(@external_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-2" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
-      <% if policy(@external_order_template).edit_provider? %>
-        <%= link_to edit_provider_external_order_template_path(@external_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-2" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
-      <% if policy(@external_order_template).use_applicant? %>
-        <%= link_to new_external_orders_applicant_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
-          <%= fa_icon "plus" %>
-          Crear solicitud
-        <% end %>
-      <% end %>
-      <% if policy(@external_order_template).use_provider? %>
-        <%= link_to new_provider_external_orders_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
-          <%= fa_icon "plus" %>
-          Crear despacho
-        <% end %>
-      <% end %>
-    </div>
+    <%= yield(:action_buttons) %>
   </div>
 </div>
+
+<% content_for :modal do %>
+  <% if policy(@external_order_template).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+<% end %>

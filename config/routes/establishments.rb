@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   localized do
+    # Establecimientos
     scope module: :establishments do
       resources :establishments do
         member do
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
       end
 
       namespace :external_orders do
+        # Solicitudes
         resources :applicants do
           member do
             get :dispatch_order
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
           end
         end
 
+        # Despachos
         resources :providers do
           member do
             get :dispatch_order
@@ -30,27 +33,15 @@ Rails.application.routes.draw do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end
         end
-      end
-    end
 
-    resources :external_orders, only: %i[show destroy] do
-      collection do
-        get :statistics
-        # get "find_lots(/:order_product_id)", to: "external_orders#find_lots", as: "find_order_product_lots"
-      end
-    end
-
-    # External order comments
-    resources :external_order_comments, only: %i[show create]
-
-    # External order templates
-    resources :external_order_templates do
-      collection do
-        get :new_provider
-      end
-      member do
-        get :delete
-        get :edit_provider
+        # Plantillas
+        namespace :templates do
+          get '', to: 'templates#index'
+          # Solicitudes
+          resources :applicants
+          # Despachos
+          resources :providers
+        end
       end
     end
   end

@@ -1,0 +1,47 @@
+<%= render 'establishments/external_orders/header' %>
+
+<% content_for :external_order_template_show_title do %>
+  <h5>Efector solicitante</h5>
+<% end %>
+
+<% content_for :action_buttons do %>
+  <div>
+    <% if policy(@external_order_template).destroy? %>
+      <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        title="<%= t("actions.tooltip.delete") %>"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-target="#delete-item" 
+        data-title="Eliminar plantilla"
+        data-body="Esta seguro que desea eliminar la plantilla <%= @external_order_template.name %>?"
+        data-href="<%= external_orders_templates_applicant_url(@external_order_template) %>">
+          <%= fa_icon "trash" %>
+      </button>
+    <% end %>
+  </div>
+  <div>
+    <%= link_to 'Volver', external_orders_templates_path, class: "btn btn-light mr-2" %>
+    <% if policy(@external_order_template).show? %>
+      <%= link_to external_orders_templates_applicant_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+        <%= fa_icon "print" %> Imprimir
+      <% end %>
+    <% end %>
+    <% if policy(:external_order_template_applicant).edit?(@external_order_template) %>
+      <%= link_to edit_external_orders_templates_applicant_path(@external_order_template), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-2" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>   
+    <% if policy(:external_order_template_applicant).use_template?(@external_order_template) %>
+      <%= link_to new_external_orders_applicant_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
+        <%= fa_icon "plus" %>
+        Crear solicitud
+      <% end %>
+    <% end %>   
+  </div>
+<% end %>
+
+<%= render 'establishments/external_orders/templates/show' %>
+

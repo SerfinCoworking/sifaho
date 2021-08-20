@@ -417,5 +417,6 @@ es:
     receipts: 'recibos'
     sectors: 'sectores'
     internal_orders: 'pedidos_sectores'
+    external_orders: 'pedidos_establecimientos'
     new: 'nuevo'
     provider_index: 'entregas'
