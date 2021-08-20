@@ -1,6 +1,6 @@
 class Establishments::ExternalOrders::Templates::ProvidersController < Establishments::ExternalOrders::Templates::TemplatesController
-   # GET /external_order_templates/new
-   def new
+  # GET /external_order_templates/new
+  def new
     authorize ExternalOrderTemplate
     @external_order_template = ExternalOrderTemplate.new(order_type: 'provision')
     @external_order_template.external_order_product_templates.build
@@ -13,7 +13,7 @@ class Establishments::ExternalOrders::Templates::ProvidersController < Establish
     @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
 
-    # POST /external_order_templates
+  # POST /external_order_templates
   # POST /external_order_templates.json
   def create
     authorize ExternalOrderTemplate

@@ -57,7 +57,7 @@
 
   <% if policy(ExternalOrderTemplate).index? %>
     <li class="nav-item non-sel" id="pedido">
-      <%= link_to external_orders_templates_path, class: "nav-link #{ active_class('external_order_templates') }" do %>
+      <%= link_to external_orders_templates_path, class: "nav-link #{ active_action_and_controller('index', 'templates') }" do %>
         <%= fa_icon "file-alt" %>
         Plantillas
       <% end %>

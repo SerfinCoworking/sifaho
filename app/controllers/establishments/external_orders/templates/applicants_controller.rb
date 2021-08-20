@@ -7,13 +7,14 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
     @external_order_template.external_order_product_templates.build
     @sectors = []
   end
- # GET /external_order_templates/1/edit
+  
+  # GET /external_order_templates/1/edit
   def edit
     policy(:external_order_template_applicant).edit?(@external_order_template)
     @sectors = @external_order_template.destination_sector.present? ? @external_order_template.destination_establishment.sectors : []
   end
 
-    # POST /external_order_templates
+  # POST /external_order_templates
   # POST /external_order_templates.json
   def create
     authorize ExternalOrderTemplate
@@ -53,5 +54,4 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
       end
     end
   end
-
 end
