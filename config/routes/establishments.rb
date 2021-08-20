@@ -1,16 +1,7 @@
 Rails.application.routes.draw do
   localized do
-    # Establecimientos
-    scope module: :establishments do
-      resources :establishments do
-        member do
-          get :delete
-        end
-        collection do
-          get :search_by_name
-        end
-      end
-
+    # External orders
+    scope module: :establishments, path: :establishments do
       namespace :external_orders do
         # Solicitudes
         resources :applicants do
@@ -42,6 +33,15 @@ Rails.application.routes.draw do
           # Despachos
           resources :providers
         end
+      end
+    end
+    # Establishments
+    resources :establishments do
+      member do
+        get :delete
+      end
+      collection do
+        get :search_by_name
       end
     end
   end
