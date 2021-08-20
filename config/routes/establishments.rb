@@ -33,8 +33,12 @@ Rails.application.routes.draw do
           # Despachos
           resources :providers
         end
+
+        # Comments
+        resources :comments, only: %i[show create]
       end
     end
+
     # Establishments
     resources :establishments do
       member do

@@ -1,4 +1,4 @@
-class ExternalOrderCommentsController < ApplicationController
+class Establishments::ExternalOrders::CommentsController < ApplicationController
   before_action :set_external_order_comment, only: %i[show]
 
   def show
