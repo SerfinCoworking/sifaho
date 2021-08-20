@@ -46,7 +46,7 @@ class LotStocksController < ApplicationController
     else
       @lot_stocks = @filterrific.find.page(params[:page]).per_page(20)
     end
-    
+
     respond_to do |format|
       format.html
       format.js

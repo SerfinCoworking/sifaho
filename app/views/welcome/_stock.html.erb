@@ -46,7 +46,7 @@
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
-            <%= link_to lot_stocks_index_stocks_url(filterrific: {:search_by_status => 2, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
+            <%= link_to lot_stocks_path(filterrific: {:search_by_status => 2, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
               Ver todos
             <% end %>
           </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="row text-center pt-2">
           <div class="col text-center">
-            <%= link_to lot_stocks_index_stocks_url(filterrific: {:search_by_status => 1, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
+            <%= link_to lot_stocks_path(filterrific: {:search_by_status => 1, :search_by_quantity => 1}, keep_params: true), class: 'btn btn-secondary btn-sm' do %>
               Ver todos
             <% end %>
           </div>

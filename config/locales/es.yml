@@ -410,3 +410,12 @@ es:
     all_notifications: "Todas las notificaciones"
     no_records: "No hay notificaciones"
     clean_all: "Limpiar todas"
+  routes:
+    stocks: 'stock'
+    lots: 'lotes'
+    lot_stocks: 'lotes_en_stock'
+    receipts: 'recibos'
+    sectors: 'sectores'
+    internal_orders: 'pedidos_sectores'
+    new: 'nuevo'
+    provider_index: 'entregas'

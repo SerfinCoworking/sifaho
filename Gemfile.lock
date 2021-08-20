@@ -346,6 +346,9 @@ GEM
       nokogiri
     rexml (3.2.4)
     rolify (5.2.0)
+    route_translator (7.0.1)
+      actionpack (>= 5.0.0.1, < 6.1)
+      activesupport (>= 5.0.0.1, < 6.1)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.3)
@@ -537,6 +540,7 @@ DEPENDENCIES
   rails_layout
   rest-client
   rolify
+  route_translator
   rspec-rails (~> 3.5)
   rubocop
   rubocop-rails

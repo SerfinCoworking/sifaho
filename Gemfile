@@ -7,6 +7,8 @@ end
 
 ruby "2.6.5"
 
+# To translate routes
+gem 'route_translator'
 # To allow the use of model scopes into controllers
 gem 'has_scope'
 # To render svg images
