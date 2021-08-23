@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::InternalOrderController
   include FindLots
 
-  before_action :set_internal_order, only: %i[show edit update]
+  before_action :set_internal_order, only: %i[show edit update rollback_order dispatch_order]
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -109,46 +109,44 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-    # # GET /internal_order/1/send_provider
-    # def send_provider
-    #   authorize @internal_order
-    #   previous_status = @internal_order.status
-    #   respond_to do |format|
-    #     begin
-    #       @internal_order.status = 'provision_en_camino'
-    #       @internal_order.save!
-  
-    #       @internal_order.send_order_by(current_user)
-    #       message = 'La provision se ha enviado correctamente.'
-  
-    #       format.html { redirect_to @internal_order, notice: message }
-    #     rescue ArgumentError => e
-    #       flash[:alert] = e.message
-    #     rescue ActiveRecord::RecordInvalid
-    #     ensure
-    #       @internal_order.status = previous_status
-    #       @sectors = Sector.select(:id, :name)
-    #                        .with_establishment_id(current_user.sector.establishment_id)
-    #                        .where.not(id: current_user.sector_id).as_json
-    #       @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
-    #       format.html { render :edit_provider }
-    #     end
-    #   end
-    # end
-  
-   
-  
-    # def return_provider_status
-    #   authorize @internal_order
-    #   respond_to do |format|
-    #     begin
-    #       @internal_order.return_provider_status_by(current_user)
-    #       flash[:notice] = 'La '+@internal_order.order_type+' se ha retornado a un estado anterior.'
-    #     rescue ArgumentError => e
-    #       flash[:alert] = e.message
-    #     end
-    #     format.html { redirect_to @internal_order }
-    #   end
-    # end
+  # # GET /internal_order/1/dispatch_order
+  def dispatch_order
+    # authorize @internal_order
+    previous_status = @internal_order.status
+    respond_to do |format|
+      begin
+        @internal_order.status = 'provision_en_camino'
+        @internal_order.save!
+
+        @internal_order.send_order_by(current_user)
+        message = 'La provision se ha enviado correctamente.'
+
+        format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      rescue ActiveRecord::RecordInvalid
+      ensure
+        @internal_order.status = previous_status
+        @sectors = Sector.select(:id, :name)
+                          .with_establishment_id(current_user.sector.establishment_id)
+                          .where.not(id: current_user.sector_id).as_json
+        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
+        format.html { render :edit }
+      end
+    end
+  end
+
+  def rollback_order
+    # authorize @internal_order
+    respond_to do |format|
+      begin
+        @internal_order.return_provider_status_by(current_user)
+        flash[:notice] = 'La '+@internal_order.order_type+' se ha retornado a un estado anterior.'
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      end
+      format.html { redirect_to internal_orders_provider_url(@internal_order) }
+    end
+  end
 end
 

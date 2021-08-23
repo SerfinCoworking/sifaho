@@ -15,8 +15,8 @@ Rails.application.routes.draw do
         # Despachos
         resources :providers do
           member do
-            # get :dispatch_order
-            # get :rollback_order
+            get :dispatch_order
+            get :rollback_order
             # get :accept_order
             # get :nullify_order
           end
