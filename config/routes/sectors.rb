@@ -7,7 +7,7 @@ Rails.application.routes.draw do
         resources :applicants do
           member do
             # get :dispatch_order
-            # get :rollback_order
+            get :rollback_order
             # get :receive_order
           end
         end

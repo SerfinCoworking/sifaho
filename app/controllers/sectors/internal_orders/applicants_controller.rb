@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
 
   before_action :set_internal_order, only: %i[show update destroy delete edit update receive_confirm receive
-                                              return_status send]
+    rollback_order send]
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -113,6 +113,19 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
           @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :edit }
       end
+    end
+  end
+
+  def rollback_order
+    # authorize @internal_order
+    respond_to do |format|
+      begin
+        @internal_order.return_applicant_status_by(current_user)
+        flash[:notice] = 'La solicitud se ha retornado a un estado anterior.'
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+      end
+      format.html { redirect_to internal_orders_applicant_url(@internal_order) }
     end
   end
 

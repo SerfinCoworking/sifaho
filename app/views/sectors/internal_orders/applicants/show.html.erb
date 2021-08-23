@@ -241,7 +241,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+      <% if policy(@internal_order).return_applicant_status? %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
           Retornar
@@ -259,7 +259,7 @@
 </div>
 
 <% content_for :modal do %>
-  <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+  <% if policy(@internal_order).return_applicant_status? %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -275,11 +275,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <% if policy(@internal_order).return_applicant_status? %>
-              <%= link_to 'Confirmar', internal_orders_applicant_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
-            <% else %>
-              <%= link_to 'Confirmar', internal_orders_applicant_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
-            <% end %>
+            <%= link_to 'Confirmar', rollback_order_internal_orders_applicant_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
           </div>
         </div>
       </div>

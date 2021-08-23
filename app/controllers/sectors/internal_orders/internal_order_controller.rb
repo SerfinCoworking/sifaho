@@ -205,18 +205,7 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     end
   end
 
-  def return_applicant_status
-    authorize @internal_order
-    respond_to do |format|
-      begin
-        @internal_order.return_applicant_status_by(current_user)
-        flash[:notice] = 'La solicitud se ha retornado a un estado anterior.'
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      end
-      format.html { redirect_to @internal_order }
-    end
-  end
+  
 
   def generate_order_report(internal_order)
     report = Thinreports::Report.new
