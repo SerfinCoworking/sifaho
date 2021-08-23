@@ -8,7 +8,7 @@ Rails.application.routes.draw do
           member do
             get :dispatch_order
             get :rollback_order
-            # get :receive_order
+            get :receive_order
           end
         end
 
@@ -17,7 +17,6 @@ Rails.application.routes.draw do
           member do
             get :dispatch_order
             get :rollback_order
-            # get :accept_order
             get :nullify_order
           end
           collection do

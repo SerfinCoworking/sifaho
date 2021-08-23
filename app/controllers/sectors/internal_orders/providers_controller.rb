@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::InternalOrderController
   include FindLots
 
-  before_action :set_internal_order, only: %i[show edit update rollback_order dispatch_order nullify_order]
+  before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order]
   # GET /internal_orders
   # GET /internal_orders.json
   def index

@@ -1,7 +1,6 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
 
-  before_action :set_internal_order, only: %i[show destroy edit update receive_confirm receive
-                                              rollback_order dispatch_order]
+  before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order]
 
   # GET /internal_orders/applicants
   # GET /internal_orders/applicants.json
@@ -140,19 +139,18 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     end
   end
 
-
-  # # GET /internal_orders/1/receive_applicant
-  # def receive_applicant
-  #   # authorize @internal_order
-  #   respond_to do |format|
-  #     begin
-  #       unless @internal_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
-  #       @internal_order.receive_order_by(current_user)
-  #       flash[:success] = 'La '+@internal_order.order_type+' se ha recibido correctamente'
-  #     rescue ArgumentError => e
-  #       flash[:error] = e.message
-  #     end
-  #     format.html { redirect_to @internal_order }
-  #   end
-  # end
+  # GET /internal_orders/1/receive_applicant
+  def receive_order
+    # authorize @internal_order
+    respond_to do |format|
+      begin
+        unless @internal_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
+        @internal_order.receive_order_by(current_user)
+        flash[:success] = 'La '+@internal_order.order_type+' se ha recibido correctamente'
+      rescue ArgumentError => e
+        flash[:error] = e.message
+      end
+      format.html { redirect_to internal_orders_applicant_url(@internal_order) }
+    end
+  end
 end

@@ -1,15 +1,9 @@
 class Sectors::InternalOrders::InternalOrderController < ApplicationController
 
-  before_action :set_internal_order, only: %i[show destroy]
-
-  def statistics
-    @internal_providers = InternalOrder.provider(current_user.sector)
-    @internal_applicants = InternalOrder.applicant(current_user.sector)
-  end
-
-  
-
-  
+  # def statistics
+  #   @internal_providers = InternalOrder.provider(current_user.sector)
+  #   @internal_applicants = InternalOrder.applicant(current_user.sector)
+  # end
 
   # GET /internal_orders/1
   # GET /internal_orders/1.json
@@ -28,14 +22,6 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     end
   end
 
-  
- 
-
- 
-  
-  
-
-
   # DELETE /internal_orders/1
   # DELETE /internal_orders/1.json
   def destroy
@@ -47,16 +33,6 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
       format.js
     end
   end
-
-  # GET /internal_order/1/delete
-  def delete
-    authorize @internal_order
-    respond_to do |format|
-      format.js
-    end
-  end
-
-
 
   def generate_order_report(internal_order)
     report = Thinreports::Report.new
@@ -134,8 +110,6 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     report.generate
   end
 
-  
-
   def set_order_product
     @order_product = params[:order_product_id].present? ? InternalOrderProduct.find(params[:order_product_id]) : InternalOrderProduct.new
   end
@@ -198,21 +172,5 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     .select(:id, :name)
     .with_establishment_id(@internal_order_template.destination_sector.establishment.id)
     .where.not(id: current_user.sector_id)
-    
-  end
-
-  # Se verifica si el value del submit del form es para enviar
-  def sending?
-    return params[:commit] == "sending"
-  end
-
-  def applicant?
-    submit = params[:commit]
-    return submit == "Solicitante"
-  end
-
-  def provider?
-    submit = params[:commit]
-    return submit == "Proveedor"
   end
 end
