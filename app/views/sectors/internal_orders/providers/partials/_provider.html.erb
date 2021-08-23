@@ -54,7 +54,7 @@
     <% end %>
     <% if policy(internal_order).destroy? %>
       <button type="button" 
-        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        class="btn btn-danger btn-sm delete-item"
         title="<%= t("actions.tooltip.delete") %>"
         data-toggle="tooltip"
         data-placement="top"
@@ -84,7 +84,7 @@
     <div class="modal fade" id="anular-confirm-<%= internal_order.id %>">
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
-          <div class="modal-header panel-heading">
+          <div class="modal-header panel-heading bg-danger text-white">
             <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= InternalOrder.statuses.key(internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -95,7 +95,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%#= link_to 'Anular', nullify_internal_order_path(internal_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando".html_safe, :class => 'btn btn-danger' %>
+            <%= link_to 'Anular', nullify_order_internal_orders_provider_path(internal_order), 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>

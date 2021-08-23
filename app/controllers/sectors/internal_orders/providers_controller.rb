@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::InternalOrderController
   include FindLots
 
-  before_action :set_internal_order, only: %i[show edit update rollback_order dispatch_order]
+  before_action :set_internal_order, only: %i[show edit update rollback_order dispatch_order nullify_order]
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -145,6 +145,16 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       rescue ArgumentError => e
         flash[:alert] = e.message
       end
+      format.html { redirect_to internal_orders_provider_url(@internal_order) }
+    end
+  end
+
+  # get /internal_orders/1/nullify_order
+  def nullify_order
+    # authorize @internal_order
+    @internal_order.nullify_by(current_user)
+    respond_to do |format|
+      flash[:success] = "#{@internal_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to internal_orders_provider_url(@internal_order) }
     end
   end

@@ -1,6 +1,6 @@
 class Sectors::InternalOrders::InternalOrderController < ApplicationController
 
-  before_action :set_internal_order, only: %i[show destroy nullify]
+  before_action :set_internal_order, only: %i[show destroy]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)
@@ -134,15 +134,7 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     report.generate
   end
 
-  # patch /internal_orders/1/nullify
-  def nullify
-    authorize @internal_order
-    @internal_order.nullify_by(current_user)
-    respond_to do |format|
-      flash[:success] = "#{@internal_order.order_type.humanize} se ha anulado correctamente."
-      format.html { redirect_to @internal_order }
-    end
-  end
+  
 
   def set_order_product
     @order_product = params[:order_product_id].present? ? InternalOrderProduct.find(params[:order_product_id]) : InternalOrderProduct.new
