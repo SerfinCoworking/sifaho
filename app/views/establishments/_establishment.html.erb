@@ -17,7 +17,7 @@
               visible: true, 
               title: "Eliminar establecimiento",
               body: "Esta seguro que desea eliminar el establecimiento #{ establishment.name }?",
-              path: "/establecimientos/#{establishment.id}"
+              path: establishment_url(establishment.id)
             }
         }
       ) 

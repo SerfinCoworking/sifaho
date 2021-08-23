@@ -1,0 +1,98 @@
+<tr id="internal_order_<%= internal_order.id %>" class="<%= internal_order_td(internal_order) %>">
+  <td><%= internal_order.remit_code %></td>
+    <td class="sol-col-aba">
+      <%= internal_order.provider_sector.name %>
+    </td>
+    <td>
+    <span class="badge badge-secondary">
+      <%= internal_order.order_type.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <span class="badge badge-<%= internal_status_label(internal_order) %>">
+      <%= internal_order.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%= internal_order.order_products.count %>
+  </td>
+  <td>
+    <%= internal_order.movements.count %>
+  </td>
+  <td>
+    <%= internal_order.comments.count %>
+  </td>
+  <td>
+    <%= internal_order.requested_date.strftime("%d/%m/%Y") %>
+  </td>
+    <% if internal_order.provision_entregada? %>
+      <td>
+      <%= internal_order.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <td>
+      ----
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    <% if policy(internal_order).show? %>
+      <%= link_to internal_orders_applicants_path(internal_order), class: 'btn btn-secondary btn-sm', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).show? %>
+      <%= link_to internal_orders_applicants_path(internal_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).edit_applicant? %>
+      <%= link_to edit_applicant_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).edit_provider? %>
+      <%= link_to edit_provider_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).destroy? %>
+      <%= link_to delete_internal_order_path(internal_order), remote: true,
+          class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).nullify? %>
+      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" title="Anular" data-target="#anular-confirm-<%=internal_order.id%>">
+        <%= fa_icon "ban" %>
+      </button>
+    <% end %>
+  </td>
+</tr>
+
+
+<% content_for :modal do %>
+  <% if policy(internal_order).nullify? %>
+    <div class="modal fade" id="anular-confirm-<%= internal_order.id %>">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= InternalOrder.statuses.key(internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro de anular el pedido?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Anular', nullify_internal_order_path(internal_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando".html_safe, :class => 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

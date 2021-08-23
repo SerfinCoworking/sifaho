@@ -1,12 +1,12 @@
-<%= render 'header' %>
+<%= render 'sectors/internal_orders/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header">
-    <%= render "filter" %>
+    <%= render "sectors/internal_orders/applicants/partials/filter" %>
   </div>
   <div class="card-body fixed-panel-index">
     <%= render(
-      partial: 'internal_orders/applicant_list',
+      partial: 'sectors/internal_orders/applicants/partials/list',
       locals: { applicant_orders: @applicant_orders }
     ) %>
   </div>

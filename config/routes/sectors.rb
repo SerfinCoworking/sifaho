@@ -2,39 +2,50 @@ Rails.application.routes.draw do
   localized do
     # Sectors
     scope module: :sectors, path: :sectors do
-      # Sectors
-      resources :sectors do
-        collection do
-          get :with_establishment_id
+      namespace :internal_orders do
+        # Solicitudes
+        resources :applicants do
+          member do
+            # get :dispatch_order
+            # get :rollback_order
+            # get :receive_order
+          end
         end
+
+      end
+    end
+    # Sectors
+    resources :sectors do
+      collection do
+        get :with_establishment_id
       end
     end
 
-    resources :internal_orders, only: %i[show destroy] do
-      member do
-        get :delete
-        get :return_provider_status
-        get :return_applicant_status
-        get :receive_applicant
-        get :edit_applicant 
-        get :edit_provider
-        patch :send_provider
-        patch :send_applicant
-        get :nullify
-        put :update_applicant
-        put :update_provider
-      end
-      collection do
-        get :new_applicant
-        get :new_provider
-        get :applicant_index
-        get :provider_index
-        get :statistics
-        get 'find_lots(/:order_product_id)', to: 'internal_orders#find_lots', as: 'find_order_product_lots'
-        post :create_applicant
-        post :create_provider
-      end
-    end
+    # resources :internal_orders, only: %i[show destroy] do
+    #   member do
+    #     get :delete
+    #     get :return_provider_status
+    #     get :return_applicant_status
+    #     get :receive_applicant
+    #     get :edit_applicant 
+    #     get :edit_provider
+    #     patch :send_provider
+    #     patch :send_applicant
+    #     get :nullify
+    #     put :update_applicant
+    #     put :update_provider
+    #   end
+    #   collection do
+    #     get :new_applicant
+    #     get :new_provider
+    #     get :applicant_index
+    #     get :provider_index
+    #     get :statistics
+    #     get 'find_lots(/:order_product_id)', to: 'internal_orders#find_lots', as: 'find_order_product_lots'
+    #     post :create_applicant
+    #     post :create_provider
+    #   end
+    # end
 
     # Internal order comments
     resources :internal_order_comments, only: %i[show create]
