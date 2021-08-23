@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
 
-  before_action :set_internal_order, only: %i[show update destroy delete edit update receive_confirm receive
-    rollback_order send]
+  before_action :set_internal_order, only: %i[show destroy edit update receive_confirm receive
+    rollback_order dispatch_order]
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -129,15 +129,15 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     end
   end
 
-  # # GET /internal_orders/1/send_applicant
-  # def send_applicant
-  #   # authorize @internal_order
-  #   @internal_order.send_request_by(current_user)
-  #   respond_to do |format|
-  #     flash[:success] = 'La solicitud se ha enviado correctamente.'
-  #     format.html { redirect_to @internal_order }
-  #   end
-  # end
+  # GET /external_orders/applicants/1/dispatch_order
+  def dispatch_order
+    # authorize @internal_order
+    @internal_order.send_request_by(current_user)
+    respond_to do |format|
+      format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: 'La solicitud se ha enviado correctamente.' }
+    end
+  end
+
 
   # # GET /internal_orders/1/receive_applicant
   # def receive_applicant

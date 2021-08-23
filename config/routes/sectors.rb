@@ -6,7 +6,7 @@ Rails.application.routes.draw do
         # Solicitudes
         resources :applicants do
           member do
-            # get :dispatch_order
+            get :dispatch_order
             get :rollback_order
             # get :receive_order
           end
