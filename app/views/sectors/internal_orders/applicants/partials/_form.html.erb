@@ -11,9 +11,9 @@
     <% end %>
   </div>
   <div class="card-body">
-    <%= simple_form_for @internal_order, :url => (@internal_order.new_record? ? create_applicant_internal_orders_path : update_applicant_internal_order_path(@internal_order)),
-      method: (@internal_order.new_record? ? :post : :put),
-      html: { role: 'check-modified'} do |f| %>
+    <%= simple_form_for @internal_order, 
+                        :url => (@internal_order.new_record? ? internal_orders_applicants_path : internal_orders_applicant_path(@internal_order)),
+                        html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
         <div class='col-3'>
@@ -48,15 +48,15 @@
           :input_html => { :cols => 40  , :rows => 1 } %>
         </div>
       </div>
-      <!-- Productos a dispensar -->
-      <%= render "shared/orders/order_products_table", form: f %>
+      <!-- Productos a solicitar -->
+      <%= render "shared/orders/applicant/table", form: f %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', applicant_index_internal_orders_path, class: 'btn mr-1' %>
+    <%= link_to 'Volver', internal_orders_applicants_path, class: 'btn mr-1' %>
   
     <button type='submit' class='btn btn-success mr-2' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='audit'>
       

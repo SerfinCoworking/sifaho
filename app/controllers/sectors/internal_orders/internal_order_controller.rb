@@ -2,9 +2,7 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
 
   # include FindLots
 
-  before_action :set_internal_order, only: %i[show edit_provider update destroy delete edit_applicant update_applicant
-                                              update_provider send_provider receive_applicant_confirm receive_applicant
-                                              return_provider_status return_applicant_status send_applicant nullify]
+  before_action :set_internal_order, only: %i[show edit_provider update destroy delete update_provider send_provider return_provider_status nullify]
 
   def statistics
     @internal_providers = InternalOrder.provider(current_user.sector)
@@ -310,7 +308,7 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     @order_product = params[:order_product_id].present? ? InternalOrderProduct.find(params[:order_product_id]) : InternalOrderProduct.new
   end
 
-  private
+  protected
 
   # Use callbacks to share common setup or constraints between actions.
   def set_internal_order

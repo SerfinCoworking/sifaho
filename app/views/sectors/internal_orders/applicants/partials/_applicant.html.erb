@@ -35,7 +35,7 @@
   </td>
   <td class="text-left actions-col">
     <% if policy(internal_order).show? %>
-      <%= link_to internal_orders_applicants_path(internal_order), class: 'btn btn-secondary btn-sm', 
+      <%= link_to internal_orders_applicant_path(internal_order), class: 'btn btn-secondary btn-sm', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
         <%= fa_icon "eye" %>
       <% end %>
@@ -47,7 +47,7 @@
       <% end %>
     <% end %>
     <% if policy(internal_order).edit_applicant? %>
-      <%= link_to edit_applicant_internal_order_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+      <%= link_to edit_internal_orders_applicant_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
         title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "pen" %>
       <% end %>
@@ -59,10 +59,19 @@
       <% end %>
     <% end %>
     <% if policy(internal_order).destroy? %>
-      <%= link_to delete_internal_order_path(internal_order), remote: true,
-          class: 'btn btn-danger btn-sm', title: 'Borrar', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "trash" %>
-      <% end %>
+      <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        title="<%= t("actions.tooltip.delete") %>"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-target="#delete-item" 
+        data-title="Eliminar solicitud"
+        data-body="Esta seguro que desea eliminar la solicitud <%= internal_order.remit_code %>?"
+        data-href="<%= internal_orders_applicant_url(internal_order.id) %>">
+          <%= fa_icon "trash" %>
+      </button>
+
+    
     <% end %>
     <% if policy(internal_order).nullify? %>
       <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" title="Anular" data-target="#anular-confirm-<%=internal_order.id%>">
@@ -74,6 +83,10 @@
 
 
 <% content_for :modal do %>
+  <% if policy(internal_order).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+
   <% if policy(internal_order).nullify? %>
     <div class="modal fade" id="anular-confirm-<%= internal_order.id %>">
       <div class="modal-dialog">

@@ -1,5 +1,7 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
 
+  before_action :set_internal_order, only: %i[show update destroy delete edit update receive_confirm receive
+                                              return_status send]
   # GET /internal_orders
   # GET /internal_orders.json
   def index
@@ -64,7 +66,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
           message = 'La solicitud se ha creado y se encuentra en auditoria.'
         end
 
-        format.html { redirect_to @internal_order }
+        format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -73,7 +75,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
                          .with_establishment_id(current_user.sector.establishment_id)
                          .where.not(id: current_user.sector_id).as_json
         @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
-        format.html { render :new_applicant }
+        format.html { render :new }
       end
     end
   end
@@ -99,7 +101,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
           message = "La solicitud se ha creado y se encuentra en auditoria."
         end
 
-        format.html { redirect_to @internal_order }
+        format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -109,7 +111,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
           .with_establishment_id(current_user.sector.establishment_id)
           .where.not(id: current_user.sector_id).as_json
           @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
-        format.html { render :new_applicant }
+        format.html { render :edit }
       end
     end
   end
