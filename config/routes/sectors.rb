@@ -12,6 +12,19 @@ Rails.application.routes.draw do
           end
         end
 
+        # Despachos
+        resources :providers do
+          member do
+            # get :dispatch_order
+            # get :rollback_order
+            # get :accept_order
+            # get :nullify_order
+          end
+          collection do
+            get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
+          end
+        end
+
       end
     end
     # Sectors
@@ -23,26 +36,18 @@ Rails.application.routes.draw do
 
     # resources :internal_orders, only: %i[show destroy] do
     #   member do
-    #     get :delete
     #     get :return_provider_status
-    #     get :return_applicant_status
     #     get :receive_applicant
-    #     get :edit_applicant 
     #     get :edit_provider
     #     patch :send_provider
-    #     patch :send_applicant
     #     get :nullify
-    #     put :update_applicant
     #     put :update_provider
     #   end
     #   collection do
-    #     get :new_applicant
     #     get :new_provider
-    #     get :applicant_index
     #     get :provider_index
     #     get :statistics
     #     get 'find_lots(/:order_product_id)', to: 'internal_orders#find_lots', as: 'find_order_product_lots'
-    #     post :create_applicant
     #     post :create_provider
     #   end
     # end

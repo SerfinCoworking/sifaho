@@ -1,4 +1,4 @@
-<%= render 'header' %>
+<%= render 'sectors/internal_orders/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex align-items-center justify-content-between">
@@ -9,11 +9,11 @@
       </h5>
     </div>
     <div>
-      <%= link_to internal_order_path(format: 'pdf'), class: 'btn',
+      <%= link_to internal_orders_provider_path(format: 'pdf'), class: 'btn',
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>
-      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path), class: 'btn',
+      <%= link_to internal_orders_providers_path, class: 'btn',
           :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
         <%= fa_icon "times" %>
       <% end %>
@@ -202,7 +202,7 @@
       </div> <!-- End last movements tab pane -->
       <div id='comments' class='tab-pane fade'>
         <!-- Tabla de movimientos -->
-        <%= render '/shared/comments', order: @internal_order, new_comment: InternalOrderComment.new %>
+        <%#= render '/shared/comments', order: @internal_order, new_comment: InternalOrderComment.new %>
       </div> <!-- End comments tab pane -->
     </div> <!-- End Tab content-->
   </div>
@@ -215,20 +215,20 @@
       </span>
     <% end %>
     <div class="text-right w-100">
-      <%= link_to (@internal_order.is_applicant?(current_user) ? applicant_index_internal_orders_path : provider_index_internal_orders_path),  
+      <%= link_to internal_orders_providers_path,  
         'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
         class: "btn btn-light mr-1" do %>
         Volver
       <% end %>
 
       <% if policy(@internal_order).show? %>
-        <%= link_to internal_order_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+        <%= link_to internal_orders_provider_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
           <%= fa_icon "print" %> Imprimir
         <% end %>
       <% end %>
 
       <% if policy(@internal_order).edit_provider? %>
-        <%= link_to edit_provider_internal_order_path(@internal_order), :"data-turbolinks" => false,
+        <%= link_to edit_internal_orders_provider_path(@internal_order), :"data-turbolinks" => false,
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: "btn btn-warning mr-1" do %>
           <%= fa_icon "pen" %>
@@ -236,53 +236,29 @@
         <% end %>
       <% end %>
       
-      <% if policy(@internal_order).edit_applicant? %>
-        <%= link_to edit_applicant_internal_order_path(@internal_order),  
-          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-          class: 'btn btn-warning btn-md mr-1' do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
-
-      <% if policy(@internal_order).send_applicant? %>
-        <%= link_to send_applicant_internal_order_path(@internal_order), 
-          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
-          method: :patch,
-          class: 'btn btn-primary btn-md mr-1' do %>
-          <%= fa_icon "paper-plane" %>
-          Enviar solicitud
-        <% end %>
-      <% end %>
       <% if policy(@internal_order).send_provider? %>
-        <%= link_to send_provider_internal_order_path(@internal_order),
+        <%#= link_to send_provider_internal_order_path(@internal_order),
           method: :patch,
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md' do %>
           <%= fa_icon "paper-plane" %>
           Enviar provisión
-        <% end %>
+        <%# end %>
       <% end %>
 
-      <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+      <% if policy(@internal_order).return_provider_status? %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
           Retornar
         </button>
       <% end %>
       
-      <% if policy(@internal_order).receive_applicant? %>
-        <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
-          <%= fa_icon "check" %>
-          Recibir
-        </button>
-      <% end %>
     </div> <!-- fin botones right -->
   </div>
 </div>
 
 <% content_for :modal do %>
-  <% if policy(@internal_order).return_provider_status? || policy(@internal_order).return_applicant_status? %>
+  <% if policy(@internal_order).return_provider_status? %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -309,28 +285,6 @@
     </div>
   <% end %>
   
-  <% if policy(@internal_order).receive_applicant? %>
-    <div class="modal fade" id="receive-confirm">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= @internal_order.human_name.downcase %></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Esta seguro que ha recibido el pedido código <%= @internal_order.remit_code %>?</p>
-            <p>Contiene <%= pluralize(@internal_order.order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
-          </div>
-          <div class="modal-footer text-right">
-            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', receive_applicant_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Recibiendo... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-success' %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
   
   <% if policy(@internal_order).nullify? %>
     <div class="modal fade" id="anular-confirm">
@@ -347,7 +301,7 @@
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Anular', nullify_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
+            <%#= link_to 'Anular', nullify_internal_order_path(@internal_order), method: :get, 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
           </div>
         </div>
       </div>

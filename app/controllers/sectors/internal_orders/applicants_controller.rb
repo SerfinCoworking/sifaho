@@ -1,9 +1,10 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
 
   before_action :set_internal_order, only: %i[show destroy edit update receive_confirm receive
-    rollback_order dispatch_order]
-  # GET /internal_orders
-  # GET /internal_orders.json
+                                              rollback_order dispatch_order]
+
+  # GET /internal_orders/applicants
+  # GET /internal_orders/applicants.json
   def index
     # authorize InternalOrder
     @filterrific = initialize_filterrific(
@@ -17,7 +18,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @applicant_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
-  # GET /internal_orders/new_applicant
+  # GET /internal_orders/applicants/new_applicant
   def new
     # authorize InternalOrder
     begin
@@ -41,8 +42,8 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
                      .where.not(id: current_user.sector_id).as_json
   end
 
-  # POST /internal_orders
-  # POST /internal_orders.json
+  # POST /internal_orders/applicants
+  # POST /internal_orders/applicants.json
   def create
     @internal_order = InternalOrder.new(internal_order_params)
     # authorize @internal_order
@@ -80,8 +81,8 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     end
   end
 
-  # PATCH /internal_orders
-  # PATCH /internal_orders.json
+  # PATCH /internal_orders/applicants
+  # PATCH /internal_orders/applicants.json
   def update
     # authorize @internal_order
     @internal_order.audited_by = current_user
@@ -116,6 +117,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     end
   end
 
+  # GET /external_orders/applicants/1/rollback_order
   def rollback_order
     # authorize @internal_order
     respond_to do |format|

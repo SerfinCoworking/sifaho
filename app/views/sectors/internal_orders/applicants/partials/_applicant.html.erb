@@ -70,9 +70,7 @@
         data-href="<%= internal_orders_applicant_url(internal_order.id) %>">
           <%= fa_icon "trash" %>
       </button>
-
-    
-    <% end %>
+    <% end %>    
     <% if policy(internal_order).nullify? %>
       <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" title="Anular" data-target="#anular-confirm-<%=internal_order.id%>">
         <%= fa_icon "ban" %>

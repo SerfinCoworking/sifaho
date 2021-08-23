@@ -2,7 +2,8 @@ $(document).on('turbolinks:load', function(e){
   if(!([
       'establishments/external_orders/applicants',
       'establishments/external_orders/providers', 
-      'sectors/internal_orders/applicants'].includes(_PAGE.controller) && 
+      'sectors/internal_orders/applicants',
+      'sectors/internal_orders/providers'].includes(_PAGE.controller) && 
       (['new', 'edit', 'accept_order', 'create', 'update', 'dispatch_order'].includes(_PAGE.action))) ) return false;
   
   initEvents();
