@@ -411,17 +411,28 @@ es:
     no_records: "No hay notificaciones"
     clean_all: "Limpiar todas"
   routes:
+    # Models
     stocks: 'stock'
     lots: 'lotes'
     lot_stocks: 'lotes_en_stock'
     receipts: 'recibos'
+    prescriptions: 'recetas'
+    outpatient_prescriptions: 'ambulatorias'
+    chronic_prescriptions: 'cronicas'
+    inpatient_prescriptions: 'internacion'
     sectors: 'sectores'
     internal_orders: 'sectores'
     external_orders: 'pedidos'
     establishments: 'establecimientos'
+    templates: 'plantillas'
+    beds: 'camas'
+    inpatient_movements: 'movimientos'
+    bedrooms: 'habitaciones'
+    # Actions
     new: 'nuevo'
     provider_index: 'entregas'
     applicant_index: 'recibos'
     providers: 'despachos'
     applicants: 'recibos'
     edit: 'editar'
+    create: 'crear'

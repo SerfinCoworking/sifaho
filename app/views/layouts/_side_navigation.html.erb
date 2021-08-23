@@ -29,7 +29,9 @@
     <% end %>
 
     <% if policy(InpatientPrescription).index? %>
-      <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom #{active_class('inpatient_prescriptions')}" do %>
+      <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom 
+        #{active_class('prescriptions/inpatient_prescriptions')} #{active_class('prescriptions/beds')} 
+        #{active_class('prescriptions/bedrooms')} #{active_class('prescriptions/inpatient_movements')}" do %>
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
         </span>
