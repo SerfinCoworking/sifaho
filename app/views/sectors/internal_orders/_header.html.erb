@@ -20,14 +20,14 @@
   <% end %>
 
   <li class="nav-item non-sel">
-    <%= link_to internal_orders_applicants_path, class: "nav-link #{ active_action('applicant_index') }" do %>
+    <%= link_to internal_orders_applicants_path, class: "nav-link #{ active_action_and_controller('index', 'applicants') }" do %>
       <%= fa_icon "inbox" %>
       Recibos
     <% end %>
   </li>
   <% if policy(:internal_order_provider).new? %>
     <li class="nav-item non-sel d-flex align-items-center">
-      <%= link_to internal_orders_providers_path, class: "nav-link #{ active_action_and_controller('provider_index', 'internal_orders') }" do %>
+      <%= link_to internal_orders_providers_path, class: "nav-link #{ active_action_and_controller('index', 'providers') }" do %>
         <%= fa_icon "paper-plane" %>
         Entregas
       <% end %>
@@ -43,7 +43,7 @@
   <% end %>
   <% if policy(:internal_order_applicant).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_internal_orders_applicant_path, class: "nav-link #{ active_action('new_applicant') }" do %>
+      <%= link_to new_internal_orders_applicant_path, class: "nav-link #{ active_action_and_controller('new', 'applicants') }" do %>
         <%= fa_icon "plus" %>
         Solicitar
       <% end %>
@@ -51,7 +51,7 @@
   <% end %>
   <% if policy(:internal_order_provider).new? %>
     <li class="nav-item non-sel">
-      <%= link_to new_internal_orders_provider_path, class: "nav-link #{ active_action_and_controller('new_provider', 'internal_orders') }" do %>
+      <%= link_to new_internal_orders_provider_path, class: "nav-link #{ active_action_and_controller('new', 'providers') }" do %>
         <%= fa_icon "plus" %>
         Entregar
       <% end %>
