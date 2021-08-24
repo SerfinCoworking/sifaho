@@ -222,7 +222,7 @@
       <% end %>
 
       
-      <% if policy(@internal_order).edit_applicant? %>
+      <% if policy(:internal_order_applicant).edit?(@internal_order) %>
         <%= link_to edit_internal_orders_applicant_path(@internal_order),  
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-warning btn-md mr-1' do %>
@@ -231,7 +231,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(@internal_order).send_applicant? %>
+      <% if policy(:internal_order_applicant).dispatch_order?(@internal_order) %>
         <%= link_to dispatch_order_internal_orders_applicant_path(@internal_order), 
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>
@@ -240,14 +240,14 @@
         <% end %>
       <% end %>
 
-      <% if policy(@internal_order).return_applicant_status? %>
+      <% if policy(:internal_order_applicant).rollback_order?(@internal_order) %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
           Retornar
         </button>
       <% end %>
       
-      <% if policy(@internal_order).receive_applicant? %>
+      <% if policy(:internal_order_applicant).receive_order?(@internal_order) %>
         <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
           <%= fa_icon "check" %>
           Recibir
@@ -258,7 +258,7 @@
 </div>
 
 <% content_for :modal do %>
-  <% if policy(@internal_order).return_applicant_status? %>
+  <% if policy(:internal_order_applicant).rollback_order?(@internal_order) %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -281,7 +281,7 @@
     </div>
   <% end %>
   
-  <% if policy(@internal_order).receive_applicant? %>
+  <% if policy(:internal_order_applicant).receive_order?(@internal_order) %>
     <div class="modal fade" id="receive-confirm">
       <div class="modal-dialog">
         <div class="modal-content">

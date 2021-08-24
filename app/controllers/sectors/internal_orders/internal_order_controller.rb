@@ -8,8 +8,7 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
   # GET /internal_orders/1
   # GET /internal_orders/1.json
   def show
-    # authorize @internal_order
-
+    authorize @internal_order
     respond_to do |format|
       format.html
       format.js
@@ -25,7 +24,6 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
   # DELETE /internal_orders/1
   # DELETE /internal_orders/1.json
   def destroy
-    authorize @internal_order
     @internal_order.destroy
     respond_to do |format|
       @internal_order.create_notification(current_user, 'se eliminó correctamente')
@@ -172,5 +170,9 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     .select(:id, :name)
     .with_establishment_id(@internal_order_template.destination_sector.establishment.id)
     .where.not(id: current_user.sector_id)
+  end
+
+  def sending?
+    return params[:commit] == 'sending'
   end
 end

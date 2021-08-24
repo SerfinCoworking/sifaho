@@ -23,7 +23,6 @@ Rails.application.routes.draw do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end
         end
-
       end
     end
     # Sectors
@@ -32,24 +31,6 @@ Rails.application.routes.draw do
         get :with_establishment_id
       end
     end
-
-    # resources :internal_orders, only: %i[show destroy] do
-    #   member do
-    #     get :return_provider_status
-    #     get :receive_applicant
-    #     get :edit_provider
-    #     patch :send_provider
-    #     get :nullify
-    #     put :update_provider
-    #   end
-    #   collection do
-    #     get :new_provider
-    #     get :provider_index
-    #     get :statistics
-    #     get 'find_lots(/:order_product_id)', to: 'internal_orders#find_lots', as: 'find_order_product_lots'
-    #     post :create_provider
-    #   end
-    # end
 
     # Internal order comments
     resources :internal_order_comments, only: %i[show create]

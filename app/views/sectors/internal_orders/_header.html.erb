@@ -25,7 +25,7 @@
       Recibos
     <% end %>
   </li>
-  <% if policy(InternalOrder).new_provider? %>
+  <% if policy(:internal_order_provider).new? %>
     <li class="nav-item non-sel d-flex align-items-center">
       <%= link_to internal_orders_providers_path, class: "nav-link #{ active_action_and_controller('provider_index', 'internal_orders') }" do %>
         <%= fa_icon "paper-plane" %>
@@ -41,7 +41,7 @@
       <% end %>
     </li>
   <% end %>
-  <% if policy(InternalOrder).new_applicant? %>
+  <% if policy(:internal_order_applicant).new? %>
     <li class="nav-item non-sel">
       <%= link_to new_internal_orders_applicant_path, class: "nav-link #{ active_action('new_applicant') }" do %>
         <%= fa_icon "plus" %>
@@ -49,7 +49,7 @@
       <% end %>
     </li>
   <% end %>
-  <% if policy(InternalOrder).new_provider? %>
+  <% if policy(:internal_order_provider).new? %>
     <li class="nav-item non-sel">
       <%= link_to new_internal_orders_provider_path, class: "nav-link #{ active_action_and_controller('new_provider', 'internal_orders') }" do %>
         <%= fa_icon "plus" %>

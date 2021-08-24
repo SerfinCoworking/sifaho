@@ -46,7 +46,7 @@
         <%= fa_icon "print" %>
       <% end %>
     <% end %>
-    <% if policy(internal_order).edit_provider? %>
+    <% if policy(:internal_order_provider).edit?(internal_order) %>
       <%= link_to edit_internal_orders_provider_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
         title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "pen" %>
@@ -66,7 +66,7 @@
       </button>
     <% end %>
  
-    <% if policy(internal_order).nullify? %>
+    <% if policy(:internal_order_provider).nullify_order?(internal_order) %>
       <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" title="Anular" data-target="#anular-confirm-<%=internal_order.id%>">
         <%= fa_icon "ban" %>
       </button>
@@ -80,7 +80,7 @@
     <%= render(partial: 'shared/modals/delete_confirmation') %>
   <% end %>
 
-  <% if policy(internal_order).nullify? %>
+  <% if policy(:internal_order_provider).nullify_order?(internal_order) %>
     <div class="modal fade" id="anular-confirm-<%= internal_order.id %>">
       <div class="modal-dialog">
         <div class="modal-content panel-warning">

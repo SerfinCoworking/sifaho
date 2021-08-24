@@ -2,10 +2,10 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   include FindLots
 
   before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order]
-  # GET /internal_orders
-  # GET /internal_orders.json
+  # GET /internal_orders/provider
+  # GET /internal_orders/provider.json
   def index
-    # authorize InternalOrder
+    policy(:internal_order_provider).index?
     @filterrific = initialize_filterrific(
       InternalOrder.provider(current_user.sector).without_status(0),
       params[:filterrific],
@@ -17,9 +17,9 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
 
-  # GET /internal_orders/new
+  # GET /internal_orders/provider/new
   def new
-    # authorize InternalOrder
+    policy(:internal_order_provider).new?
     begin
       new_from_template(params[:template], 'provision')
     rescue
@@ -34,17 +34,17 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-  # GET /internal_orders/1/edit
+  # GET /internal_orders/provider/1/edit
   def edit
-    # authorize @internal_order
+    policy(:internal_order_provider).edit?(@internal_order)
     @sectors = Sector.select(:id, :name)
                      .with_establishment_id(current_user.sector.establishment_id)
                      .where.not(id: current_user.sector_id).as_json
   end
 
   def create
+    policy(:internal_order_provider).create?
     @internal_order = InternalOrder.new(internal_order_params)
-    # authorize @internal_order
     @internal_order.created_by = current_user
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
@@ -76,10 +76,10 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-  # PATCH /internal_orders
-  # PATCH /internal_orders.json
+  # PATCH /internal_orders/provider
+  # PATCH /internal_orders/provider.json
   def update
-    # authorize @internal_order
+    policy(:internal_order_provider).update?(@internal_order)
     previous_status = @internal_order.status
     @internal_order.audited_by = current_user
     @internal_order.status = sending? ? "provision_en_camino" : 'proveedor_auditoria'
@@ -109,9 +109,9 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-  # # GET /internal_order/1/dispatch_order
+  # # GET /internal_order/provider/1/dispatch_order
   def dispatch_order
-    # authorize @internal_order
+    policy(:internal_order_provider).dispatch_order?(@internal_order)
     previous_status = @internal_order.status
     respond_to do |format|
       begin
@@ -137,7 +137,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   end
 
   def rollback_order
-    # authorize @internal_order
+    policy(:internal_order_provider).rollback_order?(@internal_order)
     respond_to do |format|
       begin
         @internal_order.return_provider_status_by(current_user)
@@ -149,14 +149,20 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-  # get /internal_orders/1/nullify_order
+  # get /internal_orders/provider/1/nullify_order
   def nullify_order
-    # authorize @internal_order
+    policy(:internal_order_provider).nullify_order?(@internal_order)
     @internal_order.nullify_by(current_user)
     respond_to do |format|
       flash[:success] = "#{@internal_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to internal_orders_provider_url(@internal_order) }
     end
+  end
+
+  # DELETE /internal_orders/providers/1
+  def destroy
+    policy(:internal_order_provider).destroy?(@internal_order)
+    super
   end
 end
 

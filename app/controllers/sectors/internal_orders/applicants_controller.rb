@@ -5,7 +5,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /internal_orders/applicants
   # GET /internal_orders/applicants.json
   def index
-    # authorize InternalOrder
+    policy(:internal_order_applicant).index?
     @filterrific = initialize_filterrific(
       InternalOrder.applicant(current_user.sector),
       params[:filterrific],
@@ -19,7 +19,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   # GET /internal_orders/applicants/new_applicant
   def new
-    # authorize InternalOrder
+    policy(:internal_order_applicant).new?
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -35,7 +35,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   # GET /external_orders/1/edit_receipt
   def edit
-    # authorize @internal_order
+    policy(:internal_order_applicant).edit?(@internal_order)
     @sectors = Sector.select(:id, :name)
                      .with_establishment_id(current_user.sector.establishment_id)
                      .where.not(id: current_user.sector_id).as_json
@@ -44,8 +44,8 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # POST /internal_orders/applicants
   # POST /internal_orders/applicants.json
   def create
+    policy(:internal_order_applicant).create?
     @internal_order = InternalOrder.new(internal_order_params)
-    # authorize @internal_order
     @internal_order.created_by = current_user
     @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
@@ -83,7 +83,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # PATCH /internal_orders/applicants
   # PATCH /internal_orders/applicants.json
   def update
-    # authorize @internal_order
+    policy(:internal_order_applicant).update?(@internal_order)
     @internal_order.audited_by = current_user
 
     respond_to do |format|
@@ -118,7 +118,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   # GET /external_orders/applicants/1/rollback_order
   def rollback_order
-    # authorize @internal_order
+    policy(:internal_order_applicant).rollback_order?(@internal_order)
     respond_to do |format|
       begin
         @internal_order.return_applicant_status_by(current_user)
@@ -132,7 +132,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   # GET /external_orders/applicants/1/dispatch_order
   def dispatch_order
-    # authorize @internal_order
+    policy(:internal_order_applicant).dispatch_order?(@internal_order)
     @internal_order.send_request_by(current_user)
     respond_to do |format|
       format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: 'La solicitud se ha enviado correctamente.' }
@@ -141,7 +141,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   # GET /internal_orders/1/receive_applicant
   def receive_order
-    # authorize @internal_order
+    policy(:internal_order_applicant).receive_order?(@internal_order)
     respond_to do |format|
       begin
         unless @internal_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
@@ -152,5 +152,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
       end
       format.html { redirect_to internal_orders_applicant_url(@internal_order) }
     end
+  end
+
+  # DELETE /internal_orders/providers/1
+  def destroy
+    policy(:internal_order_provider).destroy?(@internal_order)
+    super
   end
 end

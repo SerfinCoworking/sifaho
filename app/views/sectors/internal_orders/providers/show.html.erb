@@ -207,7 +207,7 @@
     </div> <!-- End Tab content-->
   </div>
   <div class="card-footer d-flex justify-content-between">
-    <% if policy(@internal_order).nullify? %>
+    <% if policy(:internal_order_provider).nullify_order?(@internal_order) %>
       <span data-toggle="modal" data-target="#anular-confirm">
         <button class="btn btn-danger btn-sm" data-toggle='tooltip' title="Anular solicitud" >
           <%= fa_icon 'ban' %>
@@ -227,7 +227,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(@internal_order).edit_provider? %>
+      <% if policy(:internal_order_provider).edit?(@internal_order) %>
         <%= link_to edit_internal_orders_provider_path(@internal_order), :"data-turbolinks" => false,
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: "btn btn-warning mr-1" do %>
@@ -236,7 +236,7 @@
         <% end %>
       <% end %>
       
-      <% if policy(@internal_order).send_provider? %>
+      <% if policy(:internal_order_provider).dispatch_order?(@internal_order) %>
         <%= link_to dispatch_order_internal_orders_provider_path(@internal_order),
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md' do %>
@@ -245,7 +245,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(@internal_order).return_provider_status? %>
+      <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
           <%= fa_icon "undo" %>
           Retornar
@@ -257,7 +257,7 @@
 </div>
 
 <% content_for :modal do %>
-  <% if policy(@internal_order).return_provider_status? %>
+  <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
     <div class="modal" id="return-confirm">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -281,7 +281,7 @@
   <% end %>
   
   
-  <% if policy(@internal_order).nullify? %>
+  <% if policy(:internal_order_provider).nullify_order?(@internal_order) %>
     <div class="modal fade" id="anular-confirm">
       <div class="modal-dialog">
         <div class="modal-content panel-warning">
