@@ -16,6 +16,6 @@ Rails.application.config.assets.precompile += %w( filterrific/filterrific-spinne
 Rails.application.config.assets.paths << Rails.root.join('app', 'vendor', 'assets', 'fonts')
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
 Rails.application.config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.svg)
-Rails.application.config.assets.precompile += %w( *.js ^[^_]*.css *.css.erb *.css.scss *.scss )
-Rails.application.config.assets.precompile += %w( application.js )
-Rails.application.config.assets.precompile += %w( sifaho-bg.png )
+Rails.application.config.assets.precompile += %w(*.js ^[^_]*.css *.css.erb *.css.scss *.scss)
+Rails.application.config.assets.precompile += %w(application.js)
+Rails.application.config.assets.precompile += %w(sifaho-bg.png)

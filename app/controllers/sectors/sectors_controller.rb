@@ -1,5 +1,5 @@
 class SectorsController < ApplicationController
-  before_action :set_sector, only: [:show, :new, :edit, :create, :update, :destroy, :delete]
+  before_action :set_sector, only: %i[show new edit create update destroy delete]
 
   # GET /sectors
   # GET /sectors.json
@@ -9,8 +9,8 @@ class SectorsController < ApplicationController
       params[:filterrific],
       persistence_id: false,
       available_filters: [
-        :search_name,
-      ],
+        :search_name
+      ]
     ) or return
     @sectors = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -40,11 +40,11 @@ class SectorsController < ApplicationController
 
     respond_to do |format|
       if @sector.save
-        flash.now[:success] = @sector.name + " se ha creado correctamente."
+        flash.now[:success] = "#{@sector.name} se ha creado correctamente."
         format.html { redirect_to @sector }
         format.js
       else
-        flash[:error] = "El sector no se ha podido crear."
+        flash[:error] = 'El sector no se ha podido crear.'
         format.html { render :new }
         format.js { render layout: false, content_type: 'text/javascript' }
       end
@@ -56,11 +56,11 @@ class SectorsController < ApplicationController
   def update
     respond_to do |format|
       if @sector.update(sector_params)
-        flash.now[:success] = @sector.name + " se ha modificado correctamente."
+        flash.now[:success] = "#{@sector.name} se ha modificado correctamente."
         format.html { redirect_to @sector }
         format.js
       else
-        flash.now[:error] = @sector.name + " no se ha podido modificar."
+        flash.now[:error] = "#{@sector.name} no se ha podido modificar."
         format.html { render :edit }
         format.js
       end
@@ -73,7 +73,7 @@ class SectorsController < ApplicationController
     sector = @sector.name
     @sector.destroy
     respond_to do |format|
-      flash.now[:success] = "El sector "+sector+" se ha eliminado correctamente."
+      flash.now[:success] = "El sector #{sector} se ha eliminado correctamente."
       format.js
     end
   end
@@ -95,6 +95,7 @@ class SectorsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_sector
     @sector = params[:id].present? ? Sector.find(params[:id]) : Sector.new
@@ -107,7 +108,7 @@ class SectorsController < ApplicationController
       :name,
       :establishment_id,
       :description,
-      :provide_hospitalization,
+      :provide_hospitalization
     )
   end
 end

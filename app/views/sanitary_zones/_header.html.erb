@@ -3,7 +3,7 @@
 <% content_for :page_header do %>
   <% if policy(SanitaryZone).index? %>
     <li class="nav-item non-sel">
-      <%= link_to sectors_path, class: "nav-link #{active_action_and_controller('index', 'sectors')}" do %>
+      <%= link_to sanitary_zones_path, class: "nav-link #{active_action_and_controller('index', 'sanitary_zones')}" do %>
         <%= fa_icon "map" %>
         Zonas sanitarias
       <% end %>
