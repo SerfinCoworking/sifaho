@@ -25,7 +25,7 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
 
   def can_send?(resource)
     if resource.provider_sector == user.sector
-      resource.proveedor_aceptado? && send_order.any? { |role| user.has_role?(role) }
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end
 

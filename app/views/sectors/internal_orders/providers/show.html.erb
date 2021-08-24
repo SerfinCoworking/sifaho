@@ -1,0 +1,305 @@
+<%= render 'sectors/internal_orders/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo <%= @internal_order.order_type %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to internal_orders_provider_path(format: 'pdf'), class: 'btn',
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+      <%= link_to internal_orders_providers_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class='col-2'>
+        <strong>Solicitante:</strong>
+        <%= @internal_order.applicant_sector.name%>
+      </div>
+      <div class="col-2">
+        <strong>Proveedor:</strong>
+        <%= @internal_order.provider_sector.name%>
+      </div>
+      <div class='col-3'>
+        <strong>Solicitado:</strong>
+        <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
+      </div>
+      <div class='col-3'>
+        <strong>Observaciones:</strong>
+          <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
+      </div>
+      <div class='col-2'>
+        <strong>Código:</strong>
+        <%= @internal_order.remit_code %>
+      </div>
+    </div>
+    
+    <!-- Status bar -->
+    <hr>
+    <%= render 'shared/status_bar', order: @internal_order %>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos
+              <span class="badge badge-secondary"><%= @internal_order.order_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @internal_order.movements.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
+              <%= fa_icon "comments" %> Comentarios
+              <span class="badge badge-secondary" id="comments-count"><%= @internal_order.comments.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="tab-content">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm">
+            <thead >
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th>Solicitado</th>
+                <th><%= @internal_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
+                <th>Lotes</th>
+                <th>Observaciones</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @internal_order.order_products.joins(:product).order("name").each do |int_ord_prod| %>
+                <tr class="<%= highlight_row(int_ord_prod.product_id) %>">
+                  <% @stock = Stock.where(sector: current_user.sector, product: int_ord_prod.product ).first %>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_code %>
+                    <% end %>
+                  </td>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_name %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= int_ord_prod.unity.name %>
+                  </td>
+                  <td>
+                    <%= int_ord_prod.request_quantity %> 
+                  </td>
+                  <td>
+                    <%= int_ord_prod.delivery_quantity %>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= int_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= int_ord_prod.id %>">
+                      <%= int_ord_prod.order_prod_lot_stocks.count %>
+                    </button>
+                  </td>
+                  <td>
+                    <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                      <%= fa_icon "asterisk" %>
+                    <% else %>
+                      ---
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= int_ord_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                      <% if int_ord_prod.order_prod_lot_stocks.present? %>
+                        <table class="w-100">
+                          <thead>
+                            <tr>
+                              <th> Cantidad </th>
+                              <th> Lote </th>
+                              <th> Laboratorio </th>
+                              <th> Vencimiento </th>
+                            </tr>
+                          </thead>
+                          </tbody>
+                            <% int_ord_prod.order_prod_lot_stocks.each do |iopls| %>
+                            <tr>
+
+                              <td>
+                                <%= iopls.quantity %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.code %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.laboratory.name %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.expiry_date.present? ? iopls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                              </td>
+                            </tr>
+
+                            <% end %>
+                          </tbody>
+                        </table>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
+                        <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
+                          <table class="w-100">
+                            <tr>
+                              <th>Descripción solicitud</th>
+                              <th>Descripción proveedor</th>
+                            </tr>
+                            <tr>
+                              <td><%= int_ord_prod.provider_observation %></td>
+                              <td><%= int_ord_prod.applicant_observation %></td>
+                            </tr>
+                          </table>
+                        <%end%>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @internal_order %>
+      </div> <!-- End last movements tab pane -->
+      <div id='comments' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%#= render '/shared/comments', order: @internal_order, new_comment: InternalOrderComment.new %>
+      </div> <!-- End comments tab pane -->
+    </div> <!-- End Tab content-->
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <% if policy(:internal_order_provider).nullify_order?(@internal_order) %>
+      <span data-toggle="modal" data-target="#anular-confirm">
+        <button class="btn btn-danger btn-sm" data-toggle='tooltip' title="Anular solicitud" >
+          <%= fa_icon 'ban' %>
+        </button>
+      </span>
+    <% end %>
+    <div class="text-right w-100">
+      <%= link_to internal_orders_providers_path,  
+        'data-disable-with' => "Volviendo... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
+
+      <% if policy(@internal_order).show? %>
+        <%= link_to internal_orders_provider_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
+
+      <% if policy(:internal_order_provider).edit?(@internal_order) %>
+        <%= link_to edit_internal_orders_provider_path(@internal_order), :"data-turbolinks" => false,
+          'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: "btn btn-warning mr-1" do %>
+          <%= fa_icon "pen" %>
+          Editar
+        <% end %>
+      <% end %>
+      
+      <% if policy(:internal_order_provider).dispatch_order?(@internal_order) %>
+        <%= link_to dispatch_order_internal_orders_provider_path(@internal_order),
+          'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-primary btn-md' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar provisión
+        <% end %>
+      <% end %>
+
+      <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
+          <%= fa_icon "undo" %>
+          Retornar
+        </button>
+      <% end %>
+      
+    </div> <!-- fin botones right -->
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
+    <div class="modal" id="return-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
+            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).humanize.downcase %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
+            <p>De esta manera podrá seguir agregando o quitando productos del pedido.</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Confirmar', rollback_order_internal_orders_provider_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  
+  <% if policy(:internal_order_provider).nullify_order?(@internal_order) %>
+    <div class="modal fade" id="anular-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+          <div class="modal-header panel-heading bg-danger text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro de anular el pedido?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Anular', nullify_order_internal_orders_provider_path(@internal_order), 'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

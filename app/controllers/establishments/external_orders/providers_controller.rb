@@ -176,8 +176,8 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   # DELETE /external_orders/providers/1
   def destroy
-    policy(:external_order_applicant).destroy?(@external_order)
-    super destroy
+    policy(:external_order_provider).destroy?(@external_order)
+    super
   end
 
   def set_order_product

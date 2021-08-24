@@ -310,6 +310,11 @@ class InternalOrder < ApplicationRecord
     self.class.model_name.human
   end
 
+  def custom_notification_url
+    solicitud? ? 'applicant' : 'provider'
+  end
+
+
   private
 
   def record_remit_code

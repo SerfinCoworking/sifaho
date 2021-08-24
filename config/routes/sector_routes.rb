@@ -1,29 +1,34 @@
 Rails.application.routes.draw do
   localized do
-    # Internal orders
-    resources :internal_orders, only: %i[show destroy] do
-      member do
-        get :delete
-        get :return_provider_status
-        get :return_applicant_status
-        get :receive_applicant
-        get :edit_applicant 
-        get :edit_provider
-        patch :send_provider
-        patch :send_applicant
-        get :nullify
-        put :update_applicant
-        put :update_provider
+    # Sectors
+    scope module: :sectors, path: :sectors do
+      namespace :internal_orders do
+        # Solicitudes
+        resources :applicants do
+          member do
+            get :dispatch_order
+            get :rollback_order
+            get :receive_order
+          end
+        end
+
+        # Despachos
+        resources :providers do
+          member do
+            get :dispatch_order
+            get :rollback_order
+            get :nullify_order
+          end
+          collection do
+            get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
+          end
+        end
       end
+    end
+    # Sectors
+    resources :sectors do
       collection do
-        get :new_applicant
-        get :new_provider
-        get :applicant_index
-        get :provider_index
-        get :statistics
-        get 'find_lots(/:order_product_id)', to: 'internal_orders#find_lots', as: 'find_order_product_lots'
-        post :create_applicant
-        post :create_provider
+        get :with_establishment_id
       end
     end
 

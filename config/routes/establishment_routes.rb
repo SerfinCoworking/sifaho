@@ -35,7 +35,7 @@ Rails.application.routes.draw do
         end
 
         # Comments
-        resources :external_order_comments, only: %i[show create]
+        resources :comments, only: %i[show create]
       end
     end
 

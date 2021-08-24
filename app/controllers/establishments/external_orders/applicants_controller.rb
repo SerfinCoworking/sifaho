@@ -147,7 +147,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # DELETE /external_orders/applicants/1
   def destroy
     policy(:external_order_applicant).destroy?(@external_order)
-    super destroy
+    super
   end
 
   private

@@ -1,0 +1,68 @@
+<% content_for :title, "Sectores" %>
+
+<% content_for :page_header do %>
+  <% if policy(Sector).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to sectors_path, class: "nav-link #{active_action_and_controller('index', 'sectors')}" do %>
+        <%= fa_icon "bezier-curve" %>
+        Sectores
+      <% end %>
+    </li>
+  <% end %>
+
+  <% if policy(Sector).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_sector_path, class: "nav-link #{active_action_and_controller('new', 'sectors')}" do %>
+        <%= fa_icon "plus" %>
+        Crear sector
+      <% end %>
+    </li>
+  <% end %>
+
+  <li class="nav-item non-sel">
+    <%= link_to internal_orders_applicants_path, class: "nav-link #{ active_action('applicant_index') }" do %>
+      <%= fa_icon "inbox" %>
+      Recibos
+    <% end %>
+  </li>
+  <% if policy(:internal_order_provider).new? %>
+    <li class="nav-item non-sel d-flex align-items-center">
+      <%= link_to internal_orders_providers_path, class: "nav-link #{ active_action_and_controller('provider_index', 'internal_orders') }" do %>
+        <%= fa_icon "paper-plane" %>
+        Entregas
+      <% end %>
+      <!-- Badge notification -->
+      <% request_count = InternalOrder.provider(current_user.sector).solicitud_enviada.count %>
+      <% if request_count > 0%>
+        <%= link_to internal_orders_providers_path(filterrific: {:with_status => 1}), class: 'badge badge-info mr-2',
+        title: "Solicitudes sin responder", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+          <%= request_count %>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(:internal_order_applicant).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_internal_orders_applicant_path, class: "nav-link #{ active_action('new_applicant') }" do %>
+        <%= fa_icon "plus" %>
+        Solicitar
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(:internal_order_provider).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_internal_orders_provider_path, class: "nav-link #{ active_action_and_controller('new_provider', 'internal_orders') }" do %>
+        <%= fa_icon "plus" %>
+        Entregar
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(InternalOrderTemplate).index? %>
+    <li class="nav-item non-sel" id="pedido">
+      <%= link_to internal_order_templates_path, class: "nav-link #{ active_class('internal_order_templates') }" do %>
+        <%= fa_icon "file-alt" %>
+        Plantillas
+      <% end %>
+    </li>
+  <% end %>
+<% end %>

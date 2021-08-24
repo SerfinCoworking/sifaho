@@ -356,6 +356,10 @@ class ExternalOrder < ApplicationRecord
     movements.search_action('envio').last.user.full_name if movements.search_action('envio').last.present?
   end
 
+  def custom_notification_url
+    solicitud? ? 'applicant' : 'provider'
+  end
+
   private
 
   def record_remit_code

@@ -58,7 +58,7 @@
         data-target="#delete-item" 
         data-title="Eliminar provisión"
         data-body="Esta seguro que desea eliminar la provisión <%= external_order.remit_code %>?"
-        data-href="/establecimientos/pedidos/providers/#{external_order.id}">
+        data-href="<%= external_orders_provider_url(external_order.id) %>">
           <%= fa_icon "trash" %>
       </button>
     <% end %>

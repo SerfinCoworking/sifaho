@@ -24,10 +24,8 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
       format.html
       format.js
       format.pdf do
-        send_data generate_order_report(@external_order),
-          filename: 'Despacho_'+@external_order.remit_code+'.pdf',
-          type: 'application/pdf',
-          disposition: 'inline'
+        pdf = ReportServices::ExternalOrderReportService.new(current_user, @external_order).generate_pdf
+        send_data pdf, filename: "Pedido_#{@external_order.remit_code}.pdf", type: 'application/pdf', disposition: 'inline'
       end
     end
   end
