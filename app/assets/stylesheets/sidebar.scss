@@ -27,6 +27,7 @@ body {
             width: calc(100% - #{$sidebar-width-hidden})!important;
             position: absolute;
             right: 0;
+            height: calc(100vh - #{$navbar-height});
         }
     }
 
@@ -129,6 +130,7 @@ body {
         #page-content-wrapper{
             transition: width 0.35s ease-out;
             width: calc(100% - #{$sidebar-width-visible});
+            height: calc(100vh - #{$navbar-height});
             @media(min-width: 1200px) and (max-width: 1600px){
                 width: calc(100% - #{$sidebar-width-visible-bml});
             }
