@@ -132,7 +132,15 @@
                 <td><%= movement.order_status.humanize if movement.order.present? %></td>
                 <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
                 <% if movement.order.present? %>
-                  <td><%= link_to polymorphic_path(movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
+                  <td>
+                    <%= link_to polymorphic_url([movement.order.class.name.underscore.pluralize, 
+                                  (movement.order.custom_notification_url if movement.order.class.method_defined?(:custom_notification_url)) ], 
+                                  resaltar: @stock.product_id), 
+                                  target: :_blank, 
+                                  class: "btn btn-sm btn-light" do %>
+                      <%= fa_icon 'external-link-alt' %>
+                    <% end %>
+                  </td>
                 <% end %>
               </tr>
             <% end %>

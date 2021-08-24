@@ -6,8 +6,15 @@
   <td class="text-truncate" style="max-width: 150px;"><%= stock_movement.order_destiny_name if stock_movement.order.present? %></td>
   <td><%= stock_movement.order_status.humanize if stock_movement.order.present? %></td>
   <td class="text-<%= stock_movement.adds? ? 'success' : 'danger' %>"><%= stock_movement.quantity %></td>
-  <td>
-    <% if stock_movement.order.present? %>
-      <%= link_to polymorphic_path(stock_movement.order, resaltar: @stock.product_id), target: :_blank, class: "btn btn-sm btn-light" do %><%= fa_icon 'external-link-alt' %><% end %></td>
-    <% end %>
+  <% if stock_movement.order.present? %>
+    <td>
+      <%= link_to polymorphic_url([stock_movement.order.class.name.underscore.pluralize, 
+                                  (stock_movement.order.custom_notification_url if stock_movement.order.class.method_defined?(:custom_notification_url)) ], 
+                                  resaltar: @stock.product_id), 
+                                  target: :_blank, 
+                                  class: "btn btn-sm btn-light" do %>
+        <%= fa_icon 'external-link-alt' %>
+      <% end %>
+    </td>
+  <% end %>
 </tr>

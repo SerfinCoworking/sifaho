@@ -92,7 +92,7 @@
             </thead>
             <tbody>
               <% @internal_order.order_products.joins(:product).order("name").each do |int_ord_prod| %>
-                <tr class="<%= highlight_row(int_ord_prod.product_id) %>">
+                <tr class="<%= highlight_row(int_ord_prod.product_id) %> <%= int_ord_prod.product_id.to_s %>">
                   <% @stock = Stock.where(sector: current_user.sector, product: int_ord_prod.product ).first %>
                   <td class="text-secondary">
                     <% if @stock.present? %>

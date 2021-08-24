@@ -153,13 +153,13 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
     @internal_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
     @internal_order = InternalOrder.new
     @internal_order.order_type = @internal_order_template.order_type
-    
+
     if @internal_order.provision?
       @internal_order.applicant_sector = @internal_order_template.destination_sector
     else
       @internal_order.provider_sector = @internal_order_template.destination_sector
     end
-    
+
     # Seteamos los productos a la orden
     @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots|
       @internal_order.order_products.build(product_id: iots.product_id)
