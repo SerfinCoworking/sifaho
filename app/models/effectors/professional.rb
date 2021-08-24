@@ -1,6 +1,6 @@
 class Professional < ApplicationRecord
   include PgSearch
-  
+
   enum sex: { indeterminate: 1, female: 2, male: 3 }
 
   after_create :assign_full_name
@@ -22,54 +22,48 @@ class Professional < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
-    available_filters: [
-      :sorted_by,
-      :search_professional,
-      :search_professional_qualification,
-      :get_by_qualifications_and_fullname,
-      :search_dni,
-      :with_professional_type_id,
-    ]
+    available_filters: %i[sorted_by search_professional search_professional_qualification
+                          get_by_qualifications_and_fullname search_dni with_professional_type_id]
   )
 
   pg_search_scope :get_by_qualifications_and_fullname,
-    against: [:last_name, :first_name],
-    :associated_against => { qualifications: :code },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: %i[last_name first_name],
+                  associated_against: { qualifications: :code },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_professional_qualification,
-    :associated_against => { qualifications: :code },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { qualifications: :code },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_professional,
-    against: [:first_name, :last_name],
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: %i[first_name last_name],
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
-      # Ordenamiento por fecha de creación en la BD
-      order("professionals.created_at #{ direction }")
+      # Ordenamiento por fecha de creacion en la BD
+      order("professionals.created_at #{direction}")
     when /^nombre_/
       # Ordenamiento por nombre del profesional
-      order("LOWER(professionals.first_name) #{ direction }")
+      order("LOWER(professionals.first_name) #{direction}")
     when /^apellido_/
       # Ordenamiento por apellido del profesional
-      order("LOWER(professionals.last_name) #{ direction }")
+      order("LOWER(professionals.last_name) #{direction}")
     when /^matricula_/
       # Ordenamiento por matricula
-      order("LOWER(qualifications.code) #{ direction }").joins(:qualifications)
+      order("LOWER(qualifications.code) #{direction}").joins(:qualifications)
     when /^professional_type_/
       # Ordenamiento por nombre del sector
-      order("LOWER(professional_types.name) #{ direction }").joins(:professional_type)
+      order("LOWER(professional_types.name) #{direction}").joins(:professional_type)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
@@ -77,23 +71,31 @@ class Professional < ApplicationRecord
     string = query.to_s
     where('professionals.dni::text LIKE ?', "%#{string}%")
   }
-  
+
   scope :without_user_asigned, -> { where(user_id: :nil) }
 
   def qualifications_attributes=(attributes)
     attributes.each do |attr|
-      qualification = Qualification.find_by(code: attr[:code])
-      attr[:id] = qualification.id if qualification.present?
+      professional = Professional.find_by_dni(dni)
+      # Delete deprecated qualifications
+      if professional.present?
+        puts "SELF: #{professional.attributes}"
+        qualification = Qualification.find_by(code: attr[:code], professional_id: professional.id)
+        puts "QUALIFICATION =>> #{qualification.attributes}"
+        attr[:id] = qualification.id if qualification.present?
+      end
+      # Qualification.where(code: attr[:code]).destroy_all
+      # attr[:id] = qualification.id if qualification.present? && qualification.professional.is_active?
     end
     super
   end
 
   def full_name
-    self.fullname
+    fullname
   end
 
   def full_info
-    self.fullname+" MP "+self.qualifications.first.code
+    "#{fullname} MP #{qualifications.first.code}"
   end
 
   # filters on 'sector_id' foreign key
@@ -102,11 +104,11 @@ class Professional < ApplicationRecord
   }
 
   def assign_full_name
-    self.fullname = self.last_name+" "+self.first_name
+    self.fullname = "#{last_name} #{first_name}"
     save!
   end
 
-  # Método para establecer las opciones del select input del filtro
+  # Metodo para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [

@@ -1,5 +1,5 @@
 class ProfessionalsController < ApplicationController
-  before_action :set_professional, only: [:show, :edit, :create, :update, :destroy, :delete]
+  before_action :set_professional, only: %i[show edit update destroy delete]
 
   # GET /professionals
   # GET /professionals.json
@@ -55,7 +55,7 @@ class ProfessionalsController < ApplicationController
     @professional = Professional.find_by(dni: professional_params[:dni]) unless @professional.present?
     respond_to do |format|
       if @professional.present?
-        @professional.update(professional_params)
+        @professional.update(professional_params.merge(id: @professional.id))
         flash.now[:success] = "#{@professional.fullname} se ha actualizado correctamente."
       else
         @professional = Professional.new(professional_params)
@@ -127,27 +127,28 @@ class ProfessionalsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_professional
-      @professional = params[:id].present? ? Professional.find(params[:id]) : Professional.new
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def professional_params
-      params.require(:professional).permit(
-        :id,
-        :first_name,
-        :last_name,
-        :dni,
-        :enrollment,
-        :professional_type_id,
-        :is_active,
-        :fullname,
-        :sex,
-        qualifications_attributes: [
-          :professional_id,
-          :name,
-          :code
-        ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_professional
+    @professional = Professional.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def professional_params
+    params.require(:professional).permit(
+      :id,
+      :first_name,
+      :last_name,
+      :dni,
+      :enrollment,
+      :professional_type_id,
+      :is_active,
+      :fullname,
+      :sex,
+      qualifications_attributes: [
+        :professional_id,
+        :name,
+        :code
+      ])
+  end
 end
