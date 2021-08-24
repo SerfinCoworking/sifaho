@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   # Reports
   localized do
-    resources :reports, only: %i[show index]
-
     namespace :reports do
       resources :index_reports, only: [:index]
 
@@ -56,6 +54,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :reports, only: %i[show index]
 
     # State reports
     namespace :state_reports do

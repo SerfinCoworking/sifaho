@@ -1,5 +1,5 @@
 class EstablishmentsController < ApplicationController
-  before_action :set_establishment, only: [:show, :edit, :update, :destroy, :delete]
+  before_action :set_establishment, only: %i[show edit update destroy delete]
 
   # GET /establishments
   # GET /establishments.json
@@ -11,7 +11,7 @@ class EstablishmentsController < ApplicationController
       select_options: {
         sorted_by: Establishment.options_for_sorted_by
       },
-      persistence_id: false,
+      persistence_id: false
     ) or return
     @establishments = @filterrific.find.paginate(page: params[:page], per_page: 15)
   end
@@ -75,10 +75,9 @@ class EstablishmentsController < ApplicationController
   # DELETE /establishments/1.json
   def destroy
     authorize @establishment
-    establishment_name = @establishment.name
+    flash.now[:success] = "El establecimiento #{@establishment.name} se ha eliminado correctamente."
     @establishment.destroy
     respond_to do |format|
-      flash.now[:success] = "El establecimiento #{@establishment_name} se ha eliminado correctamente."
       format.js
     end
   end

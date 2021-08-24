@@ -32,19 +32,11 @@ Rails.application.routes.draw do
 
     # Laboratories
     resources :laboratories do
-      collection do
-        get :search_by_name
-      end
-    end
-
-    # Sectors
-    resources :sectors do
       member do
         get :delete
       end
-
       collection do
-        get :with_establishment_id
+        get :search_by_name
       end
     end
   end
