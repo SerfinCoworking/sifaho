@@ -79,13 +79,9 @@ class Professional < ApplicationRecord
       professional = Professional.find_by_dni(dni)
       # Delete deprecated qualifications
       if professional.present?
-        puts "SELF: #{professional.attributes}"
         qualification = Qualification.find_by(code: attr[:code], professional_id: professional.id)
-        puts "QUALIFICATION =>> #{qualification.attributes}"
         attr[:id] = qualification.id if qualification.present?
       end
-      # Qualification.where(code: attr[:code]).destroy_all
-      # attr[:id] = qualification.id if qualification.present? && qualification.professional.is_active?
     end
     super
   end
