@@ -45,16 +45,5 @@ Rails.application.routes.draw do
         get :edit_provider
       end
     end
-
-    # Sectors
-    resources :sectors do
-      member do
-        get :delete
-      end
-
-      collection do
-        get :with_establishment_id
-      end
-    end
   end
 end

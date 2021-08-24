@@ -421,7 +421,7 @@ es:
     chronic_prescriptions: 'cronicas'
     inpatient_prescriptions: 'internacion'
     sectors: 'sectores'
-    internal_orders: 'sectores'
+    internal_orders: 'pedidos'
     external_orders: 'pedidos'
     establishments: 'establecimientos'
     templates: 'plantillas'
