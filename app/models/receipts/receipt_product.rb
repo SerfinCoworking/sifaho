@@ -1,14 +1,16 @@
 class ReceiptProduct < ApplicationRecord
+  default_scope { joins(:product).order('products.name') }
+
   belongs_to :receipt
   belongs_to :product
   belongs_to :laboratory, optional: true
   belongs_to :lot_stock, optional: true
   belongs_to :lot, optional: true
   belongs_to :provenance, class_name: 'LotProvenance'
-  
+
   # Validaciones
   validates_presence_of :receipt, :product_id, :lot_code, :laboratory_id
-  validates_presence_of :lot_stock_id, if: :is_recibido? 
+  validates_presence_of :lot_stock_id, if: :is_recibido?
   validates :provenance_id, presence: true
 
   # Delegations

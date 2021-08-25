@@ -24,7 +24,7 @@ class Establishment < ApplicationRecord
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
   validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
-  
+
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_cuie,
     against: :cuie,
@@ -32,7 +32,7 @@ class Establishment < ApplicationRecord
       :tsearch => { :prefix => true } # Buscar coincidencia desde las primeras letras.
     },
     :ignoring => :accents # Ignorar tildes.
-  
+
   pg_search_scope :search_name,
     against: :name,
     :using => {
