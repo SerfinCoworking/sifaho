@@ -6,12 +6,14 @@
         <%= @internal_order_template.new_record? ? "Agregar" : "Editando" %> plantilla de <%= @internal_order_template.order_type %> a sector
       </h5>
     </div>
-    <%= link_to internal_order_templates_path, class: "btn #{@internal_order_template.new_record? ? 'text-white' : ''}" do %>
+    <%= link_to internal_orders_templates_applicants_path, class: "btn #{@internal_order_template.new_record? ? 'text-white' : ''}" do %>
       <%= fa_icon "times" %>
     <% end %>
   </div>
   <div class="card-body">
-    <%= simple_form_for @internal_order_template, html: { role: 'check-modified'} do |f| %>
+    <%= simple_form_for @internal_order_template, 
+                        :url => (@internal_order_template.new_record? ? internal_orders_templates_applicants_path : internal_orders_templates_applicant_path(@internal_order_template)),
+                        html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <%= f.input :order_type, :as => :hidden, :input_html => { value: f.object.order_type } %>
       <div class="row">
@@ -53,12 +55,18 @@
               </thead>
               <tbody id="internal_order_product_templates" class="internal_order_product_templates">
                 <%= f.simple_fields_for :internal_order_product_templates do |form_quantity| %>
-                  <%= render "internal_order_product_template_fields", f: form_quantity %>
+                  <%= render 'sectors/internal_orders/templates/fields', f: form_quantity %>
                 <% end %>
               </tbody>
             </table>
-            <%= link_to_add_association f, :internal_order_product_templates, class: 'btn btn-primary btn-sm',
-              data: {"association-insertion-node" => "tbody.internal_order_product_templates", "association-insertion-method" => "append"} do %>
+            <%= link_to_add_association f, 
+                                        :internal_order_product_templates, 
+                                        class: 'btn btn-primary btn-sm',
+                                        partial: 'sectors/internal_orders/templates/fields',
+                                        data: {
+                                          "association-insertion-node" => "tbody.internal_order_product_templates", 
+                                          "association-insertion-method" => "append"
+                                        } do %>
               <%= fa_icon "plus" %>
               Agregar insumo
             <% end %>
@@ -68,7 +76,7 @@
     <% end %>
   </div>
   <div class="card-footer text-right">
-    <%= link_to 'Volver', internal_order_templates_path, class: 'btn btn-light mr-2' %>
+    <%= link_to 'Volver', internal_orders_templates_applicants_path, class: 'btn btn-light mr-2' %>
     <button type='submit' name='commit' class='btn btn-success' form='<%= @internal_order_template.new_record? ? 'new_internal_order_template' : 'edit_internal_order_template_' + @internal_order_template.id.to_s %>'>
       <%= fa_icon "save" %> Guardar
     </button>

@@ -1,4 +1,4 @@
-<%= render "internal_orders/header" %>
+<%= render 'sectors/internal_orders/header' %>
 
 <div class="card fixed-custom-card">
   <div class="card-header d-flex justify-content-between">
@@ -8,7 +8,7 @@
         Viendo plantilla de <%= @internal_order_template.order_type %>
       </h5>
     </div>
-    <%= link_to internal_order_templates_path, class: 'btn',
+    <%= link_to internal_orders_templates_path, class: 'btn',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
       <%= fa_icon "times" %>
     <% end %>
@@ -20,11 +20,7 @@
         <%= @internal_order_template.name %>
       </div>
       <div class="col-md-3">
-        <% if @internal_order_template.solicitud? %>
-          <h5>Sector proveedor</h5>
-        <% else %>
-          <h5>Sector solicitante</h5>
-        <% end %>
+        <%= yield(:internal_order_template_show_title)%>
         <%= @internal_order_template.destination_sector.name %>
       </div>
       <% if @internal_order_template.observation.present? %>
@@ -70,47 +66,12 @@
     </div>
   </div>
   <div class="card-footer d-flex justify-content-between">
-    <div>
-      <% if policy(@internal_order_template).destroy? %>
-        <%= link_to delete_internal_order_template_path(@internal_order_template), remote: true,
-          class: 'btn btn-danger btn-md', title: 'Eliminar', data: { toggle: 'tooltip', placement: 'top' } do %>
-          <%= fa_icon "trash"%>
-        <% end %>
-      <% end %>
-    </div>
-    <div>
-      <%= link_to 'Volver', internal_order_templates_path, class: "btn btn-light mr-1" %>
-      <% if policy(@internal_order_template).show? %>
-        <%= link_to internal_order_template_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
-          <%= fa_icon "print" %> Imprimir
-        <% end %>
-      <% end %>
-      <% if policy(@internal_order_template).edit? %>
-        <%= link_to edit_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-1" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
-      <% if policy(@internal_order_template).edit_provider? %>
-        <%= link_to edit_provider_internal_order_template_path(@internal_order_template), :"data-turbolinks" => false,
-          class: "btn btn-warning mr-1" do %>
-          <%= fa_icon "pen" %>
-          Editar
-        <% end %>
-      <% end %>
-      <% if policy(@internal_order_template).use_applicant? %>
-        <%= link_to new_applicant_internal_orders_path(template: @internal_order_template), class: "btn btn-primary mr-1", target: :_blank do %>
-          <%= fa_icon "plus" %>
-          Crear solicitud
-        <% end %>
-      <% end %>
-      <% if policy(@internal_order_template).use_provider? %>
-        <%= link_to new_provider_internal_orders_path(template: @internal_order_template), class: "btn btn-primary", target: :_blank do %>
-          <%= fa_icon "plus" %>
-          Crear provisión
-        <% end %>
-      <% end %>
-    </div>
+    <%= yield(:action_buttons) %>
   </div>
 </div>
+
+<% content_for :modal do %>
+  <% if policy(@internal_order_template).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+<% end %>

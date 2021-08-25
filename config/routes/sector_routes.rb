@@ -23,6 +23,15 @@ Rails.application.routes.draw do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end
         end
+
+        # Plantillas
+        namespace :templates do
+          get '', to: 'templates#index'
+          # Solicitudes
+          resources :applicants
+          # Despachos
+          resources :providers
+        end
       end
     end
     # Sectors
@@ -35,15 +44,6 @@ Rails.application.routes.draw do
     # Internal order comments
     resources :internal_order_comments, only: %i[show create]
 
-    # Internal order templates
-    resources :internal_order_templates do
-      collection do
-        get :new_provider
-      end
-      member do
-        get :delete
-        get :edit_provider
-      end
-    end
+
   end
 end
