@@ -32,6 +32,9 @@ Rails.application.routes.draw do
           # Despachos
           resources :providers
         end
+
+        # Comments
+        resources :comments, only: %i[show create]
       end
     end
     # Sectors
@@ -40,10 +43,5 @@ Rails.application.routes.draw do
         get :with_establishment_id
       end
     end
-
-    # Internal order comments
-    resources :internal_order_comments, only: %i[show create]
-
-
   end
 end

@@ -1,5 +1,5 @@
-class InternalOrderCommentsController < ApplicationController
-  before_action :set_internal_order_comment, only: [:show ]
+class Sectors::InternalOrders::CommentsController < ApplicationController
+  before_action :set_internal_order_comment, only: [:show]
 
   def show
   end

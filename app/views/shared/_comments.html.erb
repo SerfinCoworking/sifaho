@@ -14,7 +14,7 @@
   </div>
 
   <div class="col-8 mx-auto justify-content-between align-items-center">
-  <%= simple_form_for new_comment, 
+    <%= simple_form_for new_comment, 
                         :url => polymorphic_url([order.class.name.underscore.pluralize, :comments]),
                         :method => :post, 
                         remote: true do |f| %>
