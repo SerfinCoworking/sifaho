@@ -16,7 +16,7 @@ class InpatientMovement < ApplicationRecord
   delegate :name, to: :movement_type, prefix: true
   delegate :name, to: :bedroom, prefix: true
   delegate :name, to: :bed, prefix: true
-  delegate :fullname, :dni, :age_string, to: :patient, prefix: true
+  delegate :fullname, :dni, :age_string, to: :patient, prefix: true, allow_nil: true
 
   # Callbacks
   before_create :apply_movement
