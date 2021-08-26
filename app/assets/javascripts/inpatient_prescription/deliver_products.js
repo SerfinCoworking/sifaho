@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery', 'set_products'].includes(_PAGE.action))) ) return false;
+  if(!(['prescriptions/inpatient_prescriptions'].includes(_PAGE.controller) && (['delivery', 'set_products'].includes(_PAGE.action))) ) return false;
   
   $('.inpatient-order-product-cocoon-container').find('tr').each((index, element) => {
     initEvents(element);

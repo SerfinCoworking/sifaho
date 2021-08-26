@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-  if( _PAGE.controller !== 'chronic_dispensations' || !(['new', 'create'].includes(_PAGE.action)) ) return false;
+  if( _PAGE.controller !== 'prescriptions/chronic_dispensations' || !(['new', 'create'].includes(_PAGE.action)) ) return false;
   
   initEvents();
   

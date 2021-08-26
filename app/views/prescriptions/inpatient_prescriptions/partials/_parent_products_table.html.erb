@@ -14,7 +14,7 @@
     </thead>
     <tbody id="inpatient-order-product-cocoon-container" class="inpatient-order-product-cocoon-container">
       <%= inpatient_form.simple_fields_for :parent_order_products do |form_products| %>
-        <%= render "inpatient_prescriptions/partials/parent_products_fields", f: form_products, order: order %>
+        <%= render "prescriptions/inpatient_prescriptions/partials/parent_products_fields", f: form_products, order: order %>
       <% end %>
     </tbody>
     
@@ -23,7 +23,7 @@
   <%= link_to_add_association inpatient_form, 
     :parent_order_products, 
     class: 'btn btn-primary btn-sm',
-    partial: "inpatient_prescriptions/partials/parent_products_fields", 
+    partial: "prescriptions/inpatient_prescriptions/partials/parent_products_fields", 
     data: {
       "association-insertion-node" => "tbody#inpatient-order-product-cocoon-container",
       "association-insertion-method" => "append"} do %>
