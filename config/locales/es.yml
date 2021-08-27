@@ -81,6 +81,7 @@ es:
       internal_order:
         applicant_sector_id: "Sector solicitante"
         provider_sector: "Sector proveedor"
+        provider_sector_id: "Sector proveedor"
       internal_order_template:
         name: "Nombre"
         destination_sector_id: "Solicitante"
