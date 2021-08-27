@@ -1,5 +1,6 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
-  before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order]
+  before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order
+                                              edit_products]
   before_action :set_sectors, only: %i[new edit create update]
 
   # GET /internal_orders/applicants
@@ -37,6 +38,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
   end
 
+  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format) 
+  def edit_products
+    policy(:internal_order_applicant).edit_products?(@internal_order)
+  end
+
   # POST /internal_orders/applicants
   # POST /internal_orders/applicants.json
   def create
@@ -51,7 +57,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     respond_to do |format|
       if @internal_order.save
         flash[:info] = 'La solicitud se ha creado y se encuentra en auditoria.'
-        format.html { redirect_to internal_orders_applicant_url(@internal_order) }
+        format.html { redirect_to set_products_internal_orders_applicant_url(@internal_order) }
       else
         @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
         format.html { render :new }

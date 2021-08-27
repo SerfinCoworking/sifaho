@@ -9,7 +9,7 @@ Rails.application.routes.draw do
             get :dispatch_order
             get :rollback_order
             get :receive_order
-            get :set_products
+            get :edit_products
           end
         end
 
