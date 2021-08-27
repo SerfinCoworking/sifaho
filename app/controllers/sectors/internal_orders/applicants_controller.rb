@@ -1,6 +1,7 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
-
-  before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order]
+  before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order
+                                              edit_products]
+  before_action :set_sectors, only: %i[new edit create update]
 
   # GET /internal_orders/applicants
   # GET /internal_orders/applicants.json
@@ -20,15 +21,13 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /internal_orders/applicants/new_applicant
   def new
     policy(:internal_order_applicant).new?
+    @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'solicitud'
-      @sectors = Sector.select(:id, :name)
-                       .with_establishment_id(current_user.sector.establishment_id)
-                       .where.not(id: current_user.sector_id).as_json
       @internal_order.order_products.build
     end
   end
@@ -36,9 +35,12 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /external_orders/1/edit_receipt
   def edit
     policy(:internal_order_applicant).edit?(@internal_order)
-    @sectors = Sector.select(:id, :name)
-                     .with_establishment_id(current_user.sector.establishment_id)
-                     .where.not(id: current_user.sector_id).as_json
+    @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
+  end
+
+  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format) 
+  def edit_products
+    policy(:internal_order_applicant).edit_products?(@internal_order)
   end
 
   # POST /internal_orders/applicants
@@ -53,28 +55,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @internal_order.order_type = 'solicitud'
 
     respond_to do |format|
-      begin
-        @internal_order.save!
-
-        if sending?
-          @internal_order.solicitud_enviada!
-          @internal_order.create_notification(current_user, 'creó y envió')
-          message = 'La solicitud se ha auditado y enviado correctamente.'
-        else
-          @internal_order.solicitud_auditoria!
-          @internal_order.create_notification(current_user, 'creó y auditó')
-          message = 'La solicitud se ha creado y se encuentra en auditoria.'
-        end
-
-        format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: message }
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @sectors = Sector.select(:id, :name)
-                         .with_establishment_id(current_user.sector.establishment_id)
-                         .where.not(id: current_user.sector_id).as_json
-        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
+      if @internal_order.save
+        flash[:info] = 'La solicitud se ha creado y se encuentra en auditoria.'
+        format.html { redirect_to set_products_internal_orders_applicant_url(@internal_order) }
+      else
+        @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
         format.html { render :new }
       end
     end
@@ -87,30 +72,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @internal_order.audited_by = current_user
 
     respond_to do |format|
-      begin
-        @internal_order.update(internal_order_params)
-        @internal_order.save!
-
-        if sending?
-          @internal_order.solicitud_enviada!
-          @internal_order.create_notification(current_user, "creó y envió")
-          message = "La solicitud se ha auditado y enviado correctamente."
-        else
-          @internal_order.solicitud_auditoria!
-          @internal_order.create_notification(current_user, "creó y auditó")
-          message = "La solicitud se ha creado y se encuentra en auditoria."
-        end
-
-        format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: message }
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @sectors = Sector
-          .select(:id, :name)
-          .with_establishment_id(current_user.sector.establishment_id)
-          .where.not(id: current_user.sector_id).as_json
-          @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
+      if @internal_order.update(internal_order_params)
+        flash[:info] = 'La solicitud se ha modificado correctamente.'
+        format.html { redirect_to internal_orders_applicant_url(@internal_order) }
+      else
+        flash[:alert] = 'No se ha podido modificar la solicitud.'
         format.html { render :edit }
       end
     end
@@ -158,5 +124,14 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   def destroy
     policy(:internal_order_provider).destroy?(@internal_order)
     super
+  end
+
+  private
+
+  # Set sectors to select
+  def set_sectors
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .where.not(id: current_user.sector_id).as_json
   end
 end

@@ -11,7 +11,7 @@
     <% end %>
   </div>
   <div class="card-body">
-    <%= simple_form_for @internal_order, 
+    <%= simple_form_for @internal_order,
                         :url => (@internal_order.new_record? ? internal_orders_applicants_path : internal_orders_applicant_path(@internal_order)),
                         html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>

@@ -1,0 +1,44 @@
+<div class="card fixed-custom-card">
+  <div class="card-header bg-warning d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon 'edit' %>
+      <h5 class="card-title mb-0 ml-2">
+        Editando productos de solicitud interna
+      </h5>
+    </div>
+    <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <%= simple_form_for @internal_order,
+                        :url => (@internal_order.new_record? ? internal_orders_applicants_path : internal_orders_applicant_path(@internal_order)),
+                        html: { role: 'check-modified', id: 'order-form' } do |f| %>
+      <%= f.error_notification %>
+
+      <div class="row">
+        <%# Sector Solicitante %>
+        <div class="col">
+          <label>Sector solicitante</label>
+          <h6><%= current_user.sector_name %></h6>
+        </div>
+
+        <%# Sector Proveedor %>
+        <div class="col">
+          <label>Sector proveedor</label>
+          <h6><%= @internal_order.provider_sector_name %></h6>
+        </div>
+
+        <%# Observation %>
+        <div class="col">
+          <label>Observaciones</label>
+          <%= @internal_order.observation %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', internal_orders_applicants_path, class: 'btn btn-light mr-1' %>
+  </div>
+</div>

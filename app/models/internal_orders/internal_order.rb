@@ -27,7 +27,7 @@ class InternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validate :presence_of_products_into_the_order
+  # validate :presence_of_products_into_the_order
   validates_associated :order_products
   validates_uniqueness_of :remit_code
 
@@ -41,6 +41,9 @@ class InternalOrder < ApplicationRecord
 
   after_create :set_notification_on_create
   after_update :set_notification_on_update
+
+  # Delegations
+  delegate :name, to: :provider_sector, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -75,7 +78,7 @@ class InternalOrder < ApplicationRecord
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
@@ -185,9 +188,9 @@ class InternalOrder < ApplicationRecord
   # Nullify the order
   def nullify_by(a_user)
     self.rejected_by = a_user
-    self.status = "anulado"
-    self.save!(validate: false)
-    self.create_notification(a_user, "anuló")
+    self.status = 'anulado'
+    save!(validate: false)
+    create_notification(a_user, 'anuló')
   end
 
   def send_request_by(a_user)
@@ -328,18 +331,18 @@ class InternalOrder < ApplicationRecord
 
   # set created notification and create stock accordding with the internal order status
   def set_notification_on_create
-    self.create_notification(self.audited_by, "creó")
+    self.create_notification(self.audited_by, 'creó')
   end
-  
+
   def set_notification_on_update
     unless self.provision_entregada?
-      self.create_notification(self.audited_by, "auditó")
+      self.create_notification(self.audited_by, 'auditó')
     end
-  end  
+  end
 
   def presence_of_products_into_the_order
     if self.order_products.size == 0
-      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+      errors.add(:presence_of_products_into_the_order, 'Debe agregar almenos 1 producto')
     end
   end
 end

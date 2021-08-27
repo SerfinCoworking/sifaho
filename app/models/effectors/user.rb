@@ -26,7 +26,7 @@ class User < ApplicationRecord
 
   # Delegaciones
   delegate :full_name, :first_name, :dni, :email, to: :profile
-  delegate :name, :establishment_short_name, to: :sector, prefix: :sector, allow_nil: true
+  delegate :name, :applicant_internal_orders, :establishment_short_name, to: :sector, prefix: :sector, allow_nil: true
   delegate :establishment_name, to: :sector, allow_nil: true
   delegate :establishment, to: :sector
   delegate :full_info, to: :professional, prefix: true, allow_nil: true

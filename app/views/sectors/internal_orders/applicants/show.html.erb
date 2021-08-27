@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo <%= @internal_order.order_type %>
+        Viendo <%= @internal_order.order_type %> <%= @internal_order.remit_code %>
       </h5>
     </div>
     <div>
@@ -227,7 +227,16 @@
           'data-disable-with' => "Editar... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-warning btn-md mr-1' do %>
           <%= fa_icon "pen" %>
-          Editar
+          Editar orden
+        <% end %>
+      <% end %>
+
+      <% if policy(:internal_order_applicant).edit_products?(@internal_order) %>
+        <%= link_to edit_products_internal_orders_applicant_path(@internal_order),  
+          'data-disable-with' => "editar productos <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "edit" %>
+          Editar productos
         <% end %>
       <% end %>
 
