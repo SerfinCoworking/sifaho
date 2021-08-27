@@ -81,7 +81,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   end
 
   def edit_products
-    @external_order_product = ExternalOrderProduct.new(external_order_id: @external_order.id)
+    @external_order_product = ExternalOrderProduct.new(id: DateTime.now.to_s(:number), external_order_id: @external_order.id)
   end
  
   # PATCH /external_orders/applicants/1

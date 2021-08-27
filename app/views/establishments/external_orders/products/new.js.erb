@@ -1,6 +1,6 @@
 <% js = escape_javascript(
   render "shared/orders/#{@external_order.custom_notification_url}/fields", order: @external_order, order_product: @external_order_product
 ) %>
-$("#order-product-cocoon-container").append("<%= js %>");
+$("#order-products-container").append("<%= js %>");
 
 initProductsEvents();
