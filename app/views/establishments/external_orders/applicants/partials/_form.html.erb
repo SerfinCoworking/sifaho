@@ -27,8 +27,8 @@
               value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }"
             } 
           %>
-        </div>
-        <div class='col-md-3'>
+        <!--/div>
+        <div class='col-md-3'-->
           <%# ESTABLECIMIENTO PROVEEDOR %>
           <%= f.input :provider_establishment_id, as: :string,
             label: 'Establecimiento proveedor',
@@ -42,8 +42,8 @@
               size: 41
             } 
           %>
-        </div>
-        <div class='col-md-3'>
+        <!--/div>
+        <div class='col-md-3'-->
           <%# SECTOR PROVEEDOR %>        
           <%= f.input :provider_sector_id,
             label: 'Sector proveedor',
@@ -62,15 +62,18 @@
               value: f.object.provider_sector.present? ? f.object.provider_sector.id : ""
             }
           %>
-        </div>
-        <div class='col-md-3'>
+        <!--/div>
+        <div class='col-md-3'-->
           <%= f.input :observation, label: 'Observaciones', as: :text,
           :input_html => { :cols => 40  , :rows => 1 } %>
+        </div>
+        <div class="col-md-9">
+          Listado de últimas solicitudes
         </div>
       </div>
       
       <%# INSUMOS SOLICITADOS %>
-      <%= render "shared/orders/applicant/table", form: f %>
+      <%#= render "shared/orders/applicant/table", form: f %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
@@ -90,16 +93,6 @@
         Guardando...
       </div>
 
-    </button>
-
-    <button type='submit' class='btn btn-primary' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='sending'>
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "paper-plane" %> Guardar y enviar
-      </div>
-      <div class="d-none" style="pointer-events: none;">
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
-        Guardando...
-      </div>
     </button>
   </div>
 </div>

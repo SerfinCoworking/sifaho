@@ -1,9 +1,8 @@
-<tr class="nested-fields">
-  <%= simple_form_for order_product, 
-                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order) : external_orders_applicant_product_path(order, order_product)),
+<%= simple_form_for external_order_product, 
+                    :url => (external_order_product.new_record? ? external_orders_applicants_path : external_orders_applicant_path(external_order_product)),
                     remote: true,
                     html: { role: 'check-modified'} do |f| %>
-  
+  <tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
     <!-- Código del producto -->
     <td>
       <% if policy(f.object).edit_product? %>
@@ -144,10 +143,10 @@
         :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
     </td>
     <td>
+      <!-- Mostrar botón de quitar  -->
       <button class="btn btn-md btn-success" type="submit">
         <%= fa_icon "save" %>
       </button>
-      <!-- Mostrar botón de quitar  -->
       <%# if f.object.is_provision? || f.object.new_record? %>
       <% if policy(f.object).remove_association? %>
         <!-- Botón quitar -->
@@ -157,5 +156,5 @@
         <% end %>
       <% end %>
     </td>
-  <% end %>
-</tr>
+  </tr>
+<% end %>

@@ -1,0 +1,8 @@
+console.log("<==========");
+<% js = escape_javascript(
+  render "shared/orders/#{@external_order.custom_notification_url}/fields", order: @external_order, order_product: @external_order_product
+) %>
+  <%# render(partial: 'establishments/external_orders/applicants/partials/list', locals: { applicant_orders: @applicant_orders })%>
+
+$("#order-product-cocoon-container").append("<%= js %>");
+console.log("<==========");

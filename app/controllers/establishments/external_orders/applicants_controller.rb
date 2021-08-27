@@ -8,7 +8,9 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     :rollback_order,
     :accept_provider,
     :receive_order,
-    :destroy
+    :destroy,
+    :set_products,
+    :save_product
   ]
 
   # GET /external_orders/applicants
@@ -56,17 +58,17 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     @external_order.requested_date = DateTime.now
     @external_order.applicant_sector = current_user.sector
     @external_order.order_type = "solicitud"
-    @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
+    @external_order.status = "solicitud_auditoria"
 
     respond_to do |format|
       begin
         @external_order.save!
-        message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
-        notification_type = sending? ? "creó y envió" : "creó y auditó"
+        message = 'La solicitud de abastecimiento se ha creado y se encuentra en auditoría.'
+        notification_type = 'creó y auditó'
 
         @external_order.create_notification(current_user, notification_type)
 
-        format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
+        format.html { redirect_to set_products_external_orders_applicant_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -78,6 +80,10 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
+  def set_products
+    @external_order_product = ExternalOrderProduct.new(external_order_id: @external_order.id)
+  end
+ 
   # PATCH /external_orders/applicants/1
   def update
     policy(:external_order_applicant).update?(@external_order)

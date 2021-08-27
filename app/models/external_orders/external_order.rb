@@ -29,9 +29,9 @@ class ExternalOrder < ApplicationRecord
 
   # Validaciones
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates_associated :order_products
+  # validates_associated :order_products
   validates_uniqueness_of :remit_code
-  validate :presence_of_products_into_the_order
+  # validate :presence_of_products_into_the_order
 
   # Atributos anidados
   accepts_nested_attributes_for :order_products,

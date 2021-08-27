@@ -11,29 +11,21 @@
         <th></th>
       </tr>
     </thead>
-    <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
-      <%= form.simple_fields_for :order_products do |form_product| %>
-        <%= render "shared/orders/applicant/fields", f: form_product %>
-      <% end %>
+    <tbody id="order-product-cocoon-container">
+      <%= render "shared/orders/applicant/fields", order: order, order_product: order_product %>
     </tbody>
     
   </table>
 
-  <%= link_to_add_association form, 
-    :order_products, 
-    class: 'btn btn-primary btn-sm',
-    partial: "shared/orders/applicant/fields", 
-    data: {
-      "association-insertion-node" => "tbody#order-product-cocoon-container",
-      "association-insertion-method" => "append"} do %>
-    <%= fa_icon "plus" %>
+  <%= link_to new_external_orders_applicant_product_path(order), class: 'btn btn-primary btn-sm', remote: true do %>
     Agregar producto
+    <%= fa_icon "plus" %>
   <% end %>
   
   <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
-  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
-    <div class="invalid-feedback d-block">
-      <%= form.object.errors[:presence_of_products_into_the_order].first %>
-    </div>
-  <% end %>
+  <%# if form.object.errors[:presence_of_products_into_the_order].any? %>
+    <!--div class="invalid-feedback d-block"-->
+      <%#= form.object.errors[:presence_of_products_into_the_order].first %>
+    <!--/div-->
+  <%# end %>
 </div>
