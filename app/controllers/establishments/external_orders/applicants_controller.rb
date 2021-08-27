@@ -9,7 +9,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     :accept_provider,
     :receive_order,
     :destroy,
-    :set_products,
+    :edit_products,
     :save_product
   ]
 
@@ -80,7 +80,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     end
   end
 
-  def set_products
+  def edit_products
     @external_order_product = ExternalOrderProduct.new(external_order_id: @external_order.id)
   end
  
