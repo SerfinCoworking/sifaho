@@ -32,6 +32,13 @@
   </td>
   <td class="text-left actions-col">
     <% if policy(:external_order_applicant).can_send?(external_order) %>
+      <%= link_to edit_products_external_orders_applicant_path(external_order),
+        class: 'btn btn-primary btn-sm', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "file-signature" %>
+      <% end %>
+    <% end %>
+    
+    <% if policy(:external_order_applicant).can_send?(external_order) %>
       <%= link_to dispatch_order_external_orders_applicant_path(external_order),
         class: 'btn btn-primary btn-sm', title: 'Enviar', data: { toggle: 'tooltip', placement: 'top' } do %>
         <%= fa_icon "paper-plane" %>

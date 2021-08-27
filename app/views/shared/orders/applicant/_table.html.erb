@@ -11,7 +11,9 @@
         <div class="col-1 pl-2 pr-2"></div>
       </div>
     <div id="order-products-container">
-      <%= render "shared/orders/applicant/fields", order: order, order_product: order_product %>
+      <% order.order_products.each do |order_product_store| %>
+        <%= render "shared/orders/applicant/fields", order: order, order_product: order_product_store %>
+      <% end.presence || ( render "shared/orders/applicant/fields", order: order, order_product: order_product ) %>
     </div>
 
   <%= link_to new_external_orders_applicant_product_path(order), class: 'btn btn-primary btn-sm', remote: true do %>

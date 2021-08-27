@@ -1,9 +1,9 @@
 <%= simple_form_for order_product, 
-                  :url => (order_product.new_record? ? external_orders_applicant_products_path(order) : external_orders_applicant_product_path(order, order_product)),
-                  remote: true,
-                  html: { 
-                    id: "ord-prod-#{@form_id}",
-                    role: 'check-modified'} do |form| %>
+                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order) : external_orders_applicant_product_path(order, order_product)),
+                    remote: true,
+                    html: { 
+                      id: "ord-prod-#{@form_id}",
+                      role: 'check-modified'} do |form| %>
   <div class="row nested-fields m-0">
     <!-- Código del producto -->
     <div class="col-1 pl-1 pr-1">
@@ -42,8 +42,15 @@
       <% end %>
 
       <%# Hidden product_id %>
-      <%= form.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
-        value: "#{ if form.object.product_id.present?; form.object.product_id; end }" %>
+      <input type="hidden" 
+             class="product-id"
+             name="order_product[product_id]"
+             value="<%= "#{ if form.object.product_id.present?; form.object.product_id; end }" %>">
+      
+      <%# Hidden external_order_id %>
+      <input type="hidden"
+             name="order_product[external_order_id]"
+             value="<%= "#{ if form.object.external_order_id.present?; form.object.external_order_id; end }" %>">
     </div>
 
     <!-- Nombre de Producto -->
@@ -110,21 +117,19 @@
     <!-- Cantidad solicitada -->
     <% if policy(form.object).edit_request_quantity? %>
       <div class="col-1 pl-1 pr-1">
-        <%= form.input :request_quantity,
-          label: false,
-          placeholder: 'Cant',
-          required: false,
-          readOnly: policy(form.object).edit_request_quantity? ? false : true,
-          input_html: {
-            "data-tooltip"=>true,
-            :class=>"request-quantity input-sm",
-            :title=>"Cantidad solicitada",
-            "data-placement"=>"right",
-            min: '1', 
-            step:'any',
-            value: form.object.request_quantity.present? ?  form.object.request_quantity : 0
-          }
-        %>
+        <div class="form-group integer optional order_product_request_quantity">
+          <input class="form-control numeric integer optional request-quantity input-sm" 
+                  data-tooltip="true"
+                  title="Cantidad solicitada"
+                  data-placement="right"
+                  min="1"
+                  step="any"
+                  value="0"
+                  placeholder="Cant"
+                  type="number"
+                  name="order_product[request_quantity]"
+                  id="order_product_request_quantity">
+        </div>
       </div>
     <% else %>
       <div class="col-1 pl-1 pr-1">
@@ -140,8 +145,13 @@
 
     <!-- Observaciones proveedor -->
     <div class="col-3 pl-1 pr-1">
-      <%= form.input :applicant_observation, label: false, as: :text,
-        :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+      <div class="form-group text optional order_product_applicant_observation">
+        <textarea class="form-control text optional input-sm" 
+                  cols="20"
+                  rows="1"
+                  name="order_product[applicant_observation]"
+                  id="order_product_applicant_observation"></textarea>
+      </div>
     </div>
     
     <!-- Botones de accion -->

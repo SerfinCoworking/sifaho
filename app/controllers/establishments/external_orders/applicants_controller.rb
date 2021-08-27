@@ -81,7 +81,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   end
 
   def edit_products
-    @external_order_product = ExternalOrderProduct.new(id: DateTime.now.to_s(:number), external_order_id: @external_order.id)
+    @external_order_product = @external_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
  
   # PATCH /external_orders/applicants/1
@@ -158,7 +159,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def external_order_params
     params.require(:external_order).permit(:applicant_sector_id, 
     :sent_by_id, 
