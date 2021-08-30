@@ -32,7 +32,7 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
 
   def order_product_params
     params.require(:order_product).permit(
-      :external_order_id,
+      :order_id,
       :product_id,
       :request_quantity,
       :applicant_observation,

@@ -16,7 +16,9 @@
       <% end.presence || ( render "shared/orders/applicant/fields", order: order, order_product: order_product ) %>
     </div>
 
-  <%= link_to new_external_orders_applicant_product_path(order), class: 'btn btn-primary btn-sm', remote: true do %>
+  <!-- new_external_orders_applicant_product_path(order), class: 'btn btn-primary btn-sm', remote: true do %> -->
+  <%= link_to polymorphic_path([:new, order.class.name.underscore.pluralize, :applicant_product], applicant_id: order.id), remote: true, 
+    class: 'btn btn-primary btn-sm' do %>
     Agregar producto
     <%= fa_icon "plus" %>
   <% end %>

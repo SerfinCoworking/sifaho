@@ -10,7 +10,6 @@ Rails.application.routes.draw do
             get :rollback_order
             get :receive_order
             get :edit_products
-
           end
           resources :products, except: [:index]
         end
@@ -23,7 +22,7 @@ Rails.application.routes.draw do
             get :accept_order
             get :nullify_order
           end
-          
+
           collection do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end

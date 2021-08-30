@@ -47,10 +47,10 @@
              name="order_product[product_id]"
              value="<%= "#{ if form.object.product_id.present?; form.object.product_id; end }" %>">
       
-      <%# Hidden external_order_id %>
+      <%# Hidden order_id %>
       <input type="hidden"
-             name="order_product[external_order_id]"
-             value="<%= "#{ if form.object.external_order_id.present?; form.object.external_order_id; end }" %>">
+             name="order_product[order_id]"
+             value="<%= "#{ if form.object.order_id.present?; form.object.order_id; end }" %>">
     </div>
 
     <!-- Nombre de Producto -->
