@@ -4,7 +4,7 @@ $(document).on('turbolinks:load', function(e){
       'establishments/external_orders/providers', 
       'sectors/internal_orders/applicants',
       'sectors/internal_orders/providers'].includes(_PAGE.controller) && 
-      (['new', 'edit', 'accept_order', 'create', 'update', 'dispatch_order'].includes(_PAGE.action))) ) return false;
+      (['new', 'edit', 'accept_order', 'create', 'update', 'dispatch_order', 'edit_products'].includes(_PAGE.action))) ) return false;
   
   initProductsEvents();
   
@@ -137,6 +137,14 @@ function initProductsEvents(){
       });
     }
     setProgress(tr, totalQuantitySelected, toDelivery, (typeof(selectedQuantity) !== 'undefined' ? selectedQuantity.length : 0));
+  });
+
+  $(".enable-editing-btn").on('click', function(e){
+    e.stopPropagation();
+    $(e.target).closest('.nested-fields').find('.product-code, .product-name, .request-quantity, .observations').removeAttr('readonly');
+    $(e.target).closest('.enable-editing-buttons').fadeOut(300, function(){
+      $(e.target).closest('.enable-editing-buttons').siblings('.editing-buttons').fadeIn(300);
+    });
   });
 
 }// initProductsEvents function

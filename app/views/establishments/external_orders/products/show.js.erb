@@ -1,0 +1,15 @@
+
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.product-code').val("<%= @external_order_product.product_code %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.product-id').val("<%= @external_order_product.product_id %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('input[name="order_product[external_order_id]"]').val("<%= @external_order_product.external_order_id %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.product-name').val("<%= @external_order_product.product_name %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.product-unity').val("<%= @external_order_product.product.unity_name %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.stock-quantity').val("<%= current_user.sector.stock_to(@external_order_product.product) || 0 %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.request-quantity').val("<%= @external_order_product.request_quantity %>").attr('readonly', true);
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.observations').val("<%= @external_order_product.applicant_observation %>").attr('readonly', true);
+
+$('#row-ord-prod-<%= @external_order_product.id %>').find('.editing-buttons').fadeOut(300, function(e){  
+  $('#row-ord-prod-<%= @external_order_product.id %>').find('.enable-editing-buttons').fadeIn(300);
+});
+
+console.log("================ Cancel");

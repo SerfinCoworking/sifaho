@@ -1,0 +1,21 @@
+<div class="editing-buttons" style="display: none;">
+  <button class="btn btn-outline-success" type="submit" form="<%= "ord-prod-#{order_product.id}" %>">
+    <%= fa_icon 'save' %>
+  </button>
+  
+  <%= link_to external_orders_applicant_product_path(order, order_product), 
+              class: "btn btn-outline-danger",
+              remote: true do %>
+    <%= fa_icon 'times' %>
+  <% end %>
+</div>
+
+<div class="enable-editing-buttons">
+  <button class="btn btn-outline-warning enable-editing-btn" type="button">
+    <%= fa_icon 'pen' %>
+  </button>
+
+  <button class="btn btn-outline-danger">
+    <%= fa_icon 'trash-alt' %>
+  </button>
+</div>
