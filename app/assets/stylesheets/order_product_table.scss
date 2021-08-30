@@ -11,3 +11,20 @@ table.table{
     background-color: $red-light-color;
   }
 }
+
+/* .nested-fields.editing{
+  .editing-buttons{
+    display: block;
+  }
+  .enable-editing-buttons{
+    display: none;
+  }
+}
+.nested-fields:not(.editing){
+  .editing-buttons{
+    display: none;
+  }
+  .enable-editing-buttons{
+    display: block;
+  }
+} */
