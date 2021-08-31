@@ -150,7 +150,7 @@ $(document).on('turbolinks:load', function() {
   /* new version */
   $('[data-toggle="popover"]').popover();
   
-  $('.delete-item').on('click', function(e) {
+  $('.delete-item, .btn-delete-confirm').on('click', function(e) {
     const modal = $(e.target).attr('data-target');
     const title = $(e.target).attr('data-title');
     const body = $(e.target).attr('data-body');

@@ -1,6 +1,6 @@
 class Establishments::ExternalOrders::ProductsController < ApplicationController
   before_action :set_external_order, only: [:new, :show, :create]
-  before_action :set_external_order_product, only: [:show, :update]
+  before_action :set_external_order_product, only: [:show, :update, :destroy]
 
   def new
     @external_order_product = @external_order.order_products.build
@@ -21,9 +21,12 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
     @external_order_product.update(order_product_params)
     flash.now[:success] = "Se actualizó el producto #{@external_order_product.product_name} correctamente."
   end
-
+  
   def destroy
-
+    product_name = @external_order_product.product_name
+    @order_product_id = @external_order_product.id
+    @external_order_product.destroy
+    flash.now[:success] = "Se eliminó el producto #{product_name} correctamente."
   end
 
   private

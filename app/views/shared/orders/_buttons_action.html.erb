@@ -15,7 +15,15 @@
     <%= fa_icon 'pen' %>
   </button>
 
-  <button class="btn btn-outline-danger">
-    <%= fa_icon 'trash-alt' %>
+  <button type="button" 
+    class="btn btn-outline-danger btn-delete-confirm"
+    title="<%= t("actions.tooltip.delete") %>"
+    data-toggle="tooltip"
+    data-placement="top"
+    data-target="#delete-item" 
+    data-title="Eliminar producto"
+    data-body="Esta seguro que desea eliminar el producto <%= order_product.product.name %>?"
+    data-href="<%= external_orders_applicant_product_url(order.id, order_product.id) %>">
+      <%= fa_icon 'trash-alt' %>
   </button>
 </div>

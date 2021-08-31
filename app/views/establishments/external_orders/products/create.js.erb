@@ -14,5 +14,18 @@ $('#row-ord-prod-<%= @form_id %>').find('.creating-buttons').fadeOut(300, functi
     render "shared/orders/buttons_action", order: @external_order, order_product: @external_order_product
   ) %>
   $('#row-ord-prod-<%= @form_id %>').find('.creating-buttons').first().html("<%= js %>");
+  
+  $('#row-ord-prod-<%= @form_id %>').find(('.btn-delete-confirm').on('click', function(e) {
+    const modal = $(e.target).attr('data-target');
+    const title = $(e.target).attr('data-title');
+    const body = $(e.target).attr('data-body');
+    const href = $(e.target).attr('data-href');
+
+    $(modal).find('.modal-title').text(title);
+    $(modal).find('.modal-body').text(body);
+    $(modal).find('.btn[data-method="delete"]').attr('href', href);
+    $(modal).modal('toggle');
+  });
+  
   $('#row-ord-prod-<%= @form_id %>').find('.creating-buttons').fadeIn(300);
 });

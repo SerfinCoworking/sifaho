@@ -30,3 +30,9 @@
     <!--/div-->
   <%# end %>
 </div>
+
+<% content_for :modal do %>
+  <%# if policy(:external_order_applicant).destroy?(external_order) %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <%# end %>
+<% end %>
