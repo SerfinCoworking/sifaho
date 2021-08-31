@@ -1,9 +1,9 @@
 class Establishments::ExternalOrders::ProductsController < ApplicationController
   before_action :set_order, only: %i[new show create]
-  before_action :set_order_product, only: %i[show update]
+  before_action :set_order_product, only: %i[show update destroy]
 
   def new
-    @external_order_product = @external_order.order_products.build
+    @order_product = @order.order_products.build
     @form_id = DateTime.now.to_s(:number)
   end
 
@@ -19,8 +19,8 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
         flash.now[:success] = "Se agregó el producto #{@order_product.product_name} correctamente."
       else
         flash.now[:alert] = 'Ha ocurrido un error al guardar el producto.'
-        format.js { render 'shared/orders/products/create' }
       end
+      format.js { render 'shared/orders/products/create' }
     end
   end
 
@@ -39,7 +39,9 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
     flash.now[:success] = "Se eliminó el producto #{@order_product.product_name} correctamente."
     @order_product_id = @order_product.id
     @order_product.destroy
-    format.js { render 'shared/orders/products/destroy' }
+    respond_to do |format|
+      format.js { render 'shared/orders/products/destroy' }
+    end
   end
 
   private
