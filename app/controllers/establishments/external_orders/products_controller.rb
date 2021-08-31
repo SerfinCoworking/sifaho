@@ -1,5 +1,5 @@
 class Establishments::ExternalOrders::ProductsController < ApplicationController
-  before_action :set_external_order, only: [:new, :show]
+  before_action :set_external_order, only: [:new, :show, :create]
   before_action :set_external_order_product, only: [:show, :update]
 
   def new
@@ -13,7 +13,8 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   def create
     @external_order_product = ExternalOrderProduct.new(order_product_params)
     @external_order_product.save
-    flash.now[:success] = "Se agregó el producto #{@external_order_product.product_name} correctamente."
+    flash.now[:success] = "Se agregó el producto #{@external_order_product.product.name} correctamente."
+    @form_id = params[:form_id]
   end
 
   def update

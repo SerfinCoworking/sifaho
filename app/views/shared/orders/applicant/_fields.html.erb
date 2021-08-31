@@ -1,5 +1,5 @@
 <%= simple_form_for order_product, 
-                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order) : external_orders_applicant_product_path(order, order_product)),
+                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order, form_id: @form_id) : external_orders_applicant_product_path(order, order_product)),
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
@@ -134,20 +134,22 @@
     <!-- Botones de accion -->
     <div class="col-1 pl-1 pr-1 text-right">
       <% if form.object.new_record? %>
-        <button class="btn btn-md btn-outline-success" 
-                data-tooltip="true"
-                title="Quitar"
-                data-placemente="top"
-                type="submit" 
-                form="<%= "ord-prod-#{@form_id}" %>">
-          <%= fa_icon "save" %>
-        </button>
-        <button class="btn btn-outline-danger"
-                data-tooltip="true"
-                title="Quitar"
-                data-placemente="top">
-          <%= fa_icon "trash-alt" %>
-        </button>
+        <div class="creating-buttons">
+          <button class="btn btn-md btn-outline-success" 
+                  data-tooltip="true"
+                  title="Guardar"
+                  data-placemente="top"
+                  type="submit" 
+                  form="<%= "ord-prod-#{@form_id}" %>">
+            <%= fa_icon "save" %>
+          </button>
+          <button class="btn btn-outline-danger"
+                  data-tooltip="true"
+                  title="Quitar"
+                  data-placemente="top">
+            <%= fa_icon "trash-alt" %>
+          </button>
+        </div>
       <% else %>
         <%= render "shared/orders/buttons_action", order: order, order_product: order_product %>
       <% end %>

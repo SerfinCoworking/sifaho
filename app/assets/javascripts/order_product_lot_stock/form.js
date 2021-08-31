@@ -9,7 +9,7 @@ $(document).on('turbolinks:load', function(e){
   initProductsEvents();
   
   // button submit
-  $("button[type='submit']").on('click', function(e){
+/*   $("button[type='submit']").on('click', function(e){
     e.preventDefault();
     $(e.target).attr('disabled', true);
     $(e.target).siblings('button, a').attr('disabled', true);
@@ -18,7 +18,7 @@ $(document).on('turbolinks:load', function(e){
     $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
     $('form#'+$(e.target).attr('form')).submit();
   });
-
+ */
   // cocoon init
   $('#order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
     initProductsEvents();
