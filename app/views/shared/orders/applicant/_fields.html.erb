@@ -10,6 +10,7 @@
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
                       role: 'check-modified'} do |form| %>
+
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
     <!-- Código del producto -->
     <div class="col-1 pl-1 pr-1">
@@ -19,7 +20,7 @@
             <input type="text" 
                     name="<%="product_code_fake-#{form.object.id}"%>" 
                     value="<%= form.object.product.present? ? form.object.product.code : '' %>"
-                    class="form-control fake optional product-code input-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+                    class="form-control fake optional product-code form-control-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
                     data-autocomplete-source="<%= search_by_code_products_path %>"
                     size="6"
                     <%= order_product.new_record? ? '' : 'readonly' %>                    
@@ -60,7 +61,7 @@
             <input type="text" 
             name="<%="product_name_fake-#{form.object.id}"%>"
             value="<%= form.object.product.present? ? form.object.product.name : '' %>"
-            class="form-control fake optional product-name input-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+            class="form-control fake optional product-name form-control-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
             data-autocomplete-source="<%= search_by_name_products_path %>"
             size="45" 
             autocomplete="off"
@@ -82,7 +83,7 @@
 
     <!-- Unidad -->
     <div class="col-1 pl-1 pr-1">
-      <input class="form-control numeric integer optional product-unity input-sm" 
+      <input class="form-control numeric integer optional product-unity form-control-sm" 
              data-tooltip="true"
              title="Unidad"
              data-placement="right"
@@ -95,7 +96,7 @@
 
     <!-- Stock -->
     <div class="col-1 pl-1 pr-1">
-      <input class="form-control numeric integer optional stock-quantity input-sm" 
+      <input class="form-control numeric integer optional stock-quantity form-control-sm" 
              data-tooltip="true"
              title="Stock"
              data-placement="right"
@@ -110,7 +111,7 @@
     <% if policy(form.object).edit_request_quantity? %>
       <div class="col-1 pl-1 pr-1">
         <div class="form-group integer optional order_product_request_quantity">
-          <input class="form-control numeric integer optional request-quantity input-sm" 
+          <input class="form-control numeric integer optional request-quantity form-control-sm" 
                   data-tooltip="true"
                   title="Cantidad solicitada"
                   data-placement="right"
@@ -128,32 +129,30 @@
     <!-- Observaciones -->
     <div class="col-3 pl-1 pr-1">
       <div class="form-group text optional order_product_applicant_observation">
-        <textarea class="form-control text optional input-sm observations" 
-                  cols="20"
+        <textarea class="form-control text optional form-control-sm observations" 
                   rows="1"
                   <%= order_product.new_record? ? '' : 'readonly' %>
-                  name="order_product[applicant_observation]"><%= form.object.applicant_observation if form.object.applicant_observation.present? %>
-        </textarea>
+                  name="order_product[applicant_observation]"><%= form.object.applicant_observation.present? ? form.object.applicant_observation : ''  %></textarea>
       </div>
     </div>
     
     <!-- Botones de accion -->
-    <div class="col-1 pl-1 pr-1 text-right">
+    <div class="col-md-auto pl-1 pr-1 text-right">
       <% if form.object.new_record? %>
         <div class="creating-buttons">
-          <button class="btn btn-md btn-outline-success" 
+          <button class="btn btn-sm btn-outline-success" 
                   data-tooltip="true"
                   title="Guardar"
                   data-placemente="top"
                   type="submit" 
                   form="<%= "ord-prod-#{@form_id}" %>">
-            <%= fa_icon "save" %>
+            <%= fa_icon "save", class: 'fa-fw' %>
           </button>
-          <button class="btn btn-outline-danger"
+          <button class="btn btn-sm btn-outline-danger btn-delete-product"
                   data-tooltip="true"
                   title="Quitar"
                   data-placemente="top">
-            <%= fa_icon "trash-alt" %>
+            <%= fa_icon "trash-alt", class: 'fa-fw' %>
           </button>
         </div>
       <% else %>

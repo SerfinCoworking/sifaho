@@ -19,12 +19,6 @@ $(document).on('turbolinks:load', function(e){
   //   $('form#'+$(e.target).attr('form')).submit();
   // });
 
-  // cocoon init
-  $('#order-product-cocoon-container').on('cocoon:after-insert', function(e, inserted_item) {
-    initProductsEvents();
-    $(inserted_item).find('input.product-code').first().focus();
-  });
-
   // Remove style
   $('#lot-selection').on('hidden.bs.modal', function (e) {
     const templateHidden = $(e.target).attr('data-template-hidden');
@@ -144,6 +138,12 @@ function initProductsEvents(){
     $(e.target).closest('.nested-fields').find('.product-code, .product-name, .request-quantity, .observations').removeAttr('readonly');
     $(e.target).closest('.enable-editing-buttons').fadeOut(300, function(){
       $(e.target).closest('.enable-editing-buttons').siblings('.editing-buttons').fadeIn(300);
+    });
+  });
+
+  $('.btn-delete-product').on('click', function(e){
+    $(e.target).closest('.row.nested-fields').fadeOut(300, function(){
+      $(e.target).closest('.row.nested-fields').remove();
     });
   });
 
@@ -295,5 +295,3 @@ function setProgress(targetRow, totalQuantitySelected, toDelivery, selectedOptio
     }
   }
 }
-
-

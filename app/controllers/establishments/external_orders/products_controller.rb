@@ -36,7 +36,10 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   end
 
   def destroy
-
+    product_name = @external_order_product.product_name
+    @order_product_id = @external_order_product.id
+    @external_order_product.destroy
+    flash.now[:success] = "Se eliminó el producto #{product_name} correctamente."
   end
 
   private
