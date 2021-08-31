@@ -1,0 +1,12 @@
+<%= render 'shared/flash_message' %>
+
+<% js = escape_javascript(
+  render "shared/orders/#{@order.custom_notification_url}/fields", order: @order, order_product: @order_product
+) %>
+<% if @order_product.errors.any? %>
+  $('#ord-prod-<%= @form_id %>').replaceWith("<%= js %>");
+<% else %>
+  $("#order-products-container").append("<%= js %>");
+<% end %>
+
+initProductsEvents();

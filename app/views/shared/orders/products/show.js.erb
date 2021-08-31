@@ -1,0 +1,16 @@
+
+<%= render 'shared/flash_message' %>
+
+<% js = escape_javascript(
+  render "shared/orders/#{@order.custom_notification_url}/fields", order: @order, order_product: @order_product
+) %>
+  
+$('#ord-prod-<%= @form_id %>').fadeOut(300, function(){
+
+  $('#ord-prod-<%= @form_id %>').replaceWith("<%= js %>");
+  initProductsEvents();
+
+
+  $('#ord-prod-<%= @form_id %>').fadeIn(300);
+});
+

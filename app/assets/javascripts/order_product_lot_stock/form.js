@@ -147,6 +147,18 @@ function initProductsEvents(){
     });
   });
 
+  $('.btn-delete-confirm').on('click', function(e) {
+    const modal = $(e.target).attr('data-target');
+    const title = $(e.target).attr('data-title');
+    const body = $(e.target).attr('data-body');
+    const href = $(e.target).attr('data-href');
+
+    $(modal).find('.modal-title').text(title);
+    $(modal).find('.modal-body').text(body);
+    $(modal).find('.btn[data-method="delete"]').attr('href', href);
+    $(modal).modal('toggle');
+  });
+
 }// initProductsEvents function
 
 function onChangeOnSelectAutoCProductCode(target, item){
