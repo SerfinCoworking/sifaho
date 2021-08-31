@@ -1,5 +1,6 @@
 class Sectors::InternalOrders::ProductsController < ApplicationController
-  before_action :set_internal_order, only: [:new]
+  before_action :set_order, only: %i[new]
+  before_action :set_order_product, only: %i[update]
 
   def new
     @internal_order_product = @internal_order.order_products.build
@@ -7,19 +8,28 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   end
 
   def create
-    @internal_order_product = InternalOrderProduct.new(order_product_params)
-    
+    @order_product = InternalOrderProduct.new(order_product_params)
+    @form_id = params[:form_id]
+
     respond_to do |format|
-      if @internal_order_product.save
-        flash.now[:success] = "Se agregó el producto #{@internal_order_product.product_name} correctamente."
+      if @order_product.save
+        flash.now[:success] = "Se agregó el producto #{@order_product.product_name} correctamente."
       else
         flash.now[:alert] = 'Ha ocurrido un error al guardar el producto.'
-        format.js {  }
       end
+      format.js { render 'shared/orders/products/create' }
     end
   end
 
   def update
+    respond_to do |format|
+      if @order_product.update(order_product_params)
+        flash.now[:success] = "El producto #{@order_product.product_name} se ha actualizado correctamente."
+      else
+        flash.now[:alert] = 'Ha ocurrido un error al actualizar el producto.'
+      end
+      format.js { render 'shared/orders/products/update' }
+    end
   end
 
   def destroy
@@ -28,12 +38,12 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
 
   private
 
-  def set_internal_order
-    @internal_order = InternalOrder.find(params[:applicant_id])
+  def set_order
+    @order = InternalOrder.find(params[:applicant_id])
   end
 
-  def set_internal_order_product
-    @internal_order_product = InternalOrder.find(params[:id])
+  def set_order_product
+    @order_product = InternalOrderProduct.find(params[:id])
   end
 
   def order_product_params
