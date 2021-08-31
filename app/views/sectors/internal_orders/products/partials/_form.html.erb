@@ -147,6 +147,7 @@
       <button class="btn btn-md btn-success" type="submit">
         <%= fa_icon "save" %>
       </button>
+
       <%# if f.object.is_provision? || f.object.new_record? %>
       <% if policy(f.object).remove_association? %>
         <!-- Botón quitar -->

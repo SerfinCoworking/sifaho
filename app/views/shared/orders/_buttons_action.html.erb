@@ -3,7 +3,7 @@
     <%= fa_icon 'save' %>
   </button>
   
-  <%= link_to external_orders_applicant_product_path(order, order_product), 
+  <%= link_to polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order_product.id), 
               class: "btn btn-outline-danger",
               remote: true do %>
     <%= fa_icon 'times' %>

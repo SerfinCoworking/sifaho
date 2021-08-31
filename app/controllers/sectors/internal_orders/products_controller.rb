@@ -7,9 +7,16 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   end
 
   def create
-    @internal_order_product = ExternalOrderProduct.new(order_product_params)
-    @internal_order_product.save
-    flash.now[:success] = "Se agregó el producto #{@internal_order_product.product_name} correctamente."
+    @internal_order_product = InternalOrderProduct.new(order_product_params)
+    
+    respond_to do |format|
+      if @internal_order_product.save
+        flash.now[:success] = "Se agregó el producto #{@internal_order_product.product_name} correctamente."
+      else
+        flash.now[:alert] = 'Ha ocurrido un error al guardar el producto.'
+        format.js {  }
+      end
+    end
   end
 
   def update

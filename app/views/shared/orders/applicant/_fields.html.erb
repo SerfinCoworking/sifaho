@@ -1,5 +1,11 @@
+<% if order_product.new_record? %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_products], applicant_id: order) %>
+<% else %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order.id) %>
+<% end %>
+
 <%= simple_form_for order_product, 
-                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order) : external_orders_applicant_product_path(order, order_product)),
+                    url: url,
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
