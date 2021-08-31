@@ -1,5 +1,5 @@
 <% js = escape_javascript(
-  render "shared/orders/#{@internal_order.custom_notification_url}/fields", order: @internal_order, order_product: @internal_order_product
+  render "shared/orders/#{@order.custom_notification_url}/fields", order: @order, order_product: @order_product
 ) %>
 $("#order-products-container").append("<%= js %>");
 

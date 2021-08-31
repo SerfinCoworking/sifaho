@@ -11,7 +11,7 @@
 
   $('#row-ord-prod-<%= @form_id %>').find('.creating-buttons').fadeOut(300, function(e){  
     <% js = escape_javascript(
-      render "shared/orders/buttons_action", order: @external_order, order_product: @external_order_product
+      render "shared/orders/buttons_action", order_product: @order_product
     ) %>
     $('#row-ord-prod-<%= @form_id %>').find('.creating-buttons').first().html("<%= js %>");
     
