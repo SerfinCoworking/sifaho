@@ -1,5 +1,5 @@
 class Establishments::ExternalOrders::ProductsController < ApplicationController
-  before_action :set_order, only: %i[new show create]
+  before_action :set_order, only: %i[new show create update]
   before_action :set_order_product, only: %i[show update destroy]
 
   def new
@@ -8,6 +8,10 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   end
 
   def show
+    @form_id = @order_product.id
+    respond_to do |format|
+      format.js { render 'shared/orders/products/show' }
+    end
   end
 
   def create
@@ -17,21 +21,24 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
     respond_to do |format|
       if @order_product.save
         flash.now[:success] = "Se agregó el producto #{@order_product.product_name} correctamente."
+        format.js { render 'shared/orders/products/show' }
       else
         flash.now[:alert] = 'Ha ocurrido un error al guardar el producto.'
+        format.js { render :new }
       end
-      format.js { render 'shared/orders/products/create' }
     end
   end
 
   def update
+    @form_id = @order_product.id
     respond_to do |format|
       if @order_product.update(order_product_params)
         flash.now[:success] = "El producto #{@order_product.product_name} se ha actualizado correctamente."
+        format.js { render 'shared/orders/products/show' }
       else
         flash.now[:alert] = 'Ha ocurrido un error al actualizar el producto.'
+        format.js { render :new }
       end
-      format.js { render 'shared/orders/products/update' }
     end
   end
 
