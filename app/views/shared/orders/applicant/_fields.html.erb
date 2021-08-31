@@ -1,7 +1,7 @@
 <% if order_product.new_record? %>
   <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_products], applicant_id: order, form_id: @form_id) %>
 <% else %>
-  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order.id) %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order_product.id) %>
 <% end %>
 
 <%= simple_form_for order_product, 
@@ -130,11 +130,9 @@
     <div class="col-3 pl-1 pr-1">
       <div class="form-group text optional order_product_applicant_observation">
         <textarea class="form-control text optional form-control-sm observations" 
-                  cols="20"
                   rows="1"
                   <%= order_product.new_record? ? '' : 'readonly' %>
-                  name="order_product[applicant_observation]"><%= form.object.applicant_observation if form.object.applicant_observation.present? %>
-        </textarea>
+                  name="order_product[applicant_observation]"><%= form.object.applicant_observation.present? ? form.object.applicant_observation : ''  %></textarea>
       </div>
     </div>
     
