@@ -1,6 +1,6 @@
 class Sectors::InternalOrders::ProductsController < ApplicationController
   before_action :set_order, only: %i[new]
-  before_action :set_order_product, only: %i[update]
+  before_action :set_order_product, only: %i[update destroy]
 
   def new
     @internal_order_product = @internal_order.order_products.build
@@ -33,7 +33,10 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   end
 
   def destroy
-
+    flash.now[:success] = "Se eliminó el producto #{@order_product.product_name} correctamente."
+    @order_product_id = @order_product.id
+    @order_product.destroy
+    format.js { render 'shared/orders/products/destroy' }
   end
 
   private
