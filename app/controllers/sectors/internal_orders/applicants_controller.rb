@@ -38,9 +38,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
   end
 
-  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format) 
+  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
   def edit_products
     policy(:internal_order_applicant).edit_products?(@internal_order)
+    @internal_order_product = @internal_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
 
   # POST /internal_orders/applicants

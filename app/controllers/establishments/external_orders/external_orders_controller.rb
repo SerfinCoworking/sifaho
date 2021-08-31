@@ -35,7 +35,7 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     @order_type = @external_order.order_type
     Notification.destroy_with_target_id(@external_order.id)
     @external_order.destroy
-    @external_order.create_notification(current_user, "envió a la papelera")
+    @external_order.create_notification(current_user, 'envió a la papelera')
     respond_to do |format|
       flash.now[:success] = @order_type.humanize+" de "+@sector_name+" se ha enviado a la papelera."
       format.js

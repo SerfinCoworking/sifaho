@@ -1,0 +1,161 @@
+<%= simple_form_for internal_order_product, 
+                    :url => (internal_order_product.new_record? ? internal_orders_applicants_path : internal_orders_applicant_path(internal_order_product)),
+                    remote: true,
+                    html: { role: 'check-modified'} do |f| %>
+  <tr class="nested-fields <%= f.object.errors.any? ? 'has-error' : '' %>">
+    <!-- Código del producto -->
+    <td>
+      <% if policy(f.object).edit_product? %>
+        <div class="custom-input-group">
+          <div class="form-group fake optional products_product_id_fake">
+            <input type="text" 
+            name="<%="product_code_fake-#{f.object.id}"%>" 
+            value="<%= f.object.product.present? ? f.object.product.code : '' %>"
+            class="form-control fake optional product-code input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+            data-autocomplete-source="<%= search_by_code_products_path %>"
+            size="6"
+            autocomplete="off" 
+            placeholder="Código">
+            <div class="invalid-feedback">
+              <% if f.object.errors[:product_id].any? %>
+                Producto <%= f.object.errors[:product_id].first %>
+              <% elsif f.object.errors[:uniqueness_product_in_the_order].any? %>
+                <%= f.object.errors[:uniqueness_product_in_the_order].first %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="with-loading">
+            <%= fa_icon 'spinner', class: "fa-spin"%>
+          </div>
+        </div>
+      <% else %>
+        <%= f.input :product_code_fake, label: false, disabled: true,
+          input_html: {
+            value: "#{ f.object.product.code }",
+            class: "product-code",
+            size: 8,
+          }
+        %>
+      <% end %>
+
+      <%# Hidden product_id %>
+      <%= f.input :product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
+        value: "#{ if f.object.product_id.present?; f.object.product_id; end }" %>
+    </td>
+
+    <!-- Nombre de Producto -->
+    <td>
+      <% if policy(f.object).edit_product? %>
+        <div class="custom-input-group">
+          <div class="form-group fake optional products_product_id_fake">
+            <input type="text" 
+            name="<%="product_name_fake-#{f.object.id}"%>"
+            value="<%= f.object.product.present? ? f.object.product.name : '' %>"
+            class="form-control fake optional product-name input-sm <%= ("is-invalid" if (f.object.errors[:product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.product_id.present? && (!f.object.errors[:product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+            data-autocomplete-source="<%= search_by_name_products_path %>"
+            size="45" 
+            autocomplete="off" 
+            placeholder="Nombre">
+            <% if f.object.errors[:product_id].first %>
+              <div id="product_id_fake" class="invalid-feedback">
+                Producto <%= f.object.errors[:product_id].first %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="with-loading">
+            <%= fa_icon 'spinner', class: "fa-spin"%>
+          </div>
+        </div>
+      <% else %>
+        <%= f.input :product_name_fake, label: false, disabled: true,
+          input_html: {
+            value: "#{ f.object.product.name }",
+            size: 30,
+          }
+        %>
+      <% end %>
+    </td>
+
+    <!-- Unidad -->
+    <td>
+      <%= f.input :supply_unity_fake, label: false, disabled: true, required: false, 
+        input_html: {
+          class: 'product-unity input-sm',
+          size: 10,
+          placeholder: "Unidad",
+          value: "#{
+            if f.object.product.present?
+              f.object.product.unity.name
+            end
+          }"
+        } 
+      %> 
+    </td>
+
+    <!-- Stock -->
+    <td>
+      <%= f.input :stock_fake, label: false, disabled: true, 
+        input_html: {
+          class: 'stock-quantity input-sm',
+          size: 6, 
+          placeholder: "Cant",
+          value: "#{ f.object.product.present? ? current_user.sector.stock_to(f.object.product) : 0 }"
+        } %>
+    </td>
+      
+    <!-- Cantidad solicitada -->
+    <% if policy(f.object).edit_request_quantity? %>
+      <td style="width: 100px">
+        <%= f.input :request_quantity,
+          label: false,
+          placeholder: 'Cant',
+          required: false,
+          readOnly: policy(f.object).edit_request_quantity? ? false : true,
+          input_html: {
+            "data-tooltip"=>true,
+            :class=>"request-quantity input-sm",
+            :title=>"Cantidad solicitada",
+            "data-placement"=>"right",
+            min: '1', 
+            step:'any',
+            :style => 'width: 100px',
+            value: f.object.request_quantity.present? ?  f.object.request_quantity : 0
+          }
+        %>
+      </td>
+    <% else %>
+      <td>
+        <%= f.input :request_quantity_fake, label: false, disabled: true,
+          input_html: {
+            class: "request-quantity input-sm",
+            value: "#{ f.object.request_quantity }",
+            size: 6
+          }
+        %>
+      </td>
+    <% end %>
+
+    <!-- Observaciones proveedor -->
+    <td>
+      <%= f.input :applicant_observation, label: false, as: :text,
+        :input_html => { class: 'input-sm', :cols => 20  , :rows => 1 } %>
+    </td>
+    <td>
+      <!-- Mostrar botón de quitar  -->
+      <button class="btn btn-md btn-success" type="submit">
+        <%= fa_icon "save" %>
+      </button>
+
+      <%# if f.object.is_provision? || f.object.new_record? %>
+      <% if policy(f.object).remove_association? %>
+        <!-- Botón quitar -->
+        <%= link_to_remove_association  f, class: 'remove-tag btn btn-warning',
+          title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon "minus" %>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

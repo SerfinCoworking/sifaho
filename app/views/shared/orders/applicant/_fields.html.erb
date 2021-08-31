@@ -1,5 +1,11 @@
+<% if order_product.new_record? %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_products], applicant_id: order, form_id: @form_id) %>
+<% else %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order.id) %>
+<% end %>
+
 <%= simple_form_for order_product, 
-                    :url => (order_product.new_record? ? external_orders_applicant_products_path(order, form_id: @form_id) : external_orders_applicant_product_path(order, order_product)),
+                    url: url,
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
@@ -40,10 +46,10 @@
              name="order_product[product_id]"
              value="<%= "#{ if form.object.product_id.present?; form.object.product_id; end }" %>">
       
-      <%# Hidden external_order_id %>
+      <%# Hidden order_id %>
       <input type="hidden"
-             name="order_product[external_order_id]"
-             value="<%= "#{ if form.object.external_order_id.present?; form.object.external_order_id; end }" %>">
+             name="order_product[order_id]"
+             value="<%= "#{ if form.object.order_id.present?; form.object.order_id; end }" %>">
     </div>
 
     <!-- Nombre de Producto -->

@@ -68,7 +68,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
         @external_order.create_notification(current_user, notification_type)
 
-        format.html { redirect_to set_products_external_orders_applicant_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_applicant_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid

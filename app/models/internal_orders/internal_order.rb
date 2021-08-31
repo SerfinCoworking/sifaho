@@ -8,7 +8,8 @@ class InternalOrder < ApplicationRecord
   # Relaciones
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
-  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'internal_order_id', inverse_of: 'internal_order'
+  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'order_id',
+                            inverse_of: 'order'
   has_many :int_ord_prod_lot_stocks, through: :order_products
   has_many :lot_stocks, through: :order_products
   has_many :lots, through: :lot_stocks

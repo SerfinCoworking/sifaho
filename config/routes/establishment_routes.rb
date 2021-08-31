@@ -10,7 +10,6 @@ Rails.application.routes.draw do
             get :rollback_order
             get :receive_order
             get :edit_products
-
           end
           resources :products, except: [:index]
         end

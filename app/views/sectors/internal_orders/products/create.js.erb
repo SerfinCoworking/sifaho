@@ -1,0 +1,8 @@
+<%= render 'shared/flash_message' %>
+
+<% if @internal_order_product.errors.any? %>
+  alert("ERROR(S): <%= j @internal_order_product.errors.full_messages.join('; ') %>")
+<% else %>
+  $(".card-body").append("<%= j render @internal_order_products %>");
+  alert("Post created");
+<% end %>
