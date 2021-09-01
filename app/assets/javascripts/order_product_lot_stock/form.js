@@ -9,15 +9,26 @@ $(document).on('turbolinks:load', function(e){
   initProductsEvents();
   
   // button submit
-  // $("button[type='submit']").on('click', function(e){
-  //   e.preventDefault();
-  //   $(e.target).attr('disabled', true);
-  //   $(e.target).siblings('button, a').attr('disabled', true);
-  //   $(e.target).find("div.c-msg").css({"display": "none"});
-  //   $(e.target).find('div.d-none').toggleClass('d-none');
-  //   $('input[name="commit"][type="hidden"]').val($(e.target).attr('data-value')).trigger('change');
-  //   $('form#'+$(e.target).attr('form')).submit();
-  // });
+  $("button.send-order").on('click', function(e){
+    e.preventDefault();
+    const anyEditingForm = $('#order-products-container').find('form.editing').length;
+    const href = $(e.target).attr('data-url');
+    if(anyEditingForm){
+      // abri modal
+
+      const modal = "#send-unsaved-confirmation";
+      const title = "Enviando solicitud de establecimiento";
+      const body = "Hay productos que no han sido guardados aún";
+
+      $(modal).find('.modal-title').text(title);
+      $(modal).find('.modal-body').text(body);
+      $(modal).find('a#send-confirm-btn').attr('href', href);
+      $(modal).modal('toggle');
+      console.log($(e.target).attr('data-url'), "<============== DBEUG");
+    }else{
+      window.location.href = href;
+    }
+  });
 
   // Remove style
   $('#lot-selection').on('hidden.bs.modal', function (e) {
@@ -112,6 +123,10 @@ function initProductsEvents(){
       $(event.target).parent().siblings('.with-loading').first().removeClass('visible');
     }
   });
+
+  $('.product-code, .product-id, .product-name, .request-quantity, .observations').on('change', function(e){
+    $(e.target).closest('form').addClass('editing');
+  });
   
   deliveryQuantityEventBinding();
 
@@ -143,7 +158,7 @@ function initProductsEvents(){
 
   $('.btn-delete-product').on('click', function(e){
     $(e.target).closest('.row.nested-fields').fadeOut(300, function(){
-      $(e.target).closest('.row.nested-fields').remove();
+      $(e.target).closest('form.simple_form').remove();
     });
   });
 

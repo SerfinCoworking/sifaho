@@ -46,10 +46,10 @@
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', external_orders_applicants_path, class: 'btn btn-light mr-2' %>
   
-    <button type='submit' class='btn btn-success mr-2' form="<%= order.new_record? ? 'new_external_order' : 'edit_external_order_' + order.id.to_s %>" data-value='audit'>
+    <button class='btn btn-primary mr-2 send-order' type="button" data-url="<%= dispatch_order_external_orders_applicant_path(order) %>">
       
       <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "save" %> Guardar 
+        <%= fa_icon "paper-plane" %> Enviar
       </div>
       
       <div class="d-none" style="pointer-events: none;">
@@ -60,3 +60,8 @@
     </button>
   </div>
 </div>
+
+
+<% content_for :modal do %>
+  <%= render(partial: 'shared/modals/send_unsaved_confirmation') %>
+<% end %>

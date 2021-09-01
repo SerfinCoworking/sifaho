@@ -9,6 +9,7 @@
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
+                      class: ('editing' if order_product.errors.any?),
                       role: 'check-modified'} do |form| %>
 
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
