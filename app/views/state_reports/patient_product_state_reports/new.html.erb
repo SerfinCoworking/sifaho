@@ -9,7 +9,7 @@
         <div class="d-flex align-items-center ml-2">
           <%= fa_icon "plus" %>
           <h5 class="card-title mb-0 ml-2">
-            Nuevo reporte de producto entregado por paciente entre dos fechas <%= controller_name %>
+            Nuevo reporte de producto entregado por paciente entre dos fechas <%= params[:controller] %> <%= params[:action]%>
           </h5>
         </div>
         <%= link_to :back, class: "btn text-white" do %>
