@@ -49,12 +49,16 @@
             <% @movements.each do |movement|%>
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
+                <% if movement.order.present? %>
                 <td><%= movement.order.patient_dni %></td>
                 <td class="text-truncate align-middle" style="max-width: 200px;"><%= movement.order.patient_fullname %></td>
                 <td><%= movement.order.patient.birthdate_string %></td>
                 <td><%= movement.order.patient.age_string %></td>
                 <td><%= movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---' %></td>
                 <td class="text-truncate align-middle" style="max-width: 200px;"><%= movement.order.establishment.short_name %></td>
+                <% else %>
+                  <td colspan="6">Se eliminó la orden</td>
+                <% end %>
                 <td class="text-truncate align-middle" style="max-width: 120px;"><%= movement.product.name %></td>
                 <td><%= movement.quantity %></td>
               </tr>
