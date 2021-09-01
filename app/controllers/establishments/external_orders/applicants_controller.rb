@@ -32,6 +32,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders/applicant
   def new
     authorize :external_order_applicant
+    @last_requests = current_user.sector_applicant_external_orders.order(created_at: :asc).last(10)
+
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -84,7 +86,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     @external_order_product = @external_order.order_products.build
     @form_id = DateTime.now.to_s(:number)
   end
- 
+
   # PATCH /external_orders/applicants/1
   def update
     policy(:external_order_applicant).update?(@external_order)

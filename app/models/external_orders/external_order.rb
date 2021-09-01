@@ -34,6 +34,11 @@ class ExternalOrder < ApplicationRecord
   # Callbacks
   before_validation :record_remit_code, on: :create
 
+  # Delegations
+  delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
+  delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
+  delegate :name, to: :applicant_sector, prefix: true
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: %i[search_code search_applicant search_provider with_order_type with_status requested_date_since
