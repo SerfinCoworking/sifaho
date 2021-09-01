@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function(e){
   if(!(['state_reports/patient_product_state_reports'].includes(_PAGE.controller) && (['new'].includes(_PAGE.action))) ) return false;
-  console.log("entró")
+
   initEvents();
 
   // cocoon init
