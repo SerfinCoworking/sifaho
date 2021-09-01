@@ -9,12 +9,12 @@ wb.add_worksheet(name: "Reporte por paciente") do |sheet|
     sheet.add_row [
       index + 1,
       movement.created_at.strftime("%d/%m/%Y"),
-      movement.order.patient_dni,
-      movement.order.patient_fullname,
-      movement.order.patient.birthdate_string,
-      movement.order.patient.age_string,
-      movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---',
-      movement.order.establishment.name,
+      movement.order.present? ? movement.order.patient_dni : 'Se eliminó la orden',
+      movement.order.present? ? movement.order.patient_fullname : '',
+      movement.order.present? ? movement.order.patient.birthdate_string : '',
+      movement.order.present? ? movement.order.patient.age_string : '',
+      movement.order.present? ? (movement.order.establishment.cuie.present? ? movement.order.establishment.cuie.upcase : '---') : '',
+      movement.order.present? ? movement.order.establishment.name : '',
       movement.product.name,
       movement.quantity
     ]
