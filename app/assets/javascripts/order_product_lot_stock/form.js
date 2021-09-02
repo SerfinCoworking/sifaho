@@ -14,8 +14,7 @@ $(document).on('turbolinks:load', function(e){
     const anyEditingForm = $('#order-products-container').find('form.editing').length;
     const href = $(e.target).attr('data-url');
     if(anyEditingForm){
-      // abri modal
-
+      // abrir modal
       const modal = "#send-unsaved-confirmation";
       const title = "Enviando solicitud de establecimiento";
       const body = "Hay productos que no han sido guardados aún";
@@ -24,7 +23,6 @@ $(document).on('turbolinks:load', function(e){
       $(modal).find('.modal-body').text(body);
       $(modal).find('a#send-confirm-btn').attr('href', href);
       $(modal).modal('toggle');
-      console.log($(e.target).attr('data-url'), "<============== DBEUG");
     }else{
       window.location.href = href;
     }

@@ -1,5 +1,6 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['prescriptions/inpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
+  console.log(_PAGE.controller);
+  if(!(['prescriptions/inpatient_movements'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
   // Creamos la fecha actual + 1 dia
   const today = new Date();
   const tomorrow = new Date();
