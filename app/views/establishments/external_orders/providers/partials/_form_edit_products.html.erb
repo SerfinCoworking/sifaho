@@ -1,0 +1,64 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @external_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@external_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @external_order.new_record? ? 'Nueva' : 'Editando' %> <%= @external_order.order_type %> de establecimiento
+        código <%= @external_order.remit_code if @external_order.persisted? %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @external_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+      <div class="row">
+        <div class='col-md-3'>
+          <%# ESTABLECIMIENTO SOLICITANTE %>
+          Establecimiento solicitante
+          <%= order.applicant_sector.establishment.name %>
+          
+        </div>
+        <div class='col-md-3'>
+          <%# SECTOR SOLICITANTE %>  
+          Sector solicitante      
+          <%= order.applicant_sector.name %>
+          
+        </div>
+        <div class="col-md-3">
+          <%# SECTOR PROVEEDOR %>
+          Sector proveedor
+          <%= order.provider_sector.name %>
+          
+        </div>
+        
+        <div class='col-md-3'>
+          Observaciones
+          <%= order.observation %>
+        </div>
+      </div>
+      
+      <%# PRODUCTOS SOLICITADOS %>
+      <%= render "shared/orders/provider/table", order: order, order_product: order_product %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', external_orders_providers_path, class: 'btn btn-light mr-2' %>
+
+    <button type='submit' class='btn btn-primary' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='accepting'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "thumbs-up" %> Guardar y aceptar
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
+      </div>
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>
