@@ -17,19 +17,12 @@
      html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
-        <div class="col-md-3">
-        <%# SECTOR SOLICITANTE %>
-          <%= f.input :applicant_sector_id, as: :string,
-            label: 'Sector solicitante',
-            :input_html => {
-              disabled: true,
-              size: 30,
-              value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.name; else; current_user.sector_name;  end }"
-            } 
-          %>
-        <!--/div>
-        <div class='col-md-3'-->
-          <%# ESTABLECIMIENTO PROVEEDOR %>
+        <div class="col-md-6 border-right">
+          <%# Applicant sector %>
+          <label>Sector solicitante</label>
+          <h6><%= current_user.sector_name %></h6>
+
+          <%# Provider establishment %>
           <%= f.input :provider_establishment_id, as: :string,
             label: 'Establecimiento proveedor',
             placeholder: 'Buscar por nombre',
@@ -42,9 +35,8 @@
               size: 41
             } 
           %>
-        <!--/div>
-        <div class='col-md-3'-->
-          <%# SECTOR PROVEEDOR %>        
+
+          <%# Provider sector %>        
           <%= f.input :provider_sector_id,
             label: 'Sector proveedor',
             collection: @sectors.map {
@@ -62,14 +54,42 @@
               value: f.object.provider_sector.present? ? f.object.provider_sector.id : ""
             }
           %>
-        <!--/div>
-        <div class='col-md-3'-->
+
+          <%# Observation %>
           <%= f.input :observation, label: 'Observaciones', as: :text,
           :input_html => { :cols => 40  , :rows => 1 } %>
         </div>
-        <div class="col-md-9">
-          Listado de últimas solicitudes
-        </div>
+
+        <%# Last requests %>
+        <% if @last_requests.present? %>
+          <div class="col-6" id='last-requests'>
+            Últimas solicitudes de sectores
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Sector</th>
+                  <th>Productos</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @last_requests.reverse.each do |request| %>
+                  <tr>
+                    <td><%= request.created_at.strftime('%d/%m/%y') %></td>
+                    <td><%= request.provider_sector_and_establishment %></td>
+                    <td><%= request.order_products.count %></td>
+                    <td>
+                      <%= link_to polymorphic_path(['external_orders', request.custom_notification_url], id: request), target: :_blank, class: 'btn btn-light btn-sm' do %>
+                        <%= fa_icon 'external-link-alt' %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
       </div>
       
       <%# INSUMOS SOLICITADOS %>

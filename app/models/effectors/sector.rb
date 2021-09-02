@@ -19,6 +19,8 @@ class Sector < ApplicationRecord
   has_many :beds, foreign_key: :service_id
   has_many :applicant_internal_orders, class_name: 'InternalOrder', foreign_key: :applicant_sector_id
   has_many :provider_internal_orders, class_name: 'InternalOrder', foreign_key: :provider_sector_id
+  has_many :applicant_external_orders, class_name: 'ExternalOrder', foreign_key: :applicant_sector_id
+  has_many :provider_external_orders, class_name: 'ExternalOrder', foreign_key: :provider_sector_id
 
   # has_many :provider_external_orders, foreign_key: "provider_sector_id", class_name: "ExternalOrder"
   # has_many :provider_ordering_quantity_supplies, through: :provider_external_orders, source: "quantity_ord_supply_lots"
@@ -28,8 +30,6 @@ class Sector < ApplicationRecord
 
   # has_many :provider_prescriptions, foreign_key: "provider_sector_id", class_name: "Prescription"
   # has_many :provider_prescription_quantity_supplies, through: :provider_prescriptions, source: "quantity_ord_supply_lots"
-
-
 
   # Validaciones
   validates_presence_of :name, :establishment_id
