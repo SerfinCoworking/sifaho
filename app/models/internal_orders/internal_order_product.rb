@@ -2,6 +2,7 @@ class InternalOrderProduct < ApplicationRecord
   # Relationships
   belongs_to :order, class_name: 'InternalOrder', inverse_of: 'order_products'
   belongs_to :product
+  belongs_to :added_by_sector, class_name: 'Sector'
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'IntOrdProdLotStock',
                                    foreign_key: 'internal_order_product_id', source: :int_ord_prod_lot_stocks,
                                    inverse_of: 'internal_order_product'
@@ -13,7 +14,7 @@ class InternalOrderProduct < ApplicationRecord
                                 if: proc { is_proveedor_auditoria? || is_provision_en_camino? }
   validate :out_of_stock, if: :is_provision_en_camino?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_provision_en_camino?
-  validates_presence_of :product_id
+  validates_presence_of :product_id, :added_by_sector
   validates :order_prod_lot_stocks, presence: { message: 'Debe seleccionar almenos 1 lote' },
                                     if: :is_provision_en_camino_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_provision_en_camino?

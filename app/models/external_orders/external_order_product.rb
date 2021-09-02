@@ -4,6 +4,7 @@ class ExternalOrderProduct < ApplicationRecord
   # Relaciones
   belongs_to :order, class_name: 'ExternalOrder', inverse_of: 'order_products'
   belongs_to :product
+  belongs_to :added_by_sector, class_name: 'Sector'
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'ExtOrdProdLotStock', 
                                    foreign_key: 'external_order_product_id', source: :ext_ord_prod_lot_stocks,
@@ -16,7 +17,7 @@ class ExternalOrderProduct < ApplicationRecord
                                 if: proc { is_proveedor_auditoria? || is_proveedor_aceptado? }
   validate :out_of_stock, if: :is_proveedor_aceptado?
   validate :lot_stock_sum_quantity, if: :is_provision? && :is_proveedor_aceptado?
-  validates_presence_of :product_id
+  validates_presence_of :product_id, :added_by_sector
   validates :order_prod_lot_stocks, presence: { message: 'Debe seleccionar almenos 1 lote'},
                                     if: :is_proveedor_aceptado_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_proveedor_aceptado?
