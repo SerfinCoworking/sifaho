@@ -20,6 +20,7 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   def create
     @order_product = ExternalOrderProduct.new(order_product_params)
     @form_id = params[:form_id]
+    @order_product.added_by_sector = current_user.sector
 
     respond_to do |format|
       if @order_product.save
@@ -57,7 +58,8 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   private
 
   def set_order
-    @order = ExternalOrder.find(params[:applicant_id])
+    external_order_id = params[:applicant_id] || params[:provider_id]
+    @order = ExternalOrder.find(external_order_id)
   end
 
   def set_order_product

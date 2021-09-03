@@ -20,6 +20,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   def create
     @order_product = InternalOrderProduct.new(order_product_params)
     @form_id = params[:form_id]
+    @order_product.added_by_sector = current_user.sector
 
     respond_to do |format|
       if @order_product.save
