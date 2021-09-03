@@ -13,7 +13,7 @@ Rails.application.routes.draw do
           end
           resources :products, except: [:index]
         end
-
+        
         # Despachos
         resources :providers do
           member do
@@ -21,6 +21,7 @@ Rails.application.routes.draw do
             get :rollback_order
             get :accept_order
             get :nullify_order
+            get :edit_products
           end
 
           collection do

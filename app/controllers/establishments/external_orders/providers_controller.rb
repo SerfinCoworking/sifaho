@@ -8,6 +8,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     :rollback_order,
     :accept_order,
     :nullify_order,
+    :edit_products,
     :destroy
   ]
 
@@ -67,7 +68,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
         end
         message = accepting? ? 'La provisión se ha creado y aceptado correctamente.' : "La provisión se ha creado y se encuentra en auditoria."  
 
-        format.html { redirect_to external_orders_provider_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_provider_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -94,7 +95,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
           @external_order.create_notification(current_user, "auditó")
         end
 
-        format.html { redirect_to external_orders_provider_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_provider_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -174,6 +175,11 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     end
   end
 
+  def edit_products
+    @external_order_product = @external_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
+  end
+  
   # DELETE /external_orders/providers/1
   def destroy
     policy(:external_order_provider).destroy?(@external_order)
