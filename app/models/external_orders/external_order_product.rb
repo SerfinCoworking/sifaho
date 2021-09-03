@@ -30,7 +30,7 @@ class ExternalOrderProduct < ApplicationRecord
                                 allow_destroy: true
 
   # Delegaciones
-  delegate :code, :name, :unity_name, to: :product, prefix: :product
+  delegate :code, :name, :unity_name, to: :product, prefix: :product, allow_nil: true
 
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
@@ -64,10 +64,6 @@ class ExternalOrderProduct < ApplicationRecord
     self.order_prod_lot_stocks.each do |opls|
       opls.lot_stock.reserve(opls.quantity)
     end
-  end
-
-  def product_name
-    product.name
   end
   
   # Decrementamos la cantidad de cada lot stock (proveedor)

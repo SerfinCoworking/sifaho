@@ -50,4 +50,8 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
     end
   end
 
+  def edit_product?(resource)
+    edit?(resource) && resource.persisted? && resource.added_by_sector_id.present? && resource.added_by_sector != user.sector
+  end
+
 end

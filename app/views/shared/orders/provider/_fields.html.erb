@@ -13,10 +13,9 @@
                       role: 'check-modified'} do |form| %>
 
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
-    <!-- Código del producto -->
-    <% if form.object.persisted? && form.object.added_by_sector_id.present? && form.object.added_by_sector_id != current_user.sector.id  %>
-      <%= render "shared/orders/provider/fields_of_applicant", object: form.object %>
-    <% else %>
+    <!-- Código del producto -->  
+    
+    <% if policy(order_product).edit_product? %>
       <div class="col-1 pl-1 pr-1">
           <div class="custom-input-group">
             <div class="form-group fake optional products_product_id_fake">
@@ -129,6 +128,8 @@
           </div>
         </div>
       </div>
+    <% else %>
+      <%= render "shared/orders/provider/fields_of_applicant", object: form.object %>
     <% end %>
     <!-- Cantidad entregada -->
     <div class="col-1 pl-1 pr-1">
