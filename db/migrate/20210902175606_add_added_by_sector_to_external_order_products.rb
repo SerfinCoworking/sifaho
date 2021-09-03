@@ -1,7 +1,7 @@
 class AddAddedBySectorToExternalOrderProducts < ActiveRecord::Migration[5.2]
   def up
     add_reference :external_order_products, :added_by_sector, foreign_key: { to_table: :sectors }
-  
+
     # Update all added by sector order products depending on the order type
     ExternalOrderProduct.find_each do |order_product|
       order_product.added_by_sector = if order_product.order.provision?
