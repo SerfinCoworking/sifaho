@@ -21,6 +21,18 @@ class InternalOrderProviderPolicy < InternalOrderPolicy
     end
   end
 
+  def edit?(resource)
+    return unless resource.proveedor_auditoria? && resource.provider_sector == user.sector && resource.provision?
+
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
+  def edit_products?(resource)
+    return unless %w[solicitud_enviada proveedor_auditoria].any?(resource.status) && resource.provider_sector == user.sector
+
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
   def update?(resource)
     edit?(resource)
   end

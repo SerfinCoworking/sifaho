@@ -2,6 +2,8 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   include FindLots
 
   before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order]
+  before_action :set_sectors, only: %i[new edit create update]
+
   # GET /internal_orders/provider
   # GET /internal_orders/provider.json
   def index
@@ -20,16 +22,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/new
   def new
     policy(:internal_order_provider).new?
+    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
     begin
       new_from_template(params[:template], 'provision')
     rescue
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'provision'
-      @sectors = Sector
-        .select(:id, :name)
-        .with_establishment_id(current_user.sector.establishment_id)
-        .where.not(id: current_user.sector_id).as_json
       @internal_order.order_products.build
     end
   end
@@ -37,9 +36,14 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/1/edit
   def edit
     policy(:internal_order_provider).edit?(@internal_order)
-    @sectors = Sector.select(:id, :name)
-                     .with_establishment_id(current_user.sector.establishment_id)
-                     .where.not(id: current_user.sector_id).as_json
+    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
+  end
+
+  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
+  def edit_products
+    policy(:internal_order_provider).edit_products?(@internal_order)
+    @internal_order_product = @internal_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
 
   def create
@@ -163,6 +167,14 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   def destroy
     policy(:internal_order_provider).destroy?(@internal_order)
     super
+  end
+
+  private
+
+  def set_sectors
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .where.not(id: current_user.sector_id).as_json
   end
 end
 
