@@ -24,8 +24,8 @@ class ExternalOrderProductPolicy < ApplicationPolicy
   def destroy?
     if record.added_by_sector_id.present? && record.added_by_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
-    elsif !record.is_provision? && record.get_order.solicitud_auditoria?
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+    # elsif !record.is_provision? && record.get_order.solicitud_auditoria?
+    #   user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
     end
   end
 end
