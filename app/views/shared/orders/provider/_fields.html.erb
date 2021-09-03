@@ -14,7 +14,7 @@
 
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
     <!-- Código del producto -->
-    <% if form.object.persisted? && form.object.added_by_sector_id.present? %>
+    <% if form.object.persisted? && form.object.added_by_sector_id.present? && form.object.added_by_sector_id != current_user.sector.id  %>
       <%= render "shared/orders/provider/fields_of_applicant", object: form.object %>
     <% else %>
       <div class="col-1 pl-1 pr-1">
