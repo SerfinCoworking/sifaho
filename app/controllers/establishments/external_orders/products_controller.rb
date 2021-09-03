@@ -57,7 +57,8 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
   private
 
   def set_order
-    @order = ExternalOrder.find(params[:applicant_id])
+    external_order_id = params[:applicant_id] || params[:provider_id]
+    @order = ExternalOrder.find(external_order_id)
   end
 
   def set_order_product
