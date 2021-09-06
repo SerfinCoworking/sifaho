@@ -38,6 +38,12 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
     end
   end
 
+  def edit_products?(resource)
+    if resource.solicitud_auditoria? && resource.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+  
   def can_send?(resource)
     if resource.solicitud_auditoria? && resource.applicant_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
@@ -48,6 +54,10 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
     if resource.applicant_sector == user.sector && resource.solicitud_enviada?
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
+  end
+
+  def edit_product?(resource)
+    edit?(resource) && resource.persisted? && resource.added_by_sector_id.present? && resource.added_by_sector != user.sector
   end
 
 end

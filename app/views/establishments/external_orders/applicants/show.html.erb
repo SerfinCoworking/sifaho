@@ -231,6 +231,15 @@
         <% end %>
       <% end %>
 
+      <% if policy(:external_order_applicant).edit_products?(@external_order) %>
+        <%= link_to edit_products_external_orders_applicant_path(@external_order), 
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "file-signature" %>
+          Editar productos
+        <% end %>
+      <% end %>
+      
       <% if policy(:external_order_applicant).can_send?(@external_order) %>
         <%= link_to dispatch_order_external_orders_applicant_path(@external_order), 
           'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,

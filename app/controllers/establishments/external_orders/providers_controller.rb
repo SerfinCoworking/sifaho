@@ -179,7 +179,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     @external_order_product = @external_order.order_products.build
     @form_id = DateTime.now.to_s(:number)
   end
-  
+
   # DELETE /external_orders/providers/1
   def destroy
     policy(:external_order_provider).destroy?(@external_order)

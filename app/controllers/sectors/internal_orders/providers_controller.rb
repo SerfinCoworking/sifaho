@@ -15,7 +15,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       select_options: {
         with_status: InternalOrder.options_for_status
       },
-      persistence_id: false,
+      persistence_id: false
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end

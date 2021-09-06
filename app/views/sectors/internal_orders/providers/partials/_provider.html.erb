@@ -37,7 +37,7 @@
     <% if policy(:internal_order_provider).edit_products?(internal_order) %>
       <%= link_to edit_products_internal_orders_provider_path(internal_order),
         class: 'btn btn-warning btn-sm', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
-        <%= fa_icon "file-signature" %>asd
+        <%= fa_icon "file-signature" %>
       <% end %>
     <% end %>
     <% if policy(internal_order).show? %>

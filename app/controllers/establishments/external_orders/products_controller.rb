@@ -72,6 +72,7 @@ class Establishments::ExternalOrders::ProductsController < ApplicationController
       :product_id,
       :request_quantity,
       :applicant_observation,
+      :provider_observation,
       :_destroy
     )
   end

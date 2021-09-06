@@ -236,6 +236,14 @@
           Editar
         <% end %>
       <% end %>
+
+      <% if policy(:external_order_provider).edit_products?(@external_order) %>
+        <%= link_to edit_products_external_orders_provider_path(@external_order),
+          class: 'btn btn-warning mr-1', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "file-signature" %>
+          Editar productos
+        <% end %>
+      <% end %>
      
       <% if policy(:external_order_provider).rollback_order?(@external_order) %>
         <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">

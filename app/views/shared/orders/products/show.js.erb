@@ -1,7 +1,8 @@
 
 <%= render 'shared/flash_message' %>
 
-<% if policy(:external_ordeR_applicant).edit?(@order) %>
+<% if policy(:external_order_applicant).edit?(@order) %>
+console.log("in applicant edition", "<%= @order.solicitud_auditoria?%>");
   <% js = escape_javascript(
     render "shared/orders/applicant/fields", order: @order, order_product: @order_product
   ) %>

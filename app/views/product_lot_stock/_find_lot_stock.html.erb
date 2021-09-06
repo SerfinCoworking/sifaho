@@ -5,7 +5,8 @@
        <%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>
     </span> 
     de 
-    <%= @order_product.parent.total_dose %>
+    <%= @order_product.request_quantity %>
+    <%#= @order_product.parent.total_dose %>
     <%# <span class="badge badge-primary" id="tdelivery-ref">
       <h5 class="mb-0">
       </h5>
