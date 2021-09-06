@@ -2,4 +2,4 @@ $("tr#child-<%= @order_product.id.to_s %>").find('button.btn-select-lot-stock').
 
 $('#lot-selection').modal('hide');
 
-setLotSelectionProgress($("tr#child-<%= @order_product.id.to_s %>"), parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>"), parseInt("<%= @order_product.parent.total_dose %>"));
+setLotSelectionProgress($("tr#child-<%= @order_product.id.to_s %>"), parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>"), parseInt("<%= @order_product.request_quantity %>"));

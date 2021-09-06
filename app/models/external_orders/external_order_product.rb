@@ -26,9 +26,10 @@ class ExternalOrderProduct < ApplicationRecord
 
   accepts_nested_attributes_for :product,
                                 allow_destroy: true
+                                
   accepts_nested_attributes_for :order_prod_lot_stocks,
+                                reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
                                 allow_destroy: true
-
   # Delegaciones
   delegate :code, :name, :unity_name, to: :product, prefix: :product, allow_nil: true
 
