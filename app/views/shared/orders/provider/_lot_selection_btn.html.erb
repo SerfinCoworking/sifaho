@@ -1,0 +1,43 @@
+
+<%# boton de seleccion de lotes / abre modal igual al de internación %>
+<div class="lot-stocks-hidden">
+      <% if f.object.order_prod_lot_stocks.present?  %>
+        <%= f.simple_fields_for :order_prod_lot_stocks do |iopls| %>
+          <%= render "shared/orders/order_product_lot_stocks_fields", f: iopls %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%
+      # template input hidden lot selection
+      new_iopls = f.object.order_prod_lot_stocks.build
+      fields = f.fields_for(:order_prod_lot_stocks, 
+      new_iopls, 
+      :child_index => "id_placeholder") do |fb|
+        render "shared/orders/order_product_lot_stocks_fields", f: fb
+      end
+    %>
+
+    <div class="btn-progress">
+      <div class="bg-progress bg-info"></div>
+      <%= button_tag type: "button", 
+        class: "btn  select-lot-btn text-nowrap w-100 is-invalid",
+        "data-select-lot-url" => polymorphic_url([:find_order_product_lots, f.object.get_order.class.name.underscore.pluralize, :providers], order_product_id: f.object.id),
+        "data-template-fill-hidden" => fields do %>
+        <% if f.object.lot_stocks.present? %>
+          Seleccionados <%= f.object.lot_stocks.count %> 
+        <% else %>
+          <%= fa_icon "barcode" %> Seleccionar lote
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="invalid-feedback d-block">
+      <% if f.object.errors[:quantity_lot_stock_sum].any? %>
+        <%= f.object.errors[:quantity_lot_stock_sum].first %>
+      <% elsif f.object.errors[:order_prod_lot_stocks_any_without_stock].present? %>
+        <%= f.object.errors[:order_prod_lot_stocks_any_without_stock].first %>
+      <% elsif f.object.errors[:int_ord_prod_lot_stocks].any? %>
+        <%= f.object.errors[:int_ord_prod_lot_stocks].first %>
+      <% end %>
+    </div>
