@@ -3,8 +3,13 @@
     <%= fa_icon 'save', class: 'fa-fw' %>
   </button>
   
-  <%= link_to polymorphic_path([order_product.order.class.name.underscore.pluralize, :provider_product], provider_id: order_product.order_id, id: order_product.id), 
+  <%= link_to find_order_product_lots_path(
+                                            order_type: order.class.name,
+                                            order_id: order.id,
+                                            order_product_id: order_product.id,
+                                            product_id: order_product.product.id),
               class: "btn btn-sm btn-outline-primary",
+              remote: true,
               remote: true do %>
     <%= fa_icon 'barcode', class: 'fa-fw' %>
   <% end %>
