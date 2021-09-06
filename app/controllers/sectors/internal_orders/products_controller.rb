@@ -58,7 +58,8 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   private
 
   def set_order
-    @order = InternalOrder.find(params[:applicant_id])
+    order_id = params[:applicant_id] || params[:provider_id]
+    @order = InternalOrder.find(order_id)
   end
 
   def set_order_product
@@ -72,6 +73,15 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
       :request_quantity,
       :applicant_observation,
       :_destroy
+    )
+  end
+
+  def provider_product_params
+    params.require(:order_product).permit(
+      :order_id,
+      :product_id,
+      :request_quantity,
+      :provider_observation
     )
   end
 end

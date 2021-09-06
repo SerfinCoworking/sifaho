@@ -20,6 +20,7 @@ Rails.application.routes.draw do
             get :dispatch_order
             get :rollback_order
             get :nullify_order
+            get :edit_products
           end
           resources :products, except: [:index]
           collection do

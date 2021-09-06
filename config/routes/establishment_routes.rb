@@ -13,7 +13,7 @@ Rails.application.routes.draw do
           end
           resources :products, except: [:index]
         end
-        
+
         # Despachos
         resources :providers do
           member do

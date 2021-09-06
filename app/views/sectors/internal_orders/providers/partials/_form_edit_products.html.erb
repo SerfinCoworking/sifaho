@@ -1,0 +1,57 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @internal_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @internal_order.new_record? ? 'Nueva' : 'Editando' %> <%= @internal_order.order_type %> de sector
+        código <%= @internal_order.remit_code if @internal_order.persisted? %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+      <div class="row">
+        <div class='col-md-3'>
+          <%# SECTOR SOLICITANTE %>  
+          Sector solicitante
+          <%= order.applicant_sector.name %>
+        </div>
+
+        <div class="col-md-3">
+          <%# SECTOR PROVEEDOR %>
+          Sector proveedor
+          <%= order.provider_sector.name %>
+        </div>
+        
+        <div class='col-md-3'>
+          Observaciones
+          <%= order.observation %>
+        </div>
+      </div>
+      
+      <%# PRODUCTOS SOLICITADOS %>
+      <%= render "shared/orders/provider/table", order: order, order_product: order_product %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn btn-light mr-2' %>
+
+    <button type='submit' class='btn btn-primary' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='accepting'>
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "thumbs-up" %> Guardar y aceptar
+      </div>
+      <div class="d-none" style="pointer-events: none;">
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
+      </div>
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>

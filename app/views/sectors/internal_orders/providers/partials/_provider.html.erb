@@ -34,6 +34,12 @@
     <% end %>
   </td>
   <td class="text-left actions-col">
+    <% if policy(:internal_order_provider).edit_products?(internal_order) %>
+      <%= link_to edit_products_internal_orders_provider_path(internal_order),
+        class: 'btn btn-warning btn-sm', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "file-signature" %>asd
+      <% end %>
+    <% end %>
     <% if policy(internal_order).show? %>
       <%= link_to internal_orders_provider_path(internal_order), class: 'btn btn-secondary btn-sm', 
         title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
