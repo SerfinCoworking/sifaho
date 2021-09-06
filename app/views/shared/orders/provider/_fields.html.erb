@@ -1,7 +1,7 @@
 <% if order_product.new_record? %>
-  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order, form_id: @form_id) %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order.id, form_id: @form_id) %>
 <% else %>
-  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_product], provider_id: order, id: order_product.id) %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order.id, id: order_product.id) %>
 <% end %>
 
 <%= simple_form_for order_product, 

@@ -59,7 +59,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     respond_to do |format|
       if @internal_order.save
         flash[:info] = 'La solicitud se ha creado y se encuentra en auditoria.'
-        format.html { redirect_to set_products_internal_orders_applicant_url(@internal_order) }
+        format.html { redirect_to edit_products_internal_orders_applicant_url(@internal_order) }
       else
         @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
         format.html { render :new }

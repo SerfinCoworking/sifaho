@@ -27,12 +27,10 @@ class InternalOrderProduct < ApplicationRecord
                                 allow_destroy: true
 
   # Delegations
-  delegate :unity, to: :product
-  delegate :name, to: :product, prefix: :product
-  delegate :code, to: :product, prefix: :product
+  delegate :code, :name, :unity_name, to: :product, prefix: :product, allow_nil: true
 
   # Scopes
-  scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
+  scope :agency_referrals, ->(id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
   scope :ordered_products, -> { joins(:product).order('products.name DESC') }
 

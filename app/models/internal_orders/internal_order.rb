@@ -318,7 +318,6 @@ class InternalOrder < ApplicationRecord
     solicitud? ? 'applicant' : 'provider'
   end
 
-
   private
 
   def record_remit_code

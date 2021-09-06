@@ -1,7 +1,8 @@
 class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::InternalOrderController
   include FindLots
 
-  before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order]
+  before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order
+                                     edit_products]
   before_action :set_sectors, only: %i[new edit create update]
 
   # GET /internal_orders/provider
@@ -14,7 +15,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       select_options: {
         with_status: InternalOrder.options_for_status
       },
-      persistence_id: false,
+      persistence_id: false
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
