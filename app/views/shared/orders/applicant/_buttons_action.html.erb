@@ -8,6 +8,12 @@
               remote: true do %>
     <%= fa_icon 'times', class: 'fa-fw' %>
   <% end %>
+  
+  <%= link_to polymorphic_path([order_product.order.class.name.underscore.pluralize, :applicant_product], applicant_id: order_product.order_id, id: order_product.id), 
+              class: "btn btn-sm btn-outline-danger",
+              remote: true do %>
+    <%= fa_icon 'times', class: 'fa-fw' %>
+  <% end %>
 </div>
 
 <div class="enable-editing-buttons" style="display: <%= order_product.errors.any? ? 'none' : 'block' %> ;">
