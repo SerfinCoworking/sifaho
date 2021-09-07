@@ -12,7 +12,7 @@ $('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
   const tr = $(e.target).closest('tr');  
   const targetHidden = $(tr).find('input.hidden-lot-stock').first();
   const targetHiddenDestroy = $(tr).find('input.hidden-destroy-lot-stock').first();
-  const selectedQuantity = parseInt($(tr).find('input.available-quantity').first().val());
+  const selectedQuantity = parseInt($(tr).find('input.quantity').first().val());
   const selectedQuantityBefore = parseInt($("#qv-ref").text());
 
   if($(e.target).is(':checked')){
@@ -20,20 +20,19 @@ $('input[type=checkbox][data-toggle="switchbutton"]').on("change", function(e) {
     $(targetHiddenDestroy).val(0);
     $("#qv-ref").text(selectedQuantityBefore + selectedQuantity);
   }else{
-    //$(targetHidden).val("");
     $(targetHiddenDestroy).val(true);// destroy associate
     $("#qv-ref").text(selectedQuantityBefore - selectedQuantity);
   }
 });
 
 
-$("input.available-quantity").on("change", function(e){ 
+$("input.quantity").on("change", function(e){ 
   const tr = $(e.target).closest('tr');
   const targetSwitchButton = document.getElementById($(e.target).attr('data-target'));
   const targetHidden = $(tr).find('input.hidden-lot-stock').first();
   const targetHiddenDestroy = $(tr).find('input.hidden-destroy-lot-stock').first();
   let selectedLotsQuantity = 0;
-  $(tr).closest('tbody').find('input.available-quantity').map(function(index, element){
+  $(tr).closest('tbody').find('input.quantity').map(function(index, element){
     selectedLotsQuantity += parseInt($(element).val());
   });
 
@@ -43,7 +42,6 @@ $("input.available-quantity").on("change", function(e){
     $(targetHiddenDestroy).val(0);
   }else{
     targetSwitchButton.switchButton("off");
-    //$(targetHidden).val('');
     $(targetHiddenDestroy).val(true);// destroy associate
   }
   $("#qv-ref").text(selectedLotsQuantity)

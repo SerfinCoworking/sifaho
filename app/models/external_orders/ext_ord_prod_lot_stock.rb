@@ -8,7 +8,4 @@ class ExtOrdProdLotStock < ApplicationRecord
 
   # Delegations
   delegate :code, to: :lot_stocks, prefix: :product
-
-
 end
-
