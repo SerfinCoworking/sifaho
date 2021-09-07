@@ -12,19 +12,23 @@ table.table{
   }
 }
 
-/* .nested-fields.editing{
-  .editing-buttons{
-    display: block;
-  }
-  .enable-editing-buttons{
-    display: none;
+
+.custom-form-row{
+  transform: rotateX(0deg);
+  transition: transform 0.5s ease-in-out;
+  &:hover{
+    background-color: #808080;
+    .col-action-btn.hidden-content{
+      max-width: 7%;
+      flex: 0 0 7%;  
+    }
   }
 }
-.nested-fields:not(.editing){
-  .editing-buttons{
-    display: none;
-  }
-  .enable-editing-buttons{
-    display: block;
-  }
-} */
+
+.col-action-btn{
+  max-width: 4.78%;
+  flex: 0 0 4.78%;
+  white-space: nowrap;
+  transition: max-width 0.3s ease-out, flex 0.3s ease-out;
+  overflow: hidden;
+}

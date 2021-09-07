@@ -10,7 +10,7 @@
   <% end %>
 </div>
   
-<div class="enable-editing-buttons" style="display: <%= order_product.errors.any? ? 'none' : 'block' %> ;">
+<div class="enable-editing-buttons style="display: <%= order_product.errors.any? ? 'none' : 'block' %> ;">
   
   <%= link_to find_order_product_lots_path( order_type: order.class.name,
                                             order_id: order.id,
