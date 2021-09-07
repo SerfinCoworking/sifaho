@@ -2,7 +2,6 @@
 <%= render 'shared/flash_message' %>
 
 <% if policy(:external_order_applicant).edit?(@order) %>
-console.log("in applicant edition", "<%= @order.solicitud_auditoria?%>");
   <% js = escape_javascript(
     render "shared/orders/applicant/fields", order: @order, order_product: @order_product
   ) %>
@@ -16,7 +15,10 @@ $('#ord-prod-<%= @form_id %>').fadeOut(300, function(){
 
   $('#ord-prod-<%= @form_id %>').replaceWith("<%= js %>");
   initProductsEvents();
-
-  $('#ord-prod-<%= @form_id %>').fadeIn(300);
+  
+  if("<%= @open_modal %>" === 'yes'){
+    $('#ord-prod-<%= @order_product.id %>').find('.btn-lot-selection').first().trigger('click');
+  }
+  
 });
 
