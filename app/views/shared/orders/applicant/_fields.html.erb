@@ -17,7 +17,7 @@
     <div class="col-1 pl-1 pr-1">
       <% if policy(form.object).edit_product? %>
         <div class="custom-input-group">
-          <div class="form-group fake optional products_product_id_fake">
+          <div class="form-group mt-1 mb-1 fake optional products_product_id_fake">
             <input type="text" 
                     name="<%="product_code_fake-#{form.object.id}"%>" 
                     value="<%= form.object.product.present? ? form.object.product.code : '' %>"
@@ -58,7 +58,7 @@
     <div class="col pl-1 pr-1">
       <% if policy(form.object).edit_product? %>
         <div class="custom-input-group">
-          <div class="form-group fake optional products_product_id_fake">
+          <div class="form-group mt-1 mb-1 fake optional products_product_id_fake">
             <input type="text" 
             name="<%="product_name_fake-#{form.object.id}"%>"
             value="<%= form.object.product.present? ? form.object.product.name : '' %>"
@@ -111,7 +111,7 @@
     <!-- Cantidad solicitada -->
     <% if policy(form.object).edit_request_quantity? %>
       <div class="col-1 pl-1 pr-1">
-        <div class="form-group integer optional order_product_request_quantity">
+        <div class="form-group mt-1 mb-1 integer optional order_product_request_quantity">
           <input class="form-control numeric integer optional request-quantity form-control-sm <%= 'is-invalid' if form.object.errors[:request_quantity].any? %>" 
                   data-tooltip="true"
                   title="Cantidad solicitada"
@@ -134,7 +134,7 @@
 
     <!-- Observaciones -->
     <div class="col-3 pl-1 pr-1">
-      <div class="form-group text optional order_product_applicant_observation">
+      <div class="form-group mt-1 mb-1 text optional order_product_applicant_observation">
         <textarea class="form-control text optional form-control-sm observations" 
                   rows="1"
                   <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>

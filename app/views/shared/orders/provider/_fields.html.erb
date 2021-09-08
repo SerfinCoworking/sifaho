@@ -9,7 +9,7 @@
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
-                      class: ('editing' if order_product.errors.any?),
+                      class: "custom-form-row #{'editing' if order_product.errors.any?}",
                       role: 'check-modified'} do |form| %>
 
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
@@ -17,31 +17,31 @@
     
     <% if policy(order_product).edit_product? %>
       <div class="col-1 pl-1 pr-1">
-          <div class="custom-input-group">
-            <div class="form-group fake optional products_product_id_fake">
-            
-              <input type="text" 
-                      name="<%="product_code_fake-#{form.object.id}"%>" 
-                      value="<%= form.object.product.present? ? form.object.product.code : '' %>"
-                      class="form-control fake optional product-code form-control-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
-                      data-autocomplete-source="<%= search_by_code_products_path %>"
-                      size="6"
-                      <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>                    
-                      autocomplete="off" 
-                      placeholder="Código">
-              <div class="invalid-feedback">
-                <% if form.object.errors[:product_id].any? %>
-                  Producto <%= form.object.errors[:product_id].first %>
-                <% elsif form.object.errors[:uniqueness_product_in_the_order].any? %>
-                  <%= form.object.errors[:uniqueness_product_in_the_order].first %>
-                <% end %>
-              </div>
-            </div>
-
-            <div class="with-loading">
-              <%= fa_icon 'spinner', class: "fa-spin"%>
+        <div class="custom-input-group">
+          <div class="form-group mt-1 mb-1 fake optional products_product_id_fake">
+          
+            <input type="text" 
+                    name="<%="product_code_fake-#{form.object.id}"%>" 
+                    value="<%= form.object.product.present? ? form.object.product.code : '' %>"
+                    class="form-control fake optional product-code form-control-sm <%= ("is-invalid" if (form.object.errors[:product_id].any? || form.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if form.object.product_id.present? && (!form.object.errors[:product_id].any? || !form.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+                    data-autocomplete-source="<%= search_by_code_products_path %>"
+                    size="6"
+                    <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>                    
+                    autocomplete="off" 
+                    placeholder="Código">
+            <div class="invalid-feedback">
+              <% if form.object.errors[:product_id].any? %>
+                Producto <%= form.object.errors[:product_id].first %>
+              <% elsif form.object.errors[:uniqueness_product_in_the_order].any? %>
+                <%= form.object.errors[:uniqueness_product_in_the_order].first %>
+              <% end %>
             </div>
           </div>
+
+          <div class="with-loading">
+            <%= fa_icon 'spinner', class: "fa-spin"%>
+          </div>
+        </div>
 
         <%# Hidden product_id %>
         <input type="hidden" 
@@ -58,7 +58,7 @@
       <!-- Nombre de Producto -->
       <div class="col pl-1 pr-1">
           <div class="custom-input-group">
-            <div class="form-group fake optional products_product_id_fake">
+            <div class="form-group mt-1 mb-1 fake optional products_product_id_fake">
               <input type="text" 
               name="<%="product_name_fake-#{form.object.id}"%>"
               value="<%= form.object.product.present? ? form.object.product.name : '' %>"
@@ -83,33 +83,37 @@
 
       <!-- Unidad -->
       <div class="col-1 pl-1 pr-1">
-        <input class="form-control numeric integer optional product-unity form-control-sm" 
-              data-tooltip="true"
-              title="Unidad"
-              data-placement="right"
-              placeholder="Unidad"
-              type="text"
-              disabled
-              name="order_product[supply_unity_fake]"
-              value="<%= form.object.product.unity.name if form.object.product.present? %>">
+        <div class="form-group mt-1 mb-1">
+          <input class="form-control numeric integer optional product-unity form-control-sm" 
+                data-tooltip="true"
+                title="Unidad"
+                data-placement="right"
+                placeholder="Unidad"
+                type="text"
+                disabled
+                name="order_product[supply_unity_fake]"
+                value="<%= form.object.product.unity.name if form.object.product.present? %>">
+        </div>
       </div>
 
       <!-- Stock -->
       <div class="col-1 pl-1 pr-1">
-        <input class="form-control numeric integer optional stock-quantity form-control-sm" 
-              data-tooltip="true"
-              title="Stock"
-              data-placement="right"
-              placeholder="Stock"
-              type="number"
-              disabled
-              name="order_product[stock_fake]"
-              value="<%= form.object.product.present? ? current_user.sector.stock_to(form.object.product) : 0 %>">
+        <div class="form-group mt-1 mb-1">
+          <input class="form-control numeric integer optional stock-quantity form-control-sm" 
+                data-tooltip="true"
+                title="Stock"
+                data-placement="right"
+                placeholder="Stock"
+                type="number"
+                disabled
+                name="order_product[stock_fake]"
+                value="<%= form.object.product.present? ? current_user.sector.stock_to(form.object.product) : 0 %>">
+        </div>
       </div>
         
       <!-- Cantidad solicitada -->
       <div class="col-1 pl-1 pr-1">
-        <div class="form-group integer optional order_product_request_quantity">
+        <div class="form-group mt-1 mb-1 integer optional order_product_request_quantity">
           <input class="form-control numeric integer optional request-quantity form-control-sm <%= 'is-invalid' if form.object.errors[:request_quantity].any? %>" 
                   data-tooltip="true"
                   title="Cantidad solicitada"
@@ -133,7 +137,7 @@
     <% end %>
     <!-- Cantidad entregada -->
     <div class="col-1 pl-1 pr-1">
-      <div class="form-group integer optional order_product_delivery_quantity">
+      <div class="form-group mt-1 mb-1 integer optional order_product_delivery_quantity">
         <input class="form-control numeric integer optional delivery-quantity form-control-sm <%= 'is-invalid' if form.object.errors[:delivery_quantity].any? %>" 
                 data-tooltip="true"
                 title="Cantidad entregada"
@@ -156,7 +160,7 @@
 
     <!-- Observaciones -->
     <div class="col-3 pl-1 pr-1">
-      <div class="form-group text optional order_product_provider_observation">
+      <div class="form-group mt-1 mb-1 text optional order_product_provider_observation">
         <textarea class="form-control text optional form-control-sm observations" 
                   rows="1"
                   <%= (order_product.new_record? || false) || order_product.errors.any? ? '' : 'readonly' %>
@@ -165,7 +169,7 @@
     </div>
     
     <!-- Botones de accion -->
-    <div class="col-md-auto pl-1 pr-1 text-right">
+    <div class="col-action-btn pl-1 pr-1 d-flex align-items-center <%= 'hidden-content' if policy(order_product).destroy? %>"">
       <% if form.object.new_record? %>
         <div class="creating-buttons">
           <button class="btn btn-sm btn-outline-success" 

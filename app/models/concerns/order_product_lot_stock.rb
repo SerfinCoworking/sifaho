@@ -7,11 +7,17 @@ module OrderProductLotStock
 
     # Validations
     validates :quantity,
-    numericality: {
-      only_integer: true,
-      less_than_or_equal_to: :lot_stock_quantity,
-      message: "La cantidad seleccionada debe ser menor o igual a %{count}"
-    }
+              numericality: {
+                only_integer: true,
+                less_than_or_equal_to: :lot_stock_quantity
+              }
+
+    validates :quantity,
+              numericality: {
+                only_integer: true,
+                greater_than: 0
+              }
+
     validates_presence_of :lot_stock_id
 
     # Callbacks

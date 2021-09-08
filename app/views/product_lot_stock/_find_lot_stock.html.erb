@@ -24,7 +24,6 @@
                       role: 'check-modified'
                     } do |f| %>
   <%= f.error_notification %>
-  <%#= f.error_notification message: f.object.order_prod_lot_stocks.first.errors[:total_available_quantity].first[:message] if f.object.order_prod_lot_stocks.present? && f.object.order_prod_lot_stocks.first.errors.present? %>
   <%# hiddens necesarios para identificar el modelo correcto %>
   <input type="hidden" name="order_type" value="<%=@order_product.order.model_name.name%>">
   <input type="hidden" name="order_id" value="<%=@order_product.order.id%>">
@@ -69,7 +68,7 @@
           </td>
           <td class="align-middle">
             <div class="form-group integer">
-              <input type="number" class="form-control numeric integer optional quantity input-sm <%= opls.present? && opls.errors[:available_quantity].any? ? 'is-invalid' : ''%>"
+              <input type="number" class="form-control numeric integer optional quantity input-sm <%= opls.present? && opls.errors[:quantity].any? ? 'is-invalid' : ''%>"
               name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][quantity]"
               value="<%= opls.present? ? opls.quantity : 0%>"
               data-target="lot-stock-<%=lot_stock.id%>">
