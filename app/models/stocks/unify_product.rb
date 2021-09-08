@@ -1,10 +1,15 @@
 class UnifyProduct < ApplicationRecord
   include PgSearch
-  enum status: { auditoria: 0, aplicado: 1 }
+  include EnumTranslation
+  enum status: { pending: 0, applied: 1 }
 
   # Relationships
   belongs_to :origin_product, class_name: 'Product'
   belongs_to :target_product, class_name: 'Product'
+
+  # Delegations
+  delegate :code, :name, to: :origin_product, prefix: :origin, allow_nil: true
+  delegate :code, :name, to: :target_product, prefix: :target, allow_nil: true
 
   filterrific(
     default_filter_params: { sorted_by: 'creado_asc' },
@@ -59,8 +64,8 @@ class UnifyProduct < ApplicationRecord
 
   def self.options_for_status
     [
-      ['Auditoria', 'auditoria', 'secondary'],
-      ['Aplicado', 'aplicado', 'success']
+      ['Pendiente', 'pending', 'secondary'],
+      ['Aplicado', 'applied', 'success']
     ]
   end
 

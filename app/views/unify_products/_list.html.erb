@@ -1,5 +1,5 @@
-<% if @products.present? %>
-  <div id="filter_results">
+<% if @unify_products.present? %>
+  <div id="filterrific_results">
     <div class="card fixed-panel-list">
       <table class="table table-hover table-striped table-sm">
         <thead >
@@ -11,25 +11,25 @@
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody id="products">
-          <%= render @products %>
+        <tbody id="unify_products">
+          <%= render @unify_products %>
         </tbody>
       </table>
     </div>
     <div class="row d-flex align-items-center" style="height: 50px">
       <div class="col-5">
-        <%= will_paginate @products, list_classes: %w(pagination mb-0), 
+        <%= will_paginate @unify_products, list_classes: %w(pagination mb-0), 
           previous_label: '<i class="fa fa-angle-left"></i>',
           next_label: '<i class="fa fa-angle-right"></i>', 
           renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
       </div>
       <div class="col-5 d-flex justify-content-around align-items-center">
         <div>
-          Productos <span class="badge badge-secondary"><%= @products.count %></span>
+          Productos <span class="badge badge-secondary"><%= @unify_products.count %></span>
         </div>
       </div>
       <div class="col-2 d-flex justify-content-end align-items-center">
-        <%= link_to products_path(format: 'xlsx'),
+        <%= link_to unify_products_path(format: 'xlsx'),
           class: "btn btn-success", target: :_blank,
           title: 'Descargar a excel', data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon "file-excel" %>

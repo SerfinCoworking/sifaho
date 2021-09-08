@@ -190,6 +190,10 @@ es:
         statuses:
           pending: 'Pendiente'
           finished: 'Terminada'
+      unify_product:
+        statuses:
+          pending: 'Pendiente'
+          applied: 'Aplicado'
       snomed_concept:
         concept_id: 'Código'
         term: 'Concepto'

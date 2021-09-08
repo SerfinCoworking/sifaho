@@ -1,5 +1,5 @@
 class UnifyProductsController < ApplicationController
-  before_action :set_unify_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_unify_product, only: %i[show edit update destroy]
 
   # GET /unify_products
   # GET /unify_products.json
@@ -46,11 +46,9 @@ class UnifyProductsController < ApplicationController
 
     respond_to do |format|
       if @unify_product.save
-        format.html { redirect_to @unify_product, notice: 'Unify product was successfully created.' }
-        format.json { render :show, status: :created, location: @unify_product }
+        format.html { redirect_to @unify_product, notice: 'Unificar producto se ha creado correctamente.' }
       else
         format.html { render :new }
-        format.json { render json: @unify_product.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -60,11 +58,9 @@ class UnifyProductsController < ApplicationController
   def update
     respond_to do |format|
       if @unify_product.update(unify_product_params)
-        format.html { redirect_to @unify_product, notice: 'Unify product was successfully updated.' }
-        format.json { render :show, status: :ok, location: @unify_product }
+        format.html { redirect_to @unify_product, notice: 'Unificar producto se ha modificado correctamente.' }
       else
         format.html { render :edit }
-        format.json { render json: @unify_product.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,19 +70,20 @@ class UnifyProductsController < ApplicationController
   def destroy
     @unify_product.destroy
     respond_to do |format|
-      format.html { redirect_to unify_products_url, notice: 'Unify product was successfully destroyed.' }
+      format.html { redirect_to unify_products_url, notice: 'Unificar producto se ha eliminado correctamente.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unify_product
-      @unify_product = UnifyProduct.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def unify_product_params
-      params.require(:unify_product).permit(:origin_product_id, :target_product_id, :status, :observation)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_unify_product
+    @unify_product = UnifyProduct.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def unify_product_params
+    params.require(:unify_product).permit(:origin_product_id, :target_product_id, :observation)
+  end
 end
