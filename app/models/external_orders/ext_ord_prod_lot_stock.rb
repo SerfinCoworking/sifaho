@@ -25,12 +25,4 @@ class ExtOrdProdLotStock < ApplicationRecord
       errors.add(:quantity, :greater_than, message: 'Cantidad debe ser mayor a 0')
     end
   end
-
-  def total_quantity
-    max_deliver_quantity = inpatient_prescription_product.order_prod_lot_stocks.sum(&:quantity)
-    if inpatient_prescription_product.deliver_quantity != max_deliver_quantity
-      errors.add(:total_quantity, message: "La cantidad seleccionada debe igual a #{inpatient_prescription_product.deliver_quantity}")
-    end
-  end
 end
-

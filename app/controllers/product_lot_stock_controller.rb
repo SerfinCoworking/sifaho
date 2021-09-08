@@ -19,7 +19,7 @@ class ProductLotStockController < ApplicationController
 
   def update_lot_stock_selection
     respond_to do |format|
-      if @order_product.update!(lot_stock_params)
+      if @order_product.update(lot_stock_params)
         format.js
       else
         @selected_lot_stocks = @order_product.order_prod_lot_stocks.pluck(:lot_stock_id)
