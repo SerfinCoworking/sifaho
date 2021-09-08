@@ -1,7 +1,6 @@
 class ExternalOrderProduct < ApplicationRecord
 
   
-  default_scope { joins(:product).order('products.name') }
   
   # Relationships
   belongs_to :order, class_name: 'ExternalOrder', inverse_of: 'order_products'
@@ -26,6 +25,7 @@ class ExternalOrderProduct < ApplicationRecord
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
+  default_scope { joins(:product).order('products.name') }
   # new version
   def is_proveedor_auditoria?
     return order.proveedor_auditoria?
