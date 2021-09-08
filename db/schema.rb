@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_151616) do
+ActiveRecord::Schema.define(version: 2021_09_08_121659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -289,14 +289,14 @@ ActiveRecord::Schema.define(version: 2021_09_06_151616) do
   end
 
   create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "external_order_product_id"
+    t.bigint "order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "reserved_quantity", default: 0
-    t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
     t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
+    t.index ["order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "external_order_baks", force: :cascade do |t|
@@ -540,14 +540,14 @@ ActiveRecord::Schema.define(version: 2021_09_06_151616) do
   end
 
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "internal_order_product_id"
+    t.bigint "order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "reserved_quantity", default: 0
-    t.index ["internal_order_product_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_product_id"
     t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
+    t.index ["order_product_id"], name: "index_int_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "internal_order_baks", force: :cascade do |t|

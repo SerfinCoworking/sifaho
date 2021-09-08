@@ -7,9 +7,9 @@ class ExternalOrderProduct < ApplicationRecord
   belongs_to :added_by_sector, class_name: 'Sector'
 
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'ExtOrdProdLotStock', 
-                                   foreign_key: 'external_order_product_id', source: :ext_ord_prod_lot_stocks,
-                                   inverse_of: 'external_order_product'
-  has_many :lot_stocks, :through => :order_prod_lot_stocks
+                                   foreign_key: 'order_product_id', source: :ext_ord_prod_lot_stocks,
+                                   inverse_of: 'order_product'
+  has_many :lot_stocks, through: :order_prod_lot_stocks
 
   # Validaciones
   validates :request_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
