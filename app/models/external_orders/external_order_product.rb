@@ -36,6 +36,9 @@ class ExternalOrderProduct < ApplicationRecord
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
+  # Callbacks
+  before_update :fill_delivery_quantity
+
   # new version
   def is_proveedor_auditoria?
     return order.proveedor_auditoria?
@@ -150,6 +153,10 @@ class ExternalOrderProduct < ApplicationRecord
 
   def get_order
     return order
+  end
+
+  def fill_delivery_quantity
+    self.delivery_quantity = order_prod_lot_stocks.sum(&:quantity)
   end
 end
 

@@ -3,3 +3,20 @@ $("tr#child-<%= @order_product.id.to_s %>").find('button.btn-select-lot-stock').
 $('#lot-selection').modal('hide');
 
 setLotSelectionProgress($("tr#child-<%= @order_product.id.to_s %>"), parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>"), parseInt("<%= @order_product.request_quantity %>"));
+
+<% if policy(:external_order_applicant).edit?(@order) %>
+  <% js = escape_javascript(
+    render "shared/orders/applicant/fields", order: @order, order_product: @order_product
+  ) %>
+<% else %>
+  <% js = escape_javascript(
+    render "shared/orders/provider/fields", order: @order, order_product: @order_product
+  ) %>
+<% end %>
+  
+$('#ord-prod-<%= @order_product.id %>').fadeOut(300, function(){
+
+  $('#ord-prod-<%= @order_product.id %>').replaceWith("<%= js %>");
+  initProductsEvents();
+  
+});
