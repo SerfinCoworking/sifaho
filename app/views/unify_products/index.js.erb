@@ -1,0 +1,5 @@
+<% js = escape_javascript(
+  render(partial: 'unify_products/list', locals: { unify_products: @unify_products })
+) %>
+
+$("#filter_results").html("<%= js %>");

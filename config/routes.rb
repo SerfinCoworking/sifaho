@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :unify_products
   resources :stocks do
     collection do
       get '/lotes', to: 'lot_stocks#index', as: :lot_stocks_index

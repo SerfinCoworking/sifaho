@@ -1,13 +1,17 @@
 class Product < ApplicationRecord
   include PgSearch
 
-  # Relations
+  enum status: { activo: 0, inactivo: 1, unificado: 2 }
+
+  # Relationships
   belongs_to :unity
   belongs_to :area
   belongs_to :snomed_concept, optional: true, counter_cache: :products_count
   has_many :stocks, dependent: :destroy
   has_many :external_order_product
   has_many :patient_product_state_reports
+  has_one :origin_unify, class_name: 'UnifyProduct', foreign_key: 'origin_product_id'
+  has_one :target_unify, class_name: 'UnifyProduct', foreign_key: 'target_product_id'
 
   # Validations
   validates_presence_of :name, :code, :area_id, :unity_id
@@ -20,12 +24,7 @@ class Product < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'nombre_asc' },
-    available_filters: [
-      :search_code,
-      :search_name,
-      :with_area_ids,
-      :sorted_by
-    ]
+    available_filters: %i[search_code search_name with_area_ids sorted_by]
   )
 
   # To filter records by controller params

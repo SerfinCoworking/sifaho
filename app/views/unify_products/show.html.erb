@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Origin product:</strong>
+  <%= @unify_product.origin_product %>
+</p>
+
+<p>
+  <strong>Target product:</strong>
+  <%= @unify_product.target_product %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @unify_product.status %>
+</p>
+
+<p>
+  <strong>Observation:</strong>
+  <%= @unify_product.observation %>
+</p>
+
+<%= link_to 'Edit', edit_unify_product_path(@unify_product) %> |
+<%= link_to 'Back', unify_products_path %>

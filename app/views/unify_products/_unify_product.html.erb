@@ -1,0 +1,19 @@
+<tr id="unify_product_<%= unify_product.id %>">
+  <td><%= unify_product.origin_code %> | <%= unify_product.origin_name %></td>
+  <td><%= unify_product.target_name %> | <%= unify_product.target_name %></td>
+  <td><%= unify_product.status %></td>
+  <td class="text-left actions-col">
+    <% if policy(unify_product).show? %>
+      <%= link_to unify_product_path(unify_product), class: 'btn btn-secondary btn-sm',
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+    <% if policy(unify_product).edit? %>
+      <%= link_to edit_unify_product_path(unify_product), class: 'btn btn-warning btn-sm',
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>
