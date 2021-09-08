@@ -4,8 +4,8 @@ class InternalOrderProduct < ApplicationRecord
   belongs_to :product
   belongs_to :added_by_sector, class_name: 'Sector'
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'IntOrdProdLotStock',
-                                   foreign_key: 'internal_order_product_id', source: :int_ord_prod_lot_stocks,
-                                   inverse_of: 'internal_order_product'
+                                   foreign_key: 'order_product_id', source: :int_ord_prod_lot_stocks,
+                                   inverse_of: 'order_product'
   has_many :lot_stocks, through: :order_prod_lot_stocks
 
   # Validations
@@ -27,10 +27,12 @@ class InternalOrderProduct < ApplicationRecord
                                 allow_destroy: true
 
   # Delegations
-  delegate :code, :name, :unity_name, to: :product, prefix: :product, allow_nil: true
+  delegate :unity, to: :product
+  delegate :name, to: :product, prefix: :product
+  delegate :code, to: :product, prefix: :product
 
   # Scopes
-  scope :agency_referrals, ->(id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
+  scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
   scope :ordered_products, -> { joins(:product).order('products.name DESC') }
 

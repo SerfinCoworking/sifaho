@@ -62,6 +62,7 @@ es:
       bed: "Cama"
       patient: "Paciente"
       inpatient_prescription: "Internación"
+      int_ord_prod_lot_stock: 'Lote seleccionado'
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
@@ -116,6 +117,8 @@ es:
       external_order_product:
         delivery_quantity: "A entregar"
         request_quantity: "Cantidad solicitada"
+        order_prod_lot_stock: 'Lotes seleccionados'
+        order_prod_lot_stocks: 'Lotes seleccionados'
       chronic_prescription_product:
         delivery_quantity: "Dosis"
         request_quantity: "Dosis mensual"
