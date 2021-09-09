@@ -17,6 +17,8 @@ class UnifyProductPolicy < ApplicationPolicy
   end
 
   def update?
+    return if record.applied?
+
     user.has_any_role?(:admin)
   end
 

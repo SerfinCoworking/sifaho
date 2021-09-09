@@ -8,8 +8,13 @@ class UnifyProduct < ApplicationRecord
   belongs_to :target_product, class_name: 'Product'
 
   # Delegations
-  delegate :code, :name, to: :origin_product, prefix: :origin, allow_nil: true
-  delegate :code, :name, to: :target_product, prefix: :target, allow_nil: true
+  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term,
+           :snomed_fsn, :snomed_semantic_tag, :snomed_concept,  to: :origin_product, prefix: :origin, allow_nil: true
+  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term,
+           :snomed_fsn, :snomed_semantic_tag, :snomed_concept,  to: :target_product, prefix: :target, allow_nil: true
+
+  # Validations
+  validate :different_origin_product_than_target
 
   filterrific(
     default_filter_params: { sorted_by: 'creado_asc' },
@@ -73,5 +78,9 @@ class UnifyProduct < ApplicationRecord
     return all if values.blank?
 
     where(status: statuses.values_at(*Array(values)))
+  end
+
+  def different_origin_product_than_target
+    errors.add(:target_product_id, 'El producto destino no puede ser igual al origen') if origin_product_id == target_product_id
   end
 end

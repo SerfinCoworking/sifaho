@@ -1,6 +1,6 @@
 class LotProvenance < ApplicationRecord
 
-  # Relations
+  # Relationships
   has_many :lots, foreign_key: :provenance_id
 
   # Validations

@@ -1,7 +1,7 @@
 class Establishment < ApplicationRecord
   include PgSearch
 
-  # Relaciones
+  # Relationships
   has_many :sectors
   has_many :users, :through => :sectors
   has_many :prescriptions

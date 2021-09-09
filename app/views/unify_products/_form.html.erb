@@ -133,7 +133,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', products_path, class: 'btn btn-light mr-2' %>
+    <%= link_to 'Volver', unify_products_path, class: 'btn btn-light mr-2' %>
     <button type='submit' name='commit' class='btn btn-success' form="<%= @unify_product.new_record? ? 'new_unify_product' : 'edit_unify_product_' + @unify_product.id.to_s %>">
       <%= fa_icon 'save' %> Guardar
     </button>

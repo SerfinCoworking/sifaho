@@ -2,6 +2,7 @@
 class Notification < ActiveRecord::Base
   include Notifications::Model
 
+  # Relationships
   belongs_to :actor_sector, class_name: 'Sector'
   # Write your custom methods...
 

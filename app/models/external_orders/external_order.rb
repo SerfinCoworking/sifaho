@@ -2,7 +2,6 @@ class ExternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
 
-  # New enum
   enum order_type: { provision: 0, solicitud: 1 }
   enum status: { 
     solicitud_auditoria: 0,
@@ -14,7 +13,7 @@ class ExternalOrder < ApplicationRecord
     anulado: 6 
   }
 
-  # Relaciones
+  # Relationships
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :provider_sector, class_name: 'Sector'
   has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: "external_order_id", inverse_of: 'external_order'
@@ -27,16 +26,16 @@ class ExternalOrder < ApplicationRecord
   has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
   has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
 
-  # Validaciones
+  # Validations
   validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
   validates_associated :order_products
   validates_uniqueness_of :remit_code
   validate :presence_of_products_into_the_order
 
-  # Atributos anidados
+  # Nested attributes
   accepts_nested_attributes_for :order_products,
-    reject_if: proc { |attributes| attributes['product_id'].blank? },
-    :allow_destroy => true
+                                reject_if: proc { |attributes| attributes['product_id'].blank? },
+                                allow_destroy: true
 
   # Callbacks
   before_validation :record_remit_code, on: :create

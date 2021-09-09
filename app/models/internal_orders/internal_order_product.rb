@@ -1,13 +1,12 @@
 class InternalOrderProduct < ApplicationRecord
 
-  # Relaciones
+  # Relationships
   belongs_to :internal_order, inverse_of: 'order_products'
   belongs_to :product
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'IntOrdProdLotStock', foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks, inverse_of: 'internal_order_product'
+  has_many :lot_stocks, through: :order_prod_lot_stocks
 
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "IntOrdProdLotStock", foreign_key: "internal_order_product_id", source: :int_ord_prod_lot_stocks, inverse_of: 'internal_order_product'
-  has_many :lot_stocks, :through => :order_prod_lot_stocks
-
-  # Validaciones
+  # Validations
   validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
   validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: proc { is_proveedor_auditoria? || is_provision_en_camino? } 
   validate :out_of_stock, if: :is_provision_en_camino?
@@ -17,29 +16,28 @@ class InternalOrderProduct < ApplicationRecord
   validates_associated :order_prod_lot_stocks, if: :is_provision_en_camino?
   validate :uniqueness_product_in_the_order
   validate :order_prod_lot_stocks_any_without_stock
-  
 
+  # Nested attributes
   accepts_nested_attributes_for :product,
-    :allow_destroy => true
-
+                                allow_destroy: true
   accepts_nested_attributes_for :order_prod_lot_stocks,
-    :allow_destroy => true
+                                allow_destroy: true
 
-  # Delegaciones
+  # Delegations
   delegate :unity, to: :product
   delegate :name, to: :product, prefix: :product
   delegate :code, to: :product, prefix: :product
-  
+
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
-    
-  scope :ordered_products, -> { joins(:product).order("products.name DESC") }
+
+  scope :ordered_products, -> { joins(:product).order('products.name DESC') }
 
   # new version
   def is_proveedor_auditoria?
     return self.internal_order.proveedor_auditoria?
   end
-  
+
   def is_provision_en_camino?
     return self.internal_order.provision_en_camino?
   end
@@ -51,7 +49,7 @@ class InternalOrderProduct < ApplicationRecord
   def is_provision?
     return self.internal_order.order_type == 'provision'
   end
-  
+
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
     self.order_prod_lot_stocks.each do |iopls|

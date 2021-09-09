@@ -1,7 +1,7 @@
 <tr id="unify_product_<%= unify_product.id %>">
   <td><%= unify_product.created_at.strftime('%d/%m/%Y') %></td>
   <td><%= unify_product.origin_code %> | <%= unify_product.origin_name %></td>
-  <td><%= unify_product.target_name %> | <%= unify_product.target_name %></td>
+  <td><%= unify_product.target_code %> | <%= unify_product.target_name %></td>
   <td>
     <span class="badge badge-<%= unify_product_status_label(unify_product) %>">
       <%= UnifyProduct.human_enum_name(:status, unify_product.status) %>

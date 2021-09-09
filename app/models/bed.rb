@@ -2,7 +2,7 @@ class Bed < ApplicationRecord
   include PgSearch
   enum status: { disponible: 0, ocupada: 1, inactiva: 2 } 
 
-  # Relations
+  # Relationships
   belongs_to :bedroom
   belongs_to :service, class_name: 'Sector'
   has_one :establishment, through: :bedroom
@@ -20,7 +20,6 @@ class Bed < ApplicationRecord
   delegate :name, to: :service, prefix: :service
   delegate :fullname, :dni, :age_string, :id, to: :patient, prefix: :patient
 
-  scope :establishment, -> (establishment_id) { joins(:establishment).where("establishments.id = ?", establishment_id) }
 
   filterrific(
     default_filter_params: { sorted_by: 'estado_desc' },
@@ -32,6 +31,9 @@ class Bed < ApplicationRecord
       :by_bedroom
     ]
   )
+
+  # Scopes
+  scope :establishment, ->(establishment_id) { joins(:establishment).where('establishments.id = ?', establishment_id) }
 
   pg_search_scope :search_name,
                   against: :name,

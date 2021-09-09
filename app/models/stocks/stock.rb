@@ -1,7 +1,7 @@
 class Stock < ApplicationRecord
   include PgSearch
 
-  # Relations
+  # Relationships
   belongs_to :product
   belongs_to :sector
   has_many :lot_stocks
@@ -15,25 +15,26 @@ class Stock < ApplicationRecord
   # Delegations
   delegate :code, :name, :unity_name, :area_name, to: :product, prefix: true
 
-  pg_search_scope :search_product_code,
-    :associated_against => { product: [:code] },
-    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
-  pg_search_scope :search_product_name,
-    :associated_against => { product: [:name] },
-    :using => {:tsearch => { :prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-
   filterrific(
     default_filter_params: { sorted_by: 'nombre_asc' },
     available_filters: [
       :search_product_code,
       :search_product_name,
       :with_area_ids,
-      :sorted_by,
+      :sorted_by
     ]
   )
+
+  # Scopes
+  pg_search_scope :search_product_code,
+                  associated_against: { product: [:code] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
+
+  pg_search_scope :search_product_name,
+                  associated_against: { product: [:name] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
@@ -59,7 +60,7 @@ class Stock < ApplicationRecord
       reorder("unities.name #{direction}").joins(:product, :unity)
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 

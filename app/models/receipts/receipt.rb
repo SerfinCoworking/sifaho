@@ -2,19 +2,20 @@ class Receipt < ApplicationRecord
   include PgSearch
 
   enum status: { auditoria: 0, recibido: 1}
-    
+
+  # Relationships
   belongs_to :provider_sector, class_name: 'Sector'
   belongs_to :applicant_sector, class_name: 'Sector'
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :received_by, class_name: 'User', optional: true
-  has_one :provider_establishment, :through => :provider_sector, :source => :establishment
-  has_one :applicant_establishment, :through => :applicant_sector, :source => :establishment
+  has_one :provider_establishment, through: :provider_sector, source: :establishment
+  has_one :applicant_establishment, through: :applicant_sector, source: :establishment
   has_many :receipt_products
   has_many :supplies, through: :receipt_products
-  has_many :movements, class_name: "ReceiptMovement"
+  has_many :movements, class_name: 'ReceiptMovement'
   has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-  # Validaciones
+  # Validations
   validates_presence_of :provider_sector_id, :applicant_sector, :code
   validates_uniqueness_of :code
   validate :validate_receipt_products_length
@@ -24,11 +25,11 @@ class Receipt < ApplicationRecord
   delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
   delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
 
-  # Atributos anidados
+  # Nested attributes
   accepts_nested_attributes_for :receipt_products,
-    reject_if: proc { |attributes| attributes['product_id'].blank? },
-    :allow_destroy => true
-  
+                                reject_if: proc { |attributes| attributes['product_id'].blank? },
+                                allow_destroy: true
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
@@ -42,46 +43,46 @@ class Receipt < ApplicationRecord
   )
 
   pg_search_scope :search_code,
-    :against => :code,
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
-  
+                  against: :code,
+                  using: { tsearch: { prefix: true } },
+                  ignoring: :accents
+
   pg_search_scope :search_provider,
-    :associated_against => { :provider_sector => :name, :provider_establishment => :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { provider_sector: :name, provider_establishment: :name },
+                  using: { tsearch: { prefix: true } },
+                  ignoring: :accents
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
-      order("receipts.created_at #{ direction }")
+      order("receipts.created_at #{direction}")
     when /^responsable_/
       # Ordenamiento por nombre de responsable
-      order("LOWER(responsable.username) #{ direction }").joins("INNER JOIN users as responsable ON responsable.id = receipts.responsable_id")
+      order("LOWER(responsable.username) #{direction}").joins("INNER JOIN users as responsable ON responsable.id = receipts.responsable_id")
     when /^sector_/
       # Ordenamiento por nombre de sector
-      order("sectors.name #{ direction }").joins(:sector)
+      order("sectors.name #{direction}").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("receipts.status #{ direction }")
+      order("receipts.status #{direction}")
     when /^tipo_/
       # Ordenamiento por nombre de estado
-      order("receipts.order_type #{ direction }")
+      order("receipts.order_type #{direction}")
     when /^ins_/
       # Ordenamiento por nombre de insumo solicitado
-      order("quantity_ord_supply_lots.count #{ direction }")
+      order("quantity_ord_supply_lots.count #{direction}")
     when /^solicitado_/
-      # Ordenamiento por la fecha de recepción
-      order("receipts.requested_date #{ direction }") 
+      # Sort by requested date
+      order("receipts.requested_date #{direction}")
     when /^recibido_/
-      # Ordenamiento por la fecha de recepción
-      order("receipts.date_received #{ direction }")
+      # Sort by date received
+      order("receipts.date_received #{direction}")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
@@ -114,7 +115,7 @@ class Receipt < ApplicationRecord
       ['Responsable (a-z)', 'responsable_asc'],
       ['Estado (a-z)', 'estado_asc'],
       ['Insumos solicitados (a-z)', 'insumos_solicitados_asc'],
-      ['Fecha recibido (asc)', 'recibido_desc'],
+      ['Fecha recibido (asc)', 'recibido_desc']
     ]
   end
 

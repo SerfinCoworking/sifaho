@@ -2,7 +2,6 @@ class LotStock < ApplicationRecord
   # Relationships
   belongs_to :lot
   belongs_to :stock
-
   has_many :int_ord_prod_lot_stocks
   has_many :ext_ord_prod_lot_stocks
   has_many :out_pres_prod_lot_stocks
@@ -12,10 +11,10 @@ class LotStock < ApplicationRecord
   has_many :lot_archives
   has_many :movements, class_name: 'StockMovement'
   has_many :external_orders, through: :ext_ord_prod_lot_stocks, source: :order
-
   has_one :sector, through: :stock
   has_one :product, through: :lot
 
+  # Callbacks
   after_save :stock_refresh_quantity
 
   # Validations

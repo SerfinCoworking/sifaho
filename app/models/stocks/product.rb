@@ -12,6 +12,22 @@ class Product < ApplicationRecord
   has_many :patient_product_state_reports
   has_one :origin_unify, class_name: 'UnifyProduct', foreign_key: 'origin_product_id'
   has_one :target_unify, class_name: 'UnifyProduct', foreign_key: 'target_product_id'
+  has_many :chronic_prescription_products
+  has_many :original_chronic_prescription_products
+  has_many :inpatient_prescription_products
+  has_many :external_order_products
+  has_many :external_order_product_templates
+  has_many :internal_order_products
+  has_many :internal_order_product_templates
+  has_many :outpatient_prescription_products
+  has_many :receipt_products
+  has_many :internal_order_product_reports
+  has_many :monthly_consumption_reports
+  has_many :patient_product_reports
+  has_many :report_product_lines
+  has_many :patient_product_state_reports
+  has_many :lots
+  has_many :stocks
 
   # Validations
   validates_presence_of :name, :code, :area_id, :unity_id
