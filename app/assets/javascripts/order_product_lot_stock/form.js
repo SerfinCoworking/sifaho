@@ -14,19 +14,31 @@ $(document).on('turbolinks:load', function(e){
     const anyEditingForm = $('#order-products-container').find('form.editing').length;
     const href = $(e.target).attr('data-url');
     if(anyEditingForm){
-      // abrir modal
+      // open modal unsaved changes
       const modal = "#send-unsaved-confirmation";
-      const title = "Enviando solicitud de establecimiento";
-      const body = "Hay productos que no han sido guardados aún";
+      const title = $(e.target).attr('data-title');
+      const body = $(e.target).attr('data-body');
 
       $(modal).find('.modal-title').text(title);
       $(modal).find('.modal-body').text(body);
       $(modal).find('a#send-confirm-btn').attr('href', href);
       $(modal).modal('toggle');
     }else{
-      window.location.href = href;
+      if($(e.target).hasClass('provider-order')){
+        const modal = "#send-confirmation";
+        const title = "Enviando provisión de sector";
+        const body = "Está seguro de enviar la provisión?";
+
+        $(modal).find('.modal-title').text(title);
+        $(modal).find('.modal-body').text(body);
+        $(modal).find('a#send-confirm-btn').attr('href', href);
+        $(modal).modal('toggle');
+      }else{
+        window.location.href = href;
+      }
     }
   });
+  
 })
 // set expiry date calendar format
 function initProductsEvents(){

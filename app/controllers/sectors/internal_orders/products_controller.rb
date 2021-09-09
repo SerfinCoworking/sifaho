@@ -24,6 +24,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
 
     respond_to do |format|
       if @order_product.save
+        @open_modal = 'yes' #abrimos el modal de seleccion de lotes
         flash.now[:success] = "Se agregó el producto #{@order_product.product_name} correctamente."
         format.js { render 'shared/orders/products/show' }
       else
@@ -37,6 +38,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
     respond_to do |format|
       @form_id = @order_product.id
       if @order_product.update(order_product_params)
+        @open_modal = 'yes' #abrimos el modal de seleccion de lotes
         flash.now[:success] = "El producto #{@order_product.product_name} se ha actualizado correctamente."
         format.js { render 'shared/orders/products/show' }
       else

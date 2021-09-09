@@ -71,7 +71,8 @@
               <input type="number" class="form-control numeric integer optional quantity input-sm <%= opls.present? && opls.errors[:quantity].any? ? 'is-invalid' : ''%>"
               name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][quantity]"
               value="<%= opls.present? ? opls.quantity : 0%>"
-              data-target="lot-stock-<%=lot_stock.id%>">
+              data-target="lot-stock-<%=lot_stock.id%>"
+              min="0">
               
               <div class="invalid-feedback">
                 <%= opls.present? && opls.errors[:quantity].any? ? opls.errors[:quantity].first : '' %>

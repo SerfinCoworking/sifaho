@@ -7,7 +7,7 @@ module OrderProduct
     belongs_to :product
 
     # Callbacks
-    before_update :fill_delivery_quantity
+    after_save :fill_delivery_quantity
 
     # Validations
     validates :request_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -28,16 +28,21 @@ module OrderProduct
              to: :product, 
              prefix: :product, 
              allow_nil: true
+
+    def get_order
+      order
+    end
+
     private
 
     def fill_delivery_quantity
-      self.delivery_quantity = order_prod_lot_stocks.sum(&:quantity)
+      # Update only delivery_quantity without callback
+      self.update_column(:delivery_quantity, (order_prod_lot_stocks.length ? order_prod_lot_stocks.sum(&:quantity) : 0))
     end
 
     # Increment lot stock quantity
     def increment_lot_stock_to(a_sector)
       order_prod_lot_stocks.each do |opls|
-
         @stock = Stock.where(
           sector_id: a_sector.id,
           product_id: product_id
@@ -45,7 +50,7 @@ module OrderProduct
 
         @lot_stock = LotStock.where(
           lot_id: opls.lot_stock.lot.id,
-          stock_id: @stock.id,
+          stock_id: @stock.id
         ).first_or_create
 
         @lot_stock.increment(opls.quantity)
@@ -92,7 +97,7 @@ module OrderProduct
       any_insufficient_lot_stock = order_prod_lot_stocks.any? do |opls|
         opls.errors[:quantity].any?
       end
-  
+
       if any_insufficient_lot_stock
         errors.add(:order_prod_lot_stocks_any_without_stock, 'Revisar las cantidades seleccionadas')
       end
@@ -105,10 +110,5 @@ module OrderProduct
         errors.add(:out_of_stock, 'Este producto no tiene el stock necesario para entregar')
       end
     end
-
-    def get_order
-      order
-    end
-
   end
 end

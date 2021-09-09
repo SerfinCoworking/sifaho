@@ -55,7 +55,7 @@
     </div>
 
     <!-- Nombre de Producto -->
-    <div class="col pl-1 pr-1">
+    <div class="col-3 pl-1 pr-1">
       <% if policy(form.object).edit_product? %>
         <div class="custom-input-group">
           <div class="form-group mt-1 mb-1 fake optional products_product_id_fake">
@@ -84,28 +84,32 @@
 
     <!-- Unidad -->
     <div class="col-1 pl-1 pr-1">
-      <input class="form-control numeric integer optional product-unity form-control-sm" 
-             data-tooltip="true"
-             title="Unidad"
-             data-placement="right"
-             placeholder="Unidad"
-             type="text"
-             disabled
-             name="order_product[supply_unity_fake]"
-             value="<%= form.object.product.unity.name if form.object.product.present? %>">
+      <div class="form-group mt-1 mb-1 fake optional product_unity_fake">
+        <input class="form-control numeric integer optional product-unity form-control-sm" 
+              data-tooltip="true"
+              title="Unidad"
+              data-placement="right"
+              placeholder="Unidad"
+              type="text"
+              disabled
+              name="order_product[supply_unity_fake]"
+              value="<%= form.object.product.unity.name if form.object.product.present? %>">
+      </div>
     </div>
 
     <!-- Stock -->
     <div class="col-1 pl-1 pr-1">
-      <input class="form-control numeric integer optional stock-quantity form-control-sm" 
-             data-tooltip="true"
-             title="Stock"
-             data-placement="right"
-             placeholder="Stock"
-             type="number"
-             disabled
-             name="order_product[stock_fake]"
-             value="<%= form.object.product.present? ? current_user.sector.stock_to(form.object.product) : 0 %>">
+      <div class="form-group mt-1 mb-1 fake optional stock_quantity_fake">
+        <input class="form-control numeric integer optional stock-quantity form-control-sm" 
+              data-tooltip="true"
+              title="Stock"
+              data-placement="right"
+              placeholder="Stock"
+              type="number"
+              disabled
+              name="order_product[stock_fake]"
+              value="<%= form.object.product.present? ? current_user.sector.stock_to(form.object.product) : 0 %>">
+      </div>
     </div>
       
     <!-- Cantidad solicitada -->
@@ -133,7 +137,7 @@
     <% end %>
 
     <!-- Observaciones -->
-    <div class="col-3 pl-1 pr-1">
+    <div class="col pl-1 pr-1">
       <div class="form-group mt-1 mb-1 text optional order_product_applicant_observation">
         <textarea class="form-control text optional form-control-sm observations" 
                   rows="1"
@@ -143,7 +147,7 @@
     </div>
     
     <!-- Botones de accion -->
-    <div class="col-md-auto pl-1 pr-1 text-right">
+    <div class="col-md-auto p-1 d-flex align-items-start">
       <% if form.object.new_record? %>
         <div class="creating-buttons">
           <button class="btn btn-sm btn-outline-success" 

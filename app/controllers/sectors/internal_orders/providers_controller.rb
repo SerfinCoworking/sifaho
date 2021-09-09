@@ -117,13 +117,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # # GET /internal_order/provider/1/dispatch_order
   def dispatch_order
     policy(:internal_order_provider).dispatch_order?(@internal_order)
-    previous_status = @internal_order.status
+    # previous_status = @internal_order.status
     respond_to do |format|
       begin
-        @internal_order.status = 'provision_en_camino'
-        @internal_order.save!
-
         @internal_order.send_order_by(current_user)
+        # @internal_order.status = 'provision_en_camino'
+        # @internal_order.save!
+
         message = 'La provision se ha enviado correctamente.'
 
         format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
@@ -131,7 +131,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @internal_order.status = previous_status
+        # @internal_order.status = previous_status
         @sectors = Sector.select(:id, :name)
                           .with_establishment_id(current_user.sector.establishment_id)
                           .where.not(id: current_user.sector_id).as_json

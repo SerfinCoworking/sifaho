@@ -169,7 +169,7 @@
     </div>
     
     <!-- Botones de accion -->
-    <div class="col-action-btn pl-1 pr-1 d-flex align-items-center <%= 'hidden-content' if policy(order_product).destroy? %>"">
+    <div class="col-action-btn pl-1 pr-1 d-flex align-items-center <%= 'hidden-content' if policy(order_product).destroy? %>">
       <% if form.object.new_record? %>
         <div class="creating-buttons">
           <button class="btn btn-sm btn-outline-success" 
