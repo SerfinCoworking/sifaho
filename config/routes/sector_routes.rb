@@ -18,7 +18,6 @@ Rails.application.routes.draw do
         resources :providers do
           member do
             get :dispatch_order
-            get :rollback_order
             get :nullify_order
             get :edit_products
           end

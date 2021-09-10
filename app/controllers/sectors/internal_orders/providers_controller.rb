@@ -141,19 +141,6 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     end
   end
 
-  def rollback_order
-    policy(:internal_order_provider).rollback_order?(@internal_order)
-    respond_to do |format|
-      begin
-        @internal_order.return_provider_status_by(current_user)
-        flash[:notice] = 'La '+@internal_order.order_type+' se ha retornado a un estado anterior.'
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      end
-      format.html { redirect_to internal_orders_provider_url(@internal_order) }
-    end
-  end
-
   # get /internal_orders/provider/1/nullify_order
   def nullify_order
     policy(:internal_order_provider).nullify_order?(@internal_order)
