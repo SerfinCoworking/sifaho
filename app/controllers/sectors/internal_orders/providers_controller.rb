@@ -55,16 +55,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     @internal_order.requested_date = DateTime.now
     @internal_order.provider_sector = current_user.sector
     @internal_order.order_type = 'provision'
-    @internal_order.status = sending? ? 'provision_en_camino' : 'proveedor_auditoria'
+    @internal_order.status = 'proveedor_auditoria'
 
     respond_to do |format|
       begin
         @internal_order.save!
-
-        @internal_order.send_order_by(current_user) if sending?
-
-        message = sending? ? "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente." :message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
-        format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
+        message = "La provisión interna de #{@internal_order.applicant_sector.name} se ha auditado correctamente."
+        format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
         @internal_order.proveedor_auditoria!
@@ -87,17 +84,14 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     policy(:internal_order_provider).update?(@internal_order)
     previous_status = @internal_order.status
     @internal_order.audited_by = current_user
-    @internal_order.status = sending? ? "provision_en_camino" : 'proveedor_auditoria'
+    @internal_order.status = 'proveedor_auditoria'
 
     respond_to do |format|
       begin
         @internal_order.update!(internal_order_params)
+        message = 'La solicitud se ha editado y se encuentra en auditoria.'
 
-        @internal_order.send_order_by(current_user) if sending?
-
-        message = sending? ? 'La provision se ha enviado correctamente.' : 'La solicitud se ha editado y se encuentra en auditoria.'
-
-        format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
+        format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
@@ -117,13 +111,9 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # # GET /internal_order/provider/1/dispatch_order
   def dispatch_order
     policy(:internal_order_provider).dispatch_order?(@internal_order)
-    # previous_status = @internal_order.status
     respond_to do |format|
       begin
         @internal_order.send_order_by(current_user)
-        # @internal_order.status = 'provision_en_camino'
-        # @internal_order.save!
-
         message = 'La provision se ha enviado correctamente.'
 
         format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }

@@ -44,14 +44,8 @@ class InternalOrderProduct < ApplicationRecord
     return order.order_type == 'provision'
   end
 
-  # Decrementamos la cantidad de cada lot stock (proveedor)
-  def decrement_stock
-# primero buscamos solo los order_product con delivery_quantity > 0
-# obtenemos la relacion con lotes y decrementamos su reserved_quantity
-# lotes decrementamos la cantidad reservada
-
-    order_prod_lot_stocks.each(&:decrement_stock)
+  # Send products
+  def send_products
+    order_prod_lot_stocks.each(&:decrement_reserved_quantity)
   end
-
-
 end
