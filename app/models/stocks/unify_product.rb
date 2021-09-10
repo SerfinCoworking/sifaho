@@ -83,4 +83,24 @@ class UnifyProduct < ApplicationRecord
   def different_origin_product_than_target
     errors.add(:target_product_id, 'El producto destino no puede ser igual al origen') if origin_product_id == target_product_id
   end
+
+  def apply
+    origin_product.chronic_prescription_products.each { |chron_pres| chron_pres.update_column('product_id', target_product.id) }
+    origin_product.original_chronic_prescription_products.each { |orig_chron_pres| orig_chron_pres.update_column('product_id', target_product.id) }
+    origin_product.inpatient_prescription_products.each { |inp_pre| inp_pre.update_column('product_id', target_product.id) }
+    origin_product.external_order_products.each { |ext_ord| ext_ord.update_column('product_id', target_product.id) }
+    origin_product.external_order_product_templates.each { |ext_ord_tmp| ext_ord_tmp.update_column('product_id', target_product.id) }
+    origin_product.internal_order_products.each { |int_ord| int_ord.update_column('product_id', target_product.id) }
+    origin_product.internal_order_product_templates.each { |int_ord_tmp| int_ord_tmp.update_column('product_id', target_product.id) }
+    origin_product.outpatient_prescription_products.each { |out_pre_prod| out_pre_prod.update_column('product_id', target_product.id) }
+    origin_product.receipt_products.each { |rec_prod| rec_prod.update_column('product_id', target_product.id) }
+    origin_product.internal_order_product_reports.each { |int_rep| int_rep.update_column('product_id', target_product.id) }
+    origin_product.monthly_consumption_reports.each { |month_rep| month_rep.update_column('product_id', target_product.id) }
+    origin_product.patient_product_reports.each { |pat_rep| pat_rep.update_column('product_id', target_product.id) }
+    origin_product.report_product_lines.each { |rep_line| rep_line.update_column('product_id', target_product.id) }
+    origin_product.patient_product_state_reports.each { |pat_prod_rep| pat_prod_rep.update_column('product_id', target_product.id) }
+    origin_product.lots.each { |lot| lot.update_column('product_id', target_product.id) }
+    origin_product.stocks.each { |stock| stock.update_column('product_id', target_product.id) }
+    applied!
+  end
 end

@@ -1,5 +1,5 @@
 class UnifyProductsController < ApplicationController
-  before_action :set_unify_product, only: %i[show edit update destroy]
+  before_action :set_unify_product, only: %i[show edit update destroy confirm_apply apply]
 
   # GET /unify_products
   # GET /unify_products.json
@@ -72,6 +72,29 @@ class UnifyProductsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to unify_products_url, notice: 'Unificar producto se ha eliminado correctamente.' }
       format.json { head :no_content }
+    end
+  end
+
+  # GET /unify_products/1/confirm_apply
+  def confirm_apply
+    authorize @unify_product
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # PATCH /unify_products/1/apply
+  def apply
+    authorize @unify_product
+
+    respond_to do |format|
+      if @unify_product.apply
+        flash[:success] = 'Los productos se han unificado correctamente.'
+      else
+        flash[:alert] = 'Ha ocurrido un error al unificar los productos.'
+      end
+      format.html { redirect_to @unify_product }
     end
   end
 

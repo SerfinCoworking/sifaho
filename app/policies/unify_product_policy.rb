@@ -26,6 +26,14 @@ class UnifyProductPolicy < ApplicationPolicy
     update?
   end
 
+  def apply?
+    update?
+  end
+
+  def confirm_apply?
+    update?
+  end
+
   def destroy?
     user.has_any_role?(:admin)
   end

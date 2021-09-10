@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :unify_products
   resources :stocks do
     collection do
       get '/lotes', to: 'lot_stocks#index', as: :lot_stocks_index
@@ -55,6 +54,14 @@ Rails.application.routes.draw do
       get "search_by_name"
       get "search_by_name_to_order"
       get "search_by_code_to_order"
+    end
+  end
+
+  # Unify products
+  resources :unify_products do
+    member do
+      get :confirm_apply
+      patch :apply
     end
   end
 

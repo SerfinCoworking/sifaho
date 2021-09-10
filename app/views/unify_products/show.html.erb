@@ -71,6 +71,7 @@
         <% else %>
           Sin asociar
         <% end %>
+        <hr>
         <%= render 'shared/products/presence_of_product', a_product: @unify_product.origin_product %>
       </div>
       <div class="col-6">
@@ -135,10 +136,10 @@
         Editar
       <% end %>
     <% end %>
-    <% if @stock.present? && policy(@stock).show? %>
-      <%= link_to stock_path(@stock), target: :_blank, class: "btn btn-secondary" do %>
-        <%= fa_icon "eye" %>
-        Ver stock
+    <% if policy(@unify_product).apply? %>
+      <%= link_to confirm_apply_unify_product_path(@unify_product), remote: true, class: 'btn btn-success' do %>
+        <%= fa_icon 'check' %>
+        Aplicar
       <% end %>
     <% end %>
   </div>
