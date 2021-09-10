@@ -179,12 +179,10 @@
                         <% if ext_ord_prod.provider_observation.present? || ext_ord_prod.applicant_observation.present? %>
                           <table class="w-100">
                             <tr>
-                              <th>Descripción solicitud</th>
                               <th>Descripción proveedor</th>
                             </tr>
                             <tr>
                               <td><%= ext_ord_prod.provider_observation %></td>
-                              <td><%= ext_ord_prod.applicant_observation %></td>
                             </tr>
                           </table>
                         <%end%>

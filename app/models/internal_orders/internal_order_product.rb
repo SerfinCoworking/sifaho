@@ -25,6 +25,7 @@ class InternalOrderProduct < ApplicationRecord
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
   scope :ordered_products, -> { joins(:product).order('products.name DESC') }
+  scope :with_delivery_quantity, -> { where('delivery_quantity > ?', 0) }
 
   # new version
   def is_proveedor_auditoria?
@@ -45,10 +46,11 @@ class InternalOrderProduct < ApplicationRecord
 
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
-    self.order_prod_lot_stocks.each do |iopls|
-      iopls.lot_stock.decrement(iopls.quantity)
-      iopls.lot_stock.stock.create_stock_movement(order, iopls.lot_stock, iopls.quantity, false)
-    end
+# primero buscamos solo los order_product con delivery_quantity > 0
+# obtenemos la relacion con lotes y decrementamos su reserved_quantity
+# lotes decrementamos la cantidad reservada
+
+    order_prod_lot_stocks.each(&:decrement_stock)
   end
 
 
