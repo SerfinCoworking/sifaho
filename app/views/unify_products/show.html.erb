@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo unificación de productos
+        Viendo fusionado de productos
         <span class="badge badge-<%= unify_product_status_label(@unify_product) %>">
           <%= UnifyProduct.human_enum_name(:status, @unify_product.status) %>
         </span>
@@ -24,7 +24,12 @@
         <hr>
       </div>
       <div class="col-6 border-right">
-        <h4>Producto origen</h4>
+        <h4>
+          Producto origen
+          <span class="badge badge-<%= product_status_label(@unify_product.origin_product) %>">
+            <%= Product.human_enum_name(:status, @unify_product.origin_status) %>
+          </span>
+        </h4>
         <p class="border-bottom mt-2">
           <strong>Código: </strong><%= @unify_product.origin_code %>
         </p>
@@ -75,7 +80,12 @@
         <%= render 'shared/products/presence_of_product', a_product: @unify_product.origin_product %>
       </div>
       <div class="col-6">
-        <h4>Producto destino</h4>
+        <h4>
+          Producto destino
+          <span class="badge badge-<%= product_status_label(@unify_product.target_product) %>">
+            <%= Product.human_enum_name(:status, @unify_product.target_status) %>
+          </span>
+        </h4>
         <p class="border-bottom mt-2">
           <strong>Código: </strong><%= @unify_product.target_code %>
         </p>

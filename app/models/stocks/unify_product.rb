@@ -1,16 +1,16 @@
 class UnifyProduct < ApplicationRecord
   include PgSearch
   include EnumTranslation
-  enum status: { pending: 0, applied: 1 }
+  enum status: { pending: 0, merged: 1 }
 
   # Relationships
   belongs_to :origin_product, class_name: 'Product'
   belongs_to :target_product, class_name: 'Product'
 
   # Delegations
-  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term,
+  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term, :status,
            :snomed_fsn, :snomed_semantic_tag, :snomed_concept,  to: :origin_product, prefix: :origin, allow_nil: true
-  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term,
+  delegate :code, :name, :unity_name, :area_name, :description, :observation, :snomed_concept_id, :snomed_term, :status,
            :snomed_fsn, :snomed_semantic_tag, :snomed_concept,  to: :target_product, prefix: :target, allow_nil: true
 
   # Validations
@@ -101,6 +101,7 @@ class UnifyProduct < ApplicationRecord
     origin_product.patient_product_state_reports.each { |pat_prod_rep| pat_prod_rep.update_column('product_id', target_product.id) }
     origin_product.lots.each { |lot| lot.update_column('product_id', target_product.id) }
     origin_product.stocks.each { |stock| stock.update_column('product_id', target_product.id) }
-    applied!
+    merged!
+    origin_product.merged!
   end
 end

@@ -106,6 +106,10 @@ es:
         name: "Nombre"
         unity_id: "Unidad"
         area_id: "Rubro"
+        statuses:
+          active: 'Activo'
+          inactive: 'Inactivo'
+          merged: 'Fusionado'
       receipt_product:
         lot_code: "Lote"
         supply_id: "Insumo"
@@ -193,7 +197,7 @@ es:
       unify_product:
         statuses:
           pending: 'Pendiente'
-          applied: 'Aplicado'
+          merged: 'Fusionado'
       snomed_concept:
         concept_id: 'Código'
         term: 'Concepto'
