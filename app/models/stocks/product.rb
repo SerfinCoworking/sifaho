@@ -1,7 +1,7 @@
 class Product < ApplicationRecord
   include PgSearch
-
-  enum status: { activo: 0, inactivo: 1, unificado: 2 }
+  include EnumTranslation
+  enum status: { active: 0, inactive: 1, merged: 2 }
 
   # Relationships
   belongs_to :unity
@@ -40,7 +40,7 @@ class Product < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'nombre_asc' },
-    available_filters: %i[search_code search_name with_area_ids sorted_by]
+    available_filters: %i[search_code search_name for_statuses with_area_ids sorted_by]
   )
 
   # To filter records by controller params
@@ -93,6 +93,20 @@ class Product < ApplicationRecord
       ['Nombre (a-z)', 'nombre_asc'],
       ['Nombre (z-a)', 'nombre_desc']
     ]
+  end
+
+  def self.options_for_status
+    [
+      ['Activo', 'active', 'success'],
+      ['Inactivo', 'inactive', 'danger'],
+      ['Fusionado', 'merged', 'primary']
+    ]
+  end
+
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
   end
 
   scope :with_code, ->(product_code) { where('products.code = ?', product_code) }

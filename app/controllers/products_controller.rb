@@ -10,7 +10,8 @@ class ProductsController < ApplicationController
       Product,
       params[:filterrific],
       select_options: {
-        sorted_by: Product.options_for_sorted_by
+        sorted_by: Product.options_for_sorted_by,
+        for_statuses: Product.options_for_status
       },
       persistence_id: false
     ) or return

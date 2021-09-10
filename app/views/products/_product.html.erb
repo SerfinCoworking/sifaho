@@ -1,6 +1,11 @@
 <tr id="product_<%= product.id %>">
   <td><%= product.code %></td>
   <td><%= product.name %></td>
+  <td>
+    <span class="badge badge-<%= product_status_label(product) %>">
+      <%= Product.human_enum_name(:status, product.status) %>
+    </span>
+  </td>
   <td><%= product.unity_name %></td>
   <td><%= product.area_name %></td>
   <td class="text-left actions-col">
