@@ -25,6 +25,13 @@ module OrderProductLotStock
     before_update :update_reserved_quantity
     before_destroy :return_reserved_quantity
 
+    # Decrement each order prod lot stock of a product
+    def decrement_reserved_quantity
+      lot_stock.decrement_reserved(reserved_quantity)
+      lot_stock.stock.create_stock_movement(order_product.order, lot_stock, quantity, false)
+      update_column(:reserved_quantity, 0)
+    end
+
     private
 
     def lot_stock_quantity

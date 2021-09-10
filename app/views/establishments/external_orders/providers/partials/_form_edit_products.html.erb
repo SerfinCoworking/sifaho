@@ -46,11 +46,17 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', external_orders_providers_path, class: 'btn btn-light mr-2' %>
-
-    <button type='submit' class='btn btn-primary' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='accepting'>
+    
+    <button class='btn btn-primary mr-2 send-order' 
+            type="button" 
+            data-url="<%= accept_order_external_orders_provider_path(order) %>"
+            data-title="Enviando solicitud de establecimiento"
+            data-body="Hay productos que no han sido guardados aún">
+      
       <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "thumbs-up" %> Guardar y aceptar
+        <%= fa_icon "thumbs-up" %> Aceptar
       </div>
+      
       <div class="d-none" style="pointer-events: none;">
         <%= fa_icon "spinner", class: "fa-spin send-audit" %>
         Guardando...

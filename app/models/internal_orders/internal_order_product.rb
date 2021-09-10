@@ -25,7 +25,7 @@ class InternalOrderProduct < ApplicationRecord
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
 
   scope :ordered_products, -> { joins(:product).order('products.name DESC') }
-  scope :with_delivery_quantity, -> { where('delivery_quantity > ?', 0) }
+  
 
   # new version
   def is_proveedor_auditoria?
@@ -42,10 +42,5 @@ class InternalOrderProduct < ApplicationRecord
 
   def is_provision?
     return order.order_type == 'provision'
-  end
-
-  # Send products
-  def send_products
-    order_prod_lot_stocks.each(&:decrement_reserved_quantity)
   end
 end

@@ -33,6 +33,14 @@ module OrderProduct
       order
     end
 
+    # scope
+    scope :with_delivery_quantity, -> { where('delivery_quantity > ?', 0) }
+
+    # Send products
+    def send_products
+      order_prod_lot_stocks.each(&:decrement_reserved_quantity)
+    end
+
     private
 
     def fill_delivery_quantity

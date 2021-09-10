@@ -1,6 +1,7 @@
 class ExternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
+  include Order
 
   enum order_type: { provision: 0, solicitud: 1 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, proveedor_aceptado: 3,
@@ -210,9 +211,9 @@ class ExternalOrder < ApplicationRecord
 
   def return_to_proveedor_auditoria_by(a_user)
     self.proveedor_auditoria!
-    self.order_products.each do |eop|
-      eop.enable_reserved_stock
-    end
+    # self.order_products.each do |eop|
+    #   eop.enable_reserved_stock
+    # end
     self.create_notification(a_user, "retornó a auditoría")
   end
 
@@ -220,22 +221,7 @@ class ExternalOrder < ApplicationRecord
   # Reserva las cantidades y finalmente cambia el estado a aceptado
   def accept_order_by(a_user)
     self.proveedor_aceptado! # Cuando se asigna este estado, activa las validaciones correspondientes.
-    self.order_products.each do |eop|
-      eop.reserve_stock
-    end
     self.create_notification(a_user, "aceptó")
-  end
-
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    self.order_products.each do |eop|
-      eop.decrement_reserved_stock
-    end
-
-    self.sent_date = DateTime.now
-    self.save!(validate: false)
-
-    self.create_notification(a_user, "envió")
   end
 
   # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes

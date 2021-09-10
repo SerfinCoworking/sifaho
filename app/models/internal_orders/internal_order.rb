@@ -1,5 +1,6 @@
 class InternalOrder < ApplicationRecord
   include PgSearch
+  include Order
 
   enum order_type: { provision: 0, solicitud: 1 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3,
@@ -243,15 +244,7 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    self.order_products.with_delivery_quantity.each(&:send_products)
-    self.status = 'provision_en_camino'
-    self.sent_date = DateTime.now
-    self.sent_by_id = a_user.id
-    self.save
-    self.create_notification(a_user, "envió")
-  end
+  
 
   def get_statuses
     @statuses =self.class.statuses
