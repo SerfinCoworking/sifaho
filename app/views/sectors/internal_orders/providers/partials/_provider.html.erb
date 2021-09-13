@@ -58,7 +58,7 @@
         <%= fa_icon "pen" %>
       <% end %>
     <% end %>
-    <% if policy(internal_order).destroy? %>
+    <% if policy(:internal_order_provider).destroy?(internal_order) %>
       <button type="button" 
         class="btn btn-danger btn-sm delete-item"
         title="<%= t("actions.tooltip.delete") %>"
@@ -82,7 +82,7 @@
 
 
 <% content_for :modal do %>
-  <% if policy(internal_order).destroy? %>
+  <% if policy(:internal_order_provider).destroy?(internal_order) %>
     <%= render(partial: 'shared/modals/delete_confirmation') %>
   <% end %>
 

@@ -137,25 +137,16 @@
     <% end %>
     <!-- Cantidad entregada -->
     <div class="col-1 pl-1 pr-1">
-      <div class="form-group mt-1 mb-1 integer optional order_product_delivery_quantity">
-        <input class="form-control numeric integer optional delivery-quantity form-control-sm <%= 'is-invalid' if form.object.errors[:delivery_quantity].any? %>" 
-                data-tooltip="true"
-                title="Cantidad entregada"
-                data-placement="right"
-                min="1"
-                step="any"
-                value="<%= form.object.delivery_quantity if form.object.delivery_quantity.present? %>"
-                placeholder="Cant"
+      <div class="form-group mt-1 mb-1">
+        <input class="form-control form-control-sm" 
+                value="<%= form.object.delivery_quantity %>"
                 type="number"
-                <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>
-                name="order_product[delivery_quantity]">
-        <div class="invalid-feedback">
-          <% if form.object.errors[:out_of_stock].any? %>
-            <%= form.object.errors[:out_of_stock].first %>
-          <% end %>
-        </div>
+                disabled
+                name="product-delivery-quantity-no-editable">
       </div>
     </div>
+
+
   
 
     <!-- Observaciones -->

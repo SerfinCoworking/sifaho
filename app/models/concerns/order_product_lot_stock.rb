@@ -38,7 +38,7 @@ module OrderProductLotStock
       lot_stock.quantity
     end
 
-    # Quitamos lo reservado
+    # Restore reserved quantity
     def return_reserved_quantity
       lot_stock.enable_reserved(reserved_quantity)
     end

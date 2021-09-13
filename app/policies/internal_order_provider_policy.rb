@@ -36,7 +36,7 @@ class InternalOrderProviderPolicy < InternalOrderPolicy
   end
 
   def destroy?(resource)
-    if resource.proveedor_auditoria? && resource.provider_sector == user.sector
+    if (resource.provision? && resource.proveedor_auditoria?) && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
