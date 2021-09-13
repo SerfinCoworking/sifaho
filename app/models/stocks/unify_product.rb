@@ -88,9 +88,19 @@ class UnifyProduct < ApplicationRecord
     origin_product.chronic_prescription_products.each { |chron_pres| chron_pres.update_column('product_id', target_product.id) }
     origin_product.original_chronic_prescription_products.each { |orig_chron_pres| orig_chron_pres.update_column('product_id', target_product.id) }
     origin_product.inpatient_prescription_products.each { |inp_pre| inp_pre.update_column('product_id', target_product.id) }
-    origin_product.external_order_products.each { |ext_ord| ext_ord.update_column('product_id', target_product.id) }
+    origin_product.external_order_products.each do |ext_ord|
+      # Check if target product was already loaded
+      unless ext_ord.external_order.order_products.where(product_id: target_product_id).present?
+        ext_ord.update_column('product_id', target_product.id)
+      end
+    end
     origin_product.external_order_product_templates.each { |ext_ord_tmp| ext_ord_tmp.update_column('product_id', target_product.id) }
-    origin_product.internal_order_products.each { |int_ord| int_ord.update_column('product_id', target_product.id) }
+    origin_product.internal_order_products.each do |int_ord|
+      # Check if target product was already loaded
+      unless int_ord.internal_order.order_products.where(product_id: target_product_id).present?
+        int_ord.update_column('product_id', target_product.id)
+      end
+    end
     origin_product.internal_order_product_templates.each { |int_ord_tmp| int_ord_tmp.update_column('product_id', target_product.id) }
     origin_product.outpatient_prescription_products.each { |out_pre_prod| out_pre_prod.update_column('product_id', target_product.id) }
     origin_product.receipt_products.each { |rec_prod| rec_prod.update_column('product_id', target_product.id) }
