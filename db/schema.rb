@@ -289,14 +289,13 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   end
 
   create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "order_product_id"
+    t.bigint "external_order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "reserved_quantity", default: 0
+    t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
     t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
-    t.index ["order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "external_order_baks", force: :cascade do |t|
@@ -379,18 +378,16 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   end
 
   create_table "external_order_products", force: :cascade do |t|
-    t.bigint "order_id"
+    t.bigint "external_order_id"
     t.bigint "product_id"
     t.integer "request_quantity"
-    t.integer "delivery_quantity", default: 0
+    t.integer "delivery_quantity"
     t.text "provider_observation"
     t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "added_by_sector_id"
-    t.index ["added_by_sector_id"], name: "index_external_order_products_on_added_by_sector_id"
-    t.index ["order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
-    t.index ["order_id"], name: "index_external_order_products_on_order_id"
+    t.index ["external_order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
+    t.index ["external_order_id"], name: "index_external_order_products_on_external_order_id"
     t.index ["product_id"], name: "index_external_order_products_on_product_id"
   end
 
@@ -540,14 +537,13 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   end
 
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "order_product_id"
+    t.bigint "internal_order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "reserved_quantity", default: 0
+    t.index ["internal_order_product_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_product_id"
     t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
-    t.index ["order_product_id"], name: "index_int_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "internal_order_baks", force: :cascade do |t|
@@ -629,18 +625,16 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   end
 
   create_table "internal_order_products", force: :cascade do |t|
-    t.bigint "order_id"
+    t.bigint "internal_order_id"
     t.bigint "product_id"
     t.integer "request_quantity"
-    t.integer "delivery_quantity", default: 0
+    t.integer "delivery_quantity"
     t.text "provider_observation"
     t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "added_by_sector_id"
-    t.index ["added_by_sector_id"], name: "index_internal_order_products_on_added_by_sector_id"
-    t.index ["order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
-    t.index ["order_id"], name: "index_internal_order_products_on_order_id"
+    t.index ["internal_order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
+    t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"
     t.index ["product_id"], name: "index_internal_order_products_on_product_id"
   end
 
@@ -1305,7 +1299,6 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
-    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 
@@ -1357,10 +1350,8 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
     t.bigint "product_id"
     t.integer "total_quantity", default: 0
     t.integer "reserved_quantity", default: 0
-    t.bigint "snomed_concept_id"
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["sector_id"], name: "index_stocks_on_sector_id"
-    t.index ["snomed_concept_id"], name: "index_stocks_on_snomed_concept_id"
   end
 
   create_table "supplies", force: :cascade do |t|
@@ -1467,8 +1458,6 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   add_foreign_key "cities", "states"
   add_foreign_key "external_order_comments", "external_orders", column: "order_id"
   add_foreign_key "external_order_comments", "users"
-  add_foreign_key "external_order_products", "sectors", column: "added_by_sector_id"
-  add_foreign_key "internal_order_products", "sectors", column: "added_by_sector_id"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
   add_foreign_key "patient_phones", "patients"
@@ -1492,7 +1481,6 @@ ActiveRecord::Schema.define(version: 2021_09_10_132601) do
   add_foreign_key "states", "countries"
   add_foreign_key "stocks", "products"
   add_foreign_key "stocks", "sectors"
-  add_foreign_key "stocks", "snomed_concepts"
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"

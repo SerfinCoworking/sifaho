@@ -95,19 +95,21 @@
             <tbody>
               <% @external_order.order_products.joins(:product).order("name").each do |ext_ord_prod| %>
                 <tr class="<%= highlight_row(ext_ord_prod.product_id) %>">
-                  <td class="text-secondary">
+                  <td>
                     <% @stock = Stock.where(sector: current_user.sector, product: ext_ord_prod.product ).first %>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), 
+                        class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= ext_ord_prod.product_code %>
                       <% end %>
                     <% else %>
                       <%= ext_ord_prod.product_code %>
                     <% end %>
                   </td>
-                  <td class="text-secondary">
+                  <td>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), 
+                        class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= ext_ord_prod.product_name %>
                       <% end %>
                     <% else %>
