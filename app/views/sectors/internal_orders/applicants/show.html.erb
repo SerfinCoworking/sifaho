@@ -240,7 +240,7 @@
         <% end %>
       <% end %>
 
-      <% if policy(:internal_order_applicant).dispatch_order?(@internal_order) %>
+      <% if policy(:internal_order_applicant).can_send?(@internal_order) %>
         <%= link_to dispatch_order_internal_orders_applicant_path(@internal_order), 
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md mr-1' do %>

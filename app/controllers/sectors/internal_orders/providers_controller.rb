@@ -109,7 +109,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
 
   # # GET /internal_order/provider/1/dispatch_order
   def dispatch_order
-    policy(:internal_order_provider).dispatch_order?(@internal_order)
+    policy(:internal_order_provider).can_send?(@internal_order)
     respond_to do |format|
       begin
         @internal_order.send_order_by(current_user)
