@@ -1,42 +1,41 @@
 class OutpatientPrescriptionProduct < ApplicationRecord
 
-  # Relaciones
+  # Relationships
   belongs_to :outpatient_prescription, inverse_of: 'outpatient_prescription_products'
   belongs_to :product
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'OutPresProdLotStock', foreign_key: "outpatient_prescription_product_id", source: :out_pres_prod_lot_stocks, inverse_of: 'outpatient_prescription_product'
+  has_many :lot_stocks, through: :order_prod_lot_stocks
 
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "OutPresProdLotStock", foreign_key: "outpatient_prescription_product_id", source: :out_pres_prod_lot_stocks, inverse_of: 'outpatient_prescription_product'
-  has_many :lot_stocks, :through => :order_prod_lot_stocks
-
-  # Validaciones
-  validates :request_quantity, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }
-  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0 }, if: :is_pending? 
+  # Validations
+  validates :request_quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :delivery_quantity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, if: :is_pending? 
   validate :out_of_stock, if: :is_provision_dispensed?
   validate :lot_stock_sum_quantity, if: :is_provision_dispensed?
   validates_presence_of :product_id
-  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_dispensed_and_quantity_greater_than_0?
+  validates :order_prod_lot_stocks, presence: { message: 'Debe seleccionar almenos 1 lote' }, if: :is_dispensed_and_quantity_greater_than_0?
   validates_associated :order_prod_lot_stocks, if: :is_provision_dispensed?
   validate :uniqueness_product_in_the_order
   validate :order_prod_lot_stocks_any_without_stock
-  
+
+  # Nested attributes
   accepts_nested_attributes_for :product,
-    :allow_destroy => true
-
+                                allow_destroy: true
   accepts_nested_attributes_for :order_prod_lot_stocks,
-    :allow_destroy => true
+                                allow_destroy: true
 
-  # Delegaciones
+  # Delegations
   delegate :unity, to: :product
   delegate :name, to: :product, prefix: :product
   delegate :code, to: :product, prefix: :product
-  
+
   # Scopes
   scope :agency_referrals, -> (id, city_town) { includes(client: :address).where(agency_id: id, 'client.address.city_town' => city_town) }
-    
+
   # new version
   def is_pending?
     return self.outpatient_prescription.pendiente?
   end
-  
+
   def is_provision_dispensed?
     return self.outpatient_prescription.dispensada?
   end

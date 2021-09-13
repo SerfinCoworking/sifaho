@@ -1,4 +1,5 @@
 class Address < ApplicationRecord
+  # Relationships
   belongs_to :country, optional: true
   belongs_to :state, optional: true
   belongs_to :city, optional: true

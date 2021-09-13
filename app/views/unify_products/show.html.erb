@@ -1,0 +1,156 @@
+<%= render 'products/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo fusionado de productos
+        <span class="badge badge-<%= unify_product_status_label(@unify_product) %>">
+          <%= UnifyProduct.human_enum_name(:status, @unify_product.status) %>
+        </span>
+      </h5>
+    </div>
+    <%= link_to unify_products_path, class: 'btn btn-light' do %>
+      <%= fa_icon 'times' %>
+    <% end %>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <h5>Observaciones</h5>
+        <%= @unify_product.observation %>
+        <hr>
+      </div>
+      <div class="col-6 border-right">
+        <h4>
+          Producto origen
+          <span class="badge badge-<%= product_status_label(@unify_product.origin_product) %>">
+            <%= Product.human_enum_name(:status, @unify_product.origin_status) %>
+          </span>
+        </h4>
+        <p class="border-bottom mt-2">
+          <strong>Código: </strong><%= @unify_product.origin_code %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Nombre: </strong><%= @unify_product.origin_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Unidad: </strong><%= @unify_product.origin_unity_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Rubro: </strong><%= @unify_product.origin_area_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Descripción: </strong>
+          <%= @unify_product.origin_description %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Observación: </strong>
+          <%= @unify_product.origin_observation %>
+        </p>
+
+        <h5>Producto asociado SNOMED</h5>
+        <% if @unify_product.origin_snomed_concept.present? %>
+          <p class="border-bottom mt-2">
+            <strong>Código: </strong><%= @unify_product.origin_snomed_concept_id %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Concepto: </strong><%= @unify_product.origin_snomed_term %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Descripción: </strong><%= @unify_product.origin_snomed_fsn %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Categoría: </strong><%= @unify_product.origin_snomed_semantic_tag %>
+          </p>
+        <% else %>
+          Sin asociar
+        <% end %>
+        <hr>
+        <%= render 'shared/products/presence_of_product', a_product: @unify_product.origin_product %>
+      </div>
+      <div class="col-6">
+        <h4>
+          Producto destino
+          <span class="badge badge-<%= product_status_label(@unify_product.target_product) %>">
+            <%= Product.human_enum_name(:status, @unify_product.target_status) %>
+          </span>
+        </h4>
+        <p class="border-bottom mt-2">
+          <strong>Código: </strong><%= @unify_product.target_code %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Nombre: </strong><%= @unify_product.target_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Unidad: </strong><%= @unify_product.target_unity_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Rubro: </strong><%= @unify_product.target_area_name %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Descripción: </strong>
+          <%= @unify_product.target_description %>
+        </p>
+
+        <p class="border-bottom mt-2">
+          <strong>Observación: </strong>
+          <%= @unify_product.target_observation %>
+        </p>
+
+        <h5>Producto asociado SNOMED</h5>
+        <% if @unify_product.target_snomed_concept.present? %>
+          <p class="border-bottom mt-2">
+            <strong>Código: </strong><%= @unify_product.target_snomed_concept_id %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Concepto: </strong><%= @unify_product.target_snomed_term %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Descripción: </strong><%= @unify_product.target_snomed_fsn %>
+          </p>
+
+          <p class="border-bottom mt-2">
+            <strong>Categoría: </strong><%= @unify_product.target_snomed_semantic_tag %>
+          </p>
+        <% else %>
+          Sin asociar
+        <% end %>
+        <hr>
+        <%= render 'shared/products/presence_of_product', a_product: @unify_product.target_product %>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', unify_products_path, class: "btn btn-light mr-2" %>
+    <% if policy(@unify_product).edit? %>
+      <%= link_to edit_unify_product_path(@unify_product), :"data-turbolinks" => false, class: "btn btn-warning mr-2" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+    <% if policy(@unify_product).apply? %>
+      <%= link_to confirm_apply_unify_product_path(@unify_product), remote: true, class: 'btn btn-success' do %>
+        <%= fa_icon 'check' %>
+        Aplicar
+      <% end %>
+    <% end %>
+  </div>
+</div>

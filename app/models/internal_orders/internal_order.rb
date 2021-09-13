@@ -330,12 +330,12 @@ class InternalOrder < ApplicationRecord
   def set_notification_on_create
     self.create_notification(self.audited_by, "creó")
   end
-  
+
   def set_notification_on_update
     unless self.provision_entregada?
       self.create_notification(self.audited_by, "auditó")
     end
-  end  
+  end
 
   def presence_of_products_into_the_order
     if self.order_products.size == 0

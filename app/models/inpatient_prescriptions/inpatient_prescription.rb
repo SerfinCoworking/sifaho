@@ -10,27 +10,24 @@ class InpatientPrescription < ApplicationRecord
     canceled: 4
   }
 
-  # Relations
+  # Relationships
   belongs_to :patient
   belongs_to :prescribed_by, class_name: 'User', optional: true
   belongs_to :bed
-
   has_many :movements, class_name: 'InpatientPrescriptionMovement', foreign_key: 'order_id'
   has_many  :order_products, -> { only_children },
             dependent: :destroy,
             class_name: 'InpatientPrescriptionProduct',
             foreign_key: 'inpatient_prescription_id',
             inverse_of: 'order'
-
   has_many  :parent_order_products, -> { only_parents },
             dependent: :destroy,
             class_name: 'InpatientPrescriptionProduct',
             foreign_key: 'inpatient_prescription_id',
             inverse_of: 'order'
-
   has_many :products, through: :order_products
 
-  # Validaciones
+  # Validations
   validates_associated :order_products
   # validates :prescribed_by, presence: true
   validates :patient, presence: true
@@ -46,6 +43,7 @@ class InpatientPrescription < ApplicationRecord
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
 
+  # Delegations
   delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
   delegate :bedroom_name, :service_name, to: :bed, prefix: false
   delegate :name, to: :bed, prefix: :bed

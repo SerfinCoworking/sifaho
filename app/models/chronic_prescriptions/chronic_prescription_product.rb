@@ -1,38 +1,36 @@
 class ChronicPrescriptionProduct < ApplicationRecord
-  # Relaciones
+  # Relationships
   belongs_to :original_chronic_prescription_product, inverse_of: 'chronic_prescription_products', optional: true
   belongs_to :product
   belongs_to :dispensation_type
 
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: "ChronPresProdLotStock", foreign_key: "chronic_prescription_product_id", source: :chron_pres_prod_lot_stocks, inverse_of: 'chronic_prescription_product'
-  has_many :lot_stocks, :through => :order_prod_lot_stocks
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'ChronPresProdLotStock', foreign_key: 'chronic_prescription_product_id', source: :chron_pres_prod_lot_stocks, inverse_of: 'chronic_prescription_product'
+  has_many :lot_stocks, through: :order_prod_lot_stocks
 
-  # Validaciones
-  validates :delivery_quantity, :presence => true, :numericality => { :only_integer => true, :greater_than => 0 }
+  # Validations
+  validates :delivery_quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :out_of_stock, if: :is_dispensation?
   validate :lot_stock_sum_quantity, if: :is_dispensation?
   validates_presence_of :product_id
-
-  validates :order_prod_lot_stocks, :presence => {:message => "Debe seleccionar almenos 1 lote"}, if: :is_dispensation?
+  validates :order_prod_lot_stocks, presence: { message: 'Debe seleccionar almenos 1 lote' }, if: :is_dispensation?
   validates_associated :order_prod_lot_stocks, if: :is_dispensation?
   validate :uniqueness_product_in_the_order
   validate :order_prod_lot_stocks_any_without_stock, if: :is_dispensation?
   validates_presence_of :original_chronic_prescription_product, if: :is_not_dispensation?
-  
+
   accepts_nested_attributes_for :product,
-    :allow_destroy => true
-
+                                allow_destroy: true
   accepts_nested_attributes_for :order_prod_lot_stocks,
-    :allow_destroy => true
+                                allow_destroy: true
 
-  # Delegaciones
+  # Delegations
   delegate :unity_name, :name, :code, to: :product, prefix: :product
-  
+
   # custom validations
   def is_dispensation?
     return self.dispensation_type.chronic_dispensation.present? && self.dispensation_type.chronic_dispensation.pendiente?
   end
-  
+
   def is_not_dispensation?
     return !self.dispensation_type.chronic_dispensation.present?
   end
@@ -58,8 +56,8 @@ class ChronicPrescriptionProduct < ApplicationRecord
       errors.add(:out_of_stock, "Este producto no tiene el stock necesario para entregar")
     end
   end
-  
-  
+
+
   # Validacion: evitar duplicidad de productos en una misma orden
   def uniqueness_product_in_the_order
     (self.dispensation_type.chronic_prescription_products.uniq - [self]).each do |iop| 

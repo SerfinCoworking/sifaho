@@ -5,10 +5,10 @@ class Area < ApplicationRecord
   belongs_to :parent, class_name: 'Area', optional: true
   has_many :subareas, class_name: 'Area', foreign_key: :parent_id, dependent: :destroy
   has_many :products
-    
+
   # Validations
   validates_presence_of :name
-  
+
   delegate :name, to: :parent, prefix: true, allow_nil: true
 
   # Scopes

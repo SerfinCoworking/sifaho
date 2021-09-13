@@ -9,7 +9,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
   default_scope { joins(:product).order('products.name') }
 
-  # Relaciones
+  # Relationships
   has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'InPreProdLotStock',
                                    foreign_key: 'inpatient_prescription_product_id',
                                    source: :in_pre_prod_lot_stocks, inverse_of: 'inpatient_prescription_product'
@@ -22,7 +22,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
   belongs_to :parent, class_name: 'InpatientPrescriptionProduct', required: false
   has_many :children, class_name: 'InpatientPrescriptionProduct', foreign_key: :parent_id
 
-  # Validaciones
+  # Validations
   validates :dose_quantity,
             numericality: { only_integer: true, greater_than: 0, message: 'Dosis debe ser mayor a 0' },
             if: :parent?
@@ -37,7 +37,6 @@ class InpatientPrescriptionProduct < ApplicationRecord
   validate :uniqueness_parent_product_in_the_order, if: :parent?
   validate :uniqueness_child_product_in_the_order, if: :not_parent?
 
-  delegate :unity_name, :code, :name, to: :product, prefix: :product
   accepts_nested_attributes_for :product,
                                 allow_destroy: true
   accepts_nested_attributes_for :order_prod_lot_stocks,
@@ -46,6 +45,11 @@ class InpatientPrescriptionProduct < ApplicationRecord
   accepts_nested_attributes_for :children,
                                 reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
                                 allow_destroy: true
+
+  # Delegations
+  delegate :unity_name, :code, :name, to: :product, prefix: :product
+
+  # Scopes
   scope :only_parents, -> { where(parent_id: :nil) }
 
   scope :for_statuses, ->(values) do
@@ -53,6 +57,7 @@ class InpatientPrescriptionProduct < ApplicationRecord
 
     where(status: statuses.values_at(*Array(values)))
   end
+
   scope :only_children, -> { where.not(parent_id: :nil) }
 
   def decrement_reserved_stock

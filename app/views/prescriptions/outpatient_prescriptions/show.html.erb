@@ -125,18 +125,18 @@
               <% @outpatient_prescription.outpatient_prescription_products.each do |outpatient_prescription_product| %>
                 <tr class="<%= highlight_row(outpatient_prescription_product .product_id) %>">
                   <% @stock = Stock.where(sector: current_user.sector, product: outpatient_prescription_product.product ).first %>
-                  <td class="text-secondary">
+                  <td>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= outpatient_prescription_product.product_code %>
                       <% end %>
                     <% else %>
                       <%= outpatient_prescription_product.product_code %>
                     <% end %>
                   </td>
-                  <td class="text-secondary">
+                  <td>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= outpatient_prescription_product.product_name %>
                       <% end %>
                     <% else %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_18_144327) do
+ActiveRecord::Schema.define(version: 2021_09_10_132601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1029,6 +1029,7 @@ ActiveRecord::Schema.define(version: 2021_08_18_144327) do
     t.datetime "updated_at", null: false
     t.bigint "area_id"
     t.bigint "snomed_concept_id"
+    t.integer "status", default: 0
     t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["code"], name: "index_products_on_code", unique: true
     t.index ["snomed_concept_id"], name: "index_products_on_snomed_concept_id"
@@ -1308,7 +1309,6 @@ ActiveRecord::Schema.define(version: 2021_08_18_144327) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
-    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 
@@ -1408,6 +1408,17 @@ ActiveRecord::Schema.define(version: 2021_08_18_144327) do
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 
+  create_table "unify_products", force: :cascade do |t|
+    t.bigint "origin_product_id"
+    t.bigint "target_product_id"
+    t.integer "status", default: 0
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["origin_product_id"], name: "index_unify_products_on_origin_product_id"
+    t.index ["target_product_id"], name: "index_unify_products_on_target_product_id"
+  end
+
   create_table "unities", force: :cascade do |t|
     t.string "name", limit: 100
     t.integer "simela_group"
@@ -1485,5 +1496,7 @@ ActiveRecord::Schema.define(version: 2021_08_18_144327) do
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
+  add_foreign_key "unify_products", "products", column: "origin_product_id"
+  add_foreign_key "unify_products", "products", column: "target_product_id"
   add_foreign_key "users", "sectors"
 end

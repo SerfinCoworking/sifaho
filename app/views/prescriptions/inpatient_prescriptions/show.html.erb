@@ -141,18 +141,18 @@
                     <% end %>                            
                     <%= parent_pres_prod.prescribed_by.full_name %>
                   </td>
-                  <td class="text-secondary">
+                  <td>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= parent_pres_prod.product_code %>
                       <% end %>
                     <% else %>
                       <%= parent_pres_prod.product_code %>
                     <% end %>
                   </td>
-                  <td class="text-secondary">
+                  <td>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(@stock), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= parent_pres_prod.product_name %>
                       <% end %>
                     <% else %>
