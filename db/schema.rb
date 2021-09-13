@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_08_121659) do
+ActiveRecord::Schema.define(version: 2021_09_13_123647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -439,7 +439,6 @@ ActiveRecord::Schema.define(version: 2021_09_08_121659) do
     t.integer "status", default: 0
     t.bigint "audited_by_id"
     t.bigint "accepted_by_id"
-    t.bigint "sent_by_id"
     t.bigint "received_by_id"
     t.datetime "accepted_date"
     t.integer "order_type", default: 0
@@ -456,7 +455,6 @@ ActiveRecord::Schema.define(version: 2021_09_08_121659) do
     t.index ["received_by_id"], name: "index_external_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_external_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
-    t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
   end
 
@@ -690,24 +688,12 @@ ActiveRecord::Schema.define(version: 2021_09_08_121659) do
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
     t.integer "applicant_status", default: 0
-    t.bigint "audited_by_id"
-    t.bigint "sent_by_id"
-    t.bigint "received_by_id"
-    t.bigint "created_by_id"
     t.string "remit_code"
     t.integer "order_type", default: 0
     t.integer "status", default: 0
-    t.bigint "sent_request_by_id"
-    t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
-    t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
-    t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
-    t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
-    t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_internal_orders_on_remit_code", unique: true
-    t.index ["sent_by_id"], name: "index_internal_orders_on_sent_by_id"
-    t.index ["sent_request_by_id"], name: "index_internal_orders_on_sent_request_by_id"
   end
 
   create_table "laboratories", force: :cascade do |t|

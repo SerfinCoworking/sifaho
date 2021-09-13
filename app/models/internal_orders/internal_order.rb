@@ -6,46 +6,20 @@ class InternalOrder < ApplicationRecord
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3,
                  provision_entregada: 4, anulado: 5 }
 
-  # Relaciones
-  belongs_to :applicant_sector, class_name: 'Sector'
-  belongs_to :provider_sector, class_name: 'Sector'
+  # Relationships
   has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'order_id',
                             inverse_of: 'order'
   has_many :int_ord_prod_lot_stocks, through: :order_products
-  has_many :lot_stocks, through: :order_products
-  has_many :lots, through: :lot_stocks
-  has_many :products, through: :order_products
   has_many :movements, class_name: 'InternalOrderMovement'
   has_many :comments, class_name: 'InternalOrderComment', foreign_key: 'order_id'
-  # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-  ###### DEPRECATED ######
-  belongs_to :created_by, class_name: 'User', optional: true
-  belongs_to :audited_by, class_name: 'User', optional: true
-  belongs_to :sent_by, class_name: 'User', optional: true
-  belongs_to :received_by, class_name: 'User', optional: true
-  belongs_to :sent_request_by, class_name: 'User', optional: true
-  belongs_to :rejected_by, class_name: 'User', optional: true
 
-  # Validaciones
-  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  # validate :presence_of_products_into_the_order
   validates_associated :order_products
-  validates_uniqueness_of :remit_code
 
-  # Atributos anidados
+  # Nested attributes
   accepts_nested_attributes_for :order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
-
-  # Callbacks
-  before_validation :record_remit_code, on: :create
-
-  after_create :set_notification_on_create
-  after_update :set_notification_on_update
-
-  # Delegations
-  delegate :name, to: :provider_sector, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -294,23 +268,9 @@ class InternalOrder < ApplicationRecord
 
   def record_remit_code
     self.remit_code = "SE#{DateTime.now.to_s(:number)}"
-    # if self.provision?
-    #   self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
-    # elsif self.solicitud?
-    #   self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
-    # end
   end
 
-  # set created notification and create stock accordding with the internal order status
-  def set_notification_on_create
-    self.create_notification(self.audited_by, 'creó')
-  end
-
-  def set_notification_on_update
-    unless self.provision_entregada?
-      self.create_notification(self.audited_by, 'auditó')
-    end
-  end
+  
 
   def presence_of_products_into_the_order
     if self.order_products.size == 0

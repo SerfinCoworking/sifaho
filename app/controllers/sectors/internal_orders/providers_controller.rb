@@ -50,8 +50,6 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   def create
     policy(:internal_order_provider).create?
     @internal_order = InternalOrder.new(internal_order_params)
-    @internal_order.created_by = current_user
-    @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.provider_sector = current_user.sector
     @internal_order.order_type = 'provision'
@@ -61,6 +59,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       begin
         @internal_order.save!
         message = "La provisión interna de #{@internal_order.applicant_sector.name} se ha auditado correctamente."
+        @internal_order.create_notification(current_user, 'creó')
         format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
@@ -90,7 +89,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       begin
         @internal_order.update!(internal_order_params)
         message = 'La solicitud se ha editado y se encuentra en auditoria.'
-
+        @internal_order.create_notification(current_user, 'auditó')
         format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden

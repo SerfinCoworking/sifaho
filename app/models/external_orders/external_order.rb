@@ -8,37 +8,26 @@ class ExternalOrder < ApplicationRecord
                  provision_en_camino: 4, provision_entregada: 5, anulado: 6 }
 
   # Relationships
-  belongs_to :applicant_sector, class_name: 'Sector'
-  belongs_to :provider_sector, class_name: 'Sector'
   has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: 'order_id',
                             inverse_of: 'order'
   has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
-  has_many :lot_stocks, through: :order_products
-  has_many :lots, through: :lot_stocks
-  has_many :products, through: :order_products
   has_many :movements, class_name: 'ExternalOrderMovement'
   has_many :comments, class_name: 'ExternalOrderComment', foreign_key: 'order_id', dependent: :destroy
   has_one :provider_establishment, through: :provider_sector, source: 'establishment'
   has_one :applicant_establishment, through: :applicant_sector, source: 'establishment'
 
-  # Validations
-  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  # validates_associated :order_products
-  validates_uniqueness_of :remit_code
-  # validate :presence_of_products_into_the_order
 
+  # Validations
+  # validates_associated :order_products
+  # validate :presence_of_products_into_the_order
   # Nested attributes
   accepts_nested_attributes_for :order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
 
-  # Callbacks
-  before_validation :record_remit_code, on: :create
-
   # Delegations
   delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
   delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
-  delegate :name, to: :applicant_sector, prefix: true
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
