@@ -37,5 +37,13 @@ Rails.application.routes.draw do
         get :search
       end
     end
+
+    # Unify products
+    resources :unify_products do
+      member do
+        get :confirm_apply
+        patch :apply
+      end
+    end
   end
 end
