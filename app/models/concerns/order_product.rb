@@ -41,13 +41,6 @@ module OrderProduct
       order_prod_lot_stocks.each(&:decrement_reserved_quantity)
     end
 
-    private
-
-    def fill_delivery_quantity
-      # Update only delivery_quantity without callback
-      self.update_column(:delivery_quantity, (order_prod_lot_stocks.length ? order_prod_lot_stocks.sum(&:quantity) : 0))
-    end
-
     # Increment lot stock quantity
     def increment_lot_stock_to(a_sector)
       order_prod_lot_stocks.each do |opls|
@@ -64,6 +57,13 @@ module OrderProduct
         @lot_stock.increment(opls.quantity)
         @stock.create_stock_movement(order, @lot_stock, opls.quantity, true)
       end
+    end
+
+    private
+
+    # Update only delivery_quantity without callback
+    def fill_delivery_quantity
+      update_column(:delivery_quantity, (order_prod_lot_stocks.length ? order_prod_lot_stocks.sum(&:quantity) : 0))
     end
 
     # Incrementamos la cantidad de cada lot stock (orden)

@@ -28,5 +28,28 @@ module Order
       self.save
       create_notification(a_user, 'envió')
     end
+
+    # Receive order products
+    def receive_order_by(a_user)
+      order_products.with_delivery_quantity.each { |order_product| order_product.increment_lot_stock_to(applicant_sector) }
+      update_columns(date_received: DateTime.now, status: 'provision_entregada')
+      create_notification(a_user, 'recibió')
+    end
+
+    # Nullify the order
+    def nullify_by(a_user)
+      self.anulado!
+      self.create_notification(a_user, "Anuló")
+    end
+
+    # Return the i18n model name
+    def human_name
+      self.class.model_name.human
+    end
+
+    # Return order type
+    def custom_notification_url
+      solicitud? ? 'applicant' : 'provider'
+    end
   end
 end

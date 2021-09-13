@@ -143,7 +143,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     policy(:external_order_applicant).receive_order?(@external_order)
     respond_to do |format|
       begin
-        unless @external_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
         @external_order.receive_order_by(current_user)
         flash[:success] = "La #{@external_order.order_type} se ha recibido correctamente"
       rescue ArgumentError => e
@@ -163,8 +162,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def external_order_params
-    params.require(:external_order).permit(:applicant_sector_id, 
-    :sent_by_id, 
+    params.require(:external_order).permit(:applicant_sector_id,
     :order_type,
     :provider_sector_id, 
     :requested_date, 

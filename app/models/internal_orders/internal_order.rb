@@ -161,14 +161,6 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Nullify the order
-  def nullify_by(a_user)
-    self.rejected_by = a_user
-    self.status = 'anulado'
-    save!(validate: false)
-    create_notification(a_user, 'anuló')
-  end
-
   def send_request_by(a_user)
     if self.solicitud_auditoria?
       self.sent_request_by = a_user
@@ -189,18 +181,6 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order_by(a_user)
-    self.order_products.each do |iop|
-      iop.increment_lot_stock_to(self.applicant_sector)
-    end
-
-    self.date_received = DateTime.now
-    self.received_by = a_user
-    self.create_notification(a_user, "recibió")
-    self.status = "provision_entregada"
-    self.save!(validate: false)
-  end
 
   def create_notification(of_user, action_type)
     InternalOrderMovement.create(user: of_user, internal_order: self, action: action_type, sector: of_user.sector)
@@ -217,8 +197,6 @@ class InternalOrder < ApplicationRecord
       @not.save
     end
   end
-
-  
 
   def get_statuses
     @statuses =self.class.statuses
@@ -269,8 +247,6 @@ class InternalOrder < ApplicationRecord
   def record_remit_code
     self.remit_code = "SE#{DateTime.now.to_s(:number)}"
   end
-
-  
 
   def presence_of_products_into_the_order
     if self.order_products.size == 0

@@ -213,23 +213,7 @@ class ExternalOrder < ApplicationRecord
     self.create_notification(a_user, "aceptó")
   end
 
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order_by(a_user)
-    self.order_products.each do |eop|
-      eop.increment_lot_stock_to(self.applicant_sector)
-    end
-
-    self.date_received = DateTime.now
-    self.create_notification(a_user, "recibió")
-    self.status = "provision_entregada"
-    self.save!(validate: false)
-  end
-
-  # Nullify the order
-  def nullify_by(a_user)
-    self.anulado!
-    self.create_notification(a_user, "Anuló")
-  end
+  
 
   # Método para retornar pedido a estado anterior
   def return_applicant_status_by(a_user)
@@ -301,13 +285,8 @@ class ExternalOrder < ApplicationRecord
     self.applicant_sector.name+" "+self.applicant_establishment.short_name
   end
 
-  # Return the i18n model name
-  def human_name
-    self.class.model_name.human
-  end
-
   def sent_request_by_user_fullname
-    
+
     if self.solicitud? 
       movements.search_action('envio').first.user.full_name if movements.search_action('envio').first.present?
     else
@@ -317,10 +296,6 @@ class ExternalOrder < ApplicationRecord
 
   def sent_provision_by_user_fullname
     movements.search_action('envio').last.user.full_name if movements.search_action('envio').last.present?
-  end
-
-  def custom_notification_url
-    solicitud? ? 'applicant' : 'provider'
   end
 
   private
