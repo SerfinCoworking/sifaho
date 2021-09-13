@@ -27,10 +27,10 @@ $(document).on('turbolinks:load', function(e){
       if($(e.target).hasClass('provider-order')){
         const modal = "#send-confirmation";
         const title = "Enviando provisión de sector";
-        const body = "Está seguro de enviar la provisión?";
+        const body = "<p>Una vez enviada la orden, no se podrán retornar los productos a stock.</p> <h6>Desea enviar la provisión?</h6>";
 
         $(modal).find('.modal-title').text(title);
-        $(modal).find('.modal-body').text(body);
+        $(modal).find('.modal-body').html(body);
         $(modal).find('a#send-confirm-btn').attr('href', href);
         $(modal).modal('toggle');
       }else{
@@ -70,7 +70,7 @@ function initProductsEvents(){
     autoFocus: true,
     messages: {
       noResults: function(count) {
-        $(".ui-menu-item-wrapper").html("No se encontró el noombre del insumo");
+        $(".ui-menu-item-wrapper").html("No se encontró el nombre del insumo");
       }
     },
     search: function( event, ui ) {
