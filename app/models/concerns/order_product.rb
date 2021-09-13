@@ -59,6 +59,10 @@ module OrderProduct
       end
     end
 
+    def nullify_stocks
+      order_prod_lot_stocks.each(&:return_reserved_quantity)
+    end
+
     private
 
     # Update only delivery_quantity without callback

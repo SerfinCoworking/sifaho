@@ -32,15 +32,15 @@ module OrderProductLotStock
       update_column(:reserved_quantity, 0)
     end
 
+    # Restore reserved quantity
+    def return_reserved_quantity
+      lot_stock.enable_reserved(reserved_quantity)
+    end
+
     private
 
     def lot_stock_quantity
       lot_stock.quantity
-    end
-
-    # Restore reserved quantity
-    def return_reserved_quantity
-      lot_stock.enable_reserved(reserved_quantity)
     end
 
     # Igualamos lo solocitado con lo reservado

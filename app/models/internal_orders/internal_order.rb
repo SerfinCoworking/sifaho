@@ -163,7 +163,6 @@ class InternalOrder < ApplicationRecord
 
   def send_request_by(a_user)
     if self.solicitud_auditoria?
-      self.sent_request_by = a_user
       self.solicitud_enviada!
       self.create_notification(a_user, "envió")
     else

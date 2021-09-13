@@ -38,8 +38,9 @@ module Order
 
     # Nullify the order
     def nullify_by(a_user)
-      self.anulado!
-      self.create_notification(a_user, "Anuló")
+      order_products.with_delivery_quantity.each(&:nullify_stocks)
+      update_column(:status, 'anulado')
+      create_notification(a_user, 'Anuló')
     end
 
     # Return the i18n model name

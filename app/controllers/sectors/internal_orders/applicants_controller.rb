@@ -50,8 +50,6 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   def create
     policy(:internal_order_applicant).create?
     @internal_order = InternalOrder.new(internal_order_params)
-    @internal_order.created_by = current_user
-    @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.applicant_sector = current_user.sector
     @internal_order.order_type = 'solicitud'
