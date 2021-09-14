@@ -1,17 +1,8 @@
 class Establishments::ExternalOrders::ProvidersController < Establishments::ExternalOrders::ExternalOrdersController
   include FindLots
-  before_action :set_external_order, only: [
-    :show,
-    :edit,
-    :update,
-    :dispatch_order,
-    :rollback_order,
-    :accept_order,
-    :nullify_order,
-    :edit_products,
-    :destroy
-  ]
-  before_action :set_last_delivers, only: [:new, :edit, :create, :update]
+  before_action :set_external_order, only: %i[show edit update dispatch_order rollback_order accept_order nullify_order
+                                              edit_products destroy]
+  before_action :set_last_delivers, only: %i[new edit create update]
 
   # GET /external_orders/providers
   # GET /external_orders/providers.json

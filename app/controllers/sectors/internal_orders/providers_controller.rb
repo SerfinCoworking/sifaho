@@ -3,7 +3,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
 
   before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order
                                      edit_products]
-  before_action :set_sectors, only: %i[new edit create update]
+  before_action :set_sectors, :set_last_requests, only: %i[new edit create update]
 
   # GET /internal_orders/provider
   # GET /internal_orders/provider.json
@@ -23,7 +23,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/new
   def new
     policy(:internal_order_provider).new?
-    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
+
     begin
       new_from_template(params[:template], 'provision')
     rescue
@@ -37,7 +37,6 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/1/edit
   def edit
     policy(:internal_order_provider).edit?(@internal_order)
-    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
   end
 
   # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
@@ -152,6 +151,10 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     @sectors = Sector.select(:id, :name)
                      .with_establishment_id(current_user.sector.establishment_id)
                      .where.not(id: current_user.sector_id).as_json
+  end
+
+  def set_last_requests
+    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
   end
 end
 

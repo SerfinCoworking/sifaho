@@ -1,7 +1,7 @@
 class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::InternalOrderController
   before_action :set_internal_order, only: %i[show destroy edit update receive_order rollback_order dispatch_order
                                               edit_products]
-  before_action :set_sectors, only: %i[new edit create update]
+  before_action :set_sectors, :set_last_requests, only: %i[new edit create update]
 
   # GET /internal_orders/applicants
   # GET /internal_orders/applicants.json
@@ -21,7 +21,7 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /internal_orders/applicants/new_applicant
   def new
     policy(:internal_order_applicant).new?
-    @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
+
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -35,7 +35,6 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /external_orders/1/edit_receipt
   def edit
     policy(:internal_order_applicant).edit?(@internal_order)
-    @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
   end
 
   # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
@@ -59,7 +58,6 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
         flash[:info] = 'La solicitud se ha creado y se encuentra en auditoria.'
         format.html { redirect_to edit_products_internal_orders_applicant_url(@internal_order) }
       else
-        @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
         format.html { render :new }
       end
     end
@@ -133,5 +131,9 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
     @sectors = Sector.select(:id, :name)
                      .with_establishment_id(current_user.sector.establishment_id)
                      .where.not(id: current_user.sector_id).as_json
+  end
+
+  def set_last_requests
+    @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
   end
 end

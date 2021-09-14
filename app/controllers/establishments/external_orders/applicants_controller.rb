@@ -1,17 +1,7 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
-  before_action :set_external_order, only: [
-    :show,
-    :edit,
-    :update,
-    :dispatch_order,
-    :rollback_order,
-    :accept_provider,
-    :receive_order,
-    :destroy,
-    :edit_products,
-    :save_product
-  ]
-  before_action :set_last_requests, only: [:new, :edit, :create, :update]
+  before_action :set_external_order, only: %i[show edit update dispatch_order rollback_order accept_provider 
+                                              receive_order destroy edit_products save_product]
+  before_action :set_last_requests, only: %i[new edit create update]
 
   # GET /external_orders/applicants
   # GET /external_orders/applicants.json
