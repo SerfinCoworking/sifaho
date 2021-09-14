@@ -160,33 +160,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   private
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def external_order_params
-    params.require(:external_order).permit(:applicant_sector_id,
-    :order_type,
-    :provider_sector_id, 
-    :requested_date, 
-    :date_received, 
-    :observation, 
-    :remit_code,
-    order_products_attributes: [
-      :id, 
-      :product_id, 
-      :lot_stock_id,
-      :request_quantity,
-      :delivery_quantity,
-      :applicant_observation,
-      :provider_observation, 
-      :_destroy,
-      order_prod_lot_stocks_attributes: [
-        :id,
-        :quantity,
-        :lot_stock_id,
-        :_destroy
-      ]
-    ])
-  end
-
   def new_from_template(template_id, order_type)
     # Buscamos el template
     @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)

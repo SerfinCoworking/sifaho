@@ -47,4 +47,16 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
   def set_external_order
     @external_order = ExternalOrder.find(params[:id])
   end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def external_order_params
+    params.require(:external_order).permit(
+      :applicant_sector_id,
+      :order_type,
+      :provider_sector_id, 
+      :requested_date, 
+      :date_received, 
+      :observation
+    )
+  end
 end
