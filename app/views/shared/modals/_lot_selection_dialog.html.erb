@@ -9,32 +9,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-
-        <div class="mb-2">
-          <h5> Cantidad seleccionada:
-            <span id="qv-ref"></span> 
-            de 
-            <span class="badge badge-primary" id="tdelivery-ref"></span>
-          </h5>
-        </div>
-
-        <table class="table table-hover" id="table-lot-selection">
-          <thead>
-            <tr>
-              <th width="5%"></th>
-              <th>Cantidad</th>
-              <th>Código</th>
-              <th>Stock</th>
-              <th>Estado</th>
-              <th>Vencimiento</th>
-              <th width="35%">Laboratorio</th>
-            </tr>
-          </thead>
-        </table>
+      <div class="modal-body" id="lot-selection-list">
       </div>
       <div class="modal-footer text-right">
-        <button type='button' class='btn' data-dismiss='modal'>Volver</button>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Volver</button>
+        <button type='submit' class='btn btn-success btn-submit-form' form="order-prod-lot-stock-form">Guardar</button>
       </div>
     </div>
   </div>

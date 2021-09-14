@@ -40,7 +40,7 @@
       <%= link_to_add_association f, 
       :children, 
       class: 'btn btn-primary btn-md',
-      partial: "inpatient_prescriptions/partials/delivery_child_fields", 
+      partial: "prescriptions/inpatient_prescriptions/partials/delivery_child_fields", 
       render_options: {
         locals: { order: order, parent: f }
       },
@@ -72,7 +72,7 @@
       </thead>
       <tbody id="inpatient-order-product-cocoon-container-<%= f.object.id %>" class="inpatient-order-product-cocoon-container">
         <%= f.simple_fields_for :children do |child_form| %>
-          <%= render "inpatient_prescriptions/partials/delivery_child_fields", f: child_form, parent: f, order: order %>
+          <%= render "prescriptions/inpatient_prescriptions/partials/delivery_child_fields", f: child_form, parent: f, order: order %>
         <% end %>
       </tbody>
     </table>

@@ -8,6 +8,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     :rollback_order,
     :accept_order,
     :nullify_order,
+    :edit_products,
     :destroy
   ]
 
@@ -59,15 +60,11 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
     respond_to do |format|
       begin
-        if accepting?
-          @external_order.accept_order_by(current_user)
-        else
-          @external_order.proveedor_auditoria!
-          @external_order.create_notification(current_user, "creó")
-        end
-        message = accepting? ? 'La provisión se ha creado y aceptado correctamente.' : "La provisión se ha creado y se encuentra en auditoria."  
+        @external_order.proveedor_auditoria!
+        @external_order.create_notification(current_user, "creó")
+        message = 'La provisión se ha creado y se encuentra en auditoria.'
 
-        format.html { redirect_to external_orders_provider_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_provider_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -84,22 +81,16 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     policy(:external_order_provider).update?(@external_order)
     respond_to do |format|
       begin
-        if accepting?
-          @external_order.accept_order_by(current_user)
-          message = 'La provisión se ha auditado y aceptado correctamente.'
-        else
-          @external_order.status = 'proveedor_auditoria'
-          @external_order.update!(external_order_params)
-          message = 'La provisión se ha auditado y se encuentra en auditoria.'
-          @external_order.create_notification(current_user, "auditó")
-        end
+        @external_order.status = 'proveedor_auditoria'
+        @external_order.update!(external_order_params)
+        message = 'La provisión se ha auditado y se encuentra en auditoria.'
+        @external_order.create_notification(current_user, 'auditó')
 
-        format.html { redirect_to external_orders_provider_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_provider_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @external_order.status = "proveedor_auditoria"
         @external_order.order_products || @external_order.order_products.build
         @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
         format.html { render :edit }
@@ -113,9 +104,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
     respond_to do |format|
       begin
-        @external_order.status = "provision_en_camino"
         @external_order.send_order_by(current_user)
-        @external_order.save!
 
         format.html { redirect_to external_orders_provider_url(@external_order), notice: 'La provision se ha enviado correctamente.' }
       rescue ArgumentError => e
@@ -172,6 +161,11 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       flash[:success] = "#{@external_order.order_type.humanize} se ha anulado correctamente."
       format.html { redirect_to external_orders_provider_url(@external_order) }
     end
+  end
+
+  def edit_products
+    @external_order_product = @external_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
 
   # DELETE /external_orders/providers/1

@@ -1,6 +1,7 @@
 $(document).on('turbolinks:load', function(e){
-  if(!(['inpatient_movements'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
 
+  if(!(['prescriptions/inpatient_movements'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update'].includes(_PAGE.action))) ) return false;
+  
   $('#patient-dni').autocomplete({
     source: $('#patient-dni').data('autocomplete-source'),
     autoFocus: true,

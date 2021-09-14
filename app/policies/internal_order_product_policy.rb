@@ -22,4 +22,10 @@ class InternalOrderProductPolicy < ApplicationPolicy
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
     end
   end
+
+  def destroy?
+    if record.added_by_sector_id.present? && record.added_by_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+    end
+  end
 end

@@ -23,8 +23,14 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
       resource.provision? && resource.proveedor_auditoria? && resource.provider_sector == user.sector
   end
 
+  def edit_products?(resource)
+    if (resource.solicitud_enviada? || resource.proveedor_auditoria?) && resource.provider_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    end
+  end
+
   def can_send?(resource)
-    if resource.provider_sector == user.sector
+    if resource.proveedor_aceptado? && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end
   end

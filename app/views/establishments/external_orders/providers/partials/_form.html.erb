@@ -17,8 +17,8 @@
      html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
+        <div class="col-md-6 border-right">
         <% if @external_order.provision? %>
-        <div class='col-md-3'>
           <%# ESTABLECIMIENTO SOLICITANTE %>
           <%= f.input :applicant_establishment_id, as: :string,
             label: 'Establecimiento solicitante',
@@ -32,8 +32,6 @@
               size: 41
             } 
           %>
-        </div>
-        <div class='col-md-3'>
           <%# SECTOR SOLICITANTE %>        
           <%= f.input :applicant_sector_id,
             label: 'Sector solicitante',
@@ -52,8 +50,6 @@
               value: f.object.applicant_sector.present? ? f.object.applicant_sector.id : ""
             }
           %>
-        </div>
-        <div class="col-md-3">
           <%# SECTOR PROVEEDOR %>
           <%= f.input :provider_sector_id, as: :string,
             label: 'Sector proveedor',
@@ -63,7 +59,6 @@
               value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.name; else; current_user.sector_name;  end }"
             } 
           %>
-        </div>
         <% else %>
           <div class="col">
             <h5>Solicitante</h5>
@@ -75,14 +70,13 @@
           </div>
         <% end %>
         
-        <div class='col-md-3'>
           <%= f.input :observation, label: 'Observaciones', as: :text,
           :input_html => { :cols => 40  , :rows => 1 } %>
         </div>
       </div>
       
       <%# PRODUCTOS SOLICITADOS %>
-      <%= render "shared/orders/provider/table", form: f %>
+      <%#= render "shared/orders/provider/table", form: f %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
@@ -103,15 +97,6 @@
       </div>
     </button>
 
-    <button type='submit' class='btn btn-primary' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='accepting'>
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "thumbs-up" %> Guardar y aceptar
-      </div>
-      <div class="d-none" style="pointer-events: none;">
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
-        Guardando...
-      </div>
-    </button>
   </div>
 </div>
 

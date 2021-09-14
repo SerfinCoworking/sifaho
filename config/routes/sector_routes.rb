@@ -9,16 +9,19 @@ Rails.application.routes.draw do
             get :dispatch_order
             get :rollback_order
             get :receive_order
+            get :edit_products
           end
+          resources :products, except: [:index]
         end
 
         # Despachos
         resources :providers do
           member do
             get :dispatch_order
-            get :rollback_order
             get :nullify_order
+            get :edit_products
           end
+          resources :products, except: [:index]
           collection do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end

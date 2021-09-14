@@ -50,6 +50,7 @@ class ProductLotStockController < ApplicationController
       order_prod_lot_stocks_attributes: [
         :id,
         :lot_stock_id,
+        :quantity,
         :available_quantity,
         :_destroy
       ]

@@ -1,0 +1,31 @@
+<div class="editing-buttons" style="display: <%= order_product.errors.any? ? 'block' : 'none' %> ;">
+  <button class="btn btn-sm btn-outline-success" type="submit" form="<%= "ord-prod-#{order_product.id}" %>">
+    <%= fa_icon 'save', class: 'fa-fw' %>
+  </button>
+  
+  <%= link_to polymorphic_path([order_product.order.class.name.underscore.pluralize, :applicant_product], applicant_id: order_product.order_id, id: order_product.id), 
+              class: "btn btn-sm btn-outline-danger",
+              remote: true do %>
+    <%= fa_icon 'times', class: 'fa-fw' %>
+  <% end %>
+</div>
+
+<div class="enable-editing-buttons" style="display: <%= order_product.errors.any? ? 'none' : 'block' %> ;">
+  <button class="btn btn-sm btn-outline-warning enable-editing-btn" type="button">
+    <%= fa_icon 'pen', class: 'fa-fw' %>
+  </button>
+
+  <% if policy(order_product).destroy? %>
+  <button type="button" 
+    class="btn btn-sm btn-outline-danger btn-delete-confirm"
+    title="<%= t("actions.tooltip.delete") %>"
+    data-toggle="tooltip"
+    data-placement="top"
+    data-target="#delete-item" 
+    data-title="Eliminar producto"
+    data-body="Esta seguro que desea eliminar el producto <%= order_product.product.name %>?"
+    data-href="<%= polymorphic_path([order_product.order.class.name.underscore.pluralize, :applicant_product], applicant_id: order_product.order_id, id: order_product.id) %>">
+      <%= fa_icon 'trash-alt', class: 'fa-fw' %>
+  </button>
+  <% end %>
+</div>

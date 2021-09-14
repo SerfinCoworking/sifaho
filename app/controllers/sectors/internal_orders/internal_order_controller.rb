@@ -121,7 +121,8 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def internal_order_params
-    params.require(:internal_order).permit(:applicant_sector_id, 
+    params.require(:internal_order).permit(
+      :applicant_sector_id, 
       :sent_by_id, 
       :order_type,
       :provider_sector_id, 

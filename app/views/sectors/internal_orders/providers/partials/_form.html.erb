@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @internal_order.new_record? ? "Nueva provisión de sector" : "Editando provisión de sector" %>
+        <%= @internal_order.new_record? ? "Nueva solicitud de sector" : "Editando solicitud interna" %>
       </h5>
     </div>
     <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
@@ -11,79 +11,81 @@
     <% end %>
   </div>
   <div class="card-body">
-    
-    <%= simple_form_for @internal_order, 
+    <%= simple_form_for @internal_order,
                         :url => (@internal_order.new_record? ? internal_orders_providers_path : internal_orders_provider_path(@internal_order)),
-                        html: { role: 'check-modified'} do |f| %>
+                        html: { role: 'check-modified', id: 'order-form' } do |f| %>
       <%= f.error_notification %>
+
       <div class="row">
-        <div class='col-3'>
+        <div class="col-6 border-right">
+
+          <%# Sector Proveedor %>
+          <label>Sector proveedor</label>
+          <h6><%= current_user.sector_name %></h6>
+
+          <%# Sector Proveedor %>
           <%= f.input :applicant_sector_id, label: 'Sector solicitante',
             collection: @sectors.map {|s| [ s['name'], s['id'] ] },
-            selected: "#{ f.object.applicant_sector.present? ? f.object.applicant_sector.id : "" }",
+            required: true,
+            selected: f.object.applicant_sector.present? ? f.object.applicant_sector.id : "",
             :input_html => {
-              id: 'applicant-sector',
+              id: 'provider-sector',
               class: 'selectpicker-md custom-select-pick show-tick',
-              "data-width"=>"100%",
+              "data-width"=>"auto",
               "title"=>"Seleccionar sector",
-              "data-size"=>"10",
-              "data-live-search"=>true,
-              disabled: false,
-            } 
+              "data-width"=> "100%",
+              "data-live-search"=>true
+            }
           %>
+
+          <%# Observation %>
+          <%= f.label :observation, "Observaciones" %>
+          <div class="custom-input-group">
+            <%= f.input :observation, label: false, as: :text, :input_html => { :cols => 38  , :rows => 2 } %>
+          </div>
         </div>
-        <div class="col-3">
-          <%= f.input :provider_sector_id, as: :string,
-            label: 'Sector proveedor',
-            :input_html => {
-              disabled: true,
-              size: 30,
-              value: "#{if f.object.new_record?; current_user.sector_name; else; f.object.provider_sector.name; end}",
-            } 
-          %>
-        </div>
-       
-        <div class='col-4'>
-          <%= f.input :observation, label: 'Observaciones', as: :text,
-            :input_html => { :cols => 40  , :rows => 1 } %>
+        <div class="col-6" id='last-requests'>
+          <% if @last_delivers.present? %>
+          Últimas entregas de sectores
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Sector</th>
+                  <th>Productos</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @last_delivers.reverse.each do |request| %>
+                  <tr>
+                    <td><%= request.created_at.strftime('%d/%m/%y') %></td>
+                    <td><%= request.provider_sector_name %></td>
+                    <td><%= request.order_products.count %></td>
+                    <td>
+                      <%= link_to internal_orders_applicant_path(request), target: :_blank, class: 'btn btn-light btn-sm' do %>
+                        <%= fa_icon 'external-link-alt' %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            No hay entregas realizadas.
+          <% end %>
         </div>
       </div>
 
-      <%# PRODUCTOS SOLICITADOS %>
-      <%= render "shared/orders/provider/table", form: f %>
-      
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn mr-1' %>
-  
-    <button type='submit' class='btn btn-success mr-2' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='audit'>
-      
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "save" %> Guardar 
-      </div>
-      
-      <div class="d-none" style="pointer-events: none;">
-        Guardando...
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
-      </div>
+    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn btn-light mr-1' %>
 
-    </button>
-
-    <button type='submit' class='btn btn-primary' form="<%= @internal_order.new_record? ? 'new_internal_order' : 'edit_internal_order_' + @internal_order.id.to_s %>" data-value='sending'>
-      <div class="c-msg" style="pointer-events: none;">
-        <%= fa_icon "paper-plane" %> Guardar y enviar
-      </div>
-      <div class="d-none" style="pointer-events: none;">
-        Guardando...
-        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
-      </div>
+    <button type='submit' name='commit' class='btn btn-success mr-1' form='order-form' value='Guardar', data-disable-with="<i class='fa fa-spinner fa-spin'></i> Guardando">
+      <%= fa_icon "save" %> Guardar
     </button>
   </div>
 </div>
-
-<% content_for :modal do %>
-  <%= render "shared/modals/lot_selection_dialog" %>
-<% end %>

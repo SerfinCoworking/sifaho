@@ -8,7 +8,9 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     :rollback_order,
     :accept_provider,
     :receive_order,
-    :destroy
+    :destroy,
+    :edit_products,
+    :save_product
   ]
 
   # GET /external_orders/applicants
@@ -30,6 +32,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders/applicant
   def new
     authorize :external_order_applicant
+    @last_requests = current_user.sector_applicant_external_orders.order(created_at: :asc).last(10)
+
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -56,17 +60,17 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     @external_order.requested_date = DateTime.now
     @external_order.applicant_sector = current_user.sector
     @external_order.order_type = "solicitud"
-    @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
+    @external_order.status = "solicitud_auditoria"
 
     respond_to do |format|
       begin
         @external_order.save!
-        message = sending? ? "La solicitud de abastecimiento se ha creado y enviado correctamente." : "La solicitud de abastecimiento se ha creado y se encuentra en auditoría."
-        notification_type = sending? ? "creó y envió" : "creó y auditó"
+        message = 'La solicitud de abastecimiento se ha creado y se encuentra en auditoría.'
+        notification_type = 'creó y auditó'
 
         @external_order.create_notification(current_user, notification_type)
 
-        format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
+        format.html { redirect_to edit_products_external_orders_applicant_url(@external_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
@@ -76,6 +80,11 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
         format.html { render :new }
       end
     end
+  end
+
+  def edit_products
+    @external_order_product = @external_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
 
   # PATCH /external_orders/applicants/1
@@ -134,7 +143,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     policy(:external_order_applicant).receive_order?(@external_order)
     respond_to do |format|
       begin
-        unless @external_order.provision_en_camino?; raise ArgumentError, 'La provisión aún no está en camino.'; end
         @external_order.receive_order_by(current_user)
         flash[:success] = "La #{@external_order.order_type} se ha recibido correctamente"
       rescue ArgumentError => e
@@ -152,10 +160,9 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def external_order_params
-    params.require(:external_order).permit(:applicant_sector_id, 
-    :sent_by_id, 
+    params.require(:external_order).permit(:applicant_sector_id,
     :order_type,
     :provider_sector_id, 
     :requested_date, 

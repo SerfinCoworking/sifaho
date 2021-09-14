@@ -1,7 +1,10 @@
 class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::InternalOrderController
   include FindLots
 
-  before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order]
+  before_action :set_internal_order, only: %i[show destroy edit update rollback_order dispatch_order nullify_order
+                                     edit_products]
+  before_action :set_sectors, only: %i[new edit create update]
+
   # GET /internal_orders/provider
   # GET /internal_orders/provider.json
   def index
@@ -12,7 +15,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
       select_options: {
         with_status: InternalOrder.options_for_status
       },
-      persistence_id: false,
+      persistence_id: false
     ) or return
     @internal_orders = @filterrific.find.page(params[:page]).per_page(15)
   end
@@ -20,16 +23,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/new
   def new
     policy(:internal_order_provider).new?
+    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
     begin
       new_from_template(params[:template], 'provision')
     rescue
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @internal_order = InternalOrder.new
       @internal_order.order_type = 'provision'
-      @sectors = Sector
-        .select(:id, :name)
-        .with_establishment_id(current_user.sector.establishment_id)
-        .where.not(id: current_user.sector_id).as_json
       @internal_order.order_products.build
     end
   end
@@ -37,29 +37,30 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/1/edit
   def edit
     policy(:internal_order_provider).edit?(@internal_order)
-    @sectors = Sector.select(:id, :name)
-                     .with_establishment_id(current_user.sector.establishment_id)
-                     .where.not(id: current_user.sector_id).as_json
+    @last_delivers = current_user.sector_provider_internal_orders.order(created_at: :asc).last(10)
+  end
+
+  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
+  def edit_products
+    policy(:internal_order_provider).edit_products?(@internal_order)
+    @internal_order_product = @internal_order.order_products.build
+    @form_id = DateTime.now.to_s(:number)
   end
 
   def create
     policy(:internal_order_provider).create?
     @internal_order = InternalOrder.new(internal_order_params)
-    @internal_order.created_by = current_user
-    @internal_order.audited_by = current_user
     @internal_order.requested_date = DateTime.now
     @internal_order.provider_sector = current_user.sector
     @internal_order.order_type = 'provision'
-    @internal_order.status = sending? ? 'provision_en_camino' : 'proveedor_auditoria'
+    @internal_order.status = 'proveedor_auditoria'
 
     respond_to do |format|
       begin
         @internal_order.save!
-
-        @internal_order.send_order_by(current_user) if sending?
-
-        message = sending? ? "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado y enviado correctamente." :message = "La provisión interna de "+@internal_order.applicant_sector.name+" se ha auditado correctamente."
-        format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
+        message = "La provisión interna de #{@internal_order.applicant_sector.name} se ha auditado correctamente."
+        @internal_order.create_notification(current_user, 'creó')
+        format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validacion de stock debemos modificar el estado a proveedor_auditoria
         @internal_order.proveedor_auditoria!
@@ -82,17 +83,14 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     policy(:internal_order_provider).update?(@internal_order)
     previous_status = @internal_order.status
     @internal_order.audited_by = current_user
-    @internal_order.status = sending? ? "provision_en_camino" : 'proveedor_auditoria'
+    @internal_order.status = 'proveedor_auditoria'
 
     respond_to do |format|
       begin
         @internal_order.update!(internal_order_params)
-
-        @internal_order.send_order_by(current_user) if sending?
-
-        message = sending? ? 'La provision se ha enviado correctamente.' : 'La solicitud se ha editado y se encuentra en auditoria.'
-
-        format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
+        message = 'La solicitud se ha editado y se encuentra en auditoria.'
+        @internal_order.create_notification(current_user, 'auditó')
+        format.html { redirect_to edit_products_internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
@@ -111,13 +109,9 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
 
   # # GET /internal_order/provider/1/dispatch_order
   def dispatch_order
-    policy(:internal_order_provider).dispatch_order?(@internal_order)
-    previous_status = @internal_order.status
+    policy(:internal_order_provider).can_send?(@internal_order)
     respond_to do |format|
       begin
-        @internal_order.status = 'provision_en_camino'
-        @internal_order.save!
-
         @internal_order.send_order_by(current_user)
         message = 'La provision se ha enviado correctamente.'
 
@@ -126,26 +120,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
         flash[:alert] = e.message
       rescue ActiveRecord::RecordInvalid
       ensure
-        @internal_order.status = previous_status
+        # @internal_order.status = previous_status
         @sectors = Sector.select(:id, :name)
                           .with_establishment_id(current_user.sector.establishment_id)
                           .where.not(id: current_user.sector_id).as_json
         @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
         format.html { render :edit }
       end
-    end
-  end
-
-  def rollback_order
-    policy(:internal_order_provider).rollback_order?(@internal_order)
-    respond_to do |format|
-      begin
-        @internal_order.return_provider_status_by(current_user)
-        flash[:notice] = 'La '+@internal_order.order_type+' se ha retornado a un estado anterior.'
-      rescue ArgumentError => e
-        flash[:alert] = e.message
-      end
-      format.html { redirect_to internal_orders_provider_url(@internal_order) }
     end
   end
 
@@ -163,6 +144,14 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   def destroy
     policy(:internal_order_provider).destroy?(@internal_order)
     super
+  end
+
+  private
+
+  def set_sectors
+    @sectors = Sector.select(:id, :name)
+                     .with_establishment_id(current_user.sector.establishment_id)
+                     .where.not(id: current_user.sector_id).as_json
   end
 end
 

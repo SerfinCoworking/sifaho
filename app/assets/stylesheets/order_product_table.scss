@@ -11,3 +11,24 @@ table.table{
     background-color: $red-light-color;
   }
 }
+
+
+.custom-form-row{
+  transform: rotateX(0deg);
+  transition: transform 0.5s ease-in-out;
+  &:hover{
+    .col-action-btn.hidden-content{
+      max-width: 7.213125rem;
+      flex: 0 0 7.213125rem;  
+    }
+  }
+}
+
+.col-action-btn{
+  max-width: 4.715625rem;
+  flex: 0 0 4.715625rem;
+  white-space: nowrap;
+  transition: max-width 0.1s ease-out, flex 0.1s ease-out;
+  overflow: hidden;
+  box-sizing: content-box;
+}

@@ -1,101 +1,80 @@
 class ExternalOrder < ApplicationRecord
   acts_as_paranoid
   include PgSearch
+  include Order
 
   enum order_type: { provision: 0, solicitud: 1 }
-  enum status: { 
-    solicitud_auditoria: 0,
-    solicitud_enviada: 1,
-    proveedor_auditoria: 2,
-    proveedor_aceptado: 3,
-    provision_en_camino: 4,
-    provision_entregada: 5,
-    anulado: 6 
-  }
+  enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, proveedor_aceptado: 3,
+                 provision_en_camino: 4, provision_entregada: 5, anulado: 6 }
 
   # Relationships
-  belongs_to :applicant_sector, class_name: 'Sector'
-  belongs_to :provider_sector, class_name: 'Sector'
-  has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: "external_order_id", inverse_of: 'external_order'
+  has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: 'order_id',
+                            inverse_of: 'order'
   has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
-  has_many :lot_stocks, :through => :order_products
-  has_many :lots, :through => :lot_stocks
-  has_many :products, :through => :order_products 
-  has_many :movements, class_name: "ExternalOrderMovement"
-  has_many :comments, class_name: "ExternalOrderComment", foreign_key: "order_id", dependent: :destroy
-  has_one :provider_establishment, :through => :provider_sector, source: 'establishment'
-  has_one :applicant_establishment, :through => :applicant_sector, source: 'establishment'
+  has_many :movements, class_name: 'ExternalOrderMovement'
+  has_many :comments, class_name: 'ExternalOrderComment', foreign_key: 'order_id', dependent: :destroy
+  has_one :provider_establishment, through: :provider_sector, source: 'establishment'
+  has_one :applicant_establishment, through: :applicant_sector, source: 'establishment'
+
 
   # Validations
-  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validates_associated :order_products
-  validates_uniqueness_of :remit_code
-  validate :presence_of_products_into_the_order
-
+  # validates_associated :order_products
+  # validate :presence_of_products_into_the_order
   # Nested attributes
   accepts_nested_attributes_for :order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
 
-  # Callbacks
-  before_validation :record_remit_code, on: :create
+  # Delegations
+  delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
+  delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
-    available_filters: [
-      :search_code,
-      :search_applicant,
-      :search_provider,
-      :with_order_type,
-      :with_status,
-      :requested_date_since,
-      :requested_date_to,
-      :date_received_since,
-      :date_received_to,
-      :sorted_by
-    ]
+    available_filters: %i[search_code search_applicant search_provider with_order_type with_status requested_date_since
+                          requested_date_to date_received_since date_received_to sorted_by]
   )
 
   pg_search_scope :search_code,
-    against: :remit_code,
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: :remit_code,
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
-    :associated_against => { applicant_sector: :name, applicant_establishment: :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { applicant_sector: :name, applicant_establishment: :name },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_provider,
-    :associated_against => { provider_sector: :name, provider_establishment: :name },
-    :using => {:tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { provider_sector: :name, provider_establishment: :name },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
-      # Ordenamiento por fecha de creación en la BD
-      order("external_orders.created_at #{ direction }")
+      # Ordenamiento por fecha de creacion en la BD
+      order("external_orders.created_at #{direction}")
     when /^sector_/
       # Ordenamiento por nombre de sector
-      reorder("sectors.name #{ direction }").joins(:sector)
+      reorder("sectors.name #{direction}").joins(:sector)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      reorder("external_orders.status #{ direction }")
+      reorder("external_orders.status #{direction}")
     when /^tipo_/
       # Ordenamiento por nombre de estado
-      reorder("external_orders.order_type #{ direction }")
+      reorder("external_orders.order_type #{direction}")
     when /^solicitado_/
-      # Ordenamiento por la fecha de recepción
-      reorder("external_orders.requested_date #{ direction }")
+      # Ordenamiento por la fecha de recepcion
+      reorder("external_orders.requested_date #{direction}")
     when /^recibido_/
-      # Ordenamiento por la fecha de recepción
-      reorder("external_orders.date_received #{ direction }")
+      # Ordenamiento por la fecha de recepcion
+      reorder("external_orders.date_received #{direction}")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
@@ -138,8 +117,8 @@ class ExternalOrder < ApplicationRecord
   scope :with_order_type, lambda { |a_order_type|
     where('external_orders.order_type = ?', a_order_type)
   }
-  
-  # Método para establecer las opciones del select input del filtro
+
+  # Metodo para establecer las opciones del select input del filtro
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
@@ -221,9 +200,9 @@ class ExternalOrder < ApplicationRecord
 
   def return_to_proveedor_auditoria_by(a_user)
     self.proveedor_auditoria!
-    self.order_products.each do |eop|
-      eop.enable_reserved_stock
-    end
+    # self.order_products.each do |eop|
+    #   eop.enable_reserved_stock
+    # end
     self.create_notification(a_user, "retornó a auditoría")
   end
 
@@ -231,41 +210,10 @@ class ExternalOrder < ApplicationRecord
   # Reserva las cantidades y finalmente cambia el estado a aceptado
   def accept_order_by(a_user)
     self.proveedor_aceptado! # Cuando se asigna este estado, activa las validaciones correspondientes.
-    self.order_products.each do |eop|
-      eop.reserve_stock
-    end
     self.create_notification(a_user, "aceptó")
   end
 
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    self.order_products.each do |eop|
-      eop.decrement_reserved_stock
-    end
-
-    self.sent_date = DateTime.now
-    self.save!(validate: false)
-
-    self.create_notification(a_user, "envió")
-  end
-
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order_by(a_user)
-    self.order_products.each do |eop|
-      eop.increment_lot_stock_to(self.applicant_sector)
-    end
-
-    self.date_received = DateTime.now
-    self.create_notification(a_user, "recibió")
-    self.status = "provision_entregada"
-    self.save!(validate: false)
-  end
-
-  # Nullify the order
-  def nullify_by(a_user)
-    self.anulado!
-    self.create_notification(a_user, "Anuló")
-  end
+  
 
   # Método para retornar pedido a estado anterior
   def return_applicant_status_by(a_user)
@@ -337,13 +285,8 @@ class ExternalOrder < ApplicationRecord
     self.applicant_sector.name+" "+self.applicant_establishment.short_name
   end
 
-  # Return the i18n model name
-  def human_name
-    self.class.model_name.human
-  end
-
   def sent_request_by_user_fullname
-    
+
     if self.solicitud? 
       movements.search_action('envio').first.user.full_name if movements.search_action('envio').first.present?
     else
@@ -353,10 +296,6 @@ class ExternalOrder < ApplicationRecord
 
   def sent_provision_by_user_fullname
     movements.search_action('envio').last.user.full_name if movements.search_action('envio').last.present?
-  end
-
-  def custom_notification_url
-    solicitud? ? 'applicant' : 'provider'
   end
 
   private

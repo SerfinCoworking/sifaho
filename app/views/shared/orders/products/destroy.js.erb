@@ -1,0 +1,5 @@
+<%= render 'shared/flash_message' %>
+
+$('#row-ord-prod-<%= @order_product_id %>').fadeOut(300, function(e){  
+  $('#row-ord-prod-<%= @order_product_id %>').remove();
+});

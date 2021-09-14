@@ -17,16 +17,22 @@ class InternalOrderApplicantPolicy < InternalOrderPolicy
   end
 
   def edit?(resource)
-    if resource.solicitud_auditoria? && resource.applicant_sector == user.sector
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
+    return unless resource.solicitud_auditoria? && resource.applicant_sector == user.sector
+
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+  end
+
+  def edit_products?(resource)
+    return unless resource.solicitud_auditoria? && resource.applicant_sector == user.sector
+
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
   end
 
   def update?(resource)
     edit?(resource)
   end
 
-  def dispatch_order?(resource)
+  def can_send?(resource)
     if resource.solicitud_auditoria? && resource.applicant_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
     end

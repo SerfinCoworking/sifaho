@@ -9,7 +9,9 @@ Rails.application.routes.draw do
             get :dispatch_order
             get :rollback_order
             get :receive_order
+            get :edit_products
           end
+          resources :products, except: [:index]
         end
 
         # Despachos
@@ -19,10 +21,14 @@ Rails.application.routes.draw do
             get :rollback_order
             get :accept_order
             get :nullify_order
+            get :edit_products
           end
+
           collection do
             get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
           end
+
+          resources :products, except: [:index]
         end
 
         # Plantillas

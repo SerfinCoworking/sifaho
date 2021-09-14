@@ -113,7 +113,7 @@
                     <% end %>
                   </td>
                   <td>
-                    <%= int_ord_prod.unity.name %>
+                    <%= int_ord_prod.product_unity_name %>
                   </td>
                   <td>
                     <%= int_ord_prod.request_quantity %> 
@@ -178,12 +178,10 @@
                         <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
                           <table class="w-100">
                             <tr>
-                              <th>Descripción solicitud</th>
                               <th>Descripción proveedor</th>
                             </tr>
                             <tr>
                               <td><%= int_ord_prod.provider_observation %></td>
-                              <td><%= int_ord_prod.applicant_observation %></td>
                             </tr>
                           </table>
                         <%end%>
@@ -235,8 +233,17 @@
           Editar
         <% end %>
       <% end %>
+
+      <% if policy(:internal_order_provider).edit_products?(@internal_order) %>
+        <%= link_to edit_products_internal_orders_applicant_path(@internal_order),  
+          'data-disable-with' => "editar productos <i class='fa fa-spinner fa-spin'></i>".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "edit" %>
+          Editar productos
+        <% end %>
+      <% end %>
       
-      <% if policy(:internal_order_provider).dispatch_order?(@internal_order) %>
+      <% if policy(:internal_order_provider).can_send?(@internal_order) %>
         <%= link_to dispatch_order_internal_orders_provider_path(@internal_order),
           'data-disable-with' => "Enviando... <i class='fa fa-spinner fa-spin'></i>".html_safe,
           class: 'btn btn-primary btn-md' do %>
@@ -244,43 +251,12 @@
           Enviar provisión
         <% end %>
       <% end %>
-
-      <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
-        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#return-confirm">
-          <%= fa_icon "undo" %>
-          Retornar
-        </button>
-      <% end %>
       
     </div> <!-- fin botones right -->
   </div>
 </div>
 
-<% content_for :modal do %>
-  <% if policy(:internal_order_provider).rollback_order?(@internal_order) %>
-    <div class="modal" id="return-confirm">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-warning">
-            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = InternalOrder.statuses.key(@internal_order.status_before_type_cast - 1).humanize.downcase %></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Seguro que desea retornar la <%= @internal_order.order_type %> actual a <%= prev_status %>?</p>
-            <p>De esta manera podrá seguir agregando o quitando productos del pedido.</p>
-          </div>
-          <div class="modal-footer text-right">
-            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
-            <%= link_to 'Confirmar', rollback_order_internal_orders_provider_path(@internal_order), method: :get, 'data-disable-with' => "Retornando... <i class='fa fa-spinner fa-spin'></i>".html_safe, :class => 'btn btn-warning' %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
-  
-  
+<% content_for :modal do %>  
   <% if policy(:internal_order_provider).nullify_order?(@internal_order) %>
     <div class="modal fade" id="anular-confirm">
       <div class="modal-dialog">

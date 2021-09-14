@@ -100,7 +100,7 @@
       <% end %>
        
     <% elsif policy(f.object).edit_child_product? %>
-      <%= render 'inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
+      <%= render 'prescriptions/inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
     <% end %>
   </td>
 </tr>

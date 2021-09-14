@@ -1,0 +1,19 @@
+<%= render 'shared/flash_message' %>
+
+<% if policy(:external_order_applicant).edit?(@order) %>
+  <% js = escape_javascript(
+    render "shared/orders/applicant/fields", order: @order, order_product: @order_product
+  ) %>
+<% else %>
+  <% js = escape_javascript(
+    render "shared/orders/provider/fields", order: @order, order_product: @order_product
+  ) %>
+<% end %>
+
+<% if @order_product.errors.any? %>
+  $('#ord-prod-<%= @form_id %>').replaceWith("<%= js %>");
+<% else %>
+  $("#order-products-container").append("<%= js %>");
+<% end %>
+
+initProductsEvents();

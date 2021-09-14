@@ -1,39 +1,29 @@
 <div class="card mx-auto">
-  <table class="table table-hover table-sm mb-0">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Producto</th>
-        <th>Unidad</th>
-        <th>Tu stock</th>
-        <th>Solicitar</th>
-        <th>Tu observación</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="order-product-cocoon-container" data-order-status="<%= form.object.order_type %>">
-      <%= form.simple_fields_for :order_products do |form_product| %>
-        <%= render "shared/orders/applicant/fields", f: form_product %>
-      <% end %>
-    </tbody>
-    
-  </table>
+  <div class="row m-0">
+    <div class="col-1 pl-2 pr-2">Código</div>
+    <div class="col-3 pl-2 pr-2">Producto</div>
+    <div class="col-1 pl-2 pr-2">Unidad</div>
+    <div class="col-1 pl-2 pr-2">Tu stock</div>
+    <div class="col-1 pl-2 pr-2">Solicitar</div>
+    <div class="col pl-2 pr-2">Tu observación</div>
+    <div class="col-1 pl-2 pr-2"></div>
+  </div>
+  <div id="order-products-container">
+    <% order.order_products.each do |order_product_store| %>
+      <%= render "shared/orders/applicant/fields", order: order, order_product: order_product_store %>
+    <% end.presence || ( render "shared/orders/applicant/fields", order: order, order_product: order_product ) %>
+  </div>
 
-  <%= link_to_add_association form, 
-    :order_products, 
-    class: 'btn btn-primary btn-sm',
-    partial: "shared/orders/applicant/fields", 
-    data: {
-      "association-insertion-node" => "tbody#order-product-cocoon-container",
-      "association-insertion-method" => "append"} do %>
-    <%= fa_icon "plus" %>
+  <%= link_to polymorphic_path([:new, order.class.name.underscore.pluralize, :applicant_product], applicant_id: order.id), remote: true, 
+    class: 'btn btn-primary btn-sm' do %>
     Agregar producto
+    <%= fa_icon "plus" %>
   <% end %>
-  
-  <%# Si no se asigno algun producto, entonces debemos mostrar mensaje "presence" %>
-  <% if form.object.errors[:presence_of_products_into_the_order].any? %>
-    <div class="invalid-feedback d-block">
-      <%= form.object.errors[:presence_of_products_into_the_order].first %>
-    </div>
-  <% end %>
+
 </div>
+
+<% content_for :modal do %>
+  <%# if policy(:external_order_applicant).destroy?(external_order) %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <%# end %>
+<% end %>

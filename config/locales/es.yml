@@ -63,6 +63,7 @@ es:
       patient: "Paciente"
       inpatient_prescription: "Internación"
       lot: 'Lote'
+      int_ord_prod_lot_stock: 'Lote seleccionado'
     attributes:
       applicant_sector: "Sector solicitante"
       prescription:
@@ -82,6 +83,7 @@ es:
       internal_order:
         applicant_sector_id: "Sector solicitante"
         provider_sector: "Sector proveedor"
+        provider_sector_id: "Sector proveedor"
       internal_order_template:
         name: "Nombre"
         destination_sector_id: "Solicitante"
@@ -121,6 +123,8 @@ es:
       external_order_product:
         delivery_quantity: "A entregar"
         request_quantity: "Cantidad solicitada"
+        order_prod_lot_stock: 'Lotes seleccionados'
+        order_prod_lot_stocks: 'Lotes seleccionados'
       chronic_prescription_product:
         delivery_quantity: "Dosis"
         request_quantity: "Dosis mensual"
