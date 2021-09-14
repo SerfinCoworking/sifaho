@@ -181,33 +181,6 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   private
 
-  def external_order_params
-    params.require(:external_order).permit(:applicant_sector_id,
-    :sent_by_id,
-    :order_type,
-    :provider_sector_id, 
-    :requested_date, 
-    :date_received, 
-    :observation, 
-    :remit_code,
-    order_products_attributes: [
-      :id, 
-      :product_id, 
-      :lot_stock_id,
-      :request_quantity,
-      :delivery_quantity,
-      :applicant_observation,
-      :provider_observation, 
-      :_destroy,
-      order_prod_lot_stocks_attributes: [
-        :id,
-        :quantity,
-        :lot_stock_id,
-        :_destroy
-      ]
-    ])
-  end
-
   def accepting?
     return params[:commit] == "accepting"
   end
