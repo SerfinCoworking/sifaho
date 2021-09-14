@@ -31,6 +31,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   # GET /external_orders/providers
   def new
     authorize :external_order_provider
+    @last_delivers = current_user.sector_provider_external_orders.order(created_at: :asc).last(10)
     begin
       new_from_template(params[:template], 'provision')
     rescue

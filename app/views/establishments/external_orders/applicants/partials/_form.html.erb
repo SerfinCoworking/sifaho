@@ -61,9 +61,9 @@
         </div>
 
         <%# Last requests %>
-        <% if @last_requests.present? %>
-          <div class="col-6" id='last-requests'>
-            Últimas solicitudes de sectores
+        <div class="col-6" id='last-requests'>
+          <% if @last_requests.present? %>
+            Últimas solicitudes de establecimientos
             <table class="table">
               <thead>
                 <tr>
@@ -88,12 +88,11 @@
                 <% end %>
               </tbody>
             </table>
-          </div>
-        <% end %>
+          <% else %>
+            Aún no hay solicitudes realizadas
+          <% end%>
+        </div>
       </div>
-      
-      <%# INSUMOS SOLICITADOS %>
-      <%#= render "shared/orders/applicant/table", form: f %>
 
       <input name="commit" id="submit-type" type="hidden">
     <% end %>
