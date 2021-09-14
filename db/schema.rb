@@ -259,12 +259,6 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
     t.index ["original_chronic_prescription_product_id"], name: "unique_org_chron_pres_on_dispensation_types"
   end
 
-  create_table "dosage_instructions", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "establishment_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -520,16 +514,12 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
     t.datetime "updated_at", null: false
     t.bigint "prescribed_by_id"
     t.bigint "delivered_by_id"
-    t.bigint "snomed_concept_id"
-    t.bigint "dosage_instruction_id"
     t.index ["delivered_by_id"], name: "index_inpatient_prescription_products_on_delivered_by_id"
-    t.index ["dosage_instruction_id"], name: "index_inpatient_prescription_products_on_dosage_instruction_id"
     t.index ["inpatient_prescription_id", "product_id", "parent_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
     t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
     t.index ["parent_id"], name: "index_inpatient_prescription_products_on_parent_id"
     t.index ["prescribed_by_id"], name: "index_inpatient_prescription_products_on_prescribed_by_id"
     t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
-    t.index ["snomed_concept_id"], name: "index_inpatient_prescription_products_on_snomed_concept_id"
   end
 
   create_table "inpatient_prescriptions", force: :cascade do |t|
@@ -1021,6 +1011,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
     t.datetime "updated_at", null: false
     t.bigint "area_id"
     t.bigint "snomed_concept_id"
+    t.integer "status", default: 0
     t.index ["area_id"], name: "index_products_on_area_id"
     t.index ["code"], name: "index_products_on_code", unique: true
     t.index ["snomed_concept_id"], name: "index_products_on_snomed_concept_id"
@@ -1300,7 +1291,6 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
-    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 
@@ -1400,6 +1390,17 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
     t.index ["supply_id"], name: "index_supply_lots_on_supply_id"
   end
 
+  create_table "unify_products", force: :cascade do |t|
+    t.bigint "origin_product_id"
+    t.bigint "target_product_id"
+    t.integer "status", default: 0
+    t.text "observation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["origin_product_id"], name: "index_unify_products_on_origin_product_id"
+    t.index ["target_product_id"], name: "index_unify_products_on_target_product_id"
+  end
+
   create_table "unities", force: :cascade do |t|
     t.string "name", limit: 100
     t.integer "simela_group"
@@ -1450,8 +1451,6 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
   add_foreign_key "external_order_comments", "external_orders", column: "order_id"
   add_foreign_key "external_order_comments", "users"
   add_foreign_key "external_order_products", "sectors", column: "added_by_sector_id"
-  add_foreign_key "inpatient_prescription_products", "dosage_instructions"
-  add_foreign_key "inpatient_prescription_products", "snomed_concepts"
   add_foreign_key "internal_order_products", "sectors", column: "added_by_sector_id"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
@@ -1479,5 +1478,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_123647) do
   add_foreign_key "supplies", "supply_areas"
   add_foreign_key "supply_lots", "laboratories"
   add_foreign_key "supply_lots", "supplies"
+  add_foreign_key "unify_products", "products", column: "origin_product_id"
+  add_foreign_key "unify_products", "products", column: "target_product_id"
   add_foreign_key "users", "sectors"
 end
