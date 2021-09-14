@@ -19,8 +19,8 @@
       <div class="row">
         <div class="col-md-6 border-right">
           <%# Applicant sector %>
-          <label>Sector solicitante</label>
-          <h6><%= current_user.sector_name %></h6>
+          <label>Solicitante</label>
+          <h6><%= current_user.sector_and_establishment %></h6>
 
           <%# Provider establishment %>
           <%= f.input :provider_establishment_id, as: :string,

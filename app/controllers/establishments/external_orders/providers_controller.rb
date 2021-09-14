@@ -11,6 +11,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     :edit_products,
     :destroy
   ]
+  before_action :set_last_delivers, only: [:new, :edit, :create, :update]
 
   # GET /external_orders/providers
   # GET /external_orders/providers.json
@@ -31,7 +32,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   # GET /external_orders/providers
   def new
     authorize :external_order_provider
-    @last_delivers = current_user.sector_provider_external_orders.order(created_at: :asc).last(10)
+
     begin
       new_from_template(params[:template], 'provision')
     rescue
@@ -183,5 +184,9 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   def accepting?
     return params[:commit] == "accepting"
+  end
+
+  def set_last_delivers
+    @last_delivers = current_user.sector_provider_external_orders.order(created_at: :asc).last(10)
   end
 end

@@ -1,5 +1,4 @@
 class Establishments::ExternalOrders::ApplicantsController < Establishments::ExternalOrders::ExternalOrdersController
-
   before_action :set_external_order, only: [
     :show,
     :edit,
@@ -12,6 +11,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     :edit_products,
     :save_product
   ]
+  before_action :set_last_requests, only: [:new, :edit, :create, :update]
 
   # GET /external_orders/applicants
   # GET /external_orders/applicants.json
@@ -32,8 +32,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders/applicant
   def new
     authorize :external_order_applicant
-    @last_requests = current_user.sector_applicant_external_orders.order(created_at: :asc).last(10)
-
     begin
       new_from_template(params[:template], 'solicitud')
     rescue
@@ -183,5 +181,9 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   def sending?
     return params[:commit] == "sending"
+  end
+
+  def set_last_requests
+    @last_requests = current_user.sector_applicant_external_orders.order(created_at: :asc).last(10)
   end
 end

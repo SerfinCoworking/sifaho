@@ -50,25 +50,15 @@
                 value: f.object.applicant_sector.present? ? f.object.applicant_sector.id : ""
               }
             %>
-            <%# SECTOR PROVEEDOR %>
-            <%= f.input :provider_sector_id, as: :string,
-              label: 'Sector proveedor',
-              :input_html => {
-                disabled: true,
-                size: 30,
-                value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.name; else; current_user.sector_name;  end }"
-              } 
-            %>
           <% else %>
             <div class="col">
               <h5>Solicitante</h5>
               <%= @external_order.applicant_sector.name+" "+@external_order.applicant_establishment.name %>
             </div>
-            <div class="col">
-              <h5>Proveedor</h5>
-              <%= @external_order.provider_sector.name+" "+@external_order.provider_establishment.name %>
-            </div>
           <% end %>
+          <%# Provider %>
+          <label>Proveedor</label>
+          <h6><%= current_user.sector_and_establishment %></h6>
           
           <%= f.input :observation, label: 'Observaciones', as: :text,
           :input_html => { :cols => 40  , :rows => 2 } %>
