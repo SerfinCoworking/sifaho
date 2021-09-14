@@ -1,5 +1,4 @@
 class ExtOrdProdLotStock < ApplicationRecord
-
   include OrderProductLotStock
 
   belongs_to :order_product, inverse_of: 'order_prod_lot_stocks', class_name: 'ExternalOrderProduct'

@@ -1,0 +1,141 @@
+
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @unify_product.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@unify_product.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @unify_product.new_record? ? "Unificar" : "Editando unificación de" %> producto
+      </h5>
+    </div>
+    <%= link_to :back, class: @unify_product.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <%= simple_form_for @unify_product, html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class="row">
+        <div class="col-12">
+          <%= f.input :observation, label: 'Observaciones' %>
+        </div>
+        <div class="col-6 border-right nested-fields">
+          <label>Producto origen</label>
+          <%# ORIGIN PRODUCT CODE %>
+          <div class="custom-input-group">
+            <div class="form-group fake optional products_product_id_fake">
+              <input type="text" 
+              name="<%="product_code_fake-#{f.object.id}"%>" 
+              value="<%= f.object.origin_product.present? ? f.object.origin_product.code : '' %>"
+              class="form-control fake optional product-code input-sm <%= ("is-invalid" if (f.object.errors[:origin_product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.origin_product_id.present? && (!f.object.errors[:origin_product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+              data-autocomplete-source="<%= search_by_code_products_path %>"
+              size="6"
+              autocomplete="off" 
+              placeholder="Código">
+              <div class="invalid-feedback">
+                <% if f.object.errors[:origin_product_id].any? %>
+                  Producto <%= f.object.errors[:origin_product_id].first %>
+                <% elsif f.object.errors[:uniqueness_product_in_the_order].any? %>
+                  <%= f.object.errors[:uniqueness_product_in_the_order].first %>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+
+          <%# ORIGIN PRODUCT NAME %>
+          <div class="custom-input-group">
+            <div class="form-group fake optional products_product_id_fake">
+              <input type="text" 
+              name="<%="product_name_fake-#{f.object.id}"%>"
+              value="<%= f.object.origin_product.present? ? f.object.origin_product.name : '' %>"
+              class="form-control fake optional product-name input-sm <%= ("is-invalid" if (f.object.errors[:origin_product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.origin_product_id.present? && (!f.object.errors[:origin_product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+              data-autocomplete-source="<%= search_by_name_products_path %>"
+              size="45" 
+              autocomplete="off" 
+              placeholder="Nombre">
+              <% if f.object.errors[:origin_product_id].first %>
+                <div id="product_id_fake" class="invalid-feedback">
+                  Producto <%= f.object.errors[:origin_product_id].first %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+
+          <%# ORIGIN PRODUCT ID %>
+          <%= f.input :origin_product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
+            value: "#{ if f.object.origin_product_id.present?; f.object.origin_product_id; end }" %>
+        </div>
+
+        <div class="col-6 nested-fields">
+          <label>Producto destino</label>
+          <%# TARGET PRODUCT CODE %>
+          <div class="custom-input-group">
+            <div class="form-group fake optional products_product_id_fake">
+              <input type="text" 
+              name="<%="product_code_fake-#{f.object.id}"%>" 
+              value="<%= f.object.target_product.present? ? f.object.target_product.code : '' %>"
+              class="form-control fake optional product-code input-sm <%= ("is-invalid" if (f.object.errors[:target_product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.target_product_id.present? && (!f.object.errors[:target_product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+              data-autocomplete-source="<%= search_by_code_products_path %>"
+              size="6"
+              autocomplete="off" 
+              placeholder="Código">
+              <div class="invalid-feedback">
+                <% if f.object.errors[:target_product_id].any? %>
+                  Producto <%= f.object.errors[:target_product_id].first %>
+                <% elsif f.object.errors[:uniqueness_product_in_the_order].any? %>
+                  <%= f.object.errors[:uniqueness_product_in_the_order].first %>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+
+          <%# TARGET PRODUCT NAME %>
+          <div class="custom-input-group">
+            <div class="form-group fake optional products_product_id_fake">
+              <input type="text" 
+              name="<%="product_name_fake-#{f.object.id}"%>"
+              value="<%= f.object.target_product.present? ? f.object.target_product.name : '' %>"
+              class="form-control fake optional product-name input-sm <%= ("is-invalid" if (f.object.errors[:target_product_id].any? || f.object.errors[:uniqueness_product_in_the_order].any?) ) %> <%= ("is-valid" if f.object.target_product_id.present? && (!f.object.errors[:target_product_id].any? || !f.object.errors[:uniqueness_product_in_the_order].any?) ) %>"
+              data-autocomplete-source="<%= search_by_name_products_path %>"
+              size="45" 
+              autocomplete="off" 
+              placeholder="Nombre">
+              <% if f.object.errors[:target_product_id].first %>
+                <div id="product_id_fake" class="invalid-feedback">
+                  Producto <%= f.object.errors[:target_product_id].first %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="with-loading">
+              <%= fa_icon 'spinner', class: "fa-spin"%>
+            </div>
+          </div>
+
+          <%# TARGET PRODUCT ID %>
+          <%= f.input :target_product_id, :as => :hidden, :error => false, :input_html =>  { class: "product-id" },
+            value: "#{ if f.object.target_product_id.present?; f.object.target_product_id; end }" %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', unify_products_path, class: 'btn btn-light mr-2' %>
+    <button type='submit' name='commit' class='btn btn-success' form="<%= @unify_product.new_record? ? 'new_unify_product' : 'edit_unify_product_' + @unify_product.id.to_s %>">
+      <%= fa_icon 'save' %> Guardar
+    </button>
+  </div>
+</div>

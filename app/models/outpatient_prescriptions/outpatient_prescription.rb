@@ -1,33 +1,33 @@
 class OutpatientPrescription < ApplicationRecord
   include PgSearch
 
-  # Estados
+  # Statuses
   enum status: { pendiente: 0, dispensada: 1, vencida: 2 }
 
-  # Relaciones
+  # Relationships
   belongs_to :professional
   belongs_to :patient
   belongs_to :provider_sector, class_name: 'Sector', optional: true
   belongs_to :establishment
 
   has_many :outpatient_prescription_products, dependent: :destroy
-
-  has_many :products,:through => :outpatient_prescription_products
-  has_many :movements, class_name: "OutpatientPrescriptionMovement"
+  has_many :products, through: :outpatient_prescription_products
+  has_many :movements, class_name: 'OutpatientPrescriptionMovement'
   has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-  # Validaciones
+  # Validations
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
   validates_associated :outpatient_prescription_products
   validates_uniqueness_of :remit_code
   validate :presence_of_products_into_the_order
   validate :date_prescribed_in_range
 
-  # Atributos anidados
+  # Nested attributes
   accepts_nested_attributes_for :outpatient_prescription_products,
-    :allow_destroy => true
+                                allow_destroy: true
 
-  delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient
+  # Delegations
+  delegate :fullname, :last_name, :dni, :age_string, to: :patient, prefix: :patient, allow_nil: true
   delegate :qualifications, :fullname, to: :professional, prefix: :professional
 
   filterrific(
@@ -46,52 +46,52 @@ class OutpatientPrescription < ApplicationRecord
   # SCOPES #--------------------------------------------------------------------
 
   pg_search_scope :search_by_remit_code,
-    against: [ :remit_code ],
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: [ :remit_code ],
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_by_professional,
-    :associated_against => { professional: [ :last_name, :first_name ] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { professional: %i[last_name first_name] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_by_patient,
-    :associated_against => { patient: [ :last_name, :first_name, :dni ] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { patient: %i[last_name first_name dni] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^updated_at_/s
-      # Ordenamiento por fecha de modificación en la BD
-      reorder("outpatient_prescriptions.updated_at #{ direction }")
+      # Ordenamiento por fecha de modificacion en la BD
+      reorder("outpatient_prescriptions.updated_at #{direction}")
     when /^created_at_/s
-      # Ordenamiento por fecha de creación en la BD
-      reorder("outpatient_prescriptions.created_at #{ direction }")
+      # Ordenamiento por fecha de creacion en la BD
+      reorder("outpatient_prescriptions.created_at #{direction}")
     when /^medico_/
       # Ordenamiento por nombre de droga
-      reorder("LOWER(professionals.last_name) #{ direction }").joins(:professional)
+      reorder("LOWER(professionals.last_name) #{direction}").joins(:professional)
     when /^paciente_/
       # Ordenamiento por marca de medicamento
-      reorder("LOWER(patients.last_name) #{ direction }").joins(:patient)
+      reorder("LOWER(patients.last_name) #{direction}").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      reorder("outpatient_prescriptions.status #{ direction }")
+      reorder("outpatient_prescriptions.status #{direction}")
     when /^recetada_/
-      # Ordenamiento por la fecha de recepción
-      reorder("outpatient_prescriptions.date_prescribed #{ direction }")
+      # Ordenamiento por la fecha de recepcion
+      reorder("outpatient_prescriptions.date_prescribed #{direction}")
     when /^creado_/
-      # Ordenamiento por la fecha de recepción
-      reorder("outpatient_prescriptions.created_at #{ direction }")
+      # Ordenamiento por la fecha de recepcion
+      reorder("outpatient_prescriptions.created_at #{direction}")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
-  # Método para establecer las opciones del select sorted_by
+  # Metodo para establecer las opciones del select sorted_by
   # Es llamado por el controlador como parte de `initialize_filterrific`.
   def self.options_for_sorted_by
     [
@@ -118,7 +118,7 @@ class OutpatientPrescription < ApplicationRecord
       ['Dispensada', 'dispensada', 'success'],
       ['Vencida', 'vencida', 'danger']
     ]
-  end 
+  end
 
   # Prescripciones prescritas desde una fecha
   scope :date_prescribed_since, lambda { |reference_time|
@@ -147,8 +147,7 @@ class OutpatientPrescription < ApplicationRecord
     where(patient_id: [*an_id])
   }
 
-
-  # Métodos públicos #----------------------------------------------------------
+  # Metodos públicos #----------------------------------------------------------
   def sum_to?(a_sector)
     if self.dispensada?
       return true unless self.provider_sector == a_sector

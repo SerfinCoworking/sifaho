@@ -1,7 +1,7 @@
 class ExternalOrderMovement < ApplicationRecord
   include PgSearch
 
-  # Relations
+  # Relationships
   belongs_to :user
   belongs_to :external_order
   belongs_to :sector
@@ -10,6 +10,6 @@ class ExternalOrderMovement < ApplicationRecord
   scope :by_action, ->(action_string) { where('action LIKE ?', action_string) }
 
   pg_search_scope :search_action,
-    against: :action,
-    :ignoring => :accents # Ignorar tildes.
+                  against: :action,
+                  ignoring: :accents # Ignorar tildes.
 end

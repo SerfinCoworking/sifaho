@@ -1,11 +1,13 @@
 class PermissionRequest < ApplicationRecord
   include PgSearch
-  
+
   enum status: { nueva: 0, terminada: 1, rechazada: 2 }
 
+  # Relationships
   belongs_to :user
   has_one :profile, through: :user
 
+  # Validations
   validates_presence_of :user, :establishment, :sector, :role
 
   filterrific(

@@ -1,7 +1,5 @@
 class ExternalOrderProduct < ApplicationRecord
 
-  
-  
   # Relationships
   belongs_to :order, class_name: 'ExternalOrder', inverse_of: 'order_products'
   belongs_to :added_by_sector, class_name: 'Sector'

@@ -1,4 +1,5 @@
 class StockQuantityReport < ApplicationRecord
+  # Relationships
   belongs_to :created_by, class_name: 'User'
   belongs_to :sector
   has_many :stock_report_areas

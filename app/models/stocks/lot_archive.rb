@@ -1,22 +1,25 @@
 class LotArchive < ApplicationRecord
+  enum status: { archivado: 0, retornado: 1 }
+
+  # Relationships
   belongs_to :user
   belongs_to :returned_by, class_name: 'User', optional: true
   belongs_to :lot_stock
 
-  enum status: { archivado: 0, retornado: 1 }
-
-  validates :quantity, 
-    presence: true, 
-    numericality: { only_integer: true, greater_than: 0}
+  # Validations
+  validates :quantity,
+            presence: true,
+            numericality: { only_integer: true, greater_than: 0 }
   validates_presence_of :observation
 
+  # Callbacks
   after_create :decrement_lot_stock
 
   def decrement_lot_stock
     self.lot_stock.increment_archived(self.quantity)
     self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false)
   end
-  
+
   def return_by(a_user)
     self.returned_by = a_user
     self.lot_stock.decrement_archived(self.quantity)

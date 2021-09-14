@@ -62,6 +62,7 @@ es:
       bed: "Cama"
       patient: "Paciente"
       inpatient_prescription: "Internación"
+      lot: 'Lote'
       int_ord_prod_lot_stock: 'Lote seleccionado'
     attributes:
       applicant_sector: "Sector solicitante"
@@ -107,10 +108,15 @@ es:
         name: "Nombre"
         unity_id: "Unidad"
         area_id: "Rubro"
+        statuses:
+          active: 'Activo'
+          inactive: 'Inactivo'
+          merged: 'Fusionado'
       receipt_product:
         lot_code: "Lote"
         supply_id: "Insumo"
         expiry_date: "Fecha vencimiento"
+        lot: 'Lote'
       internal_order_product:
         delivery_quantity: "A entregar"
         request_quantity: "Cantidad solicitada"
@@ -192,6 +198,10 @@ es:
         statuses:
           pending: 'Pendiente'
           finished: 'Terminada'
+      unify_product:
+        statuses:
+          pending: 'Pendiente'
+          merged: 'Fusionado'
       snomed_concept:
         concept_id: 'Código'
         term: 'Concepto'

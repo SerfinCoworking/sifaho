@@ -94,6 +94,9 @@
     td, th a{ 
       color: $font-main-in-light;
     }
+    td .btn-link{
+      color: $font-main-in-light;
+    }
   }
 
   .pagination .page-item .page-link{

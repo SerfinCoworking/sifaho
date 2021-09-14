@@ -7,6 +7,7 @@ class PatientProductStateReport < ApplicationRecord
 
   # Delegations
   delegate :code, :name, to: :product, prefix: :product
+  delegate :patient_dni, :patient_fullname, to: :order, prefix: true, allow_nil: true
 
   # Validations
   validates_presence_of :since_date, :to_date, :created_by

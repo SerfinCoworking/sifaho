@@ -26,7 +26,6 @@ class InternalOrderProduct < ApplicationRecord
 
   scope :ordered_products, -> { joins(:product).order('products.name DESC') }
   
-
   # new version
   def is_proveedor_auditoria?
     return order.proveedor_auditoria?

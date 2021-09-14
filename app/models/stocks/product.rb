@@ -1,13 +1,33 @@
 class Product < ApplicationRecord
   include PgSearch
+  include EnumTranslation
+  enum status: { active: 0, inactive: 1, merged: 2 }
 
-  # Relations
+  # Relationships
   belongs_to :unity
   belongs_to :area
   belongs_to :snomed_concept, optional: true, counter_cache: :products_count
   has_many :stocks, dependent: :destroy
   has_many :external_order_product
   has_many :patient_product_state_reports
+  has_one :origin_unify, class_name: 'UnifyProduct', foreign_key: 'origin_product_id'
+  has_one :target_unify, class_name: 'UnifyProduct', foreign_key: 'target_product_id'
+  has_many :chronic_prescription_products
+  has_many :original_chronic_prescription_products
+  has_many :inpatient_prescription_products
+  has_many :external_order_products
+  has_many :external_order_product_templates
+  has_many :internal_order_products
+  has_many :internal_order_product_templates
+  has_many :outpatient_prescription_products
+  has_many :receipt_products
+  has_many :internal_order_product_reports
+  has_many :monthly_consumption_reports
+  has_many :patient_product_reports
+  has_many :report_product_lines
+  has_many :patient_product_state_reports
+  has_many :lots
+  has_many :stocks
 
   # Validations
   validates_presence_of :name, :code, :area_id, :unity_id
@@ -20,12 +40,7 @@ class Product < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'nombre_asc' },
-    available_filters: [
-      :search_code,
-      :search_name,
-      :with_area_ids,
-      :sorted_by
-    ]
+    available_filters: %i[search_code search_name for_statuses with_area_ids sorted_by]
   )
 
   # To filter records by controller params
@@ -78,6 +93,20 @@ class Product < ApplicationRecord
       ['Nombre (a-z)', 'nombre_asc'],
       ['Nombre (z-a)', 'nombre_desc']
     ]
+  end
+
+  def self.options_for_status
+    [
+      ['Activo', 'active', 'success'],
+      ['Inactivo', 'inactive', 'danger'],
+      ['Fusionado', 'merged', 'primary']
+    ]
+  end
+
+  scope :for_statuses, ->(values) do
+    return all if values.blank?
+
+    where(status: statuses.values_at(*Array(values)))
   end
 
   scope :with_code, ->(product_code) { where('products.code = ?', product_code) }

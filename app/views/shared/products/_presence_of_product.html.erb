@@ -1,0 +1,17 @@
+<h5>Presencias del producto en:</h5>
+<p class="mt-3">Recetas crónicas: <%= a_product.original_chronic_prescription_products.count %></p>
+<p>Dispensaciones de recetas crónicas: <%= a_product.chronic_prescription_products.count %></p>
+<p>Recetas internación: <%= a_product.inpatient_prescription_products.count %></p>
+<p>Recetas ambulatorias: <%= a_product.outpatient_prescription_products.count %></p>
+<p>Pedidos de establecimientos: <%= a_product.external_order_products.count %></p>
+<p>Plantillas de establecimientos: <%= a_product.external_order_product_templates.count %></p>
+<p>Pedidos de sectores: <%= a_product.internal_order_products.count %></p>
+<p>Plantillas de sectores: <%= a_product.internal_order_product_templates.count %></p>
+<p>Recibos: <%= a_product.receipt_products.count %></p>
+<p>Reportes de pedidos de sector: <%= a_product.internal_order_product_reports.count %></p>
+<p>Reportes de consumo mensual: <%= a_product.monthly_consumption_reports.count %></p>
+<p>Reportes de producto por paciente: <%= a_product.patient_product_reports.count %></p>
+<p>Reportes: <%= a_product.report_product_lines.count %></p>
+<p>Reportes de provincia por paciente: <%= a_product.patient_product_state_reports.count %></p>
+<p>Lotes: <%= a_product.lots.count %></p>
+<p>Stocks: <%= a_product.stocks.count %></p>

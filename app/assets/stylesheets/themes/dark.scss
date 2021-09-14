@@ -105,10 +105,31 @@
     td, th a{ 
       color: $font-main-in-dark;
     }
+    td .btn-link{
+      color: $font-main-in-dark;
+    }
   }
 
   .pagination .page-item .page-link{
       color: $font-main-in-dark;
+  }
+
+  .custom-table-products-collapsable{
+    tr{
+      &:hover{
+        background-color: $bg-light-in-dark;
+      }
+      &.active{
+        background-color: $bg-light-in-dark;
+      }
+      &.sub-active{
+        background-color: rgba(190, 229, 235, 0.4);
+      }
+    }
+  }
+
+  .bg-light{
+    background-color: $bg-light-in-dark!important;
   }
 
   .custom-form-row:hover{

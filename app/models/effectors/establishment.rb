@@ -1,7 +1,7 @@
 class Establishment < ApplicationRecord
   include PgSearch
 
-  # Relaciones
+  # Relationships
   has_many :sectors
   has_many :users, :through => :sectors
   has_many :prescriptions
@@ -18,13 +18,13 @@ class Establishment < ApplicationRecord
   validates :name, presence: true
   validates :short_name, presence: true
   validates :sanitary_zone_id, presence: true
-  validates :cuie, presence: true, length: { is: 6 }, uniqueness: true
+  validates :cuie, allow_blank: true, length: { is: 6 }, uniqueness: true
   validates :establishment_type_id, presence: true
   validates :siisa,
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
   validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
-  
+
   # SCOPES #--------------------------------------------------------------------
   pg_search_scope :search_cuie,
     against: :cuie,
@@ -32,7 +32,7 @@ class Establishment < ApplicationRecord
       :tsearch => { :prefix => true } # Buscar coincidencia desde las primeras letras.
     },
     :ignoring => :accents # Ignorar tildes.
-  
+
   pg_search_scope :search_name,
     against: :name,
     :using => {

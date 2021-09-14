@@ -1,5 +1,5 @@
 class InpatientMovement < ApplicationRecord
-  
+
   # Relationships
   belongs_to :bed
   has_one :bedroom, through: :bed
@@ -20,7 +20,7 @@ class InpatientMovement < ApplicationRecord
 
   # Callbacks
   before_create :apply_movement
-  
+
   # Scopes
   scope :establishment, -> (establishment_id) {
     left_joins(:establishment).where("establishments.id = ?" , establishment_id)

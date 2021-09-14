@@ -46,8 +46,7 @@
           <strong>En stock: </strong>
           <%= @stock_quantity %>
         </p>
-      </div>
-      <div class="col-6">
+        
         <h5>Producto asociado SNOMED</h5>
         <% if @product.snomed_concept.present? %>
           <p class="border-bottom mt-2">
@@ -68,6 +67,9 @@
         <% else %>
           Sin asociar
         <% end %>
+      </div>
+      <div class="col-6">
+        <%= render 'shared/products/presence_of_product', a_product: @product %>
       </div>
     </div>
   </div>

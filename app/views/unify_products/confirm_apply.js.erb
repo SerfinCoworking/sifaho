@@ -1,0 +1,22 @@
+// Style modal
+$('#dialog .modal-header').addClass('bg-warning');
+$('#dialog .modal-title').html("<i class='fa fa-check'></i>  Confirmar unificación de producto");
+
+// Render the edit form
+$('#dialog .modal-body').html(
+  'Está seguro de que desea unificar el producto <%= @unify_product.origin_name %> con el producto <%= @unify_product.target_name %>?'
+);
+
+// Add form button
+$('#dialog .modal-footer').html(
+  "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'>Volver</button>"+
+  "<a data-method='patch' href='<%= apply_unify_product_path(@unify_product) %>' class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>"
+);
+
+// Show the dynamic dialog
+$('#dialog').modal("show");
+
+// Remove style
+$('#dialog').on('hidden.bs.modal', function () {
+  $('#dialog .modal-header').removeClass('bg-danger text-white');
+});

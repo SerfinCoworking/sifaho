@@ -4,14 +4,14 @@ class Lot < ApplicationRecord
 
   enum status: { vigente: 0, por_vencer: 1, vencido: 2 }
 
-  #callback
-  after_validation :update_status
-
-  # Relations
+  # Relationships
   belongs_to :product
   belongs_to :laboratory
   belongs_to :provenance, class_name: 'LotProvenance', counter_cache: :lots_count
   has_many :lot_stocks
+
+  # Callbacks
+  after_validation :update_status
 
   # Validations
   validates :product,
