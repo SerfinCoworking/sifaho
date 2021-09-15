@@ -60,7 +60,7 @@
                 <% @last_delivers.reverse.each do |request| %>
                   <tr>
                     <td><%= request.created_at.strftime('%d/%m/%y') %></td>
-                    <td><%= request.provider_sector_name %></td>
+                    <td><%= request.applicant_sector_name %></td>
                     <td><%= request.order_products.count %></td>
                     <td>
                       <%= link_to internal_orders_applicant_path(request), target: :_blank, class: 'btn btn-light btn-sm' do %>

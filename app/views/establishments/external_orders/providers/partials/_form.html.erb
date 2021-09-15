@@ -81,7 +81,7 @@
                 <% @last_delivers.reverse.each do |deliver| %>
                   <tr>
                     <td><%= deliver.created_at.strftime('%d/%m/%y') %></td>
-                    <td><%= deliver.provider_sector_and_establishment %></td>
+                    <td><%= deliver.applicant_sector_and_establishment %></td>
                     <td><%= deliver.order_products.count %></td>
                     <td>
                       <%= link_to polymorphic_path(['external_orders', deliver.custom_notification_url], id: deliver), target: :_blank, class: 'btn btn-light btn-sm' do %>
