@@ -1,16 +1,8 @@
 class Establishments::ExternalOrders::ProvidersController < Establishments::ExternalOrders::ExternalOrdersController
   include FindLots
-  before_action :set_external_order, only: [
-    :show,
-    :edit,
-    :update,
-    :dispatch_order,
-    :rollback_order,
-    :accept_order,
-    :nullify_order,
-    :edit_products,
-    :destroy
-  ]
+  before_action :set_external_order, only: %i[show edit update dispatch_order rollback_order accept_order nullify_order
+                                              edit_products destroy]
+  before_action :set_last_delivers, only: %i[new edit create update]
 
   # GET /external_orders/providers
   # GET /external_orders/providers.json
@@ -31,6 +23,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   # GET /external_orders/providers
   def new
     authorize :external_order_provider
+
     begin
       new_from_template(params[:template], 'provision')
     rescue
@@ -179,5 +172,9 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   def accepting?
     params[:commit] == 'accepting'
+  end
+
+  def set_last_delivers
+    @last_delivers = current_user.sector_provider_external_orders.order(created_at: :asc).last(10)
   end
 end

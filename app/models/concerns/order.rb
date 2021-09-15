@@ -19,6 +19,7 @@ module Order
 
     # Delegations
     delegate :name, to: :provider_sector, prefix: true
+    delegate :name, to: :applicant_sector, prefix: true
 
     # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
     def send_order_by(a_user)
