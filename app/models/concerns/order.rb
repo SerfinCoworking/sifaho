@@ -26,11 +26,9 @@ module Order
       if order_products.count.zero?
         raise ArgumentError, 'Debe asignar almenos 1 producto.'
       end
-      
+
       order_products.with_delivery_quantity.each(&:send_products)
-      self.status = 'provision_en_camino'
-      self.sent_date = DateTime.now
-      self.save
+      update_columns(status: 'provision_en_camino', sent_date: DateTime.now)
       create_notification(a_user, 'envió')
     end
 

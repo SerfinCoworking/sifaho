@@ -42,6 +42,7 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
   def edit_products
     policy(:internal_order_provider).edit_products?(@internal_order)
+    @internal_order.proveedor_auditoria! if @internal_order.solicitud_enviada?
     @internal_order_product = @internal_order.order_products.build
     @form_id = DateTime.now.to_s(:number)
   end
