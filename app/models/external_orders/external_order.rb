@@ -206,14 +206,14 @@ class ExternalOrder < ApplicationRecord
     self.create_notification(a_user, "retornó a auditoría")
   end
 
-  # Valida las cantidades en stock
-  # Reserva las cantidades y finalmente cambia el estado a aceptado
+  # Accept order with products
   def accept_order_by(a_user)
-    self.proveedor_aceptado! # Cuando se asigna este estado, activa las validaciones correspondientes.
-    self.create_notification(a_user, "aceptó")
+    if order_products.count.zero?
+      raise ArgumentError, 'Debe asignar almenos 1 producto.'
+    end
+    proveedor_aceptado!
+    create_notification(a_user, 'aceptó')
   end
-
-  
 
   # Método para retornar pedido a estado anterior
   def return_applicant_status_by(a_user)
@@ -222,15 +222,6 @@ class ExternalOrder < ApplicationRecord
       self.solicitud_auditoria!
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
-    end
-  end
-
-  def send_request_by(a_user)
-    if self.solicitud_auditoria?
-      self.solicitud_enviada!
-      self.create_notification(a_user, "envió")
-    else
-      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
     end
   end
 

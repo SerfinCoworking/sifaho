@@ -22,11 +22,29 @@ module Order
 
     # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
     def send_order_by(a_user)
+      if order_products.count.zero?
+        raise ArgumentError, 'Debe asignar almenos 1 producto.'
+      end
+      
       order_products.with_delivery_quantity.each(&:send_products)
       self.status = 'provision_en_camino'
       self.sent_date = DateTime.now
       self.save
       create_notification(a_user, 'envió')
+    end
+
+    # Send request order
+    def send_request_by(a_user)
+      if order_products.count.zero?
+        raise ArgumentError, 'Debe asignar almenos 1 producto.'
+      end
+      
+      if solicitud_auditoria?
+        solicitud_enviada!
+        create_notification(a_user, 'envió')
+      else
+        raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
+      end
     end
 
     # Receive order products

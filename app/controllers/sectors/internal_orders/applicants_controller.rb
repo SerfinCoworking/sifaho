@@ -99,9 +99,17 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /external_orders/applicants/1/dispatch_order
   def dispatch_order
     policy(:internal_order_applicant).can_send?(@internal_order)
-    @internal_order.send_request_by(current_user)
     respond_to do |format|
-      format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: 'La solicitud se ha enviado correctamente.' }
+      begin
+        @internal_order.send_request_by(current_user)
+        format.html { redirect_to internal_orders_applicant_url(@internal_order), notice: 'La solicitud se ha enviado correctamente.' }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+        @internal_order_product = @internal_order.order_products.build
+        @form_id = DateTime.now.to_s(:number)
+        @error = e.message
+        format.html { render :edit_products }
+      end
     end
   end
 

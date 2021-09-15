@@ -118,14 +118,10 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
         format.html { redirect_to internal_orders_provider_url(@internal_order), notice: message }
       rescue ArgumentError => e
         flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        # @internal_order.status = previous_status
-        @sectors = Sector.select(:id, :name)
-                          .with_establishment_id(current_user.sector.establishment_id)
-                          .where.not(id: current_user.sector_id).as_json
-        @order_products = @internal_order.order_products.present? ? @internal_order.order_products : @internal_order.order_products.build
-        format.html { render :edit }
+        @internal_order_product = @internal_order.order_products.build
+        @form_id = DateTime.now.to_s(:number)
+        @error = e.message
+        format.html { render :edit_products }
       end
     end
   end

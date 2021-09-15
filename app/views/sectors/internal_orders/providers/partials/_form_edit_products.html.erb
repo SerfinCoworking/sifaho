@@ -11,6 +11,7 @@
       <%= fa_icon "times" %>
     <% end %>
   </div>
+  
   <div class="card-body">
 
       <div class="row">
@@ -30,6 +31,18 @@
           Observaciones
           <%= order.observation %>
         </div>
+      </div>
+
+      <%# Dispatch order as POST method %>
+      <%= simple_form_for order_product, 
+                          url: dispatch_order_internal_orders_applicant_path(order),
+                          method: :POST,
+                          html: { id: "dispatch-order"} do |form| %>
+      <% end %>
+
+      <%# Error message of dispatch order without products%>
+      <div class="text-danger mt-2 mb-2">
+        <%= @error if @error.present? %>
       </div>
       
       <%# PRODUCTOS SOLICITADOS %>

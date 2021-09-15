@@ -108,13 +108,12 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
         format.html { redirect_to external_orders_provider_url(@external_order), notice: 'La provision se ha enviado correctamente.' }
       rescue ArgumentError => e
-        # si fallo la validación de stock, debemos volver atras el estado de la orden
+
         flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @external_order.order_products || @external_order.order_products.build
-        @sectors = @external_order.provider_sector.present? ? @external_order.provider_establishment.sectors : []
-        format.html { render :edit }
+        @external_order_product = @external_order.order_products.build
+        @form_id = DateTime.now.to_s(:number)
+        @error = e.message
+        format.html { render :edit_products }
       end
     end
   end
@@ -127,13 +126,11 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
         @external_order.accept_order_by(current_user)
         format.html { redirect_to external_orders_provider_url(@external_order), notice: 'La provision se ha aceptado correctamente.' }
       rescue ArgumentError => e
-        # si fallo la validación de stock, debemos volver atras el estado de la orden
         flash[:alert] = e.message
-      rescue ActiveRecord::RecordInvalid
-      ensure
-        @external_order.order_products || @external_order.order_products.build
-        @sectors = @external_order.applicant_sector.present? ? @external_order.applicant_establishment.sectors : []
-        format.html { render :edit }
+        @external_order_product = @external_order.order_products.build
+        @form_id = DateTime.now.to_s(:number)
+        @error = e.message
+        format.html { render :edit_products }
       end
     end
   end
@@ -181,6 +178,6 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   private
 
   def accepting?
-    return params[:commit] == "accepting"
+    params[:commit] == 'accepting'
   end
 end
