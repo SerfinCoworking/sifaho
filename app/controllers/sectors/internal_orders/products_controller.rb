@@ -74,15 +74,6 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
       :product_id,
       :request_quantity,
       :applicant_observation,
-      :_destroy
-    )
-  end
-
-  def provider_product_params
-    params.require(:order_product).permit(
-      :order_id,
-      :product_id,
-      :request_quantity,
       :provider_observation
     )
   end

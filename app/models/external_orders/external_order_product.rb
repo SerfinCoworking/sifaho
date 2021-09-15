@@ -3,9 +3,9 @@ class ExternalOrderProduct < ApplicationRecord
   # Relationships
   belongs_to :order, class_name: 'ExternalOrder', inverse_of: 'order_products'
   belongs_to :added_by_sector, class_name: 'Sector'
-  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'ExtOrdProdLotStock', 
-  foreign_key: 'order_product_id', source: :ext_ord_prod_lot_stocks,
-  inverse_of: 'order_product'
+  has_many :order_prod_lot_stocks, dependent: :destroy, class_name: 'ExtOrdProdLotStock',
+           foreign_key: 'order_product_id', source: :ext_ord_prod_lot_stocks,
+           inverse_of: 'order_product'
   has_many :lot_stocks, through: :order_prod_lot_stocks
 
   include OrderProduct
