@@ -20,8 +20,8 @@ Rails.application.routes.draw do
             get :rollback_order
             get :nullify_order
             get :edit_products
-            post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
             post 'edit_products', to: 'providers#accept_order', as: 'accept_order'
+            post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
           end
 
           collection do

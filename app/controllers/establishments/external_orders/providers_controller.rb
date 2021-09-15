@@ -154,6 +154,8 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   end
 
   def edit_products
+    policy(:external_order_provider).edit_products?(@external_order)
+    @external_order.proveedor_auditoria! if @external_order.solicitud_enviada?
     @external_order_product = @external_order.order_products.build
     @form_id = DateTime.now.to_s(:number)
   end
