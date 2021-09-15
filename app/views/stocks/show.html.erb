@@ -6,6 +6,11 @@
       <%= fa_icon 'eye' %>
       <h5 class="card-title mb-0 ml-2">
         Viendo stock de <%= @stock.product_name %>
+        <% if @stock.product.merged? %>
+          <span class="badge badge-warning">
+            Fusionado
+          </span>
+        <% end %>
       </h5>
     </div>
     <%= link_to stocks_path, class: 'btn btn-light',
@@ -41,6 +46,19 @@
         </div>
       </div>
     </div>
+
+    <% if @stock.product.merged? %>
+      <div class="col-8 mx-auto">
+        <div class="alert alert-warning" role="alert">
+          <h4><%= fa_icon 'exclamation-triangle' %> ¡Atención!</h4>
+          <p>Este producto se ha funcionado con el siguiente: </p>
+          <p>
+            <strong>Código: </strong> <%= @stock.product.origin_unify.target_code %> 
+            <strong>Nombre: </strong> <%= @stock.product.origin_unify.target_name %>
+          </p>
+        </div>
+      </div>
+    <% end %>
 
     <ul class="nav nav-tabs nav-justified mt-4" id="myStockTab" role="tablist">
       <li class="nav-item" role="presentation">
