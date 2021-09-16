@@ -41,7 +41,7 @@
 
       <%# Dispatch order as POST method %>
       <%= simple_form_for order_product, 
-                          url: dispatch_order_external_orders_provider_path(order),
+                          url: accept_order_external_orders_provider_path(order),
                           method: :POST,
                           html: { id: "dispatch-order"} do |form| %>
       <% end %>
