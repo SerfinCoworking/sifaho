@@ -118,13 +118,15 @@
             <tbody>
               <% @reserved_lots.each do |lot| %>
                 <tr>
-                  <th scope="row"><%= lot.external_order_product.external_order.updated_at.strftime("%d/%m/%Y") %></th>
-                  <td><%= lot.external_order_product.external_order.human_name %></td>
-                  <td><%= lot.external_order_product.external_order.remit_code %></td>
+                  <th scope="row"><%= lot.order_product.order.updated_at.strftime("%d/%m/%Y") %></th>
+                  <td><%= lot.order_product.order.human_name %></td>
+                  <td><%= lot.order_product.order.remit_code %></td>
                   <td><%= lot.quantity %></td>
                   <td class="actions-col">
-                    <%= link_to polymorphic_path(lot.external_order_product.external_order, resaltar: lot.product.id), 
-                      target: :_blank, class: "btn btn-sm btn-light" do %>
+                    <%= link_to polymorphic_url([lot.order_product.order.class.name.underscore.pluralize, 
+                                        (lot.order_product.order.custom_notification_url if lot.order_product.order.class.method_defined?(:custom_notification_url)) ],
+                                        id: lot.order_product.order.id, resaltar: lot.product.id), 
+                                        target: :_blank, class: "btn btn-sm btn-light" do %>
                       <%= fa_icon 'external-link-alt' %>
                     <% end %>
                   </td>

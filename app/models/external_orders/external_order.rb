@@ -9,7 +9,7 @@ class ExternalOrder < ApplicationRecord
 
   # Relationships
   has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: 'order_id',
-                            inverse_of: 'order'
+                            inverse_of: 'order', source: :external_order_product
   has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
   has_many :movements, class_name: 'ExternalOrderMovement'
   has_many :comments, class_name: 'ExternalOrderComment', foreign_key: 'order_id', dependent: :destroy

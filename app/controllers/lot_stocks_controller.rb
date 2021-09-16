@@ -63,8 +63,7 @@ class LotStocksController < ApplicationController
   # GET /stocks/1.json
   def show
     authorize @lot_stock
-    @reserved_lots = @lot_stock.ext_ord_prod_lot_stocks
-      .where("external_orders.status = 3").joins(:order, :external_order_product).order("external_orders.updated_at DESC")
+    @reserved_lots = @lot_stock.movements_with_reserved_quantity
   end
   
   # GET /stocks/1
