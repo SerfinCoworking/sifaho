@@ -110,7 +110,7 @@ class UnifyProduct < ApplicationRecord
     origin_product.report_product_lines.each { |rep_line| rep_line.update_column('product_id', target_product.id) }
     origin_product.patient_product_state_reports.each { |pat_prod_rep| pat_prod_rep.update_column('product_id', target_product.id) }
     origin_product.lots.each { |lot| lot.update_column('product_id', target_product.id) }
-    origin_product.stocks.each { |stock| stock.update_column('product_id', target_product.id) }
+    # origin_product.stocks.each { |stock| stock.update_column('product_id', target_product.id) } Don't merge stocks
     merged!
     origin_product.merged!
   end

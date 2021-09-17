@@ -30,11 +30,7 @@ class LotStock < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'expiry_desc' },
-    available_filters: [
-      :sorted_by,
-      :search_by_status,
-      :search_by_quantity
-    ]
+    available_filters: %i[sorted_by search_by_status search_by_quantity]
   )
 
   scope :sorted_by, lambda { |sort_option|
