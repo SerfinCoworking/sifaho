@@ -105,10 +105,17 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders/applicants/1/dispatch_order
   def dispatch_order
     policy(:external_order_applicant).can_send?(@external_order)
-    @external_order.send_request_by(current_user)
     respond_to do |format|
-      message = 'La solicitud se ha enviado correctamente.'
-      format.html { redirect_to external_orders_applicant_url(@external_order), notice: message }
+      begin
+        @external_order.send_request_by(current_user)
+        format.html { redirect_to external_orders_applicant_url(@external_order), notice: 'La solicitud se ha enviado correctamente.' }
+      rescue ArgumentError => e
+        flash[:alert] = e.message
+        @external_order_product = @external_order.order_products.build
+        @form_id = DateTime.now.to_s(:number)
+        @error = e.message
+        format.html { render :edit_products }
+      end
     end
   end
 

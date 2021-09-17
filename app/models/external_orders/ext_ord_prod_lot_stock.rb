@@ -7,4 +7,6 @@ class ExtOrdProdLotStock < ApplicationRecord
 
   # Delegations
   delegate :code, to: :lot_stocks, prefix: :product
+
+  scope :with_reserved_quantity, -> { where('reserved_quantity > 0') }
 end

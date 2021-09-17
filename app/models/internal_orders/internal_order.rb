@@ -150,15 +150,6 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  def send_request_by(a_user)
-    if self.solicitud_auditoria?
-      self.solicitud_enviada!
-      self.create_notification(a_user, "envió")
-    else
-      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
-    end
-  end
-
   # Método para retornar perdido a estado anterior
   def return_applicant_status_by(a_user)
     if solicitud_enviada?
@@ -168,7 +159,6 @@ class InternalOrder < ApplicationRecord
       raise ArgumentError, "No es posible retornar a un estado anterior"
     end
   end
-
 
   def create_notification(of_user, action_type)
     InternalOrderMovement.create(user: of_user, internal_order: self, action: action_type, sector: of_user.sector)

@@ -34,7 +34,7 @@ $(document).on('turbolinks:load', function(e){
         $(modal).find('a#send-confirm-btn').attr('href', href);
         $(modal).modal('toggle');
       }else{
-        window.location.href = href;
+        $("#dispatch-order").submit();
       }
     }
   });

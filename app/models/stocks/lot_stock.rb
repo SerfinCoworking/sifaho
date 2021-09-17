@@ -75,9 +75,9 @@ class LotStock < ApplicationRecord
   scope :by_stock, ->(stock_id) { where(stock_id: stock_id) }
 
   scope :greater_than_zero, -> { where('lot_stocks.quantity > 0 OR lot_stocks.reserved_quantity > 0') }
-
+  
   scope :search_by_status, ->(status) { joins(:lot).where('lots.status = ?', status) }
-
+  
   scope :search_by_quantity, lambda { |quantity|
     if quantity == 0 || quantity == 1
       quantity == 0 ? where('lot_stocks.quantity = 0') : where('lot_stocks.quantity > 0')
@@ -106,6 +106,11 @@ class LotStock < ApplicationRecord
       ['Fecha vencimiento (nueva primero)', 'expiry_desc', 'warning'],
       ['Fecha vencimiento (antigua primero)', 'expiry_asc', 'success']
     ]
+  end
+
+  # Get all order_product_lot_stocks with reserved_quantity
+  def movements_with_reserved_quantity
+    ext_ord_prod_lot_stocks.with_reserved_quantity + int_ord_prod_lot_stocks.with_reserved_quantity
   end
 
   # Metodo para incrementar la cantidad del lote.

@@ -6,4 +6,5 @@ class IntOrdProdLotStock < ApplicationRecord
   has_one :order, through: :order_product, source: :internal_order
   has_one :product, through: :order_product
 
+  scope :with_reserved_quantity, -> { where('reserved_quantity > 0') }
 end

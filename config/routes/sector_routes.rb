@@ -6,10 +6,11 @@ Rails.application.routes.draw do
         # Solicitudes
         resources :applicants do
           member do
-            get :dispatch_order
+            # get :dispatch_order
             get :rollback_order
             get :receive_order
             get :edit_products
+            post 'edit_products', to: 'applicants#dispatch_order', as: 'dispatch_order'
           end
           resources :products, except: [:index]
         end
@@ -17,9 +18,9 @@ Rails.application.routes.draw do
         # Despachos
         resources :providers do
           member do
-            get :dispatch_order
             get :nullify_order
             get :edit_products
+            post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
           end
           resources :products, except: [:index]
           collection do
