@@ -250,6 +250,13 @@
         Editar
       <% end %>
     <% end %>
+
+    <% if policy(@outpatient_prescription).print? %>
+      <%= link_to outpatient_prescription_path(@outpatient_prescription, format: :pdf), class: "btn btn-info" do %>
+        <%= fa_icon "print" %>
+        Imprimir
+      <% end %>
+    <% end %>
     
     <% if policy(@outpatient_prescription).dispense? %>
       <%= link_to dispense_outpatient_prescription_path(@outpatient_prescription), :"data-turbolinks" => false,

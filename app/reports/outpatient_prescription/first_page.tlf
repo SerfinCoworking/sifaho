@@ -7,15 +7,15 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 175.7,
+      "y": 279.5,
       "width": 555.2,
-      "height": 646.9,
+      "height": 543.1,
       "header": {
         "enabled": true,
         "height": 15.7,
         "translate": {
           "x": -12,
-          "y": 48.7
+          "y": 152.5
         },
         "items": [
           {
@@ -116,9 +116,9 @@
             "type": "text",
             "display": true,
             "description": "",
-            "x": 487,
+            "x": 521.4,
             "y": 127,
-            "width": 46.5,
+            "width": 65.6,
             "height": 11,
             "style": {
               "font-family": [
@@ -134,33 +134,7 @@
               "font-style": []
             },
             "texts": [
-              "Obs Solic"
-            ]
-          },
-          {
-            "id": "",
-            "type": "text",
-            "display": true,
-            "description": "",
-            "x": 542,
-            "y": 127,
-            "width": 38,
-            "height": 11,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "center",
-              "vertical-align": "top",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": []
-            },
-            "texts": [
-              "Obs Prov"
+              "Observaciones"
             ]
           },
           {
@@ -247,7 +221,7 @@
         "height": 24.5,
         "translate": {
           "x": -12,
-          "y": 1.4
+          "y": 105.2
         },
         "items": [
           {
@@ -347,13 +321,13 @@
             }
           },
           {
-            "id": "obs_req",
+            "id": "observation",
             "type": "text-block",
             "display": true,
             "description": "",
-            "x": 487,
+            "x": 526.4,
             "y": 190,
-            "width": 50,
+            "width": 60.8,
             "height": 22,
             "style": {
               "font-family": [
@@ -392,38 +366,6 @@
             "y1": 212.9,
             "x2": 587.2,
             "y2": 212.9
-          },
-          {
-            "id": "obs_del",
-            "type": "text-block",
-            "display": true,
-            "description": "",
-            "x": 537.2,
-            "y": 190,
-            "width": 50,
-            "height": 22,
-            "style": {
-              "font-family": [
-                "Helvetica"
-              ],
-              "font-size": 9,
-              "color": "#000000",
-              "text-align": "left",
-              "vertical-align": "middle",
-              "line-height": "",
-              "line-height-ratio": "",
-              "letter-spacing": "",
-              "font-style": [],
-              "overflow": "fit",
-              "word-wrap": "break-word"
-            },
-            "reference-id": "",
-            "value": "",
-            "multiple-line": true,
-            "format": {
-              "base": "",
-              "type": ""
-            }
           },
           {
             "id": "expiry_date",
@@ -543,7 +485,7 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -37.1
+          "y": 66.7
         },
         "items": []
       },
@@ -552,11 +494,11 @@
         "height": 0,
         "translate": {
           "x": -12,
-          "y": -84.4
+          "y": 19.4
         },
         "items": []
       },
-      "content-height": 631.1999999999999,
+      "content-height": 527.4,
       "auto-page-break": true
     },
     {
@@ -565,7 +507,7 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 41.9,
+      "y": 80,
       "width": 52.6,
       "height": 12,
       "style": {
@@ -593,7 +535,7 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 75,
+      "y": 130,
       "width": 53,
       "height": 12,
       "style": {
@@ -620,9 +562,9 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 70,
-      "y": 41.3,
-      "width": 352.6,
+      "x": 20,
+      "y": 95,
+      "width": 505.2,
       "height": 12,
       "style": {
         "font-family": [
@@ -652,9 +594,9 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 70,
-      "y": 75,
-      "width": 352.6,
+      "x": 20,
+      "y": 145,
+      "width": 505.2,
       "height": 12,
       "style": {
         "font-family": [
@@ -685,7 +627,7 @@
       "display": true,
       "description": "",
       "x": 20,
-      "y": 105,
+      "y": 185,
       "width": 77.3,
       "height": 12,
       "style": {
@@ -713,9 +655,9 @@
       "display": true,
       "description": "",
       "x": 20.4,
-      "y": 120,
-      "width": 405.8,
-      "height": 31,
+      "y": 200,
+      "width": 554.8,
+      "height": 25.5,
       "style": {
         "font-family": [
           "Helvetica"
@@ -953,7 +895,7 @@
       "description": "",
       "x": 540.4,
       "y": 45.8,
-      "width": 34.8,
+      "width": 34.9,
       "height": 14,
       "style": {
         "font-family": [
@@ -979,9 +921,9 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 445.2,
+      "x": 405.8,
       "y": 60.1,
-      "width": 130,
+      "width": 169.4,
       "height": 14,
       "style": {
         "font-family": [
@@ -1011,9 +953,9 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 544.6,
-      "y": 76.7,
-      "width": 30.6,
+      "x": 20,
+      "y": 45,
+      "width": 47.3,
       "height": 14,
       "style": {
         "font-family": [
@@ -1031,16 +973,16 @@
         ]
       },
       "texts": [
-        "Fecha"
+        "Recetada"
       ]
     },
     {
-      "id": "requested_date",
+      "id": "prescribed_date",
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 445.7,
-      "y": 91.1,
+      "x": 20,
+      "y": 59.4,
       "width": 129.5,
       "height": 14,
       "style": {
@@ -1049,7 +991,7 @@
         ],
         "font-size": 11,
         "color": "#000000",
-        "text-align": "right",
+        "text-align": "left",
         "vertical-align": "middle",
         "line-height": "",
         "line-height-ratio": "",
@@ -1067,14 +1009,14 @@
       }
     },
     {
-      "id": "",
-      "type": "text",
+      "id": "patient_dni",
+      "type": "text-block",
       "display": true,
       "description": "",
-      "x": 20,
-      "y": 160,
-      "width": 52.6,
-      "height": 12,
+      "x": 40,
+      "y": 108.7,
+      "width": 88.1,
+      "height": 11,
       "style": {
         "font-family": [
           "Helvetica"
@@ -1083,149 +1025,29 @@
         "color": "#000000",
         "text-align": "left",
         "vertical-align": "top",
-        "line-height": 11.03125,
-        "line-height-ratio": 1,
+        "line-height": "",
+        "line-height-ratio": "",
         "letter-spacing": "",
-        "font-style": [
-          "underline"
-        ]
+        "font-style": [],
+        "overflow": "truncate",
+        "word-wrap": "break-word"
       },
-      "texts": [
-        "Productos:"
-      ]
+      "reference-id": "",
+      "value": "",
+      "multiple-line": false,
+      "format": {
+        "base": "",
+        "type": ""
+      }
     },
     {
-      "id": "products_count",
+      "id": "professional_qualifications",
       "type": "text-block",
       "display": true,
       "description": "",
       "x": 70,
       "y": 160,
-      "width": 38.8,
-      "height": 11,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": false,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "",
-      "type": "text",
-      "display": true,
-      "description": "",
-      "x": 120,
-      "y": 160,
-      "width": 76.3,
-      "height": 12,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": 11.03125,
-        "line-height-ratio": 1,
-        "letter-spacing": "",
-        "font-style": [
-          "underline"
-        ]
-      },
-      "texts": [
-        "Observaciones:"
-      ]
-    },
-    {
-      "id": "observations_count",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 190,
-      "y": 160,
-      "width": 156.4,
-      "height": 11,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": false,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "patient_dni",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 95,
-      "y": 55,
-      "width": 75.5,
-      "height": 11,
-      "style": {
-        "font-family": [
-          "Helvetica"
-        ],
-        "font-size": 10,
-        "color": "#000000",
-        "text-align": "left",
-        "vertical-align": "top",
-        "line-height": "",
-        "line-height-ratio": "",
-        "letter-spacing": "",
-        "font-style": [],
-        "overflow": "truncate",
-        "word-wrap": "break-word"
-      },
-      "reference-id": "",
-      "value": "",
-      "multiple-line": false,
-      "format": {
-        "base": "",
-        "type": ""
-      }
-    },
-    {
-      "id": "professional_enrollment",
-      "type": "text-block",
-      "display": true,
-      "description": "",
-      "x": 120,
-      "y": 89,
-      "width": 74.8,
+      "width": 505.2,
       "height": 11,
       "style": {
         "font-family": [
@@ -1261,17 +1083,17 @@
         "border-style": "solid"
       },
       "x1": 20,
-      "y1": 70,
+      "y1": 123.7,
       "x2": 428,
-      "y2": 70
+      "y2": 123.7
     },
     {
       "id": "",
       "type": "text",
       "display": true,
       "description": "",
-      "x": 75,
-      "y": 55,
+      "x": 20,
+      "y": 108.7,
       "width": 19.3,
       "height": 14,
       "style": {
@@ -1298,8 +1120,8 @@
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 206,
-      "y": 55,
+      "x": 166,
+      "y": 108.7,
       "width": 70.6,
       "height": 11,
       "style": {
@@ -1330,9 +1152,9 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 180,
-      "y": 55,
-      "width": 23.3,
+      "x": 140,
+      "y": 108.7,
+      "width": 26.2,
       "height": 14,
       "style": {
         "font-family": [
@@ -1364,18 +1186,18 @@
         "border-style": "solid"
       },
       "x1": 20,
-      "y1": 105,
+      "y1": 180,
       "x2": 428,
-      "y2": 105
+      "y2": 180
     },
     {
       "id": "",
       "type": "text",
       "display": true,
       "description": "",
-      "x": 75,
-      "y": 88,
-      "width": 41.3,
+      "x": 20,
+      "y": 160,
+      "width": 41.5,
       "height": 14,
       "style": {
         "font-family": [
@@ -1395,6 +1217,141 @@
       "texts": [
         "Matrícula"
       ]
+    },
+    {
+      "id": "",
+      "type": "text",
+      "display": true,
+      "description": "",
+      "x": 150,
+      "y": 45,
+      "width": 59.9,
+      "height": 14,
+      "style": {
+        "font-family": [
+          "Helvetica"
+        ],
+        "font-size": 11,
+        "color": "#000000",
+        "text-align": "left",
+        "vertical-align": "middle",
+        "line-height": "",
+        "line-height-ratio": "",
+        "letter-spacing": "",
+        "font-style": [
+          "underline"
+        ]
+      },
+      "texts": [
+        "Vencimiento"
+      ]
+    },
+    {
+      "id": "expiry_date",
+      "type": "text-block",
+      "display": true,
+      "description": "",
+      "x": 150,
+      "y": 59.4,
+      "width": 129.5,
+      "height": 14,
+      "style": {
+        "font-family": [
+          "Helvetica"
+        ],
+        "font-size": 11,
+        "color": "#000000",
+        "text-align": "left",
+        "vertical-align": "middle",
+        "line-height": "",
+        "line-height-ratio": "",
+        "letter-spacing": "",
+        "font-style": [],
+        "overflow": "truncate",
+        "word-wrap": "break-word"
+      },
+      "reference-id": "",
+      "value": "",
+      "multiple-line": true,
+      "format": {
+        "base": "",
+        "type": ""
+      }
+    },
+    {
+      "id": "",
+      "type": "line",
+      "display": true,
+      "description": "",
+      "style": {
+        "border-color": "#bfbfbf",
+        "border-width": 1,
+        "border-style": "solid"
+      },
+      "x1": 20,
+      "y1": 228,
+      "x2": 428,
+      "y2": 228
+    },
+    {
+      "id": "",
+      "type": "text",
+      "display": true,
+      "description": "",
+      "x": 20,
+      "y": 231,
+      "width": 77.3,
+      "height": 12,
+      "style": {
+        "font-family": [
+          "Helvetica"
+        ],
+        "font-size": 11,
+        "color": "#000000",
+        "text-align": "left",
+        "vertical-align": "top",
+        "line-height": 12.03125,
+        "line-height-ratio": 1,
+        "letter-spacing": "",
+        "font-style": [
+          "underline"
+        ]
+      },
+      "texts": [
+        "Impreso por"
+      ]
+    },
+    {
+      "id": "user_info",
+      "type": "text-block",
+      "display": true,
+      "description": "",
+      "x": 20,
+      "y": 245,
+      "width": 505.2,
+      "height": 12,
+      "style": {
+        "font-family": [
+          "Helvetica"
+        ],
+        "font-size": 11,
+        "color": "#000000",
+        "text-align": "left",
+        "vertical-align": "top",
+        "line-height": "",
+        "line-height-ratio": "",
+        "letter-spacing": "",
+        "font-style": [],
+        "overflow": "truncate",
+        "word-wrap": "break-word"
+      },
+      "reference-id": "",
+      "value": "",
+      "multiple-line": false,
+      "format": {
+        "base": "",
+        "type": ""
+      }
     }
   ],
   "state": {
