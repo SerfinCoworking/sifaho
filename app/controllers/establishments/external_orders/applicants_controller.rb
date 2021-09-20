@@ -68,7 +68,7 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
 
   def edit_products
     if params[:template].present?
-      new_from_template(params[:template], 'solicitud') 
+      new_from_template(params[:template], 'solicitud')
     else
       @external_order.order_products.build
     end
@@ -157,8 +157,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     # Buscamos el template
     @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
     # Seteamos los productos a la orden
-    @external_order_template.external_order_product_templates.joins(:product).order('name').each do |iots|
-      @external_order.order_products.build(id: DateTime.now.to_s(:number), product_id: iots.product_id)
+    @external_order_template.external_order_product_templates.joins(:product).order('name').each do |eopt|
+      @external_order.order_products.build(product_id: eopt.product_id)
     end
   end
 

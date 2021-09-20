@@ -22,7 +22,6 @@ Rails.application.routes.draw do
             get :nullify_order
             get :edit_products
             post 'edit_products', to: 'providers#accept_order', as: 'accept_order'
-            # post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
           end
 
           collection do
@@ -42,7 +41,11 @@ Rails.application.routes.draw do
             end
           end
           # Despachos
-          resources :providers
+          resources :providers do
+            member do
+              post :build_from_template
+            end
+          end
         end
 
         # Comments
