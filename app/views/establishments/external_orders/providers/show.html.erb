@@ -276,9 +276,6 @@
           </div>
           <div class="modal-body">
             <p>Seguro que desea retornar la <%= @external_order.order_type %> actual a <%= prev_status %>?</p>
-            <% if @external_order.proveedor_aceptado? %>
-              <p>Las cantidades reservadas de los productos para este pedido volverán a estar disponibles en stock.</p>
-            <% end %>
           </div>
           <div class="modal-footer text-right">
             <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
