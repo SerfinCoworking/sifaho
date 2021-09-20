@@ -1,3 +1,5 @@
+<%= render 'shared/flash_message' %>
+
 $("tr#child-<%= @order_product.id.to_s %>").find('button.btn-select-lot-stock').first().text('<%= @order_product.order_prod_lot_stocks.count.to_s %>');
 
 $('#lot-selection').modal('hide');
