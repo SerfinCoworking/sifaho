@@ -24,11 +24,6 @@ Rails.application.routes.draw do
             post 'edit_products', to: 'providers#accept_order', as: 'accept_order'
             # post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
           end
-
-          collection do
-            get 'find_lots(/:order_product_id)', to: 'providers#find_lots', as: 'find_order_product_lots'
-          end
-
           resources :products, except: [:index]
         end
 
