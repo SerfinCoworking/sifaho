@@ -37,6 +37,7 @@
         <th>Código</th>
         <th>Stock</th>
         <th>Estado</th>
+        <th>Procedencia</th>
         <th>Vencimiento</th>
         <th width="35%">Laboratorio</th>
         <th>Reservado</th>
@@ -87,7 +88,12 @@
           </td>
           <td class="align-middle">
             <span class="badge badge-<%= lot_status_label(lot_stock.lot) %> ">
-              <%= lot_stock.lot.status %>
+              <%= lot_stock.lot.status.humanize %>
+            </span>
+          </td>
+          <td class="align-middle">
+            <span class="badge badge-secondary">
+              <%= lot_stock.lot.provenance_name %>
             </span>
           </td>
           <td class="align-middle">
