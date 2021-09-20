@@ -4,7 +4,7 @@ let unsaved = false;
 $(document).on('change', 'form[role="check-modified"]:not([data-remote]) :input', function() {
   return unsaved = true;
 });
- 
+
 $(document).on('turbolinks:load', function() {
   return unsaved = false;
 });
@@ -15,6 +15,11 @@ $(document).on('submit', 'form[role="check-modified"]', function() {
  
  
 $(document).on('turbolinks:before-visit', function(event) {
+  /* check if exists a product unsaved on order products form */
+  if($(document).find('.unsaved-row').length){
+    unsaved = true;
+  };
+
   if(unsaved){
     event.preventDefault();
     modalConfirm(function(confirm){

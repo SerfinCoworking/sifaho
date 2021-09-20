@@ -22,15 +22,11 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   # GET /external_orders/applicant
   def new
     authorize :external_order_applicant
-    begin
-      new_from_template(params[:template], 'solicitud')
-    rescue
-      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
-      @external_order = ExternalOrder.new
-      @external_order.order_type = 'solicitud'
-      @sectors = []
-      @external_order.order_products.build
-    end
+    flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
+    @external_order = ExternalOrder.new
+    @external_order.order_type = 'solicitud'
+    @sectors = []
+    @external_order.order_products.build
   end
 
   # GET /external_orders/applicant/1/edit
@@ -47,8 +43,8 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
     @external_order = ExternalOrder.new(external_order_params)
     @external_order.requested_date = DateTime.now
     @external_order.applicant_sector = current_user.sector
-    @external_order.order_type = "solicitud"
-    @external_order.status = "solicitud_auditoria"
+    @external_order.order_type = 'solicitud'
+    @external_order.status = 'solicitud_auditoria'
 
     respond_to do |format|
       begin
@@ -71,22 +67,25 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   end
 
   def edit_products
-    @external_order_product = @external_order.order_products.build
-    @form_id = DateTime.now.to_s(:number)
+    if params[:template].present?
+      new_from_template(params[:template], 'solicitud') 
+    else
+      @external_order.order_products.build
+    end
   end
 
   # PATCH /external_orders/applicants/1
   def update
     policy(:external_order_applicant).update?(@external_order)
-    @external_order.status = sending? ? "solicitud_enviada" : "solicitud_auditoria"
+    @external_order.status = 'solicitud_auditoria'
 
     respond_to do |format|
       begin
         @external_order.update(external_order_params)
         @external_order.save!
 
-        message = sending? ? "La solicitud se ha auditado y enviado correctamente." : "La solicitud se ha auditado y se encuentra en auditoria."
-        notification_type = sending? ? "auditó y envió" : "auditó"
+        message = 'La solicitud se ha auditado y se encuentra en auditoria.'
+        notification_type = 'auditó'
 
         @external_order.create_notification(current_user, notification_type)
 
@@ -112,7 +111,6 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
       rescue ArgumentError => e
         flash[:alert] = e.message
         @external_order_product = @external_order.order_products.build
-        @form_id = DateTime.now.to_s(:number)
         @error = e.message
         format.html { render :edit_products }
       end
@@ -158,26 +156,10 @@ class Establishments::ExternalOrders::ApplicantsController < Establishments::Ext
   def new_from_template(template_id, order_type)
     # Buscamos el template
     @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
-    @external_order = ExternalOrder.new
-    @external_order.order_type = @external_order_template.order_type
-    if @external_order.provision?
-      @external_order.applicant_sector = @external_order_template.destination_sector
-    else
-      @external_order.provider_sector = @external_order_template.destination_sector
-    end
     # Seteamos los productos a la orden
-    @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots|
-      @external_order.order_products.build(product_id: iots.product_id)
+    @external_order_template.external_order_product_templates.joins(:product).order('name').each do |iots|
+      @external_order.order_products.build(id: DateTime.now.to_s(:number), product_id: iots.product_id)
     end
-    # Establecemos la opciones del selector de sector
-    @sectors = Sector
-      .select(:id, :name)
-      .with_establishment_id(@external_order_template.destination_establishment_id)
-      .where.not(id: current_user.sector_id)
-  end
-
-  def sending?
-    return params[:commit] == "sending"
   end
 
   def set_last_requests

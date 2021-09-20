@@ -1,6 +1,6 @@
 class Establishments::ExternalOrders::Templates::TemplatesController < ApplicationController
 
-  before_action :set_template, only: %i[show edit update destroy use_applicant use_provider]
+  before_action :set_template, only: %i[show edit update destroy use_applicant use_provider build_from_template]
 
   # GET /external_order_templates
   # GET /external_order_templates.json

@@ -54,4 +54,16 @@ class Establishments::ExternalOrders::Templates::ApplicantsController < Establis
       end
     end
   end
+
+  def build_from_template
+    respond_to do |format|
+      @external_order = ExternalOrder.create(provider_sector_id: @external_order_template.destination_sector_id,
+                                             applicant_sector: current_user.sector,
+                                             requested_date: DateTime.now,
+                                             status: 'solicitud_auditoria',
+                                             observation: @external_order_template.observation,
+                                             order_type: @external_order_template.order_type)
+      format.html { redirect_to edit_products_external_orders_applicant_path(id: @external_order, template: @external_order_template) }
+    end
+  end
 end

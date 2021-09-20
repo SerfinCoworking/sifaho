@@ -1,5 +1,7 @@
+<%# Generate a random id, for identify html form %>
+<% form_id = rand(0..100000) %>
 <% if order_product.new_record? %>
-  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_products], applicant_id: order, form_id: @form_id) %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_products], applicant_id: order, form_id: form_id) %>
 <% else %>
   <% url = polymorphic_path([order.class.name.underscore.pluralize, :applicant_product], applicant_id: order, id: order_product.id) %>
 <% end %>
@@ -8,11 +10,11 @@
                     url: url,
                     remote: true,
                     html: { 
-                      id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
-                      class: ('editing' if order_product.errors.any?),
-                      role: 'check-modified'} do |form| %>
+                      id: order_product.new_record? ? "ord-prod-#{form_id}" : "ord-prod-#{order_product.id}",
+                      class: "#{'editing' if order_product.errors.any? || order_product.new_record?} #{'unsaved-row' if order_product.new_record?}" 
+                    } do |form| %>
 
-  <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
+  <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{form_id}" : "row-ord-prod-#{order_product.id}" %>">
     <!-- Código del producto -->
     <div class="col-1 pl-1 pr-1">
       <% if policy(form.object).edit_product? %>
@@ -155,7 +157,7 @@
                   title="Guardar"
                   data-placemente="top"
                   type="submit" 
-                  form="<%= "ord-prod-#{@form_id}" %>">
+                  form="<%= "ord-prod-#{form_id}" %>">
             <%= fa_icon "save", class: 'fa-fw' %>
           </button>
           <button class="btn btn-sm btn-outline-danger btn-delete-product"
