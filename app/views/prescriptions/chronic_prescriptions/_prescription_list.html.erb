@@ -1,0 +1,79 @@
+<% if prescriptions.present? %>
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead >
+          <tr>
+            <th>Código</th>
+            <th>Médico</th>
+            <th>Estado</th>
+            <th>Productos</th>
+            <th>Movimientos</th>
+            <th>Recetada</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% prescriptions.each do |chronic_prescription| %>
+          <tr id="chronic_prescription_<%= chronic_prescription.id %>">
+            <td><%= chronic_prescription.remit_code %></th>
+              <td class="pres-col-pro"><%= chronic_prescription.professional.fullname %></td>
+              <td>
+                <span class="badge badge-<%= chronic_prescription_status_label(chronic_prescription) %>">
+                  <%= chronic_prescription.status.underscore.humanize %>
+                </span>
+              </td>
+              <td>
+                <%= chronic_prescription.original_chronic_prescription_products.count %>
+              </td>
+              <td>
+                <%= chronic_prescription.movements.count %>
+              </td>
+              <td>
+                <% if chronic_prescription.date_prescribed.present? %>
+                  <%= chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+                <% else %>
+                  ------
+                <% end %>
+              <td class="text-left actions-col">
+                <div class="d-flex">
+                  <% if policy(chronic_prescription).dispense_new? %>
+                    <%= link_to new_chronic_prescription_chronic_dispensation_path(chronic_prescription),
+                      class: 'btn btn-sm btn-primary mr-1 ml-1',
+                      title: t("actions.tooltip.dispense"),
+                      target: (dispense_target if defined?(dispense_target)),
+                      data: { toggle: 'tooltip', placement: 'top'} do %> 
+                      <%= fa_icon "paper-plane"%>
+                    <% end %>
+                  <% end %>
+
+                  <%= render(
+                    partial: 'shared/action_buttons',
+                    locals:{ 
+                        object: chronic_prescription, 
+                        show: {visible: true, target: (show_target if defined?(show_target) )},
+                        edit: {visible: true, target: (edit_target if defined?(edit_target) )},
+                        destroy: {
+                          visible: true, 
+                          title: "Eliminar prescripción",
+                          body: "Esta seguro que desea eliminar la prescripción de #{ chronic_prescription.professional.fullname }?",
+                          path: "/recetas_cronicas/#{chronic_prescription.id}"
+                        }
+                        
+                    }
+                  ) 
+                  %>
+                
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>
+

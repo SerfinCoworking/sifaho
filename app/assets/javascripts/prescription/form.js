@@ -19,7 +19,6 @@ $(document).on('turbolinks:load', function(e){
         $("#patient-lastname").val(barcodeArray[1]).attr('readonly', true);
         $("#patient-firstname").val(barcodeArray[2]).attr('readonly', true);
         $('#patient-sex-fake').val(sexes[barcodeArray[3]]);
-        console.log(sexes[barcodeArray[3]]);
       } else {
         $("#patient-dni").val($.trim(barcodeArray[1]));
         $("#patient-lastname").val(barcodeArray[4]).attr('readonly', true);
@@ -31,7 +30,6 @@ $(document).on('turbolinks:load', function(e){
     } // main callback function
     ,
     onError: function(string, qty) {
-      console.log("Entró error");
       $('#userInput').val ($('#userInput').val()  + string);
     }
   });

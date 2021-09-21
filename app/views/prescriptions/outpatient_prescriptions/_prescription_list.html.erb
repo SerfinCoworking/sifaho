@@ -1,0 +1,80 @@
+<% if prescriptions.present? %>
+    <div class="card fixed-panel-list">
+      <table class="table table-hover table-striped table-sm">
+        <thead >
+          <tr>
+            <th>Código</th>
+            <th>Médico</th>
+            <th>Estado</th>
+            <th>Productos</th>
+            <th>Movimientos</th>
+            <th>Recetada</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% prescriptions.each do |outpatient_prescription| %>
+            <tr id="outpatient_prescription_<%= outpatient_prescription.id %>">
+              <td><%= outpatient_prescription.remit_code %></th>
+              <td class="pres-col-pro"><%= outpatient_prescription.professional.full_name %></td>
+              <td>
+                <span class="badge badge-<%= outpatient_prescription_status_label(outpatient_prescription) %>">
+                  <%= outpatient_prescription.status.underscore.humanize %>
+                </span>
+              </td>
+              <td>
+                <%= outpatient_prescription.outpatient_prescription_products.count %>
+              </td>
+              <td>
+                <%= outpatient_prescription.movements.count %>
+              </td>
+              <td>
+                <% if outpatient_prescription.date_prescribed.present? %>
+                  <%= outpatient_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+                <% else %>
+                  ------
+                <% end %>
+              <td class="text-left actions-col">
+                <div class="d-flex">
+                  <% if policy(outpatient_prescription).dispense? %>
+                    <%= link_to dispense_outpatient_prescription_path(outpatient_prescription), :"data-turbolinks" => false,
+                      class: 'btn btn-primary btn-sm mr-1 ml-1',
+                      title: 'Dispensar', 
+                      target: (dispense_target if defined?(dispense_target)),
+                      data: { toggle: 'tooltip', placement: 'top' } do %>
+                      <%= fa_icon "paper-plane" %>
+                    <% end %>
+                  <% end %>
+                  
+                  <%= render(
+                    partial: 'shared/action_buttons',
+                    locals:{ 
+                        object: outpatient_prescription, 
+                        show: {visible: true, target: (show_target if defined?(show_target) )},
+                        edit: {visible: true, target: (edit_target if defined?(edit_target) )},
+                        destroy: {
+                          visible: true, 
+                          title: "Eliminar prescripción",
+                          body: "Esta seguro que desea eliminar la prescripción de #{ outpatient_prescription.professional.full_name }?",
+                          path: "#{outpatient_prescription_path(outpatient_prescription)}"
+                        }
+                        
+                    }
+                  ) 
+                  %>
+                </div>
+              </td>
+            </tr>
+
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+   
+<% else %>
+  <%= render(
+    partial: 'shared/not_found_filter',
+    locals: { object_name: 'recetas' }
+  ) %>
+<% end %>
+

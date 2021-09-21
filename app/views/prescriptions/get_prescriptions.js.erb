@@ -1,5 +1,5 @@
-$("div#chronic-prescriptions").html('<%= j render("list", prescriptions: @chronic_prescriptions) %>');
-$("div#outpatient-prescriptions").html('<%= j render("list", prescriptions: @outpatient_prescriptions) %>');
+$("div#chronic-prescriptions").html('<%= j render("prescriptions/chronic_prescriptions/prescription_list", prescriptions: @chronic_prescriptions) %>');
+$("div#outpatient-prescriptions").html('<%= j render("prescriptions/outpatient_prescriptions/prescription_list", prescriptions: @outpatient_prescriptions) %>');
 $("#chronic-tab").find('span.badge-secondary').first().html('<%= @chronic_prescriptions.count %>');
 $("#outpatient-tab").find('span.badge-secondary').first().html('<%= @outpatient_prescriptions.count %>');
 
@@ -22,7 +22,6 @@ if(<%= @chronic_prescriptions.count %> === 0 && <%= @outpatient_prescriptions.co
 // Mostramos la ultima receta actualizada 
 if(<%= @last_prescription.present? %>){
   $("#last-receipt-title").addClass('show');
-  $("#last-prescription-info").html('<%= j render("list", prescriptions: @last_prescription) %>');
 }
 
 $('[data-toggle="tooltip"]').tooltip({
