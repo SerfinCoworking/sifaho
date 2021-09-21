@@ -23,15 +23,10 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /internal_orders/provider/new
   def new
     policy(:internal_order_provider).new?
-
-    begin
-      new_from_template(params[:template], 'provision')
-    rescue
-      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
-      @internal_order = InternalOrder.new
-      @internal_order.order_type = 'provision'
-      @internal_order.order_products.build
-    end
+    flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
+    @internal_order = InternalOrder.new
+    @internal_order.order_type = 'provision'
+    @internal_order.order_products.build
   end
 
   # GET /internal_orders/provider/1/edit
@@ -42,9 +37,13 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
   def edit_products
     policy(:internal_order_provider).edit_products?(@internal_order)
-    @internal_order.proveedor_auditoria! if @internal_order.solicitud_enviada?
-    @internal_order_product = @internal_order.order_products.build
-    @form_id = DateTime.now.to_s(:number)
+    if params[:template].present?
+      new_from_template(params[:template], 'provision')
+    else
+      @internal_order.proveedor_auditoria! if @internal_order.solicitud_enviada?
+      @internal_order_product = @internal_order.order_products.build
+      @form_id = DateTime.now.to_s(:number)
+    end
   end
 
   def create
@@ -140,6 +139,15 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   def destroy
     policy(:internal_order_provider).destroy?(@internal_order)
     super
+  end
+
+  def new_from_template(template_id, order_type)
+    # Buscamos el template
+    @internal_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+    # Seteamos los productos a la orden
+    @internal_order_template.internal_order_product_templates.joins(:product).order('name').each do |iots|
+      @internal_order.order_products.build(product_id: iots.product_id)
+    end
   end
 
   private

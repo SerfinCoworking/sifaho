@@ -37,7 +37,7 @@ module Order
       if order_products.count.zero?
         raise ArgumentError, 'Debe asignar almenos 1 producto.'
       end
-      
+
       if solicitud_auditoria?
         solicitud_enviada!
         create_notification(a_user, 'envió')

@@ -128,32 +128,4 @@ class Sectors::InternalOrders::InternalOrderController < ApplicationController
       :observation
     )
   end
-
-  def new_from_template(template_id, order_type)
-    # Buscamos el template
-    @internal_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
-    @internal_order = InternalOrder.new
-    @internal_order.order_type = @internal_order_template.order_type
-
-    if @internal_order.provision?
-      @internal_order.applicant_sector = @internal_order_template.destination_sector
-    else
-      @internal_order.provider_sector = @internal_order_template.destination_sector
-    end
-
-    # Seteamos los productos a la orden
-    @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots|
-      @internal_order.order_products.build(product_id: iots.product_id)
-    end
-
-    # Establecemos la opciones del selector de sector
-    @sectors = Sector
-    .select(:id, :name)
-    .with_establishment_id(@internal_order_template.destination_sector.establishment.id)
-    .where.not(id: current_user.sector_id)
-  end
-
-  def sending?
-    return params[:commit] == 'sending'
-  end
 end

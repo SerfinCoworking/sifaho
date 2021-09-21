@@ -32,9 +32,17 @@ Rails.application.routes.draw do
         namespace :templates do
           get '', to: 'templates#index'
           # Solicitudes
-          resources :applicants
+          resources :applicants do
+            member do
+              post :build_from_template
+            end
+          end
           # Despachos
-          resources :providers
+          resources :providers do
+            member do
+              post :build_from_template
+            end
+          end
         end
 
         # Comments
