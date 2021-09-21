@@ -38,7 +38,7 @@
     <% end %>
 
     <% if policy(:internal_order_template_applicant).use_template?(@internal_order_template) %>
-      <%= link_to new_internal_orders_applicant_path(template: @internal_order_template), class: "btn btn-primary mr-1", target: :_blank do %>
+      <%= link_to build_from_template_internal_orders_templates_applicant_path(@internal_order_template), method: :post, class: "btn btn-primary mr-1", target: :_blank do %>
         <%= fa_icon "plus" %>
         Crear solicitud
       <% end %>

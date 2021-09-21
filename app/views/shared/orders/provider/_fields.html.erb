@@ -1,3 +1,5 @@
+<%# Generate a random id, for identify html form %>
+<% form_id = rand(0..100000) %>
 <% if order_product.new_record? %>
   <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order.id, form_id: @form_id) %>
 <% else %>
@@ -9,8 +11,8 @@
                     remote: true,
                     html: { 
                       id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
-                      class: "custom-form-row #{'editing' if order_product.errors.any?}",
-                      role: 'check-modified'} do |form| %>
+                      class: "custom-form-row #{'editing' if order_product.errors.any? || order_product.new_record?} #{'unsaved-row' if order_product.new_record?}" ,
+                    } do |form| %>
 
   <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
     <!-- Código del producto -->  

@@ -35,7 +35,7 @@
       <% end %>
     <% end %>   
     <% if policy(:external_order_template_applicant).use_template?(@external_order_template) %>
-      <%= link_to new_external_orders_applicant_path(template: @external_order_template), class: "btn btn-primary", target: :_blank do %>
+      <%= link_to build_from_template_external_orders_templates_applicant_path(@external_order_template), method: :post, class: "btn btn-primary", target: :_blank do %>
         <%= fa_icon "plus" %>
         Crear solicitud
       <% end %>

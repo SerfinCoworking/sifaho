@@ -51,4 +51,16 @@ class Sectors::InternalOrders::Templates::ApplicantsController < Sectors::Intern
       end
     end
   end
+
+  def build_from_template
+    respond_to do |format|
+      @internal_order = InternalOrder.create(provider_sector_id: @internal_order_template.destination_sector_id,
+                                             applicant_sector: current_user.sector,
+                                             requested_date: DateTime.now,
+                                             status: 'solicitud_auditoria',
+                                             observation: @internal_order_template.observation,
+                                             order_type: @internal_order_template.order_type)
+      format.html { redirect_to edit_products_internal_orders_applicant_path(id: @internal_order, template: @internal_order_template) }
+    end
+  end
 end

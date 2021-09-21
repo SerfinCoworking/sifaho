@@ -22,7 +22,6 @@ Rails.application.routes.draw do
             get :nullify_order
             get :edit_products
             post 'edit_products', to: 'providers#accept_order', as: 'accept_order'
-            # post 'edit_products', to: 'providers#dispatch_order', as: 'dispatch_order'
           end
           resources :products, except: [:index]
         end
@@ -31,9 +30,17 @@ Rails.application.routes.draw do
         namespace :templates do
           get '', to: 'templates#index'
           # Solicitudes
-          resources :applicants
+          resources :applicants do
+            member do
+              post :build_from_template
+            end
+          end
           # Despachos
-          resources :providers
+          resources :providers do
+            member do
+              post :build_from_template
+            end
+          end
         end
 
         # Comments

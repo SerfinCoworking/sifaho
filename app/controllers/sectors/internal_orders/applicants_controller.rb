@@ -21,15 +21,10 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /internal_orders/applicants/new_applicant
   def new
     policy(:internal_order_applicant).new?
-
-    begin
-      new_from_template(params[:template], 'solicitud')
-    rescue
-      flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
-      @internal_order = InternalOrder.new
-      @internal_order.order_type = 'solicitud'
-      @internal_order.order_products.build
-    end
+    flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
+    @internal_order = InternalOrder.new
+    @internal_order.order_type = 'solicitud'
+    @internal_order.order_products.build
   end
 
   # GET /external_orders/1/edit_receipt
@@ -40,8 +35,11 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
   def edit_products
     policy(:internal_order_applicant).edit_products?(@internal_order)
-    @internal_order_product = @internal_order.order_products.build
-    @form_id = DateTime.now.to_s(:number)
+    if params[:template].present?
+      new_from_template(params[:template], 'solicitud')
+    else
+      @internal_order_product = @internal_order.order_products.build
+    end
   end
 
   # POST /internal_orders/applicants
@@ -143,5 +141,14 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
   def set_last_requests
     @last_requests = current_user.sector_applicant_internal_orders.order(created_at: :asc).last(10)
+  end
+
+  def new_from_template(template_id, order_type)
+    # Buscamos el template
+    @internal_order_template = InternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+    # Seteamos los productos a la orden
+    @internal_order_template.internal_order_product_templates.joins(:product).order('name').each do |iots|
+      @internal_order.order_products.build(product_id: iots.product_id)
+    end
   end
 end

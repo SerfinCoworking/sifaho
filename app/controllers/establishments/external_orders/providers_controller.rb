@@ -1,7 +1,7 @@
 class Establishments::ExternalOrders::ProvidersController < Establishments::ExternalOrders::ExternalOrdersController
   include FindLots
   before_action :set_external_order, only: %i[show edit update dispatch_order rollback_order accept_order nullify_order
-                                              edit_products destroy]
+                                              edit_products destroy new_from_template]
   before_action :set_last_delivers, only: %i[new edit create update]
 
   # GET /external_orders/providers
@@ -155,9 +155,12 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   def edit_products
     policy(:external_order_provider).edit_products?(@external_order)
-    @external_order.proveedor_auditoria! if @external_order.solicitud_enviada?
-    @external_order_product = @external_order.order_products.build
-    @form_id = DateTime.now.to_s(:number)
+    if params[:template].present?
+      new_from_template(params[:template], 'provision')
+    else
+      @external_order.proveedor_auditoria! if @external_order.solicitud_enviada?
+      @external_order.order_products.build
+    end
   end
 
   # DELETE /external_orders/providers/1
@@ -172,8 +175,13 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
 
   private
 
-  def accepting?
-    params[:commit] == 'accepting'
+  def new_from_template(template_id, order_type)
+    # Buscamos el template
+    @external_order_template = ExternalOrderTemplate.find_by(id: template_id, order_type: order_type)
+    # Seteamos los productos a la orden
+    @external_order_template.external_order_product_templates.joins(:product).order('name').each do |eopt|
+      @external_order.order_products.build(product_id: eopt.product_id)
+    end
   end
 
   def set_last_delivers

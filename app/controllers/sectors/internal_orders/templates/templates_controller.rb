@@ -1,5 +1,5 @@
 class Sectors::InternalOrders::Templates::TemplatesController < ApplicationController
-  before_action :set_internal_order_template, only: %i[show edit update destroy]
+  before_action :set_internal_order_template, only: %i[show edit update destroy build_from_template]
 
   # GET /sectors/internal_orders/templates/templates
   # GET /sectors/internal_orders/templates/templates.json
