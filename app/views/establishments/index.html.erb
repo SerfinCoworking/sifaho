@@ -1,4 +1,4 @@
-<%= render 'external_orders/header' %>
+<%= render 'establishments/external_orders/header' %>
 
 <% if @establishments.present? %>
 
@@ -8,7 +8,7 @@
       </div>
       <div class="card-body fixed-panel-index">
         <%= render(
-          partial: 'establishments/list',
+          partial: 'list',
           locals: { establishments: @establishments }
         ) %>
       </div>

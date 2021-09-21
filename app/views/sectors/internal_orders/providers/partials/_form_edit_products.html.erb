@@ -1,0 +1,80 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @internal_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @internal_order.new_record? ? 'Nueva' : 'Editando' %> <%= @internal_order.order_type %> de sector
+        código <%= @internal_order.remit_code if @internal_order.persisted? %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  
+  <div class="card-body">
+
+      <div class="row">
+        <div class='col-md-3'>
+          <%# SECTOR SOLICITANTE %>  
+          Sector solicitante
+          <%= order.applicant_sector.name %>
+        </div>
+
+        <div class="col-md-3">
+          <%# SECTOR PROVEEDOR %>
+          Sector proveedor
+          <%= order.provider_sector.name %>
+        </div>
+        
+        <div class='col-md-3'>
+          Observaciones
+          <%= order.observation %>
+        </div>
+      </div>
+
+      <%# Dispatch order as POST method %>
+      <%= simple_form_for order_product, 
+                          url: dispatch_order_internal_orders_applicant_path(order),
+                          method: :POST,
+                          html: { id: "dispatch-order"} do |form| %>
+      <% end %>
+
+      <%# Error message of dispatch order without products%>
+      <div class="text-danger mt-2 mb-2">
+        <%= @error if @error.present? %>
+      </div>
+      
+      <%# PRODUCTOS SOLICITADOS %>
+      <%= render "shared/orders/provider/table", order: order, order_product: order_product %>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn btn-light mr-2' %>
+
+    <button class='btn btn-primary mr-2 send-order provider-order' 
+            type="button" 
+            data-url="<%= dispatch_order_internal_orders_provider_path(order) %>"
+            data-title="Enviando provisión de sector"
+            data-body="Hay productos que no han sido guardados aún">
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "paper-plane" %> Enviar
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
+      </div>
+
+    </button>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+
+  <%= render(partial: 'shared/modals/send_unsaved_confirmation') %>
+  <%= render(partial: 'shared/modals/send_confirmation') %>
+<% end %>

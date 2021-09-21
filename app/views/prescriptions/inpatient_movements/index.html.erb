@@ -1,0 +1,13 @@
+<%= render 'prescriptions/inpatient_prescriptions/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header">
+    <%= render "filter" %>
+  </div>
+  <div class="card-body fixed-panel-index">
+    <%= render(
+      partial: 'list',
+      locals: { inpatient_movement: @inpatient_movement }
+    ) %>
+  </div>
+</div>

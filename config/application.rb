@@ -44,5 +44,6 @@ module Sifaho
     config.autoload_paths += Dir[Rails.root.join('app', 'policies', '*/')]
     config.autoload_paths += Dir[Rails.root.join('app', 'controllers', '*/')]
     config.autoload_paths << Rails.root.join('lib')
+    config.paths['config/routes.rb'] = Dir[Rails.root.join('config/routes/*.rb')]
   end
 end

@@ -46,7 +46,7 @@ class LotStocksController < ApplicationController
     else
       @lot_stocks = @filterrific.find.page(params[:page]).per_page(20)
     end
-    
+
     respond_to do |format|
       format.html
       format.js
@@ -63,16 +63,15 @@ class LotStocksController < ApplicationController
   # GET /stocks/1.json
   def show
     authorize @lot_stock
-    @reserved_lots = @lot_stock.ext_ord_prod_lot_stocks
-      .where("external_orders.status = 3").joins(:order, :external_order_product).order("external_orders.updated_at DESC")
+    @reserved_lots = @lot_stock.movements_with_reserved_quantity
   end
-  
+
   # GET /stocks/1
   # GET /stocks/1.json
   def show_lot_archive
     authorize @lot_archive
   end
-  
+
   def new_archive
     authorize @lot_stock
     @lot_archive = LotArchive.new
@@ -80,12 +79,12 @@ class LotStocksController < ApplicationController
       format.js
     end
   end
-  
+
   def create_archive
     authorize @lot_stock    
     @lot_archive = LotArchive.new(lot_archive_params)
     @lot_archive.user_id = current_user.id
-    
+
     respond_to do |format|
       if @lot_archive.save
         format.html { redirect_to stock_show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
@@ -95,7 +94,7 @@ class LotStocksController < ApplicationController
     end
   end
 
-  def find_lots   
+  def find_lots
     # Buscamos los lot_stocks que pertenezcan al sector del usuario y ademas tengan stock
     @lot_stocks = LotStock.joins(:stock)
       .joins(:product)
@@ -122,7 +121,7 @@ class LotStocksController < ApplicationController
       format.js
     end
   end
-  
+
   def return_archive
     authorize @lot_archive
     @lot_archive.return_by(current_user)
@@ -132,20 +131,21 @@ class LotStocksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_lot_stock
-      @lot_stock = LotStock.find(params[:lot_stock_id])
-    end
-    
-    def set_lot_archive
-      @lot_archive = LotArchive.find(params[:id])
-    end
 
-    def lot_archive_params
-      params.require(:lot_archive).permit([
-        :lot_stock_id,
-        :quantity,
-        :observation
-      ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_lot_stock
+    @lot_stock = LotStock.find(params[:lot_stock_id])
+  end
+
+  def set_lot_archive
+    @lot_archive = LotArchive.find(params[:id])
+  end
+
+  def lot_archive_params
+    params.require(:lot_archive).permit([
+      :lot_stock_id,
+      :quantity,
+      :observation
+    ])
+  end
 end

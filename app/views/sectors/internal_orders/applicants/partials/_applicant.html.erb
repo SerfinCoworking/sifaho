@@ -1,0 +1,83 @@
+<tr id="internal_order_<%= internal_order.id %>" class="<%= internal_order_td(internal_order) %>">
+  <td><%= internal_order.remit_code %></td>
+    <td class="sol-col-aba">
+      <%= internal_order.provider_sector.name %>
+    </td>
+    <td>
+    <span class="badge badge-secondary">
+      <%= internal_order.order_type.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <span class="badge badge-<%= internal_status_label(internal_order) %>">
+      <%= internal_order.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%= internal_order.order_products.count %>
+  </td>
+  <td>
+    <%= internal_order.movements.count %>
+  </td>
+  <td>
+    <%= internal_order.comments.count %>
+  </td>
+  <td>
+    <%= internal_order.requested_date.strftime("%d/%m/%Y") %>
+  </td>
+    <% if internal_order.provision_entregada? %>
+      <td>
+      <%= internal_order.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      <td>
+      ----
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    <% if policy(:internal_order_applicant).edit_products?(internal_order) %>
+      <%= link_to edit_products_internal_orders_applicant_path(internal_order),
+        class: 'btn btn-warning btn-sm', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "file-signature" %>
+      <% end %>
+    <% end %>
+
+    <% if policy(internal_order).show? %>
+      <%= link_to internal_orders_applicant_path(internal_order), class: 'btn btn-secondary btn-sm', 
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+    <% if policy(internal_order).show? %>
+      <%= link_to internal_orders_applicants_path(internal_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+    <% end %>
+    <% if policy(:internal_order_applicant).edit?(internal_order) %>
+      <%= link_to edit_internal_orders_applicant_path(internal_order), :"data-turbolinks" => false, class: 'btn btn-warning btn-sm', 
+        title: 'Editar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+    <% if policy(:internal_order_applicant).destroy?(internal_order) %>
+      <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        title="<%= t("actions.tooltip.delete") %>"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-target="#delete-item" 
+        data-title="Eliminar solicitud"
+        data-body="Esta seguro que desea eliminar la solicitud <%= internal_order.remit_code %>?"
+        data-href="<%= internal_orders_applicant_url(internal_order.id) %>">
+          <%= fa_icon "trash" %>
+      </button>
+    <% end %>
+  </td>
+</tr>
+
+
+<% content_for :modal do %>
+  <% if policy(:internal_order_applicant).destroy?(internal_order) %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+<% end %>

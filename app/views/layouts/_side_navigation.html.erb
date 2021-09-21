@@ -29,7 +29,9 @@
     <% end %>
 
     <% if policy(InpatientPrescription).index? %>
-      <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom #{active_class('inpatient_prescriptions')}" do %>
+      <%= link_to main_app.inpatient_prescriptions_path, class: "list-group-item list-group-item-action list-custom 
+        #{active_class('prescriptions/inpatient_prescriptions')} #{active_class('prescriptions/beds')} 
+        #{active_class('prescriptions/bedrooms')} #{active_class('prescriptions/inpatient_movements')}" do %>
         <span class="sb-icon">
           <%= fa_icon "procedures" %>
         </span>
@@ -38,7 +40,8 @@
     <% end %>
 
     <% if policy(Sector).index? %>
-      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom #{active_class('sectors')} #{active_class('internal_orders')} #{active_class('internal_order_templates')}" do %>
+      <%= link_to main_app.sectors_path, class: "list-group-item list-group-item-action list-custom 
+        #{active_class_folder('sectors')}" do %>
         <span class="sb-icon">
           <%= fa_icon "bezier-curve" %>
         </span>
@@ -47,9 +50,10 @@
     <% end %>
 
     <% if policy(Establishment).index? %>
-      <%= link_to main_app.provider_index_external_orders_path, class: "list-group-item list-group-item-action list-custom #{active_class('establishments')} #{active_class('external_orders')} #{active_class('external_order_templates')}" do %>
+      <%= link_to main_app.external_orders_providers_path, class: "list-group-item list-group-item-action list-custom
+        #{active_class_folder('establishments')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "hospital"%>
+          <%= fa_icon "hospital" %>
         </span>
         <span class="ml-2 sb-title">Establecimientos</span>
       <% end %>
@@ -58,7 +62,7 @@
     <% if policy(Purchase).index? %>
       <%= link_to main_app.purchases_path, class: "list-group-item list-group-item-action list-custom #{active_class('purchases')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "truck-moving"%>
+          <%= fa_icon "truck-moving" %>
         </span>
         <span class="ml-2 sb-title">Abastecimientos</span>
       <% end %>
@@ -67,7 +71,7 @@
     <% if policy(SanitaryZone).index? %>
       <%= link_to main_app.sanitary_zones_path, class: "list-group-item list-group-item-action list-custom #{active_class('sanitary_zones')}" do %>
         <span class="sb-icon">
-          <%= fa_icon "map"%>
+          <%= fa_icon "map" %>
         </span>
         <span class="ml-2 sb-title">Zonas sanitarias</span>
       <% end %>
@@ -83,7 +87,8 @@
     <% end %>
 
     <% if policy(Lot).index? %>
-      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('lots')}"  do %>
+      <%= link_to main_app.lots_path, class: "list-group-item list-group-item-action list-custom #{active_class('lots')}
+        #{active_class('lot_provenances')}"  do %>
         <span class="sb-icon">
           <%= fa_icon "barcode" %>
         </span>
@@ -92,7 +97,8 @@
     <% end %>
 
     <% if policy(Product).index? %>
-      <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom #{active_class('products')}" do %>
+      <%= link_to main_app.products_path, class: "list-group-item list-group-item-action list-custom 
+        #{active_class('products')} #{active_class('snomed_concepts')}" do %>
         <span class="sb-icon">
           <%= fa_icon "pills" %>
         </span>
@@ -137,7 +143,8 @@
     <% end %>
 
     <% if policy(User).index? %>
-      <%= link_to main_app.users_admin_index_path, class: "list-group-item list-group-item-action list-custom #{active_class('users')}" do %>
+      <%= link_to main_app.users_admin_index_path, class: "list-group-item list-group-item-action list-custom 
+        #{active_class('users')} #{active_class('permission_requests')}" do %>
         <span class="sb-icon">
           <%= fa_icon "users" %>
         </span>

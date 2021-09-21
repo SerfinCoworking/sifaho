@@ -1,0 +1,181 @@
+<tr class="nested-fields"  id="parent-<%= f.object.product.present? ? f.object.product.id : '' %>">
+  <!-- Código del producto -->
+  <td>
+    <% if policy(f.object).edit_parent_product? %>
+      <div class="custom-input-group">
+        <div class="form-group">
+          <input type="text" 
+                 class="form-control product_id uniqueness_parent_product_in_the_order product-code order-product-inputs input-sm"
+                 name="<%= f.object.id.present? ? "product_code_fake-#{f.object.id}": "product_code_fake"%>" 
+                 value="<%= f.object.product.present? ? f.object.product.code : '' %>"
+                 data-autocomplete-source="<%= search_by_code_products_path %>"
+                 size="6"
+                 autocomplete="off"
+                 placeholder="Código"
+                 <%= 'readonly' if f.object.product.present? %>>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
+
+      <%# Hidden product_id %>
+      <input class="form-control product-id" 
+             type="hidden" 
+             name="<%= f.object.product_id.present? ? "ip_products[#{f.object.product_id}][product_id]" : 'product_id' %>"
+             value="<%= f.object.product_id if f.object.product_id.present? %>">
+      
+    <% else %>
+      <div class="product-info">
+        <%= f.object.product.code %>
+      </div>
+    <% end %>
+  </td>
+
+  <!-- Nombre de Producto -->
+  <td>
+    <% if policy(f.object).edit_parent_product? %>
+      <div class="custom-input-group" style="width: 21.875rem">
+        <div class="form-group">
+          <input type="text"
+                 class="form-control product_id uniqueness_parent_product_in_the_order product-name order-product-inputs input-sm"
+                 name="<%= f.object.id.present? ? "product_name_fake-#{f.object.id}": "product_name_fake"%>"
+                 value="<%= f.object.product.present? ? f.object.product.name : '' %>"
+                 data-autocomplete-source="<%= search_by_name_products_path %>"
+                 size="45"
+                 autocomplete="off"
+                 placeholder="Nombre"
+                 <%= 'readonly' if f.object.product.present? %>>
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="with-loading">
+          <%= fa_icon 'spinner', class: "fa-spin"%>
+        </div>
+      </div>
+    <% else %>
+      <div class="product-info text-truncate" style="width: 21.875rem">
+        <%= f.object.product.name %>
+      </div>
+    <% end %>
+  </td>
+
+  <!-- Unidad -->
+  <td>
+    <% if policy(f.object).edit_parent_product? %>  
+      <div class="form-group">
+        <input class="form-control input-sm product-unity" 
+              value="<%= f.object.product.unity.name if f.object.product.present? %>"
+              placeholder="Unidad" 
+              name="<%= f.object.id.present? ? "supply_unity_fake-#{f.object.id}": "supply_unity_fake"%>"
+              disabled>
+      </div>
+    <% else %>
+      <div class="product-info">
+        <%= f.object.product.unity.name %>
+      </div>
+    <% end %>
+  </td>
+    
+  <!-- Dosis -->
+  <td style="width: 100px">
+    <% if policy(f.object).edit_parent_product? %>
+      <div class="form-group">
+        <input class="form-control input-sm order-product-inputs dose_quantity" 
+              value="<%= f.object.dose_quantity if f.object.dose_quantity.present? %>"
+              placeholder="Cant" 
+              type="number"
+              min="0"
+              name="<%= f.object.id.present? ? "dose_quantity-#{f.object.id}": "dose_quantity"%>"
+              <%= 'readonly' if f.object.id.present? %>>
+        <div class="invalid-feedback"> </div>
+      </div>
+      
+    <% else %>
+      <div class="product-info">
+        <%= f.object.dose_quantity %>
+      </div>
+    <% end %>
+  </td>
+
+  <!-- Intervalo -->
+  <td>
+    <% if policy(f.object).edit_parent_product? %>
+      <div class="form-group">
+        <input class="form-control input-sm order-product-inputs interval" 
+              value="<%= f.object.interval if f.object.interval.present? %>"
+              placeholder="Intervalo" 
+              type="number"
+              min="0"
+              max="24"
+              name="<%= f.object.id.present? ? "interval-#{f.object.id}": "interval"%>"
+              <%= 'readonly' if f.object.id.present? %>>
+        <div class="invalid-feedback"> </div>
+      </div>
+
+    <% else %>
+      <div class="product-info">
+        <%= f.object.interval %>
+      </div>
+    <% end %>
+  </td>
+
+  <td>
+    <% if policy(f.object).edit_parent_product? %>
+    <div class="form-group">
+        <input class="form-control input-sm total_dose" 
+              value="<%= f.object.total_dose if f.object.total_dose.present? %>"
+              placeholder="Dosis total" 
+              type="number"
+              readonly
+              tabindex="-1"
+              name="<%= f.object.id.present? ? "total_dose-#{f.object.id}": "total_dose" %>"
+              style="pointer-events: none;">
+        <div class="invalid-feedback"> </div>
+      </div>
+    <% else %>
+      <div class="product-info">
+        <%= f.object.total_dose %>
+      </div>
+    <% end %>
+  </td>
+
+  <td>
+    <% if policy(f.object).edit_parent_product? %>
+      <div style="width: 21.875rem">
+        <%= f.input :observation, label: false, as: :text,
+                    readonly: !f.object.new_record?,
+                    input_html: { class: 'input-sm product-observartion order-product-inputs', cols: 20  , rows: 1 } %>
+      </div>
+    <% else %>  
+      <div class="product-info text-truncate" style="width: 21.875rem">
+        <%= f.object.observation %>
+      </div>
+    <% end %>
+  </td>
+  
+  <td class="actions-col">
+    <% if f.object.new_record? %>
+      <!-- Boton crear-->
+      <button type="button" class="btn btn-md btn-outline-success btn-ipp-save" 
+              data-url="<%= inpatient_prescription_inpatient_prescription_products_path(f.object.inpatient_prescription_id) %>" 
+              data-url-type="POST" 
+              data-toggle="tooltip" 
+              data-placement="top" 
+              title="Guardar" 
+              data-product-id="<%= f.object.id %>">
+        <%= fa_icon 'save', class: "fa-fw" %>
+      </button>
+      <!-- Quitar elemento (no persistido) -->
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-outline-danger btn-md',
+        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash-alt", class: "fa-fw" %>
+      <% end %>
+
+    <% elsif policy(f.object).edit_parent_product? %>
+      <%= render 'prescriptions/inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
+    <% end %>    
+  </td>
+</tr>

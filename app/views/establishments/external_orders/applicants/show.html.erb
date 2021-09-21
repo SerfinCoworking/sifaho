@@ -1,0 +1,321 @@
+<%= render 'establishments/external_orders/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo <%= @external_order.human_name.downcase %>
+      </h5>
+    </div>
+    <div>
+      <%= link_to external_orders_applicants_path(format: 'pdf'), class: 'btn',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+      <%= link_to external_orders_applicants_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class='col'>
+        <strong>Solicitante:</strong>
+        <%= @external_order.applicant_sector.name %><br>
+        <%= @external_order.applicant_establishment.name %>
+      </div>
+      <div class="col">
+        <strong>Proveedor:</strong>
+        <%= @external_order.provider_sector.name %><br>
+        <%= @external_order.provider_establishment.name %>
+      </div>
+      <div class='col-2'>
+        <strong>Solicitado:</strong>
+        <%= @external_order.requested_date.strftime("%d/%m/%Y")%>
+      </div>
+      <div class='col-3'>
+        <strong>Observaciones:</strong>
+          <%= @external_order.observation? ? @external_order.observation : 'Sin observaciones' %>
+      </div>
+      <div class='col-2'>
+        <strong>Código:</strong>
+        <%= @external_order.remit_code %>
+      </div>
+    </div>
+    
+    <!-- Status bar -->
+    <hr>
+    <%= render 'shared/status_bar', order: @external_order %>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#products' role="tab">
+              <%= fa_icon "cubes" %> Productos
+              <span class="badge badge-secondary"><%= @external_order.order_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @external_order.movements.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
+              <%= fa_icon "comments" %> Comentarios
+              <span class="badge badge-secondary" id="comments-count"><%= @external_order.comments.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="tab-content">
+      <div id='products' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm">
+            <thead >
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th>Solicitado</th>
+                <th><%= @external_order.provision_entregada? ? 'Entregado' : 'A entregar' %></th>
+                <th>Lotes</th>
+                <th>Observaciones</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @external_order.order_products.joins(:product).order("name").each do |ext_ord_prod| %>
+                <tr class="<%= highlight_row(ext_ord_prod.product_id) %>">
+                  <td class="text-secondary">
+                    <% @stock = Stock.where(sector: current_user.sector, product: ext_ord_prod.product ).first %>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= ext_ord_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= ext_ord_prod.product_code %>
+                    <% end %>
+                  </td>
+                  <td class="text-secondary">
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                        <%= ext_ord_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= ext_ord_prod.product_name %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= ext_ord_prod.product_unity_name %>
+                  </td>
+                  <td>
+                    <%= ext_ord_prod.request_quantity %> 
+                  </td>
+                  <td>
+                    <%= ext_ord_prod.delivery_quantity %>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= ext_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= ext_ord_prod.id %>">
+                      <%= ext_ord_prod.order_prod_lot_stocks.count %>
+                    </button>
+                  </td>
+                  <td>
+                    <% if ext_ord_prod.provider_observation.present? || ext_ord_prod.applicant_observation.present? %>
+                      <%= fa_icon "asterisk" %>
+                    <% else %>
+                      ---
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= ext_ord_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                      <% if ext_ord_prod.order_prod_lot_stocks.present? %>
+                        <table class="w-100">
+                          <thead>
+                            <tr>
+                              <th> Cantidad </th>
+                              <th> Lote </th>
+                              <th> Laboratorio </th>
+                              <th> Vencimiento </th>
+                            </tr>
+                          </thead>
+                          </tbody>
+                            <% ext_ord_prod.order_prod_lot_stocks.each do |eopls| %>
+                            <tr>
+
+                              <td>
+                                <%= eopls.quantity %>
+                              </td>
+                              
+                              <td>
+                                <%= eopls.lot_stock.lot.code %>
+                              </td>
+                              
+                              <td>
+                                <%= eopls.lot_stock.lot.laboratory.name %>
+                              </td>
+                              
+                              <td>
+                                <%= eopls.lot_stock.lot.expiry_date.present? ? eopls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                              </td>
+                            </tr>
+
+                            <% end %>
+                          </tbody>
+                        </table>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
+                        <% if ext_ord_prod.provider_observation.present? || ext_ord_prod.applicant_observation.present? %>
+                          <table class="w-100">
+                            <tr>
+                              <th>Descripción solicitud</th>
+                              <th>Descripción proveedor</th>
+                            </tr>
+                            <tr>
+                              <td><%= ext_ord_prod.provider_observation %></td>
+                              <td><%= ext_ord_prod.applicant_observation %></td>
+                            </tr>
+                          </table>
+                        <%end%>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @external_order %>
+      </div> <!-- End last movements tab pane -->
+      <div id='comments' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/comments', order: @external_order, new_comment: ExternalOrderComment.new %>
+      </div> <!-- End comments tab pane -->
+    </div> <!-- End Tab content-->
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <div class="text-right w-100">
+      <%= link_to external_orders_applicants_path,  
+        'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
+        class: "btn btn-light mr-1" do %>
+        Volver
+      <% end %>
+
+      <% if policy(:external_order_applicant).show? %>
+        <%= link_to external_orders_applicant_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+          <%= fa_icon "print" %> Imprimir
+        <% end %>
+      <% end %>
+
+      <% if policy(:external_order_applicant).edit?(@external_order) %>
+        <%= link_to edit_external_orders_applicant_path(@external_order),  
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "pen" %>
+          Editar orden
+        <% end %>
+      <% end %>
+
+      <% if policy(:external_order_applicant).edit_products?(@external_order) %>
+        <%= link_to edit_products_external_orders_applicant_path(@external_order), 
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
+          class: 'btn btn-warning btn-md mr-1' do %>
+          <%= fa_icon "file-signature" %>
+          Editar productos
+        <% end %>
+      <% end %>
+      
+      <% if policy(:external_order_applicant).can_send?(@external_order) %>
+        <%= link_to dispatch_order_external_orders_applicant_path(@external_order), 
+          'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Enviando... ".html_safe,
+          class: 'btn btn-primary btn-md mr-1' do %>
+          <%= fa_icon "paper-plane" %>
+          Enviar solicitud
+        <% end %>
+      <% end %>
+      
+      <% if policy(:external_order_applicant).rollback_order?(@external_order) %>
+        <button type="button" class="btn btn-warning mr-1" data-toggle="modal" data-target="#return-confirm">
+          <%= fa_icon "undo" %>
+          Retornar
+        </button>
+      <% end %>
+      
+      
+      <% if policy(:external_order_applicant).receive_order?(@external_order) %>
+        <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#receive-confirm">
+          <%= fa_icon "check" %>
+          Recibir
+        </button>
+      <% end %>
+    </div> <!-- fin botones right -->
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo solicitudes enviadas o entregas aceptadas)%>
+  <% if policy(:external_order_applicant).rollback_order?(@external_order) %>
+    <div class="modal" id="return-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
+            <h5 class="m-0"><%= fa_icon "undo" %> Retornar a <%= prev_status = ExternalOrder.statuses.key(@external_order.status_before_type_cast - 1).humanize.underscore %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Seguro que desea retornar la <%= @external_order.order_type %> actual a <%= prev_status %>?</p>
+            <% if @external_order.proveedor_aceptado? %>
+              <p>Las cantidades reservadas de los productos para este pedido volverán a estar disponibles en stock.</p>
+            <% end %>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Confirmar', rollback_order_external_orders_applicant_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Retornando...".html_safe, :class => 'btn btn-warning' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <%# Recibo de orden (solo en proveedor en camino) %>
+  <% if policy(:external_order_applicant).receive_order?(@external_order) %>
+    <div class="modal fade" id="receive-confirm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar recibo de <%= @external_order.human_name.downcase %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro que ha recibido el <%= @external_order.human_name.downcase %> código <%= @external_order.remit_code %>?</p>
+            <p>El pedido contiene <%= pluralize(@external_order.order_products.count, 'producto', plural: 'productos diferentes') %>.</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Confirmar', receive_order_external_orders_applicant_path(@external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Recibiendo...".html_safe, :class => 'btn btn-success' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+<% end %>

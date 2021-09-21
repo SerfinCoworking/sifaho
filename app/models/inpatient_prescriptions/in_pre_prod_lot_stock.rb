@@ -11,10 +11,6 @@ class InPreProdLotStock < ApplicationRecord
   validates :lot_stock, presence: true
   validate :total_available_quantity
 
-  accepts_nested_attributes_for :lot_stock,
-                                reject_if: proc { |attributes| attributes['lot_stock_id'].blank? },
-                                allow_destroy: true
-
   before_create :reserve_quantity
   before_update :update_reserved_quantity, if: :product_is_not_dispensada?
   before_destroy :return_reserved_quantity

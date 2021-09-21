@@ -1,61 +1,29 @@
 class InternalOrder < ApplicationRecord
   include PgSearch
+  include Order
 
   enum order_type: { provision: 0, solicitud: 1 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2, provision_en_camino: 3,
                  provision_entregada: 4, anulado: 5 }
 
-  # Relaciones
-  belongs_to :applicant_sector, class_name: 'Sector'
-  belongs_to :provider_sector, class_name: 'Sector'
-  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'internal_order_id', inverse_of: 'internal_order'
-  has_many :int_ord_prod_lot_stocks, through: :order_products
-  has_many :lot_stocks, through: :order_products
-  has_many :lots, through: :lot_stocks
-  has_many :products, through: :order_products
+  # Relationships
+  has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'order_id',
+                            inverse_of: 'order'
+  has_many :int_ord_prod_lot_stocks, through: :order_products, inverse_of: :order, source: :order_prod_lot_stocks
   has_many :movements, class_name: 'InternalOrderMovement'
   has_many :comments, class_name: 'InternalOrderComment', foreign_key: 'order_id'
-  # has_many :stock_movements, as: :order, dependent: :destroy, inverse_of: :order
 
-  ###### DEPRECATED ######
-  belongs_to :created_by, class_name: 'User', optional: true
-  belongs_to :audited_by, class_name: 'User', optional: true
-  belongs_to :sent_by, class_name: 'User', optional: true
-  belongs_to :received_by, class_name: 'User', optional: true
-  belongs_to :sent_request_by, class_name: 'User', optional: true
-  belongs_to :rejected_by, class_name: 'User', optional: true
-
-  # Validaciones
-  validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
-  validate :presence_of_products_into_the_order
   validates_associated :order_products
-  validates_uniqueness_of :remit_code
 
-  # Atributos anidados
+  # Nested attributes
   accepts_nested_attributes_for :order_products,
                                 reject_if: proc { |attributes| attributes['product_id'].blank? },
                                 allow_destroy: true
 
-  # Callbacks
-  before_validation :record_remit_code, on: :create
-
-  after_create :set_notification_on_create
-  after_update :set_notification_on_update
-
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
-    available_filters: [
-      :search_code,
-      :search_applicant,
-      :search_provider,
-      :with_order_type,
-      :with_status,
-      :requested_date_since,
-      :requested_date_to,
-      :date_received_since,
-      :date_received_to,
-      :sorted_by
-    ]
+    available_filters: %i[search_code search_applicant search_provider with_order_type with_status requested_date_since
+                          requested_date_to date_received_since date_received_to sorted_by]
   )
 
   pg_search_scope :search_code,
@@ -75,7 +43,7 @@ class InternalOrder < ApplicationRecord
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/s
       # Ordenamiento por fecha de creación en la BD
@@ -182,42 +150,6 @@ class InternalOrder < ApplicationRecord
     end
   end
 
-  # Nullify the order
-  def nullify_by(a_user)
-    self.rejected_by = a_user
-    self.status = "anulado"
-    self.save!(validate: false)
-    self.create_notification(a_user, "anuló")
-  end
-
-  def send_request_by(a_user)
-    if self.solicitud_auditoria?
-      self.sent_request_by = a_user
-      self.solicitud_enviada!
-      self.create_notification(a_user, "envió")
-    else
-      raise ArgumentError, 'La solicitud no se encuentra en auditoría.'
-    end
-  end
-
-  # Método para retornar pedido a estado anterior
-  def return_provider_status_by(a_user)
-    if provision_en_camino?
-      self.order_products.each do |iop|
-        iop.increment_stock
-      end
-  
-      self.sent_by = nil
-      self.sent_date = nil
-      self.status = "proveedor_auditoria"
-      self.save!(validate: false)
-
-      self.create_notification(a_user, "retornó a un estado anterior")
-    else
-      raise ArgumentError, "No es posible retornar a un estado anterior"
-    end
-  end
-
   # Método para retornar perdido a estado anterior
   def return_applicant_status_by(a_user)
     if solicitud_enviada?
@@ -226,19 +158,6 @@ class InternalOrder < ApplicationRecord
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
     end
-  end
-
-  # Cambia estado del pedido a "Aceptado" y se verifica que hayan lotes
-  def receive_order_by(a_user)
-    self.order_products.each do |iop|
-      iop.increment_lot_stock_to(self.applicant_sector)
-    end
-
-    self.date_received = DateTime.now
-    self.received_by = a_user
-    self.create_notification(a_user, "recibió")
-    self.status = "provision_entregada"
-    self.save!(validate: false)
   end
 
   def create_notification(of_user, action_type)
@@ -255,19 +174,6 @@ class InternalOrder < ApplicationRecord
       @not.read_at = nil
       @not.save
     end
-  end
-
-  # Cambia estado a "en camino" y descuenta la cantidad a los lotes de insumos
-  def send_order_by(a_user)
-    self.order_products.each do |iop|
-      iop.decrement_stock
-    end
-
-    self.sent_date = DateTime.now
-    self.sent_by_id = a_user.id
-    self.save!(validate: false)
-
-    self.create_notification(a_user, "envió")
   end
 
   def get_statuses
@@ -305,36 +211,15 @@ class InternalOrder < ApplicationRecord
     self.applicant_sector.name
   end
 
-  # Return the i18n model name
-  def human_name
-    self.class.model_name.human
-  end
-
   private
 
   def record_remit_code
     self.remit_code = "SE#{DateTime.now.to_s(:number)}"
-    # if self.provision?
-    #   self.remit_code = self.provider_sector.name[0..3].upcase+'prov'+InternalOrder.maximum(:id).to_i.next.to_s
-    # elsif self.solicitud?
-    #   self.remit_code = self.applicant_sector.name[0..3].upcase+'sol'+InternalOrder.maximum(:id).to_i.next.to_s
-    # end
-  end
-
-  # set created notification and create stock accordding with the internal order status
-  def set_notification_on_create
-    self.create_notification(self.audited_by, "creó")
-  end
-
-  def set_notification_on_update
-    unless self.provision_entregada?
-      self.create_notification(self.audited_by, "auditó")
-    end
   end
 
   def presence_of_products_into_the_order
     if self.order_products.size == 0
-      errors.add(:presence_of_products_into_the_order, "Debe agregar almenos 1 producto")      
+      errors.add(:presence_of_products_into_the_order, 'Debe agregar almenos 1 producto')
     end
   end
 end

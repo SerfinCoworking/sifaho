@@ -1,0 +1,77 @@
+<%= render 'sectors/internal_orders/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <h5 class="card-title mb-0 ml-2">
+        <%= fa_icon "eye" %> 
+        Viendo plantilla de <%= @internal_order_template.order_type %>
+      </h5>
+    </div>
+    <%= link_to internal_orders_templates_path, class: 'btn',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <div class="row">
+      <div class="col-md-3">
+        <h5>Nombre</h5>
+        <%= @internal_order_template.name %>
+      </div>
+      <div class="col-md-3">
+        <%= yield(:internal_order_template_show_title)%>
+        <%= @internal_order_template.destination_sector.name %>
+      </div>
+      <% if @internal_order_template.observation.present? %>
+        <div class="col-md-3">
+          <h5>Observaciones</h5>
+          <%= @internal_order_template.observation %>
+        </div>
+      <% end %>
+      <div class="col-md-3">
+        <h5>Creada por</h5>
+        <% if @internal_order_template.created_by.profile.present? %>
+          <span><%= image_tag user_avatar(@internal_order_template.created_by, 25), class:"img-circle img-profile-nav" %></span>
+        <% end %>
+        <%= @internal_order_template.created_by.full_name %>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <!-- Insumos a dispensar -->
+          <table class="table table-hover table-sm mb-0">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody class="internal_order_product_templates">
+              <% @internal_order_template.internal_order_product_templates.joins(:product).order("name").each do |iots| %>
+                <tr>
+                  <td><%= iots.product_code %></td>
+                  <td><%= iots.product_name %></td>
+                  <td><%= iots.unity.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <%= yield(:action_buttons) %>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <% if policy(@internal_order_template).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+<% end %>

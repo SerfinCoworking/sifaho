@@ -1,0 +1,106 @@
+<tr class="nested-fields" id="child-<%= f.object.id.present? ? f.object.id : '' %>">
+  <!-- Código del producto -->
+  <td>
+    <div class="custom-input-group">
+      <div class="form-group">
+        <input type="text" 
+                class="form-control product_id uniqueness_child_product_in_the_order product-code order-product-inputs input-sm"
+                name="<%= f.object.id.present? ? "product_code_fake-#{f.object.id}": "product_code_fake"%>" 
+                value="<%= f.object.product.present? ? f.object.product.code : parent.object.product.code %>"
+                data-autocomplete-source="<%= search_by_code_products_path %>"
+                size="6"
+                autocomplete="off"
+                placeholder="Código"
+                <%= 'readonly' if f.object.product.present? %>>
+        <div class="invalid-feedback"></div>
+      </div>
+
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+
+    <%# Hidden product_id %>
+    <input class="form-control product-id" 
+            type="hidden" 
+            name="<%= f.object.product_id.present? ? "ip_products[#{f.object.product_id}][product_id]" : 'product_id' %>"
+            value="<%= f.object.product_id.present? ? f.object.product_id : parent.object.product.id %>">
+
+  </td>
+
+  <!-- Nombre de Producto -->
+  <td>
+    <div class="custom-input-group">
+      <div class="form-group">
+        <input type="text"
+                class="form-control product_id uniqueness_child_product_in_the_order product-name order-product-inputs input-sm"
+                name="<%= f.object.id.present? ? "product_name_fake-#{f.object.id}" : "product_name_fake"%>"
+                value="<%= f.object.product.present? ? f.object.product.name : parent.object.product.name %>"
+                data-autocomplete-source="<%= search_by_name_products_path %>"
+                size="45"
+                autocomplete="off"
+                placeholder="Nombre"
+                <%= 'readonly' if f.object.product.present? %>>
+        <div class="invalid-feedback"></div>
+      </div>
+
+      <div class="with-loading">
+        <%= fa_icon 'spinner', class: "fa-spin"%>
+      </div>
+    </div>
+  </td>
+
+  <!-- Stock -->
+  <td>
+    <div class="form-group">
+      <input class="form-control input-sm product-stock" 
+            value="<%= (f.object.product.present? ? current_user.sector.stock_to(f.object.product) : current_user.sector.stock_to(parent.object.product)) %>"
+            name="<%= f.object.id.present? ? "stock_fake-#{f.object.id}": "stock_fake"%>"
+            disabled>
+    </div>
+  </td>
+
+  <!-- Delivery quantity -->
+  <td>
+    <div class="form-group">
+      <input class="form-control input-sm order-product-inputs deliver_quantity product-deliver-quantity" 
+             value="<%= f.object.id.present? ? f.object.deliver_quantity : parent.object.total_dose %>"
+             placeholder="A entregar" 
+             type="number"
+             name="<%= f.object.id.present? ? "deliver_quantity-#{f.object.id}": "deliver_quantity"%>"
+            <%= 'readonly' if f.object.id.present? %>>
+      <div class="invalid-feedback"> </div>
+    </div>
+  </td>
+  
+  <td>
+    <%= f.input :observation, label: false, as: :text, :input_html => { 
+      class: 'order-product-inputs input-sm product-observartion', 
+      :cols => 20, 
+      :rows => 1, 
+      readonly: f.object.id.present? } %>
+  </td>
+
+  <td class="actions-col">
+    <% if f.object.new_record? %>
+      <!-- Boton crear -->
+      <button type="button" class="btn btn-outline-success btn-ipp-save" 
+              data-url="<%= inpatient_prescription_inpatient_prescription_products_path(order.id) %>" 
+              data-url-type="POST" 
+              data-toggle="tooltip" 
+              data-placement="top" 
+              title="Guardar" 
+              data-parent-id="<%= parent.object.id %>">
+        <%= fa_icon 'save', class: "fa-fw" %>
+      </button>
+
+      <%= link_to_remove_association  f, class: 'remove-tag btn btn-outline-danger',
+        title: 'Quitar', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "trash-alt", class: "fa-fw" %>
+      <% end %>
+       
+    <% elsif policy(f.object).edit_child_product? %>
+      <%= render 'prescriptions/inpatient_prescriptions/partials/select_lot_stocks_btn', order: order, f_object: f.object %>
+    <% end %>
+  </td>
+</tr>

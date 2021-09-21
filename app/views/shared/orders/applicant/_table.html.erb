@@ -1,0 +1,27 @@
+<div class="card mx-auto">
+  <div class="row m-0">
+    <div class="col-1 pl-2 pr-2">Código</div>
+    <div class="col-3 pl-2 pr-2">Producto</div>
+    <div class="col-1 pl-2 pr-2">Unidad</div>
+    <div class="col-1 pl-2 pr-2">Tu stock</div>
+    <div class="col-1 pl-2 pr-2">Solicitar</div>
+    <div class="col pl-2 pr-2">Tu observación</div>
+    <div class="col-1 pl-2 pr-2"></div>
+  </div>
+  <div id="order-products-container">
+    <% order.order_products.each do |order_product_store| %>
+      <%= render "shared/orders/applicant/fields", order: order, order_product: order_product_store %>
+    <% end.presence || ( render "shared/orders/applicant/fields", order: order, order_product: order_product ) %>
+  </div>
+
+  <%= link_to polymorphic_path([:new, order.class.name.underscore.pluralize, :applicant_product], applicant_id: order.id), remote: true, 
+    class: 'btn btn-primary btn-sm' do %>
+    Agregar producto
+    <%= fa_icon "plus" %>
+  <% end %>
+
+</div>
+
+<% content_for :modal do %>
+  <%= render(partial: 'shared/modals/delete_confirmation') %>
+<% end %>

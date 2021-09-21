@@ -1,0 +1,340 @@
+<%= render 'prescriptions/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo receta crónica
+        <span class="badge badge-<%= chronic_prescription_status_label(@chronic_prescription) %>">
+          <%= @chronic_prescription.status.underscore.humanize %>
+        </span>
+      </h5>
+    </div>
+    <div>
+      <%= link_to chronic_prescriptions_path, class: 'btn',
+          :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+        <%= fa_icon "times" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <!-- Professional profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to professional_path(@chronic_prescription.professional), class: "link" do %>
+              <%= image_tag professional_avatar(@chronic_prescription.professional, 83), size: '83x102', class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Médico</h4>
+            <p>
+              <%= link_to professional_path(@chronic_prescription.professional), class: "link" do %>
+                <%= @chronic_prescription.professional_fullname %>
+              <% end %>
+            </p>
+            <p class="mb-1"><strong>Matrículas: </strong>
+            <% @chronic_prescription.professional_qualifications.each do |qualification| %>
+              <p class="mb-1"> <%= "#{qualification.name} #{qualification.code}" %> </p>
+            <% end %>
+          </div>
+        </div> 
+      </div><!-- End professional profile -->
+
+      <!-- Patient profile -->
+      <div class='col-md-3 col-xs-3'>
+        <div class="media">
+          <div class="mr-3">
+            <%= link_to patient_path(@chronic_prescription.patient), class: "link" do %>
+              <%= image_tag patient_avatar(@chronic_prescription.patient, 83, 102), size: '83x102', class:"img-thumbnail media-object" %>
+            <% end %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">Paciente</h4>
+            <p>
+              <%= link_to patient_path(@chronic_prescription.patient), class: "link" do %>
+                <%= @chronic_prescription.patient_fullname.titleize %>
+              <% end %>    
+            </p>
+            <p class="mb-1"><strong>DNI: </strong><%= @chronic_prescription.patient_dni %></p>
+            <p class="mb-1"><strong>Edad: </strong><%= @chronic_prescription.patient_age_string %></p>
+          </div>
+        </div>
+      </div> <!-- End Patient profile -->
+
+      <!-- Extra info -->
+      <div class='col-md-6 col-xs-6'>
+        <div class='row'>
+          <div class='col-3 col-xs-3'>    
+            <strong>Recetada:</strong><br>
+            <%= @chronic_prescription.date_prescribed.strftime("%d/%m/%Y") %>
+          </div>
+          <div class='col-3 col-xs-3'>
+            <strong>Vencimiento:</strong><br>
+            <%= @chronic_prescription.expiry_date.strftime("%d/%m/%Y") %>
+          </div>
+          <div class="col-3">
+            <strong>Meses: </strong><br>
+            <%= (@chronic_prescription.expiry_date - @chronic_prescription.date_prescribed.to_date).to_i / 30%>
+          </div>
+          <div class='col-3 col-xs-3'>
+            <strong>Código:</strong>
+            <%= @chronic_prescription.remit_code %>
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class="col-12">
+            <strong>Diagnóstico:</strong>
+            <%= @chronic_prescription.diagnostic.present? ? @chronic_prescription.diagnostic : 'Ninguno' %>
+          </div>
+        </div>
+      </div><!-- End extra info -->
+    </div>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos recetados
+              <span class="badge badge-secondary"><%= @chronic_prescription.original_chronic_prescription_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= @chronic_prescription.chronic_dispensations.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#dispensations' role="tab">
+              <%= fa_icon "paper-plane" %> Dispensaciones
+              <span class="badge badge-secondary"><%= @chronic_prescription.chronic_dispensations.count %></span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link <%= @chronic_prescription.movements.count == 0 ? 'disabled' : '' %>" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= @chronic_prescription.movements.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-content mt-2">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Productos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm mb-0">
+            <thead >
+              <tr>
+                <th>Cód Ins</th>
+                <th>Insumo</th>
+                <th>Cantidad mensual</th>
+                <th>Dispensada</th>
+                <th width="200">Proceso</th>
+                <th>Observaciones</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @chronic_prescription.original_chronic_prescription_products.each do |org_chron_pres_prod| %>
+                <tr id="original_product_<%= org_chron_pres_prod.id %>">
+                  <% @stock = Stock.where(sector: current_user.sector, product: org_chron_pres_prod.product).first %>
+                  <td>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
+                        <%= org_chron_pres_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= org_chron_pres_prod.product_code %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
+                        <%= org_chron_pres_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= org_chron_pres_prod.product_name %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= org_chron_pres_prod.request_quantity %> <%= org_chron_pres_prod.product_unity_name.pluralize(org_chron_pres_prod.request_quantity) %>
+                  </td>
+                  <td>
+                    <%= org_chron_pres_prod.total_delivered_quantity %> / <%= org_chron_pres_prod.total_request_quantity %>
+                  </td>
+                  <td>
+                    <div class="custom-progress progress bg-light position-relative">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: <%= delivered_percentage_ocpp(org_chron_pres_prod) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: <%= end_treatment_percentage_ocpp(org_chron_pres_prod) %>" aria-valuemin="0" aria-valuemax="100"></div>
+                      <span class="justify-content-center d-flex position-absolute align-self-center w-100"><%= progress_label_ocpp(org_chron_pres_prod ) %></span>
+                    </div>
+                  </td>
+                  
+                  <td>
+                    <div class="<%= org_chron_pres_prod.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= org_chron_pres_prod.observation.presence %>">
+                      <div class="text-truncate"  style="max-width: 13.66rem;">
+                        <%= org_chron_pres_prod.observation.presence || '---' %>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <% if org_chron_pres_prod.terminado_manual? %>
+                      <a tabindex="0" class="btn btn-sm btn-light" role="button" data-toggle="popover" data-trigger="hover" \
+                        title="Terminado por <%= org_chron_pres_prod.finished_by_professional.fullname %>" \ 
+                        data-content="<%= org_chron_pres_prod.finished_observation %>">
+                        <%= fa_icon 'check' %>
+                        <%= fa_icon 'user-md' %>
+                      </a>
+                    <% end %>
+                    <!-- FINISH TREATMENT ACTION -->
+                    <% if policy(org_chron_pres_prod).finish_treatment? %>
+                      <%= link_to finish_treatment_chronic_prescription_path(id: @chronic_prescription.id, original_product_id: org_chron_pres_prod.id), 
+                        class: 'btn btn-sm btn-warning', remote: true, data: { toggle: 'tooltip', placement: 'top'}, title: 'Terminar tratamiento' do %>
+                        <%= fa_icon 'check' %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= org_chron_pres_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                        <%= org_chron_pres_prod.observation %>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id='dispensations' class='tab-pane fade'>
+        <!-- Tabla de dispensaciones -->
+        <div class="row">
+          
+          <div class="col-3">
+            <div class="card">
+
+              <div class="list-group p-1" id="list-tab" role="tablist">
+                <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
+                  <div role="button" class="d-flex align-items-center justify-content-between list-group-item list-group-item-action <%= index == 0 ? 'active' : '' %>" id="list-dispensation-<%= index %>" data-toggle="list" href="#tab-<%=index%>" role="tab" aria-controls="tab-<%=index%>">
+                    
+                    <div>
+                      <span class="badge badge-secondary"><%= (@chronic_prescription.chronic_dispensations.count - index) %>°</span> &nbsp;
+                      <%=chronic_dispensation.created_at.strftime("%d/%m/%Y %H:%M") %>
+                    </div>       
+                    <% if policy(chronic_dispensation).return_dispensation? %> 
+                      <%= link_to chronic_prescription_chronic_dispensation_return_dispensation_modal_path(@chronic_prescription.id, chronic_dispensation.id), remote: true,
+                          class: 'btn btn-sm btn-warning ml-2 return-dispensation-modal', title: 'Rertornar dispensación', data: { toggle: 'tooltip', placement: 'top' } do %>
+                        <%= fa_icon "undo" %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-9">
+            <div class="card table-sm tab-content" id="nav-tabContent">
+              <% @chronic_prescription.chronic_dispensations.order("created_at desc").each_with_index do |chronic_dispensation, index| %>
+                <div class="tab-pane fade show <%= index == 0 ? 'active' : '' %>" role="tabpanel" aria-labelledby="list-dispensation-<%= index %>" id="tab-<%=index%>">
+                  <table class="table mb-0 custom-table-products-collapsable">
+                    <thead >
+                      <tr>
+                        <th></th>
+                        <th>Cód Ins</th>
+                        <th>Insumo</th>
+                        <th>Unidad</th>
+                        <th>Entregado</th>
+                        <th class="text-center">Productos</th>
+                        <th class="observations-col">Observaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% chronic_dispensation.dispensation_types.each do |dispensation_type| %>
+                        <tr class="toggle-collapse-row" data-target="#collapse-row-<%= dispensation_type.id %>">
+                          <td class="org-product">
+                            <div class="fa-icon-container">
+                              <%= fa_icon 'angle-right'%>
+                            </div>
+                          </td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_code %></td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_name %></td>
+                          <td class="org-product"><%= dispensation_type.original_chronic_prescription_product.product_unity_name %></td>
+                          <td class="org-product"><%= dispensation_type.quantity %></td>
+                          <td class="text-center org-product">
+                            <%= dispensation_type.chronic_prescription_products.count %>
+                          </td>
+                          <td class="org-product observations-col">
+                            <div class="<%= dispensation_type.original_chronic_prescription_product.observation.present? ? 'toggle-popover' : '' %>" data-trigger="hover" data-content="<%= dispensation_type.original_chronic_prescription_product.observation.presence %>">
+                              <div class="text-truncate"  style="max-width: 13.66rem;">
+                                <%= dispensation_type.original_chronic_prescription_product.observation.presence || '---' %>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <%= render 'prescriptions/chronic_prescriptions/partials/products_group_by_dispensation_type', dispensation_type: dispensation_type %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>        
+      </div> <!-- End last movements tab pane -->
+      
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: @chronic_prescription %>
+      </div> <!-- End last movements tab pane -->
+
+    </div>
+  </div>
+  <div class="card-footer text-right">
+    <%= link_to 'Volver', chronic_prescriptions_path, class: "btn btn-light mr-1" %>
+    <%#= link_to prescription_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+      <%#= fa_icon "print" %>
+      <%# Imprimir %>
+    <%# end %>
+    <% if policy(@chronic_prescription).edit? %>
+      <%= link_to edit_chronic_prescription_path(@chronic_prescription), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+
+    <% if policy(@chronic_prescription).finish? %>
+      <%= link_to finish_chronic_prescription_path(@chronic_prescription), :"data-turbolinks" => false,
+        class: "btn btn-success" do %>
+        <%= fa_icon "check" %>
+        Finalizar
+      <% end %>
+    <% end %>
+    
+    <% if policy(@chronic_prescription).dispense_new? %>
+      <%= link_to new_chronic_prescription_chronic_dispensation_path(@chronic_prescription), :"data-turbolinks" => false,
+        class: "btn btn-primary" do %>
+        <%= fa_icon "paper-plane" %>
+        Dispensar
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%# Retornar a un estado anterior (solo prescripciones dispensadas)%>
+  <% if policy(@chronic_prescription).return_dispensation? %>
+    <div class="modal fade" tabindex="-1" role="dialog" id="return-confirm"></div>
+  <% end %>
+<% end %>

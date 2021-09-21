@@ -47,14 +47,14 @@
         <span class="caret"></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
-        <%= link_to applicant_index_internal_orders_path, class: "dropdown-item d-flex justify-content-between aling-items-center" do %>
+        <%= link_to internal_orders_applicants_path, class: "dropdown-item d-flex justify-content-between aling-items-center" do %>
           <div>
             <span class="mr-1"> <%= fa_icon "file-prescription" %> </span>
             <span> Recibos </span>
           </div>
           <div class="label label-info"><%= InternalOrder.applicant(current_user.sector).provision_en_camino.count %></div>
         <% end %>
-        <%= link_to provider_index_internal_orders_path, class: "dropdown-item d-flex justify-content-between aling-items" do %>
+        <%= link_to internal_orders_providers_path, class: "dropdown-item d-flex justify-content-between aling-items" do %>
           <div>
             <span class="mr-1"> <%= fa_icon "paper-plane" %> </span>
             <span>Entregas</span>
@@ -64,19 +64,19 @@
             <div class="label label-info pull-right"><%= InternalOrder.provider(current_user.sector).solicitud_enviada.count %></div>
           <%# end %>
         <% end %>
-        <%= link_to new_applicant_internal_orders_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
+        <%= link_to new_internal_orders_applicant_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
           <div>
             <span class="mr-1"> <%= fa_icon "plus" %> </span>
             <span>Solicitud</span>
           </div>
         <% end %>
-        <%= link_to new_provider_internal_orders_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
+        <%= link_to new_internal_orders_provider_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
           <div>
             <span class="mr-1"> <%= fa_icon "plus" %> </span>
             <span> Provisión </span>
           </div>
         <% end %>
-        <%= link_to internal_order_templates_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
+        <%= link_to internal_orders_templates_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
           <div>
             <span class="mr-1"> <%= fa_icon "skiing" %> </span>
             <span> Plantillas </span>
@@ -91,11 +91,11 @@
         <span class="caret"></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-submenu-link">
-        <%= link_to applicant_index_external_orders_path, class: "dropdown-item" do %>
+        <%= link_to external_orders_applicants_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-inbox') %>
           <span class="hidden-xs">Recibos</span>
         <% end %>
-        <%= link_to provider_index_external_orders_path, class: "dropdown-item" do %>
+        <%= link_to external_orders_providers_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-send') %>
           <span class="hidden-xs">Despachos</span>
           <% count =  ExternalOrder.provider(current_user.sector).solicitud_enviada.count %>
@@ -110,17 +110,19 @@
             Recibo
           <% end %>
         <% end %>
-        <% if policy(ExternalOrder).new_applicant? %>
-          <%= link_to new_applicant_external_orders_path, class: "dropdown-item" do %>
+        <% if policy(:external_order_applicant).new? %>
+          <%= link_to new_external_orders_applicant_path, class: "dropdown-item" do %>
             <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
             S<span class="hidden-xs">olicitud</span>
           <% end %>
         <% end %>
-        <%= link_to new_provider_external_orders_path, class: "dropdown-item" do %>
-          <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
-          D<span class="hidden-xs">espacho</span>
+        <% if policy(:external_order_provider).new? %>
+          <%= link_to new_external_orders_provider_path, class: "dropdown-item" do %>
+            <%= content_tag(:span, '', class: 'glyphicon glyphicon-plus') %>
+            D<span class="hidden-xs">espacho</span>
+          <% end %>
         <% end %>
-        <%= link_to external_order_templates_path, class: "dropdown-item" do %>
+        <%= link_to external_orders_templates_path, class: "dropdown-item" do %>
           <%= content_tag(:span, '', class: 'glyphicon glyphicon-modal-window') %>
           Plantillas
         <% end %>

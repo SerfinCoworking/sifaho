@@ -1,0 +1,74 @@
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo plantilla de <%= @external_order_template.order_type %>
+      </h5>
+    </div>
+    <%= link_to external_orders_templates_path, class: 'btn btn-light',
+      :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body" id="panel-body-new">
+    <div class="row">
+      <div class="col-md-3">
+        <h5>Nombre</h5>
+        <%= @external_order_template.name %>
+      </div>
+      <div class="col-md-3">
+        <%= yield(:external_order_template_show_title) %>
+        <%= @external_order_template.destination_sector.sector_and_establishment %>
+      </div>
+      <% if @external_order_template.observation.present? %>
+        <div class="col-md-3">
+          <h5>Observaciones</h5>
+          <%= @external_order_template.observation %>
+        </div>
+      <% end %>
+      <div class="col-md-3">
+        <h5>Creada por</h5>
+        <% if @external_order_template.created_by.profile.present? %>
+          <span><%= image_tag user_avatar(@external_order_template.created_by, 25), class:"img-circle img-profile-nav" %></span>
+        <% end %>
+        <%= @external_order_template.created_by.full_name %>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm mb-0">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+              </tr>
+            </thead>
+            <tbody class="external_order_template_supplies">
+              <% @external_order_template.external_order_product_templates.joins(:product).order("name").each do |iots| %>
+                <tr>
+                  <td><%= iots.product_code %></td>
+                  <td><%= iots.product_name %></td>
+                  <td><%= iots.unity.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer d-flex align-item-center justify-content-between">
+    <%= yield(:action_buttons) %>
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <% if policy(@external_order_template).destroy? %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+<% end %>

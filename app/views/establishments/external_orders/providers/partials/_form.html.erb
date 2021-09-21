@@ -1,0 +1,125 @@
+<div class="card fixed-custom-card">
+  <div class="card-header <%= @external_order.new_record? ? 'bg-primary text-white' : 'bg-warning' %> d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center ml-2">
+      <%= fa_icon (@external_order.new_record? ?  "plus" : "edit")%>
+      <h5 class="card-title mb-0 ml-2">
+        <%= @external_order.new_record? ? 'Nueva' : 'Editando' %> <%= @external_order.order_type %> de establecimiento
+        código <%= @external_order.remit_code if @external_order.persisted? %>
+      </h5>
+    </div>
+    <%= link_to :back, class: @external_order.new_record? ? 'btn text-white' : 'btn' do %>
+      <%= fa_icon "times" %>
+    <% end %>
+  </div>
+  <div class="card-body">
+
+  <%= simple_form_for @external_order, :url => (@external_order.new_record? ? external_orders_providers_path : external_orders_provider_path(@external_order)),
+     html: { role: 'check-modified'} do |f| %>
+      <%= f.error_notification %>
+      <div class="row">
+        <div class="col-6 border-right">
+          <% if @external_order.provision? %>
+            <%# ESTABLECIMIENTO SOLICITANTE %>
+            <%= f.input :applicant_establishment_id, as: :string,
+              label: 'Establecimiento solicitante',
+              placeholder: 'Buscar por nombre',
+              required: true,
+              :input_html => {
+                autocomplete: 'off',
+                id: "effector-establishment",
+                data: { autocomplete_source: search_by_name_establishments_path },
+                value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.establishment.name; end }",
+                size: 41
+              } 
+            %>
+            <%# SECTOR SOLICITANTE %>        
+            <%= f.input :applicant_sector_id,
+              label: 'Sector solicitante',
+              collection: @sectors.map {
+                |sector| [sector.name, sector.id]
+              },
+              :input_html => {
+                placeholder: 'Debe seleccionar establecimiento',
+                required: true,
+                id: 'effector-sector',
+                class: 'selectpicker-md custom-select-pick show-tick',
+                "data-width"=>"100%",
+                "title"=>"Seleccionar sector",
+                "data-size"=>"10",
+                "data-live-search"=>true,
+                value: f.object.applicant_sector.present? ? f.object.applicant_sector.id : ""
+              }
+            %>
+          <% else %>
+            <div class="col">
+              <h5>Solicitante</h5>
+              <%= @external_order.applicant_sector.name+" "+@external_order.applicant_establishment.name %>
+            </div>
+          <% end %>
+          <%# Provider %>
+          <label>Proveedor</label>
+          <h6><%= current_user.sector_and_establishment %></h6>
+          
+          <%= f.input :observation, label: 'Observaciones', as: :text,
+          :input_html => { :cols => 40  , :rows => 2 } %>
+        </div>
+
+        <%# Last requests %>
+        <div class="col-6" id='last-requests'>
+          <% if @last_delivers.present? %>
+            Últimos despachos de establecimientos
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Destino</th>
+                  <th>Productos</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @last_delivers.reverse.each do |deliver| %>
+                  <tr>
+                    <td><%= deliver.created_at.strftime('%d/%m/%y') %></td>
+                    <td><%= deliver.applicant_sector_and_establishment %></td>
+                    <td><%= deliver.order_products.count %></td>
+                    <td>
+                      <%= link_to polymorphic_path(['external_orders', deliver.custom_notification_url], id: deliver), target: :_blank, class: 'btn btn-light btn-sm' do %>
+                        <%= fa_icon 'external-link-alt' %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            Aún no hay despachos realizados
+          <% end%>
+        </div>
+      </div>
+
+      <input name="commit" id="submit-type" type="hidden">
+    <% end %>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end">
+    <%= link_to 'Volver', external_orders_providers_path, class: 'btn btn-light mr-2' %>
+  
+    <button type='submit' class='btn btn-success mr-2' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='audit'>
+      
+      <div class="c-msg" style="pointer-events: none;">
+        <%= fa_icon "save" %> Guardar 
+      </div>
+      
+      <div class="d-none" style="pointer-events: none;">
+        <%= fa_icon "spinner", class: "fa-spin send-audit" %>
+        Guardando...
+      </div>
+    </button>
+
+  </div>
+</div>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/lot_selection_dialog" %>
+<% end %>

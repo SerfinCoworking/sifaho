@@ -1,0 +1,112 @@
+<tr id="external_order_<%= external_order.id %>" class="<%= ordering_td(external_order) %>">
+  <td><%= external_order.remit_code %></td>
+  <td class="sol-col-aba">
+    <%= external_order.applicant_sector.name %>
+    <%= external_order.applicant_sector.establishment_short_name %>
+  </td>
+  <td>
+    <span class="badge badge-secondary">
+      <%= external_order.order_type.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <span class="badge badge-<%= ordering_status_label(external_order) %>">
+      <%= external_order.status.underscore.humanize %>
+    </span>
+  </td>
+  <td>
+    <%= external_order.order_products.count %>
+  </td>
+  <td>
+    <%= external_order.movements.count %>
+  </td>
+  <td>
+    <%= external_order.requested_date.present? ? external_order.requested_date.strftime("%d/%m/%Y") : '----' %>
+  </td>
+  <td>
+    <% if external_order.provision_entregada? %>
+      <%= external_order.date_received.strftime("%d/%m/%y %H:%M") %>
+    <% else %>
+      ----
+    <% end %>
+  </td>
+  <td class="text-left actions-col">
+    
+    <% if policy(:external_order_provider).edit_products?(external_order) %>
+      <%= link_to edit_products_external_orders_provider_path(external_order),
+        class: 'btn btn-warning btn-sm', title: 'Editar productos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        <%= fa_icon "file-signature" %>
+      <% end %>
+    <% end %>
+    
+    <% if policy(:external_order_provider).show? %>
+      <%= link_to external_orders_provider_path(external_order),
+        class: 'btn btn-secondary btn-sm', title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "eye" %>
+      <% end %>
+    <% end %>
+    <% if policy(:external_order_provider).show? %>
+      <%= link_to external_orders_provider_path(external_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
+        :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
+        <%= fa_icon "print" %>
+      <% end %>
+    <% end %>
+    <% if policy(:external_order_provider).edit?(external_order) %>
+      <%= link_to edit_external_orders_provider_path(external_order), :"data-turbolinks" => false,
+        class: 'btn btn-warning btn-sm', title: 'Editar orden', data: { toggle: 'tooltip', placement: 'top' }, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i>".html_safe do %>
+        <%= fa_icon "pen" %>
+      <% end %>
+    <% end %>
+    <% if policy(:external_order_provider).destroy?(external_order) %>
+      <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        title="<%= t("actions.tooltip.delete") %>"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-target="#delete-item" 
+        data-title="Eliminar provisión"
+        data-body="Esta seguro que desea eliminar la provisión <%= external_order.remit_code %>?"
+        data-href="<%= external_orders_provider_url(external_order.id) %>">
+          <%= fa_icon "trash" %>
+      </button>
+    <% end %>
+    
+    <% if policy(:external_order_provider).nullify_order?(external_order) %>
+      <span data-toggle="modal" data-target="#anular-confirm-<%= external_order.id %>">
+        <%= button_tag class:"btn btn-sm btn-danger",
+          title: 'Anular', data: { toggle: 'tooltip', placement: 'top' } do %>
+          <%= fa_icon "ban" %>
+        <% end %>
+      </span>
+    <% end %>
+  </td>
+</tr>
+
+<% content_for :modal do %>
+
+  <% if policy(:external_order_provider).destroy?(external_order) %>
+    <%= render(partial: 'shared/modals/delete_confirmation') %>
+  <% end %>
+
+  <% if policy(:external_order_provider).nullify_order?(external_order) %>
+    <div class="modal fade" id="anular-confirm-<%=external_order.id%>">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="m-0"><%= fa_icon "check" %> Confirmar anulación de <%= ExternalOrder.statuses.key(external_order.status_before_type_cast - 1).underscore.humanize %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Esta seguro de anular el <%= external_order.human_name.downcase %> <%= external_order.remit_code %>?</p>
+          </div>
+          <div class="modal-footer text-right">
+            <a href="#" data-dismiss="modal" class="btn">Cancelar</a>
+            <%= link_to 'Anular', nullify_order_external_orders_provider_path(external_order), method: :get, 'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Anulando...".html_safe, :class => 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

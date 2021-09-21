@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_152528) do
+ActiveRecord::Schema.define(version: 2021_09_21_115018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -289,13 +289,14 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
   end
 
   create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "external_order_product_id"
+    t.bigint "order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["external_order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_external_order_product_id"
+    t.integer "reserved_quantity", default: 0
     t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
+    t.index ["order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "external_order_baks", force: :cascade do |t|
@@ -378,16 +379,18 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
   end
 
   create_table "external_order_products", force: :cascade do |t|
-    t.bigint "external_order_id"
+    t.bigint "order_id"
     t.bigint "product_id"
     t.integer "request_quantity"
-    t.integer "delivery_quantity"
+    t.integer "delivery_quantity", default: 0
     t.text "provider_observation"
     t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["external_order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
-    t.index ["external_order_id"], name: "index_external_order_products_on_external_order_id"
+    t.bigint "added_by_sector_id"
+    t.index ["added_by_sector_id"], name: "index_external_order_products_on_added_by_sector_id"
+    t.index ["order_id", "product_id"], name: "unique_product_on_external_order_products", unique: true
+    t.index ["order_id"], name: "index_external_order_products_on_order_id"
     t.index ["product_id"], name: "index_external_order_products_on_product_id"
   end
 
@@ -430,7 +433,6 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
     t.integer "status", default: 0
     t.bigint "audited_by_id"
     t.bigint "accepted_by_id"
-    t.bigint "sent_by_id"
     t.bigint "received_by_id"
     t.datetime "accepted_date"
     t.integer "order_type", default: 0
@@ -447,7 +449,6 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
     t.index ["received_by_id"], name: "index_external_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_external_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_external_orders_on_remit_code", unique: true
-    t.index ["sent_by_id"], name: "index_external_orders_on_sent_by_id"
     t.index ["sent_request_by_id"], name: "index_external_orders_on_sent_request_by_id"
   end
 
@@ -537,13 +538,14 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
   end
 
   create_table "int_ord_prod_lot_stocks", force: :cascade do |t|
-    t.bigint "internal_order_product_id"
+    t.bigint "order_product_id"
     t.bigint "lot_stock_id"
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["internal_order_product_id"], name: "index_int_ord_prod_lot_stocks_on_internal_order_product_id"
+    t.integer "reserved_quantity", default: 0
     t.index ["lot_stock_id"], name: "index_int_ord_prod_lot_stocks_on_lot_stock_id"
+    t.index ["order_product_id"], name: "index_int_ord_prod_lot_stocks_on_order_product_id"
   end
 
   create_table "internal_order_baks", force: :cascade do |t|
@@ -625,16 +627,18 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
   end
 
   create_table "internal_order_products", force: :cascade do |t|
-    t.bigint "internal_order_id"
+    t.bigint "order_id"
     t.bigint "product_id"
     t.integer "request_quantity"
-    t.integer "delivery_quantity"
+    t.integer "delivery_quantity", default: 0
     t.text "provider_observation"
     t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["internal_order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
-    t.index ["internal_order_id"], name: "index_internal_order_products_on_internal_order_id"
+    t.bigint "added_by_sector_id"
+    t.index ["added_by_sector_id"], name: "index_internal_order_products_on_added_by_sector_id"
+    t.index ["order_id", "product_id"], name: "unique_product_on_internal_order_products", unique: true
+    t.index ["order_id"], name: "index_internal_order_products_on_order_id"
     t.index ["product_id"], name: "index_internal_order_products_on_product_id"
   end
 
@@ -674,24 +678,12 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
     t.bigint "provider_sector_id"
     t.bigint "applicant_sector_id"
     t.integer "applicant_status", default: 0
-    t.bigint "audited_by_id"
-    t.bigint "sent_by_id"
-    t.bigint "received_by_id"
-    t.bigint "created_by_id"
     t.string "remit_code"
     t.integer "order_type", default: 0
     t.integer "status", default: 0
-    t.bigint "sent_request_by_id"
-    t.bigint "rejected_by_id"
     t.index ["applicant_sector_id"], name: "index_internal_orders_on_applicant_sector_id"
-    t.index ["audited_by_id"], name: "index_internal_orders_on_audited_by_id"
-    t.index ["created_by_id"], name: "index_internal_orders_on_created_by_id"
     t.index ["provider_sector_id"], name: "index_internal_orders_on_provider_sector_id"
-    t.index ["received_by_id"], name: "index_internal_orders_on_received_by_id"
-    t.index ["rejected_by_id"], name: "index_internal_orders_on_rejected_by_id"
     t.index ["remit_code"], name: "index_internal_orders_on_remit_code", unique: true
-    t.index ["sent_by_id"], name: "index_internal_orders_on_sent_by_id"
-    t.index ["sent_request_by_id"], name: "index_internal_orders_on_sent_request_by_id"
   end
 
   create_table "laboratories", force: :cascade do |t|
@@ -1458,6 +1450,8 @@ ActiveRecord::Schema.define(version: 2021_09_15_152528) do
   add_foreign_key "cities", "states"
   add_foreign_key "external_order_comments", "external_orders", column: "order_id"
   add_foreign_key "external_order_comments", "users"
+  add_foreign_key "external_order_products", "sectors", column: "added_by_sector_id"
+  add_foreign_key "internal_order_products", "sectors", column: "added_by_sector_id"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"
   add_foreign_key "patient_phones", "patients"

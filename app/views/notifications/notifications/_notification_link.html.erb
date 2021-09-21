@@ -1,8 +1,9 @@
 <% unless notification.target.nil? %>
   <li class="list-group-item <%= notification.read_at.present? ? '' : 'unread'%> notification-<%= notification.id %>">
-    <%= link_to main_app.polymorphic_path(notification.target, 
-      notification_id: notification.id), 
-      class:'notification-link d-flex align-items-center p-2' do %>    
+    <%= link_to main_app.polymorphic_url([notification.target.class.name.underscore.pluralize, 
+                                        (notification.target.custom_notification_url if notification.target.class.method_defined?(:custom_notification_url)) ],
+                                        id: notification.target.id, notification_id: notification.id),
+                                        class:'notification-link d-flex align-items-center p-2' do %>    
     
       <div class="d-flex align-items-center h-100 mw-100">
         <%= image_tag user_avatar(notification.actor, 25), 

@@ -1,6 +1,5 @@
 $(document).on('turbolinks:load', function(e){
-
-  if(!(['outpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
+  if(!(['prescriptions/outpatient_prescriptions'].includes(_PAGE.controller) && (['new', 'edit', 'create', 'update', 'dispense'].includes(_PAGE.action))) ) return false;
   
   initEvents();
   

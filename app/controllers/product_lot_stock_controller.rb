@@ -20,8 +20,10 @@ class ProductLotStockController < ApplicationController
   def update_lot_stock_selection
     respond_to do |format|
       if @order_product.update(lot_stock_params)
+        flash.now[:success] = "Los lotes del producto #{@order_product.product_name} se han modificado correctamente!"
         format.js
       else
+        flash.now[:alert] = "Los lotes del producto #{@order_product.product_name} no se han podido modificar"
         @selected_lot_stocks = @order_product.order_prod_lot_stocks.pluck(:lot_stock_id)
         @lot_stocks = LotStock.joins(:stock)
                               .joins(:product)
@@ -50,6 +52,7 @@ class ProductLotStockController < ApplicationController
       order_prod_lot_stocks_attributes: [
         :id,
         :lot_stock_id,
+        :quantity,
         :available_quantity,
         :_destroy
       ]

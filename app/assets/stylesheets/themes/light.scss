@@ -57,12 +57,12 @@
       border-color: #29abe1;
     }
     .form-control, .form-control:focus{
-      background-color: #f8f9fa;
+      background-color: #fff;
       color: $font-main-in-light;
       &[disabled], &[readonly]{
         background-color: #e2e4e6;
         cursor: not-allowed;
-      } 
+      }
     }
   }
 
@@ -101,5 +101,9 @@
 
   .pagination .page-item .page-link{
       color: $font-main-in-light;
+  }
+
+  .custom-form-row:hover{
+    background-color: #d0d0d0;
   }
 }

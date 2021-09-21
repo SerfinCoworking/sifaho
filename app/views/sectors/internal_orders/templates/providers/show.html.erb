@@ -1,0 +1,47 @@
+
+
+
+<% content_for :internal_order_template_show_title do %>
+  <h5>Sector solicitante</h5>
+<% end %>
+
+<% content_for :action_buttons do %>
+  <div>
+    <% if policy(@internal_order_template).destroy? %>
+      <button type="button" 
+        class="btn btn-danger btn-sm mr-1 ml-1 delete-item"
+        title="<%= t("actions.tooltip.delete") %>"
+        data-toggle="tooltip"
+        data-placement="top"
+        data-target="#delete-item" 
+        data-title="Eliminar plantilla"
+        data-body="Esta seguro que desea eliminar la plantilla <%= @internal_order_template.name %>?"
+        data-href="<%= internal_orders_templates_provider_url(@internal_order_template) %>">
+          <%= fa_icon "trash" %>
+      </button>
+    <% end %>
+  </div>
+  <div>
+    <%= link_to 'Volver', internal_orders_templates_path, class: "btn btn-light mr-1" %>
+    <% if policy(@internal_order_template).show? %>
+      <%= link_to internal_orders_templates_provider_path(format: 'pdf'), class: 'btn btn-info mr-1', target: :_blank do %>
+        <%= fa_icon "print" %> Imprimir
+      <% end %>
+    <% end %>
+    <% if policy(:internal_order_template_provider).edit?(@internal_order_template) %>
+      <%= link_to edit_internal_orders_templates_provider_path(@internal_order_template), :"data-turbolinks" => false,
+        class: "btn btn-warning mr-1" do %>
+        <%= fa_icon "pen" %>
+        Editar
+      <% end %>
+    <% end %>
+    <% if policy(:internal_order_template_provider).use_template?(@internal_order_template) %>
+      <%= link_to new_internal_orders_provider_path(template: @internal_order_template), class: "btn btn-primary", target: :_blank do %>
+        <%= fa_icon "plus" %>
+        Crear provisión
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render 'sectors/internal_orders/templates/show' %>
