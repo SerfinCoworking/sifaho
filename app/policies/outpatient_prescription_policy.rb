@@ -21,6 +21,10 @@ class OutpatientPrescriptionPolicy < ApplicationPolicy
     end
   end
 
+  def print?
+    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+  end
+
   def update?
     edit?
   end

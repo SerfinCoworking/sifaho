@@ -29,10 +29,8 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
       format.html
       format.js
       format.pdf do
-        send_data generate_order_report(@outpatient_prescription),
-        filename: 'Rec_amb_'+@outpatient_prescription.patient_last_name+'.pdf',
-        type: 'application/pdf',
-        disposition: 'inline'
+        pdf = ReportServices::OutpatientPrescriptionReportService.new(current_user, @outpatient_prescription).generate_pdf
+        send_data pdf, filename: "Pedido_#{@outpatient_prescription.remit_code}.pdf", type: 'application/pdf', disposition: 'inline'
       end
     end
   end
@@ -55,8 +53,8 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
     @outpatient_prescription.provider_sector = current_user.sector
     @outpatient_prescription.establishment = current_user.sector.establishment
     @outpatient_prescription.remit_code = "AM"+DateTime.now.to_s(:number)
-    
-    @outpatient_prescription.status= dispensing? ? 'dispensada' : 'pendiente'
+
+    @outpatient_prescription.status = dispensing? ? 'dispensada' : 'pendiente'
     @outpatient_prescription.date_dispensed = dispensing? ? DateTime.now : ''
 
     respond_to do |format|
@@ -67,7 +65,7 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
 
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha creado correctamente."
         notification_type = dispensing? ? "creó y dispensó" : "creó"
-        
+
         @outpatient_prescription.create_notification(current_user, notification_type)
         format.html { redirect_to @outpatient_prescription, notice: message }
       rescue ArgumentError => e
@@ -94,7 +92,7 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
         @outpatient_prescription.update!(outpatient_prescription_params)
 
         if(dispensing?); @outpatient_prescription.dispense_by(current_user); end
-       
+
         message = dispensing? ? "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado y dispensado correctamente." : "La receta ambulatoria de "+@outpatient_prescription.patient.fullname+" se ha auditado correctamente."
         notification_type = dispensing? ? "auditó y dispensó" : "auditó"
 
@@ -142,7 +140,6 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
     end
   end
 
-
   def return_dispensation
     authorize @outpatient_prescription
     respond_to do |format|
@@ -163,111 +160,50 @@ class Prescriptions::OutpatientPrescriptionsController < ApplicationController
     supply_count: pre.quantity_ord_supply_lots.count, created_at: pre.created_at.strftime("%d/%m/%Y") } }
   end
 
-  def generate_order_report(prescription)
-    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf')
-
-    report.use_layout File.join(Rails.root, 'app', 'reports', 'prescription', 'first_page.tlf'), :default => true
-    
-    if prescription.cronica?
-      supply_relations = prescription.quantity_ord_supply_lots.sin_entregar.joins(:supply).order("name")
-    else
-      supply_relations = prescription.quantity_ord_supply_lots.joins(:supply).order("name")
-    end
-  
-    supply_relations.each do |qosl|
-      if report.page_count == 1 && report.list.overflow?
-        report.start_new_page layout: :other_page do |page|
-        end
-      end
-      
-      report.list do |list|
-        list.add_row do |row|
-          row.values  supply_code: qosl.supply_id,
-                      supply_name: qosl.supply.name,
-                      requested_quantity: qosl.requested_quantity.to_s+" "+qosl.unity.pluralize(qosl.requested_quantity),
-                      delivered_quantity: qosl.delivered_quantity.to_s+" "+qosl.unity.pluralize(qosl.delivered_quantity),
-                      lot: qosl.sector_supply_lot_lot_code,
-                      laboratory: qosl.sector_supply_lot_laboratory_name,
-                      expiry_date: qosl.sector_supply_lot_expiry_date, 
-                      applicant_obs: qosl.provider_observation
-        end
-      end
-      
-      if report.page_count == 1
-
-        report.page[:order_type] = prescription.order_type
-        report.page[:prescribed_date] = prescription.prescribed_date.strftime("%d/%m/%Y")
-        report.page[:expiry_date] = prescription.expiry_date.present? ? prescription.expiry_date.strftime("%d/%m/%Y") : "---"
-         
-        report.page[:professional_name] = prescription.professional.fullname
-        report.page[:professional_dni] = prescription.professional.dni
-        report.page[:professional_enrollment] = prescription.professional.enrollment
-        report.page[:professional_phone] = prescription.professional.phone
-
-        report.page[:patien_name] = "#{prescription.patient.first_name} #{prescription.patient.last_name}"
-        report.page[:patien_dni] = prescription.patient.dni
-
-      end
-    end
-    
-
-    report.pages.each do |page|
-      page[:title] = 'Receta Digital'
-      page[:remit_code] = prescription.remit_code
-      page[:date_now] = DateTime.now.strftime("%d/%m/%YY")
-      page[:page_count] = report.page_count
-      page[:sector] = current_user.sector_name
-      page[:establishment] = current_user.establishment_name
-    end
-
-    report.generate
-  end
-  
   def set_order_product
     @order_product = params[:order_product_id].present? ? OutpatientPrescriptionProduct.find(params[:order_product_id]) : OutpatientPrescriptionProduct.new
   end
-  
 
   private
 
-    # Set prescription and patient to prescription
-    def set_patient_to_outpatient_prescription
-      @outpatient_prescription = params[:outpatient_prescription].present? ? OutpatientPrescription.create(outpatient_prescription_params) : OutpatientPrescription.new
-      @patient = Patient.find(params[:patient_id])
-      @outpatient_prescription.patient_id =  @patient.id
-    end
+  # Set prescription and patient to prescription
+  def set_patient_to_outpatient_prescription
+    @outpatient_prescription = params[:outpatient_prescription].present? ? OutpatientPrescription.create(outpatient_prescription_params) : OutpatientPrescription.new
+    @patient = Patient.find(params[:patient_id])
+    @outpatient_prescription.patient_id =  @patient.id
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_outpatient_prescription
-      @outpatient_prescription = OutpatientPrescription.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_outpatient_prescription
+    @outpatient_prescription = OutpatientPrescription.find(params[:id])
+  end
 
-    def outpatient_prescription_params
-      params.require(:outpatient_prescription).permit(
-        :professional_id,
-        :patient_id,
-        :observation,        
-        :date_prescribed,
-        :expiry_date,
-        outpatient_prescription_products_attributes: [
-          :id, 
-          :product_id, 
+  def outpatient_prescription_params
+    params.require(:outpatient_prescription).permit(
+      :professional_id,
+      :patient_id,
+      :observation,        
+      :date_prescribed,
+      :expiry_date,
+      outpatient_prescription_products_attributes: [
+        :id, 
+        :product_id, 
+        :lot_stock_id,
+        :request_quantity,
+        :delivery_quantity,
+        :observation,
+        :_destroy,
+        order_prod_lot_stocks_attributes: [
+          :id,
+          :quantity,
           :lot_stock_id,
-          :request_quantity,
-          :delivery_quantity,
-          :observation,
-          :_destroy,
-          order_prod_lot_stocks_attributes: [
-            :id,
-            :quantity,
-            :lot_stock_id,
-            :_destroy
-          ]
+          :_destroy
         ]
-      )
-    end
+      ]
+    )
+  end
 
-    def dispensing?
-      return params[:commit] == "dispensing"
-    end
+  def dispensing?
+    return params[:commit] == "dispensing"
+  end
 end

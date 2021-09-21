@@ -9,7 +9,7 @@ class InternalOrder < ApplicationRecord
   # Relationships
   has_many :order_products, dependent: :destroy, class_name: 'InternalOrderProduct', foreign_key: 'order_id',
                             inverse_of: 'order'
-  has_many :int_ord_prod_lot_stocks, through: :order_products
+  has_many :int_ord_prod_lot_stocks, through: :order_products, inverse_of: :order, source: :order_prod_lot_stocks
   has_many :movements, class_name: 'InternalOrderMovement'
   has_many :comments, class_name: 'InternalOrderComment', foreign_key: 'order_id'
 

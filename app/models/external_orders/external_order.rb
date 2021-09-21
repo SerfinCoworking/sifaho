@@ -10,12 +10,11 @@ class ExternalOrder < ApplicationRecord
   # Relationships
   has_many :order_products, dependent: :destroy, class_name: 'ExternalOrderProduct', foreign_key: 'order_id',
                             inverse_of: 'order'
-  has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'external_order'
+  has_many :ext_ord_prod_lot_stocks, through: :order_products, inverse_of: 'order', source: :order_prod_lot_stocks
   has_many :movements, class_name: 'ExternalOrderMovement'
   has_many :comments, class_name: 'ExternalOrderComment', foreign_key: 'order_id', dependent: :destroy
   has_one :provider_establishment, through: :provider_sector, source: 'establishment'
   has_one :applicant_establishment, through: :applicant_sector, source: 'establishment'
-
 
   # Validations
   # validates_associated :order_products
