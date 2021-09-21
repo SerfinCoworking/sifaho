@@ -42,7 +42,6 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     else
       @internal_order.proveedor_auditoria! if @internal_order.solicitud_enviada?
       @internal_order_product = @internal_order.order_products.build
-      @form_id = DateTime.now.to_s(:number)
     end
   end
 

@@ -39,7 +39,6 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
       new_from_template(params[:template], 'solicitud')
     else
       @internal_order_product = @internal_order.order_products.build
-      @form_id = DateTime.now.to_s(:number)
     end
   end
 
