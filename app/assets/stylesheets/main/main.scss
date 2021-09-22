@@ -138,6 +138,13 @@
   }
 }
 
+.ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front{
+  .ui-menu-item-wrapper.ui-state-active{
+    background-color: $cblue2;
+    border: 1px solid #29abe1;
+  }
+}
+
 footer{
   .modal-header.bg-warning{
     color: #212529
