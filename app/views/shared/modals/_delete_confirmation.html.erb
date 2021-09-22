@@ -1,5 +1,5 @@
 <div class="modal fade" tabindex="-1" role="dialog" id="delete-item">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title">
@@ -13,7 +13,7 @@
        <%# se rellena con JS %>
       </div>
       <div class="modal-footer text-right">
-        <button type='button' class='btn' data-dismiss='modal'>Volver</button>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Volver</button>
         <%# el link de eliminar se rellena con JS %>
         <a data-remote='true' data-method='delete' href='#' data-dismiss='modal' data-disable-with="<i class='fa fa-spinner'></i>" class='btn commit btn-danger pull-right' rel='nofollow'>Confirmar</a>
       </div>
