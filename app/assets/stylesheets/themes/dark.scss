@@ -149,7 +149,6 @@
       color: $font-main-in-dark;
     }
   }
-
   
 }
 
@@ -186,6 +185,16 @@
     .dropdown-menu{
       background-color: $bg-main-in-dark;
       color: $font-main-in-dark;
+    }
+  }
+
+}
+#wrapper.dark ~ .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front{
+  background-color: $bg-main-in-dark;
+  .ui-menu-item-wrapper{
+    color: $font-main-in-dark;
+    &.ui-state-active{
+      background-color: $cblue2;
     }
   }
 }
