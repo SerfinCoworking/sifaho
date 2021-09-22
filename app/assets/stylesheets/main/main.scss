@@ -130,6 +130,14 @@
   }
 }
 
+
+.dropdown.bootstrap-select .dropdown-menu{
+  li.selected.active > a, li:hover > a{
+    color: #fff;
+    background-color: $cblue2;
+  }
+}
+
 footer{
   .modal-header.bg-warning{
     color: #212529
