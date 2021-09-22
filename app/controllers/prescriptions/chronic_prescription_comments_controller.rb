@@ -1,4 +1,4 @@
-class ChronicPrescriptionCommentsController < ApplicationController
+class Prescriptions::ChronicPrescriptionCommentsController < ApplicationController
   before_action :set_chronic_prescription_comment, only: [:show]
 
   def show

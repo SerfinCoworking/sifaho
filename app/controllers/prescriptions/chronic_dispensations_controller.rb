@@ -1,4 +1,4 @@
-class ChronicDispensationsController < ApplicationController
+class Prescriptions::ChronicDispensationsController < ApplicationController
   include FindLots
 
   before_action :set_chronic_prescription, only: %i[new create return_dispensation]

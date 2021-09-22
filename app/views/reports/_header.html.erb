@@ -2,37 +2,37 @@
 
 <% content_for :page_header do %>
   <li class="nav-item non-sel" id="page-title">
-    <%= link_to reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')} disabled" do %>
+    <%= link_to reports_reports_path, class: "nav-link #{active_action_and_controller('index', 'reports')} disabled" do %>
       <%= fa_icon "file-alt" %>
       Reportes
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_stock_quantity_reports_path, class: "nav-link #{active_class("reports/stock_quantity_reports")}" do %>
+    <%= link_to new_reports_stock_quantity_report_path, class: "nav-link #{active_class("reports/stock_quantity_reports")}" do %>
       <%= fa_icon "pills" %>
       <span class="hidden-xs"> Stock por rubro</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_patient_product_reports_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
+    <%= link_to new_reports_patient_product_report_path, class: "nav-link #{active_class("reports/patient_product_reports")}" do %>
       <%= fa_icon "user-injured" %>
-      <span class="hidden-xs"> Entregado por pacientes</span>
+      <span class="hidden-xs"> Pacientes</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_internal_order_product_reports_path, class: "nav-link #{active_class("reports/internal_order_products")}" do %>
+    <%= link_to new_reports_internal_order_product_report_path, class: "nav-link #{active_class("reports/internal_order_products")}" do %>
       <%= fa_icon "bezier-curve" %>
-      <span class="hidden-xs"> Entregado por sectores</span>
+      <span class="hidden-xs"> Sectores</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_external_order_product_reports_path, class: "nav-link #{active_class("reports/external_order_products")}" do %>
+    <%= link_to new_reports_external_order_product_report_path, class: "nav-link #{active_class("reports/external_order_products")}" do %>
       <%= fa_icon "hospital" %>
-      <span class="hidden-xs"> Entregado por establecimientos</span>
+      <span class="hidden-xs"> Establecimientos</span>
     <% end %>
   </li>
   <li class="nav-item non-sel">
-    <%= link_to reports_monthly_consumption_reports_path, class: "nav-link #{active_class("reports/monthly_consumption_reports")}" do %>
+    <%= link_to new_reports_monthly_consumption_report_path, class: "nav-link #{active_class("reports/monthly_consumption_reports")}" do %>
       <%= fa_icon "capsules" %>
       <span class="hidden-xs"> Consumo por mes</span>
     <% end %>

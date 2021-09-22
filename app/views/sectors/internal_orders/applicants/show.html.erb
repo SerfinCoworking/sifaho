@@ -127,10 +127,11 @@
                     </button>
                   </td>
                   <td>
-                    <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
-                      <%= fa_icon "asterisk" %>
-                    <% else %>
-                      ---
+                    <% if int_ord_prod.provider_observation.present? %>
+                      <%= render 'shared/popover', content: int_ord_prod.provider_observation, title: 'Observaciones proveedor', icon: 'eye' %>
+                    <% end %>
+                    <% if int_ord_prod.applicant_observation.present? %>
+                      <%= render 'shared/popover', content: int_ord_prod.applicant_observation, title: 'Observaciones solicitante', icon: 'eye' %>
                     <% end %>
                   </td>
                 </tr>
@@ -175,18 +176,6 @@
                         <% else %>
                             No tiene lotes asignados
                         <% end %>
-                        <% if int_ord_prod.provider_observation.present? || int_ord_prod.applicant_observation.present? %>
-                          <table class="w-100">
-                            <tr>
-                              <th>Descripción solicitud</th>
-                              <th>Descripción proveedor</th>
-                            </tr>
-                            <tr>
-                              <td><%= int_ord_prod.provider_observation %></td>
-                              <td><%= int_ord_prod.applicant_observation %></td>
-                            </tr>
-                          </table>
-                        <%end%>
                       </div>
                     </div>
                   </td>

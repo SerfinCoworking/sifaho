@@ -1,8 +1,8 @@
 $(document).on('turbolinks:load', function(e){
 
-  if(!(['patient_product_state_reports', 'patient_product_reports', 'internal_order_products', 'external_order_products'].includes(_PAGE.controller) && 
-  (['new', 'create'].includes(_PAGE.action))) ) return false;
+  if(!( _PAGE.controller.startsWith('reports') && (['new', 'create'].includes(_PAGE.action)) ) ) return false;
 
+  console.log("Entró js reports");
   initEvents();
 
   // cocoon init

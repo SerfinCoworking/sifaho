@@ -452,6 +452,7 @@ es:
     laboratories: 'laboratorios'
     users_admin: 'usuarios'
     permission_requests: 'solicitudes_permisos'
+    reports: 'reportes'
     stock_quantity_reports: 'stock_por_rubros'
     patient_product_reports: 'entregado_por_pacientes'
     internal_order_product_reports: 'entregado_por_sectores'
