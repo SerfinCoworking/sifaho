@@ -1,8 +1,7 @@
-class OriginalChronicPrescriptionProductsController < ApplicationController
+class Prescriptions::OriginalChronicPrescriptionProductsController < ApplicationController
   before_action :set_original_chronic_prescription_product, only: [:finish_treatment, :update_treatment]
 
   # GET /chronic_prescriptions
-  # GET /chronic_prescriptions.json
   def finish_treatment
     authorize @original_product
     respond_to do |format|
