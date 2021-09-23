@@ -1,6 +1,6 @@
 <% content_for :page_header do %>
     <li class="nav-item <%= active_action('index') %> non-sel">
-        <%= link_to notifications.clean_notifications_path, class: 'nav-link', method: 'delete' do %>
+        <%= link_to clean_notifications_path, class: 'nav-link', method: 'delete' do %>
             <%= fa_icon "trash" %>
             <%= t('notifications.clean_all') %>
         <% end %>
