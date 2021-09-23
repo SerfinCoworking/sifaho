@@ -66,34 +66,6 @@ class LotStocksController < ApplicationController
     @reserved_lots = @lot_stock.movements_with_reserved_quantity
   end
 
-  # GET /stocks/1
-  # GET /stocks/1.json
-  def show_lot_archive
-    authorize @lot_archive
-  end
-
-  def new_archive
-    authorize @lot_stock
-    @lot_archive = LotArchive.new
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  def create_archive
-    authorize @lot_stock    
-    @lot_archive = LotArchive.new(lot_archive_params)
-    @lot_archive.user_id = current_user.id
-
-    respond_to do |format|
-      if @lot_archive.save
-        format.html { redirect_to stock_show_lot_stocks_path(id: @lot_stock.stock_id,lot_stock_id: @lot_stock.id), notice: 'Lote archivado correctamente.' }
-      else
-        format.js { render :new_archive }
-      end
-    end
-  end
-
   def find_lots
     # Buscamos los lot_stocks que pertenezcan al sector del usuario y ademas tengan stock
     @lot_stocks = LotStock.joins(:stock)
@@ -139,13 +111,5 @@ class LotStocksController < ApplicationController
 
   def set_lot_archive
     @lot_archive = LotArchive.find(params[:id])
-  end
-
-  def lot_archive_params
-    params.require(:lot_archive).permit([
-      :lot_stock_id,
-      :quantity,
-      :observation
-    ])
   end
 end

@@ -460,6 +460,7 @@ es:
     monthly_consumption_reports: 'consumo_por_mes'
     state_reports: 'reportes_provincia'
     patient_product_state_reports: 'producto_por_pacientes'
+    lot_archives: 'archivos'
     # Actions
     new: 'nuevo'
     provider_index: 'entregas'
