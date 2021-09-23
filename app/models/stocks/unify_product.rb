@@ -90,14 +90,14 @@ class UnifyProduct < ApplicationRecord
     origin_product.inpatient_prescription_products.each { |inp_pre| inp_pre.update_column('product_id', target_product.id) }
     origin_product.external_order_products.each do |ext_ord|
       # Check if target product was already loaded
-      unless ext_ord.external_order.order_products.where(product_id: target_product_id).present?
+      unless ext_ord.order.order_products.where(product_id: target_product_id).present?
         ext_ord.update_column('product_id', target_product.id)
       end
     end
     origin_product.external_order_product_templates.each { |ext_ord_tmp| ext_ord_tmp.update_column('product_id', target_product.id) }
     origin_product.internal_order_products.each do |int_ord|
       # Check if target product was already loaded
-      unless int_ord.internal_order.order_products.where(product_id: target_product_id).present?
+      unless int_ord.order.order_products.where(product_id: target_product_id).present?
         int_ord.update_column('product_id', target_product.id)
       end
     end
