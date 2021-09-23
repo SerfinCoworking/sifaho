@@ -35,9 +35,7 @@
         <div id="page-content-wrapper" class="<%= user_signed_in? ? '' : 'w-100' %>">
           <div class="pt-3 container-fluid h-100">
 
-            <!-- Modal -->
-            <%= render "shared/dialog" %>
-            <%= render "shared/modals/confirmation_unsaved" %>
+            
 
             <!-- Main yield -->
             <%= yield %>
@@ -47,6 +45,9 @@
     </div>
   </body>
   <footer>
+    <!-- Modal -->
+    <%= render "shared/modals/dialog" %>
+    <%= render "shared/modals/confirmation_unsaved" %>
     <%= yield(:modal) %>    
   </footer>
 </html>

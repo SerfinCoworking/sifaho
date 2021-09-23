@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center ml-2">
       <%= fa_icon (@internal_order.new_record? ?  "plus" : "edit")%>
       <h5 class="card-title mb-0 ml-2">
-        <%= @internal_order.new_record? ? "Nueva solicitud de sector" : "Editando solicitud interna" %>
+        <%= @internal_order.new_record? ? "Nueva provisión de sector" : "Editando provisión interna" %>
       </h5>
     </div>
     <%= link_to :back, class: @internal_order.new_record? ? 'btn text-white' : 'btn' do %>
@@ -82,7 +82,7 @@
   </div>
 
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn btn-light mr-1' %>
+    <%= link_to 'Volver', internal_orders_providers_path, class: 'btn btn-secondary mr-1' %>
 
     <% if @internal_order.persisted? && policy(:internal_order_provider).edit_products?(@internal_order) %>
       <%= link_to edit_products_internal_orders_provider_path(@internal_order),  
@@ -94,7 +94,7 @@
     <% end %>
 
     <button type='submit' name='commit' class='btn btn-success mr-1' form='order-form' value='Guardar', data-disable-with="<i class='fa fa-spinner fa-spin'></i> Guardando">
-      <%= fa_icon "save" %> Guardar
+      <%= fa_icon "save" %> Guardar y agregar productos
     </button>
   </div>
 </div>

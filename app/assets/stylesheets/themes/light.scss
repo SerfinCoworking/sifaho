@@ -106,4 +106,26 @@
   .custom-form-row:hover{
     background-color: #d0d0d0;
   }
+
+  
+}
+
+#wrapper.lgith ~ footer{
+  // Modal
+  .modal-dialog .modal-body{
+    background-color: $bg-main-in-light;
+    color: $font-main-in-light;
+  }
+
+  .modal-dialog .modal-content{
+    background-color: $bg-main-in-light;
+    color: $font-main-in-light;
+    table, table tr:hover{
+      color: $font-main-in-light;
+    }
+    .modal-footer{
+      border-top: 1px solid rgba(0, 0, 0, 0.125);
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
 }

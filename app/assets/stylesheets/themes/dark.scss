@@ -135,4 +135,63 @@
   .custom-form-row:hover{
     background-color: #808080;
   }
+
+  // bootstrap selecpicker
+  .dropdown.bootstrap-select{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+    button.dropdown-toggle{
+      background-color: #6c6f75;
+      color: #e9ecef;
+    }
+    .dropdown-menu{
+      background-color: $bg-main-in-dark;
+      color: $font-main-in-dark;
+    }
+  }
+  
+}
+
+#wrapper.dark ~ footer{
+  // Modal
+  .modal-dialog .modal-content{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+    table, table tr:hover{
+      color: $font-main-in-dark;
+    }
+    .modal-footer{
+      border-top: 1px solid rgba(0, 0, 0, 0.125);
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  .form-control, .form-control:focus{
+    background-color: #6c6f75;
+    color: #e9ecef;
+    &::placeholder{
+      color: #e9ecef
+    }
+  }
+
+  // bootstrap selecpicker
+  .dropdown.bootstrap-select{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+    button.dropdown-toggle{
+      background-color: #6c6f75;
+      color: #e9ecef;
+    }
+    .dropdown-menu{
+      background-color: $bg-main-in-dark;
+      color: $font-main-in-dark;
+    }
+  }
+
+}
+#wrapper.dark ~ .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front{
+  background-color: $bg-main-in-dark;
+  .ui-menu-item-wrapper{
+    color: $font-main-in-dark;
+  }
 }
