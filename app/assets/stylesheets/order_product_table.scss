@@ -10,6 +10,10 @@ table.table{
   tr.nested-fields.has-error{
     background-color: $red-light-color;
   }
+  tr.row-with-error{
+    height: 60px;
+    position: relative;
+  }
 }
 
 

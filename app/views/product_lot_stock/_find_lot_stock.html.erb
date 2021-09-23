@@ -32,14 +32,14 @@
   <table class="table table-hover" id="table-lot-selection">
     <thead>
       <tr>
-        <th width="5%"></th>
-        <th>Cantidad</th>
+        <th></th>
+        <th width="30%">Cantidad</th>
         <th>Código</th>
         <th>Stock</th>
         <th>Estado</th>
         <th>Procedencia</th>
         <th>Vencimiento</th>
-        <th width="35%">Laboratorio</th>
+        <th>Laboratorio</th>
         <th>Reservado</th>
       </tr>
     </thead>
@@ -48,9 +48,9 @@
       <% lot_stocks.each_with_index do |lot_stock, index| %> 
         <% opls = f.object.order_prod_lot_stocks.select { |u| u.lot_stock_id == lot_stock.id }.first %>
 
-        <tr class="<%= opls.present? && opls.errors.any? ? 'table-danger' : '' %> <%= opls.present? && !opls.errors.any? ? 'table-success' : '' %>">
-          <td class="align-middle">
-            <div class="custom-control custom-switch">
+        <tr class="<%= opls.present? && opls.errors.any? ? 'table-danger row-with-error' : '' %> <%= opls.present? && !opls.errors.any? ? 'table-success' : '' %>">
+          <td class="p-2">
+            <div class="custom-control pl-0">
               <input type="checkbox" id="lot-stock-<%=lot_stock.id%>" 
                 <%= opls.present? ? 'checked' : ''%>
                 data-toggle="switchbutton" 
@@ -67,42 +67,46 @@
               <input type="hidden" name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][_destroy]" value="false" class="hidden-destroy-lot-stock">
               
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <div class="form-group integer">
-              <input type="number" class="form-control numeric integer optional quantity input-sm <%= opls.present? && opls.errors[:quantity].any? ? 'is-invalid' : ''%>"
+              <input type="number" class="form-control numeric integer optional quantity form-control-sm  <%= opls.present? && opls.errors[:quantity].any? ? 'is-invalid' : ''%>"
               name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][quantity]"
               value="<%= opls.present? ? opls.quantity : 0%>"
               data-target="lot-stock-<%=lot_stock.id%>"
               min="0">
               
-              <div class="invalid-feedback">
-                <%= opls.present? && opls.errors[:quantity].any? ? opls.errors[:quantity].first : '' %>
+              <div class="invalid-feedback w-auto position-absolute m-0">
+                Cantidad <%= opls.present? && opls.errors[:quantity].any? ? opls.errors[:quantity].first : '' %>
               </div>
             </div>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <%= lot_stock.lot.code %>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <%= lot_stock.quantity %>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <span class="badge badge-<%= lot_status_label(lot_stock.lot) %> ">
               <%= lot_stock.lot.status.humanize %>
             </span>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <span class="badge badge-secondary">
               <%= lot_stock.lot.provenance_name %>
             </span>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <%= lot_stock.lot_short_expiry_date_string %>
           </td>
-          <td class="align-middle">
-            <%= lot_stock.lot.laboratory.name %>
+          <td class="p-2">
+            <div style="width: 300px;">
+              <div class="text-truncate">
+                <%= lot_stock.lot.laboratory.name %>
+              </div>
+            </div>
           </td>
-          <td class="align-middle">
+          <td class="p-2">
             <%= opls.present? ? opls.reserved_quantity : '-' %>
           </td>
         </tr>
