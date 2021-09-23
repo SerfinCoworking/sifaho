@@ -3,7 +3,11 @@ Rails.application.routes.draw do
     # Stocks
     resources :stocks do
       collection do
-        resources :lot_stocks, only: %i[index show]
+        resources :lot_stocks, only: %i[index show] do
+          member do
+            resources :lot_archives, only: %i[show new create]
+          end
+        end
       end
       # collection do
       #   get '/lotes', to: 'lot_stocks#index', as: :lot_stocks_index
@@ -18,6 +22,11 @@ Rails.application.routes.draw do
       end
     end
 
+    get ':id/return_archive_modal', to: 'lot_stocks#return_archive_modal', as: :return_archive_modal
+
+    # get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
+    patch ':id/return_archive', to: 'lot_stocks#return_archive', as: :return_archive
+
     # Lots
     resources :lots do
       member do
@@ -28,10 +37,6 @@ Rails.application.routes.draw do
         resources :lot_provenances
       end
     end
-
-    get ':id/return_archive_modal', to: 'lot_stocks#return_archive_modal', as: :return_archive_modal
-    get 'lot_archive/:id', to: 'lot_stocks#show_lot_archive', as: :lot_archive
-    patch ':id/return_archive', to: 'lot_stocks#return_archive', as: :return_archive
 
     # Sector supply lots
     resources :sector_supply_lots, only: %i[index show create destroy] do

@@ -14,8 +14,8 @@
         <% end %>
       <% end %>
 
-      <% if policy(lot_stock).create_archive? %>
-        <%= link_to stock_new_archive_path(lot_stock.stock, lot_stock), class: "btn btn-warning btn-sm", remote: true, 
+      <% if policy(LotArchive).new? %>
+        <%= link_to new_lot_archive_path(lot_stock), class: "btn btn-warning btn-sm", remote: true, 
           title: 'Archivar', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
           <%= fa_icon 'archive'%>
         <% end %>

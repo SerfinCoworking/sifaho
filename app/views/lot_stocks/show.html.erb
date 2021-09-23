@@ -162,7 +162,7 @@
                   <td><%= lot_archive.quantity %></td>
                   <td><%= lot_archive.observation %></td>
                   <td class="actions-col">
-                    <% if policy(lot_archive).show_lot_archive? %>
+                    <% if policy(lot_archive).show? %>
                       <%= link_to lot_archive_path(lot_archive), class: "btn btn-light btn-sm",
                         title: 'Ver detalle', tabindex: "-1", data: { toggle: 'tooltip', placement: 'top' } do %>
                         <%= fa_icon 'eye' %>

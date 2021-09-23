@@ -80,7 +80,6 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
   def update
     policy(:internal_order_provider).update?(@internal_order)
     previous_status = @internal_order.status
-    @internal_order.audited_by = current_user
     @internal_order.status = 'proveedor_auditoria'
 
     respond_to do |format|

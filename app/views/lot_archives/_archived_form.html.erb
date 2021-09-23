@@ -1,4 +1,7 @@
-<%= simple_form_for @lot_archive, method: :post, url: stock_create_archive_url(@lot_stock.stock, @lot_stock), remote: true, html: {role: 'check-modified'} do |f_lot_archive| %>
+<%= simple_form_for @lot_archive, method: :post, remote: true, html: {role: 'check-modified'} do |f_lot_archive| %>
+  
+  <%= @lot_archive.errors.messages[:base].first if @lot_archive.errors.present? %>
+  
   <%= f_lot_archive.error_notification %>
 
   <div class="row">
