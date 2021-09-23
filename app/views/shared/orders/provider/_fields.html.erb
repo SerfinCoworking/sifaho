@@ -1,7 +1,7 @@
 <%# Generate a random id, for identify html form %>
 <% form_id = rand(0..100000) %>
 <% if order_product.new_record? %>
-  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order.id, form_id: @form_id) %>
+  <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_products], provider_id: order.id, form_id: form_id) %>
 <% else %>
   <% url = polymorphic_path([order.class.name.underscore.pluralize, :provider_product], provider_id: order.id, id: order_product.id) %>
 <% end %>
@@ -10,11 +10,11 @@
                     url: url,
                     remote: true,
                     html: { 
-                      id: order_product.new_record? ? "ord-prod-#{@form_id}" : "ord-prod-#{order_product.id}",
-                      class: "custom-form-row #{'editing' if order_product.errors.any? || order_product.new_record?} #{'unsaved-row' if order_product.new_record?}" ,
+                      id: order_product.new_record? ? "ord-prod-#{form_id}" : "ord-prod-#{order_product.id}",
+                      class: "#{'custom-form-row' unless order_product.errors.any?} #{'editing' if order_product.errors.any? || order_product.new_record?} #{'unsaved-row' if order_product.new_record?}" ,
                     } do |form| %>
 
-  <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{@form_id}" : "row-ord-prod-#{order_product.id}" %>">
+  <div class="row nested-fields m-0" id="<%= order_product.new_record? ? "row-ord-prod-#{form_id}" : "row-ord-prod-#{order_product.id}" %>">
     <!-- Código del producto -->  
     
     <% if policy(order_product).edit_product? %>
@@ -31,7 +31,7 @@
                     <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>                    
                     autocomplete="off" 
                     placeholder="Código">
-            <div class="invalid-feedback">
+            <div class="invalid-feedback custom-validation-msg">
               <% if form.object.errors[:product_id].any? %>
                 Producto <%= form.object.errors[:product_id].first %>
               <% elsif form.object.errors[:uniqueness_product_in_the_order].any? %>
@@ -70,11 +70,7 @@
               autocomplete="off"
               <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>
               placeholder="Nombre">
-              <% if form.object.errors[:product_id].first %>
-                <div id="product_id_fake" class="invalid-feedback">
-                  Producto <%= form.object.errors[:product_id].first %>
-                </div>
-              <% end %>
+              
             </div>
 
             <div class="with-loading">
@@ -127,7 +123,7 @@
                   type="number"
                   <%= order_product.new_record? || order_product.errors.any? ? '' : 'readonly' %>
                   name="order_product[request_quantity]">
-          <div class="invalid-feedback">
+          <div class="invalid-feedback custom-validation-msg">
             <% if form.object.errors[:request_quantity].any? %>
               Cantidad solicitada <%= form.object.errors[:request_quantity].first %>
             <% end %>
@@ -162,15 +158,15 @@
     </div>
     
     <!-- Botones de accion -->
-    <div class="col-action-btn pl-1 pr-1 d-flex align-items-center <%= 'hidden-content' if policy(order_product).destroy? %>">
+    <div class="col-action-btn pl-1 pr-1 d-flex align-items-top <%= 'hidden-content' if policy(order_product).destroy? %>">
       <% if form.object.new_record? %>
-        <div class="creating-buttons">
+        <div class="creating-buttons mt-1">
           <button class="btn btn-sm btn-outline-success" 
                   data-tooltip="true"
                   title="Guardar"
                   data-placemente="top"
                   type="submit" 
-                  form="<%= "ord-prod-#{@form_id}" %>">
+                  form="<%= "ord-prod-#{form_id}" %>">
             <%= fa_icon "save", class: 'fa-fw' %>
           </button>
           <button class="btn btn-sm btn-outline-danger btn-delete-product"
