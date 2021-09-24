@@ -32,22 +32,15 @@ class OutpatientPrescription < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'updated_at_desc' },
-    available_filters: [
-      :search_by_remit_code,
-      :search_by_professional,
-      :search_by_patient,
-      :sorted_by,
-      :with_order_type,
-      :date_prescribed_since,
-      :for_statuses
-    ]
+    available_filters: %i[search_by_remit_code search_by_professional search_by_patient sorted_by with_order_type
+                          date_prescribed_since for_statuses]
   )
 
   # SCOPES #--------------------------------------------------------------------
 
   pg_search_scope :search_by_remit_code,
-                  against: [ :remit_code ],
-                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  against: [:remit_code],
+                  using: { tsearch: { prefix: true }, trigram: {} }, # Buscar coincidencia en cualquier parte del string
                   ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_by_professional,

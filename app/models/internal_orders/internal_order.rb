@@ -28,7 +28,7 @@ class InternalOrder < ApplicationRecord
 
   pg_search_scope :search_code,
                   against: :remit_code,
-                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  using: { tsearch: { prefix: true }, trigram: {} }, # Buscar coincidencia en cualquier parte del string
                   ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_applicant,
