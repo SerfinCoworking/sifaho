@@ -108,6 +108,9 @@
     td .btn-link{
       color: $font-main-in-dark;
     }
+    td.table-success, td.table-warning{
+      color: $font-main-in-light;
+    }
   }
 
   .pagination .page-item .page-link{

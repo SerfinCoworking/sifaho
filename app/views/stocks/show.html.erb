@@ -101,7 +101,7 @@
           <tbody>
             <% @stock.lot_stocks.greater_than_zero.order(quantity: :desc).each do |lot_stock| %>
               <tr>
-                <th scope="row"><%= lot_stock.lot_code %></th>
+                <td class="font-weight-bold" scope="row"><%= lot_stock.lot_code %></td>
                 <td><%= lot_stock.lot_laboratory_name %></td>
                 <td><span class="badge badge-secondary"><%= lot_stock.lot_provenance_name %></span></td>
                 <td><%= lot_stock.lot_short_expiry_date_string %></td>
@@ -143,7 +143,7 @@
             <% @stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <th scope="row"><%= movement.lot_stock.lot_code %></th>
+                <td class="font-weight-bold" scope="row"><%= movement.lot_stock.lot_code %></td>
                 <td><%= movement.order.present? ? movement.order.class.model_name.human : 'Se eliminó' %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name if movement.order.present?  %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name if movement.order.present? %></td>

@@ -21,12 +21,9 @@ class LotArchivesController < ApplicationController
     authorize @lot_archive
 
     respond_to do |format|
-      begin
-        @lot_archive.save
+      if @lot_archive.save
         format.html { redirect_to @lot_archive, notice: 'Lote archivado correctamente.' }
-      rescue ArgumentError => e
-        @lot_archive.errors.add(:base, e.message)
-        flash.now[:alert] = e.message
+      else
         format.js { render :new }
       end
     end
