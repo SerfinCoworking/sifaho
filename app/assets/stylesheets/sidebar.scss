@@ -11,7 +11,7 @@ body {
     &.toggled, &.wrapper-1220{
         #wrapper-2 > #sidebar-wrapper{
             width: $sidebar-width-hidden!important;
-            z-index: 100;
+            z-index: 110;
             position: fixed;
             .list-group-item{
                 &.profile-link > .img-container > img{
