@@ -34,8 +34,8 @@
       <tr>
         <th></th>
         <th width="30%">Cantidad</th>
-        <th>Código</th>
         <th>Stock</th>
+        <th>Código</th>
         <th>Estado</th>
         <th>Procedencia</th>
         <th>Vencimiento</th>
@@ -80,23 +80,23 @@
               </div>
             </div>
           </td>
-          <td class="p-2">
-            <%= lot_stock.lot.code %>
-          </td>
-          <td class="p-2">
+          <td class="p-2 text-center">
             <%= lot_stock.quantity %>
           </td>
-          <td class="p-2">
+          <td class="p-2 text-center">
+            <%= lot_stock.lot.code %>
+          </td>
+          <td class="p-2 text-center">
             <span class="badge badge-<%= lot_status_label(lot_stock.lot) %> ">
               <%= lot_stock.lot.status.humanize %>
             </span>
           </td>
-          <td class="p-2">
+          <td class="p-2 text-center">
             <span class="badge badge-secondary">
               <%= lot_stock.lot.provenance_name %>
             </span>
           </td>
-          <td class="p-2">
+          <td class="p-2 text-center">
             <%= lot_stock.lot_short_expiry_date_string %>
           </td>
           <td class="p-2">
@@ -106,7 +106,7 @@
               </div>
             </div>
           </td>
-          <td class="p-2">
+          <td class="p-2 text-center">
             <%= opls.present? ? opls.reserved_quantity : '-' %>
           </td>
         </tr>

@@ -191,6 +191,10 @@
       color: $font-main-in-dark;
     }
   }
+  tr.table-success, tr.table-success:hover{
+    color: $font-main-in-light!important;
+
+  }
 
 }
 #wrapper.dark ~ .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front{
