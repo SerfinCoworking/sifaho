@@ -65,7 +65,6 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
   # PATCH /internal_orders/applicants.json
   def update
     policy(:internal_order_applicant).update?(@internal_order)
-    @internal_order.audited_by = current_user
 
     respond_to do |format|
       if @internal_order.update(internal_order_params)
