@@ -45,9 +45,11 @@
       <% end %>
 
       <%# Error message of dispatch order without products%>
-      <div class="text-danger mt-2 mb-2">
-        <%= @error if @error.present? %>
-      </div>
+      <% if @error.present? %>
+        <div class="text-danger mt-2 mb-2">
+          <%= @error %>
+        </div>
+      <% end %>
     
     <%# INSUMOS SOLICITADOS %>
     <%= render "shared/orders/applicant/table", order: order, order_product: order_product %>
