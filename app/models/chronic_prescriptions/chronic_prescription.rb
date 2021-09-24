@@ -10,10 +10,10 @@ class ChronicPrescription < ApplicationRecord
   belongs_to :establishment
 
   has_many :chronic_dispensations, dependent: :destroy, inverse_of: 'chronic_prescription'
-  has_many :chronic_prescription_products, :through => :chronic_dispensations
+  has_many :chronic_prescription_products, through: :chronic_dispensations
   has_many :original_chronic_prescription_products, dependent: :destroy, inverse_of: 'chronic_prescription'
-  has_many :products, :through => :chronic_prescription_products
-  has_many :movements, class_name: "ChronicPrescriptionMovement"
+  has_many :products, through: :chronic_prescription_products
+  has_many :movements, class_name: 'ChronicPrescriptionMovement'
 
   # Validaciones
   validates_presence_of :patient_id, :professional_id, :date_prescribed, :remit_code
@@ -30,64 +30,58 @@ class ChronicPrescription < ApplicationRecord
 
   filterrific(
     default_filter_params: { sorted_by: 'updated_at_desc' },
-    available_filters: [
-      :search_by_remit_code,
-      :search_by_professional,
-      :search_by_patient,
-      :sorted_by,
-      :date_prescribed_since,
-      :for_statuses
-    ]
+    available_filters: %i[search_by_remit_code search_by_professional search_by_patient sorted_by date_prescribed_since
+                          for_statuses]
   )
 
   pg_search_scope :search_by_remit_code,
-    against: :remit_code,
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  against: :remit_code,
+                  using: { tsearch: { prefix: true }, trigram: {} }, # Buscar coincidencia en cualquier parte del string
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_by_professional,
-    :associated_against => { professional: [ :last_name, :first_name ] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { professional: %i[last_name first_name] },
+                  using: { tsearch: { prefix:  true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   pg_search_scope :search_by_patient,
-    :associated_against => { patient: [ :last_name, :first_name, :dni ] },
-    :using => { :tsearch => {:prefix => true} }, # Buscar coincidencia desde las primeras letras.
-    :ignoring => :accents # Ignorar tildes.
+                  associated_against: { patient: %i[last_name first_name dni] },
+                  using: { tsearch: { prefix: true } }, # Buscar coincidencia desde las primeras letras.
+                  ignoring: :accents # Ignorar tildes.
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    direction = sort_option =~ /desc$/ ? 'desc' : 'asc'
     case sort_option.to_s
     when /^updated_at_/s
-      # Ordenamiento por fecha de modificación en la BD
-      order("chronic_prescriptions.updated_at #{ direction }")
+      # Ordenamiento por fecha de modificacion en la BD
+      order("chronic_prescriptions.updated_at #{direction}")
     when /^created_at_/s
-      # Ordenamiento por fecha de creación en la BD
-      order("chronic_prescriptions.created_at #{ direction }")
+      # Ordenamiento por fecha de creacion en la BD
+      order("chronic_prescriptions.created_at #{direction}")
     when /^medico_/
       # Ordenamiento por nombre de droga
-      order("professionals.last_name #{ direction }").joins(:professional)
+      order("professionals.last_name #{direction}").joins(:professional)
     when /^paciente_/
       # Ordenamiento por marca de medicamento
-      order("patients.last_name #{ direction }").joins(:patient)
+      order("patients.last_name #{direction}").joins(:patient)
     when /^estado_/
       # Ordenamiento por nombre de estado
-      order("chronic_prescriptions.status #{ direction }")
+      order("chronic_prescriptions.status #{direction}")
     when /^productos_/
       left_joins(:original_chronic_prescription_products)
       .group(:id)
-      .reorder("COUNT(original_chronic_prescription_products.id) #{ direction }")
+      .reorder("COUNT(original_chronic_prescription_products.id) #{direction}")
     when /^movimientos_/
       left_joins(:movements)
       .group(:id)
-      .reorder("COUNT(chronic_prescription_movements.id) #{ direction }")
+      .reorder("COUNT(chronic_prescription_movements.id) #{direction}")
     when /^recetada_/
-      # Ordenamiento por la fecha de recepción
-      order("chronic_prescriptions.date_prescribed #{ direction }")
+      # Ordenamiento por la fecha de recepcion
+      order("chronic_prescriptions.date_prescribed #{direction}")
     else
       # Si no existe la opcion de ordenamiento se levanta la excepcion
-      raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
     end
   }
 
