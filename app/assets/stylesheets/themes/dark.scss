@@ -149,7 +149,11 @@
       color: $font-main-in-dark;
     }
   }
-  
+
+  .custom-sticky-top{
+    background-color: $bg-main-in-dark;
+    color: $font-main-in-dark;
+  }
 }
 
 #wrapper.dark ~ footer{
