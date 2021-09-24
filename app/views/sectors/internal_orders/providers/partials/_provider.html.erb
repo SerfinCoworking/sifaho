@@ -1,4 +1,4 @@
-<tr id="internal_order_<%= internal_order.id %>" class="<%= internal_order_td(internal_order) %>">
+<tr id="internal_order_<%= internal_order.id %>" class="<%= internal_order_td(internal_order) %> <%= highlight_provider_row_bg(internal_order) %>">
   <td><%= internal_order.remit_code %></td>
   <td class="sol-col-aba">
     <%= internal_order.applicant_sector.name %>

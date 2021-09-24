@@ -1,4 +1,4 @@
-<tr id="external_order_<%= external_order.id %>" class="<%= ordering_td(external_order) %>">
+<tr id="external_order_<%= external_order.id %>" class="<%= ordering_td(external_order) %> <%= highlight_applicant_row_bg(external_order)%>">
   <td><%= external_order.remit_code %></td>
     <td class="sol-col-aba">
       <%= external_order.provider_sector.name %>
