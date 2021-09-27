@@ -59,10 +59,10 @@
           <% end %>
         </div>
         <div>
-          <%= link_to internal_orders_applicants_path(filterrific: {:with_status => 2}), 
+          <%= link_to internal_orders_applicants_path(filterrific: {:with_status => 3}),
             class: 'tn btn-link text-dark text-left p-0',
             title: "Ver provisiones en camino", data: { toggle: 'tooltip', placement: 'bottom' } do %>
-            Provisiones en camino <span class="badge badge-primary"><%= @applicant_orders.proveedor_auditoria.count %></span>
+            Provisiones en camino <span class="badge badge-primary"><%= @applicant_orders.provision_en_camino.count %></span>
           <% end %>
         </div>
       </div>

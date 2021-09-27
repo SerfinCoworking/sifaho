@@ -15,10 +15,18 @@
     <% end %>
   </li>
 
-  <li class="nav-item non-sel">
+  <li class="nav-item non-sel d-flex align-items-center">
     <%= link_to external_orders_applicants_path, class: "nav-link #{ active_action_and_controller('index', 'applicants') }" do %>
       <%= fa_icon "inbox" %>
       Recibos
+    <% end %>
+    <!-- Badge notification -->
+    <% request_count = ExternalOrder.applicant(current_user.sector).provision_en_camino.count %>
+    <% if request_count > 0%>
+      <%= link_to external_orders_applicants_path(filterrific: {:with_status => 4}), class: 'badge badge-info',
+      title: "En camino", data: { toggle: 'tooltip', placement: 'bottom' } do %>
+        <%= request_count %>
+      <% end %>
     <% end %>
   </li>
 
