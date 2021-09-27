@@ -126,7 +126,7 @@ class StocksController < ApplicationController
     report = Thinreports::Report.new
 
     report.use_layout File.join(Rails.root, 'app', 'reports', 'stock', 'one_stock_report.tlf'), :default => true
-    
+
     # Comenzamos con la pagina principal
     report.start_new_page
 
