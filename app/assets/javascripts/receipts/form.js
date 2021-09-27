@@ -146,7 +146,7 @@ $(document).on('turbolinks:load', function(e){
       const _this = $(e.target);
       jQuery(function() {
         return $('.receipt-product-lot-code').autocomplete({
-          source: '/lotes_provincia/search_by_code?product_code='+_this.closest(".nested-fields").find(".receipt-product-code").val(),
+          source: '/lotes/search_by_code?product_code='+_this.closest(".nested-fields").find(".receipt-product-code").val(),
           minLength: 1,
           messages: {
             noResults: function(count) {
