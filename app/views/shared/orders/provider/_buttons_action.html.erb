@@ -1,3 +1,9 @@
+<% if order_product.applicant_observation.present? %>
+  <div class="editing-buttons mt-1 mr-1">
+    <%= render 'shared/popover', content: order_product.applicant_observation, title: 'Observaciones solicitante', icon: 'eye' %>
+  </div>
+<% end %>
+
 <div class="editing-buttons mt-1" style="display: <%= order_product.errors.any? ? 'block' : 'none' %> ;">
   <button class="btn btn-sm btn-outline-success" type="submit" form="<%= "ord-prod-#{order_product.id}" %>">
     <%= fa_icon 'save', class: 'fa-fw' %>
@@ -10,7 +16,7 @@
   <% end %>
 </div>
   
-<div class="enable-editing-buttons mt-1 style="display: <%= order_product.errors.any? ? 'none' : 'block' %>;">
+<div class="enable-editing-buttons mt-1" style="display: <%= order_product.errors.any? ? 'none' : 'block' %>;">
   
   <%= link_to find_order_product_lots_path( order_type: order.class.name,
                                             order_id: order.id,

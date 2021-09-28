@@ -179,9 +179,6 @@
           </button>
         </div>
       <% else %>
-        <% if order_product.applicant_observation.present? %>
-          <%= render 'shared/popover', content: order_product.applicant_observation, title: 'Observaciones solicitante', icon: 'eye' %>
-        <% end %>
         <%= render "shared/orders/provider/buttons_action", order: order, order_product: order_product %>
       <% end %>
     </div>
