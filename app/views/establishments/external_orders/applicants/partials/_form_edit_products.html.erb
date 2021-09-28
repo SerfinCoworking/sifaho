@@ -12,44 +12,23 @@
     <% end %>
   </div>
   <div class="card-body">
-    <div class="row">
-      <div class="col-md-3">
-        <%# SECTOR SOLICITANTE %>
-        Sector solicitante
-        <%= order.applicant_sector.name %>
-        
-      </div>
-      <div class='col-md-3'>
-        <%# ESTABLECIMIENTO PROVEEDOR %>
-        Establecimiento proveedor
-        <%= order.provider_sector.establishment.name %>
-        
-      </div>
-      <div class='col-md-3'>
-        <%# SECTOR PROVEEDOR %>        
-        Sector proveedor
-        <%= order.provider_sector.name %>
-        
-      </div>
-      <div class='col-md-3'>
-        Observaciones
-        <%= order.observation %>
-      </div>
+    <div class="row order-header-info mb-2">
+      <%= render "establishments/external_orders/edit_products_header", order: order %>
     </div>
 
     <%# Dispatch order as POST method %>
-      <%= simple_form_for order_product, 
-                          url: dispatch_order_external_orders_applicant_path(order),
-                          method: :POST,
-                          html: { id: "dispatch-order"} do |form| %>
-      <% end %>
+    <%= simple_form_for order_product, 
+                        url: dispatch_order_external_orders_applicant_path(order),
+                        method: :POST,
+                        html: { id: "dispatch-order"} do |form| %>
+    <% end %>
 
-      <%# Error message of dispatch order without products%>
-      <% if @error.present? %>
-        <div class="text-danger mt-2 mb-2">
-          <%= @error %>
-        </div>
-      <% end %>
+    <%# Error message of dispatch order without products%>
+    <% if @error.present? %>
+      <div class="text-danger mt-2 mb-2">
+        <%= @error %>
+      </div>
+    <% end %>
     
     <%# INSUMOS SOLICITADOS %>
     <%= render "shared/orders/applicant/table", order: order, order_product: order_product %>

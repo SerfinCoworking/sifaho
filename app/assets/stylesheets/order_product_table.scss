@@ -6,6 +6,24 @@
 */
 @import 'variables';
 
+.order-header-info{
+  .applicant-info, .provider-info{
+    .hospital-thumb{
+      height: 40px;
+      width: 40px;
+      object-fit: cover;
+    }
+    .applicant-title, .provider-title{
+      font-size: .8rem;
+      margin-bottom: 0px;
+    }
+    .applicant-subtitle, .provider-subtitle{
+      font-size: .9rem;
+
+    }
+  }
+}
+
 table.table{
   tr.nested-fields.has-error{
     background-color: $red-light-color;
