@@ -12,7 +12,7 @@
     <% end %>
   </div>
   <div class="card-body">
-    <%= render "establishments/external_orders/edit_products_header", order: order %>
+    <%= render "establishments/external_orders/order_header", order: order %>
 
     <%# Dispatch order as POST method %>
     <%= simple_form_for order_product, 

@@ -21,31 +21,7 @@
   </div>
 
   <div class="card-body">
-    <div class="row">
-      <div class='col'>
-        <strong>Solicitante:</strong>
-        <%= @external_order.applicant_sector.name %><br>
-        <%= @external_order.applicant_establishment.name %>
-      </div>
-      <div class="col">
-        <strong>Proveedor:</strong>
-        <%= @external_order.provider_sector.name %><br>
-        <%= @external_order.provider_establishment.name %>
-      </div>
-      <div class='col-2'>
-        <strong>Solicitado:</strong>
-        <%= @external_order.requested_date.strftime("%d/%m/%Y")%>
-      </div>
-      <div class='col-3'>
-        <strong>Observaciones:</strong>
-          <%= @external_order.observation? ? @external_order.observation : 'Sin observaciones' %>
-      </div>
-      <div class='col-2'>
-        <strong>Código:</strong>
-        <%= @external_order.remit_code %>
-      </div>
-    </div>
-    
+    <%= render "establishments/external_orders/order_header", order: @external_order %>    
     <!-- Status bar -->
     <hr>
     <%= render 'shared/status_bar', order: @external_order %>
