@@ -48,7 +48,7 @@
       <% end %>
     <% end %>
     <% if policy(internal_order).show? %>
-      <%= link_to internal_orders_applicants_path(internal_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
+      <%= link_to internal_orders_applicant_path(internal_order, format: 'pdf'), class: 'btn btn-info btn-sm',  
         :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
         <%= fa_icon "print" %>
       <% end %>

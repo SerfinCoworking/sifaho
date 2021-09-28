@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_21_141946) do
+ActiveRecord::Schema.define(version: 2021_09_28_131339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -259,12 +259,6 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
     t.index ["original_chronic_prescription_product_id"], name: "unique_org_chron_pres_on_dispensation_types"
   end
 
-  create_table "dosage_instructions", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "establishment_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -431,7 +425,6 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
     t.bigint "applicant_sector_id"
     t.bigint "provider_sector_id"
     t.datetime "requested_date"
@@ -450,7 +443,6 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
     t.index ["applicant_sector_id"], name: "index_external_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_external_orders_on_audited_by_id"
     t.index ["created_by_id"], name: "index_external_orders_on_created_by_id"
-    t.index ["deleted_at"], name: "index_external_orders_on_deleted_at"
     t.index ["provider_sector_id"], name: "index_external_orders_on_provider_sector_id"
     t.index ["received_by_id"], name: "index_external_orders_on_received_by_id"
     t.index ["rejected_by_id"], name: "index_external_orders_on_rejected_by_id"
@@ -520,16 +512,12 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
     t.datetime "updated_at", null: false
     t.bigint "prescribed_by_id"
     t.bigint "delivered_by_id"
-    t.bigint "snomed_concept_id"
-    t.bigint "dosage_instruction_id"
     t.index ["delivered_by_id"], name: "index_inpatient_prescription_products_on_delivered_by_id"
-    t.index ["dosage_instruction_id"], name: "index_inpatient_prescription_products_on_dosage_instruction_id"
     t.index ["inpatient_prescription_id", "product_id", "parent_id"], name: "unique_product_on_inpatient_prescription_products", unique: true
     t.index ["inpatient_prescription_id"], name: "index_inpatient_prescription"
     t.index ["parent_id"], name: "index_inpatient_prescription_products_on_parent_id"
     t.index ["prescribed_by_id"], name: "index_inpatient_prescription_products_on_prescribed_by_id"
     t.index ["product_id"], name: "index_inpatient_prescription_products_on_product_id"
-    t.index ["snomed_concept_id"], name: "index_inpatient_prescription_products_on_snomed_concept_id"
   end
 
   create_table "inpatient_prescriptions", force: :cascade do |t|
@@ -1301,7 +1289,6 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "products_count", default: 0, null: false
-    t.index ["concept_id", "term"], name: "index_snomed_concepts_on_concept_id_and_term", unique: true
     t.index ["concept_id"], name: "index_snomed_concepts_on_concept_id"
   end
 
@@ -1462,8 +1449,6 @@ ActiveRecord::Schema.define(version: 2021_09_21_141946) do
   add_foreign_key "external_order_comments", "external_orders", column: "order_id"
   add_foreign_key "external_order_comments", "users"
   add_foreign_key "external_order_products", "sectors", column: "added_by_sector_id"
-  add_foreign_key "inpatient_prescription_products", "dosage_instructions"
-  add_foreign_key "inpatient_prescription_products", "snomed_concepts"
   add_foreign_key "internal_order_products", "sectors", column: "added_by_sector_id"
   add_foreign_key "lots", "laboratories"
   add_foreign_key "lots", "products"

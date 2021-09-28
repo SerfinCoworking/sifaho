@@ -66,7 +66,8 @@ class StockMovement < ApplicationRecord
       ['Receta crónica', 'ChronicPrescription'],
       ['Pedido de sector', 'InternalOrder'],
       ['Pedido de establecimiento', 'ExternalOrder'],
-      ['Recibo', 'Receipt']
+      ['Recibo', 'Receipt'],
+      ['Archivo de lote', 'LotArchive']
     ]
   end
 

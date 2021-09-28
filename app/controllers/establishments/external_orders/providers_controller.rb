@@ -49,12 +49,12 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
     @external_order = ExternalOrder.new(external_order_params)
     @external_order.requested_date = DateTime.now
     @external_order.provider_sector = current_user.sector
-    @external_order.order_type = "provision"
+    @external_order.order_type = 'provision'
 
     respond_to do |format|
       begin
         @external_order.proveedor_auditoria!
-        @external_order.create_notification(current_user, "creó")
+        @external_order.create_notification(current_user, 'creó')
         message = 'La provisión se ha creado y se encuentra en auditoria.'
 
         format.html { redirect_to edit_products_external_orders_provider_url(@external_order), notice: message }

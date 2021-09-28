@@ -145,13 +145,13 @@ class ProductsController < ApplicationController
   def search_by_code
     @products = Product.active.order(:id).with_code(params[:term]).limit(8)
     render json: @products.map { |product| {
-      label: product.code,
-      id: product.id,
-      name: product.name,
-      unity: product.unity.name,
-      stock: current_user.sector.stock_to(product.id)
-    } 
-  }
+                                 label: product.code,
+                                 id: product.id,
+                                 name: product.name,
+                                 unity: product.unity.name,
+                                 stock: current_user.sector.stock_to(product.id)
+                               }
+    }
   end
 
   def search_by_name_to_order
