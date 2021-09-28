@@ -1,5 +1,4 @@
 class ExternalOrder < ApplicationRecord
-  acts_as_paranoid
   include PgSearch
   include Order
 
