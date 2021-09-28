@@ -1,0 +1,49 @@
+<div class="row order-header-info mb-2">
+  <div class="col">
+    <%# SECTOR SOLICITANTE %>
+    <div class="title">
+      Solicitante
+    </div>
+    <div class="d-flex align-items-center establishment-info">
+      <% if order.applicant_sector.establishment.image.attached? %>
+        <%= image_tag order.applicant_sector.establishment.image.variant(resize: "x40", gravity: "center"), class:"rounded-circle hospital-thumb" %>
+      <% else %>
+        <%= fa_icon 'hospital', class: "fa-2x" %>
+      <% end %>
+      <div class="ml-2">
+        <p class="establishment-title">
+          <%= order.applicant_sector.establishment.short_name %>
+        </p>
+        <div class="establishment-subtitle font-weight-bold">
+          <%= order.applicant_sector.name %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='col'>
+    <%# ESTABLECIMIENTO PROVEEDOR %>
+    <div class="title">
+      Proveedor
+    </div>
+    <div class="d-flex align-items-center establishment-info">
+      <% if order.provider_sector.establishment.image.attached? %>
+        <%= image_tag order.provider_sector.establishment.image.variant(resize: "x40", gravity: "center"), class:"rounded-circle hospital-thumb" %>
+      <% else %>
+        <%= fa_icon 'hospital', class: 'fa-2x' %>
+      <% end %>
+      <div class="ml-2">
+        <p class="establishment-title">
+          <%= order.provider_sector.establishment.short_name %>
+        </p>
+        <div class="establishment-subtitle font-weight-bold">
+          <%= order.provider_sector.name %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='col-md-7'>
+    Observaciones
+    <%= order.observation %>
+  </div>
+</div>

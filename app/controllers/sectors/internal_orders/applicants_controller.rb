@@ -53,8 +53,8 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
     respond_to do |format|
       if @internal_order.save
-        flash[:info] = 'La solicitud se ha creado y se encuentra en auditoria.'
-        format.html { redirect_to edit_products_internal_orders_applicant_url(@internal_order) }
+        message = 'La solicitud se ha creado y se encuentra en auditoria.'
+        format.html { redirect_to edit_products_internal_orders_applicant_url(@internal_order), notice: message }
       else
         format.html { render :new }
       end
@@ -68,8 +68,8 @@ class Sectors::InternalOrders::ApplicantsController < Sectors::InternalOrders::I
 
     respond_to do |format|
       if @internal_order.update(internal_order_params)
-        flash[:info] = 'La solicitud se ha modificado correctamente.'
-        format.html { redirect_to internal_orders_applicant_url(@internal_order) }
+        message = 'La solicitud se ha modificado correctamente.'
+        format.html { redirect_to edit_products_internal_orders_applicant_url(@internal_order), notice: message }
       else
         flash[:alert] = 'No se ha podido modificar la solicitud.'
         format.html { render :edit }

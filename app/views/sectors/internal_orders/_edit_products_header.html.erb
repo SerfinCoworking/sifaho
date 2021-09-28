@@ -1,0 +1,33 @@
+<div class="row order-header-info mb-2">
+  <div class="col">
+    <%# SECTOR APPLICANT %>
+    <div class="title">
+      Solicitante
+    </div>
+    <div class="d-flex align-items-center sector-info">
+      <%= fa_icon 'bezier-curve', class: "fa-2x" %>
+      <div class="sector-subtitle font-weight-bold ml-2">
+        <%= order.applicant_sector.name %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col">
+    <%# SECTOR PROVIDER %>
+    <div class="title">
+      Proveedor
+    </div>
+    <div class="d-flex align-items-center sector-info">
+      <%= fa_icon 'bezier-curve', class: "fa-2x" %>
+      <div class="sector-subtitle font-weight-bold ml-2">
+        <%= order.provider_sector.name %>
+      </div>
+    </div>
+  </div>
+
+  <div class='col-md-7'>
+    Observaciones
+    <%= order.observation %>
+  </div>
+  
+</div>
