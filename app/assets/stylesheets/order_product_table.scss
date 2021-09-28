@@ -7,17 +7,17 @@
 @import 'variables';
 
 .order-header-info{
-  .applicant-info, .provider-info{
+  .sector-info, .establishment-info{
     .hospital-thumb{
       height: 40px;
       width: 40px;
       object-fit: cover;
     }
-    .applicant-title, .provider-title{
+    .sector-title, .establishment-title{
       font-size: .8rem;
       margin-bottom: 0px;
     }
-    .applicant-subtitle, .provider-subtitle{
+    .sector-subtitle, .establishment-subtitle{
       font-size: .9rem;
 
     }

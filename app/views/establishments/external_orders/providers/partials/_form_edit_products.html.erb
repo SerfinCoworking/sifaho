@@ -12,10 +12,9 @@
     <% end %>
   </div>
   <div class="card-body">
-    <div class="row order-header-info mb-2">
-      <%= render "establishments/external_orders/edit_products_header", order: order %>        
-    </div>
-
+    
+    <%= render "establishments/external_orders/edit_products_header", order: order %>        
+    
     <%# Dispatch order as POST method %>
     <%= simple_form_for order_product, 
                         url: accept_order_external_orders_provider_path(order),

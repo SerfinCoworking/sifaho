@@ -11,22 +11,7 @@
     <% end %>
   </div>
   <div class="card-body">
-    <div class="row">
-      <div class="col-md-4">
-        <%# SECTOR SOLICITANTE %>
-        Sector solicitante
-        <%= order.applicant_sector.name %>
-      </div>
-      <div class='col-md-4'>
-        <%# SECTOR PROVEEDOR %>
-        Sector proveedor
-        <%= order.provider_sector.name %>
-      </div>
-      <div class='col-md-4'>
-        Observaciones
-        <%= order.observation %>
-      </div>
-    </div>
+    <%= render "sectors/internal_orders/edit_products_header", order: order %>
 
     <%# Dispatch order as POST method %>
     <%= simple_form_for order_product, 
