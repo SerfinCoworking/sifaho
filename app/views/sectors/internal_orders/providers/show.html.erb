@@ -21,29 +21,7 @@
   </div>
 
   <div class="card-body">
-    <div class="row">
-      <div class='col-2'>
-        <strong>Solicitante:</strong>
-        <%= @internal_order.applicant_sector.name%>
-      </div>
-      <div class="col-2">
-        <strong>Proveedor:</strong>
-        <%= @internal_order.provider_sector.name%>
-      </div>
-      <div class='col-3'>
-        <strong>Solicitado:</strong>
-        <%= @internal_order.requested_date.strftime("%d/%m/%Y")%>
-      </div>
-      <div class='col-3'>
-        <strong>Observaciones:</strong>
-          <%= @internal_order.observation? ? @internal_order.observation : 'Sin observaciones' %>
-      </div>
-      <div class='col-2'>
-        <strong>Código:</strong>
-        <%= @internal_order.remit_code %>
-      </div>
-    </div>
-    
+    <%= render "sectors/internal_orders/order_header", order: @internal_order %>    
     <!-- Status bar -->
     <hr>
     <%= render 'shared/status_bar', order: @internal_order %>

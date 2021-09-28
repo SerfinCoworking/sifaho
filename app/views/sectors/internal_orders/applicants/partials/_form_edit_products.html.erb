@@ -11,7 +11,7 @@
     <% end %>
   </div>
   <div class="card-body">
-    <%= render "sectors/internal_orders/header", order: order %>
+    <%= render "sectors/internal_orders/order_header", order: order %>
 
     <%# Dispatch order as POST method %>
     <%= simple_form_for order_product, 

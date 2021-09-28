@@ -1,4 +1,4 @@
-<div class="row order-header-info mb-2">
+<div class="row order-header-info mb-2 align-items-center">
   <div class="col">
     <%# SECTOR APPLICANT %>
     <div class="title">
@@ -22,6 +22,17 @@
       <div class="sector-subtitle font-weight-bold ml-2">
         <%= order.provider_sector.name %>
       </div>
+    </div>
+  </div>
+
+  <div class="col-2">
+    <div>
+      <strong>Solicitado:</strong>
+      <%= order.requested_date.strftime("%d/%m/%Y")%>
+    </div>
+    <div>
+      <strong>Código:</strong>
+      <%= order.remit_code %>
     </div>
   </div>
 
