@@ -19,7 +19,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-7 border-right">
-            <%=  simple_form_for @patient_product_state_report, url: 'crear', method: :post, html: {id: "report-form"} do |f| %>
+            <%=  simple_form_for @patient_product_state_report, url: state_reports_patient_product_state_reports_path, method: :post, html: { id: "report-form" } do |f| %>
               <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
               <%= f.error_notification message: f.object.errors[:patient_product_state_report].to_sentence if f.object.errors[:patient_product_state_report].present? %>
               <div class="row nested-fields">
@@ -94,9 +94,10 @@
         <%= link_to :back, class: "btn btn-light mr-2" do %>
           Volver
         <% end %>
-        <button type='submit' name='commit' class='btn btn-success' form='report-form'>
-          <%= fa_icon "check" %> Generar
-        </button>
+        <%= button_tag(type: 'submit', class: "btn btn-success", form:'report-form', 'data-disable-with' => "<i class='fa fa-circle-notch fa-spin'></i> Generando".html_safe) do %> 
+          <%= fa_icon "check" %>
+          Generar
+        <% end %>
       </div>
     </div>
   </div>
