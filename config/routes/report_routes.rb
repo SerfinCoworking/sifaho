@@ -38,19 +38,17 @@ Rails.application.routes.draw do
       resources :reports, only: %i[show index]
     end
 
-
     # State reports
     namespace :state_reports do
       resources :patient_product_state_reports,
-                only: [:show],
+                only: %i[show new create],
                 controller: :patient_product_state_reports,
                 model: :patient_product_state_report do
         collection do
-          get :new
           get :load_more
-          post :create
         end
       end
     end
+
   end
 end

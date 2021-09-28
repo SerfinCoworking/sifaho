@@ -162,7 +162,7 @@
     <% end %>
 
     <% if policy(PatientProductStateReport).index? %>
-      <%= link_to main_app.state_reports_patient_product_state_reports_path, class: "list-group-item list-group-item-action list-custom #{active_class_folder("state_reports")}" do %>
+      <%= link_to main_app.new_state_reports_patient_product_state_report_path, class: "list-group-item list-group-item-action list-custom #{active_class_folder("state_reports")}" do %>
         <span class="sb-icon">
           <%= fa_icon "file-alt" %>
         </span>
