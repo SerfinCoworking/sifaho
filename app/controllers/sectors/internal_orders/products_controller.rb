@@ -23,9 +23,9 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
     @order_product.added_by_sector = current_user.sector
 
     respond_to do |format|
-      if @order_product.save
+      if @order_product.save!
         @open_modal = 'yes' #abrimos el modal de seleccion de lotes
-        flash.now[:success] = "Se agregó el producto #{@order_product.product_name} correctamente."
+        flash.now[:success] = "asdasdSe agregó el producto #{@order_product.product_code} correctamente."
         format.js { render 'shared/orders/products/show' }
       else
         flash.now[:alert] = 'Ha ocurrido un error al guardar el producto.'
@@ -39,7 +39,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
       @form_id = @order_product.id
       if @order_product.update(order_product_params)
         @open_modal = 'yes' #abrimos el modal de seleccion de lotes
-        flash.now[:success] = "El producto #{@order_product.product_name} se ha actualizado correctamente."
+        flash.now[:success] = "El producto #{@order_product.product_code} se ha actualizado correctamente."
         format.js { render 'shared/orders/products/show' }
       else
         flash.now[:alert] = 'Ha ocurrido un error al actualizar el producto.'
@@ -49,7 +49,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
   end
 
   def destroy
-    flash.now[:success] = "Se eliminó el producto #{@order_product.product_name} correctamente."
+    flash.now[:success] = "Se eliminó el producto #{@order_product.product_code} correctamente."
     @order_product_id = @order_product.id
     @order_product.destroy
     respond_to do |format|
