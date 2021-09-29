@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= fa_icon "eye" %>
       <h5 class="card-title mb-0 ml-2">
-        Viendo <%= @external_order.human_name.downcase %>
+        Viendo <%= @external_order.order_type %> <%= @external_order.remit_code%>
       </h5>
     </div>
     <div>
@@ -185,7 +185,7 @@
     <div class="text-right w-100">
       <%= link_to external_orders_providers_path,  
         'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Volviendo... ".html_safe,
-        class: "btn btn-light mr-1" do %>
+        class: "btn btn-secondary mr-1" do %>
         Volver
       <% end %>
 
@@ -200,7 +200,7 @@
           'data-disable-with' => "<i class='fa fa-spinner fa-spin'></i> Editando... ".html_safe,
           class: "btn btn-warning mr-1" do %>
           <%= fa_icon "pen" %>
-          Editar
+          Editar orden
         <% end %>
       <% end %>
 

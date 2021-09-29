@@ -104,6 +104,15 @@
 
   <div class="card-footer d-flex justify-content-end">
     <%= link_to 'Volver', external_orders_providers_path, class: 'btn btn-secondary mr-2' %>
+
+    <% if @external_order.persisted? && policy(:external_order_provider).edit_products?(@external_order) %>
+      <%= link_to edit_products_external_orders_provider_path(@external_order),  
+        'data-disable-with' => "Editar productos <i class='fa fa-spinner fa-spin'></i>".html_safe,
+        class: 'btn btn-warning btn-md mr-1' do %>
+        <%= fa_icon "file-signature" %>
+        Editar productos
+      <% end %>
+    <% end %>
   
     <button type='submit' class='btn btn-success mr-2' form="<%= @external_order.new_record? ? 'new_external_order' : 'edit_external_order_' + @external_order.id.to_s %>" data-value='audit'>
       
