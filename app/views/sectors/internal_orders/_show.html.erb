@@ -1,0 +1,175 @@
+<%= render 'sectors/internal_orders/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <%= fa_icon "eye" %>
+      <h5 class="card-title mb-0 ml-2">
+        Viendo <%= order.order_type %> <%= order.remit_code %>
+      </h5>
+    </div>
+    <div>
+      <%= yield(:print_and_back_button) %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <%= render "sectors/internal_orders/order_header", order: order %>
+    <!-- Status bar -->
+    <hr>
+    <%= render 'shared/status_bar', order: order %>
+
+    <!-- Tabs -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <ul class='nav nav-tabs nav-justified'>
+          <li class='nav-item'>
+            <a class="nav-link active" data-toggle='tab' href='#supplies' role="tab">
+              <%= fa_icon "cubes" %> Productos
+              <span class="badge badge-secondary"><%= order.order_products.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#last-movements' role="tab">
+              <%= fa_icon "exchange-alt" %> Movimientos
+              <span class="badge badge-secondary"><%= order.movements.count %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle='tab' href='#comments' role="tab">
+              <%= fa_icon "comments" %> Comentarios
+              <span class="badge badge-secondary" id="comments-count"><%= order.comments.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="tab-content">
+      <div id='supplies' class='tab-pane fade show active'>
+        <!-- Insumos a dispensar -->
+        <div class="card">
+          <table class="table table-hover table-sm">
+            <thead >
+              <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th>Solicitado</th>
+                <th>Entregado</th>
+                <th>Lotes</th>
+                <th class="text-center" style="width: 1%; white-space: nowrap;">Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.order_products.joins(:product).order("name").each do |int_ord_prod| %>
+                <tr class="<%= highlight_row(int_ord_prod.product_id) %>">
+                  <% @stock = Stock.where(sector: current_user.sector, product: int_ord_prod.product ).first %>
+                  <td>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_code %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_code %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if @stock.present? %>
+                      <%= link_to stock_path(@stock), class: 'btn btn-link text-left p-0', target: :_blank do %>
+                        <%= int_ord_prod.product_name %>
+                      <% end %>
+                    <% else %>
+                      <%= int_ord_prod.product_name %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= int_ord_prod.product_unity_name %>
+                  </td>
+                  <td>
+                    <%= int_ord_prod.request_quantity %> 
+                  </td>
+                  <td>
+                    <%= int_ord_prod.delivery_quantity %>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapse-row-<%= int_ord_prod.id %>" aria-expanded="false" aria-controls="collapse-row-<%= int_ord_prod.id %>">
+                      <%= int_ord_prod.order_prod_lot_stocks.count %>
+                    </button>
+                  </td>
+                  <td class="text-right" style="white-space: nowrap;">
+                    <% if int_ord_prod.applicant_observation.present? %>
+                      <%= render 'shared/popover', content: int_ord_prod.applicant_observation, title: 'Observaciones solicitante', icon: 'comment-dots', text: order.applicant_sector_name %>
+                    <% end %>
+                    <% if int_ord_prod.provider_observation.present? %>
+                      <%= render 'shared/popover', content: int_ord_prod.provider_observation, title: 'Observaciones proveedor', icon: 'comment-dots', text: order.provider_sector_name %>
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="7" class="p-0">
+                    <div id="collapse-row-<%= int_ord_prod.id %>" class="collapse in">
+                      <div class="p-3">
+                      <% if int_ord_prod.order_prod_lot_stocks.present? %>
+                        <table class="w-100">
+                          <thead>
+                            <tr>
+                              <th> Cantidad </th>
+                              <th> Lote </th>
+                              <th> Laboratorio </th>
+                              <th> Vencimiento </th>
+                            </tr>
+                          </thead>
+                          </tbody>
+                            <% int_ord_prod.order_prod_lot_stocks.each do |iopls| %>
+                            <tr>
+
+                              <td>
+                                <%= iopls.quantity %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.code %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.laboratory.name %>
+                              </td>
+                              
+                              <td>
+                                <%= iopls.lot_stock.lot.expiry_date.present? ? iopls.lot_stock.lot.expiry_date.strftime("%m/%y") : "Sin asignar" %>
+                              </td>
+                            </tr>
+
+                            <% end %>
+                          </tbody>
+                        </table>
+                        <% else %>
+                            No tiene lotes asignados
+                        <% end %>
+                      </div>
+                    </div>
+                  </td>
+                </tr> <%# fin Listado de lotes y descripciones %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id='last-movements' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/movements_table', order: order %>
+      </div> <!-- End last movements tab pane -->
+      <div id='comments' class='tab-pane fade'>
+        <!-- Tabla de movimientos -->
+        <%= render '/shared/comments', order: order, new_comment: InternalOrderComment.new %>
+      </div> <!-- End comments tab pane -->
+    </div> <!-- End Tab content-->
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <%= yield(:action_buttons_left) %>
+    
+    <div class="text-right w-100">
+      <%= yield(:action_buttons) %>
+    </div> <!-- fin botones right -->
+  </div>
+</div>

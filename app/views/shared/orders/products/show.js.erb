@@ -20,5 +20,6 @@ $('#ord-prod-<%= @form_id %>').fadeOut(300, function(){
     $('#ord-prod-<%= @order_product.id %>').find('.btn-lot-selection').first().trigger('click');
   }
   
+  $('[data-toggle="popover"]').popover();
 });
 

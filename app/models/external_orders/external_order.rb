@@ -26,6 +26,8 @@ class ExternalOrder < ApplicationRecord
   # Delegations
   delegate :sector_and_establishment, to: :provider_sector, prefix: :provider
   delegate :sector_and_establishment, to: :applicant_sector, prefix: :applicant
+  delegate :short_name, to: :provider_establishment, prefix: :provider
+  delegate :short_name, to: :applicant_establishment, prefix: :applicant
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
