@@ -139,9 +139,10 @@ class PatientsController < ApplicationController
       token = ENV['ANDES_TOKEN']
       url = ENV['ANDES_MPI_URL']
       andes_patients = RestClient::Request.execute( method: :get, url: url.to_s,
+                                                    verify_ssl: false,
                                                     timeout: 30, headers: {
                                                       'Authorization' => "JWT #{token}",
-                                                      params: { 'documento': dni }
+                                                      params: { 'documento': dni },
                                                     })
 
       if JSON.parse(andes_patients).count.positive?
@@ -250,6 +251,7 @@ class PatientsController < ApplicationController
     token = ENV['ANDES_TOKEN']
     url = ENV['ANDES_MPI_URL']
     RestClient::Request.execute(method: :get, url: "#{url}/#{patient_id}/foto/#{patient_photo_id}",
+                                verify_ssl: false,
                                 timeout: 30, headers: {
                                   'Authorization' => "JWT #{token}",
                                 }

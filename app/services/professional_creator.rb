@@ -12,6 +12,7 @@ class ProfessionalCreator
     url = "#{ENV['ANDES_FHIR_URL']}/practitioner"
     @practitioners = RestClient::Request.execute( method: :get,
                                                   url: url,
+                                                  verify_ssl: false,
                                                   timeout: 30,
                                                     headers: {
                                                     'Authorization' => "Bearer #{token}",
