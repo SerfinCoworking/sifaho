@@ -15,6 +15,13 @@
     <% end %>
   </li>
 
+  <li class="nav-item non-sel">
+    <%= link_to external_orders_summary_path, class: "nav-link #{ active_action_and_controller('summary', 'external_orders') }" do %>
+      <%= fa_icon "chart-bar"%>
+      Resumen
+    <% end %>
+  </li>
+
   <li class="nav-item non-sel d-flex align-items-center">
     <%= link_to external_orders_applicants_path, class: "nav-link #{ active_action_and_controller('index', 'applicants') }" do %>
       <%= fa_icon "inbox" %>

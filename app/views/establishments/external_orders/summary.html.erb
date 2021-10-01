@@ -1,0 +1,91 @@
+<%= render 'establishments/external_orders/header' %>
+
+<div class="dashboard-grid">
+
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+      <a class="col-md-4 bg-success d-flex justify-content-center align-items-center pointer">
+        <%= fa_icon 'money-bill', class: 'text-white', size: '4x' %>
+      </a>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-between">
+            Solicitudes enviadas
+            <%= link_to new_account_movement_path(account_movement_type: 1), class: 'btn btn-sm btn-light' do %>
+              <%= fa_icon 'plus' %>
+              Cargar
+            <% end %>
+          </h5>
+          <p class="card-text"><%= number_to_currency @ins_amount, unit: 'AR$' %><small class="text-muted"> este mes</small></p>
+          <% if AccountMovement.by_movement_type(1).last.present? %>
+            <p class="card-text"><small class="text-muted">Último hace <%= time_ago_in_words AccountMovement.by_movement_type(1).last.updated_at %></small></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+      <a class="col-md-4 bg-secondary d-flex justify-content-center align-items-center pointer">
+        <%= fa_icon 'funnel-dollar', class: 'text-white', size: '4x' %>
+      </a>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-between">
+            Egresos
+            <%= link_to new_account_movement_path(account_movement_type: 2), class: 'btn btn-sm btn-light' do %>
+              <%= fa_icon 'plus' %>
+              Cargar
+            <% end %>
+          </h5>
+          <p class="card-text"><%= number_to_currency @outs_amount, unit: 'AR$' %><small class="text-muted"> este mes</small></p>
+          <% if AccountMovement.by_movement_type(2).last.present? %>
+            <p class="card-text"><small class="text-muted">Último hace <%= time_ago_in_words AccountMovement.by_movement_type(2).last.updated_at %></small></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+      <a class="col-md-4 bg-warning d-flex justify-content-center align-items-center pointer">
+        <%= fa_icon 'cash-register', class: 'text-white', size: '4x' %>
+      </a>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-between">
+            <%= @cash_register.name %>
+            <%= link_to account_movements_path(filterrific: [by_movement_type: 1]), data: { turbolinks: false }, class: 'btn btn-sm btn-light' do %>
+              <%= fa_icon "eye" %>
+              Ver
+            <% end %>
+          </h5>
+          <p class="card-text"><%= number_to_price @cash_register.balance %></p>
+          <p class="card-text"><small class="text-muted">Modificado <%= time_ago_in_words @cash_register.updated_at %></small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+      <a class="col-md-4 bg-info d-flex justify-content-center align-items-center pointer">
+        <%= fa_icon 'money-bill-alt', class: 'text-white', size: '4x' %>
+      </a>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-between">
+            Transferencias
+            <button type="button" class="btn btn-sm btn-light">
+              <%= fa_icon 'eye' %> Ver
+            </button> 
+          </h5>
+          <p class="card-text"><%= number_to_currency @transferences_amount, unit: 'AR$' %><small class="text-muted"> este mes</small></p>
+          <p class="card-text"><small class="text-muted">Última hace 4 días</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

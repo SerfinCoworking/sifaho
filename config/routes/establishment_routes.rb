@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     # External orders
     scope module: :establishments, path: :establishments do
       namespace :external_orders do
+        # Summary page
+        get '/summary', to: 'external_orders#summary', as: 'summary'
+
         # Solicitudes
         resources :applicants do
           member do
