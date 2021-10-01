@@ -53,10 +53,11 @@ class Establishments::ExternalOrders::ExternalOrdersController < ApplicationCont
     params.require(:external_order).permit(
       :applicant_sector_id,
       :order_type,
-      :provider_sector_id, 
-      :requested_date, 
-      :date_received, 
-      :observation
+      :provider_sector_id,
+      :requested_date,
+      :date_received,
+      :provider_observation,
+      :applicant_observation
     )
   end
 end

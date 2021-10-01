@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_28_131339) do
+ActiveRecord::Schema.define(version: 2021_10_01_115148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -427,7 +427,7 @@ ActiveRecord::Schema.define(version: 2021_09_28_131339) do
   end
 
   create_table "external_orders", force: :cascade do |t|
-    t.text "observation"
+    t.text "provider_observation"
     t.datetime "date_received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
