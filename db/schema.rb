@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_115148) do
+ActiveRecord::Schema.define(version: 2021_10_01_121200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(version: 2021_10_01_115148) do
     t.string "remit_code"
     t.bigint "sent_request_by_id"
     t.bigint "rejected_by_id"
+    t.text "applicant_observation"
     t.index ["accepted_by_id"], name: "index_external_orders_on_accepted_by_id"
     t.index ["applicant_sector_id"], name: "index_external_orders_on_applicant_sector_id"
     t.index ["audited_by_id"], name: "index_external_orders_on_audited_by_id"
