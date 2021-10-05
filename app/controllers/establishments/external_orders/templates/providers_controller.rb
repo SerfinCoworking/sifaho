@@ -60,7 +60,7 @@ class Establishments::ExternalOrders::Templates::ProvidersController < Establish
                                              provider_sector: current_user.sector,
                                              requested_date: DateTime.now,
                                              status: 'proveedor_auditoria',
-                                             observation: @external_order_template.observation,
+                                             provider_observation: @external_order_template.provider_observation,
                                              order_type: @external_order_template.order_type)
       format.html { redirect_to edit_products_external_orders_provider_path(id: @external_order, template: @external_order_template) }
     end
