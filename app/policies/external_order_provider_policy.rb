@@ -13,7 +13,7 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
-  
+
   def edit_provider_on_solicitud?(resource)
     unless resource.solicitud? && resource.solicitud_enviada? && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
