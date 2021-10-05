@@ -21,10 +21,17 @@
         <%= yield(:external_order_template_show_title) %>
         <%= @external_order_template.destination_sector.sector_and_establishment %>
       </div>
-      <% if @external_order_template.observation.present? %>
+      <% if @external_order_template.applicant_observation.present? %>
         <div class="col-md-3">
           <h5>Observaciones</h5>
-          <%= @external_order_template.observation %>
+          <%= @external_order_template.applicant_observation %>
+        </div>
+      <% end %>
+      
+      <% if @external_order_template.provider_observation.present? %>
+        <div class="col-md-3">
+          <h5>Observaciones</h5>
+          <%= @external_order_template.provider_observation %>
         </div>
       <% end %>
       <div class="col-md-3">

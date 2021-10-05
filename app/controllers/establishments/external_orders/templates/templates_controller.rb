@@ -49,7 +49,8 @@ class Establishments::ExternalOrders::Templates::TemplatesController < Applicati
       :owner_sector_id,
       :destination_sector_id,
       :destination_establishment_id,
-      :observation, 
+      :applicant_observation, 
+      :provider_observation, 
       :order_type,
       external_order_product_templates_attributes:
       [ 
