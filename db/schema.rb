@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_121200) do
+ActiveRecord::Schema.define(version: 2021_10_05_183347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -417,9 +417,10 @@ ActiveRecord::Schema.define(version: 2021_10_01_121200) do
     t.bigint "destination_sector_id"
     t.bigint "created_by_id"
     t.integer "order_type", default: 0
-    t.text "observation"
+    t.text "applicant_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "provider_observation"
     t.index ["created_by_id"], name: "index_external_order_templates_on_created_by_id"
     t.index ["destination_establishment_id"], name: "index_external_order_templates_on_destination_establishment_id"
     t.index ["destination_sector_id"], name: "index_external_order_templates_on_destination_sector_id"
