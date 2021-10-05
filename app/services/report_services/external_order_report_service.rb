@@ -23,7 +23,7 @@ module ReportServices
       report.page[:applicant_user] = @external_order.sent_request_by_user_fullname 
       report.page[:provider_efector] = @external_order.provider_sector.sector_and_establishment
       report.page[:provider_user] = @external_order.sent_provision_by_user_fullname
-      report.page[:observations] = @external_order.observation
+      report.page[:observations] = @external_order.provider_observation
       report.page[:username].value("DNI: #{@user.dni} #{@user.full_name}")
       report.page[:products_count].value(@external_order.order_products.count)
       report.page[:observations_count].value("solicitante "+@external_order.order_products.where.not(applicant_observation: [nil, ""]).count.to_s+" / proveedor "+@external_order.order_products.where.not(provider_observation: [nil, ""]).count.to_s)

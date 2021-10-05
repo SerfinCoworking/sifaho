@@ -10,7 +10,6 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
 
   def edit?(resource)
     if resource.provision? && resource.proveedor_auditoria? && resource.provider_sector == user.sector
-    # if (["solicitud_enviada", "proveedor_auditoria"].include?(resource.status)) && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
@@ -49,7 +48,7 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
   end
 
   def nullify_order?(resource)
-    if (["solicitud_enviada"].include? resource.status) && resource.provider_sector == user.sector
+    if (['solicitud_enviada'].include? resource.status) && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end
