@@ -9,7 +9,13 @@ class ExternalOrderProviderPolicy < ExternalOrderPolicy
   end
 
   def edit?(resource)
-    if resource.provision? && resource.proveedor_auditoria? && resource.provider_sector == user.sector
+    if ((resource.solicitud? && resource.solicitud_enviada?) || (resource.provision? && resource.proveedor_auditoria?)) && resource.provider_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
+  end
+  
+  def edit_provider_on_solicitud?(resource)
+    unless resource.solicitud? && resource.solicitud_enviada? && resource.provider_sector == user.sector
       user.has_any_role?(:admin, :farmaceutico, :enfermero)
     end
   end

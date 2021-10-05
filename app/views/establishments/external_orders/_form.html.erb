@@ -15,13 +15,11 @@
   </div>
   <div class="card-body">
  
-    <% url = @external_order.new_record? ? polymorphic_url(['external_orders', @external_order.custom_notification_url.pluralize ]) : polymorphic_url(['external_orders', @external_order.custom_notification_url], id: @external_order.id) %>
-    
     <%= simple_form_for @external_order, url: url, html: { role: 'check-modified'} do |f| %>
       <%= f.error_notification %>
       <div class="row">
         <div class="col-6 border-right">
-          <% if @external_order.provision? %>
+          <% if @external_order.provision? %> 
             <%# ESTABLECIMIENTO SOLICITANTE %>
             <%= f.input :applicant_establishment_id, as: :string,
               label: 'Establecimiento solicitante',
@@ -67,42 +65,57 @@
               <h5>Solicitante</h5>
               <%= @external_order.applicant_sector.name+" "+@external_order.applicant_establishment.name %>
             </div>
-
-            <%# Provider establishment %>
-            <%= f.input :provider_establishment_id, as: :string,
-              label: 'Establecimiento proveedor',
-              placeholder: 'Buscar por nombre',
-              required: true,
-              :input_html => {
-                autocomplete: 'off',
-                id: "effector-establishment",
-                data: { autocomplete_source: search_by_name_establishments_path },
-                value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.establishment.name; end }",
-                size: 41
-              } 
-            %>
-
-            <%# Provider sector %>        
-            <%= f.input :provider_sector_id,
-              label: 'Sector proveedor',
-              collection: @sectors.map {
-                |sector| [sector.name, sector.id]
-              },
-              :input_html => {
-                placeholder: 'Debe seleccionar establecimiento',
+            
+            <% if policy(:external_order_provider).edit_provider_on_solicitud?(@external_order) %>
+              <%# Provider establishment %>
+              <%= f.input :provider_establishment_id, as: :string,
+                label: 'Establecimiento proveedor',
+                placeholder: 'Buscar por nombre',
                 required: true,
-                id: 'effector-sector',
-                class: 'selectpicker-md custom-select-pick show-tick',
-                "data-width"=>"100%",
-                "title"=>"Seleccionar sector",
-                "data-size"=>"10",
-                "data-live-search"=>true,
-                value: f.object.provider_sector.present? ? f.object.provider_sector.id : ""
-              }
-            %>
+                :input_html => {
+                  autocomplete: 'off',
+                  id: "effector-establishment",
+                  data: { autocomplete_source: search_by_name_establishments_path },
+                  value: "#{ if f.object.provider_sector.present?; f.object.provider_sector.establishment.name; end }",
+                  size: 41
+                } 
+              %>
 
-            <%= f.input :applicant_observation, label: 'Observaciones', as: :text,
-            :input_html => { :cols => 40  , :rows => 2 } %>
+              <%# Provider sector %>        
+              <%= f.input :provider_sector_id,
+                label: 'Sector proveedor',
+                collection: @sectors.map {
+                  |sector| [sector.name, sector.id]
+                },
+                :input_html => {
+                  placeholder: 'Debe seleccionar establecimiento',
+                  required: true,
+                  id: 'effector-sector',
+                  class: 'selectpicker-md custom-select-pick show-tick',
+                  "data-width"=>"100%",
+                  "title"=>"Seleccionar sector",
+                  "data-size"=>"10",
+                  "data-live-search"=>true,
+                  value: f.object.provider_sector.present? ? f.object.provider_sector.id : ""
+                }
+              %>
+
+              <%= f.input :applicant_observation, label: 'Observaciones', as: :text, :input_html => { :cols => 40  , :rows => 2 } %>
+            <% else %>
+              <% if @external_order.applicant_observation.present? %>
+                <div>
+                  Observaciones
+                  <%= @external_order.applicant_observation %>
+                </div>
+              <% end %>
+              <div>
+                <h5>Proveedor</h5>
+                <%= @external_order.provider_sector.name+" "+@external_order.provider_establishment.name %>
+              </div>
+              <%= f.input :provider_observation, label: 'Observaciones', as: :text, :input_html => { :cols => 40  , :rows => 2 } %>
+            <% end %>
+
+            
           <% end %>
 
             
