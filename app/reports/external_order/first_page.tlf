@@ -684,8 +684,8 @@
       "type": "text",
       "display": true,
       "description": "",
-      "x": 430,
-      "y": 41.9,
+      "x": 429.6,
+      "y": 39.4,
       "width": 77.3,
       "height": 14,
       "style": {
@@ -708,12 +708,12 @@
       ]
     },
     {
-      "id": "observations",
+      "id": "applicant_observation",
       "type": "text-block",
       "display": true,
       "description": "",
-      "x": 430.4,
-      "y": 53,
+      "x": 430,
+      "y": 50.9,
       "width": 142.7,
       "height": 38.9,
       "style": {
@@ -1315,7 +1315,7 @@
       "description": "",
       "x": 85,
       "y": 111,
-      "width": 352.6,
+      "width": 340.9,
       "height": 11,
       "style": {
         "font-family": [
@@ -1335,6 +1335,38 @@
       "reference-id": "",
       "value": "",
       "multiple-line": false,
+      "format": {
+        "base": "",
+        "type": ""
+      }
+    },
+    {
+      "id": "provider_observation",
+      "type": "text-block",
+      "display": true,
+      "description": "",
+      "x": 430,
+      "y": 91.4,
+      "width": 142.7,
+      "height": 38.9,
+      "style": {
+        "font-family": [
+          "Helvetica"
+        ],
+        "font-size": 9,
+        "color": "#000000",
+        "text-align": "left",
+        "vertical-align": "top",
+        "line-height": "",
+        "line-height-ratio": "",
+        "letter-spacing": "",
+        "font-style": [],
+        "overflow": "truncate",
+        "word-wrap": "break-word"
+      },
+      "reference-id": "",
+      "value": "",
+      "multiple-line": true,
       "format": {
         "base": "",
         "type": ""
