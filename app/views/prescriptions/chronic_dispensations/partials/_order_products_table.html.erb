@@ -3,7 +3,7 @@
     <tbody id="chronic-product-cocoon-container<%=ocpp_id%>" class="chronic-product-cocoon-container">
       <%= form.simple_fields_for relation do |form_products| %>
         <% if ocpp_id == form_products.object.original_chronic_prescription_product_id %>
-          <%= render "chronic_dispensations/partials/order_products_fields", f: form_products %>
+          <%= render "prescriptions/chronic_dispensations/partials/order_products_fields", f: form_products %>
         <% end %>
       <% end %>
     </tbody>
