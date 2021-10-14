@@ -7,9 +7,10 @@ class InsurancesController < ApplicationController
     token = ENV['ANDES_TOKEN']
     andes_puco_url = ENV['ANDES_PUCO_URL']
     @insurances = JSON.parse(RestClient::Request.execute(method: :get, url: andes_puco_url,
+      verify_ssl: false,
       timeout: 30, headers: {
         "Authorization" => "JWT #{token}",
-        params: {'dni': dni}
+        params: { 'dni': dni }
       }
     ))
   end
