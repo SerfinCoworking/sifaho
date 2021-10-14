@@ -66,7 +66,7 @@
                   <td class="text-secondary">
                     <% @stock = Stock.where(sector: current_user.sector, product: ext_ord_prod.product ).first %>
                     <% if @stock.present? %>
-                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= ext_ord_prod.product_code %>
                       <% end %>
                     <% else %>
@@ -75,7 +75,7 @@
                   </td>
                   <td class="text-secondary">
                     <% if @stock.present? %>
-                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-dark text-left p-0', target: :_blank do %>
+                      <%= link_to stock_path(Stock.where(sector: current_user.sector.id, product_id: ext_ord_prod.product.id).first), class: 'btn btn-link text-left p-0', target: :_blank do %>
                         <%= ext_ord_prod.product_name %>
                       <% end %>
                     <% else %>

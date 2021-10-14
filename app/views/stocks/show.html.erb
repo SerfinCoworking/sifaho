@@ -191,7 +191,7 @@
 
   <!-- Botones de acción footer -->
   <div class="card-footer d-flex justify-content-end">
-    <%= link_to 'Volver', stocks_path, class: "btn btn-light mr-2" %>
+    <%= link_to 'Volver', stocks_path, class: "btn btn-secondary mr-2" %>
 
     <%= link_to stock_path(id: @stock.id,format: 'pdf'), class: 'btn btn-info mr-2', target: :_blank do %>
       <%= fa_icon "print" %> Imprimir

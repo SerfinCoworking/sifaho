@@ -101,18 +101,6 @@
     }
   }
 
-  table{
-    td, th a{ 
-      color: $font-main-in-dark;
-    }
-    td .btn-link{
-      color: $font-main-in-dark;
-    }
-    td.table-success, td.table-warning{
-      color: $font-main-in-light;
-    }
-  }
-
   .pagination .page-item .page-link{
       color: $font-main-in-dark;
   }
@@ -194,15 +182,27 @@
       color: $font-main-in-dark;
     }
   }
-  tr.table-success, tr.table-success:hover{
-    color: $font-main-in-light!important;
-
-  }
-
+  
 }
 #wrapper.dark ~ .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front{
   background-color: $bg-main-in-dark;
   .ui-menu-item-wrapper{
     color: $font-main-in-dark;
   }
+}
+
+table{
+  td, th, th a, td a{ 
+    color: $font-main-in-dark;
+  }
+  td .btn-link{
+    color: $font-main-in-dark;
+  }
+  td.table-success, td.table-warning{
+    color: $font-main-in-light;
+  }
+}
+
+tr.table-success, tr.table-success:hover{
+  color: $font-main-in-light!important;
 }
