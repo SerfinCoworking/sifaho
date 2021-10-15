@@ -192,13 +192,16 @@
 }
 
 table{
+  td{
+    vertical-align: middle;
+  }
   td, th, th a, td a{ 
     color: $font-main-in-dark;
   }
   td .btn-link{
     color: $font-main-in-dark;
   }
-  td.table-success, td.table-warning{
+  tr.table-info td, tr.table-info a, td.table-success, td.table-warning{
     color: $font-main-in-light;
   }
 }

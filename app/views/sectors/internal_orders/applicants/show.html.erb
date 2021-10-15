@@ -1,9 +1,9 @@
 <% content_for :print_and_back_button do %>
-  <%= link_to internal_orders_applicant_path(format: 'pdf'), class: 'btn',
+  <%= link_to internal_orders_applicant_path(format: 'pdf'), class: 'btn btn-light',
     :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
     <%= fa_icon "print" %>
   <% end %>
-  <%= link_to internal_orders_applicants_path, class: 'btn',
+  <%= link_to internal_orders_applicants_path, class: 'btn btn-light',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
     <%= fa_icon "times" %>
   <% end %>

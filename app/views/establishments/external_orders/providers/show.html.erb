@@ -1,10 +1,10 @@
 <%# Header buttons actions %>
 <% content_for :print_and_back_button do %>
-  <%= link_to external_orders_providers_path(format: 'pdf'), class: 'btn',  
+  <%= link_to external_orders_providers_path(format: 'pdf'), class: 'btn btn-light',  
     :title => 'Imprimir pdf', :'data-placement'=>'top', :'data-toggle'=>'tooltip', target: :_blank do %>
     <%= fa_icon "print" %>
   <% end %>
-  <%= link_to external_orders_providers_path, class: 'btn',
+  <%= link_to external_orders_providers_path, class: 'btn btn-light',
       :title => 'Cerrar', :'data-placement'=>'top', :'data-toggle'=>'tooltip' do %>
     <%= fa_icon "times" %>
   <% end %>
