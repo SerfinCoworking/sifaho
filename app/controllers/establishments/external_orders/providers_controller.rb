@@ -154,7 +154,13 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
   end
 
   def edit_products
-    policy(:external_order_provider).edit_products?(@external_order)
+    authorized = policy(:external_order_provider).edit_products?(@external_order)
+
+    unless authorized
+      flash[:error] = "Usted no está autorizado para realizar modificaciones en la orden #{@external_order.remit_code}."
+      redirect_to external_orders_providers_url
+    end
+
     if params[:template].present?
       new_from_template(params[:template], 'provision')
     else

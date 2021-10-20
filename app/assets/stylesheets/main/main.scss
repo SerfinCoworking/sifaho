@@ -90,7 +90,7 @@
 
   .dropdown-menu{
     transition: background-color 0.3s ease-out;
-    a.dropdown-item:hover{
+    a.dropdown-item:hover, a.dropdown-item:focus{
       background-color: $cblue2;
       color: #fff!important;
     }

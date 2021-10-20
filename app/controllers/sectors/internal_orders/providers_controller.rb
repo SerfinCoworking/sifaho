@@ -34,9 +34,15 @@ class Sectors::InternalOrders::ProvidersController < Sectors::InternalOrders::In
     policy(:internal_order_provider).edit?(@internal_order)
   end
 
-  # GET /sectors/internal_orders/applicants/:id/edit_products(.:format)
+  # GET /sectors/internal_orders/providers/:id/edit_products(.:format)
   def edit_products
-    policy(:internal_order_provider).edit_products?(@internal_order)
+    authorized = policy(:internal_order_provider).edit_products?(@internal_order)
+
+    unless authorized
+      flash[:error] = "Usted no está autorizado para realizar modificaciones en la orden #{@internal_order.remit_code}."
+      redirect_to internal_orders_providers_url
+    end
+
     if params[:template].present?
       new_from_template(params[:template], 'provision')
     else
