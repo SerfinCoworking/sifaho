@@ -191,21 +191,23 @@
   }
 }
 
-table{
-  td{
-    vertical-align: middle;
+#wrapper.dark , #wrapper.dark ~ footer{
+  table{
+    td{
+      vertical-align: middle;
+    }
+    td, th, th a, td a{ 
+      color: $font-main-in-dark;
+    }
+    td .btn-link{
+      color: $font-main-in-dark;
+    }
+    tr.table-info td, tr.table-info a, td.table-success, td.table-warning{
+      color: $font-main-in-light;
+    }
   }
-  td, th, th a, td a{ 
-    color: $font-main-in-dark;
-  }
-  td .btn-link{
-    color: $font-main-in-dark;
-  }
-  tr.table-info td, tr.table-info a, td.table-success, td.table-warning{
-    color: $font-main-in-light;
-  }
-}
 
-tr.table-success, tr.table-success:hover{
-  color: $font-main-in-light!important;
+  tr.table-success, tr.table-success:hover{
+    color: $font-main-in-light!important;
+  }
 }
