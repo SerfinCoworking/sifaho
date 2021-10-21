@@ -40,6 +40,11 @@ module OrderProduct
     def send_products
       order_prod_lot_stocks.each(&:decrement_reserved_quantity)
     end
+    
+    # Validates products
+    def validates_products
+      order_prod_lot_stocks.each(&:validates_decrement_reserved_quantity)
+    end
 
     # Increment lot stock quantity
     def increment_lot_stock_to(a_sector)

@@ -27,6 +27,8 @@ module Order
         raise ArgumentError, 'Debe asignar almenos 1 producto.'
       end
 
+      order_products.with_delivery_quantity.each(&:validates_products) #validate reserved quantity before decrement stocks
+
       order_products.with_delivery_quantity.each(&:send_products)
       update_columns(status: 'provision_en_camino', sent_date: DateTime.now)
       create_notification(a_user, 'envió')
