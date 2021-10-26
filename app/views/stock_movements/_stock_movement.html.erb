@@ -8,14 +8,23 @@
   <td class="text-<%= stock_movement.adds? ? 'success' : 'danger' %>"><%= stock_movement.quantity %></td>
   <% if stock_movement.order.present? %>
     <td>
-      <%= link_to polymorphic_url([stock_movement.order.class.name.underscore.pluralize, 
-                                  (stock_movement.order.custom_notification_url if stock_movement.order.class.method_defined?(:custom_notification_url)) ], 
-                                  resaltar: @stock.product_id,
-                                  id: stock_movement.order.id), 
-                                  target: :_blank, 
-                                  class: "btn btn-sm btn-light" do %>
-        <%= fa_icon 'external-link-alt' %>
-      <% end %>
+      <% if stock_movement.order.class.method_defined?(:custom_notification_url) %>
+        <%= link_to polymorphic_url([stock_movement.order.class.name.underscore.pluralize, 
+                                    stock_movement.order.custom_notification_url ], 
+                                    id: stock_movement.order.id,
+                                    resaltar: @stock.product_id), 
+                                    target: :_blank, 
+                                    class: "btn btn-sm btn-light" do %>
+          <%= fa_icon 'external-link-alt' %>
+        <% end %>
+      <% else %>
+        <%= link_to polymorphic_url([stock_movement.order],
+                                    resaltar: @stock.product_id), 
+                                    target: :_blank, 
+                                    class: "btn btn-sm btn-light" do %>
+          <%= fa_icon 'external-link-alt' %>
+        <% end %>
+      <% end %>  
     </td>
   <% end %>
 </tr>
