@@ -3,10 +3,10 @@
 $("tr#child-<%= @order_product.id.to_s %>").find('button.btn-select-lot-stock').first().text('<%= @order_product.order_prod_lot_stocks.count.to_s %>');
 
 $('#lot-selection').modal('hide');
-$('#lot-selection').on('hidden.bs.modal', function (event) {
+<%# $('#lot-selection').on('hidden.bs.modal', function (event) {
   $('#lot-selection').find('.modal-footer button').show();
   $('#lot-selection').find('.modal-footer #spinner').hide();
-})
+}) %>
 
 setLotSelectionProgress($("tr#child-<%= @order_product.id.to_s %>"), parseInt("<%= @order_product.order_prod_lot_stocks.sum(:reserved_quantity) %>"), parseInt("<%= @order_product.request_quantity %>"));
 
