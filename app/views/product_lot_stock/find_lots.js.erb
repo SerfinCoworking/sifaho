@@ -2,7 +2,7 @@
 <% js = escape_javascript(
   render(partial: 'product_lot_stock/find_lot_stock', locals: { lot_stocks: @lot_stocks })
 ) %>
-$("button[type='submit']").removeAttr('disabled');
+<%# $("button[type='submit']").removeAttr('disabled'); %>
 $("#lot-selection .modal-body").html('<%= js %>');
 $('input[type=checkbox][data-toggle="switchbutton"]').each(function( index, element ) {
   element.switchButton();
@@ -48,3 +48,12 @@ $("input.quantity").on("change", function(e){
 });
 
 $('#lot-selection').modal('show');
+
+<%# Disable modal buttons %>
+$('#lot-selection').find('button#btn-submit-form').on('click', function(e) {
+  $(e.target).closest('.modal-footer').find('button').fadeOut(200, () => {
+    const formId = $(e.target).attr('form');
+    $('#lot-selection').find('form#'+formId).submit();
+    $(e.target).closest('.modal-footer').find('#spinner').fadeIn(200);    
+  });
+});

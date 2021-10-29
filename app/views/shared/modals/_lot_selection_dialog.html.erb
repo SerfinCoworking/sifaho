@@ -5,15 +5,13 @@
         <h5 class="modal-title">
           <%= fa_icon 'barcode'%> Seleccionar lote en stock
         </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
       <div class="modal-body" id="lot-selection-list">
       </div>
       <div class="modal-footer text-right">
         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Volver</button>
-        <button type='submit' class='btn btn-success btn-submit-form' form="order-prod-lot-stock-form">Guardar</button>
+        <button type='button' class='btn btn-success btn-submit-form' id="btn-submit-form" form="order-prod-lot-stock-form">Guardar</button>
+        <%= fa_icon 'spinner', class: "fa-spin", style: "display:none;", id: "spinner" %>
       </div>
     </div>
   </div>
