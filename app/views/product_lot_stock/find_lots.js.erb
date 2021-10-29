@@ -49,7 +49,7 @@ $("input.quantity").on("change", function(e){
 
 $('#lot-selection').modal('show');
 
-<%# Disable modal buttons %>
+<%# Disable modal buttons 
 $('<%# #lot-selection').find('button#btn-submit-form').on('click', function(e) {
   $(e.target).closest('.modal-footer').find('button').fadeOut(200, () => {
     const formId = $(e.target).attr('form');
