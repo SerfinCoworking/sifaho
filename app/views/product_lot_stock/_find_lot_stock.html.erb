@@ -34,13 +34,13 @@
       <tr>
         <th></th>
         <th width="30%">Cantidad</th>
-        <th>Stock</th>
-        <th>Código</th>
-        <th>Estado</th>
-        <th>Procedencia</th>
-        <th>Vencimiento</th>
-        <th>Laboratorio</th>
-        <th>Reservado</th>
+        <th class="text-center">Stock</th>
+        <th class="text-center">Código</th>
+        <th class="text-center">Estado</th>
+        <th class="d-sm-none d-xl-table-cell">Procedencia</th>
+        <th class="d-sm-none d-xl-table-cell">Vencimiento</th>
+        <th class="d-sm-none d-xl-table-cell">Laboratorio</th>
+        <th class="text-center">Reservado</th>
       </tr>
     </thead>
     <tbody>
@@ -91,15 +91,15 @@
               <%= lot_stock.lot.status.humanize %>
             </span>
           </td>
-          <td class="p-2 text-center">
+          <td class="p-2 text-center d-sm-none d-xl-table-cell">
             <span class="badge badge-secondary">
               <%= lot_stock.lot.provenance_name %>
             </span>
           </td>
-          <td class="p-2 text-center">
+          <td class="p-2 text-center d-sm-none d-xl-table-cell">
             <%= lot_stock.lot_short_expiry_date_string %>
           </td>
-          <td class="p-2">
+          <td class="p-2 d-sm-none d-xl-table-cell">
             <div style="width: 300px;">
               <div class="text-truncate">
                 <%= lot_stock.lot.laboratory.name %>
