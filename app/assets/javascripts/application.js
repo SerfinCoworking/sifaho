@@ -146,7 +146,7 @@ $(document).on('turbolinks:load', function() {
 });
 
 $(document).on('turbolinks:load', function() {
-  
+  resize();
   /* new version */
   $('[data-toggle="popover"]').popover();
   
