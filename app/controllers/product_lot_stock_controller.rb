@@ -20,8 +20,6 @@ class ProductLotStockController < ApplicationController
   def update_lot_stock_selection
     respond_to do |format|
       if @order_product.update(lot_stock_params)
-        puts "===================".colorize(background: :red)
-        puts lot_stock_params
         flash.now[:success] = "Los lotes del producto código #{@order_product.product_code} se han modificado correctamente!"
         format.js
       else
