@@ -7,6 +7,15 @@ $(document).on('turbolinks:load', function(e){
       (['new', 'edit', 'accept_order', 'create', 'update', 'dispatch_order', 'edit_products'].includes(_PAGE.action))) ) return false;
   
   initProductsEvents();
+
+  //Disable modal buttons 
+  $('#lot-selection').find('button#btn-submit-form').on('click', function(e) {
+    $(e.target).closest('#btn-container').fadeOut(200, () => {
+      const formId = $(e.target).attr('form');
+      $('#lot-selection').find('form#'+formId).submit();
+      $(e.target).closest('.modal-footer').find('#spinner').fadeIn(200);    
+    });
+  });
   
   // button submit
   $("button.send-order").on('click', function(e){

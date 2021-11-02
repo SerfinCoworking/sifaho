@@ -47,13 +47,8 @@ $("input.quantity").on("change", function(e){
   $("#qv-ref").text(selectedLotsQuantity)
 });
 
+$('#lot-selection').find('#btn-container').show();
+$('#lot-selection').find('#spinner').hide();
+
 $('#lot-selection').modal('show');
 
-<%# Disable modal buttons 
-$('<%# #lot-selection').find('button#btn-submit-form').on('click', function(e) {
-  $(e.target).closest('.modal-footer').find('button').fadeOut(200, () => {
-    const formId = $(e.target).attr('form');
-    $('#lot-selection').find('form#'+formId).submit();
-    $(e.target).closest('.modal-footer').find('#spinner').fadeIn(200);    
-  });
-}); %>
