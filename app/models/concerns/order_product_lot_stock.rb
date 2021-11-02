@@ -48,7 +48,7 @@ module OrderProductLotStock
     private
 
     def lot_stock_quantity
-      lot_stock.quantity
+      lot_stock.quantity + lot_stock.reserved_quantity
     end
 
     # Igualamos lo solocitado con lo reservado
