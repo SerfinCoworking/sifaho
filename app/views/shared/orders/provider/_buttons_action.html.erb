@@ -5,12 +5,12 @@
 <% end %>
 
 <div class="editing-buttons mt-1" style="display: <%= order_product.errors.any? ? 'block' : 'none' %> ;">
-  <button class="btn btn-sm btn-outline-success" type="submit" form="<%= "ord-prod-#{order_product.id}" %>">
+  <button class="btn btn-sm btn-outline-success btn-req" type="submit" form="<%= "ord-prod-#{order_product.id}" %>">
     <%= fa_icon 'save', class: 'fa-fw' %>
   </button>
   
   <%= link_to polymorphic_path([order_product.order.class.name.underscore.pluralize, :provider_product], provider_id: order_product.order_id, id: order_product.id), 
-              class: "btn btn-sm btn-outline-danger",
+              class: "btn btn-sm btn-outline-danger btn-req",
               remote: true do %>
     <%= fa_icon 'times', class: 'fa-fw' %>
   <% end %>
@@ -22,7 +22,7 @@
                                             order_id: order.id,
                                             order_product_id: order_product.id,
                                             product_id: order_product.product.id),
-              class: "btn btn-sm btn-lot-selection #{ order_product.delivery_quantity == 0 ? "btn-outline-primary" : "btn-outline-success"}",
+              class: "btn btn-sm btn-lot-selection btn-req #{ order_product.delivery_quantity == 0 ? "btn-outline-primary" : "btn-outline-success"}",
               remote: true,
               remote: true do %>
     <%= fa_icon 'barcode', class: 'fa-fw' %>

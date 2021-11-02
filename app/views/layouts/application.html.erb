@@ -35,10 +35,12 @@
         <div id="page-content-wrapper" class="<%= user_signed_in? ? '' : 'w-100' %>">
           <div class="pt-3 container-fluid h-100">
 
-            
-
             <!-- Main yield -->
             <%= yield %>
+
+            <div class="request-loading" id="loading">
+              <%= fa_icon 'spinner', class: 'fa-spin' %>
+            </div>
           </div>
         </div>
       </div>

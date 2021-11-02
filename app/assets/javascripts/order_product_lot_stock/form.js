@@ -47,6 +47,13 @@ $(document).on('turbolinks:load', function(e){
       }
     }
   });
+
+  $('.btn-req').on('click', function(e){
+    $("#loading").show(0, function(e) {
+      $("#loading").css({"display": "flex"});
+      $("#loading").css({"opacity": 1});
+    });
+  });
   
 })
 // set expiry date calendar format

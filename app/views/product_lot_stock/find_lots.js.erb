@@ -50,5 +50,12 @@ $("input.quantity").on("change", function(e){
 $('#lot-selection').find('#btn-container').show();
 $('#lot-selection').find('#spinner').hide();
 
+
+$("#loading").css({"opacity": 1});
+
+setTimeout(function(){
+  $("#loading").hide();
+}, 300);
+
 $('#lot-selection').modal('show');
 
