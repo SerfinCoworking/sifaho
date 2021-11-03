@@ -23,7 +23,7 @@ class Sectors::InternalOrders::ProductsController < ApplicationController
     @order_product.added_by_sector = current_user.sector
 
     respond_to do |format|
-      if @order_product.save!
+      if @order_product.save
         @open_modal = 'yes' #abrimos el modal de seleccion de lotes
         flash.now[:success] = "asdasdSe agregó el producto #{@order_product.product_code} correctamente."
         format.js { render 'shared/orders/products/show' }

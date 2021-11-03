@@ -106,15 +106,16 @@ function initProductsEvents(){
     $(e.target).closest('form').addClass('editing');
   });
   
+  $('.btn-req').on('click', function(e){
+    $("#loading").show(0, function(e) {
+      $("#loading").css({"display": "flex"});
+      $("#loading").css({"opacity": 1});
+    });
+  });
+  
   $(".enable-editing-btn").on('click', function(e){
     e.stopPropagation();
     
-    $('.btn-req').on('click', function(e){
-      $("#loading").show(0, function(e) {
-        $("#loading").css({"display": "flex"});
-        $("#loading").css({"opacity": 1});
-      });
-    });
 
     $(e.target).closest('.col-action-btn').removeClass('hidden-content');
     $(e.target).closest('.nested-fields').find('.product-code, .product-name, .request-quantity, .observations').removeAttr('readonly');

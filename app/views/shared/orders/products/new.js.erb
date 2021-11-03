@@ -12,6 +12,10 @@
 
 <% if @order_product.errors.any? %>
   $('#ord-prod-<%= @form_id %>').replaceWith("<%= js %>");
+  $("#loading").css({"opacity": 1});
+  setTimeout(function(){
+    $("#loading").hide();
+  }, 300);
 <% else %>
   $("#order-products-container").append("<%= js %>");
 <% end %>
