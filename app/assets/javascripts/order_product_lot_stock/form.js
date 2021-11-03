@@ -108,11 +108,20 @@ function initProductsEvents(){
   
   $(".enable-editing-btn").on('click', function(e){
     e.stopPropagation();
+    
+    $('.btn-req').on('click', function(e){
+      $("#loading").show(0, function(e) {
+        $("#loading").css({"display": "flex"});
+        $("#loading").css({"opacity": 1});
+      });
+    });
+
     $(e.target).closest('.col-action-btn').removeClass('hidden-content');
     $(e.target).closest('.nested-fields').find('.product-code, .product-name, .request-quantity, .observations').removeAttr('readonly');
     $(e.target).closest('.enable-editing-buttons').fadeOut(300, function(){
       $(e.target).closest('.enable-editing-buttons').siblings('.editing-buttons').fadeIn(300);
     });
+    
   });
 
   $('.btn-delete-product').on('click', function(e){

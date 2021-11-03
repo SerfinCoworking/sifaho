@@ -23,3 +23,10 @@ $('#ord-prod-<%= @form_id %>').fadeOut(300, function(){
   $('[data-toggle="popover"]').popover();
 });
 
+if("<%= @open_modal %>" !== 'yes'){
+  $("#loading").css({"opacity": 1});
+
+  setTimeout(function(){
+    $("#loading").hide();
+  }, 300);
+}
