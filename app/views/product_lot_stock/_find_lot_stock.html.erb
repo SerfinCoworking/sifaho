@@ -69,14 +69,18 @@
           </td>
           <td class="p-2">
             <div class="form-group integer">
-              <input type="number" class="form-control numeric integer optional quantity form-control-sm  <%= opls.present? && opls.errors[:quantity].any? ? 'is-invalid' : ''%>"
+              <input type="number" class="form-control numeric integer optional quantity form-control-sm  <%= opls.present? && (opls.errors[:quantity].any? || opls.errors[:insufficient_quantity].any?) ? 'is-invalid' : ''%>"
               name="order_products[order_prod_lot_stocks_attributes][<%= lot_stock.id %>][quantity]"
               value="<%= opls.present? ? opls.quantity : 0%>"
               data-target="lot-stock-<%=lot_stock.id%>"
               min="0">
               
               <div class="invalid-feedback w-auto position-absolute m-0">
-                Cantidad <%= opls.present? && opls.errors[:quantity].any? ? opls.errors[:quantity].first : '' %>
+                <% if opls.present? && opls.errors[:qunatity].any? %>
+                  Cantidad <%= opls.errors[:quantity].first %>
+                <% elsif opls.present? && opls.errors[:insufficient_quantity].any? %>
+                  <%= opls.errors[:insufficient_quantity].first %>
+                <% end %>
               </div>
             </div>
           </td>

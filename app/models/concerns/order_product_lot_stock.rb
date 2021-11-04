@@ -53,8 +53,13 @@ module OrderProductLotStock
 
     # Igualamos lo solocitado con lo reservado
     def reserve_quantity
-      lot_stock.reserve(quantity)
-      self.reserved_quantity = quantity
+      begin
+        lot_stock.reserve(quantity)
+        self.reserved_quantity = quantity
+      rescue ArgumentError => e
+        errors.add(:insufficient_quantity, e)
+        raise ActiveRecord::RecordInvalid.new(self)
+      end
     end
 
     # Quitamos lo reservado
