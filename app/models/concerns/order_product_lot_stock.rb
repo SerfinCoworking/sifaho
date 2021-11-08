@@ -31,7 +31,7 @@ module OrderProductLotStock
       lot_stock.stock.create_stock_movement(order_product.order, lot_stock, quantity, false)
       update_column(:reserved_quantity, 0)
     end
-    
+
     # Decrement each order prod lot stock of a product
     def validates_decrement_reserved_quantity
       # Lot stock reserved is less than required quantity, raise an error

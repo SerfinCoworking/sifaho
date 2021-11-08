@@ -208,6 +208,8 @@ es:
         products_count: 'Productos asociados'
         fsn: 'Descripción'
         semantic_tag: 'Categoría'
+      unity:
+        name: 'Nombre'
 
   date:
     abbr_day_names:

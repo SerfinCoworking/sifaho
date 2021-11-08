@@ -4,8 +4,8 @@ class Product < ApplicationRecord
   enum status: { active: 0, inactive: 1, merged: 2 }
 
   # Relationships
-  belongs_to :unity
-  belongs_to :area
+  belongs_to :unity, optional: true
+  belongs_to :area, optional: true
   belongs_to :snomed_concept, optional: true, counter_cache: :products_count
   has_many :stocks, dependent: :destroy
   has_many :external_order_product
