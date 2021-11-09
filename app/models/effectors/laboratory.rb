@@ -1,10 +1,7 @@
 class Laboratory < ApplicationRecord
   include PgSearch
 
-  # Relaciones
-  has_many :supply_lots, -> { with_deleted }
-
-  # Validaciones
+  # Validations
   validates_presence_of :name, :cuit, :gln
 
   filterrific(

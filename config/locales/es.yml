@@ -66,6 +66,8 @@ es:
       int_ord_prod_lot_stock: 'Lote seleccionado'
     attributes:
       applicant_sector: "Sector solicitante"
+      area: 
+        name: "Nombre"
       prescription:
         professional: "Médico"
         patient: "Paciente"
