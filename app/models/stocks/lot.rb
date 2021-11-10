@@ -7,13 +7,14 @@ class Lot < ApplicationRecord
   # Relationships
   belongs_to :product
   belongs_to :laboratory
-  belongs_to :provenance, class_name: 'LotProvenance', counter_cache: :lots_count
+  belongs_to :provenance, class_name: 'LotProvenance', counter_cache: :lots_count, optional: true
   has_many :lot_stocks
 
   # Callbacks
   after_validation :update_status
 
   # Validations
+  validates_presence_of :provenance_id
   validates :product,
     uniqueness: { :scope => [:provenance_id, :laboratory_id, :code, :expiry_date], 
     if: :expire?,
@@ -21,7 +22,6 @@ class Lot < ApplicationRecord
       "El lote #{object.code} ya existe con esa procedencia, laboratorio y fecha de vencimiento! Intenta con otro!"
     end
   }
-  validates :provenance_id, presence: true
 
   # Delegations
   delegate :name, :code, :area_name, :unity_name, to: :product, prefix: true
