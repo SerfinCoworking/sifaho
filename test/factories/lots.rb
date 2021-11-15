@@ -17,6 +17,6 @@ FactoryBot.define do
       association :provenance, factory: :province_lot_provenance
     end
 
-    factory :province_lot, traits: [:ibuprofeno, :abbott, :province]
+    factory :province_lot, traits: %i[ibuprofeno abbott province]
   end
 end

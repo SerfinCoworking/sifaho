@@ -15,14 +15,13 @@ class Establishment < ApplicationRecord
   has_one_attached :image
 
   # Validations
-  validates :name, presence: true
-  validates :short_name, presence: true
+  validates_presence_of :name, :short_name
   validates :sanitary_zone_id, presence: true
   validates :cuie, allow_blank: true, length: { is: 6 }, uniqueness: true
   validates :establishment_type_id, presence: true
   validates :siisa,
     format: { with: /\A\d+\z/, message: "debe tener solo números." }
-  validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
+  validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to: 90 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
   # SCOPES #--------------------------------------------------------------------
@@ -91,7 +90,4 @@ class Establishment < ApplicationRecord
 
   scope :by_establishment_type, ->(ids_ary) { where(establishment_type: ids_ary) }
 
-  def short_name
-    super.presence || self.name
-  end
 end

@@ -89,8 +89,6 @@ es:
       internal_order_template:
         name: "Nombre"
         destination_sector_id: "Solicitante"
-      establishment:
-        name: "Nombre"      
       professional:
         first_name: "Nombre"
         last_name: "Apellido"
@@ -178,6 +176,8 @@ es:
         sanitary_zone_id: "Zona sanitaria"
         establishment_type_id: "Tipo de establecimiento"
         siisa: 'Código SIISA'
+        name: "Nombre"
+        short_name: "Nombre abreviado"
       bedroom:
         name: 'Nombre'
         location_sector: 'Ubicación'
