@@ -78,7 +78,7 @@ es:
         supply_id: "Insumo"
       sector:
         name: "Nombre"
-        establishment_id: "Establecimiento"
+        establishment: "Establecimiento"
       external_order:
         applicant_sector_id: "Sector solicitante"
         provider_sector_id: "Sector proveedor"
