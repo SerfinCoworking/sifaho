@@ -23,11 +23,15 @@ RSpec.describe Sector, type: :model do
   end
 
   # validation
+  it { should validate_presence_of(:name) }
+  it { should validate_presence_of(:establishment) }
+  
   it 'name cannot be blank' do
     sector = build(:informatica_sector, name: nil)
     expect { sector.save! }.to raise_error(ActiveRecord::RecordInvalid,
                                            'La validación falló: Nombre no puede estar en blanco')
   end
+
 
   it 'establishment cannot be blank' do
     sector = build(:informatica_sector, establishment: nil)
