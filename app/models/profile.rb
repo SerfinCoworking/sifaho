@@ -10,6 +10,6 @@ class Profile < ApplicationRecord
   validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg']
 
   def full_name
-    self.last_name+" "+self.first_name
+    "#{last_name} #{first_name}"
   end
 end
