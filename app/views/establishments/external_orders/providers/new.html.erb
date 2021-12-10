@@ -1,3 +1,49 @@
+
+<%= content_for :form_edit do %>
+  <%= simple_form_for @external_order, url: external_orders_providers_path, html: { role: 'check-modified'} do |f| %>
+    <%= f.error_notification %>
+    
+    <h5>Solicitante</h5>
+    
+    <%# Applicant establishment %>
+    <%= f.input :applicant_establishment_id, as: :string,
+      label: 'Establecimiento solicitante',
+      placeholder: 'Buscar por nombre',
+      required: true,
+      :input_html => {
+        autocomplete: 'off',
+        id: "effector-establishment",
+        data: { autocomplete_source: search_by_name_establishments_path },
+        value: "#{ if f.object.applicant_sector.present?; f.object.applicant_sector.establishment.name; end }",
+        size: 41
+      } 
+    %>
+
+    <%# Applicant sector %>        
+    <%= f.input :applicant_sector_id,
+      label: 'Sector solicitante',
+      collection: @sectors.map {
+        |sector| [sector.name, sector.id]
+      },
+      :input_html => {
+        placeholder: 'Debe seleccionar establecimiento',
+        required: true,
+        id: 'effector-sector',
+        class: 'selectpicker-md custom-select-pick show-tick',
+        "data-width"=>"100%",
+        "title"=>"Seleccionar sector",
+        "data-size"=>"10",
+        "data-live-search"=>true,
+        value: f.object.provider_sector.present? ? f.object.provider_sector.id : ""
+      }
+    %>
+          
+    <h5>Proveedor</h5>
+    <%= @external_order.provider_sector.name+" "+@external_order.provider_establishment.name %>
+    <%= f.input :provider_observation, label: 'Observaciones', as: :text, :input_html => { :cols => 40  , :rows => 2 } %>
+  <% end %>
+<% end %>
+
 <%= content_for :action_buttons do %>
   <%= link_to 'Volver', external_orders_providers_path, class: 'btn btn-secondary mr-2' %>
   <% if @external_order.persisted? && policy(:external_order_provider).edit_products?(@external_order) %>
@@ -23,4 +69,4 @@
   
 <% end %>
 
-<%= render 'establishments/external_orders/form', external_order: @external_order, order_type: @external_order.order_type, url: external_orders_providers_path %>
+<%= render 'establishments/external_orders/form', external_order: @external_order, order_type: @external_order.order_type %>

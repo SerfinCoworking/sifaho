@@ -30,6 +30,7 @@ class Establishments::ExternalOrders::ProvidersController < Establishments::Exte
       flash[:error] = 'No se ha encontrado la plantilla' if params[:template].present?
       @external_order = ExternalOrder.new
       @external_order.order_type = 'provision'
+      @external_order.provider_sector = current_user.sector
       @sectors = []
       @external_order.order_products.build
     end

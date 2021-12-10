@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
       @user = create(:it_user)
     end
 
-    it 'has name_and_sector' do
+    it 'has name and sector' do
       expect(@user.name_and_sector).to eq('Reimann Test | Informática')
     end
 

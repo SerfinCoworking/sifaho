@@ -59,4 +59,10 @@ class ExternalOrderApplicantPolicy < ExternalOrderPolicy
     edit?(resource) && resource.persisted? && resource.added_by_sector_id.present? && resource.added_by_sector != user.sector
   end
 
+  def edit_provider_on_solicitud?(resource)
+    if resource.solicitud? && resource.solicitud_auditoria? && resource.applicant_sector == user.sector
+      user.has_any_role?(:admin, :farmaceutico, :enfermero)
+    end
+  end
+
 end

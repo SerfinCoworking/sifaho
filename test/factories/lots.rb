@@ -18,5 +18,6 @@ FactoryBot.define do
     end
 
     factory :province_lot, traits: %i[ibuprofeno abbott province]
+    factory :province_lot_without_product, traits: %i[abbott province]
   end
 end
