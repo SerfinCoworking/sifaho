@@ -268,12 +268,12 @@ class ExternalOrder < ApplicationRecord
 
   # Returns the name of the efetor who deliver the products
   def origin_name
-    self.provider_sector.name+" "+self.provider_establishment.short_name
+    "#{provider_sector.name} #{provider_establishment.short_name || ''}"
   end
 
   # Returns the name of the efetor who receive the products
   def destiny_name
-    self.applicant_sector.name+" "+self.applicant_establishment.short_name
+    "#{applicant_sector.name} #{applicant_establishment.short_name || ''}"
   end
 
   def sent_request_by_user_fullname
