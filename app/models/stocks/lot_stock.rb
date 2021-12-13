@@ -117,7 +117,7 @@ class LotStock < ApplicationRecord
   # Si se encuentra archivado, vuelve a vigente con 0 de cantidad.
   def increment(a_quantity)
     self.quantity += a_quantity
-    self.save!
+    save!
   end
 
   # Disminuye la cantidad del stock
@@ -126,42 +126,42 @@ class LotStock < ApplicationRecord
       raise ArgumentError, "Cantidad en stock insuficiente del lote "+self.lot_code+" producto "+self.product_name
     else
       self.quantity -= a_quantity
-      self.save!
+      save!
     end
   end
 
   # Incrementa la cantidad archivada y resta la cantidad en stock
   def increment_archived(a_quantity)
-    self.decrement(a_quantity)
+    decrement(a_quantity)
     self.archived_quantity += a_quantity
-    self.save!
+    save!
   end
 
   # Decrementa la cantidad archivada y la suma a la cantidad en stock
   def decrement_archived(a_quantity)
-    self.increment(a_quantity)
+    increment(a_quantity)
     self.archived_quantity -= a_quantity
-    self.save!
+    save!
   end
 
   # Decrementa la cantidad reservada sin modificar otras cantidades
   def decrement_reserved(a_quantity)
     self.reserved_quantity -= a_quantity
-    self.save!
+    save!
   end
 
   # Habilita la cantidad reservada nuevamente en stock
   def enable_reserved(a_quantity)
-    self.increment(a_quantity)
+    increment(a_quantity)
     self.reserved_quantity -= a_quantity
-    self.save!
+    save!
   end
 
   # Mueve cantidad del stock a reservado
   def reserve(a_quantity)
-    self.decrement(a_quantity)
+    decrement(a_quantity)
     self.reserved_quantity += a_quantity
-    self.save!
+    save!
   end
 
   def total_quantity
