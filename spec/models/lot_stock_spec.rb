@@ -67,6 +67,16 @@ RSpec.describe LotStock, type: :model do
         @lot_stock.increment(2500)
       end
 
+      it 'decrements with negative param' do
+        expect { @lot_stock.decrement(-100) }.to raise_error(ArgumentError).with_message('La cantidad a decrementar debe ser mayor a 0.')
+        expect(@lot_stock.quantity).to eq(2500)
+      end
+      
+      it 'decrements with negative param' do
+        expect { @lot_stock.decrement(3000) }.to raise_error(ArgumentError).with_message("La cantidad en stock es insuficiente del lote #{@lot_stock.lot_code} producto #{@lot_stock.product_name}.")
+        expect(@lot_stock.quantity).to eq(2500)
+      end
+
       it 'increments archived quantity' do
         expect(@lot_stock.archived_quantity).to eq(0)
         @lot_stock.increment_archived(150)
@@ -110,11 +120,83 @@ RSpec.describe LotStock, type: :model do
         expect(@lot_stock.reserved_quantity).to eq(0)
         expect(@lot_stock.quantity).to eq(2300)
       end
+
+      it 'increment archived with negative param' do
+        expect(@lot_stock.archived_quantity).to eq(0)
+        expect { @lot_stock.increment_archived(-150) }.to raise_error(ArgumentError).with_message('La cantidad a archivar debe ser mayor a 0.')
+        expect(@lot_stock.quantity).to eq(2500)
+        expect(@lot_stock.archived_quantity).to eq(0)
+      end
+
+      it 'decrement archived with negative param' do
+        expect(@lot_stock.archived_quantity).to eq(0)
+        @lot_stock.increment_archived(150)
+        expect(@lot_stock.quantity).to eq(2350)
+        expect(@lot_stock.archived_quantity).to eq(150)
+        expect { @lot_stock.decrement_archived(-50) }.to raise_error(ArgumentError).with_message('La cantidad a quitar de archivo debe ser mayor a 0.')
+        expect(@lot_stock.archived_quantity).to eq(150)
+        expect(@lot_stock.quantity).to eq(2350)
+      end
+      
+      it 'decrement archived with greater param than archived' do
+        expect(@lot_stock.archived_quantity).to eq(0)
+        @lot_stock.increment_archived(150)
+        expect(@lot_stock.quantity).to eq(2350)
+        expect(@lot_stock.archived_quantity).to eq(150)
+        expect { @lot_stock.decrement_archived(200) }.to raise_error(ArgumentError).with_message('La cantidad a quitar de archivo debe ser menor o igual a 150.')
+        expect(@lot_stock.archived_quantity).to eq(150)
+        expect(@lot_stock.quantity).to eq(2350)
+      end
+
+      it 'reserve with negative param' do
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        expect { @lot_stock.reserve(-900) }.to raise_error(ArgumentError).with_message('La cantidad a reservar debe ser mayor a 0.')
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        expect(@lot_stock.quantity).to eq(2500)
+      end
+
+      it 'enable reserve with negative param' do
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        @lot_stock.reserve(600)
+        expect(@lot_stock.reserved_quantity).to eq(600)
+        expect(@lot_stock.quantity).to eq(1900)
+        expect { @lot_stock.enable_reserved(-300) }.to raise_error(ArgumentError).with_message('La cantidad a devolver de la reserva debe ser nayor a 0.')
+        expect(@lot_stock.reserved_quantity).to eq(600)
+        expect(@lot_stock.quantity).to eq(1900)
+      end
+      
+      it 'enable reserve with greater param than reseved' do
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        @lot_stock.reserve(600)
+        expect(@lot_stock.reserved_quantity).to eq(600)
+        expect(@lot_stock.quantity).to eq(1900)
+        expect { @lot_stock.enable_reserved(700) }.to raise_error(ArgumentError).with_message('La cantidad a devolver de la reserva debe ser menor o igual a 600.')
+        expect(@lot_stock.reserved_quantity).to eq(600)
+        expect(@lot_stock.quantity).to eq(1900)
+      end
+
+      it 'decrement reserve with negative param' do
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        @lot_stock.reserve(200)
+        expect(@lot_stock.reserved_quantity).to eq(200)
+        expect(@lot_stock.quantity).to eq(2300)
+        expect { @lot_stock.decrement_reserved(-200) }.to raise_error(ArgumentError).with_message('La cantidad a enviar debe ser mayor a 0.')
+        expect(@lot_stock.reserved_quantity).to eq(200)
+        expect(@lot_stock.quantity).to eq(2300)
+      end
+
+      it 'decrement reserve with greater param than reserved' do
+        expect(@lot_stock.reserved_quantity).to eq(0)
+        @lot_stock.reserve(200)
+        expect(@lot_stock.reserved_quantity).to eq(200)
+        expect(@lot_stock.quantity).to eq(2300)
+        expect { @lot_stock.decrement_reserved(400) }.to raise_error(ArgumentError).with_message('La cantidad a enviar debe ser menor o igual a 200.')
+        expect(@lot_stock.reserved_quantity).to eq(200)
+        expect(@lot_stock.quantity).to eq(2300)
+      end
     end
 
 
-    # it 'total quantity' do
-    # end
   end
   
 
