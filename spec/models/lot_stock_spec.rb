@@ -71,7 +71,7 @@ RSpec.describe LotStock, type: :model do
         expect { @lot_stock.decrement(-100) }.to raise_error(ArgumentError).with_message('La cantidad a decrementar debe ser mayor a 0.')
         expect(@lot_stock.quantity).to eq(2500)
       end
-      
+
       it 'decrements with negative param' do
         expect { @lot_stock.decrement(3000) }.to raise_error(ArgumentError).with_message("La cantidad en stock es insuficiente del lote #{@lot_stock.lot_code} producto #{@lot_stock.product_name}.")
         expect(@lot_stock.quantity).to eq(2500)
@@ -137,7 +137,7 @@ RSpec.describe LotStock, type: :model do
         expect(@lot_stock.archived_quantity).to eq(150)
         expect(@lot_stock.quantity).to eq(2350)
       end
-      
+
       it 'decrement archived with greater param than archived' do
         expect(@lot_stock.archived_quantity).to eq(0)
         @lot_stock.increment_archived(150)
@@ -164,7 +164,7 @@ RSpec.describe LotStock, type: :model do
         expect(@lot_stock.reserved_quantity).to eq(600)
         expect(@lot_stock.quantity).to eq(1900)
       end
-      
+
       it 'enable reserve with greater param than reseved' do
         expect(@lot_stock.reserved_quantity).to eq(0)
         @lot_stock.reserve(600)
@@ -196,43 +196,5 @@ RSpec.describe LotStock, type: :model do
       end
     end
 
-
   end
-  
-
-  # # validation
-  # it 'quantity greater than or eaul to 0' do
-    
-  # end
-  
-  # it 'reserved_quantity greater than or equal to 0' do
-    
-  # end
-
-  # it 'stock cannot be blank' do
-    
-  # end
-  
-  # # delegate
-  # it 'has refresh quantity of stock' do
-    
-  # end
-
-  # it 'has product name and code' do
-    
-  # end
-
-  # it 'has lot attributes and lot provenance' do
-    
-  # end
-  
-  
-
-  # # relationship
-
-
-  # # callback
-  # it 'resfresh stock quantity after save' do
-    
-  # end
 end
