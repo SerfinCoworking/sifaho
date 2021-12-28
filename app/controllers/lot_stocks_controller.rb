@@ -98,7 +98,7 @@ class LotStocksController < ApplicationController
     authorize @lot_archive
     @lot_archive.return_by(current_user)
     respond_to do |format|
-      format.html { redirect_to show_stock_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
+      format.html { redirect_to stock_show_lot_stocks_url(@lot_archive.lot_stock.stock, @lot_archive.lot_stock), notice: 'El archivo se retorno correctamente.' }
     end
   end
 
