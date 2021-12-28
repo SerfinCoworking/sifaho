@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_06_155059) do
+ActiveRecord::Schema.define(version: 2021_12_28_134516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -1320,6 +1320,7 @@ ActiveRecord::Schema.define(version: 2021_12_06_155059) do
     t.boolean "adds", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "status"
     t.index ["lot_stock_id"], name: "index_stock_movements_on_lot_stock_id"
     t.index ["order_type", "order_id"], name: "order_polymorphic"
     t.index ["stock_id"], name: "index_stock_movements_on_stock_id"

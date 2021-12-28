@@ -50,10 +50,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params.except :id)
-        flash[:success] = @user.full_name+" se ha modificado correctamente."
+        flash[:success] = "#{@user.full_name} se ha modificado correctamente."
         format.html { redirect_to action: "show", id: @user.id }
       else
-        flash[:error] = @user.full_name+" no se ha podido modificar."
+        flash[:error] = "#{@user.full_name} no se ha podido modificar."
         format.html { render :edit_permissions }
       end
     end
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        flash[:success] = "Ahora estás en "+@user.sector_name+" "+@user.sector_establishment_short_name
+        flash[:success] = "Ahora estás en #{@user.sector_name} #{@user.sector_establishment_short_name}"
         format.js {render inline: "location.reload();" }
       else
         flash[:error] = "No se ha podido modificar el sector."
