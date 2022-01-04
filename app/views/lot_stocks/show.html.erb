@@ -84,7 +84,7 @@
                 <td><%= movement.order_human_name %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
-                <td><%= movement.order_status.present? ? movement.order_status.humanize : '' %></td>
+                <td><%= movement.status.present? ? movement.status.humanize : movement.order_status.humanize %></td>
                 <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
                 <td>
                   <% if movement.order.present? %>

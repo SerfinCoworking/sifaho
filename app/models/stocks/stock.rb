@@ -99,7 +99,8 @@ class Stock < ApplicationRecord
     self.save!
   end
 
-  def create_stock_movement(an_order, a_lot_stock, a_quantity, adds_param)
-    StockMovement.create(stock: self, order: an_order, lot_stock: a_lot_stock, quantity: a_quantity, adds: adds_param)
+  def create_stock_movement(an_order, a_lot_stock, a_quantity, adds_param, status)
+    StockMovement.create(stock: self, order: an_order, lot_stock: a_lot_stock, quantity: a_quantity, adds: adds_param,
+                         status: status)
   end
 end
