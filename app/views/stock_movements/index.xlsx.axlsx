@@ -14,7 +14,7 @@ wb.add_worksheet(name: "Movimientos de stock") do |sheet|
       movement.order_remit_code_string,
       movement.order_origin_name_string,
       movement.order_destiny_name_string,
-      movement.order_status_string,
+      movement.order_status,
       movement.adds? ? movement.quantity : 0,
       movement.adds? ? 0 : movement.quantity
     ]
