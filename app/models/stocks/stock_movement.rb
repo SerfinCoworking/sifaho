@@ -10,7 +10,7 @@ class StockMovement < ApplicationRecord
   has_one :sector, through: :stock
 
   # Delegations
-  delegate :destiny_name, :origin_name, :status, :human_name, to: :order, prefix: :order, allow_nil: true
+  delegate :destiny_name, :origin_name, :human_name, to: :order, prefix: :order, allow_nil: true
 
   filterrific(
     default_filter_params: { sorted_by: 'fecha_desc' },
@@ -99,7 +99,11 @@ class StockMovement < ApplicationRecord
     self.order_destiny_name if self.order.present?
   end
 
-  def order_status_string
-    self.order_status if self.order.present?
+  def order_status
+    if status.present?
+      status.humanize
+    elsif order.present?
+      order.status.humanize
+    end
   end
 end
