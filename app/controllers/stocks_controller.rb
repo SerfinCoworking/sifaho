@@ -152,7 +152,7 @@ class StocksController < ApplicationController
           row.values line_number: index + 1,
             date: movement.created_at.strftime("%d/%m/%Y"),
             lot: movement.lot_stock.lot_code,
-            movement: movement.order.class.model_name.human,
+            movement: movement.order_human_name_string,
             origin_name: movement.order_origin_name,
             destiny_name: movement.order_destiny_name,
             received_quantity: movement.adds? ? movement.quantity : 0,

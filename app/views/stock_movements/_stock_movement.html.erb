@@ -1,7 +1,7 @@
 <tr id="stock_movement_<%= stock_movement.id %>">
   <td><%= stock_movement.created_at.strftime("%d/%m/%Y") %></td>
   <td scope="row font-weight-bold"><%= stock_movement.lot_stock.lot_code %></td>
-  <td><%= stock_movement.order.present? ? stock_movement.order.class.model_name.human : 'Se eliminó' %></td>
+  <td><%= stock_movement.order_human_name_string %></td>
   <td class="text-truncate" style="max-width: 150px;"><%= stock_movement.order_origin_name if stock_movement.order.present? %></td>
   <td class="text-truncate" style="max-width: 150px;"><%= stock_movement.order_destiny_name if stock_movement.order.present? %></td>
   <td><%= stock_movement.order_status %></td>

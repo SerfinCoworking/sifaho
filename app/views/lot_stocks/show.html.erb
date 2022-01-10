@@ -81,7 +81,7 @@
             <% @lot_stock.movements.sort_by{|e| e[:created_at]}.last(10).reverse.each do |movement| %>
               <tr>
                 <td><%= movement.created_at.strftime("%d/%m/%Y") %></td>
-                <td><%= movement.order_human_name %></td>
+                <td><%= movement.order_human_name_string %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name %></td>
                 <td><%= movement.order_status %></td>
