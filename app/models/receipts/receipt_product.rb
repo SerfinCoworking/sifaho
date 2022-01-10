@@ -42,7 +42,10 @@ class ReceiptProduct < ApplicationRecord
     @lot_stock.increment(self.quantity)
     self.lot_stock_id = @lot_stock.id
     self.save!
-    @stock.create_stock_movement(self.receipt, @lot_stock, self.quantity, true)
+  end
+
+  def create_stock_movement
+    lot_stock.stock.create_stock_movement(receipt, lot_stock, quantity, true, receipt.status)
   end
 
   def is_recibido? 

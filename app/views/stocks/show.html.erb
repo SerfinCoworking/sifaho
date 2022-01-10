@@ -147,7 +147,7 @@
                 <td><%= movement.order.present? ? movement.order.class.model_name.human : 'Se eliminó' %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_origin_name if movement.order.present?  %></td>
                 <td class="text-truncate" style="max-width: 150px;"><%= movement.order_destiny_name if movement.order.present? %></td>
-                <td><%= movement.order_status.humanize if movement.order.present? %></td>
+                <td><%= movement.status.present? ? movement.status.humanize : movement.order_status.humanize %></td>
                 <td class="text-<%= movement.adds? ? 'success' : 'danger' %>"><%= movement.quantity %></td>
                 <% if movement.order.present? %>
                   <td>
