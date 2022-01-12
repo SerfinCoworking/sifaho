@@ -59,8 +59,8 @@ module OrderProduct
           stock_id: @stock.id
         ).first_or_create
 
-        @lot_stock.increment(opls.quantity)
-        @stock.create_stock_movement(order, @lot_stock, opls.quantity, true)
+        @lot_stock.increment(opls.quantity, opls.order_product.order)
+        # @stock.create_stock_movement(order, @lot_stock, opls.quantity, true)
       end
     end
 
@@ -76,12 +76,12 @@ module OrderProduct
     end
 
     # Incrementamos la cantidad de cada lot stock (orden)
-    def increment_stock
-      order_prod_lot_stocks.each do |opls|
-        opls.lot_stock.increment(opls.quantity)
-        opls.lot_stock.stock.create_stock_movement(order, opls.lot_stock, opls.quantity, true)
-      end
-    end
+    # def increment_stock
+    #   order_prod_lot_stocks.each do |opls|
+    #     opls.lot_stock.increment(opls.quantity)
+    #     opls.lot_stock.stock.create_stock_movement(order, opls.lot_stock, opls.quantity, true)
+    #   end
+    # end
 
     # custom validations
     # Validacion: la cantidad no debe ser mayor o menor a la cantidad a entregar

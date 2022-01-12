@@ -39,7 +39,7 @@ class ReceiptProduct < ApplicationRecord
       stock_id: @stock.id,
     ).first_or_create
 
-    @lot_stock.increment(self.quantity)
+    @lot_stock.increment(quantity, receipt)
     self.lot_stock_id = @lot_stock.id
     self.save!
   end

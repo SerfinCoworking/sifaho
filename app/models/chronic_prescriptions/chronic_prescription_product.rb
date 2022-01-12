@@ -89,8 +89,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
   # Incrementamos la cantidad de cada lot stock (proveedor). Utilizado para retornar
   def increment_stock
     self.order_prod_lot_stocks.each do |cpp|
-      cpp.lot_stock.increment(cpp.quantity)
-      cpp.lot_stock.stock.create_stock_movement(self.dispensation_type.chronic_dispensation.chronic_prescription, cpp.lot_stock, cpp.quantity, true)
+      cpp.lot_stock.increment(cpp.quantity, dispensation_type.chronic_dispensation.chronic_prescription)
     end
   end
 end

@@ -115,9 +115,10 @@ class LotStock < ApplicationRecord
 
   # Metodo para incrementar la cantidad del lote.
   # Si se encuentra archivado, vuelve a vigente con 0 de cantidad.
-  def increment(a_quantity)
+  def increment(a_quantity, order)
     self.quantity += a_quantity
     save!
+    stock.create_stock_movement(order, self, a_quantity, true, order.status)
   end
 
   # Disminuye la cantidad del stock
@@ -144,13 +145,13 @@ class LotStock < ApplicationRecord
   end
 
   # Decrementa la cantidad archivada y la suma a la cantidad en stock
-  def decrement_archived(a_quantity)
+  def decrement_archived(a_quantity, order)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a quitar de archivo debe ser mayor a 0.'
     elsif a_quantity > archived_quantity
       raise ArgumentError, "La cantidad a quitar de archivo debe ser menor o igual a #{archived_quantity}."
     else
-      increment(a_quantity)
+      increment(a_quantity, order)
       self.archived_quantity -= a_quantity
       save!
     end

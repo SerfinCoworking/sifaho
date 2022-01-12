@@ -49,10 +49,10 @@ class PurchaseProduct < ApplicationRecord
       ).first_or_create
 
       # Se incrementa el LotStock
-      @lot_stock.increment((opls.quantity * opls.presentation))
+      @lot_stock.increment((opls.quantity * opls.presentation), purchase)
       opls.lot_stock_id = @lot_stock.id
       opls.save!
-      @stock.create_stock_movement(self.purchase, @lot_stock, opls.quantity * opls.presentation, true)
+      # @stock.create_stock_movement(self.purchase, @lot_stock, opls.quantity * opls.presentation, true)
     end
   end
 
