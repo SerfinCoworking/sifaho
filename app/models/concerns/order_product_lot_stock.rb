@@ -41,7 +41,7 @@ module OrderProductLotStock
 
     # Restore reserved quantity
     def return_reserved_quantity
-      lot_stock.enable_reserved(reserved_quantity)
+      lot_stock.enable_reserved(reserved_quantity, order_product.order)
     end
 
     private
@@ -53,7 +53,7 @@ module OrderProductLotStock
     # Igualamos lo solocitado con lo reservado
     def reserve_quantity
       begin
-        lot_stock.reserve(quantity)
+        lot_stock.reserve(quantity, order_product.order)
         self.reserved_quantity = quantity
       rescue ArgumentError => e
         errors.add(:insufficient_quantity, e)
@@ -65,8 +65,8 @@ module OrderProductLotStock
     # Reservamos el nuevo quantity
     # Actualizamos reserved_quantity con el nuevo quantity
     def update_reserved_quantity
-      lot_stock.enable_reserved(reserved_quantity)
-      lot_stock.reserve(quantity)
+      lot_stock.enable_reserved(reserved_quantity, order_product.order)
+      lot_stock.reserve(quantity, order_product.order)
       self.reserved_quantity = quantity
     end
   end

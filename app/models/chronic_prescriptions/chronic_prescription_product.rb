@@ -81,8 +81,7 @@ class ChronicPrescriptionProduct < ApplicationRecord
   # Decrementamos la cantidad de cada lot stock (proveedor)
   def decrement_stock
     self.order_prod_lot_stocks.each do |cpp|
-      cpp.lot_stock.decrement(cpp.quantity)
-      cpp.lot_stock.stock.create_stock_movement(self.dispensation_type.chronic_dispensation.chronic_prescription, cpp.lot_stock, cpp.quantity, false)
+      cpp.lot_stock.decrement(cpp.quantity, dispensation_type.chronic_dispensation.chronic_prescription)
     end
   end
 

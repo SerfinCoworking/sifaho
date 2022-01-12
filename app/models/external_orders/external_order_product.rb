@@ -42,18 +42,18 @@ class ExternalOrderProduct < ApplicationRecord
   end
 
   # Se habilita la cantidad que estaba reservada en stock
-  def enable_reserved_stock
-    self.order_prod_lot_stocks.each do |opls|
-      opls.lot_stock.enable_reserved(opls.quantity)
-    end
-  end
+  # def enable_reserved_stock
+  #   self.order_prod_lot_stocks.each do |opls|
+  #     opls.lot_stock.enable_reserved(opls.quantity)
+  #   end
+  # end
 
   # Se reserva la cantidad del lote en stock
-  def reserve_stock
-    self.order_prod_lot_stocks.each do |opls|
-      opls.lot_stock.reserve(opls.quantity)
-    end
-  end
+  # def reserve_stock
+  #   self.order_prod_lot_stocks.each do |opls|
+  #     opls.lot_stock.reserve(opls.quantity)
+  #   end
+  # end 
   
   # Decrementamos la cantidad de cada lot stock (proveedor)
   # def decrement_reserved_stock

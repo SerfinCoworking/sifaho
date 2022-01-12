@@ -44,10 +44,6 @@ class ReceiptProduct < ApplicationRecord
     self.save!
   end
 
-  def create_stock_movement
-    lot_stock.stock.create_stock_movement(receipt, lot_stock, quantity, true, receipt.status)
-  end
-
   def is_recibido? 
     self.receipt.recibido?
   end

@@ -134,7 +134,6 @@ class Receipt < ApplicationRecord
         self.received_date = DateTime.now
         self.received_by = a_user
         self.recibido!
-        receipt_products.each(&:create_stock_movement)
       else
         raise ArgumentError, 'No hay productos para recibir en el pedido'
       end # End check if sector supply exists

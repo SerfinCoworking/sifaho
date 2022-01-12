@@ -16,15 +16,15 @@ class LotArchive < ApplicationRecord
   after_create :decrement_lot_stock
 
   def decrement_lot_stock
-    self.lot_stock.increment_archived(self.quantity)
-    self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false, self.status)
+    self.lot_stock.increment_archived(quantity, self)
+    # self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, false, self.status)
   end
 
   def return_by(a_user)
     self.returned_by = a_user
-    self.lot_stock.decrement_archived(self.quantity)
+    self.lot_stock.decrement_archived(self.quantity, self)
     self.retornado!
-    self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, true, self.status)
+    # self.lot_stock.stock.create_stock_movement(self, self.lot_stock, self.quantity, true, self.status)
   end
 
   def lot_stock_quantity

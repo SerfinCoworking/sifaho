@@ -60,7 +60,6 @@ module OrderProduct
         ).first_or_create
 
         @lot_stock.increment(opls.quantity, opls.order_product.order)
-        # @stock.create_stock_movement(order, @lot_stock, opls.quantity, true)
       end
     end
 

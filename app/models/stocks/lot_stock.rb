@@ -122,7 +122,7 @@ class LotStock < ApplicationRecord
   end
 
   # Disminuye la cantidad del stock
-  def decrement(a_quantity)
+  def decrement(a_quantity, order)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a decrementar debe ser mayor a 0.'
     elsif a_quantity > self.quantity
@@ -130,15 +130,16 @@ class LotStock < ApplicationRecord
     else
       self.quantity -= a_quantity
       save!
+      stock.create_stock_movement(order, self, a_quantity, false, order.status)
     end
   end
 
   # Incrementa la cantidad archivada y resta la cantidad en stock
-  def increment_archived(a_quantity)
+  def increment_archived(a_quantity, order)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a archivar debe ser mayor a 0.'
     else
-      decrement(a_quantity)
+      decrement(a_quantity, order)
       self.archived_quantity += a_quantity
       save!
     end
@@ -171,24 +172,24 @@ class LotStock < ApplicationRecord
   end
 
   # Habilita la cantidad reservada nuevamente en stock
-  def enable_reserved(a_quantity)
+  def enable_reserved(a_quantity, order)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a devolver de la reserva debe ser nayor a 0.'
     elsif a_quantity > reserved_quantity
       raise ArgumentError, "La cantidad a devolver de la reserva debe ser menor o igual a #{reserved_quantity}."
     else
-      increment(a_quantity)
+      increment(a_quantity, order)
       self.reserved_quantity -= a_quantity
       save!
     end
   end
 
   # Mueve cantidad del stock a reservado
-  def reserve(a_quantity)
+  def reserve(a_quantity, order)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a reservar debe ser mayor a 0.'
     else  
-      decrement(a_quantity)
+      decrement(a_quantity, order)
       self.reserved_quantity += a_quantity
       save!
     end

@@ -79,8 +79,7 @@ class PurchaseProduct < ApplicationRecord
       if any_insufficient_lot_stock
         raise ArgumentError, "No se puede retornar el remito #{self.purchase.remit_code} debido a que uno o más lotes seleccionados no poseen la cantidad suficiente en stock para devolver."
       else
-        opls.lot_stock.decrement(opls.presentation * opls.quantity)
-        opls.lot_stock.stock.create_stock_movement(self.purchase, opls.lot_stock, opls.quantity * opls.presentation, false)
+        opls.lot_stock.decrement(opls.presentation * opls.quantity, purchase)
       end
     end
   end
