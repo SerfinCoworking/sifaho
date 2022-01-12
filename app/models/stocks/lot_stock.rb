@@ -157,7 +157,7 @@ class LotStock < ApplicationRecord
   end
 
   # Decrementa la cantidad reservada sin modificar otras cantidades
-  def decrement_reserved(a_quantity)
+  def decrement_reserved(a_quantity, opls)
     if a_quantity.negative?
       raise ArgumentError, 'La cantidad a enviar debe ser mayor a 0.'
     elsif a_quantity > reserved_quantity
@@ -165,6 +165,7 @@ class LotStock < ApplicationRecord
     else
       self.reserved_quantity -= a_quantity
       save!
+      stock.create_stock_movement(opls.order_product.order, self, a_quantity, false, opls.order_product.order.status)
     end
   end
 

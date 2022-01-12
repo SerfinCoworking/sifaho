@@ -27,8 +27,7 @@ module OrderProductLotStock
 
     # Decrement each order prod lot stock of a product
     def decrement_reserved_quantity
-      lot_stock.decrement_reserved(reserved_quantity)
-      lot_stock.stock.create_stock_movement(order_product.order, lot_stock, quantity, false)
+      lot_stock.decrement_reserved(reserved_quantity, self)
       update_column(:reserved_quantity, 0)
     end
 

@@ -29,6 +29,7 @@ module Order
 
       order_products.with_delivery_quantity.each(&:validates_products) #validate reserved quantity before decrement stocks
 
+      self.status = 'provision_en_camino'
       order_products.with_delivery_quantity.each(&:send_products)
       update_columns(status: 'provision_en_camino', sent_date: DateTime.now)
       create_notification(a_user, 'envió')

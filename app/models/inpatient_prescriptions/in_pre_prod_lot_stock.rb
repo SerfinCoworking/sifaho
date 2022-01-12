@@ -22,8 +22,7 @@ class InPreProdLotStock < ApplicationRecord
   # Decrementamos la cantidad reservada del stock
   # Quitamos el reserved_quantity de la relacion
   def remove_reserved_quantity
-    lot_stock.decrement_reserved(reserved_quantity)
-    lot_stock.stock.create_stock_movement(inpatient_prescription_product.order, lot_stock, available_quantity, false)
+    lot_stock.decrement_reserved(reserved_quantity, self)
     update_columns(reserved_quantity: 0)
   end
 
