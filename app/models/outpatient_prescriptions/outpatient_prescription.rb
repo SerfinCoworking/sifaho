@@ -172,13 +172,11 @@ class OutpatientPrescription < ApplicationRecord
   # Método para retornar pedido a estado anterior
   def return_dispensation(a_user)
     if self.dispensada?
+      self.status = "pendiente"
       self.outpatient_prescription_products.each do |opp|
         opp.increment_stock
       end
-
-      self.status = "pendiente"
       self.save!(validate: false)
-
       self.create_notification(a_user, "retornó a un estado anterior")
     else
       raise ArgumentError, "No es posible retornar a un estado anterior"
