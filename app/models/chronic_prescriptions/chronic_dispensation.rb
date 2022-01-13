@@ -33,7 +33,7 @@ class ChronicDispensation < ApplicationRecord
     end
     errors.add(:presence_of_products_into_dispensation, "Debe dispensar almenos 1 insumo") unless @products > 0
   end
-  
+
   # Incrementa la cantidad total dispensada:
   # Sumar 1 dosis o Sumar la cantidad segun corresponda [dispensation_type]
   def dispense_prescription

@@ -5,7 +5,6 @@
     <h5>Solicitante</h5>
     <%= @external_order.applicant_sector.name+" "+@external_order.applicant_establishment.name %>
 
-    Observaciones
     <%= f.input :applicant_observation, label: 'Observaciones', as: :text, :input_html => { :cols => 40  , :rows => 2 } %>
 
     <h5>Proveedor</h5>
