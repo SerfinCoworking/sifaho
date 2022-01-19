@@ -167,7 +167,7 @@ class LotStock < ApplicationRecord
     else
       self.reserved_quantity -= a_quantity
       save!
-      stock.create_stock_movement(opls.order_product.order, self, a_quantity, false, opls.order_product.order.status)
+      stock.update_stock_movement(opls.order_product.order, self, opls.order_product.order.status)
     end
   end
 

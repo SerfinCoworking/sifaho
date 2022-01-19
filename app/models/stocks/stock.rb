@@ -103,4 +103,9 @@ class Stock < ApplicationRecord
     StockMovement.create(stock: self, order: an_order, lot_stock: a_lot_stock, quantity: a_quantity, adds: adds_param,
                          status: status)
   end
+
+  def update_stock_movement(an_order, a_lot_stock, status)
+    stock_movement = StockMovement.where(order_id: an_order.id, lot_stock: a_lot_stock.id).first
+    stock_movement.update(status: status)
+  end
 end
