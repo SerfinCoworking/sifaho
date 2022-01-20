@@ -51,6 +51,7 @@ module Order
 
     # Receive order products
     def receive_order_by(a_user)
+      self.status = 'provision_entregada'
       order_products.with_delivery_quantity.each { |order_product| order_product.increment_lot_stock_to(applicant_sector) }
       update_columns(date_received: DateTime.now, status: 'provision_entregada')
       create_notification(a_user, 'recibió')
