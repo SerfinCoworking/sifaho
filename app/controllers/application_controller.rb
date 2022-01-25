@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
         session[:my_url_controller] = params[:controller]
         session[:filterrific] = nil
         session[:page] = nil
-      elsif session[:my_url_controller] == params[:controller] && params[:action].include?('index')
+      elsif session[:my_url_controller] == params[:controller] && ['index', 'lot_stocks_by_stock'].include?(params[:action])
         # en caso de que el controlador se el mismo, la unica accion que puede modificar tanto los filtros como el paginador es el index
         # entonces es aqui donde modificamos los valores mencionados
         
