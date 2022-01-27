@@ -44,10 +44,51 @@ RSpec.describe Receipt, type: :model do
       expect(@receipt.receipt_products.first.product_name).to eq('Ibuprofeno 1500mg')
     end
 
-    # context 'receive order' do
-    #   it '' do
+    context 'on receive order' do
+
+      before(:each) do
+        @receipt.save
+        @user = create(:it_user)
+      end
+      
+      it 'creates a lot if not exist for each product' do
+        lot = Lot.where(
+          provenance_id: @receipt.receipt_products.first.provenance_id,
+          product_id: @receipt.receipt_products.first.product_id,
+          code: @receipt.receipt_products.first.lot_code,
+          laboratory_id: @receipt.receipt_products.first.laboratory_id,
+          expiry_date: @receipt.receipt_products.first.expiry_date
+        ).first
+        expect(lot).to be nil
+
+        @receipt.receive_remit(@user)
+
+        lot = Lot.where(
+          provenance_id: @receipt.receipt_products.first.provenance_id,
+          product_id: @receipt.receipt_products.first.product_id,
+          code: @receipt.receipt_products.first.lot_code,
+          laboratory_id: @receipt.receipt_products.first.laboratory_id,
+          expiry_date: @receipt.receipt_products.first.expiry_date
+        ).first
+        expect(lot).to be_persisted
+      end
+
+      it 'creates a stock if not exist for each product' do
+        stock = Stock.where(
+          sector_id: @applicant_sector.id,
+          product_id: @product.id
+        ).first
+        expect(stock).to be nil
         
-    #   end
-    # end
+        @receipt.receive_remit(@user)
+
+        stock = Stock.where(
+          sector_id: @user.sector_id,
+          product_id: @product.id
+        ).first
+
+        expect(stock).to be_persisted
+      end
+    end
   end
 end
