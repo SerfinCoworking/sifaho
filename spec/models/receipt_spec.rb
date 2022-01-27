@@ -13,13 +13,17 @@ RSpec.describe Receipt, type: :model do
       @product = create(:unidad_product)
       @receipt_product = build(:receipt_product_1, product: @product)
       @receipt = Receipt.new(provider_sector: @provider_sector, applicant_sector: @applicant_sector,
-                             receipt_products: [@receipt_product], code: 'AA613')
+                             receipt_products: [@receipt_product], code: 'AA613', observation: 'test observation')
     end
 
     it 'does create' do
       expect(@receipt.save!).to be true
     end
 
+    it 'has observation attribute' do
+      expect(@receipt.observation).to eq('test observation')
+    end
+    
     it 'has provider establishment and sector' do
       expect(@receipt.provider_sector.establishment_name).to eq('Hospital Dr. Ramón Carrillo')
       expect(@receipt.provider_sector.name).to eq('Farmacia')
@@ -88,6 +92,21 @@ RSpec.describe Receipt, type: :model do
         ).first
 
         expect(stock).to be_persisted
+      end
+
+      it 'changes status to "recibido"' do
+        expect(@receipt.status).to eq('auditoria')
+
+        @receipt.receive_remit(@user)
+
+        expect(@receipt.status).to  eq('recibido')
+      end
+
+      it 'has receipt products quantity / lot code / laboratory / expiry date' do
+        a_receipt_product = @receipt.receipt_products.first
+        expect(a_receipt_product.quantity).to eq(3500)
+        expect(a_receipt_product.lot_code).to eq('DD-001')
+        expect(a_receipt_product.expiry_date).to eq(Date.today + 1.year)
       end
     end
   end
