@@ -12,13 +12,19 @@ FactoryBot.define do
 
     trait :sec_2 do
       name { 'Depósito' }
-      description { 'Sector de depósito del HSMA' }
+      description { 'Sector de depósito del HPP' }
       association :establishment, factory: :establishment_2
     end
-
+        
     trait :sec_3 do
       name { 'Internación' }
       description { 'Sector de Internación del HSMA' }
+    end
+    
+    trait :sec_4 do
+      name { 'Depósito' }
+      description { 'Sector de depósito del HSMA' }
+      association :establishment, factory: :establishment_1
     end
 
     trait :hdj_establishment do 
@@ -29,5 +35,6 @@ FactoryBot.define do
     factory :sector_1, traits: %i[sec_1]
     factory :sector_2, traits: %i[sec_2]
     factory :sector_3, traits: %i[sec_3]
+    factory :sector_4, traits: %i[sec_4]
   end
 end
