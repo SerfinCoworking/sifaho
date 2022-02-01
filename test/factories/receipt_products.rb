@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :receipt_product do
-    quantity 2500
-    lot_code 'EE-001'
-    expiry_date Date.today + 1.year + 2.month
+    quantity { 2500 }
+    lot_code { 'EE-001' }
+    expiry_date { Date.today + 1.year + 2.month }
     laboratory
 
     trait :rp_1 do
