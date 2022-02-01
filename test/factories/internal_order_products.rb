@@ -7,8 +7,15 @@ FactoryBot.define do
 
     trait :order_prod_1 do
       association :product, factory: :product_1
+      association :added_by_sector, factory: :sector_4
+    end
+    
+    trait :order_prod_2 do
+      association :product, factory: :product_2
+      association :added_by_sector, factory: :sector_4
     end
 
     factory :order_product_1, traits: [:order_prod_1]
+    factory :order_product_2, traits: [:order_prod_2]
   end
 end

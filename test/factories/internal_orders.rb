@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :internal_order do
-    observation { 'observations' } 
-    remit_code { 'TEST-INTERNAL_ORDER' }
+    observation { 'observations' }
     order_type { 'solicitud' }
 
     trait :ord_1 do
