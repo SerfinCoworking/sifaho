@@ -27,11 +27,11 @@ class InternalOrderProduct < ApplicationRecord
 
   # new version
   def is_proveedor_auditoria?
-    return order.proveedor_auditoria?
+    order.proveedor_auditoria?
   end
 
   def is_provision_en_camino?
-    return order.provision_en_camino?
+    order.provision_en_camino?
   end
 
   def is_provision_en_camino_and_quantity_greater_than_0?
@@ -39,6 +39,6 @@ class InternalOrderProduct < ApplicationRecord
   end
 
   def is_provision?
-    return order.order_type == 'provision'
+    order.order_type == 'provision'
   end
 end
