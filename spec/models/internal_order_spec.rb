@@ -14,11 +14,11 @@ RSpec.describe InternalOrder, type: :model do
     end
 
     it 'has status' do
-      expect(@order.status).to eq('solicitud_auditoria')
+      expect(@order).to be_solicitud_auditoria
     end
 
     it 'has order_type' do
-      expect(@order.order_type).to eq('solicitud')
+      expect(@order).to be_solicitud
     end
 
     it 'has applicant_sector' do
@@ -52,14 +52,14 @@ RSpec.describe InternalOrder, type: :model do
       end
 
       it 'status change' do
-        expect(@order.status).to eq('solicitud_enviada')
+        expect(@order).to be_solicitud_enviada
       end
 
       context 'on delivery order' do
         it 'without delivery_quantity' do
           @deliver = create(:user_1)
           @order.send_order_by(@deliver)
-          expect(@order.status).to eq('provision_en_camino')
+          expect(@order).to be_provision_en_camino
         end
 
         it 'might add new product to requested order' do
@@ -72,7 +72,7 @@ RSpec.describe InternalOrder, type: :model do
         it 'changes status' do
           @deliver = create(:user_1)
           @order.nullify_by(@deliver)
-          expect(@order.status).to eq('anulado')
+          expect(@order).to be_anulado
         end
       end
 
@@ -81,7 +81,7 @@ RSpec.describe InternalOrder, type: :model do
           @deliver = create(:user_1)
           @order.send_order_by(@deliver)
           @order.receive_order_by(@sender)
-          expect(@order.status).to eq('provision_entregada')
+          expect(@order).to be_provision_entregada
         end
       end
     end
