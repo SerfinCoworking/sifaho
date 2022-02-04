@@ -19,13 +19,9 @@ class CreateInternalOrders < ActiveRecord::Migration[5.1]
       t.column :applicant_status, :integer, default: 0
       t.integer :status, default: 0
       t.column :order_type, :integer, default: 0
-      t.string :remit_code
+      t.string :remit_code, index: true, unique: true
 
       t.timestamps
     end
-    add_reference :internal_orders, :provider_sector, index: true
-    add_reference :internal_orders, :applicant_sector, index: true
-    add_reference :internal_orders, :sent_request_by, index: true
-    add_index :internal_orders, :remit_code, unique: true
   end
 end
