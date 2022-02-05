@@ -281,6 +281,17 @@ ActiveRecord::Schema.define(version: 2022_01_10_132219) do
     t.index ["sanitary_zone_id"], name: "index_establishments_on_sanitary_zone_id"
   end
 
+  create_table "ext_ord_prod_lot_stocks", force: :cascade do |t|
+    t.bigint "order_product_id"
+    t.bigint "lot_stock_id"
+    t.integer "quantity"
+    t.integer "reserved_quantity", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_stock_id"], name: "index_ext_ord_prod_lot_stocks_on_lot_stock_id"
+    t.index ["order_product_id"], name: "index_ext_ord_prod_lot_stocks_on_order_product_id"
+  end
+
   create_table "external_order_comments", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "user_id"
