@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :user do
     username { 12345678 }
     password { 'password' }
-    sector
 
     trait :test_1 do
       username { 00001111 }

@@ -21,15 +21,15 @@ RSpec.describe InternalOrderProduct, type: :model do
     end
 
     it 'order status isn t proveedor_auditoria' do
-      expect(@order_product.is_proveedor_auditoria?).to be false
+      expect(@order_product).not_to be_is_proveedor_auditoria
     end
 
     it 'order status isn t provision_en_camino' do
-      expect(@order_product.is_provision_en_camino?).to be false
+      expect(@order_product).not_to be_is_provision_en_camino
     end
 
     it 'order type isn t provision' do
-      expect(@order_product.is_provision?).to be false
+      expect(@order_product).not_to be_is_provision
     end
   end
 end
