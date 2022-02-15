@@ -21,7 +21,7 @@ RSpec.describe PermissionModule, type: :model do
       expect(@permission_module.save).to be(false)
     end
 
-    it 'name attribute should require' do
+    it 'name should require' do
       expect { @permission_module.save! }.to raise_error(ActiveRecord::RecordInvalid,
         'La validación falló: Nombre no puede estar en blanco')
     end
