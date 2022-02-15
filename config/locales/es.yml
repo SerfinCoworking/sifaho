@@ -212,6 +212,8 @@ es:
         semantic_tag: 'Categoría'
       unity:
         name: 'Nombre'
+      permission_module:
+        name: 'Nombre'
 
   date:
     abbr_day_names:

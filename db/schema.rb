@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_10_132219) do
+ActiveRecord::Schema.define(version: 2022_02_15_172833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -941,6 +941,12 @@ ActiveRecord::Schema.define(version: 2022_01_10_132219) do
     t.index ["address_id"], name: "index_patients_on_address_id"
     t.index ["bed_id"], name: "index_patients_on_bed_id"
     t.index ["patient_type_id"], name: "index_patients_on_patient_type_id"
+  end
+
+  create_table "permission_modules", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "permission_requests", force: :cascade do |t|
