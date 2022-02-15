@@ -7,7 +7,7 @@ FactoryBot.define do
       username { 00001111 }
       password { 'password' }
     end
-    
+
     trait :u_1 do
       username { 00002222 }
       password { 'password' }
