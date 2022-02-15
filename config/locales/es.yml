@@ -214,6 +214,9 @@ es:
         name: 'Nombre'
       permission_module:
         name: 'Nombre'
+      permission:
+        name: 'Nombre'
+        permission_module: 'Módulo'
 
   date:
     abbr_day_names:
