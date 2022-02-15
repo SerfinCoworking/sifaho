@@ -17,13 +17,18 @@ RSpec.describe PermissionModule, type: :model do
       @permission_module = build(:permission_module)  
     end
 
-    it 'does not save' do
+    it 'incorrect object save' do
       expect(@permission_module.save).to be(false)
     end
 
     it 'name attribute should require' do
       expect { @permission_module.save! }.to raise_error(ActiveRecord::RecordInvalid,
         'La validación falló: Nombre no puede estar en blanco')
+    end
+
+    it 'saves successfully' do
+      @permission_module.name = 'Sector'
+      expect(@permission_module.save).to be(true)
     end
   end
 end
