@@ -28,7 +28,7 @@
   <div class="col-2">
     <div>
       <strong>Solicitado:</strong>
-      <%= order.requested_date.strftime("%d/%m/%Y")%>
+      <%= order.requested_date.present? ? order.requested_date.strftime("%d/%m/%Y") : '----' %>
     </div>
     <div>
       <strong>Código:</strong>
