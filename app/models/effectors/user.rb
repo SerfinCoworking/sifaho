@@ -7,6 +7,8 @@ class User < ApplicationRecord
   devise :ldap_authenticatable, authentication_keys: [:username]
 
   # Relaciones
+  has_many :permission_users
+  has_many :permissions, through: :permission_users
   has_many :user_sectors
   has_many :sectors, through: :user_sectors
   belongs_to :sector, optional: true
