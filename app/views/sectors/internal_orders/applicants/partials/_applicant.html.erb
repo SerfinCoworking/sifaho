@@ -23,7 +23,7 @@
     <%= internal_order.comments.count %>
   </td>
   <td>
-    <%= internal_order.requested_date.strftime("%d/%m/%Y") %>
+    <%= internal_order.requested_date.present? ? internal_order.requested_date.strftime("%d/%m/%Y") : '----' %>
   </td>
     <% if internal_order.provision_entregada? %>
       <td>
