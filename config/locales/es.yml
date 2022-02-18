@@ -474,6 +474,7 @@ es:
     patient_product_state_reports: 'producto_por_pacientes'
     lot_archives: 'archivos'
     chronic_dispensations: 'dispensar'
+    edit_permissions: 'permisos'
     # Actions
     new: 'nuevo'
     provider_index: 'entregas'

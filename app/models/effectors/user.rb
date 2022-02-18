@@ -131,4 +131,8 @@ class User < ApplicationRecord
   def sector_and_establishment
     "#{sector_name} #{establishment_name}"
   end
+
+  def has_permission?(permissions_target)
+    permissions.where(name: permissions_target).any?
+  end
 end
