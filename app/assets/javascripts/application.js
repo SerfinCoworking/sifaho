@@ -169,4 +169,9 @@ $(document).on('turbolinks:load', function() {
 
 });
 
+function loadImage(e, img_path){
+  e.target.src = img_path;
+  e.onerror = null;
+}
+
 // delete confirm

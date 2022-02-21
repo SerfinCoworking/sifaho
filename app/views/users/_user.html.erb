@@ -23,7 +23,7 @@
         <%= fa_icon "eye" %>
       <% end %>
     <% end %>
-    <% if policy(user).edit_permissions? %>
+    <% if policy(:permission).edit? %>
       <%= link_to edit_permissions_users_admin_path(user), class: 'btn btn-warning btn-sm', 
         title: 'Editar permisos', data: { toggle: 'tooltip', placement: 'top', permissions: 'view' } do %>
         <%= fa_icon "lock" %>

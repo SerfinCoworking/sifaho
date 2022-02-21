@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     resources :users_admin, controller: :users, only: %i[index update show] do
       member do
         get :change_sector
-        get :edit_permissions
+        get :edit_permissions, to: 'permissions#edit'
         put :update_permissions
       end
     end
