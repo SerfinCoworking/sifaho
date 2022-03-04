@@ -127,6 +127,7 @@ class Lot < ApplicationRecord
 
   # Se actualiza el estado de expiración sin guardar
   def update_status
+    puts self.id
     unless self.vencido?
       if self.expiry_date.present?
         # If expired

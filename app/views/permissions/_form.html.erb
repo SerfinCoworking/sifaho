@@ -1,0 +1,10 @@
+<%= simple_form_for(@permission_request) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :establishment, label: "¿A cuál establecimiento pertenece?", placeholder: "Ej. Hospital Dr. Ramón Carrillo" %>
+    <%= f.input :sector, label: "¿A cuál sector pertenece?", placeholder: "Ej. Farmacia" %>
+    <%= f.input :role, label: "¿Qué rol cumple?", placeholder: "Ej. Farmacéutico" %>
+    <%= f.input :observation, label: "Observaciones" %>
+  </div>
+<% end %>

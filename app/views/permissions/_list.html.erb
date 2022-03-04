@@ -1,0 +1,40 @@
+<%= simple_form_for 'permission_users', url: update_permissions_users_admin_path(@user), method: 'PUT', html: { name: 'permission_users', id: 'permission_users', novalidate: true} do |f| %>
+  <% @permission_modules.each_with_index do |permission_mod, index| %> 
+    <div class="card">
+      <div class="card-header permission-mod-items" id="per-mod-header-<%= index %>">
+        <h2 class="mb-0 d-flex align-items-center">
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#per_mod_<%=index%>" aria-expanded="true" aria-controls="per_mod_<%=index%>">
+            <%#= permission_mod.name %>
+            <%= fa_icon 'caret-down' %>
+          </button>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input perm-mod-toggle-button" id="perm-mod-check-<%= index %>">
+            <label class="custom-control-label" for="perm-mod-check-<%= index %>"></label>
+          </div>
+        </h2>
+      </div>
+
+      
+      <div id="per_mod_<%=index%>" class="collapse show" aria-labelledby="per-mod-header-<%= index %>">
+        <% permission_mod.each do |perm| %> 
+          <div class="card card-body  p-0">
+            <label for="perm-check-<%= perm.id %>" class="mb-0 d-flex flex-row w-100 justify-content-between w-100 p-2">
+              <span><%= perm.name %></span>
+              <div class="custom-control custom-switch">
+                <input type="checkbox" 
+                       class="custom-control-input perm-toggle-button" 
+                       id="perm-check-<%= perm.id %>" 
+                       value="<%=perm.id%>"
+                       name="permission_users[permissions_attributes][<%= perm.id %>][permission_id]"
+                       <%= @enable_permissions.include?(perm.id) ? 'checked': '' %>>
+                <input type="hidden" name="permission_users[permissions_attributes][<%= perm.id %>][_destroy]"> 
+                <label class="custom-control-label" for="perm-check-<%= perm.id %>">
+                </label>
+              </div>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div> 
+  <% end %>
+<% end %>

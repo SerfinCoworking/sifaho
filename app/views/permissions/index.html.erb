@@ -1,0 +1,46 @@
+<%= render 'users/header' %>
+
+<div class="card fixed-custom-card">
+  <div class="card-header">
+    <%= form_for_filterrific @filterrific do |f| %>
+      <div class="row d-flex justify-content-start">
+        <div class="col-1 d-flex justify-content-end align-items-center">
+          <%= render_filterrific_spinner %>
+          <%= link_to permission_requests_path(reset: true), class: 'btn btn-secondary ml-2',
+            title: 'Reiniciar', data: { toggle: 'tooltip', placement: 'top' } do %>
+            <%= fa_icon 'redo' %>
+          <% end %>
+        </div>
+        <div class="col-3">
+          <label>Nombre</label>
+          <%= f.text_field(
+              :search_name,
+              class: 'filterrific-periodically-observed form-control',
+              placeholder: 'Nombre'
+            ) %>
+        </div>
+        <div class="col-3">
+          <label>Estado</label>
+          <%= f.select(:for_statuses,
+            @filterrific.select_options[:for_statuses].map {
+              |status| [status.first, status.second, data: {'content': "<span class='badge badge-"+status.third+"'>"+status.first+"</span>"}]
+            },{include_blank: false, include_hidden: false},
+            { 
+              class: "selectpicker-md show-tick custom-select-pick", 
+              multiple: true,
+              allow_blank: false,
+              title: 'Estado',
+              "data-width"=>"100%"
+            }
+          ) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-body fixed-panel-index">
+    <%= render(
+      partial: 'permission_requests/list',
+      locals: { permission_requests: @permission_requests }
+    ) %>
+  </div>
+</div>

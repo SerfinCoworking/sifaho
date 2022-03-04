@@ -1,0 +1,22 @@
+<% content_for :title, "Usuarios" %>
+
+<% content_for :page_header do %>
+  <li class="nav-item non-sel">
+    <%= link_to users_admin_index_path, class: "nav-link #{ active_action_and_controller('index', 'users') }" do %>
+      <%= fa_icon "users" %>
+      Usuarios
+    <% end %>
+  </li>
+  <% if policy(PermissionRequest).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to permission_requests_path, class: "nav-link #{ active_action_and_controller('index', 'permission_requests') }" do %>
+        <%= fa_icon "envelope" %>
+        Solicitud de permisos&nbsp;
+        <% count =  PermissionRequest.nueva.count %>
+        <% if count > 0 %>
+          <div class="badge badge-info float-right"><%= count %></div>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
