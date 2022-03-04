@@ -1,6 +1,7 @@
 class DashboardPolicy < Struct.new(:user, :dashboard)
   def sidebar?
-    user.roles.any?
+    # ROLES ARE DEPRECATED
+    user.roles.any? || user.permissions.any?
   end
 
   def index?

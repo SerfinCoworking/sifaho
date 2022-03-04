@@ -65,7 +65,8 @@ $.fn.selectpicker.defaults = {
   deselectAllText: 'Ninguno'
 };
 
-$('#filterrific_filter').on(
+
+/* $('#filterrific_filter').on(
   "change",
   ":input",
   function (e) {
@@ -73,8 +74,7 @@ $('#filterrific_filter').on(
     $(this).off("blur");
     Filterrific.submitFilterForm;
   }
-);
-
+); */
 $(document).on('turbolinks:load', function() {
 
   $(document).ready(function($) {
@@ -83,6 +83,17 @@ $(document).on('turbolinks:load', function() {
     });
   });
 
+  $('.remote_form input').on('keyup', function(e){
+    const form = $(e.target).closest('form');    
+    if(e.keyCode != 13){
+      $.ajax({
+        url: form.attr('action'),
+        dataType: 'script',
+        data: form.serialize()
+      });
+    }
+  });
+/* 
   $('#filterrific_filter').on(
     "change",
     ":input",
@@ -91,7 +102,7 @@ $(document).on('turbolinks:load', function() {
     $(this).off("blur");
     Filterrific.submitFilterForm;
     }
-  );
+  ); */
 
   $('.datepicker').datepicker({
     format: "dd/mm/yyyy",
@@ -168,5 +179,10 @@ $(document).on('turbolinks:load', function() {
   });
 
 });
+
+function loadImage(e, img_path){
+  e.target.src = img_path;
+  e.onerror = null;
+}
 
 // delete confirm

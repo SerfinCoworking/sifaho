@@ -3,21 +3,7 @@ require 'rails_helper'
 # Test suite for User model
 RSpec.describe User, type: :model do
 
-  it 'does not create' do
-    user = User.new
-    expect(user.save).to be false
-  end
-
-  it 'does create' do
-    user = build(:simple_user)
-    expect(user.save).to be true
-  end
-
-  # Validation tests
-  it { should validate_presence_of(:username) }
-
-  # Delegate
-  context 'created' do
+  context 'on build' do
     before(:each) do
       @user = create(:simple_user)
     end
@@ -37,12 +23,35 @@ RSpec.describe User, type: :model do
     it 'has profile email' do
       expect(@user.email).to eq('reimann@example.com')
     end
+
+    it 'has many permissions' do
+      expect(@user).to have_many(:permissions)
+    end
+
+    it 'has many sectors' do
+      expect(@user).to have_many(:sectors)
+    end
+
+    it 'belongs to a sector (active)' do
+      expect(@user).to belong_to(:sector)
+    end
   end
 
-  # Relationship
-  it 'has sector' do
-    user = create(:it_user)
-    expect(user.sector_name).to eq('Informática')
+  # Delegate
+  context 'on create' do
+
+    it 'incorrect object should not been save' do
+      user = User.new
+      expect(user.save).to be false
+    end
+
+    # Validation tests
+    it { should validate_presence_of(:username) }
+
+    it 'correct object should been save' do
+      @user = build(:simple_user)
+      expect(@user.save).to be true
+    end
   end
 
   # Method

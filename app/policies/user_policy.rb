@@ -1,7 +1,11 @@
 class UserPolicy < ApplicationPolicy
 
   def index?
-    index_user.any? { |role| user.has_role?(role) }
+    user.has_permission?(:read_user)
+  end
+
+  def show?
+    user.has_permission?(:read_user)
   end
 
   def update?
@@ -13,7 +17,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit_permissions?
-    self.update?
+    user.has_permission?(:update_permissions)
   end
 
   def update_permissions?
@@ -24,10 +28,6 @@ class UserPolicy < ApplicationPolicy
     else
       update_permissions.any? { |role| user.has_role?(role) }
     end
-  end
-
-  def edit_permissions?
-    self.update_permissions?
   end
 
   def show_establishment?

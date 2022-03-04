@@ -1,0 +1,75 @@
+<%= render "users/header" %>
+
+<div class="row">
+  <div class="col-5">
+    <div class="card card-secondary">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "envelope" %>
+          <h5 class="card-title mb-0 ml-2">
+            Viendo solicitud de permisos
+          </h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <%= @permission_request.user.full_name %> solicita permisos para
+        <p><h5><strong>Establecimiento:</strong> <%= @permission_request.establishment %></h5></p>
+        <p><h5><strong>Sector: </strong><%= @permission_request.sector %></h5></p>
+        <p><h5><strong>Rol: </strong><%= @permission_request.role %></h5></p>
+        <h5><strong>Observaciones:</strong></h5>
+        <p><h5><%= @permission_request.observation %></h5></p>
+      </div>
+      <div class="card-footer text-right">
+        <%= link_to 'Volver', permission_requests_path, class: "btn btn-light" %>
+        <% if policy(@permission_request).end? %>
+          <%= link_to end_permission_request_path(@permission_request),
+            class: 'btn btn-success btn-md' do %>
+            <%= fa_icon "check" %>
+            Terminada
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-7">
+    <div class="card card-secondary">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <%= fa_icon "user" %>
+          <h5 class="card-title mb-0 ml-2">
+            Perfil de usuario
+          </h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="media">
+          <div class="media-left">
+              <%= image_tag user_avatar(@permission_request.user, 150), class:"img-thumbnail media-object" %>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading"><%= @permission_request.user.full_name %></h4>
+            <p><strong>DNI: </strong><%= @permission_request.user.dni %></p>
+            <p><strong>Email: </strong><%= @permission_request.user.email %></p>
+            <p><strong>Roles activados:</strong> <%= @permission_request.user.roles.map(&:name).join(", ").humanize %>.</p>
+            <p>
+              <strong>Sectores habilitados:</strong>
+              <ul class="list-group text-left">
+                <% @permission_request.user.sectors.each do |sector| %>
+                  <li class="list-group-item"><%= sector.sector_and_establishment %></li>
+                <% end %>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <% if policy(@permission_request.user).edit_permissions? %>
+          <%= link_to edit_permissions_users_admin_path(@permission_request.user), class: 'btn btn-warning' do %>
+            <%= fa_icon "lock" %>
+            Editar permisos
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

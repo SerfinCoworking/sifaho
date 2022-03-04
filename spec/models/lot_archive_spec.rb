@@ -16,8 +16,8 @@ RSpec.describe LotArchive, type: :model do
       @lot_stock.lot = lot
       @lot_stock.stock = stock
       @user = create(:simple_user)
-      @lot_stock.increment(1500)
       @lot_archive = LotArchive.new(quantity: 10, observation: 'Prueba de observación')
+      @lot_stock.increment(1500, @lot_archive)
       @lot_archive.lot_stock = @lot_stock
       @lot_archive.user = @user
     end
@@ -61,7 +61,7 @@ RSpec.describe LotArchive, type: :model do
       @lot_archive.return_by(@user)
       expect(@lot_stock.quantity).to eq(1500)
       expect(@lot_stock.archived_quantity).to eq(0)
-      expect(@lot_archive.quantity).to eq(0)
+      expect(@lot_archive.quantity).to eq(100)
     end
   end
 end

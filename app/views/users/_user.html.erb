@@ -19,13 +19,13 @@
   <td class="text-left actions-col">
     <% if policy(user).show? %>
       <%= link_to users_admin_path(user), class: 'btn btn-secondary btn-sm', 
-        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Ver detalles', data: { toggle: 'tooltip', placement: 'top', detail: 'view' } do %>
         <%= fa_icon "eye" %>
       <% end %>
     <% end %>
-    <% if policy(user).edit_permissions? %>
+    <% if policy(:permission).edit? %>
       <%= link_to edit_permissions_users_admin_path(user), class: 'btn btn-warning btn-sm', 
-        title: 'Editar permisos', data: { toggle: 'tooltip', placement: 'top' } do %>
+        title: 'Editar permisos', data: { toggle: 'tooltip', placement: 'top', permissions: 'view' } do %>
         <%= fa_icon "lock" %>
       <% end %>
     <% end %>

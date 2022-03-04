@@ -1,0 +1,57 @@
+<%= render 'header' %>
+
+  <div class="card fixed-custom-card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <%= fa_icon "lock" %>
+        <h5 class="card-title mb-0 ml-2">
+          Editando permisos
+        </h5>
+      </div>
+      <%= link_to users_admin_index_path, class: 'btn btn-light' do %>
+        <%= fa_icon 'times' %>
+      <% end %>
+    </div>
+
+      
+    <div class="card-body">
+      <div class="row">
+        <div class="col-3 border-right">
+          <div class="d-flex">
+            <img src="<%= user_avatar(@user, 25) %>" onError='loadImage(event, "<%= image_path('profile-placeholder.jpg') %>")' class="rounded-circle mr-2 user-thumbnail-40" />
+            <div>
+              <p class="mb-0"><%= @user.full_name %></p>
+              <p class="mb-0"><%= @user.profile.dni %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-9">
+          <%= simple_form_for 'remote_form', remote: true, url: permissions_users_admin_path(@user), method: 'GET', html: { novalidate: true} do |f| %>
+            <div class="form-inputs">
+              <%= f.input :search_name,
+                label: false,
+                required: false,
+                class: 'form-control input-sm',
+                placeholder: 'Módulo',
+                autocomplete: 'off' %>
+            </div>
+          <% end %>
+
+          <div id="permissions_list"> 
+            <%= render(
+              partial: 'permissions/list',
+              locals: { permission_modules: @permission_modules }
+            ) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-footer d-flex justify-content-end">
+      <%= link_to 'Volver', users_admin_index_path, class: 'btn btn-light mr-2' %>
+      <button type='submit' name='commit' class='btn btn-success' form='permission_users'>
+        <%= fa_icon 'save' %> Guardar
+      </button>
+    </div> 
+
+  </div>

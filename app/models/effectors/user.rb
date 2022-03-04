@@ -7,6 +7,8 @@ class User < ApplicationRecord
   devise :ldap_authenticatable, authentication_keys: [:username]
 
   # Relaciones
+  has_many :permission_users
+  has_many :permissions, through: :permission_users
   has_many :user_sectors
   has_many :sectors, through: :user_sectors
   belongs_to :sector, optional: true
@@ -18,7 +20,7 @@ class User < ApplicationRecord
   has_many :permission_requests, dependent: :destroy
   has_many :inpatient_prescription_products
 
-  accepts_nested_attributes_for :profile, :professional
+  accepts_nested_attributes_for :profile, :professional, :permission_users
 
   validates :username, presence: true, uniqueness: true
 
@@ -128,5 +130,9 @@ class User < ApplicationRecord
 
   def sector_and_establishment
     "#{sector_name} #{establishment_name}"
+  end
+
+  def has_permission?(permissions_target)
+    permissions.where(name: permissions_target).any?
   end
 end

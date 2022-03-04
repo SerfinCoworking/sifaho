@@ -11,7 +11,8 @@ module Order
     has_many :products, through: :order_products
 
     # Validations
-    validates_presence_of :provider_sector_id, :applicant_sector_id, :requested_date, :remit_code
+    validates_presence_of :provider_sector_id, :applicant_sector_id, :remit_code
+    validates_presence_of :requested_date, if: :solicitud_enviada?
     validates_uniqueness_of :remit_code
 
     # Callbacks
@@ -42,6 +43,7 @@ module Order
       end
 
       if solicitud_auditoria?
+        self.requested_date = DateTime.now
         solicitud_enviada!
         create_notification(a_user, 'envió')
       else
