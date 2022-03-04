@@ -4,7 +4,8 @@ namespace :batch do
     Rails.logger.info 'Start update lot status. Vigentes: '+Lot.vigente.count.to_s+' Por vencer: '+Lot.por_vencer.count.to_s+' Vencido: '+Lot.vencido.count.to_s
     Lot.without_status(2).find_each do |lot| 
       lot.update_status
-      lot.save!
+      lot.save(:validate => false)
+      #lot.save!
     end
     Rails.logger.info 'Finished update lot status. Vigentes: '+Lot.vigente.count.to_s+' Por vencer: '+Lot.por_vencer.count.to_s+' Vencido: '+Lot.vencido.count.to_s
   end
