@@ -1,11 +1,11 @@
 class UserPolicy < ApplicationPolicy
 
   def index?
-    user.has_permission?(:read_user)
+    user.has_permission?(:read_users)
   end
 
   def show?
-    user.has_permission?(:read_user)
+    user.has_permission?(:read_users)
   end
 
   def update?
