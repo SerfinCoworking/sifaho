@@ -1,38 +1,40 @@
 <%= simple_form_for 'permission_users', url: update_permissions_users_admin_path(@user), method: 'PUT', html: { name: 'permission_users', id: 'permission_users', novalidate: true} do |f| %>
-  <% @permission_modules.each_with_index do |permission_mod, index| %> 
+  <% @permission_modules.each do |permission_mod| %> 
     <div class="card">
-      <div class="card-header permission-mod-items" id="per-mod-header-<%= index %>">
+      <div class="card-header permission-mod-items" id="per-mod-header-<%= permission_mod.id %>">
         <h2 class="mb-0 d-flex align-items-center">
-          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#per_mod_<%=index%>" aria-expanded="true" aria-controls="per_mod_<%=index%>">
-            <%#= permission_mod.name %>
+          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#per_mod_<%=permission_mod.id%>" aria-expanded="true" aria-controls="per_mod_<%=permission_mod.id%>">
+            <%= permission_mod.name %>
             <%= fa_icon 'caret-down' %>
           </button>
           <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input perm-mod-toggle-button" id="perm-mod-check-<%= index %>">
-            <label class="custom-control-label" for="perm-mod-check-<%= index %>"></label>
+            <input type="checkbox" class="custom-control-input perm-mod-toggle-button" id="perm-mod-check-<%= permission_mod.id %>">
+            <label class="custom-control-label" for="perm-mod-check-<%= permission_mod.id %>"></label>
           </div>
         </h2>
       </div>
 
       
-      <div id="per_mod_<%=index%>" class="collapse show" aria-labelledby="per-mod-header-<%= index %>">
-        <% permission_mod.each do |perm| %> 
+      <div id="per_mod_<%=permission_mod.id%>" class="collapse show" aria-labelledby="per-mod-header-<%= permission_mod.id %>">
+        <% permission_mod.permissions_build(@user).each do |perm| %> 
           <div class="card card-body  p-0">
-            <label for="perm-check-<%= perm.id %>" class="mb-0 d-flex flex-row w-100 justify-content-between w-100 p-2">
-              <span><%= perm.name %></span>
+            <label for="perm-check-<%= perm.permission_id %>" class="mb-0 d-flex flex-row w-100 justify-content-between w-100 p-2">
+              <span><%= perm.permission.name %></span>
               <div class="custom-control custom-switch">
                 <input type="checkbox" 
                        class="custom-control-input perm-toggle-button" 
-                       id="perm-check-<%= perm.id %>" 
-                       value="<%=perm.id%>"
-                       name="permission_users[permissions_attributes][<%= perm.id %>][permission_id]"
-                       <%= @enable_permissions.include?(perm.id) ? 'checked': '' %>>
-                <input type="hidden" name="permission_users[permissions_attributes][<%= perm.id %>][_destroy]"> 
-                <label class="custom-control-label" for="perm-check-<%= perm.id %>">
+                       id="perm-check-<%= perm.permission_id %>" 
+                       value="<%=perm.permission_id%>"
+                       name="permission[permission_users_attributes][<%= perm.permission_id %>][permission_id]"
+                       <%= @enable_permissions.include?(perm.permission.id) ? 'checked': '' %>>
+                <input type="hidden" name="permission[permission_users_attributes][<%= perm.permission_id %>][_destroy]" value="<%= !@enable_permissions.include?(perm.permission.id) %>"> 
+                <label class="custom-control-label" for="perm-check-<%= perm.permission.id %>">
                 </label>
               </div>
             </label>
           </div>
+          <input type="hidden" name="permission[permission_users_attributes][<%= perm.permission_id %>][id]" value="<%= perm.id %>"> 
+          <input type="hidden" name="permission[permission_users_attributes][<%= perm.permission_id %>][sector_id]" value="<%= perm.sector_id %>"> 
         <% end %>
       </div>
     </div> 

@@ -20,7 +20,8 @@ class User < ApplicationRecord
   has_many :permission_requests, dependent: :destroy
   has_many :inpatient_prescription_products
 
-  accepts_nested_attributes_for :profile, :professional, :permission_users
+  accepts_nested_attributes_for :profile, :professional
+  accepts_nested_attributes_for :permission_users, allow_destroy: true
 
   validates :username, presence: true, uniqueness: true
 
