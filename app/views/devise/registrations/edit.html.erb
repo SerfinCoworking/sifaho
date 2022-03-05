@@ -3,7 +3,7 @@
     Cambiar contraseña
   <% end %>
   <%= form_for(resource, :as => resource_name, :url => user_registration_path, :html => { :method => :put, :role => 'form'}) do |f| %>
-    <%= devise_error_messages! %>
+    <%= render "devise/shared/error_messages", resource: resource %>
     <div class="form-group">
       <%= f.label 'Usuario' %>
       <%= f.text_field :username, disabled: true, class: 'form-control' %>

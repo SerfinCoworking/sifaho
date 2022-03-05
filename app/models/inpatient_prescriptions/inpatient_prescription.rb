@@ -1,5 +1,5 @@
 class InpatientPrescription < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   include EnumTranslation
 
   enum status: {

@@ -1,5 +1,5 @@
 class Receipt < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { auditoria: 0, recibido: 1}
 

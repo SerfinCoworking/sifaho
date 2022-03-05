@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   include EnumTranslation
   enum status: { active: 0, inactive: 1, merged: 2 }
 

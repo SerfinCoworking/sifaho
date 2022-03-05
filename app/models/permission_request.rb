@@ -1,5 +1,5 @@
 class PermissionRequest < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { nueva: 0, terminada: 1, rechazada: 2 }
 

@@ -1,5 +1,5 @@
 class Professional < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum sex: { indeterminate: 1, female: 2, male: 3 }
 

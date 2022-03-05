@@ -1,5 +1,5 @@
 class ChronicPrescription < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { pendiente: 0, dispensada: 1, dispensada_parcial: 2, vencida: 3 }
 

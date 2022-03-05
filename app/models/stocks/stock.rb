@@ -1,5 +1,5 @@
 class Stock < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relationships
   belongs_to :product

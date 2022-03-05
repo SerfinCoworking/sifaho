@@ -1,5 +1,5 @@
 class SnomedConcept < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relationships
   has_many :products, dependent: :restrict_with_exception

@@ -1,5 +1,5 @@
 class StockMovement < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relationships
   belongs_to :order, polymorphic: true

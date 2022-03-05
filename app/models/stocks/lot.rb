@@ -1,6 +1,6 @@
 class Lot < ApplicationRecord
   acts_as_paranoid
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { vigente: 0, por_vencer: 1, vencido: 2 }
 

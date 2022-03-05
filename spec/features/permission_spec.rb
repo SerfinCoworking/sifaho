@@ -9,7 +9,7 @@ RSpec.feature 'Permissions', type: :feature do
 
   describe 'GET / (home page)' do
     before(:each) do
-      permission = create(:permission, name: 'read_user', permission_module: @permission_module)
+      permission = create(:permission, name: 'read_users', permission_module: @permission_module)
       PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
       visit '/users/sign_in'
       within('#new_user') do
@@ -117,7 +117,7 @@ RSpec.feature 'Permissions', type: :feature do
 
           element.click
           user_mod_permission.permissions.each do |permission|
-            expect(page.find("#perm-check-#{permission.id}")).not_to be_checked
+            expect(page.find("#perm-check-#{permission.id}")).not_to be(true)
           end
         end
 

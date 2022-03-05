@@ -1,5 +1,5 @@
 class ExternalOrder < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   include Order
 
   enum order_type: { provision: 0, solicitud: 1 }

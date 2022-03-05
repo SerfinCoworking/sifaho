@@ -1,5 +1,5 @@
 class Bedroom < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relationships
   belongs_to :location_sector, class_name: 'Sector'

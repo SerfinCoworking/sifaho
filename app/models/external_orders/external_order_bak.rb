@@ -1,6 +1,6 @@
 class ExternalOrderBak < ApplicationRecord
   acts_as_paranoid
-  include PgSearch
+  include PgSearch::Model
 
   enum order_type: { despacho: 0, solicitud_abastecimiento: 1, recibo: 2 }
   enum status: { solicitud_auditoria: 0, solicitud_enviada: 1, proveedor_auditoria: 2,

@@ -1,5 +1,5 @@
 class Area < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relations
   belongs_to :parent, class_name: 'Area', optional: true

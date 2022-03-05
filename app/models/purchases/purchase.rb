@@ -1,5 +1,5 @@
 class Purchase < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { inicial: 0,  auditoria: 1, recibido: 2}
     

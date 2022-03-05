@@ -1,5 +1,5 @@
 class Bed < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   enum status: { disponible: 0, ocupada: 1, inactiva: 2 } 
 
   # Relationships

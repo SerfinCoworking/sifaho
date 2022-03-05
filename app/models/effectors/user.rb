@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   rolify
-  include PgSearch
+  include PgSearch::Model
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :rememberable, :trackable, :database_authenticatable

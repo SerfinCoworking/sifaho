@@ -1,6 +1,6 @@
 class BedOrder < ApplicationRecord
   acts_as_paranoid
-  include PgSearch
+  include PgSearch::Model
 
   enum order_type: { provision: 0, solicitud: 1 }
 

@@ -1,5 +1,5 @@
 class ExternalOrderMovement < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relationships
   belongs_to :user

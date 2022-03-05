@@ -1,6 +1,6 @@
 class PermissionModule < ApplicationRecord
 
-  include PgSearch
+  include PgSearch::Model
 
   has_many :permissions
 

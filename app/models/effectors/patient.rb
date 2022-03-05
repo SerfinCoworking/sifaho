@@ -1,5 +1,5 @@
 class Patient < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   enum status: { Temporal: 0, Validado: 1 }
   enum sex: { Otro: 1, Femenino: 2, Masculino: 3 }

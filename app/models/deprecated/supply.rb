@@ -1,6 +1,6 @@
 class Supply < ApplicationRecord
   acts_as_paranoid
-  include PgSearch
+  include PgSearch::Model
 
   # Relaciones
   has_many :reports, dependent: :destroy

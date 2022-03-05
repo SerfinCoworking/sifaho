@@ -1,5 +1,5 @@
 class UnifyProduct < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   include EnumTranslation
   enum status: { pending: 0, merged: 1 }
 

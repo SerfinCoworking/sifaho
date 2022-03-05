@@ -1,5 +1,5 @@
 class OutpatientPrescription < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Statuses
   enum status: { pendiente: 0, dispensada: 1, vencida: 2 }

@@ -1,5 +1,5 @@
 class Sector < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   # Relaciones
   belongs_to :establishment, counter_cache: true
