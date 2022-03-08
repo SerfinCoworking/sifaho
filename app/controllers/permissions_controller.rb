@@ -24,9 +24,21 @@ class PermissionsController < ApplicationController
   end
 
   def update
-    @user.update(permission_params)
     respond_to do |format|
-      format.html { redirect_to users_admin_url(@user) }
+      begin
+        @user.update!(permission_params)
+        format.html { redirect_to users_admin_url(@user) }
+      rescue
+        flash[:error] = "No se pudo actualizar los permisos del usuario #{@user.full_name}"
+        @filterrific = initialize_filterrific(
+          PermissionModule.eager_load(:permissions),
+          params[:remote_form],
+          persistence_id: false
+        )
+        @permission_modules = @filterrific.find
+        @enable_permissions = @user.permissions.pluck(:id)
+        format.html { render :edit }
+      end
     end
   end
 

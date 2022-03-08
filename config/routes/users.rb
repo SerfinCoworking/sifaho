@@ -22,8 +22,8 @@ Rails.application.routes.draw do
       member do
         get :change_sector
         get :permissions, to: 'permissions#index'
-        get :edit_permissions, to: 'permissions#edit'
-        put :update_permissions, to: 'permissions#update'
+        get '/permisos', to: 'permissions#edit', as: :edit_permissions
+        put '/permisos', to: 'permissions#update', as: :update_permissions
       end
     end
 

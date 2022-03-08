@@ -5,6 +5,7 @@ $(document).on('turbolinks:load', function() {
     const permissions = parent.find('.perm-toggle-button');
     permissions.each((index, permission) => {
       $(permission).prop('checked', $(e.target).is(':checked'));
+      $(permission).siblings("input[type='hidden']").val(!$(e.target).is(':checked'));
     });
   });
   $(".perm-toggle-button").on('change', function(e){

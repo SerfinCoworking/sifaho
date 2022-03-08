@@ -35,7 +35,7 @@ class PermissionModule < ApplicationRecord
   }
 
   def permissions_build(user)
-    permissions.where.not(id: user.permission_users.pluck(:permission_id)).map { |permission|
+    permissions.where.not(id: user.permission_users.collect(&:permission_id)).map { |permission|
       user.permission_users.build(sector: user.sector, permission: permission)
     }
     user.permission_users.sort_by { |item| [item.permission.name] }

@@ -64,6 +64,7 @@ es:
       inpatient_prescription: "Internación"
       lot: 'Lote'
       int_ord_prod_lot_stock: 'Lote seleccionado'
+      permission_user: 'Permisos'
     attributes:
       applicant_sector: "Sector solicitante"
       area: 
@@ -217,6 +218,8 @@ es:
       permission:
         name: 'Nombre'
         permission_module: 'Módulo'
+      permission_users:
+        sector: 'Sector'
 
   date:
     abbr_day_names:

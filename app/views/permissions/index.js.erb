@@ -1,5 +1,4 @@
 <% js = escape_javascript(
   render(partial: 'permissions/list', locals: { permission_modules: @permission_modules })
 ) %>
-console.log("sad")
 $("#permissions_list").html("<%= js %>");
