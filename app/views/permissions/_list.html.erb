@@ -16,7 +16,7 @@
 
       
       <div id="per_mod_<%=permission_mod.id%>" class="collapse show" aria-labelledby="per-mod-header-<%= permission_mod.id %>">
-        <% permission_mod.permissions_build(@user).each do |perm| %> 
+        <% permission_mod.permissions_build(@user, @sector).each do |perm| %> 
           <div class="card card-body  p-0">
             <label for="perm-check-<%= perm.permission_id %>" class="mb-0 d-flex flex-row w-100 justify-content-between w-100 p-2">
               <span><%= perm.permission.name %></span>

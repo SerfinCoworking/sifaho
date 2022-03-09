@@ -132,6 +132,10 @@ RSpec.feature 'Permissions', type: :feature do
             # click_button 'Guardar'
             # expect(page).to have_content("No se pudo actualizar los permisos del usuario #{@user_2.full_name}")
           # end
+
+          it 'displays a selector of sectors' do
+            expect(page).to have_css('#remote_form_sector')
+          end
         end
       end
     end

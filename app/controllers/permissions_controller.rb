@@ -9,7 +9,8 @@ class PermissionsController < ApplicationController
       persistence_id: false
     )
     @permission_modules = @filterrific.find
-    @enable_permissions = @user.permissions.pluck(:id)
+    @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+    @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
   end
 
   def edit
@@ -20,7 +21,8 @@ class PermissionsController < ApplicationController
       persistence_id: false
     )
     @permission_modules = @filterrific.find
-    @enable_permissions = @user.permissions.pluck(:id)
+    @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+    @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
   end
 
   def update
@@ -36,7 +38,8 @@ class PermissionsController < ApplicationController
           persistence_id: false
         )
         @permission_modules = @filterrific.find
-        @enable_permissions = @user.permissions.pluck(:id)
+        @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+        @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
         format.html { render :edit }
       end
     end

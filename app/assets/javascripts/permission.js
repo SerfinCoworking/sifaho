@@ -11,5 +11,10 @@ $(document).on('turbolinks:load', function() {
   $(".perm-toggle-button").on('change', function(e){
     $(e.target).siblings("input[type='hidden']").val(!$(e.target).is(':checked'));
   });
+  
+  $('#remote_form_sector').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    $(e.target).closest('form').submit();
+  });
+  
 });
 

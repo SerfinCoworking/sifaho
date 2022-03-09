@@ -34,10 +34,14 @@ class PermissionModule < ApplicationRecord
     end
   }
 
-  def permissions_build(user)
-    permissions.where.not(id: user.permission_users.collect(&:permission_id)).map { |permission|
-      user.permission_users.build(sector: user.sector, permission: permission)
-    }
-    user.permission_users.sort_by { |item| [item.permission.name] }
+  def permissions_build(user, sector)
+    permissions.where
+               .not(id: user.permission_users.where(sector: sector)
+               .collect(&:permission_id)).map { |permission|
+                 user.permission_users.build(sector: sector, permission: permission)
+               }
+    user.permission_users
+        .select { |permission_user| permission_user if sector.present? && permission_user.sector_id == sector.id  }
+        .sort_by { |item| [item.permission.name] }
   end
 end
