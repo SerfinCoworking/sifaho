@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :users_admin, controller: :users, only: %i[index update show] do
       member do
         put :adds_sector
+        delete '/sector/:sector_id', to: 'users#removes_sector', as: :removes_sector
         get :change_sector
         get :permissions, to: 'permissions#index'
         get '/permisos', to: 'permissions#edit', as: :edit_permissions

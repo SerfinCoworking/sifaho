@@ -83,3 +83,7 @@
 <% content_for :modal do %>
   <%= render "shared/modals/sector_selection" %>
 <% end %>
+
+<% content_for :modal do %>
+  <%= render(partial: 'shared/modals/delete_confirmation') %>
+<%end%>

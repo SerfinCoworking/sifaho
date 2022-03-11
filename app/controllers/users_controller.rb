@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :change_sector, :edit_permissions, :update_permissions, :adds_sector ]
+  before_action :set_user, only: %I[show update change_sector edit_permissions update_permissions adds_sector removes_sector ]
 
   def index
     authorize User
@@ -76,8 +76,22 @@ class UsersController < ApplicationController
   def adds_sector
     @sector = Sector.find(params[:remote_form][:sector])
     @user.sectors << @sector
-    @sectors = Sector.includes(:establishment).order('establishments.name ASC', 'sectors.name ASC').where.not(id: @user.sectors.pluck(:id))
     @user.save
+    @sectors = Sector.includes(:establishment)
+                     .order('establishments.name ASC', 'sectors.name ASC')
+                     .where.not(id: @user.sectors.pluck(:id))
+  end
+
+  def removes_sector
+    @user.user_sectors.where(sector_id: params[:sector_id]).first.destroy
+    if @user.sector_id == params[:sector_id]
+      @user.update!(sector_id: nil)
+    end
+    @user.permission_users.where(sector_id: params[:sector_id]).destroy_all
+    @sectors = Sector.includes(:establishment)
+                     .order('establishments.name ASC', 'sectors.name ASC')
+                     .where.not(id: @user.sectors.pluck(:id))
+    @sector = @user.sector if @user.sector.present?
   end
 
   private
