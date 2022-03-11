@@ -23,6 +23,9 @@ class PermissionsController < ApplicationController
     @permission_modules = @filterrific.find
     @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
     @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
+    @sectors = Sector.includes(:establishment)
+                     .order('establishments.name ASC', 'sectors.name ASC')
+                     .where.not(id: @user.sectors.pluck(:id))
   end
 
   def update
@@ -47,7 +50,7 @@ class PermissionsController < ApplicationController
 
   private
   def set_user
-    @user = User.find(params[:id])
+    @user = User.eager_load(:sectors).find(params[:id])
   end
 
   def permission_params

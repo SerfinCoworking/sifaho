@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :change_sector, :edit_permissions, :update_permissions ]
+  before_action :set_user, only: [:show, :update, :change_sector, :edit_permissions, :update_permissions, :adds_sector ]
 
   def index
     authorize User
@@ -71,6 +71,13 @@ class UsersController < ApplicationController
         format.js {render inline: "location.reload();" }
       end
     end
+  end
+
+  def adds_sector
+    @sector = Sector.find(params[:remote_form][:sector])
+    @user.sectors << @sector
+    @sectors = Sector.includes(:establishment).order('establishments.name ASC', 'sectors.name ASC').where.not(id: @user.sectors.pluck(:id))
+    @user.save
   end
 
   private

@@ -136,6 +136,16 @@ RSpec.feature 'Permissions', type: :feature do
           it 'displays a selector of sectors' do
             expect(page).to have_css('#remote_form_sector')
           end
+
+          it 'displays a sectors select modal' do
+            expect(page).to have_css('#sector-selection')
+          end
+          
+          # it 'displays a select with sectors options' do
+          #   find("#open-sectors-select-modal").click
+
+          #   expect(page).to have_css('#sector-selection')
+          # end
         end
       end
     end

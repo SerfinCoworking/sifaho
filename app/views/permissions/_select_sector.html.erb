@@ -1,0 +1,18 @@
+<%= simple_form_for 'remote_form', remote: true, url: adds_sector_users_admin_path(@user), method: 'PUT', html: { novalidate: true} do |f| %>
+  <div class="form-inputs">
+      <%= f.select( :sector, 
+        @sectors.map { 
+          |sector| ["#{sector.name} - #{sector.establishment.name}", sector.id] 
+        },
+        { include_blank: false, include_hidden: false },
+        { 
+          class: "selectpicker-md show-tick custom-select-pick",
+          allow_blank: false,
+          title: 'Seleccionar sector',
+          id: "remote_form_sector_selector",
+          "data-width"=>"100%",
+          "data-live-search"=>"true" 
+        }
+      ) %>
+  </div>
+<% end %>

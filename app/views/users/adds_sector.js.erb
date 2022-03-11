@@ -1,0 +1,18 @@
+<% js_available_sectors = escape_javascript(
+  render(partial: 'permissions/available_sectors')
+) %>
+
+<% js_select_sector = escape_javascript(
+  render(partial: 'permissions/select_sector')
+) %>
+
+$("#available_sectors_container").html("<%= js_available_sectors %>");
+$("#total_available_sectors").html("<%= @user.sectors.count %>");
+$("#select_sector_container").html("<%= js_select_sector %>");
+
+$('.selectpicker-md').selectpicker({
+  style: 'btn btn-light',
+});
+$('#remote_form_sector_selector').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  $(e.target).closest('form').submit();
+});
