@@ -76,6 +76,7 @@ class UsersController < ApplicationController
   def adds_sector
     @sector = Sector.find(params[:remote_form][:sector])
     @user.sectors << @sector
+    @user.sector = @sector if @user.sector_id.nil?
     @user.save
     @sectors = Sector.includes(:establishment)
                      .order('establishments.name ASC', 'sectors.name ASC')
@@ -84,10 +85,10 @@ class UsersController < ApplicationController
 
   def removes_sector
     @user.user_sectors.where(sector_id: params[:sector_id]).first.destroy
-    if @user.sector_id == params[:sector_id]
-      @user.update!(sector_id: nil)
-    end
     @user.permission_users.where(sector_id: params[:sector_id]).destroy_all
+
+    @user.update!(sector: @user.sectors.first) if @user.sector_id == params[:sector_id].to_i
+
     @sectors = Sector.includes(:establishment)
                      .order('establishments.name ASC', 'sectors.name ASC')
                      .where.not(id: @user.sectors.pluck(:id))

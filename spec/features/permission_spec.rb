@@ -140,7 +140,7 @@ RSpec.feature 'Permissions', type: :feature do
           it 'displays a sectors select modal' do
             expect(page).to have_css('#sector-selection')
           end
-          
+
           # it 'displays a select with sectors options' do
           #   find("#open-sectors-select-modal").click
 
