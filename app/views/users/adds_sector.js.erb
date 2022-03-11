@@ -1,18 +1,25 @@
 <% js_available_sectors = escape_javascript(
-  render(partial: 'permissions/available_sectors')
+  render(partial: 'permissions/partials/available_sectors')
 ) %>
 
-<% js_select_sector = escape_javascript(
-  render(partial: 'permissions/select_sector')
+<% js_sector_select = escape_javascript(
+  render(partial: 'permissions/partials/select_sector')
+) %>
+
+<% js_location_select = escape_javascript(
+  render(partial: 'permissions/partials/location_select')
 ) %>
 
 $("#available_sectors_container").html("<%= js_available_sectors %>");
 $("#total_available_sectors").html("<%= @user.sectors.count %>");
-$("#select_sector_container").html("<%= js_select_sector %>");
+$("#select_sector_container").html("<%= js_sector_select %>");
+$("#location_select_container").html("<%= js_location_select %>");
 
 $('.selectpicker-md').selectpicker({
   style: 'btn btn-light',
 });
-$('#remote_form_sector_selector').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+$('#remote_form_sector, #remote_form_sector_selector').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   $(e.target).closest('form').submit();
 });
+
+$("#remote_form_sector").trigger('change')

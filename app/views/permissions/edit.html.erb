@@ -25,25 +25,9 @@
             </div>
           </div>
           <div class="mt-2 d-flex w-100">
-
-            <%= simple_form_for 'remote_form', remote: true, url: permissions_users_admin_path(@user), method: 'GET', html: { novalidate: true, class: "w-100"} do |f| %>
-              <div class="form-inputs">
-                  <%= f.select( :sector, 
-                    @user.sectors.all.map { 
-                      |sector| ["#{sector.name} - #{sector.establishment.name}", sector.id] 
-                    },
-                    { include_blank: false, include_hidden: false, selected: (@sector.id if @sector.present?) },
-                    { 
-                      class: "selectpicker-md show-tick custom-select-pick",
-                      allow_blank: false,
-                      title: 'Seleccionar sector',
-                      id: "remote_form_sector",
-                      "data-width"=>"100%",
-                      "data-live-search"=>"true" 
-                    }
-                  ) %>
-              </div>
-            <% end %>
+            <div id="location_select_container">
+              <%= render "permissions/partials/location_select" %>
+            </div>
 
             <div>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sector-selection" id="open-sectors-select-modal">
@@ -89,11 +73,11 @@
 <% end %>
 
 <% content_for :available_sectors do %>
-  <%= render "permissions/available_sectors" %>
+  <%= render "permissions/partials/available_sectors" %>
 <% end %>
 
 <% content_for :select_sector do %>
-  <%= render "permissions/select_sector" %>
+  <%= render "permissions/partials/select_sector" %>
 <% end %>
 
 <% content_for :modal do %>
