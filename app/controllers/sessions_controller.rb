@@ -19,7 +19,7 @@ class SessionsController < Devise::SessionsController
         end
       end
       redirect_to root_path
-    rescue Net::LDAP::LdapError
+    rescue Net::LDAP::Error
       respond_to do |format|
         format.html {redirect_to new_user_session_path, :notice => $!.to_s}
         format.json {render json: $!.to_s}
