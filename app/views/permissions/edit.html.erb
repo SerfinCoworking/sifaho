@@ -24,6 +24,17 @@
               <p class="mb-0"><%= @user.profile.dni %></p>
             </div>
           </div>
+          <div class="mt-2 d-flex w-100">
+            <div id="location_select_container">
+              <%= render "permissions/partials/location_select" %>
+            </div>
+
+            <div>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sector-selection" id="open-sectors-select-modal">
+                <%= fa_icon 'plus' %>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="col-9">
           <%= simple_form_for 'remote_form', remote: true, url: permissions_users_admin_path(@user), method: 'GET', html: { novalidate: true} do |f| %>
@@ -55,3 +66,24 @@
     </div> 
 
   </div>
+
+
+<% content_for :available_sectors_count do %>
+  <%= @user.sectors.count %>
+<% end %>
+
+<% content_for :available_sectors do %>
+  <%= render "permissions/partials/available_sectors" %>
+<% end %>
+
+<% content_for :select_sector do %>
+  <%= render "permissions/partials/select_sector" %>
+<% end %>
+
+<% content_for :modal do %>
+  <%= render "shared/modals/sector_selection" %>
+<% end %>
+
+<% content_for :modal do %>
+  <%= render(partial: 'shared/modals/delete_confirmation') %>
+<%end%>

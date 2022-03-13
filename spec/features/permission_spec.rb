@@ -62,8 +62,8 @@ RSpec.feature 'Permissions', type: :feature do
 
       describe 'GET /usuarios/id/permisos (edit user permissions page)' do
         before(:each) do
-          permission = create(:permission, name: 'update_permissions', permission_module: @permission_module)
-          PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
+          @permission = create(:permission, name: 'update_permissions', permission_module: @permission_module)
+          PermissionUser.create(user: @user, sector: @user.sector, permission: @permission)
           visit "/usuarios/#{@user.id}/permisos"
         end
 
@@ -121,6 +121,22 @@ RSpec.feature 'Permissions', type: :feature do
           user_mod_permission.permissions.each do |permission|
             expect(page.find("#perm-check-#{permission.id}")).not_to be_checked
           end
+        end
+        describe "a user without permissions" do
+          before(:each) do
+            @user_2 = create(:user)
+            visit "/usuarios/#{@user_2.id}/permisos"
+          end
+
+        
+          it 'displays a selector of sectors' do
+            expect(page).to have_css('#remote_form_sector')
+          end
+
+          it 'displays a sectors select modal' do
+            expect(page).to have_css('#sector-selection')
+          end
+
         end
       end
     end

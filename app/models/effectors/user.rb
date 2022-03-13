@@ -134,6 +134,6 @@ class User < ApplicationRecord
   end
 
   def has_permission?(permissions_target)
-    permissions.where(name: permissions_target).any?
+    permissions.joins(:permission_users).where(name: permissions_target, 'permission_users.sector_id': sector_id).any?
   end
 end

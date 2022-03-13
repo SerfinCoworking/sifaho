@@ -9,7 +9,8 @@ class PermissionsController < ApplicationController
       persistence_id: false
     )
     @permission_modules = @filterrific.find
-    @enable_permissions = @user.permissions.pluck(:id)
+    @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+    @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
   end
 
   def edit
@@ -20,19 +21,36 @@ class PermissionsController < ApplicationController
       persistence_id: false
     )
     @permission_modules = @filterrific.find
-    @enable_permissions = @user.permissions.pluck(:id)
+    @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+    @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
+    @sectors = Sector.includes(:establishment)
+                     .order('establishments.name ASC', 'sectors.name ASC')
+                     .where.not(id: @user.sectors.pluck(:id))
   end
 
   def update
-    @user.update(permission_params)
     respond_to do |format|
-      format.html { redirect_to users_admin_url(@user) }
+      begin
+        @user.update!(permission_params)
+        format.html { redirect_to users_admin_url(@user) }
+      rescue
+        flash[:error] = "No se pudo actualizar los permisos del usuario #{@user.full_name}"
+        @filterrific = initialize_filterrific(
+          PermissionModule.eager_load(:permissions),
+          params[:remote_form],
+          persistence_id: false
+        )
+        @permission_modules = @filterrific.find
+        @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+        @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
+        format.html { render :edit }
+      end
     end
   end
 
   private
   def set_user
-    @user = User.find(params[:id])
+    @user = User.eager_load(:sectors).find(params[:id])
   end
 
   def permission_params
