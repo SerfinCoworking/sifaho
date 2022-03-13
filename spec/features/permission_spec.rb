@@ -7,14 +7,14 @@ RSpec.feature 'Permissions', type: :feature do
     @permission_module = create(:permission_module, name: 'Usuario')
   end
 
-  describe 'GET / (home page)' do
+  describe 'GET / (home page)', js: true do
     before(:each) do
       permission = create(:permission, name: 'read_users', permission_module: @permission_module)
       PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
       visit '/users/sign_in'
       within('#new_user') do
-        fill_in 'user_username', with: 00002222
-        fill_in 'user_password', with: 'password'
+        fill_in 'user_username', with: @user.username
+        fill_in 'user_password', with: @user.password
       end
       click_button 'Iniciar sesión'
     end
@@ -87,11 +87,11 @@ RSpec.feature 'Permissions', type: :feature do
 
         it 'has a toggle button each permisison' do
           # expect Permisisons group toggle button exist
-          expect(page).to have_selector('.perm-mod-toggle-button')
+          expect(page).to have_selector('.perm-mod-toggle-button', visible: false)
         end
 
         it 'has a toggle button each permisison' do
-          expect(page).to have_selector('.perm-toggle-button')
+          expect(page).to have_selector('.perm-toggle-button', visible: false)
         end
 
         it 'has users permissions enable' do
@@ -102,33 +102,26 @@ RSpec.feature 'Permissions', type: :feature do
         it 'enable or disable permissions' do
           user_mod_permission = PermissionModule.find_by(name: 'Usuario')
           expect(page.find("#perm-mod-check-#{user_mod_permission.id}")).not_to be_checked
-          find(:css, "#perm-mod-check-#{user_mod_permission.id}").set(true)
 
+          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
           expect(page.find("#perm-mod-check-#{user_mod_permission.id}")).to be_checked
         end
 
         it 'on enable / disable permission module, check / uncheck all permissions module' do
           user_mod_permission = PermissionModule.find_by(name: 'Usuario')
-          element = find(:css, "#perm-mod-check-#{user_mod_permission.id}")
-          element.click
+          
+          #check all 
+          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click 
           user_mod_permission.permissions.each do |permission|
             expect(page.find("#perm-check-#{permission.id}")).to be_checked
           end
-
-          element.click
+          
+          # uncheck all 
+          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
           user_mod_permission.permissions.each do |permission|
-            expect(page.find("#perm-check-#{permission.id}")).not_to be(true)
+            expect(page.find("#perm-check-#{permission.id}")).not_to be_checked
           end
         end
-
-        # it '' do
-          
-          # expect Permissions list into a group
-          # expect Permissions list into a group toggle button exist
-        # end
-          # expect Permissions list into a group | on: enable permission
-          # expect Permissions list into a group | off: disable permission
-          # expect Role template list buttons
       end
     end
   end
