@@ -1,3 +1,15 @@
+.all-cl-container{
+  display: flex;
+  justify-content: space-between;
+  width: 85px;
+  .label-fs-1{
+    font-size: 1rem;
+    margin-bottom: 0;
+    margin-top: 2px;
+  }
+}
+
 #location_select_container{
   width: calc(100% - 40px);
 }
+
