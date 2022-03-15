@@ -15,6 +15,10 @@ $(document).on('turbolinks:load', function() {
   $('#remote_form_sector, #remote_form_sector_selector').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
     $(e.target).closest('form').submit();
   });
+
+  $("#remote_form_sector_selector").on('loaded.bs.select', function(e){
+    $(e.target).siblings('.dropdown-menu').first().find('.bs-searchbox input.form-control').first().attr('id', $(e.target).attr('id') + '_inp_search');
+  });
   
 });
 

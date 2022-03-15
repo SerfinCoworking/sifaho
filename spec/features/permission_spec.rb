@@ -5,19 +5,17 @@ RSpec.feature 'Permissions', type: :feature do
   background do
     @user = create(:user_1)
     @permission_module = create(:permission_module, name: 'Usuario')
+    permission = create(:permission, name: 'read_users', permission_module: @permission_module)
+    PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
+    visit '/users/sign_in'
+    within('#new_user') do
+      fill_in 'user_username', with: @user.username
+      fill_in 'user_password', with: @user.password
+    end
+    click_button 'Iniciar sesión'
   end
 
   describe 'GET / (home page)', js: true do
-    before(:each) do
-      permission = create(:permission, name: 'read_users', permission_module: @permission_module)
-      PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
-      visit '/users/sign_in'
-      within('#new_user') do
-        fill_in 'user_username', with: @user.username
-        fill_in 'user_password', with: @user.password
-      end
-      click_button 'Iniciar sesión'
-    end
 
     subject { page }
 
@@ -96,47 +94,94 @@ RSpec.feature 'Permissions', type: :feature do
 
         it 'has users permissions enable' do
           ru_permission = Permission.find_by(name: 'update_permissions')
-          expect(page.find("#perm-check-#{ru_permission.id}")).to be_checked
+          expect(page.find("#perm-check-#{ru_permission.id}", visible: false)).to be_checked
         end
 
         it 'enable or disable permissions' do
           user_mod_permission = PermissionModule.find_by(name: 'Usuario')
-          expect(page.find("#perm-mod-check-#{user_mod_permission.id}")).not_to be_checked
+          expect(page.find("#perm-mod-check-#{user_mod_permission.id}", visible: false)).not_to be_checked
 
           find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
-          expect(page.find("#perm-mod-check-#{user_mod_permission.id}")).to be_checked
+          expect(page.find("#perm-mod-check-#{user_mod_permission.id}", visible: false)).to be_checked
         end
 
         it 'on enable / disable permission module, check / uncheck all permissions module' do
           user_mod_permission = PermissionModule.find_by(name: 'Usuario')
-          
+
           #check all 
           find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click 
           user_mod_permission.permissions.each do |permission|
-            expect(page.find("#perm-check-#{permission.id}")).to be_checked
+            expect(page.find("#perm-check-#{permission.id}", visible: false)).to be_checked
           end
-          
+
           # uncheck all 
           find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
           user_mod_permission.permissions.each do |permission|
-            expect(page.find("#perm-check-#{permission.id}")).not_to be_checked
+            expect(page.find("#perm-check-#{permission.id}", visible: false)).not_to be_checked
           end
         end
-        describe "a user without permissions" do
+
+        describe "a user without permissions and sector" do
           before(:each) do
             @user_2 = create(:user)
+            create(:sector_2)
+            create(:sector_3)
+            create(:sector_4)
             visit "/usuarios/#{@user_2.id}/permisos"
           end
 
-        
           it 'displays a selector of sectors' do
-            expect(page).to have_css('#remote_form_sector')
+            expect(page).to have_css('#remote_form_sector', visible: false)
           end
 
-          it 'displays a sectors select modal' do
-            expect(page).to have_css('#sector-selection')
-          end
+          it 'displays a sectors select modal, search a sector and remove / add one sector' do
+            # check present elements
+            expect(page).to have_css('#sector-selection', visible: false)
+            expect(page).to have_css('#open-sectors-select-modal')
+            find(:css, '#open-sectors-select-modal').click
+            expect(page).to have_text('Selección de sectores')
+            expect(page).to have_content('Sectores activos 0')
+            within '#sector-selection' do
 
+              # check "Select a sector" button, and filter
+              expect(page.has_button?('Seleccionar sector')).to be true
+
+              find_button('Seleccionar sector').click
+              expect(page.has_css?('ul', class: 'dropdown-menu', visible: true)).to be true
+              Sector.all.each do |sector|
+                expect(page.has_css?('.dropdown-item', text: "#{sector.name} - #{sector.establishment_name}", visible: true)).to be true
+              end
+
+              expect(page.has_css?('input#remote_form_sector_selector_inp_search')).to be true
+
+              find_field(id: 'remote_form_sector_selector_inp_search').set('Internación')
+
+              # check Sector addition
+              Sector.where(name: 'Internación').each do |sector|
+                expect(page.has_css?('.dropdown-item', text: "#{sector.name} - #{sector.establishment_name}", visible: true)).to be true
+              end
+
+              Sector.where.not(name: 'Internación').each do |sector|
+                expect(page.has_css?('.dropdown-item', text: "#{sector.name} - #{sector.establishment_name}", visible: true)).to be false
+              end
+
+              internacion_sector = Sector.where(name: 'Internación').first
+              find('li', text: "#{internacion_sector.name} - #{internacion_sector.establishment_name}").click
+
+              expect(page.has_css?('.dropdown-item', text: "#{internacion_sector.name} - #{internacion_sector.establishment_name}", visible: true)).to be false
+            end
+
+            # check post Sector addition
+            expect(page.has_css?('ul#available_sectors_container', visible: true)).to be true
+
+            within '#available_sectors_container' do
+              Sector.where(name: 'Internación').each do |sector|
+                expect(page).to have_content("#{sector.name} - #{sector.establishment_name}")
+              end
+            end
+
+
+          end
         end
       end
     end
