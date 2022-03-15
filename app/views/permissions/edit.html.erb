@@ -38,13 +38,13 @@
         </div>
         <div class="col-9">
           <%= simple_form_for 'remote_form', remote: true, url: permissions_users_admin_path(@user), method: 'GET', html: { novalidate: true} do |f| %>
-            <div class="form-inputs">
-              <%= f.input :search_name,
-                label: false,
-                required: false,
-                class: 'form-control input-sm',
-                placeholder: 'Módulo',
-                autocomplete: 'off' %>
+            <div class="input-group mb-2">
+              <input class="form-control" placeholder="Módulo" type="text" name="remote_form[search_name]" id="remote_form_search_name">
+              <div class="input-group-prepend">
+                <div class="input-group-text" id="btnGroupAddon">
+                  <%= fa_icon 'search' %>
+                </div>
+              </div>                  
             </div>
           <% end %>
 
