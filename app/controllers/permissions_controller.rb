@@ -9,7 +9,7 @@ class PermissionsController < ApplicationController
       persistence_id: false
     )
     @permission_modules = @filterrific.find
-    @sector = params[:remote_form].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
+    @sector = params[:remote_form].present? && params[:remote_form][:sector].present? ? Sector.find(params[:remote_form][:sector]) : @user.sector
     @enable_permissions = @user.permission_users.where(sector: @sector).pluck(:permission_id)
   end
 

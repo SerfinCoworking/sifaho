@@ -24,7 +24,7 @@ $('#remote_form_sector, #remote_form_sector_selector').on('changed.bs.select', f
 
 $("#remote_form_sector").trigger('change');
 
-$('.delete-item, .btn-delete-confirm').on('click', function(e) {
+$('.delete-item').on('click', function(e) {
   const modal = $(e.target).attr('data-target');
   const title = $(e.target).attr('data-title');
   const body = $(e.target).attr('data-body');

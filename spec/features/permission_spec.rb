@@ -141,6 +141,7 @@ RSpec.feature 'Permissions', type: :feature do
             find(:css, '#open-sectors-select-modal').click
             expect(page).to have_text('Selección de sectores')
             expect(page).to have_content('Sectores activos 0')
+            @internacion_sector = Sector.where(name: 'Internación').first
             within '#sector-selection' do
 
               # check "Select a sector" button, and filter
@@ -165,22 +166,35 @@ RSpec.feature 'Permissions', type: :feature do
                 expect(page.has_css?('.dropdown-item', text: "#{sector.name} - #{sector.establishment_name}", visible: true)).to be false
               end
 
-              internacion_sector = Sector.where(name: 'Internación').first
-              find('li', text: "#{internacion_sector.name} - #{internacion_sector.establishment_name}").click
+              find('li', text: "#{@internacion_sector.name} - #{@internacion_sector.establishment_name}").click
 
-              expect(page.has_css?('.dropdown-item', text: "#{internacion_sector.name} - #{internacion_sector.establishment_name}", visible: true)).to be false
+              expect(page.has_css?('.dropdown-item', text: "#{@internacion_sector.name} - #{@internacion_sector.establishment_name}", visible: true)).to be false
+
+              # check sector addition on location select
             end
 
             # check post Sector addition
             expect(page.has_css?('ul#available_sectors_container', visible: true)).to be true
 
+            @sector = Sector.where(name: 'Internación').first
             within '#available_sectors_container' do
-              Sector.where(name: 'Internación').each do |sector|
-                expect(page).to have_content("#{sector.name} - #{sector.establishment_name}")
-              end
+              expect(page).to have_content("#{@sector.name} - #{@sector.establishment_name}")
             end
 
+            find(:css, "#linked-sector-#{@sector.id}").click
+            expect(page.has_css?('#delete-item', visible: true)).to be true
+            sleep 1 #seleep for modal animation delay
+            within '#delete-item' do
+              click_link 'Confirmar'
+            end
+            sleep 1 #seleep for modal animation delay
 
+            expect(page.has_css?('ul#available_sectors_container', visible: true)).to be false
+
+            within '#sector-selection' do
+              find_button('Seleccionar sector').click
+              expect(page.has_css?('.dropdown-item', text: "#{@internacion_sector.name} - #{@internacion_sector.establishment_name}", visible: true)).to be true
+            end
           end
         end
       end
