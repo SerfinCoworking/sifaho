@@ -12,13 +12,15 @@
           <div class="custom-control custom-switch">
             <div class="d-flex all-cl-container">
               <label class="label-fs-1" for="perm-mod-check-<%= permission_mod.id %>">Todos</label>
-              <input type="checkbox" class="custom-control-input perm-mod-toggle-button" id="perm-mod-check-<%= permission_mod.id %>">
+              <input type="checkbox" 
+                     class="custom-control-input perm-mod-toggle-button" 
+                     id="perm-mod-check-<%= permission_mod.id %>"
+                     <%= (permission_mod.permissions.pluck(:id) - @enable_permissions).empty? ? 'checked': '' %>>
               <label class="custom-control-label" for="perm-mod-check-<%= permission_mod.id %>"></label>
             </div>
           </div>
         </h2>
       </div>
-
       
       <div id="per_mod_<%=permission_mod.id%>" class="collapse show" aria-labelledby="per-mod-header-<%= permission_mod.id %>">
         <% permission_mod.permissions_build(@user, @sector).each do |perm| %> 
