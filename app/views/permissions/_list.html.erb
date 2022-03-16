@@ -3,9 +3,11 @@
     <div class="card">
       <div class="card-header permission-mod-items" id="per-mod-header-<%= permission_mod.id %>">
         <h2 class="mb-0 d-flex align-items-center">
-          <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#per_mod_<%=permission_mod.id%>" aria-expanded="true" aria-controls="per_mod_<%=permission_mod.id%>">
-            <%= permission_mod.name %>
+          <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#per_mod_<%=permission_mod.id%>" aria-expanded="true" aria-controls="per_mod_<%=permission_mod.id%>">
             <%= fa_icon 'caret-down' %>
+            <span class="ml-2">
+              <%= permission_mod.name %>
+            </span>
           </button>
           <div class="custom-control custom-switch">
             <div class="d-flex all-cl-container">
