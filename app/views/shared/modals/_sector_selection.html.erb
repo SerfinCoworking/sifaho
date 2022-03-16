@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">
-          <%= fa_icon 'barcode'%> Selección de sectores
+          <%= fa_icon 'bezier-curve'%> Selección de sectores
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -16,16 +16,15 @@
             <%= yield(:available_sectors_count) %>
           </span>
         </h5>
+        <div id="select_sector_container" class="mb-2">
+          <%= yield(:select_sector) %>
+        </div>
         <ul class="list-group" id="available_sectors_container">
           <%= yield(:available_sectors) %>
         </ul>
-        <div id="select_sector_container">
-          <%= yield(:select_sector) %>
-        </div>
       </div>
       <div class="modal-footer text-right">
-        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Volver</button>
-        <button type='submit' class='btn btn-success btn-submit-form' form="order-prod-lot-stock-form">Guardar</button>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cerrar</button>
       </div>
     </div>
   </div>
