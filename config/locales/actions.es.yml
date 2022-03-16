@@ -1,0 +1,20 @@
+
+es:
+  actions:
+    add: Agregar %{model}
+    new: Nuevo %{model}
+    create: Crear %{model}
+    show: "Viendo %{model}"
+    edit: Editar %{model}
+    save: Guardar
+    back: Volver
+    trash: Enviar a la papelera
+    confirm: Confirmar
+    tooltip:
+      show: Ver
+      edit: Editar
+      delete: Eliminar
+      filter: Filtrar
+      dispense: Dispensar
+      delivery: Entregar productos
+      set_products: Agregar productos
