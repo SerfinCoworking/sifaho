@@ -3,3 +3,9 @@ es:
     name:
       read_users: 'Ver / Listar'
       update_permissions: 'Editar'
+      read_outpatient_recipes: 'Ver / Listar'
+      create_outpatient_recipes: 'Crear'
+      update_outpatient_recipes: 'Editar'
+      destroy_outpatient_recipes: 'Eliminar'
+      dispense_outpatient_recipes: 'Dispensar'
+      return_outpatient_recipes: 'Retornar'

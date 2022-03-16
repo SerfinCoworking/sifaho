@@ -19,7 +19,7 @@
       <span class="ml-2 sb-title">Inicio</span>
     <% end %>
 
-    <% if policy(Prescription).new? %>
+    <% if policy(OutpatientPrescription).index? || policy(ChronicPrescription).index? %>
       <%= link_to main_app.new_prescription_path,  class: "list-group-item list-group-item-action list-custom #{active_class('outpatient_prescriptions')} #{active_class('chronic_prescriptions')} #{active_class('prescriptions')}" do %>
         <span class="sb-icon">
           <%= fa_icon "signature" %>

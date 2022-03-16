@@ -1,22 +1,28 @@
 <% content_for :title, "Recetas" %>
 
 <% content_for :page_header do %>
-  <li class="nav-item non-sel">
-    <%= link_to new_prescription_path, class: "nav-link #{ active_action_and_controller('new', 'prescriptions') }" do %>
-      <%= fa_icon "signature" %>
-      Recetas
-    <% end %>
-  </li>
-  <li class="nav-item non-sel">
-    <%= link_to outpatient_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'outpatient_prescriptions') }" do %>
-      <%= fa_icon "signature" %>
-      Ambulatorias
-    <% end %>
-  </li>
-  <li class="nav-item non-sel">
-    <%= link_to chronic_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'chronic_prescriptions') }" do %>
-      <%= fa_icon "signature" %>
-      Crónicas
-    <% end %>
-  </li>
+  <% if policy(OutpatientPrescription).new? || policy(ChronicPrescription).new? %>
+    <li class="nav-item non-sel">
+      <%= link_to new_prescription_path, class: "nav-link #{ active_action_and_controller('new', 'prescriptions') }" do %>
+        <%= fa_icon "signature" %>
+        Recetas
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(OutpatientPrescription).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to outpatient_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'outpatient_prescriptions') }" do %>
+        <%= fa_icon "signature" %>
+        Ambulatorias
+      <% end %>
+    </li>
+  <% end %>
+  <% if policy(ChronicPrescription).index? %>
+    <li class="nav-item non-sel">
+      <%= link_to chronic_prescriptions_path, class: "nav-link #{ active_action_and_controller('index', 'chronic_prescriptions') }" do %>
+        <%= fa_icon "signature" %>
+        Crónicas
+      <% end %>
+    </li>
+  <% end %>
 <% end %>

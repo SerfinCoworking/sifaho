@@ -42,7 +42,9 @@ class PermissionModule < ApplicationRecord
                  user.permission_users.build(sector: sector, permission: permission)
                }
     user.permission_users
-        .select { |permission_user| permission_user if sector.present? && permission_user.sector_id == sector.id  }
+        .select { |permission_user| 
+          permission_user if sector.present? && permission_user.sector_id == sector.id && permission_user.permission.permission_module_id == self.id 
+        }
         .sort_by { |item| [item.permission.name] }
   end
 end

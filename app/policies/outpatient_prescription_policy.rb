@@ -4,53 +4,42 @@ class OutpatientPrescriptionPolicy < ApplicationPolicy
   end
 
   def show?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :central_farmaceutico, :medic, :enfermero)
+    user.has_permission?(:read_outpatient_recipes)
   end
 
   def new?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
+    user.has_permission?(:create_outpatient_recipes)
   end
 
   def create?
     new?
-  end  
-  
+  end
+
   def edit?
-    if record.pendiente?
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
-    end
+    user.has_permission?(:update_outpatient_recipes) if record.pendiente?
   end
 
   def print?
-    user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia)
+    show?
   end
 
   def update?
     edit?
   end
-  
+
   def dispense?
-    edit?
+    user.has_permission?(:dispense_outpatient_recipes)
   end
-  
+
   def return_dispensation?
-    record.dispensada?
+    user.has_permission?(:return_outpatient_recipes) if record.dispensada?
   end
 
   def destroy?
-    unless record.dispensada?
-      user.has_any_role?(:admin)
-    end
+    user.has_permission?(:destroy_outpatient_recipes) unless record.dispensada?
   end
 
   def delete?
     destroy?
   end
-
-  def nullify?
-    if record.provider_sector == user.sector && record.solicitud? && (record.solicitud_enviada? || record.proveedor_auditoria?)
-      user.has_any_role?(:admin, :farmaceutico, :auxiliar_farmacia, :medic, :enfermero)
-    end
-  end
-
 end

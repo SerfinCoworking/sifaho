@@ -1,15 +1,19 @@
-<%= link_to new_outpatient_prescriptions_path(@patient), 
-  class: "btn btn-primary text-nowrap btn-create-receipt", 
-  id: 'new-outpatient', 
-  data: { disable_with: '<i class="fas fa-spinner fa-spin"></i>' } do %>
-  <%= fa_icon "plus" %>
-  Ambulatoria
+<% if policy(OutpatientPrescription).new? %>
+  <%= link_to new_outpatient_prescriptions_path(@patient), 
+    class: "btn btn-primary text-nowrap btn-create-receipt", 
+    id: 'new-outpatient', 
+    data: { disable_with: '<i class="fas fa-spinner fa-spin"></i>' } do %>
+    <%= fa_icon "plus" %>
+    Ambulatoria
+  <% end %>
 <% end %>
 
-<%= link_to new_chronic_prescriptions_path(@patient), 
-  class: "btn btn-primary text-nowrap ml-1 btn-create-receipt", 
-  id: 'new-chronic',
-  data: { disable_with: '<i class="fas fa-spinner fa-spin"></i>' } do %>
-  <%= fa_icon "plus" %>
-  Crónica
+<% if policy(ChronicPrescription).new? %>
+  <%= link_to new_chronic_prescriptions_path(@patient), 
+    class: "btn btn-primary text-nowrap ml-1 btn-create-receipt", 
+    id: 'new-chronic',
+    data: { disable_with: '<i class="fas fa-spinner fa-spin"></i>' } do %>
+    <%= fa_icon "plus" %>
+    Crónica
+  <% end %>
 <% end %>
