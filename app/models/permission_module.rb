@@ -4,6 +4,7 @@ class PermissionModule < ApplicationRecord
 
   has_many :permissions
 
+  validates :name, uniqueness: true
   validates_presence_of :name
 
   pg_search_scope :search_name,
