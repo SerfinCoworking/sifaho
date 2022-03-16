@@ -26,7 +26,7 @@
         <% permission_mod.permissions_build(@user, @sector).each do |perm| %> 
           <div class="card card-body  p-0">
             <label for="perm-check-<%= perm.permission_id %>" class="mb-0 d-flex flex-row w-100 justify-content-between w-100 p-2">
-              <span><%= perm.permission.name %></span>
+              <span><%= t("permissions.name.#{perm.permission.name}") %></span>
               <div class="custom-control custom-switch">
                 <input type="checkbox" 
                        class="custom-control-input perm-toggle-button" 

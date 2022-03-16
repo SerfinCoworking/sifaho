@@ -97,31 +97,28 @@ RSpec.feature 'Permissions', type: :feature do
           expect(page.find("#perm-check-#{ru_permission.id}", visible: false)).to be_checked
         end
 
-        it 'enable or disable permissions' do
-          user_mod_permission = PermissionModule.find_by(name: 'Usuario')
-          expect(page.find("#perm-mod-check-#{user_mod_permission.id}", visible: false)).not_to be_checked
-
-          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
-          expect(page.find("#perm-mod-check-#{user_mod_permission.id}", visible: false)).to be_checked
+        it 'enable or disable one permission' do
+          ru_permission = Permission.find_by(name: 'update_permissions')
+          find(:label, text: 'Editar', for: "perm-check-#{ru_permission.id}").click
+          expect(page.find("#perm-check-#{ru_permission.id}", visible: false)).not_to be_checked
         end
 
         it 'on enable / disable permission module, check / uncheck all permissions module' do
           user_mod_permission = PermissionModule.find_by(name: 'Usuario')
-
-          #check all 
-          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click 
-          user_mod_permission.permissions.each do |permission|
-            expect(page.find("#perm-check-#{permission.id}", visible: false)).to be_checked
-          end
-
           # uncheck all 
           find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
           user_mod_permission.permissions.each do |permission|
             expect(page.find("#perm-check-#{permission.id}", visible: false)).not_to be_checked
           end
+
+          # check all 
+          find(:label, text: 'Todos', for: "perm-mod-check-#{user_mod_permission.id}").click
+          user_mod_permission.permissions.each do |permission|
+            expect(page.find("#perm-check-#{permission.id}", visible: false)).to be_checked
+          end
         end
 
-        describe "a user without permissions and sector" do
+        describe 'a user without permissions and sector' do
           before(:each) do
             @user_2 = create(:user)
             create(:sector_2)

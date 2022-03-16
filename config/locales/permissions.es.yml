@@ -1,0 +1,5 @@
+es:
+  permissions:
+    name:
+      read_users: 'Ver / Listar'
+      update_permissions: 'Editar'
