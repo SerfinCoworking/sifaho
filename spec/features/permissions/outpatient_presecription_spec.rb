@@ -5,6 +5,7 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
   background do
     @user = create(:user_1)
     @permission_module = create(:permission_module, name: 'Recetas Ambulatorias')
+    @create_recipe_permission = create(:permission, name: 'create_outpatient_recipes', permission_module: @permission_module)
     visit '/users/sign_in'
     within('#new_user') do
       fill_in 'user_username', with: @user.username
@@ -25,7 +26,7 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
     describe 'GET /recetas (recipes page)' do
       before(:each) do
         permission = create(:permission, name: 'read_outpatient_recipes', permission_module: @permission_module)
-        PermissionUser.create(user: @user, sector: @user.sector, permission: permission)  
+        PermissionUser.create(user: @user, sector: @user.sector, permission: permission)
       end
 
       it 'shows "Recetas" link button' do
@@ -35,31 +36,33 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
 
       describe 'Create action outpatient recipe' do
         before(:each) do
+          visit '/'
           click_link 'Recetas'
           within '#new_patient' do
-            fill_in 'patient-dni', with: 37458994
-            within '#ui-id-2' do
-              find('li.ui-menu-item').first.click
-            end
-            find('#patient-submit').click
+            expect(page.has_css?('input#patient-dni')).to be true
+            page.execute_script %Q{$('#patient-dni').focus().val('37458994').keydown()}
+
+            sleep 2
           end
+          find('ul.ui-autocomplete').should have_content('37458994')
+          page.execute_script("$('.ui-menu-item:contains(\"37458994\")').first().click()")
+          sleep 2
+          find_button('Guardar paciente').click
         end
 
         it 'does not show "+ Ambulatoria" link button' do
-          # should
-
+          expect(page.has_css?('#new-outpatient')).to be false
         end
-
-        # describe 'Create action outpatient recipe' do
-        #   before(:each) do
-            
-        #   end
         
+        describe 'Create action outpatient recipe' do
+          before(:each) do
+            PermissionUser.create(user: @user, sector: @user.sector, permission: @create_recipe_permission)
+          end
           
-        #   it 'shows "+ Ambulatoria" link button' do
-            
-        #   end
-        # end
+          it 'shows "+ Ambulatoria" link button' do
+            expect(page.has_css?('#new-outpatient')).to be true  
+          end
+        end
       end
 
     end
