@@ -5,7 +5,9 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
   background do
     @user = create(:user_1)
     @permission_module = create(:permission_module, name: 'Recetas Ambulatorias')
+    @professionals_permission_module = create(:permission_module, name: 'Profesionales')
     @create_recipe_permission = create(:permission, name: 'create_outpatient_recipes', permission_module: @permission_module)
+    @create_professional_permission = create(:permission, name: 'create_professionals', permission_module: @professionals_permission_module)
     visit '/users/sign_in'
     within('#new_user') do
       fill_in 'user_username', with: @user.username
@@ -22,7 +24,7 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
       visit '/'
       expect(page).to_not have_selector(:css, "a[href='#{new_prescription_path}']")
     end
-    
+
     describe 'GET /recetas (recipes page)' do
       before(:each) do
         permission = create(:permission, name: 'read_outpatient_recipes', permission_module: @permission_module)
@@ -78,18 +80,22 @@ RSpec.feature 'OutpatientPrescriptions', type: :feature do
 
           describe 'save new outpatient recipe' do
             before(:each) do
-              find("#{new_professional_path}")
+              PermissionUser.create(user: @user, sector: @user.sector, permission: @create_professional_permission)
+              find(:css, '#new-outpatient').click
+              sleep 1
+              page.execute_script %Q{$('#add-professional-btn').click()}
+              sleep 1
               within '#professional-form-async' do
-                page.execute_script %Q{$('#last-name').focus().val('Naval').keydown()}
-                sleep 2
-                within '#professionals-list' do
-                  find(:css, '.btn-success').first.click
-                end
+                page.execute_script %Q{$('#last-name').focus().val('Naval').keyup()}
                 sleep 2
               end
+              within '#professionals-list' do
+                find('.btn-success', match: :first).click
+              end
+              sleep 2
             end
             it 'create recipe' do
-              expect(oage.has_css?('#professional')).to be true
+              expect(page.has_css?('#professional')).to be true
             end
           end
         end
